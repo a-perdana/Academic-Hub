@@ -910,7 +910,7 @@ body {
       try {
         const snap = await getDoc(doc(db, 'users', user.uid));
         if (snap.exists()) {
-          isAdmin = snap.data().role === 'academic_admin';
+          isAdmin = snap.data().role_academichub === 'academic_admin';
           firestoreName = snap.data().displayName || null;
         } else { isAdmin = false; }
       } catch { isAdmin = false; }
