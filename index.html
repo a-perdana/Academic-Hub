@@ -4320,6 +4320,29 @@
             return;
           }
           currentUser = user;
+
+          // Ensure Firestore profile exists with role_academichub
+          try {
+            const userRef = doc(db, 'users', user.uid);
+            const snap    = await getDoc(userRef);
+            if (!snap.exists()) {
+              await setDoc(userRef, {
+                uid:              user.uid,
+                email:            user.email,
+                displayName:      user.displayName || '',
+                photoURL:         user.photoURL    || '',
+                role_academichub: 'academic_user',
+                createdAt:        serverTimestamp(),
+              });
+            } else if (snap.data().role_academichub == null) {
+              // Legacy migration from old `role` field
+              const legacy     = snap.data().role;
+              const assignRole = ['academic_admin', 'academic_user'].includes(legacy)
+                ? legacy : 'academic_user';
+              await setDoc(userRef, { role_academichub: assignRole }, { merge: true });
+            }
+          } catch (_) {}
+
           document.getElementById("loadingScreen").style.display = "none";
           document.getElementById("loginScreen").style.display = "none";
           document.getElementById("mainContent").style.display = "block";
