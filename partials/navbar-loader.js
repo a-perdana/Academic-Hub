@@ -115,7 +115,7 @@ window.__loadAcademicNavbar = async function(activeKey) {
 };
 
 window.__clearNavbarCounters = function() {
-  const ids = ['annBadge', 'msgBadge', 'libBadge', 'docBadge'];
+  const ids = ['annBadge', 'msgBadge', 'libBadge', 'docBadge', 'aiBadge'];
   ids.forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -174,6 +174,12 @@ window.__initNavbarCounters = async function({ db, user }) {
   if (document.getElementById('docBadge')) {
     state.unsubs.push(
       onSnapshot(collection(db, 'documents'), (snap) => setBadge('docBadge', snap.size, 999), () => {}),
+    );
+  }
+
+  if (document.getElementById('aiBadge')) {
+    state.unsubs.push(
+      onSnapshot(collection(db, 'prompts'), (snap) => setBadge('aiBadge', snap.size, 999), () => {}),
     );
   }
 };
