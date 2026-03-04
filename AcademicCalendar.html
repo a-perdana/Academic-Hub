@@ -1,9 +1,9 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Eduversal Indonesia Event Calendar â€“ interactive yearly activity timeline for partner schools" />
+    <meta name="description" content="Eduversal Indonesia Event Calendar – interactive yearly activity timeline for partner schools" />
     <meta name="theme-color" content="#667eea" />
     <title>Event Calendar | Eduversal Indonesia</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
@@ -25,7 +25,7 @@
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family:"DM Sans",sans-serif; background:linear-gradient(135deg,#0c0c0c 0%,#1a1a2e 100%); min-height:100vh; color:#fff; overflow-x:hidden; }
 
-      /* â”€â”€ Background â”€â”€ */
+      /* ── Background ── */
       .bg-animation { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; overflow:hidden; }
       .bg-animation::before { content:""; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background: radial-gradient(ellipse at 20% 80%,rgba(120,119,198,.15) 0%,transparent 50%), radial-gradient(ellipse at 80% 20%,rgba(255,119,198,.10) 0%,transparent 50%), radial-gradient(ellipse at 40% 40%,rgba(79,172,254,.08) 0%,transparent 50%); animation:bgFloat 20s ease-in-out infinite; }
       @keyframes bgFloat { 0%,100%{transform:translate(0,0) rotate(0deg);} 33%{transform:translate(30px,-30px) rotate(1deg);} 66%{transform:translate(-20px,20px) rotate(-1deg);} }
@@ -35,7 +35,7 @@
       .orb-3 { width:250px; height:250px; background:linear-gradient(135deg,#4facfe,#00f2fe); top:40%; left:60%; animation-delay:-10s; }
       @keyframes orbFloat { 0%,100%{transform:translate(0,0) scale(1);} 50%{transform:translate(50px,-50px) scale(1.1);} }
 
-      /* â”€â”€ Top Nav â”€â”€ */
+      /* ── Top Nav ── */
       .top-nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:62px; background:rgba(5,5,16,.80); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,.08); gap:16px; transition:background .3s,padding .3s,height .3s; }
       .top-nav.scrolled { background:rgba(5,5,16,.95); height:54px; }
       .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
@@ -85,7 +85,7 @@
       .dd-signout-btn:hover { background:rgba(239,68,68,.22); }
       @media(max-width:768px){ .top-nav{padding:0 16px;} .nav-btn span{display:none;} .nav-btn{padding:9px; border-radius:10px;} .nav-stats{display:none;} .nav-brand-name{display:none;} }
 
-      /* â”€â”€ Page Header â”€â”€ */
+      /* ── Page Header ── */
       .page-header { padding: 5.5rem 2rem 1.5rem; position:relative; z-index:10; }
       .back-link { display:inline-flex; align-items:center; gap:6px; color:rgba(255,255,255,.55); font-size:13px; text-decoration:none; margin-bottom:1rem; transition:color .2s; }
       .back-link:hover { color:#fff; }
@@ -94,10 +94,10 @@
       .page-header .subtitle { font-size:1rem; color:rgba(255,255,255,.6); }
       @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(1.2);} }
 
-      /* â”€â”€ Main â”€â”€ */
+      /* ── Main ── */
       main { max-width:1700px; margin:0 auto; padding:0 2rem 4rem; position:relative; z-index:10; }
 
-      /* â”€â”€ Stats Bar â”€â”€ */
+      /* ── Stats Bar ── */
       .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
       .stat-card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); border-radius:16px; padding:1.2rem 1.4rem; display:flex; align-items:center; gap:14px; transition:all .3s; }
       .stat-card:hover { background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.16); }
@@ -108,7 +108,7 @@
       @media(max-width:900px){ .stats-bar{grid-template-columns:repeat(2,1fr);} }
       @media(max-width:500px){ .stats-bar{grid-template-columns:1fr;} }
 
-      /* â”€â”€ Filter Bar â”€â”€ */
+      /* ── Filter Bar ── */
       .filter-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:1.25rem; flex-wrap:wrap; }
       .filter-cats { display:flex; gap:8px; flex-wrap:wrap; }
       .filter-btn { padding:7px 14px; border-radius:20px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.07); color:rgba(255,255,255,.7); font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; white-space:nowrap; }
@@ -122,7 +122,7 @@
       .add-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(102,126,234,.45); }
       .add-btn svg { width:15px; height:15px; }
 
-      /* â”€â”€ Timeline Outer â”€â”€ */
+      /* ── Timeline Outer ── */
       .timeline-outer { overflow-x:auto; border-radius:16px; border:1px solid rgba(255,255,255,.10); background:rgba(0,0,0,.25); margin-bottom:1.5rem; }
       .timeline-table { display:flex; flex-direction:column; min-width:max-content; }
 
@@ -169,12 +169,12 @@
       .today-dot { position:absolute; top:-4px; left:50%; transform:translateX(-50%); width:8px; height:8px; border-radius:50%; background:#ff6b6b; border:2px solid #fff; }
       .today-line-inner { position:relative; width:2px; height:100%; background:linear-gradient(180deg,rgba(255,107,107,.9) 0%,rgba(255,107,107,.25) 100%); }
 
-      /* â”€â”€ Legend â”€â”€ */
+      /* ── Legend ── */
       .legend { display:flex; gap:20px; flex-wrap:wrap; padding:1rem 1.25rem; background:rgba(255,255,255,.04); border-radius:12px; border:1px solid rgba(255,255,255,.08); margin-bottom:2rem; }
       .legend-item { display:flex; align-items:center; gap:7px; font-size:12px; color:rgba(255,255,255,.6); }
       .legend-dot { width:10px; height:10px; border-radius:3px; flex-shrink:0; }
 
-      /* â”€â”€ Modals â”€â”€ */
+      /* ── Modals ── */
       .modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:2000; display:none; align-items:center; justify-content:center; padding:20px; backdrop-filter:blur(4px); }
       .modal-overlay.open { display:flex; animation:fadeIn .2s ease; }
       @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
@@ -250,7 +250,7 @@
       .btn-success { background:linear-gradient(135deg,#11998e,#38ef7d); color:#fff; }
       .btn-success:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(17,153,142,.4); }
 
-      /* â”€â”€ Form Modal â”€â”€ */
+      /* ── Form Modal ── */
       .modal-form .modal-box { max-width:700px; }
       .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
       .form-group { display:flex; flex-direction:column; gap:6px; }
@@ -273,16 +273,16 @@
       .schools-toggle-btn { padding:5px 12px; border-radius:20px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.07); color:rgba(255,255,255,.6); font-size:12px; cursor:pointer; transition:all .18s; }
       .schools-toggle-btn.active { background:rgba(102,126,234,.25); border-color:rgba(102,126,234,.5); color:#fff; }
 
-      /* â”€â”€ Loading â”€â”€ */
+      /* ── Loading ── */
       .loading-overlay { position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:9999; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px; }
       .spinner { width:44px; height:44px; border:3px solid rgba(255,255,255,.12); border-top-color:#667eea; border-radius:50%; animation:spin 0.9s linear infinite; }
       @keyframes spin { to{ transform:rotate(360deg); } }
       .loading-text { font-size:14px; color:rgba(255,255,255,.6); }
 
-      /* â”€â”€ Empty state â”€â”€ */
+      /* ── Empty state ── */
       .empty-lane { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; color:rgba(255,255,255,.18); font-style:italic; }
 
-      /* â”€â”€ Admin Activity List â”€â”€ */
+      /* ── Admin Activity List ── */
       .admin-list-section { display:none; margin-top:2.5rem; }
       .admin-list-section.visible { display:block; }
       .admin-list-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1rem; flex-wrap:wrap; gap:12px; }
@@ -350,53 +350,53 @@
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
 
-    <!-- â•â• TOP NAV â•â• -->
+    <!-- ══ TOP NAV ══ -->
     <div id="navbarMount"></div>
 
-    <!-- â•â• PAGE HEADER â•â• -->
+    <!-- ══ PAGE HEADER ══ -->
     <div class="page-header">
       <a href="index.html" class="back-link">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         Dashboard
       </a>
-      <h1>ðŸ“… Event Calendar</h1>
-      <p class="subtitle">2025/26 Annual Activity Timeline Â· July 2025 â€“ May 2026</p>
+      <h1>📅 Event Calendar</h1>
+      <p class="subtitle">2025/26 Annual Activity Timeline · July 2025 – May 2026</p>
     </div>
 
     <main>
-      <!-- â•â• STATS BAR â•â• -->
+      <!-- ══ STATS BAR ══ -->
       <div class="stats-bar">
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(102,126,234,.18);">ðŸ“Š</div>
-          <div class="stat-text"><div class="stat-value" id="statTotal">â€”</div><div class="stat-label">Total Activities</div></div>
+          <div class="stat-icon" style="background:rgba(102,126,234,.18);">📊</div>
+          <div class="stat-text"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total Activities</div></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(16,185,129,.18);">âœ…</div>
-          <div class="stat-text"><div class="stat-value" id="statCompleted">â€”</div><div class="stat-label">Completed</div></div>
+          <div class="stat-icon" style="background:rgba(16,185,129,.18);">✅</div>
+          <div class="stat-text"><div class="stat-value" id="statCompleted">—</div><div class="stat-label">Completed</div></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(79,172,254,.18);">ðŸ“…</div>
-          <div class="stat-text"><div class="stat-value" id="statThisMonth">â€”</div><div class="stat-label">This Month</div></div>
+          <div class="stat-icon" style="background:rgba(79,172,254,.18);">📅</div>
+          <div class="stat-text"><div class="stat-value" id="statThisMonth">—</div><div class="stat-label">This Month</div></div>
         </div>
         <div class="stat-card">
-          <div class="stat-icon" style="background:rgba(245,158,11,.18);">â³</div>
-          <div class="stat-text"><div class="stat-value" id="statUpcoming">â€”</div><div class="stat-label">Upcoming (30 days)</div></div>
+          <div class="stat-icon" style="background:rgba(245,158,11,.18);">⏳</div>
+          <div class="stat-text"><div class="stat-value" id="statUpcoming">—</div><div class="stat-label">Upcoming (30 days)</div></div>
         </div>
       </div>
 
-      <!-- â•â• FILTER BAR â•â• -->
+      <!-- ══ FILTER BAR ══ -->
       <div class="filter-bar">
         <div class="filter-cats" id="filterCats">
-          <button class="filter-btn active" data-cat="all" style="border-color:rgba(108,92,231,.4); background:rgba(108,92,231,.18); color:#fff;">ðŸ” All</button>
-          <button class="filter-btn" data-cat="assessment">ðŸ“Š Assessment</button>
-          <button class="filter-btn" data-cat="training">ðŸŽ“ Training &amp; PD</button>
-          <button class="filter-btn" data-cat="visit">ðŸ« School Visit</button>
-          <button class="filter-btn" data-cat="report">ðŸ“‹ Reporting</button>
-          <button class="filter-btn" data-cat="event">ðŸŽ‰ Events</button>
-          <button class="filter-btn" data-cat="parent">ðŸ‘¨â€ðŸ‘©â€ðŸ‘§ Parent &amp; Student</button>
+          <button class="filter-btn active" data-cat="all" style="border-color:rgba(108,92,231,.4); background:rgba(108,92,231,.18); color:#fff;">🔍 All</button>
+          <button class="filter-btn" data-cat="assessment">📊 Assessment</button>
+          <button class="filter-btn" data-cat="training">🎓 Training &amp; PD</button>
+          <button class="filter-btn" data-cat="visit">🏫 School Visit</button>
+          <button class="filter-btn" data-cat="report">📋 Reporting</button>
+          <button class="filter-btn" data-cat="event">🎉 Events</button>
+          <button class="filter-btn" data-cat="parent">👨‍👩‍👧 Parent &amp; Student</button>
         </div>
         <div class="filter-right">
-          <input type="text" class="search-input" id="searchInput" placeholder="ðŸ”Ž Search activities...">
+          <input type="text" class="search-input" id="searchInput" placeholder="🔎 Search activities...">
           <button class="add-btn" id="addActBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add New Activity
@@ -404,21 +404,21 @@
         </div>
       </div>
 
-      <!-- â•â• TIMELINE â•â• -->
+      <!-- ══ TIMELINE ══ -->
       <div class="timeline-outer" id="timelineOuter">
         <div class="timeline-table" id="timelineTable">
           <!-- Built by JS -->
         </div>
       </div>
 
-      <!-- â•â• LEGEND â•â• -->
+      <!-- ══ LEGEND ══ -->
       <div class="legend" id="legend"></div>
 
-      <!-- â•â• ADMIN ACTIVITY LIST â•â• -->
+      <!-- ══ ADMIN ACTIVITY LIST ══ -->
       <div class="admin-list-section" id="adminListSection">
         <div class="admin-list-header">
           <div>
-            <div class="admin-list-title">ðŸ“‹ All Activities</div>
+            <div class="admin-list-title">📋 All Activities</div>
             <div class="admin-list-subtitle">Full list of scheduled events and activities for the academic year</div>
           </div>
           <button class="add-btn" id="addActBtnList" style="display:none;">
@@ -430,12 +430,12 @@
           <select class="admin-sort-select" id="adminSortSelect">
             <option value="date-asc">Sort by Date (Earliest first)</option>
             <option value="date-desc">Sort by Date (Latest first)</option>
-            <option value="title-asc">Sort by Title Aâ€“Z</option>
-            <option value="title-desc">Sort by Title Zâ€“A</option>
+            <option value="title-asc">Sort by Title A–Z</option>
+            <option value="title-desc">Sort by Title Z–A</option>
             <option value="category">Sort by Category</option>
             <option value="priority">Sort by Priority</option>
           </select>
-          <input type="text" class="admin-search-input" id="adminSearchInput" placeholder="ðŸ”Ž Filter activities...">
+          <input type="text" class="admin-search-input" id="adminSearchInput" placeholder="🔎 Filter activities...">
           <span class="admin-row-count" id="adminRowCount"></span>
         </div>
         <div class="admin-table-wrap">
@@ -443,10 +443,10 @@
             <thead>
               <tr>
                 <th class="admin-rownum-th">#</th>
-                <th data-sort="title">Title <i class="sort-icon">â†•</i></th>
-                <th data-sort="category">Category <i class="sort-icon">â†•</i></th>
-                <th data-sort="priority">Priority <i class="sort-icon">â†•</i></th>
-                <th data-sort="date-asc">Date Range <i class="sort-icon">â†•</i></th>
+                <th data-sort="title">Title <i class="sort-icon">↕</i></th>
+                <th data-sort="category">Category <i class="sort-icon">↕</i></th>
+                <th data-sort="priority">Priority <i class="sort-icon">↕</i></th>
+                <th data-sort="date-asc">Date Range <i class="sort-icon">↕</i></th>
                 <th>Duration</th>
                 <th>Schools</th>
                 <th>Actions</th>
@@ -468,7 +468,7 @@
       Go to Today
     </button>
 
-    <!-- â•â• ACTIVITY DETAIL MODAL â•â• -->
+    <!-- ══ ACTIVITY DETAIL MODAL ══ -->
     <div class="modal-overlay" id="detailModal">
       <div class="modal-box">
         <div class="modal-header">
@@ -480,21 +480,21 @@
         </div>
         <div class="modal-body">
           <div class="modal-info-grid">
-            <div class="modal-info-item"><div class="modal-info-label">ðŸ“… Date Range</div><div class="modal-info-value" id="detailDate"></div></div>
-            <div class="modal-info-item"><div class="modal-info-label">ðŸ« Schools</div><div class="modal-info-value" id="detailSchools"></div></div>
-            <div class="modal-info-item"><div class="modal-info-label">â± Duration</div><div class="modal-info-value" id="detailDuration"></div></div>
-            <div class="modal-info-item"><div class="modal-info-label">ðŸ‘¤ Added By</div><div class="modal-info-value" id="detailCreatedBy"></div></div>
+            <div class="modal-info-item"><div class="modal-info-label">📅 Date Range</div><div class="modal-info-value" id="detailDate"></div></div>
+            <div class="modal-info-item"><div class="modal-info-label">🏫 Schools</div><div class="modal-info-value" id="detailSchools"></div></div>
+            <div class="modal-info-item"><div class="modal-info-label">⏱ Duration</div><div class="modal-info-value" id="detailDuration"></div></div>
+            <div class="modal-info-item"><div class="modal-info-label">👤 Added By</div><div class="modal-info-value" id="detailCreatedBy"></div></div>
           </div>
           <div>
             <div class="modal-section-title">Description</div>
-            <div class="modal-description" id="detailDesc">â€”</div>
+            <div class="modal-description" id="detailDesc">—</div>
           </div>
           <div id="detailDocsSection">
-            <div class="modal-section-title">ðŸ“Ž Documents &amp; Resources</div>
+            <div class="modal-section-title">📎 Documents &amp; Resources</div>
             <div class="doc-list" id="detailDocs"></div>
           </div>
           <div id="detailCompletionSection">
-            <div class="modal-section-title">âœ… Completion Status</div>
+            <div class="modal-section-title">✅ Completion Status</div>
             <div class="completion-bar-wrap">
               <div class="completion-bar-label"><span id="compBarLabel">0/15 schools completed</span><span id="compBarPct">0%</span></div>
               <div class="completion-bar-track"><div class="completion-bar-fill" id="compBarFill" style="width:0%"></div></div>
@@ -502,7 +502,7 @@
             <div class="school-completions" id="schoolCompList"></div>
           </div>
           <div id="detailMyComp">
-            <div class="modal-section-title">ðŸ“ My School</div>
+            <div class="modal-section-title">📝 My School</div>
             <div class="my-completion">
               <div class="my-comp-top">
                 <span class="my-comp-label">Mark as Completed?</span>
@@ -513,7 +513,7 @@
               </div>
               <textarea class="notes-area" id="myCompNotes" placeholder="Notes or comments... (optional)"></textarea>
               <div style="display:flex;justify-content:flex-end;margin-top:8px;">
-                <button class="btn btn-success" id="saveCompBtn">ðŸ’¾ Save</button>
+                <button class="btn btn-success" id="saveCompBtn">💾 Save</button>
               </div>
             </div>
           </div>
@@ -532,7 +532,7 @@
       </div>
     </div>
 
-    <!-- â•â• ADD / EDIT MODAL â•â• -->
+    <!-- ══ ADD / EDIT MODAL ══ -->
     <div class="modal-overlay modal-form" id="editModal">
       <div class="modal-box">
         <div class="modal-header">
@@ -551,20 +551,20 @@
             <div class="form-group">
               <label class="form-label">Category *</label>
               <select class="form-select" id="editCategory">
-                <option value="assessment">ðŸ“Š Assessment</option>
-                <option value="training">ðŸŽ“ Training &amp; PD</option>
-                <option value="visit">ðŸ« School Visit</option>
-                <option value="report">ðŸ“‹ Reporting</option>
-                <option value="event">ðŸŽ‰ Events</option>
-                <option value="parent">ðŸ‘¨â€ðŸ‘©â€ðŸ‘§ Parent &amp; Student</option>
+                <option value="assessment">📊 Assessment</option>
+                <option value="training">🎓 Training &amp; PD</option>
+                <option value="visit">🏫 School Visit</option>
+                <option value="report">📋 Reporting</option>
+                <option value="event">🎉 Events</option>
+                <option value="parent">👨‍👩‍👧 Parent &amp; Student</option>
               </select>
             </div>
             <div class="form-group">
               <label class="form-label">Priority</label>
               <select class="form-select" id="editPriority">
-                <option value="high">ðŸ”´ High</option>
-                <option value="medium" selected>ðŸŸ¡ Medium</option>
-                <option value="low">ðŸŸ¢ Low</option>
+                <option value="high">🔴 High</option>
+                <option value="medium" selected>🟡 Medium</option>
+                <option value="low">🟢 Low</option>
               </select>
             </div>
             <div class="form-group">
@@ -608,7 +608,7 @@
               </div>
             </div>
             <div class="form-group full">
-              <label class="form-label">ðŸ“Ž Documents &amp; Links</label>
+              <label class="form-label">📎 Documents &amp; Links</label>
               <div class="doc-list-form" id="docListForm"></div>
               <button type="button" class="add-doc-btn" id="addDocBtn" style="margin-top:8px;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -627,13 +627,13 @@
       </div>
     </div>
 
-    <!-- â•â• LOADING â•â• -->
+    <!-- ══ LOADING ══ -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="spinner"></div>
       <div class="loading-text">Loading...</div>
     </div>
 
-    <!-- â•â• ENV â•â• -->
+    <!-- ══ ENV ══ -->
     <script src="firebase-config.js"></script>
     <script>
       if (!window.ENV) window.ENV = {
@@ -657,12 +657,12 @@
 
       await window.__loadAcademicNavbar("calendar");
 
-      // â”€â”€ Firebase init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Firebase init ────────────────────────────────────────────
       const app  = initializeApp({ apiKey:window.ENV.FIREBASE_API_KEY, authDomain:window.ENV.FIREBASE_AUTH_DOMAIN, projectId:window.ENV.FIREBASE_PROJECT_ID, storageBucket:window.ENV.FIREBASE_STORAGE_BUCKET, messagingSenderId:window.ENV.FIREBASE_MESSAGING_SENDER_ID, appId:window.ENV.FIREBASE_APP_ID });
       const auth = getAuth(app);
       const db   = getFirestore(app);
 
-      // â”€â”€ Constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Constants ─────────────────────────────────────────────────
       const WEEK_W = 130; // px per week column
 
       const MONTHS = [
@@ -680,12 +680,12 @@
       ];
 
       const CATS = {
-        assessment:{ label:'Assessment', en:'Assessment',      color:'#667eea', bg:'rgba(102,126,234,.18)', border:'rgba(102,126,234,.55)', icon:'ðŸ“Š' },
-        training:  { label:'Training & PD',   en:'Training & PD',   color:'#11998e', bg:'rgba(17,153,142,.18)',  border:'rgba(17,153,142,.55)',  icon:'ðŸŽ“' },
-        visit:     { label:'School Visit', en:'School Visit',    color:'#f5576c', bg:'rgba(245,87,108,.18)', border:'rgba(245,87,108,.55)', icon:'ðŸ«' },
-        report:    { label:'Reporting',     en:'Reporting',       color:'#f7971e', bg:'rgba(247,151,30,.18)',  border:'rgba(247,151,30,.55)',  icon:'ðŸ“‹' },
-        event:     { label:'Events',      en:'Events',          color:'#4facfe', bg:'rgba(79,172,254,.18)', border:'rgba(79,172,254,.55)', icon:'ðŸŽ‰' },
-        parent:    { label:'Parent & Student',en:'Parent & Student',color:'#a855f7', bg:'rgba(168,85,247,.18)', border:'rgba(168,85,247,.55)', icon:'ðŸ‘¨â€ðŸ‘©â€ðŸ‘§' },
+        assessment:{ label:'Assessment', en:'Assessment',      color:'#667eea', bg:'rgba(102,126,234,.18)', border:'rgba(102,126,234,.55)', icon:'📊' },
+        training:  { label:'Training & PD',   en:'Training & PD',   color:'#11998e', bg:'rgba(17,153,142,.18)',  border:'rgba(17,153,142,.55)',  icon:'🎓' },
+        visit:     { label:'School Visit', en:'School Visit',    color:'#f5576c', bg:'rgba(245,87,108,.18)', border:'rgba(245,87,108,.55)', icon:'🏫' },
+        report:    { label:'Reporting',     en:'Reporting',       color:'#f7971e', bg:'rgba(247,151,30,.18)',  border:'rgba(247,151,30,.55)',  icon:'📋' },
+        event:     { label:'Events',      en:'Events',          color:'#4facfe', bg:'rgba(79,172,254,.18)', border:'rgba(79,172,254,.55)', icon:'🎉' },
+        parent:    { label:'Parent & Student',en:'Parent & Student',color:'#a855f7', bg:'rgba(168,85,247,.18)', border:'rgba(168,85,247,.55)', icon:'👨‍👩‍👧' },
       };
 
       const PRIORITY = { high:{label:'High',color:'#ef4444'}, medium:{label:'Medium',color:'#f59e0b'}, low:{label:'Low',color:'#10b981'} };
@@ -715,28 +715,28 @@
         { title:'End-of-Year Ceremony & Graduation', category:'event', priority:'high', monthStart:10, weekStart:4, monthEnd:10, weekEnd:4, description:'Year-end graduation ceremony and school closing event. Includes the Eduversal awards ceremony.', schools:'all', documents:[] },
       ];
 
-      // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── State ─────────────────────────────────────────────────────
       let currentUser  = null;
       let isAdmin      = false;
       let isModerator  = false;
       let userSchool   = null;
       let allActivities = [];
-      let myCompletions = {}; // activityId â†’ {completed, notes}
+      let myCompletions = {}; // activityId → {completed, notes}
       let activeFilter = 'all';
       let searchTerm   = '';
       let currentDetailId = null;
       let unsubActivities = null;
 
-      // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Helpers ───────────────────────────────────────────────────
       function weekIdx(mIdx, wNum) { return mIdx * 4 + (wNum - 1); }
       function totalWeeks(a) { return weekIdx(a.monthEnd, a.weekEnd) - weekIdx(a.monthStart, a.weekStart) + 1; }
       function monthLabel(idx) { return `${MONTHS[idx].short} ${MONTHS[idx].year}`; }
       function formatDateRange(a) {
         const s = MONTHS[a.monthStart]; const e = MONTHS[a.monthEnd];
-        if (a.monthStart === a.monthEnd) return `${s.name} ${s.year} Â· W${a.weekStart}${a.weekStart !== a.weekEnd ? 'â€“W'+a.weekEnd : ''}`;
-        return `${s.name} W${a.weekStart} â€“ ${e.name} W${a.weekEnd} ${e.year}`;
+        if (a.monthStart === a.monthEnd) return `${s.name} ${s.year} · W${a.weekStart}${a.weekStart !== a.weekEnd ? '–W'+a.weekEnd : ''}`;
+        return `${s.name} W${a.weekStart} – ${e.name} W${a.weekEnd} ${e.year}`;
       }
-      function docTypeIcon(t) { return {pdf:'ðŸ“„',xlsx:'ðŸ“Š',docx:'ðŸ“',link:'ðŸ”—',folder:'ðŸ“'}[t] || 'ðŸ“Ž'; }
+      function docTypeIcon(t) { return {pdf:'📄',xlsx:'📊',docx:'📝',link:'🔗',folder:'📁'}[t] || '📎'; }
       function docIconClass(t){ return `doc-icon-${t||'pdf'}`; }
 
       function getTodayWeekIdx() {
@@ -767,7 +767,7 @@
         });
       }
 
-      // â”€â”€ Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Auth ──────────────────────────────────────────────────────
       onAuthStateChanged(auth, async user => {
         if (!user) { window.location.href = 'index.html'; return; }
         currentUser = user;
@@ -796,10 +796,10 @@
         loadMyCompletions();
       });
 
-      // â”€â”€ Load activities â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Load activities ───────────────────────────────────────────
       function loadActivities() {
         const ref = collection(db,'timeline_activities');
-        // No compound orderBy â†’ no composite index needed; we sort client-side in assignLanes()
+        // No compound orderBy → no composite index needed; we sort client-side in assignLanes()
         const q   = query(ref);
         if (unsubActivities) unsubActivities();
         unsubActivities = onSnapshot(q, snap => {
@@ -810,7 +810,7 @@
         }, err => {
           console.error('Firestore load error:', err);
           document.getElementById('loadingOverlay').innerHTML =
-            '<div style="color:#ef4444;text-align:center;padding:2rem;">âš ï¸ Could not load activities.<br><small>'+err.message+'</small></div>';
+            '<div style="color:#ef4444;text-align:center;padding:2rem;">⚠️ Could not load activities.<br><small>'+err.message+'</small></div>';
         });
       }
 
@@ -828,14 +828,14 @@
         }
       }
 
-      // â”€â”€ Render Timeline â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Render Timeline ───────────────────────────────────────────
       function renderTimeline() {
         const table = document.getElementById('timelineTable');
         table.innerHTML = '';
         const filtered = filterActivities();
         const totalW = MONTHS.length * 4 * WEEK_W;
 
-        // â”€â”€ Month header row â”€â”€
+        // ── Month header row ──
         const mRow = document.createElement('div');
         mRow.className = 'tl-month-row';
         const corner = document.createElement('div');
@@ -853,7 +853,7 @@
         });
         table.appendChild(mRow);
 
-        // â”€â”€ Week header row â”€â”€
+        // ── Week header row ──
         const wRow = document.createElement('div');
         wRow.className = 'tl-week-row';
         const corner2 = document.createElement('div');
@@ -872,7 +872,7 @@
         });
         table.appendChild(wRow);
 
-        // â”€â”€ Category lane rows â”€â”€
+        // ── Category lane rows ──
         Object.entries(CATS).forEach(([catKey, catDef]) => {
           const catActs = filtered.filter(a => a.category===catKey);
           const withLanes = assignLanes(catActs);
@@ -973,7 +973,7 @@
         renderLegend();
       }
 
-      // â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Stats ──────────────────────────────────────────────────────
       function renderStats() {
         const total = allActivities.length;
         const completed = Object.values(myCompletions).filter(c=>c.completed).length;
@@ -991,7 +991,7 @@
         document.getElementById('statUpcoming').textContent  = upcoming;
       }
 
-      // â”€â”€ Legend â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Legend ─────────────────────────────────────────────────────
       function renderLegend() {
         const lg = document.getElementById('legend');
         lg.innerHTML = '';
@@ -1014,7 +1014,7 @@
         lg.appendChild(tli);
       }
 
-      // â”€â”€ Detail Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Detail Modal ───────────────────────────────────────────────
       async function openDetailModal(id) {
         currentDetailId = id;
         const act = allActivities.find(a=>a.id===id);
@@ -1026,7 +1026,7 @@
         document.getElementById('detailDate').textContent  = formatDateRange(act);
         document.getElementById('detailDuration').textContent = `${totalWeeks(act)} week(s)`;
         document.getElementById('detailSchools').textContent  = act.schools==='all' ? 'All Partner Schools' : (act.schools||[]).join(', ');
-        document.getElementById('detailDesc').textContent     = act.description || 'â€”';
+        document.getElementById('detailDesc').textContent     = act.description || '—';
         document.getElementById('detailCreatedBy').textContent= act.createdBy==='system'?'Eduversal (Demo)':'Eduversal Management';
 
         // Badges
@@ -1057,7 +1057,7 @@
         const toggle = document.getElementById('myCompToggle');
         const compLabel = document.getElementById('myCompLabel');
         toggle.className = myComp?.completed ? 'toggle-btn completed' : 'toggle-btn pending';
-        compLabel.textContent = myComp?.completed ? 'Completed âœ“' : 'Mark as Completed';
+        compLabel.textContent = myComp?.completed ? 'Completed ✓' : 'Mark as Completed';
         document.getElementById('myCompNotes').value = myComp?.notes || '';
 
         // Admin buttons
@@ -1097,7 +1097,7 @@
         const lbl = document.getElementById('myCompLabel');
         const isDone = btn.classList.contains('completed');
         btn.className = isDone ? 'toggle-btn pending' : 'toggle-btn completed';
-        lbl.textContent = isDone ? 'Mark as Completed' : 'Completed âœ“';
+        lbl.textContent = isDone ? 'Mark as Completed' : 'Completed ✓';
       });
 
       document.getElementById('saveCompBtn').addEventListener('click', async () => {
@@ -1128,7 +1128,7 @@
         document.getElementById('detailModal').classList.remove('open');
       });
 
-      // â”€â”€ Edit/Add Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Edit/Add Modal ─────────────────────────────────────────────
       function openEditModal(act=null) {
         document.getElementById('editModalTitle').textContent = act ? 'Edit Activity' : 'Add New Activity';
         document.getElementById('editId').value        = act?.id || '';
@@ -1141,10 +1141,10 @@
           const sel = document.getElementById(id);
           sel.innerHTML = MONTHS.map((m,i)=>`<option value="${i}">${m.name} ${m.year}</option>`).join('');
         });
-        document.getElementById('editMonthStart').value = act?.monthStart ?? 0;
-        document.getElementById('editWeekStart').value  = act?.weekStart  ?? 1;
-        document.getElementById('editMonthEnd').value   = act?.monthEnd   ?? 0;
-        document.getElementById('editWeekEnd').value    = act?.weekEnd    ?? 1;
+        document.getElementById('editMonthStart').value = act?.monthStart ? 0;
+        document.getElementById('editWeekStart').value  = act?.weekStart  ? 1;
+        document.getElementById('editMonthEnd').value   = act?.monthEnd   ? 0;
+        document.getElementById('editWeekEnd').value    = act?.weekEnd    ? 1;
         // Schools
         const isAll = !act || act.schools==='all';
         document.getElementById('schoolsAllBtn').className    = isAll ? 'schools-toggle-btn active' : 'schools-toggle-btn';
@@ -1235,7 +1235,7 @@
       document.getElementById('editCancelBtn').addEventListener('click', () => document.getElementById('editModal').classList.remove('open'));
       document.getElementById('detailClose').addEventListener('click', () => document.getElementById('detailModal').classList.remove('open'));
 
-      // â”€â”€ Admin Activity List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Admin Activity List ────────────────────────────────────────
       const ADMIN_PAGE_SIZE = 20;
       let adminSortMode    = 'date-asc';
       let adminSearchTerm  = '';
@@ -1273,7 +1273,7 @@
         document.getElementById('adminRowCount').textContent =
           `${totalFiltered} of ${allActivities.length} activities`;
 
-        // â”€â”€ Table body â”€â”€
+        // ── Table body ──
         const tbody = document.getElementById('adminTableBody');
         tbody.innerHTML = '';
 
@@ -1331,7 +1331,7 @@
           });
         }
 
-        // â”€â”€ Pagination â”€â”€
+        // ── Pagination ──
         const pagEl   = document.getElementById('adminPagination');
         const infoEl  = document.getElementById('adminPagInfo');
         const btnsEl  = document.getElementById('adminPagBtns');
@@ -1340,7 +1340,7 @@
           pagEl.style.display = 'none';
         } else {
           pagEl.style.display = 'flex';
-          infoEl.textContent  = `Showing ${startIdx + 1}â€“${endIdx} of ${totalFiltered}`;
+          infoEl.textContent  = `Showing ${startIdx + 1}–${endIdx} of ${totalFiltered}`;
           btnsEl.innerHTML    = '';
 
           const addBtn = (label, page, isActive, disabled) => {
@@ -1354,14 +1354,14 @@
           const addEllipsis = () => {
             const sp = document.createElement('span');
             sp.className = 'admin-pag-ellipsis';
-            sp.textContent = 'â€¦';
+            sp.textContent = '…';
             btnsEl.appendChild(sp);
           };
 
           // Prev
-          addBtn('â€¹', adminCurrentPage - 1, false, adminCurrentPage === 1);
+          addBtn('‹', adminCurrentPage - 1, false, adminCurrentPage === 1);
 
-          // Page numbers: always show first, last, current Â±1
+          // Page numbers: always show first, last, current ±1
           const pages = new Set([1, totalPages, adminCurrentPage, adminCurrentPage - 1, adminCurrentPage + 1].filter(p => p >= 1 && p <= totalPages));
           const sorted = [...pages].sort((a,b) => a - b);
           let prev = 0;
@@ -1372,10 +1372,10 @@
           });
 
           // Next
-          addBtn('â€º', adminCurrentPage + 1, false, adminCurrentPage === totalPages);
+          addBtn('›', adminCurrentPage + 1, false, adminCurrentPage === totalPages);
         }
 
-        // â”€â”€ Sort icon highlight â”€â”€
+        // ── Sort icon highlight ──
         document.querySelectorAll('.admin-table th[data-sort]').forEach(th => {
           const icon = th.querySelector('.sort-icon');
           if (!icon) return;
@@ -1384,10 +1384,10 @@
                       || (s === 'title'    && (adminSortMode === 'title-asc' || adminSortMode === 'title-desc'))
                       || s === adminSortMode;
           if (active) {
-            icon.textContent = (adminSortMode.endsWith('-desc')) ? 'â†“' : 'â†‘';
+            icon.textContent = (adminSortMode.endsWith('-desc')) ? '↓' : '↑';
             icon.style.opacity = '1';
           } else {
-            icon.textContent = 'â†•';
+            icon.textContent = '↕';
             icon.style.opacity = '.4';
           }
         });
@@ -1424,7 +1424,7 @@
         document.getElementById(id).addEventListener('click', e => { if(e.target.id===id) document.getElementById(id).classList.remove('open'); });
       });
 
-      // â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Filters ────────────────────────────────────────────────────
       function applyFilterBtnStyle(btn, cat) {
         if (cat==='all') { btn.style.background='rgba(108,92,231,.18)'; btn.style.borderColor='rgba(108,92,231,.4)'; btn.style.color='#fff'; return; }
         const c = CATS[cat];
@@ -1446,19 +1446,19 @@
         renderTimeline();
       });
 
-      // â”€â”€ Scroll to today â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Scroll to today ────────────────────────────────────────────
       document.getElementById('todayBtn').addEventListener('click', () => {
         const outer = document.getElementById('timelineOuter');
         const wi = getTodayWeekIdx();
         if (wi>=0) outer.scrollTo({ left: 210 + wi*WEEK_W - outer.clientWidth/2 + WEEK_W/2, behavior:'smooth' });
       });
 
-      // â”€â”€ Nav scroll effect â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Nav scroll effect ──────────────────────────────────────────
       window.addEventListener('scroll', () => {
         document.getElementById('topNav').classList.toggle('scrolled', window.scrollY>10);
       });
 
-      // â”€â”€ Nav badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Nav badges ─────────────────────────────────────────────────
       async function loadNavBadges() {
         try {
           const lastAnn = localStorage.getItem('lastSeenAnn') || '0';
@@ -1476,7 +1476,7 @@
         } catch(e) {}
       }
 
-      // â”€â”€ Profile dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // ── Profile dropdown ───────────────────────────────────────────
       function setupNav() {
         const wrap = document.getElementById('profileWrap');
         const btn  = document.getElementById('profileBtn');

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Message Board â€” Eduversal Indonesia</title>
+<title>Message Board — Eduversal Indonesia</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -32,7 +32,7 @@ body {
   font-size: 14px;
 }
 
-/* â”€â”€â”€ TOP NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOP NAV ─────────────────────────────────── */
 .top-nav {
   position: sticky; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -145,7 +145,7 @@ body {
   .nav-page-title { font-size: 13px; }
 }
 
-/* â”€â”€â”€ LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOADING ─────────────────────────────────── */
 #loadingScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: flex; align-items: center; justify-content: center;
@@ -159,7 +159,7 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 #loadingScreen p { color: rgba(255,255,255,.5); font-size: 13px; }
 
-/* â”€â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOGIN ──────────────────────────────────── */
 #loginScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: none; align-items: center; justify-content: center;
@@ -199,10 +199,10 @@ body {
 .login-email button:hover { background: var(--accent-dark); }
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
-/* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── MAIN CONTENT ────────────────────────────── */
 #mainContent { display: none; }
 
-/* â”€â”€â”€ FORUM LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FORUM LAYOUT ────────────────────────────── */
 .forum-wrap {
   max-width: 1120px;
   margin: 0 auto;
@@ -213,7 +213,7 @@ body {
   align-items: start;
 }
 
-/* â”€â”€â”€ SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SIDEBAR ─────────────────────────────────── */
 .forum-sidebar {
   position: sticky;
   top: 86px;
@@ -270,10 +270,10 @@ body {
   background: var(--accent-2); color: var(--accent);
 }
 
-/* â”€â”€â”€ FORUM MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FORUM MAIN ──────────────────────────────── */
 .forum-main { min-width: 0; }
 
-/* â”€â”€â”€ FORUM HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FORUM HEADER ────────────────────────────── */
 .forum-header {
   display: flex; align-items: center; gap: 12px;
   margin-bottom: 14px; flex-wrap: wrap;
@@ -295,7 +295,7 @@ body {
 }
 .new-topic-btn svg { width: 14px; height: 14px; }
 
-/* â”€â”€â”€ FILTER BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FILTER BAR ──────────────────────────────── */
 .filter-bar {
   display: flex; align-items: center; gap: 10px;
   margin-bottom: 14px; flex-wrap: wrap;
@@ -330,7 +330,7 @@ body {
 .sort-select:focus { border-color: var(--accent); }
 .topic-count { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-left: auto; white-space: nowrap; }
 
-/* â”€â”€â”€ TOPIC LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOPIC LIST ──────────────────────────────── */
 .topic-list { display: flex; flex-direction: column; gap: 6px; }
 .empty-state {
   text-align: center; padding: 56px 20px; color: var(--ink-3);
@@ -339,7 +339,7 @@ body {
 }
 .empty-icon { font-size: 36px; margin-bottom: 10px; }
 
-/* â”€â”€â”€ TOPIC ROW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOPIC ROW ───────────────────────────────── */
 .topic-row {
   background: var(--white); border: 1px solid var(--border);
   border-left: 3px solid var(--border);
@@ -410,7 +410,7 @@ body {
 .cat-events    { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
 .cat-technical { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
-/* â”€â”€â”€ TOPIC DETAIL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOPIC DETAIL ────────────────────────────── */
 .thread-breadcrumb {
   display: flex; align-items: center; gap: 7px;
   font-size: 13px; color: var(--ink-3); margin-bottom: 20px; flex-wrap: wrap;
@@ -481,7 +481,7 @@ body {
 .pin-btn:hover { background: #fef3c7; border-color: #fcd34d; }
 .pin-btn.pinned-active { background: #fef3c7; border-color: #fcd34d; color: #78350f; }
 
-/* â”€â”€â”€ INLINE EDIT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── INLINE EDIT ─────────────────────────────── */
 .inline-edit-form { display: flex; flex-direction: column; gap: 10px; }
 .inline-input, .inline-textarea {
   width: 100%; background: var(--paper);
@@ -509,7 +509,7 @@ body {
 }
 .cancel-btn:hover { background: var(--border); color: var(--ink); }
 
-/* â”€â”€â”€ REPLIES SECTION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── REPLIES SECTION ─────────────────────────── */
 .replies-section-header {
   font-size: 13px; font-weight: 700; color: var(--ink-2);
   margin-bottom: 10px; padding-bottom: 8px;
@@ -550,7 +550,7 @@ body {
 }
 .reply-edited { font-size: 11px; color: var(--ink-3); margin-top: 6px; }
 
-/* â”€â”€â”€ REPLY FORM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── REPLY FORM ──────────────────────────────── */
 .reply-form-card {
   background: var(--white); border: 1px solid var(--border);
   border-radius: 12px; padding: 18px; box-shadow: var(--shadow-sm);
@@ -583,7 +583,7 @@ body {
 .reply-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; box-shadow: none; }
 .reply-send-btn svg { width: 14px; height: 14px; }
 
-/* â”€â”€â”€ NEW TOPIC MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── NEW TOPIC MODAL ─────────────────────────── */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(28,28,46,0.55); backdrop-filter: blur(4px);
@@ -638,14 +638,14 @@ body {
 .modal-status { margin-top: 10px; font-size: 12.5px; text-align: center; min-height: 18px; }
 .modal-status.error { color: #dc2626; }
 
-/* â”€â”€â”€ SPINNER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SPINNER ─────────────────────────────────── */
 .btn-spinner {
   display: inline-block; width: 13px; height: 13px;
   border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
   border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle;
 }
 
-/* â”€â”€â”€ FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FAB ─────────────────────────────────────── */
 .fab-container {
   position: fixed; bottom: 24px; right: 24px;
   display: flex; flex-direction: column; align-items: flex-end;
@@ -695,7 +695,7 @@ body {
 .fab-container.open .fab-ic-open  { opacity: 0; transform: rotate(45deg) scale(.7); }
 .fab-container.open .fab-ic-close { opacity: 1; transform: rotate(0deg) scale(1); }
 
-/* â”€â”€â”€ FEEDBACK MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FEEDBACK MODAL ──────────────────────────── */
 .feedback-overlay {
   position: fixed; inset: 0; background: rgba(28,28,46,.55);
   backdrop-filter: blur(4px); z-index: 2000;
@@ -742,7 +742,7 @@ body {
 .feedback-status.ok  { color: #16a34a; display: block; }
 .feedback-status.err { color: #dc2626; display: block; }
 
-/* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── RESPONSIVE ──────────────────────────────── */
 @media (max-width: 900px) {
   .forum-wrap { grid-template-columns: 1fr; gap: 16px; }
   .forum-sidebar { position: static; flex-direction: row; flex-wrap: wrap; }
@@ -775,13 +775,13 @@ body {
 <!-- Loading Screen -->
 <div id="loadingScreen">
   <div class="spinner"></div>
-  <p>Loadingâ€¦</p>
+  <p>Loading…</p>
 </div>
 
 <!-- Login Screen -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-icon">ðŸŽ“</div>
+    <div class="login-icon">🎓</div>
     <h2>Eduversal Indonesia</h2>
     <p>Sign in to access the Message Board</p>
     <button id="googleLoginBtn" class="login-google">
@@ -827,14 +827,14 @@ body {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
               Topics
             </span>
-            <span class="stat-value" id="statTopics">â€”</span>
+            <span class="stat-value" id="statTopics">—</span>
           </div>
           <div class="stat-item">
             <span class="stat-label">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
               Replies
             </span>
-            <span class="stat-value" id="statReplies">â€”</span>
+            <span class="stat-value" id="statReplies">—</span>
           </div>
         </div>
       </div>
@@ -911,7 +911,7 @@ body {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
-            <input type="text" class="search-input" id="searchInput" placeholder="Search topicsâ€¦">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search topics…">
           </div>
           <select class="sort-select" id="sortSelect">
             <option value="latest">Latest</option>
@@ -922,7 +922,7 @@ body {
         </div>
 
         <div id="topicList" class="topic-list">
-          <div class="empty-state"><div class="empty-icon">ðŸ’¬</div>Loading topicsâ€¦</div>
+          <div class="empty-state"><div class="empty-icon">💬</div>Loading topics…</div>
         </div>
       </div>
 
@@ -963,11 +963,11 @@ body {
       <div class="modal-field">
         <label class="modal-label" for="topicCategory">Category</label>
         <select class="modal-select" id="topicCategory">
-          <option value="general">ðŸ’¬ General Discussion</option>
-          <option value="academic">ðŸ“š Academic &amp; Curriculum</option>
-          <option value="resources">ðŸ“‚ Resources &amp; Materials</option>
-          <option value="events">ðŸ“… Events &amp; Activities</option>
-          <option value="technical">âš™ï¸ Technical Support</option>
+          <option value="general">💬 General Discussion</option>
+          <option value="academic">📚 Academic &amp; Curriculum</option>
+          <option value="resources">📂 Resources &amp; Materials</option>
+          <option value="events">📅 Events &amp; Activities</option>
+          <option value="technical">⚙️ Technical Support</option>
         </select>
       </div>
       <div class="modal-field">
@@ -976,7 +976,7 @@ body {
       </div>
       <div class="modal-field">
         <label class="modal-label" for="topicBody">Message</label>
-        <textarea class="modal-textarea" id="topicBody" placeholder="Share your thoughts, questions, or resourcesâ€¦" required></textarea>
+        <textarea class="modal-textarea" id="topicBody" placeholder="Share your thoughts, questions, or resources…" required></textarea>
       </div>
       <button type="submit" class="modal-submit-btn" id="topicSubmitBtn">Post Topic</button>
       <div class="modal-status" id="topicStatus"></div>
@@ -1026,7 +1026,7 @@ body {
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackSubject">Subject</label>
       <select class="feedback-select" id="fabFeedbackSubject">
-        <option value="">â€” select â€”</option>
+        <option value="">— select —</option>
         <option value="bug">Bug / Issue</option>
         <option value="feature">Feature Request</option>
         <option value="content">Content Update</option>
@@ -1036,7 +1036,7 @@ body {
     </div>
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackMessage">Message</label>
-      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedbackâ€¦"></textarea>
+      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedback…"></textarea>
     </div>
     <button class="feedback-submit-btn" id="fabFeedbackSubmitBtn">Send Feedback</button>
     <div class="feedback-status" id="fabFeedbackStatus"></div>
@@ -1059,7 +1059,7 @@ body {
 
   await window.__loadAcademicNavbar("messageboard");
 
-  // â”€â”€ Firebase Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Firebase Init ─────────────────────────────────────────────
   const firebaseConfig = {
     apiKey:            window.ENV.FIREBASE_API_KEY,
     authDomain:        window.ENV.FIREBASE_AUTH_DOMAIN,
@@ -1073,16 +1073,16 @@ body {
   const db       = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // â”€â”€ Category Config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Category Config ───────────────────────────────────────────
   const CAT_CONFIG = {
-    general:   { label: 'General',   emoji: 'ðŸ’¬', dot: '#0891b2' },
-    academic:  { label: 'Academic',  emoji: 'ðŸ“š', dot: '#7c3aed' },
-    resources: { label: 'Resources', emoji: 'ðŸ“‚', dot: '#16a34a' },
-    events:    { label: 'Events',    emoji: 'ðŸ“…', dot: '#ea580c' },
-    technical: { label: 'Technical', emoji: 'âš™ï¸', dot: '#475569' },
+    general:   { label: 'General',   emoji: '💬', dot: '#0891b2' },
+    academic:  { label: 'Academic',  emoji: '📚', dot: '#7c3aed' },
+    resources: { label: 'Resources', emoji: '📂', dot: '#16a34a' },
+    events:    { label: 'Events',    emoji: '📅', dot: '#ea580c' },
+    technical: { label: 'Technical', emoji: '⚙️', dot: '#475569' },
   };
 
-  // â”€â”€ App State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── App State ─────────────────────────────────────────────────
   let currentUser         = null;
   let currentUserRole     = null;
   let currentTopicId      = null;
@@ -1104,13 +1104,13 @@ body {
     "tnafatih.sch.id","eduversal.org",
   ];
 
-  // â”€â”€ SVG Icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── SVG Icons ─────────────────────────────────────────────────
   const EDIT_ICON   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>`;
   const DELETE_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`;
   const SEND_ICON   = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`;
   const PIN_ICON    = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
 
-  // â”€â”€ Utility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Utility ───────────────────────────────────────────────────
   function escHtml(str) {
     if (!str) return "";
     return String(str)
@@ -1133,7 +1133,7 @@ body {
     return currentUserDisplayName || user.displayName || user.email.split("@")[0];
   }
 
-  // â”€â”€ Avatar helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Avatar helpers ────────────────────────────────────────────
   const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
   function avatarColor(str) {
     let h = 0;
@@ -1187,7 +1187,7 @@ body {
   });
   document.getElementById('ddSignOut').addEventListener('click', () => signOut(auth));
 
-  // â”€â”€ Category helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Category helpers ──────────────────────────────────────────
   function catBadgeHtml(cat) {
     const c = CAT_CONFIG[cat] || CAT_CONFIG.general;
     return `<span class="cat-badge cat-${escHtml(cat)}">${c.label}</span>`;
@@ -1197,14 +1197,14 @@ body {
     return currentUser && (currentUser.uid === uid || currentUserRole === "moderator");
   }
 
-  // â”€â”€ Auth error display â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auth error display ────────────────────────────────────────
   function showError(msg) {
     const el = document.getElementById("errorMsg");
     el.textContent = msg; el.style.display = "block";
     setTimeout(() => (el.style.display = "none"), 4000);
   }
 
-  // â”€â”€ Auth State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auth State ────────────────────────────────────────────────
   onAuthStateChanged(auth, async (user) => {
     document.getElementById("loadingScreen").style.display = "none";
     if (user) {
@@ -1273,7 +1273,7 @@ body {
 
   document.getElementById("logoutBtn").addEventListener("click", () => signOut(auth));
 
-  // â”€â”€ Forum Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Forum Init ────────────────────────────────────────────────
   function initForum() {
     // Wire up search and sort
     document.getElementById('searchInput').addEventListener('input', e => {
@@ -1286,7 +1286,7 @@ body {
     showTopicList();
   }
 
-  // â”€â”€ Category filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Category filter ───────────────────────────────────────────
   window.__mb_setCategory = function(cat) {
     currentCategory = cat;
     // Update sidebar active state
@@ -1301,7 +1301,7 @@ body {
     renderTopicList(allTopicDocs);
   }
 
-  // â”€â”€ Sidebar stats update â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Sidebar stats update ──────────────────────────────────────
   function updateSidebarStats(docs) {
     // Total topics
     document.getElementById('statTopics').textContent = docs.length;
@@ -1320,7 +1320,7 @@ body {
     });
   }
 
-  // â”€â”€ View: Topic List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── View: Topic List ──────────────────────────────────────────
   function showTopicList() {
     editingTarget = null; currentTopicId = null;
     currentTopicData = null; cachedReplyDocs = [];
@@ -1388,7 +1388,7 @@ body {
       const msg = searchQuery || currentCategory !== 'all'
         ? 'No topics match your filter.'
         : 'No topics yet. Be the first to post!';
-      container.innerHTML = `<div class="empty-state"><div class="empty-icon">ðŸ’¬</div>${msg}</div>`;
+      container.innerHTML = `<div class="empty-state"><div class="empty-icon">💬</div>${msg}</div>`;
       return;
     }
 
@@ -1404,14 +1404,14 @@ body {
           <div class="topic-row-icon">${cfg.emoji}</div>
           <div class="topic-row-body">
             <div class="topic-row-title-line">
-              ${isPinned ? '<span class="pinned-badge">ðŸ“Œ Pinned</span>' : ''}
+              ${isPinned ? '<span class="pinned-badge">📌 Pinned</span>' : ''}
               ${catBadgeHtml(cat)}
               <span class="topic-row-title">${escHtml(data.title)}</span>
             </div>
             <div class="topic-row-meta">
               ${makeAvatarElFromName('author-avatar', data.displayName || '?')}
               <span>${escHtml(data.displayName)}</span>
-              <span class="meta-sep">Â·</span>
+              <span class="meta-sep">·</span>
               <span>${formatDate(data.createdAt)}</span>
             </div>
           </div>
@@ -1427,7 +1427,7 @@ body {
     }).join('');
   }
 
-  // â”€â”€ View: Topic Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── View: Topic Detail ────────────────────────────────────────
   async function openTopic(topicId) {
     if (unsubTopics) { unsubTopics(); unsubTopics = null; }
     if (unsubReplies) { unsubReplies(); unsubReplies = null; }
@@ -1436,7 +1436,7 @@ body {
 
     document.getElementById("topicListView").style.display = "none";
     document.getElementById("topicDetailView").style.display = "block";
-    document.getElementById("topicPost").innerHTML = '<div class="empty-state" style="padding:32px 0">Loadingâ€¦</div>';
+    document.getElementById("topicPost").innerHTML = '<div class="empty-state" style="padding:32px 0">Loading…</div>';
     document.getElementById("repliesArea").innerHTML = "";
 
     const topicSnap = await getDoc(doc(db,"topics",topicId));
@@ -1459,7 +1459,7 @@ body {
     });
   }
 
-  // â”€â”€ Render: Topic Post â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Render: Topic Post ────────────────────────────────────────
   function renderTopicPost() {
     const el = document.getElementById("topicPost");
     if (!el || !currentTopicData) return;
@@ -1495,7 +1495,7 @@ body {
       <div class="thread-post">
         <div class="thread-post-top">
           ${catBadgeHtml(cat)}
-          ${d.pinned ? '<span class="pinned-badge">ðŸ“Œ Pinned</span>' : ''}
+          ${d.pinned ? '<span class="pinned-badge">📌 Pinned</span>' : ''}
         </div>
         <div class="thread-post-header">
           <h2 class="thread-post-title">${escHtml(d.title)}</h2>
@@ -1512,7 +1512,7 @@ body {
             ${makeAvatarElFromName('author-avatar', d.displayName || '?')}
             <strong>${escHtml(d.displayName)}</strong>
           </div>
-          <span>Â·</span>
+          <span>·</span>
           <span>${formatDate(d.createdAt)}</span>
           ${editedBadge}
         </div>
@@ -1529,7 +1529,7 @@ body {
     }
   }
 
-  // â”€â”€ Render: Replies â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Render: Replies ───────────────────────────────────────────
   function renderReplies(docs) {
     const area = document.getElementById("repliesArea");
     if (!area) return;
@@ -1537,7 +1537,7 @@ body {
     const cnt = docs.length;
 
     const repliesHtml = !cnt
-      ? '<div class="empty-state" style="padding:28px 0;border:none;background:transparent;">No replies yet â€” start the conversation!</div>'
+      ? '<div class="empty-state" style="padding:28px 0;border:none;background:transparent;">No replies yet — start the conversation!</div>'
       : docs.map(d => {
           const data   = d.data();
           const canEdit= canModify(data.uid);
@@ -1592,7 +1592,7 @@ body {
       </div>
       <div class="reply-form-card">
         <div class="reply-form-label">Leave a Reply</div>
-        <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your replyâ€¦"></textarea>
+        <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your reply…"></textarea>
         <div class="reply-form-footer">
           <button class="reply-send-btn" id="replySendBtn">
             ${SEND_ICON} Send Reply
@@ -1622,7 +1622,7 @@ body {
     }
   }
 
-  // â”€â”€ Topic CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Topic CRUD ────────────────────────────────────────────────
   async function saveTopicEdit() {
     const titleEl = document.getElementById("editTopicTitle");
     const bodyEl  = document.getElementById("editTopicBody");
@@ -1631,7 +1631,7 @@ body {
     const body  = bodyEl.value.trim();
     if (!title || !body) return;
     const saveBtn = document.getElementById("saveTopicEditBtn");
-    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = "Savingâ€¦"; }
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = "Saving…"; }
     try {
       await updateDoc(doc(db,"topics",currentTopicId), { title, body, editedAt: serverTimestamp() });
       const snap = await getDoc(doc(db,"topics",currentTopicId));
@@ -1663,7 +1663,7 @@ body {
     } catch (err) { console.error("Pin toggle error:", err); }
   }
 
-  // â”€â”€ Reply CRUD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Reply CRUD ────────────────────────────────────────────────
   async function submitReply() {
     const textarea = document.getElementById("replyTextarea");
     if (!textarea) return;
@@ -1671,7 +1671,7 @@ body {
     if (!body || !currentUser) return;
     const btn = document.getElementById("replySendBtn");
     btn.disabled = true;
-    btn.innerHTML = `<span class="btn-spinner"></span> Sendingâ€¦`;
+    btn.innerHTML = `<span class="btn-spinner"></span> Sending…`;
     try {
       await addDoc(collection(db,"topics",currentTopicId,"replies"), {
         body, uid: currentUser.uid,
@@ -1706,7 +1706,7 @@ body {
     } catch (err) { console.error("Reply delete error:", err); }
   }
 
-  // â”€â”€ New Topic Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── New Topic Modal ───────────────────────────────────────────
   const modal = document.getElementById("newTopicModal");
   function openModal() {
     document.getElementById("newTopicForm").reset();
@@ -1731,7 +1731,7 @@ body {
 
     const btn      = document.getElementById("topicSubmitBtn");
     const statusEl = document.getElementById("topicStatus");
-    btn.disabled = true; btn.textContent = "Postingâ€¦";
+    btn.disabled = true; btn.textContent = "Posting…";
     statusEl.className = "modal-status"; statusEl.textContent = "";
 
     try {
@@ -1754,13 +1754,13 @@ body {
     }
   });
 
-  // â”€â”€ Back Button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Back Button ───────────────────────────────────────────────
   document.getElementById("backToListBtn").addEventListener("click", showTopicList);
 
-  // â”€â”€ Global bridge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Global bridge ─────────────────────────────────────────────
   window.__mb_openTopic = openTopic;
 
-  // â”€â”€ Speed Dial FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Speed Dial FAB ────────────────────────────────────────────
   (function(){
     const c = document.getElementById('fabContainer');
     const m = document.getElementById('fabMain');
@@ -1769,7 +1769,7 @@ body {
     document.addEventListener('click', e => { if (!c.contains(e.target)) c.classList.remove('open'); });
   })();
 
-  // â”€â”€ FAB Feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FAB Feedback ──────────────────────────────────────────────
   const fabFbOverlay = document.getElementById('fabFeedbackOverlay');
   document.getElementById('fabFeedbackBtn')?.addEventListener('click', () => {
     document.getElementById('fabContainer').classList.remove('open');
@@ -1792,7 +1792,7 @@ body {
       statusEl.textContent = 'Please fill in all fields.';
       statusEl.className = 'feedback-status err'; return;
     }
-    btn.disabled = true; btn.textContent = 'Sendingâ€¦';
+    btn.disabled = true; btn.textContent = 'Sending…';
     try {
       await addDoc(collection(db,'feedbacks'), {
         subject, message,
@@ -1800,7 +1800,7 @@ body {
         userEmail: currentUser?.email || null,
         createdAt: serverTimestamp(),
       });
-      statusEl.textContent = 'Feedback sent â€” thank you!';
+      statusEl.textContent = 'Feedback sent — thank you!';
       statusEl.className = 'feedback-status ok';
       setTimeout(closeFabFeedback, 2000);
     } catch {

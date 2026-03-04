@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Prompt Library â€” Academic Hub</title>
+<title>AI Prompt Library — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -32,7 +32,7 @@ body {
   font-size: 14px;
 }
 
-/* â”€â”€â”€ TOP NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOP NAV ────────────────────────────────────── */
 .top-nav {
   position: sticky; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -126,7 +126,7 @@ body {
 .dd-signout-btn:hover { background: rgba(231,76,60,0.22); color: #e74c3c; }
 .dd-signout-btn svg { width: 15px; height: 15px; }
 
-/* â”€â”€â”€ LOADING / LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOADING / LOGIN ──────────────────────────── */
 #loadingScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: flex; align-items: center; justify-content: center;
@@ -156,10 +156,10 @@ body {
 .login-email button:hover { background: #0e7490; }
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
-/* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── MAIN CONTENT ─────────────────────────────── */
 #mainContent { display: none; }
 
-/* â”€â”€â”€ SEARCH BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SEARCH BAR ───────────────────────────────── */
 .search-bar {
   background: var(--white);
   border-bottom: 1px solid var(--border);
@@ -189,7 +189,7 @@ body {
 .sort-select:focus { border-color: var(--accent); }
 .prompt-count { font-size: 12.5px; color: var(--ink-3); margin-left: auto; white-space: nowrap; }
 
-/* â”€â”€â”€ PAGE LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PAGE LAYOUT ───────────────────────────────── */
 .page-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
@@ -201,7 +201,7 @@ body {
   align-items: start;
 }
 
-/* â”€â”€â”€ SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SIDEBAR ───────────────────────────────────── */
 .sidebar { position: sticky; top: 118px; }
 .sidebar-card {
   background: var(--white); border: 1px solid var(--border);
@@ -237,7 +237,7 @@ body {
 .cat-count { font-size: 11px; background: var(--paper-2); color: var(--ink-3); border-radius: 20px; padding: 2px 7px; font-weight: 500; }
 .cat-item.active .cat-count { background: rgba(8,145,178,0.15); color: var(--accent-dark); }
 
-/* â”€â”€â”€ PROMPT GRID â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PROMPT GRID ───────────────────────────────── */
 .prompt-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -251,7 +251,7 @@ body {
 .empty-state p { font-size: 15px; font-weight: 500; color: var(--ink-2); margin-bottom: 6px; }
 .empty-state span { font-size: 13px; }
 
-/* â”€â”€â”€ PROMPT CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PROMPT CARD ───────────────────────────────── */
 .prompt-card {
   background: var(--white); border: 1px solid var(--border);
   border-radius: 12px; overflow: hidden;
@@ -328,7 +328,7 @@ body {
 .card-admin-btn.card-del-btn:hover { border-color: #dc2626; color: #dc2626; background: #fef2f2; }
 .card-admin-btn svg { width: 13px; height: 13px; }
 
-/* â”€â”€â”€ TEST DRAWER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TEST DRAWER ───────────────────────────────── */
 .drawer-overlay {
   position: fixed; inset: 0; z-index: 500;
   background: rgba(28,28,46,.35); backdrop-filter: blur(4px);
@@ -412,7 +412,7 @@ body {
 .drawer-btn.success { background: #059669; border-color: #059669; color: white; }
 .drawer-tip { width: 100%; font-size: 11.5px; color: var(--ink-3); text-align: center; padding-top: 4px; }
 
-/* â”€â”€â”€ ADD/EDIT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ADD/EDIT MODAL ─────────────────────────────── */
 .modal-overlay {
   position: fixed; inset: 0; z-index: 600;
   background: rgba(28,28,46,.45); backdrop-filter: blur(6px);
@@ -445,7 +445,7 @@ body {
 .modal-save { padding: 10px 24px; border-radius: 8px; border: none; background: var(--accent); color: white; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; transition: background .2s; }
 .modal-save:hover { background: var(--accent-dark); }
 
-/* â”€â”€â”€ CONFIRM DELETE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── CONFIRM DELETE ─────────────────────────────── */
 .confirm-overlay {
   position: fixed; inset: 0; z-index: 700;
   background: rgba(28,28,46,.5); backdrop-filter: blur(6px);
@@ -464,7 +464,7 @@ body {
 .confirm-delete { padding: 9px 18px; border-radius: 8px; border: none; background: #dc2626; color: white; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
 .confirm-delete:hover { background: #b91c1c; }
 
-/* â”€â”€â”€ FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FAB ────────────────────────────────────────── */
 .fab-container { position: fixed; right: 24px; bottom: 24px; z-index: 400; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
 .fab-items { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; opacity: 0; pointer-events: none; transform: translateY(10px); transition: all .25s ease; }
 .fab-container.open .fab-items { opacity: 1; pointer-events: all; transform: translateY(0); }
@@ -486,7 +486,7 @@ body {
 .fab-container.open .fab-ic-open { opacity: 0; transform: rotate(90deg); }
 .fab-container.open .fab-ic-close { opacity: 1; transform: rotate(0); }
 
-/* â”€â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOAST ──────────────────────────────────────── */
 .toast {
   position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: rgba(28,28,46,.92); color: white;
@@ -500,14 +500,14 @@ body {
 .toast.success { background: rgba(5,150,105,.92); }
 .toast svg { width: 15px; height: 15px; }
 
-/* â”€â”€â”€ ERROR MSG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ERROR MSG ──────────────────────────────────── */
 #errorMsg {
   position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
   background: #dc2626; color: white; padding: 10px 20px; border-radius: 8px;
   font-size: 13px; z-index: 9000; display: none;
 }
 
-/* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── RESPONSIVE ─────────────────────────────────── */
 @media (max-width: 900px) {
   .page-layout { grid-template-columns: 1fr; padding: 16px; }
   .sidebar { position: static; display: none; }
@@ -530,13 +530,13 @@ body {
 <!-- Loading -->
 <div id="loadingScreen">
   <div class="spinner"></div>
-  <p>Loading AI Prompt Libraryâ€¦</p>
+  <p>Loading AI Prompt Library…</p>
 </div>
 
 <!-- Login -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-icon">âœ¨</div>
+    <div class="login-icon">✨</div>
     <h2>AI Prompt Library</h2>
     <p>Sign in with your school account to access curated prompts.</p>
     <button class="login-google" id="googleLoginBtn">
@@ -566,12 +566,12 @@ body {
   <div class="search-bar">
     <div class="search-input-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" id="searchInput" type="text" placeholder="Search promptsâ€¦">
+      <input class="search-input" id="searchInput" type="text" placeholder="Search prompts…">
     </div>
     <select class="sort-select" id="sortSelect">
       <option value="newest">Newest First</option>
       <option value="popular">Most Used</option>
-      <option value="az">A â†’ Z</option>
+      <option value="az">A → Z</option>
     </select>
     <span class="prompt-count" id="promptCount"></span>
     <button class="nav-btn" id="addPromptBtn" style="display:none">
@@ -589,7 +589,7 @@ body {
         <div class="sidebar-card-title">Library Stats</div>
         <div class="stats-grid">
           <div class="stat-cell">
-            <div class="stat-num" id="statTotal">â€”</div>
+            <div class="stat-num" id="statTotal">—</div>
             <div class="stat-label">Total Prompts</div>
           </div>
           <div class="stat-cell">
@@ -597,11 +597,11 @@ body {
             <div class="stat-label">Categories</div>
           </div>
           <div class="stat-cell">
-            <div class="stat-num" id="statUses">â€”</div>
+            <div class="stat-num" id="statUses">—</div>
             <div class="stat-label">Total Uses</div>
           </div>
           <div class="stat-cell">
-            <div class="stat-num" id="statNew">â€”</div>
+            <div class="stat-num" id="statNew">—</div>
             <div class="stat-label">This Week</div>
           </div>
         </div>
@@ -643,7 +643,7 @@ body {
         <div class="drawer-desc" id="drawerDesc"></div>
       </div>
       <div>
-        <div class="drawer-section-label">Prompt â€” Edit before using</div>
+        <div class="drawer-section-label">Prompt — Edit before using</div>
         <textarea class="prompt-edit-area" id="drawerPromptText" spellcheck="false"></textarea>
       </div>
       <div id="placeholderSection" style="display:none">
@@ -663,7 +663,7 @@ body {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Test in Claude
       </button>
-      <div class="drawer-tip">Opens claude.ai Â· Free account works Â· Paste the copied prompt</div>
+      <div class="drawer-tip">Opens claude.ai · Free account works · Paste the copied prompt</div>
     </div>
   </div>
 </div>
@@ -692,16 +692,16 @@ body {
       </div>
       <div class="modal-field">
         <label class="modal-label" for="mIcon">Icon (emoji)</label>
-        <input class="modal-input" id="mIcon" type="text" placeholder="ðŸ“" maxlength="4">
+        <input class="modal-input" id="mIcon" type="text" placeholder="📝" maxlength="4">
       </div>
     </div>
     <div class="modal-field">
       <label class="modal-label" for="mDesc">Short Description</label>
-      <input class="modal-input" id="mDesc" type="text" placeholder="What this prompt helps you doâ€¦" maxlength="200">
+      <input class="modal-input" id="mDesc" type="text" placeholder="What this prompt helps you do…" maxlength="200">
     </div>
     <div class="modal-field">
       <label class="modal-label" for="mPrompt">Full Prompt Text</label>
-      <textarea class="modal-textarea" id="mPrompt" placeholder="Write your prompt here. Use [brackets] for placeholders like [Student Name], [Subject], [Grade Level]â€¦" style="min-height:180px"></textarea>
+      <textarea class="modal-textarea" id="mPrompt" placeholder="Write your prompt here. Use [brackets] for placeholders like [Student Name], [Subject], [Grade Level]…" style="min-height:180px"></textarea>
     </div>
     <div class="modal-err" id="modalErr"></div>
     <div class="modal-footer">
@@ -785,20 +785,20 @@ const allowedDomains = [
   "pribadipremiere.sch.id","semesta.sch.id","tnafatih.sch.id","eduversal.org",
 ];
 
-// â”€â”€ Category config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Category config ───────────────────────────────
 const CATEGORIES = {
-  'all':                 { label: 'All Prompts',           color: '#1c1c2e', bg: '#f0f0f5', icon: 'âœ¨' },
-  'lesson-planning':     { label: 'Lesson Planning',       color: '#0891b2', bg: '#e0f2fe', icon: 'ðŸ“‹' },
-  'assessment':          { label: 'Assessment & Grading',  color: '#7c3aed', bg: '#ede9fe', icon: 'ðŸ“Š' },
-  'parent-communication':{ label: 'Parent Communication',  color: '#059669', bg: '#d1fae5', icon: 'ðŸ“¨' },
-  'student-support':     { label: 'Student Support',       color: '#dc2626', bg: '#fee2e2', icon: 'ðŸ¤' },
-  'academic-writing':    { label: 'Academic Writing',      color: '#d97706', bg: '#fef3c7', icon: 'âœï¸'  },
-  'administrative':      { label: 'Administrative Tasks',  color: '#64748b', bg: '#f1f5f9', icon: 'ðŸ—‚ï¸'  },
-  'curriculum':          { label: 'Curriculum Development',color: '#0284c7', bg: '#dbeafe', icon: 'ðŸ“š' },
-  'staff-development':   { label: 'Staff Development',     color: '#db2777', bg: '#fce7f3', icon: 'ðŸŒ±' },
+  'all':                 { label: 'All Prompts',           color: '#1c1c2e', bg: '#f0f0f5', icon: '✨' },
+  'lesson-planning':     { label: 'Lesson Planning',       color: '#0891b2', bg: '#e0f2fe', icon: '📋' },
+  'assessment':          { label: 'Assessment & Grading',  color: '#7c3aed', bg: '#ede9fe', icon: '📊' },
+  'parent-communication':{ label: 'Parent Communication',  color: '#059669', bg: '#d1fae5', icon: '📨' },
+  'student-support':     { label: 'Student Support',       color: '#dc2626', bg: '#fee2e2', icon: '🤝' },
+  'academic-writing':    { label: 'Academic Writing',      color: '#d97706', bg: '#fef3c7', icon: '✍️'  },
+  'administrative':      { label: 'Administrative Tasks',  color: '#64748b', bg: '#f1f5f9', icon: '🗂️'  },
+  'curriculum':          { label: 'Curriculum Development',color: '#0284c7', bg: '#dbeafe', icon: '📚' },
+  'staff-development':   { label: 'Staff Development',     color: '#db2777', bg: '#fce7f3', icon: '🌱' },
 };
 
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Helpers ───────────────────────────────────────
 const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
 function avatarColor(str) {
   let h = 0;
@@ -850,7 +850,7 @@ function extractPlaceholders(text) {
   return matches ? [...new Set(matches)] : [];
 }
 
-// â”€â”€ Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Auth ──────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
   document.getElementById('loadingScreen').style.display = 'none';
   if (user) {
@@ -902,7 +902,7 @@ document.getElementById('profileBtn').addEventListener('click', e => {
 });
 document.addEventListener('click', () => document.getElementById('profileWrap').classList.remove('open'));
 
-// â”€â”€ Prompts Listener â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Prompts Listener ──────────────────────────────
 function initPrompts() {
   const q = query(collection(db, 'prompts'), orderBy('createdAt', 'desc'));
   unsubPrompts = onSnapshot(q, snap => {
@@ -913,7 +913,7 @@ function initPrompts() {
   });
 }
 
-// â”€â”€ Stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Stats ─────────────────────────────────────────
 function updateStats() {
   document.getElementById('statTotal').textContent = allPrompts.length;
   const totalUses = allPrompts.reduce((s, p) => s + (p.uses || 0), 0);
@@ -923,7 +923,7 @@ function updateStats() {
   document.getElementById('statNew').textContent = newThisWeek;
 }
 
-// â”€â”€ Category list â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Category list ─────────────────────────────────
 function renderCategoryList() {
   const counts = {};
   allPrompts.forEach(p => { counts[p.category] = (counts[p.category] || 0) + 1; });
@@ -947,7 +947,7 @@ function renderCategoryList() {
   });
 }
 
-// â”€â”€ Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Filters ───────────────────────────────────────
 function applyFilters() {
   let arr = [...allPrompts];
   if (activeCategory !== 'all') arr = arr.filter(p => p.category === activeCategory);
@@ -966,7 +966,7 @@ function applyFilters() {
   renderGrid();
 }
 
-// â”€â”€ Grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Grid ──────────────────────────────────────────
 function renderGrid() {
   const grid = document.getElementById('promptGrid');
   if (filteredPrompts.length === 0) {
@@ -1048,7 +1048,7 @@ function buildCard(p) {
   </div>`;
 }
 
-// â”€â”€ Quick copy (card) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Quick copy (card) ─────────────────────────────
 async function quickCopy(text, btn) {
   try {
     await navigator.clipboard.writeText(text);
@@ -1057,10 +1057,10 @@ async function quickCopy(text, btn) {
     btn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
     setTimeout(() => { btn.classList.remove('copied'); btn.innerHTML = orig; }, 2000);
     showToast('Prompt copied to clipboard', 'success');
-  } catch { showToast('Could not copy â€” please select and copy manually'); }
+  } catch { showToast('Could not copy — please select and copy manually'); }
 }
 
-// â”€â”€ Drawer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Drawer ────────────────────────────────────────
 function openDrawer(p) {
   const cat = CATEGORIES[p.category] || CATEGORIES['lesson-planning'];
   document.getElementById('drawerIcon').textContent = p.icon || cat.icon;
@@ -1140,7 +1140,7 @@ document.getElementById('drawerTestBtn').addEventListener('click', async () => {
   showToast('Prompt copied! Paste it in Claude (Ctrl+V)', 'success');
 });
 
-// â”€â”€ Search & Sort â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Search & Sort ──────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', e => {
   searchTerm = e.target.value.trim();
   applyFilters();
@@ -1150,7 +1150,7 @@ document.getElementById('sortSelect').addEventListener('change', e => {
   applyFilters();
 });
 
-// â”€â”€ Add / Edit Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Add / Edit Modal ──────────────────────────────
 document.getElementById('addPromptBtn').addEventListener('click', () => openAddModal());
 function openAddModal() {
   editingId = null;
@@ -1203,7 +1203,7 @@ document.getElementById('modalSave').addEventListener('click', async () => {
   } catch (e) { err.textContent = e.message; err.style.display = 'block'; }
 });
 
-// â”€â”€ Delete â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Delete ────────────────────────────────────────
 function openConfirmDelete(id) {
   deleteId = id;
   document.getElementById('confirmOverlay').classList.add('open');
@@ -1229,7 +1229,7 @@ document.getElementById('promptGrid').addEventListener('click', e => {
   if (delBtn)  openConfirmDelete(delBtn.dataset.id);
 });
 
-// â”€â”€ FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FAB ───────────────────────────────────────────
 document.getElementById('fabMain').addEventListener('click', e => {
   e.stopPropagation();
   document.getElementById('fabContainer').classList.toggle('open');
@@ -1237,15 +1237,15 @@ document.getElementById('fabMain').addEventListener('click', e => {
 document.addEventListener('click', () =>
   document.getElementById('fabContainer').classList.remove('open'));
 
-// â”€â”€ Seed default prompts (run once if collection empty) â”€â”€â”€â”€â”€â”€
+// ── Seed default prompts (run once if collection empty) ──────
 async function seedDefaultPrompts() {
   // Only seeds if Firestore has zero prompts
   const defaults = [
     // Lesson Planning
-    { category:'lesson-planning', icon:'ðŸ“‹', title:'Differentiated Lesson Plan Generator', description:'Create a complete lesson plan with three differentiation levels for diverse learners in your classroom.', prompt:`Create a differentiated lesson plan for [Subject] at [Grade Level] on the topic of [Topic/Unit].
+    { category:'lesson-planning', icon:'📋', title:'Differentiated Lesson Plan Generator', description:'Create a complete lesson plan with three differentiation levels for diverse learners in your classroom.', prompt:`Create a differentiated lesson plan for [Subject] at [Grade Level] on the topic of [Topic/Unit].
 
 Include:
-1. Learning Objectives (3â€“4 measurable objectives using Bloom's Taxonomy)
+1. Learning Objectives (3–4 measurable objectives using Bloom's Taxonomy)
 2. Three differentiation tiers:
    - Tier 1 (Support): Scaffolded activities for students who need additional support
    - Tier 2 (Core): Activities for students working at grade level
@@ -1257,14 +1257,14 @@ Include:
 
 School context: [School Name/Type], class size approximately [Class Size] students.` },
 
-    { category:'lesson-planning', icon:'ðŸ”', title:'Inquiry-Based Learning Sequence', description:'Design a 5-stage inquiry learning sequence that builds critical thinking and student agency.', prompt:`Design an inquiry-based learning sequence for [Subject], [Grade Level], on the topic: [Topic].
+    { category:'lesson-planning', icon:'🔍', title:'Inquiry-Based Learning Sequence', description:'Design a 5-stage inquiry learning sequence that builds critical thinking and student agency.', prompt:`Design an inquiry-based learning sequence for [Subject], [Grade Level], on the topic: [Topic].
 
 Use the 5E Inquiry Model:
-1. Engage â€“ Hook activity to spark curiosity (10â€“15 min)
-2. Explore â€“ Hands-on investigation or research task
-3. Explain â€“ Structured opportunity to share findings
-4. Elaborate â€“ Apply knowledge to a new, authentic scenario
-5. Evaluate â€“ Assessment task aligned to learning objectives
+1. Engage – Hook activity to spark curiosity (10–15 min)
+2. Explore – Hands-on investigation or research task
+3. Explain – Structured opportunity to share findings
+4. Elaborate – Apply knowledge to a new, authentic scenario
+5. Evaluate – Assessment task aligned to learning objectives
 
 Also include:
 - Key inquiry questions to guide student thinking
@@ -1273,7 +1273,7 @@ Also include:
 - Resources or websites to support research` },
 
     // Assessment
-    { category:'assessment', icon:'ðŸ“Š', title:'Assessment Rubric Builder', description:'Generate a detailed, criterion-referenced rubric for any task or assignment.', prompt:`Create a detailed assessment rubric for the following task:
+    { category:'assessment', icon:'📊', title:'Assessment Rubric Builder', description:'Generate a detailed, criterion-referenced rubric for any task or assignment.', prompt:`Create a detailed assessment rubric for the following task:
 
 Task/Assignment: [Assignment Name and Brief Description]
 Subject: [Subject]
@@ -1281,18 +1281,18 @@ Grade Level: [Grade Level]
 Assessment Type: [Essay / Project / Presentation / Lab Report / Other]
 
 The rubric should have:
-- 4â€“5 assessment criteria relevant to this task
+- 4–5 assessment criteria relevant to this task
 - 4 performance levels: Excellent (4), Proficient (3), Developing (2), Beginning (1)
 - Clear, observable descriptors for each cell
 - A total score guide
 
 Format as a table. Make language accessible to students so they can use it for self-assessment.` },
 
-    { category:'assessment', icon:'ðŸ“', title:'Formative Assessment Toolkit', description:'Generate five varied formative assessment strategies tailored to your lesson topic.', prompt:`Suggest 5 varied formative assessment strategies for checking student understanding in a [Subject] lesson on [Topic] at [Grade Level].
+    { category:'assessment', icon:'📝', title:'Formative Assessment Toolkit', description:'Generate five varied formative assessment strategies tailored to your lesson topic.', prompt:`Suggest 5 varied formative assessment strategies for checking student understanding in a [Subject] lesson on [Topic] at [Grade Level].
 
 For each strategy, provide:
 1. Strategy name and brief description
-2. How to implement it (step-by-step, 3â€“5 minutes max)
+2. How to implement it (step-by-step, 3–5 minutes max)
 3. What to look/listen for (success indicators)
 4. How to use the data to adjust teaching immediately
 
@@ -1300,7 +1300,7 @@ Include a mix of: written, verbal, visual, and digital methods.
 Class setting: [Class size, any specific considerations like EAL learners or mixed ability].` },
 
     // Parent Communication
-    { category:'parent-communication', icon:'ðŸ“¨', title:'Progress Report Narrative Writer', description:'Write a professional, strengths-based student progress narrative for parent reports.', prompt:`Write a professional student progress narrative for a parent/guardian report card.
+    { category:'parent-communication', icon:'📨', title:'Progress Report Narrative Writer', description:'Write a professional, strengths-based student progress narrative for parent reports.', prompt:`Write a professional student progress narrative for a parent/guardian report card.
 
 Student information:
 - Name: [Student Name]
@@ -1308,14 +1308,14 @@ Student information:
 - Grade Level: [Grade Level]
 - Current performance level: [Exceeding / Meeting / Approaching / Below grade level expectations]
 
-Key strengths to highlight: [List 2â€“3 strengths]
-Areas for growth: [List 1â€“2 specific areas]
+Key strengths to highlight: [List 2–3 strengths]
+Areas for growth: [List 1–2 specific areas]
 Recent notable achievement: [Describe one positive example]
 
-Tone: Warm, professional, and constructive. Length: 3â€“4 sentences.
+Tone: Warm, professional, and constructive. Length: 3–4 sentences.
 Avoid vague statements. Use specific, observable behaviours and examples.` },
 
-    { category:'parent-communication', icon:'ðŸ“ž', title:'Parent Meeting Agenda Creator', description:'Create a structured and productive parent-teacher meeting agenda.', prompt:`Create a structured agenda for a 20-minute parent-teacher meeting.
+    { category:'parent-communication', icon:'📞', title:'Parent Meeting Agenda Creator', description:'Create a structured and productive parent-teacher meeting agenda.', prompt:`Create a structured agenda for a 20-minute parent-teacher meeting.
 
 Meeting purpose: [e.g., Regular progress review / Concern about behaviour / Academic support discussion]
 Student: [Student Name], [Grade Level]
@@ -1331,10 +1331,10 @@ Include:
 
 Make the agenda feel collaborative, not one-sided.` },
 
-    { category:'parent-communication', icon:'âœ‰ï¸', title:'Concern Letter Drafter', description:'Draft a sensitive, professional letter to parents about a student concern.', prompt:`Draft a professional letter to parents/guardians regarding a concern about their child.
+    { category:'parent-communication', icon:'✉️', title:'Concern Letter Drafter', description:'Draft a sensitive, professional letter to parents about a student concern.', prompt:`Draft a professional letter to parents/guardians regarding a concern about their child.
 
 Student: [Student Name], [Grade Level]
-Concern: [Describe the specific concern â€” academic, behavioural, attendance, wellbeing]
+Concern: [Describe the specific concern — academic, behavioural, attendance, wellbeing]
 Context: [Relevant background information]
 Actions already taken: [List steps taken so far]
 
@@ -1348,7 +1348,7 @@ The letter should:
 - Be no longer than one page` },
 
     // Student Support
-    { category:'student-support', icon:'ðŸ¤', title:'Student Support Plan Builder', description:'Create an individualized learning support plan for a student with specific needs.', prompt:`Create an individualized student support plan for:
+    { category:'student-support', icon:'🤝', title:'Student Support Plan Builder', description:'Create an individualized learning support plan for a student with specific needs.', prompt:`Create an individualized student support plan for:
 
 Student: [Student Name], [Grade Level]
 Subject(s) affected: [Subject(s)]
@@ -1357,21 +1357,21 @@ Current performance: [Brief description]
 Student strengths: [List known strengths]
 
 The support plan should include:
-1. SMART learning goals (2â€“3 goals for the next [Time Period])
+1. SMART learning goals (2–3 goals for the next [Time Period])
 2. In-class accommodations and modifications
 3. Recommended instructional strategies
 4. Resources and interventions
 5. Progress monitoring method and frequency
 6. Roles and responsibilities (teacher, student, parents, support staff)` },
 
-    { category:'student-support', icon:'ðŸ’¡', title:'Re-Engagement Strategy Generator', description:'Get practical strategies for reconnecting with a disengaged or unmotivated student.', prompt:`Suggest practical re-engagement strategies for a student who appears disengaged.
+    { category:'student-support', icon:'💡', title:'Re-Engagement Strategy Generator', description:'Get practical strategies for reconnecting with a disengaged or unmotivated student.', prompt:`Suggest practical re-engagement strategies for a student who appears disengaged.
 
 Student profile:
 - Grade Level: [Grade Level]
 - Subject: [Subject]
 - Observed behaviour: [e.g., Not completing work, distracted, withdrawn, disruptive]
 - Duration of issue: [How long this has been observed]
-- Known context: [Any relevant background â€” home situation, friendships, interests, learning differences]
+- Known context: [Any relevant background — home situation, friendships, interests, learning differences]
 
 Please provide:
 1. 3 immediate classroom strategies (implementable today)
@@ -1381,7 +1381,7 @@ Please provide:
 5. A self-reflection prompt to give the student` },
 
     // Academic Writing
-    { category:'academic-writing', icon:'âœï¸', title:'Student Writing Feedback Generator', description:'Provide structured, growth-oriented feedback on a student\'s written work.', prompt:`Provide detailed academic feedback on the following student writing sample.
+    { category:'academic-writing', icon:'✍️', title:'Student Writing Feedback Generator', description:'Provide structured, growth-oriented feedback on a student\'s written work.', prompt:`Provide detailed academic feedback on the following student writing sample.
 
 Assignment context: [Assignment title and requirements]
 Grade Level: [Grade Level]
@@ -1392,14 +1392,14 @@ Student writing:
 ---
 
 Your feedback should include:
-1. What the student did well (2â€“3 specific strengths with examples from the text)
-2. Main areas for improvement (2â€“3 specific, actionable suggestions)
+1. What the student did well (2–3 specific strengths with examples from the text)
+2. Main areas for improvement (2–3 specific, actionable suggestions)
 3. One focused revision task the student should do
 4. A grade or level indication: [Exceeding / Meeting / Approaching / Beginning] with brief justification
 
 Tone: Constructive, encouraging, and specific. Avoid vague praise. Refer directly to the student's text.` },
 
-    { category:'academic-writing', icon:'ðŸŽ¯', title:'Research Question Refiner', description:'Transform a broad topic into a focused, researchable academic question.', prompt:`Help me develop strong research questions for the following academic context.
+    { category:'academic-writing', icon:'🎯', title:'Research Question Refiner', description:'Transform a broad topic into a focused, researchable academic question.', prompt:`Help me develop strong research questions for the following academic context.
 
 Student level: [Grade Level / University Year]
 Subject/Discipline: [Subject]
@@ -1412,10 +1412,10 @@ Please:
 2. Propose one strong, focused research question for each angle
 3. Rate each question for: scope (too broad/narrow), researchability, and student interest potential
 4. Recommend the strongest question and explain why
-5. Suggest 3â€“4 key sub-questions to guide the research` },
+5. Suggest 3–4 key sub-questions to guide the research` },
 
     // Administrative
-    { category:'administrative', icon:'ðŸ—‚ï¸', title:'Meeting Minutes Formatter', description:'Structure and format raw meeting notes into professional minutes.', prompt:`Format the following raw meeting notes into professional meeting minutes.
+    { category:'administrative', icon:'🗂️', title:'Meeting Minutes Formatter', description:'Structure and format raw meeting notes into professional minutes.', prompt:`Format the following raw meeting notes into professional meeting minutes.
 
 Meeting details:
 - Meeting title: [Meeting Title]
@@ -1439,7 +1439,7 @@ Format into:
 
 Use clear, concise language in third person. Remove filler words and repetition.` },
 
-    { category:'administrative', icon:'ðŸ“„', title:'Policy Summary Simplifier', description:'Summarise a complex policy document into a clear, staff-friendly overview.', prompt:`Summarise the following policy document for school staff.
+    { category:'administrative', icon:'📄', title:'Policy Summary Simplifier', description:'Summarise a complex policy document into a clear, staff-friendly overview.', prompt:`Summarise the following policy document for school staff.
 
 Audience: [Teaching staff / Administrative staff / All staff]
 Purpose: [Why they need to understand this policy]
@@ -1450,7 +1450,7 @@ Policy text:
 ---
 
 Create a staff summary that includes:
-1. What this policy is about (2â€“3 sentences)
+1. What this policy is about (2–3 sentences)
 2. Who it applies to
 3. Key requirements and staff responsibilities (bullet points)
 4. Important dates or deadlines
@@ -1460,7 +1460,7 @@ Create a staff summary that includes:
 Keep language clear, practical and jargon-free. Maximum 1 page.` },
 
     // Curriculum
-    { category:'curriculum', icon:'ðŸ“š', title:'Unit Overview Designer', description:'Create a comprehensive unit overview aligned to learning standards and outcomes.', prompt:`Design a unit overview for the following:
+    { category:'curriculum', icon:'📚', title:'Unit Overview Designer', description:'Create a comprehensive unit overview aligned to learning standards and outcomes.', prompt:`Design a unit overview for the following:
 
 Subject: [Subject]
 Grade Level: [Grade Level]
@@ -1470,28 +1470,28 @@ Duration: [Number of weeks / lessons]
 Key prerequisites: [What students should already know]
 
 The unit overview should include:
-1. Big Ideas / Essential Questions (2â€“3)
+1. Big Ideas / Essential Questions (2–3)
 2. Learning outcomes (aligned to the specified framework)
-3. Key concepts and vocabulary (8â€“12 terms)
+3. Key concepts and vocabulary (8–12 terms)
 4. Suggested lesson sequence outline (week by week)
 5. Summative assessment task description
 6. Cross-curricular connections
 7. Recommended resources and materials` },
 
     // Staff Development
-    { category:'staff-development', icon:'ðŸŒ±', title:'Individual PD Plan Generator', description:'Create a personalised professional development plan aligned to school priorities and teacher goals.', prompt:`Create an Individual Professional Development Plan (PDP) for a teacher.
+    { category:'staff-development', icon:'🌱', title:'Individual PD Plan Generator', description:'Create a personalised professional development plan aligned to school priorities and teacher goals.', prompt:`Create an Individual Professional Development Plan (PDP) for a teacher.
 
 Teacher profile:
 - Subject / Role: [Subject or Role]
 - Years of experience: [Years]
-- Current strength areas: [List 2â€“3]
-- Self-identified growth areas: [List 2â€“3]
-- School's current strategic priorities: [List 1â€“3 school priorities]
+- Current strength areas: [List 2–3]
+- Self-identified growth areas: [List 2–3]
+- School's current strategic priorities: [List 1–3 school priorities]
 
 Time period: [Academic year / Semester]
 
 The PDP should include:
-1. 2â€“3 professional learning goals (SMART format)
+1. 2–3 professional learning goals (SMART format)
 2. For each goal:
    - Specific actions and activities
    - Resources and support needed
@@ -1507,7 +1507,7 @@ The PDP should include:
   const snap = await getDocs(collection(db, 'prompts'));
   if (!snap.empty) return; // already seeded
 
-  console.log('Seeding default promptsâ€¦');
+  console.log('Seeding default prompts…');
   for (const p of defaults) {
     await addDoc(collection(db, 'prompts'), { ...p, uses: 0, createdAt: serverTimestamp(), createdBy: 'system' });
   }

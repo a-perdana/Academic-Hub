@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Policy & Documents â€” Academic Hub</title>
+<title>Policy & Documents — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -31,7 +31,7 @@ body {
   font-size: 14px;
 }
 
-/* â”€â”€â”€ TOP NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOP NAV ─────────────────────────────────── */
 .top-nav {
   position: sticky; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -154,7 +154,7 @@ body {
   .nav-page-title { font-size: 13px; }
 }
 
-/* â”€â”€â”€ LOADING / LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOADING / LOGIN ────────────────────────── */
 #loadingScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: flex; align-items: center; justify-content: center;
@@ -206,10 +206,10 @@ body {
 .login-email button:hover { background: #0e7490; }
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
-/* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── MAIN CONTENT ────────────────────────────── */
 #mainContent { display: none; }
 
-/* â”€â”€â”€ FILTER BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FILTER BAR ─────────────────────────────── */
 .filter-bar {
   background: var(--white); border-bottom: 1px solid var(--border);
   padding: 14px 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -240,7 +240,7 @@ body {
 .pill:hover { border-color: var(--accent); color: var(--accent); }
 .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-/* â”€â”€â”€ PAGE LAYOUT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PAGE LAYOUT ────────────────────────────── */
 .docs-layout {
   max-width: 1160px; margin: 0 auto; padding: 28px 20px 100px;
   display: grid; grid-template-columns: 248px 1fr; gap: 24px; align-items: start;
@@ -287,12 +287,12 @@ body {
 .doc-focus-btn:hover { border-color: #f59e0b; color: #f59e0b; background: #fffbeb; }
 .doc-focus-btn.focused { border-color: #f59e0b; color: #f59e0b; background: #fffbeb; }
 
-/* â”€â”€â”€ DOCUMENT LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── DOCUMENT LIST ──────────────────────────── */
 .doc-list { display: flex; flex-direction: column; gap: 8px; }
 .doc-empty { text-align: center; padding: 60px 20px; color: var(--ink-3); font-size: 15px; }
 .doc-empty-icon { font-size: 48px; margin-bottom: 12px; }
 
-/* â”€â”€â”€ DOCUMENT ROW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── DOCUMENT ROW ───────────────────────────── */
 .doc-row {
   background: var(--white); border: 1px solid var(--border);
   border-left-width: 4px; border-radius: 12px;
@@ -353,14 +353,14 @@ body {
 }
 .doc-meta { font-size: 11px; color: var(--ink-3); }
 
-/* â”€â”€â”€ DOC ACTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── DOC ACTIONS ────────────────────────────── */
 .doc-actions {
   display: flex; flex-direction: column;
   align-items: flex-end; gap: 7px; flex-shrink: 0;
 }
 .doc-action-row { display: flex; align-items: center; gap: 6px; }
 
-/* â”€â”€â”€ STAR RATING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── STAR RATING ────────────────────────────── */
 .stars-wrap {
   display: flex; align-items: center; gap: 2px;
   cursor: pointer; user-select: none;
@@ -380,7 +380,7 @@ body {
   font-size: 11px; color: var(--ink-3); margin-left: 5px; white-space: nowrap;
 }
 
-/* â”€â”€â”€ LIKE BUTTON â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LIKE BUTTON ────────────────────────────── */
 .like-btn {
   display: flex; align-items: center; gap: 5px;
   padding: 5px 11px; border-radius: 20px;
@@ -395,7 +395,7 @@ body {
 .like-btn.liked { border-color: #fca5a5; color: #ef4444; background: #fff5f5; }
 .like-btn.liked svg { fill: #ef4444; }
 
-/* â”€â”€â”€ OPEN / DELETE BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── OPEN / DELETE BUTTONS ──────────────────── */
 .doc-open-btn {
   display: flex; align-items: center; gap: 5px;
   padding: 7px 15px; border-radius: 8px;
@@ -415,7 +415,7 @@ body {
 .doc-del-btn:hover  { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
 .doc-edit-btn:hover { background: var(--accent-2); border-color: var(--accent); color: var(--accent); }
 
-/* â”€â”€â”€ PAGINATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PAGINATION ─────────────────────────────── */
 .pagination {
   display: flex; align-items: center; justify-content: center;
   gap: 6px; margin-top: 28px; flex-wrap: wrap;
@@ -432,7 +432,7 @@ body {
 .page-btn:disabled { opacity: .4; cursor: default; }
 .page-ellipsis { color: var(--ink-3); font-size: 13px; padding: 0 4px; }
 
-/* â”€â”€â”€ ADD DOCUMENT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ADD DOCUMENT MODAL ─────────────────────── */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
@@ -473,7 +473,7 @@ body {
 .modal-add:disabled { opacity: .6; cursor: default; }
 .modal-err { font-size: 12px; color: #dc2626; }
 
-/* â”€â”€â”€ CONFIRM DIALOG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── CONFIRM DIALOG ─────────────────────────── */
 .confirm-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.5); backdrop-filter: blur(3px);
@@ -491,7 +491,7 @@ body {
 .confirm-cancel { padding: 8px 20px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--ink-2); font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 500; }
 .confirm-delete { padding: 8px 20px; border-radius: 8px; border: none; background: #dc2626; color: white; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 600; }
 
-/* â”€â”€â”€ SPEED DIAL FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SPEED DIAL FAB ─────────────────────────── */
 .fab-container {
   position: fixed; bottom: 24px; right: 24px;
   display: flex; flex-direction: column; align-items: flex-end;
@@ -559,7 +559,7 @@ body {
 .fab-ic-close { opacity: 0; transform: rotate(-45deg) scale(0.7); }
 .fab-container.open .fab-ic-open  { opacity: 0; transform: rotate(45deg) scale(0.7); }
 .fab-container.open .fab-ic-close { opacity: 1; transform: rotate(0deg) scale(1); }
-/* â”€â”€ Feedback Modal â”€â”€ */
+/* ── Feedback Modal ── */
 .feedback-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.65);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
@@ -609,7 +609,7 @@ body {
 .feedback-status.ok  { color: #00b894; display: block; }
 .feedback-status.err { color: #e74c3c; display: block; }
 
-/* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── RESPONSIVE ─────────────────────────────── */
 @media (max-width: 860px) {
   .docs-layout { grid-template-columns: 1fr; }
   .focused-panel { position: static; }
@@ -631,20 +631,20 @@ body {
 <!-- Loading screen -->
 <div id="loadingScreen">
   <div class="spinner"></div>
-  <p>Loadingâ€¦</p>
+  <p>Loading…</p>
 </div>
 
 <!-- Login screen -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-icon">ðŸ“‹</div>
+    <div class="login-icon">📋</div>
     <h2>Policy &amp; Documents</h2>
     <p>Sign in to access school policies, guidelines, and handbooks</p>
     <button class="login-google" id="googleLoginBtn">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
       Sign in with Google
     </button>
-    <div class="login-or">â€” or â€”</div>
+    <div class="login-or">— or —</div>
     <form class="login-email" id="loginForm">
       <input type="email" id="emailInput" placeholder="Email address" required autocomplete="email">
       <input type="password" id="passwordInput" placeholder="Password" required autocomplete="current-password">
@@ -669,7 +669,7 @@ body {
     </div>
     <div class="search-wrap">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="Search documentsâ€¦">
+      <input type="text" class="search-input" id="searchInput" placeholder="Search documents…">
     </div>
     <div class="filter-pills" id="categoryFilters">
       <button class="pill active" data-cat="All">All</button>
@@ -713,7 +713,7 @@ body {
     </div>
     <div class="modal-field">
       <label class="modal-label" for="docUrl">URL (Google Drive, OneDrive, or direct link) <span style="color:#dc2626">*</span></label>
-      <input type="url" class="modal-input" id="docUrl" placeholder="https://â€¦">
+      <input type="url" class="modal-input" id="docUrl" placeholder="https://…">
     </div>
     <div class="modal-row">
       <div class="modal-field">
@@ -762,7 +762,7 @@ body {
     </div>
     <div class="modal-field">
       <label class="modal-label" for="editUrl">URL <span style="color:#dc2626">*</span></label>
-      <input type="url" class="modal-input" id="editUrl" placeholder="https://â€¦">
+      <input type="url" class="modal-input" id="editUrl" placeholder="https://…">
     </div>
     <div class="modal-row">
       <div class="modal-field">
@@ -810,7 +810,7 @@ body {
   </div>
 </div>
 
-<!-- â•â• SPEED DIAL FAB â•â• -->
+<!-- ══ SPEED DIAL FAB ══ -->
 <div class="fab-container" id="fabContainer">
   <div class="fab-items">
     <div class="fab-item">
@@ -839,7 +839,7 @@ body {
     </svg>
   </button>
 </div>
-<!-- â•â• FEEDBACK MODAL â•â• -->
+<!-- ══ FEEDBACK MODAL ══ -->
 <div class="feedback-overlay" id="fabFeedbackOverlay">
   <div class="feedback-modal">
     <div class="feedback-modal-header">
@@ -849,7 +849,7 @@ body {
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackSubject">Subject</label>
       <select class="feedback-select" id="fabFeedbackSubject">
-        <option value="">â€” select â€”</option>
+        <option value="">— select —</option>
         <option value="bug">Bug / Issue</option>
         <option value="feature">Feature Request</option>
         <option value="content">Content Update</option>
@@ -859,7 +859,7 @@ body {
     </div>
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackMessage">Message</label>
-      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedbackâ€¦"></textarea>
+      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedback…"></textarea>
     </div>
     <button class="feedback-submit-btn" id="fabFeedbackSubmitBtn">Send Feedback</button>
     <div class="feedback-status" id="fabFeedbackStatus"></div>
@@ -906,7 +906,7 @@ body {
   const db       = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── State ────────────────────────────────────────────────────
   let currentUser    = null;
   let isAdmin        = false;
   let currentUserDisplayName = null;
@@ -927,7 +927,7 @@ body {
     "pribadipremiere.sch.id","semesta.sch.id","tnafatih.sch.id","eduversal.org",
   ];
 
-  // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Helpers ──────────────────────────────────────────────────
   const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
   function avatarColor(str) {
     let h = 0;
@@ -984,7 +984,7 @@ body {
     setTimeout(() => el.style.display = 'none', 4000);
   }
 
-  // â”€â”€ Stars HTML â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Stars HTML ───────────────────────────────────────────────
   function buildStarsHtml(docId, ratingSum, ratingCount, userScore) {
     const avg      = ratingCount > 0 ? ratingSum / ratingCount : 0;
     const avgLabel = ratingCount > 0 ? avg.toFixed(1) + ' (' + ratingCount + ')' : 'Rate';
@@ -992,7 +992,7 @@ body {
       let cls = '';
       if (userScore !== undefined && s <= userScore) cls = 'user-rated';
       else if (userScore === undefined && s <= Math.round(avg)) cls = 'avg-filled';
-      return `<span class="star ${cls}" data-score="${s}" data-docid="${escHtml(docId)}">â˜…</span>`;
+      return `<span class="star ${cls}" data-score="${s}" data-docid="${escHtml(docId)}">★</span>`;
     }).join('');
     return `<div class="stars-wrap" data-docid="${escHtml(docId)}">
       <div class="stars-inner">${stars}</div>
@@ -1000,7 +1000,7 @@ body {
     </div>`;
   }
 
-  // â”€â”€ Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auth ─────────────────────────────────────────────────────
   onAuthStateChanged(auth, async (user) => {
     document.getElementById('loadingScreen').style.display = 'none';
     if (user) {
@@ -1049,7 +1049,7 @@ body {
     catch { showLoginError('Invalid email or password'); }
   });
 
-  // â”€â”€ Load user interactions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Load user interactions ───────────────────────────────────
   async function loadUserInteractions() {
     if (!currentUser) return;
     try {
@@ -1064,7 +1064,7 @@ body {
     } catch (err) { console.error('loadUserInteractions:', err); }
   }
 
-  // â”€â”€ Documents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Documents ────────────────────────────────────────────────
   function initDocuments() {
     const q = query(collection(db, 'documents'), orderBy('createdAt', 'desc'));
     unsubDocs = onSnapshot(q, snap => {
@@ -1098,12 +1098,12 @@ body {
     const end    = Math.min(start + PER_PAGE, total);
 
     countEl.textContent = total > 0
-      ? `Showing ${start + 1}â€“${end} of ${total} document${total !== 1 ? 's' : ''}`
+      ? `Showing ${start + 1}–${end} of ${total} document${total !== 1 ? 's' : ''}`
       : '0 documents';
 
     if (total === 0) {
       listEl.innerHTML = `<div class="doc-empty">
-        <div class="doc-empty-icon">ðŸ“‚</div>
+        <div class="doc-empty-icon">📂</div>
         <p>${allDocs.length === 0 ? 'No documents yet.' : 'No documents match your search.'}</p>
       </div>`;
       document.getElementById('pagination').innerHTML = '';
@@ -1131,7 +1131,7 @@ body {
         </button>` : '';
       return `
         <div class="doc-row" data-id="${d.id}" data-cat="${escHtml(d.category||'Other')}">
-          <div class="doc-icon">ðŸ“„</div>
+          <div class="doc-icon">📄</div>
           <div class="doc-body">
             <div class="doc-title-row">
               <span class="doc-title">${escHtml(d.title)}</span>
@@ -1216,21 +1216,21 @@ body {
     renderPagination(totalPages);
   }
 
-  // â”€â”€ Focused Documents â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Focused Documents ─────────────────────────────────────────
   function renderFocusedDocs() {
     const el = document.getElementById('focusedList');
     if (!el) return;
     const focused = allDocs.filter(d => d.featured === true);
     if (focused.length === 0) {
       el.innerHTML = `<div class="focused-empty">${isAdmin
-        ? 'Star â˜… any document<br>to pin it here.'
+        ? 'Star ★ any document<br>to pin it here.'
         : 'No featured documents.'
       }</div>`;
       return;
     }
     el.innerHTML = focused.map(d => `
       <a href="${escHtml(d.url||'#')}" target="_blank" rel="noopener noreferrer" class="focused-item">
-        <div class="focused-item-icon">ðŸ“Œ</div>
+        <div class="focused-item-icon">📌</div>
         <div class="focused-item-body">
           <div class="focused-item-title">${escHtml(d.title)}</div>
           <div class="focused-item-cat">${escHtml(d.category||'Other')}</div>
@@ -1238,7 +1238,7 @@ body {
       </a>`).join('');
   }
 
-  // â”€â”€ Pagination â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Pagination ───────────────────────────────────────────────
   function renderPagination(totalPages) {
     const el = document.getElementById('pagination');
     if (totalPages <= 1) { el.innerHTML = ''; return; }
@@ -1248,9 +1248,9 @@ body {
       for (let i = 1; i <= totalPages; i++) pages.push(i);
     } else {
       pages.push(1);
-      if (currentPage > 3) pages.push('â€¦');
+      if (currentPage > 3) pages.push('…');
       for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) pages.push(i);
-      if (currentPage < totalPages - 2) pages.push('â€¦');
+      if (currentPage < totalPages - 2) pages.push('…');
       pages.push(totalPages);
     }
 
@@ -1258,8 +1258,8 @@ body {
       <button class="page-btn" id="prevBtn" ${currentPage === 1 ? 'disabled' : ''}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      ${pages.map(p => p === 'â€¦'
-        ? `<span class="page-ellipsis">â€¦</span>`
+      ${pages.map(p => p === '…'
+        ? `<span class="page-ellipsis">…</span>`
         : `<button class="page-btn ${p === currentPage ? 'active' : ''}" data-page="${p}">${p}</button>`
       ).join('')}
       <button class="page-btn" id="nextBtn" ${currentPage === totalPages ? 'disabled' : ''}>
@@ -1277,7 +1277,7 @@ body {
     });
   }
 
-  // â”€â”€ Like â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Like ─────────────────────────────────────────────────────
   async function likeDoc(docId) {
     if (!currentUser) return;
     const isLiked  = userLikes.has(docId);
@@ -1302,7 +1302,7 @@ body {
     } catch (err) { console.error('likeDoc:', err); }
   }
 
-  // â”€â”€ Rate â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Rate ─────────────────────────────────────────────────────
   async function rateDoc(docId, score) {
     if (!currentUser) return;
     const prevScore = userRatings.get(docId);
@@ -1312,7 +1312,7 @@ body {
     const d         = allDocs.find(x => x.id === docId);
 
     if (prevScore === score) {
-      // Toggle off â€” remove rating
+      // Toggle off — remove rating
       userRatings.delete(docId);
       if (d) { d.ratingSum = Math.max(0,(d.ratingSum||0) - score); d.ratingCount = Math.max(0,(d.ratingCount||0) - 1); }
       renderList();
@@ -1344,7 +1344,7 @@ body {
     }
   }
 
-  // â”€â”€ Search & Filter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Search & Filter ──────────────────────────────────────────
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value.trim();
     currentPage = 1;
@@ -1360,7 +1360,7 @@ body {
     renderList();
   });
 
-  // â”€â”€ Edit Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Edit Modal ───────────────────────────────────────────────
   function openEditModal(rec) {
     editingDocId = rec.id;
     document.getElementById('editTitle').value    = rec.title    || '';
@@ -1402,7 +1402,7 @@ body {
       errEl.textContent = 'URL must start with http:// or https://'; return;
     }
 
-    btn.disabled = true; btn.textContent = 'Savingâ€¦';
+    btn.disabled = true; btn.textContent = 'Saving…';
     try {
       await updateDoc(doc(db, 'documents', editingDocId), {
         title, url, category, description: desc,
@@ -1417,7 +1417,7 @@ body {
     btn.disabled = false; btn.textContent = 'Save Changes';
   });
 
-  // â”€â”€ Add Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Add Modal ────────────────────────────────────────────────
   function openModal() {
     document.getElementById('docTitle').value    = '';
     document.getElementById('docUrl').value      = '';
@@ -1452,7 +1452,7 @@ body {
     if (!url.startsWith('http://') && !url.startsWith('https://')) {
       errEl.textContent = 'URL must start with http:// or https://'; return;
     }
-    btn.disabled = true; btn.textContent = 'Addingâ€¦';
+    btn.disabled = true; btn.textContent = 'Adding…';
     try {
       await addDoc(collection(db, 'documents'), {
         title, url, category, description: desc,
@@ -1467,7 +1467,7 @@ body {
     btn.disabled = false; btn.textContent = 'Add Document';
   });
 
-  // â”€â”€ Speed Dial FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Speed Dial FAB ────────────────────────────────────────────
   (function(){
     const c = document.getElementById('fabContainer');
     const m = document.getElementById('fabMain');
@@ -1475,7 +1475,7 @@ body {
     m.addEventListener('click', e => { e.stopPropagation(); c.classList.toggle('open'); });
     document.addEventListener('click', e => { if(!c.contains(e.target)) c.classList.remove('open'); });
   })();
-  // â”€â”€ FAB Feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FAB Feedback ──────────────────────────────────────────────
   const fabFbOverlay = document.getElementById('fabFeedbackOverlay');
   document.getElementById('fabFeedbackBtn')?.addEventListener('click', () => {
     document.getElementById('fabContainer').classList.remove('open');
@@ -1497,7 +1497,7 @@ body {
     if(!subject||!message){
       statusEl.textContent='Please fill in all fields.'; statusEl.className='feedback-status err'; return;
     }
-    btn.disabled=true; btn.textContent='Sendingâ€¦';
+    btn.disabled=true; btn.textContent='Sending…';
     try {
       await addDoc(collection(db,'feedbacks'),{
         subject, message,
@@ -1505,14 +1505,14 @@ body {
         userEmail: currentUser?.email||null,
         createdAt: serverTimestamp(),
       });
-      statusEl.textContent='Feedback sent â€” thank you!'; statusEl.className='feedback-status ok';
+      statusEl.textContent='Feedback sent — thank you!'; statusEl.className='feedback-status ok';
       setTimeout(closeFabFeedback, 2000);
     } catch {
       statusEl.textContent='Failed to send. Please try again.'; statusEl.className='feedback-status err';
     } finally { btn.disabled=false; btn.textContent='Send Feedback'; }
   });
 
-  // â”€â”€ Confirm â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Confirm ──────────────────────────────────────────────────
   let confirmCb = null;
   function showConfirm(msg, cb) {
     document.getElementById('confirmMsg').textContent = msg;

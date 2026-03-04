@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Announcements â€” Teachers Hub</title>
+<title>Announcements — Teachers Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -34,7 +34,7 @@ body {
   font-size: 14px;
 }
 
-/* â”€â”€â”€ TOP NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOP NAV ─────────────────────────────────── */
 .top-nav {
   position: sticky; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
@@ -168,7 +168,7 @@ body {
   .nav-btn { padding: 7px; }
 }
 
-/* â”€â”€â”€ LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOADING ─────────────────────────────────── */
 #loadingScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: flex; align-items: center; justify-content: center;
@@ -182,7 +182,7 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 #loadingScreen p { color: rgba(255,255,255,.5); font-size: 13px; }
 
-/* â”€â”€â”€ LOGIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOGIN ──────────────────────────────────── */
 #loginScreen {
   position: fixed; inset: 0; background: var(--ink);
   display: none; align-items: center; justify-content: center;
@@ -222,7 +222,7 @@ body {
 .login-email button:hover { background: #b45309; }
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
-/* â”€â”€â”€ MAIN CONTENT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── MAIN CONTENT ────────────────────────────── */
 #mainContent { display: none; }
 
 .page-wrap {
@@ -240,7 +240,7 @@ body {
 
 .ann-main-col { min-width: 0; }
 
-/* â”€â”€â”€ FILTER SIDEBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── FILTER SIDEBAR ──────────────────────────── */
 .ann-sidebar {
   background: var(--white);
   border: 1px solid var(--border);
@@ -266,7 +266,7 @@ body {
 .ann-stat-row:last-child { border-bottom: none; }
 .ann-stat-row span:last-child { font-weight: 700; color: var(--ink); }
 
-/* â”€â”€â”€ ANNOUNCEMENTS LIST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ANNOUNCEMENTS LIST ─────────────────────── */
 .ann-list { display: flex; flex-direction: column; gap: 16px; }
 .ann-pagination {
   margin-top: 18px;
@@ -543,7 +543,7 @@ body {
 .ann-card.expanded .ann-preview { display: none; }
 .ann-card.expanded .ann-preview::after { display: none; }
 
-/* â”€â”€â”€ EXPANDED BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── EXPANDED BODY ───────────────────────────── */
 .ann-full-body {
   display: none;
   padding: 4px 20px 14px;
@@ -629,7 +629,7 @@ body {
   transform: scale(1.06);
 }
 
-/* â”€â”€â”€ COMMENTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── COMMENTS ────────────────────────────────── */
 .ann-comments {
   display: none;
   border-top: 1px solid var(--border);
@@ -697,7 +697,7 @@ body {
 .comment-post-btn:hover { background: #b45309; }
 .comment-post-btn:disabled { opacity: .6; cursor: default; }
 
-/* â”€â”€â”€ NEW ANNOUNCEMENT MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── NEW ANNOUNCEMENT MODAL ─────────────────── */
 .modal-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
@@ -771,7 +771,7 @@ body {
   color: var(--ink-3);
 }
 
-/* â”€â”€â”€ RICH TEXT EDITOR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── RICH TEXT EDITOR ───────────────────────── */
 .rich-editor-wrap { border: 1px solid var(--border); border-radius: 9px; background: var(--paper); transition: border-color 0.2s; }
 .rich-editor-wrap:focus-within { border-color: var(--accent); background: var(--white); }
 .rich-editor-toolbar { display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
@@ -809,7 +809,7 @@ body {
 .modal-publish:disabled { opacity: .6; cursor: default; }
 .modal-err { font-size: 12px; color: #dc2626; }
 
-/* â”€â”€â”€ SPEED DIAL FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── SPEED DIAL FAB ─────────────────────────── */
 .fab-container {
   position: fixed; bottom: 24px; right: 24px;
   display: flex; flex-direction: column; align-items: flex-end;
@@ -877,7 +877,7 @@ body {
 .fab-ic-close { opacity: 0; transform: rotate(-45deg) scale(0.7); }
 .fab-container.open .fab-ic-open  { opacity: 0; transform: rotate(45deg) scale(0.7); }
 .fab-container.open .fab-ic-close { opacity: 1; transform: rotate(0deg) scale(1); }
-/* â”€â”€ Feedback Modal â”€â”€ */
+/* ── Feedback Modal ── */
 .feedback-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.65);
   backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
@@ -927,7 +927,7 @@ body {
 .feedback-status.ok  { color: #00b894; display: block; }
 .feedback-status.err { color: #e74c3c; display: block; }
 
-/* â”€â”€â”€ CONFIRM DIALOG â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── CONFIRM DIALOG ─────────────────────────── */
 .confirm-overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.5); backdrop-filter: blur(3px);
@@ -951,20 +951,20 @@ body {
 <!-- Loading screen -->
 <div id="loadingScreen">
   <div class="spinner"></div>
-  <p>Loadingâ€¦</p>
+  <p>Loading…</p>
 </div>
 
 <!-- Login screen -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-icon">ðŸ“¢</div>
+    <div class="login-icon">📢</div>
     <h2>Announcements</h2>
     <p>Sign in to view and comment on announcements</p>
     <button class="login-google" id="googleLoginBtn">
       <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 002.38-5.88c0-.57-.05-.66-.15-1.18z"/><path fill="#34A853" d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 01-7.18-2.54H1.83v2.07A8 8 0 008.98 17z"/><path fill="#FBBC05" d="M4.5 10.52a4.8 4.8 0 010-3.04V5.41H1.83a8 8 0 000 7.18l2.67-2.07z"/><path fill="#EA4335" d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 001.83 5.4L4.5 7.49a4.77 4.77 0 014.48-3.3z"/></svg>
       Sign in with Google
     </button>
-    <div class="login-or">â€” or â€”</div>
+    <div class="login-or">— or —</div>
     <form class="login-email" id="loginForm">
       <input type="email" id="emailInput" placeholder="Email address" required autocomplete="email">
       <input type="password" id="passwordInput" placeholder="Password" required autocomplete="current-password">
@@ -992,7 +992,7 @@ body {
           <p class="ann-sidebar-title">Search</p>
           <div class="ann-search-wrap">
             <svg class="ann-search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input class="ann-search-input" id="annSearch" type="text" placeholder="Searchâ€¦" autocomplete="off">
+            <input class="ann-search-input" id="annSearch" type="text" placeholder="Search…" autocomplete="off">
           </div>
         </div>
         <div class="ann-sidebar-section">
@@ -1014,8 +1014,8 @@ body {
         </div>
         <div class="ann-sidebar-section">
           <p class="ann-sidebar-title">Stats</p>
-          <div class="ann-stat-row"><span>Total</span><span id="statTotal">â€”</span></div>
-          <div class="ann-stat-row"><span>Pinned</span><span id="statPinned">â€”</span></div>
+          <div class="ann-stat-row"><span>Total</span><span id="statTotal">—</span></div>
+          <div class="ann-stat-row"><span>Pinned</span><span id="statPinned">—</span></div>
         </div>
       </aside>
 
@@ -1047,11 +1047,11 @@ body {
 <!-- New / Edit Announcement Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
-    <h3 id="modalHeading">ðŸ“¢ New Announcement</h3>
+    <h3 id="modalHeading">📢 New Announcement</h3>
     <input type="hidden" id="editingId">
     <div class="modal-field">
       <label class="modal-label" for="annTitle">Title</label>
-      <input type="text" class="modal-input" id="annTitle" placeholder="e.g. IGCSE Mock Exam â€” March 2026" maxlength="120">
+      <input type="text" class="modal-input" id="annTitle" placeholder="e.g. IGCSE Mock Exam — March 2026" maxlength="120">
     </div>
     <div class="modal-field">
       <label class="modal-label">Body</label>
@@ -1066,7 +1066,7 @@ body {
             <option value="5">Large</option>
           </select>
         </div>
-        <div class="rich-editor-area" id="annBody" contenteditable="true" data-placeholder="Write your announcement hereâ€¦" spellcheck="true"></div>
+        <div class="rich-editor-area" id="annBody" contenteditable="true" data-placeholder="Write your announcement here…" spellcheck="true"></div>
       </div>
     </div>
     <div class="modal-field">
@@ -1081,13 +1081,13 @@ body {
       </div>
     </div>
     <div class="modal-field">
-      <label class="modal-label">ðŸ”— Attach Links <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
+      <label class="modal-label">🔗 Attach Links <span style="font-weight:400;color:var(--ink-3)">(optional)</span></label>
       <div class="link-form-rows" id="annLinksContainer"></div>
       <button type="button" class="add-link-btn" id="addLinkBtn">+ Add Link</button>
     </div>
     <label class="modal-pin-row">
       <input type="checkbox" id="annPin">
-      ðŸ“Œ Pin this announcement (appears at the top)
+      📌 Pin this announcement (appears at the top)
     </label>
     <div class="modal-err" id="modalErr"></div>
     <div class="modal-footer">
@@ -1109,7 +1109,7 @@ body {
   </div>
 </div>
 
-<!-- â•â• SPEED DIAL FAB â•â• -->
+<!-- ══ SPEED DIAL FAB ══ -->
 <div class="fab-container" id="fabContainer">
   <div class="fab-items">
     <div class="fab-item">
@@ -1138,7 +1138,7 @@ body {
     </svg>
   </button>
 </div>
-<!-- â•â• FEEDBACK MODAL â•â• -->
+<!-- ══ FEEDBACK MODAL ══ -->
 <div class="feedback-overlay" id="fabFeedbackOverlay">
   <div class="feedback-modal">
     <div class="feedback-modal-header">
@@ -1148,7 +1148,7 @@ body {
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackSubject">Subject</label>
       <select class="feedback-select" id="fabFeedbackSubject">
-        <option value="">â€” select â€”</option>
+        <option value="">— select —</option>
         <option value="bug">Bug / Issue</option>
         <option value="feature">Feature Request</option>
         <option value="content">Content Update</option>
@@ -1158,7 +1158,7 @@ body {
     </div>
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackMessage">Message</label>
-      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedbackâ€¦"></textarea>
+      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedback…"></textarea>
     </div>
     <button class="feedback-submit-btn" id="fabFeedbackSubmitBtn">Send Feedback</button>
     <div class="feedback-status" id="fabFeedbackStatus"></div>
@@ -1246,7 +1246,7 @@ body {
     "pribadipremiere.sch.id","semesta.sch.id","tnafatih.sch.id","eduversal.org",
   ];
 
-  // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Helpers ─────────────────────────────────────────────────
   const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
   function avatarColor(str) {
     let h = 0;
@@ -1311,7 +1311,7 @@ body {
     setTimeout(() => el.style.display = 'none', 4000);
   }
 
-  // â”€â”€ Auth â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Auth ─────────────────────────────────────────────────────
   onAuthStateChanged(auth, async (user) => {
     document.getElementById('loadingScreen').style.display = 'none';
     if (user) {
@@ -1370,7 +1370,7 @@ body {
     catch { showError('Invalid email or password'); }
   });
 
-  // â”€â”€ Toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Toast ────────────────────────────────────────────────────
   function showToast(msg) {
     let toast = document.getElementById('copyToast');
     if (!toast) {
@@ -1427,7 +1427,7 @@ body {
   let showFilter = 'all';
   let sortOrder = 'newest';
 
-  // â”€â”€ Announcements List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Announcements List ───────────────────────────────────────
   function initAnnouncements() {
     const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
     unsubAnn = onSnapshot(q, (snap) => {
@@ -1711,25 +1711,25 @@ body {
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
         </button>
         <button class="ann-admin-btn ${boardIds.has(id) ? 'board-active' : ''}" data-action="board" title="${boardIds.has(id) ? 'Remove from board' : 'Pin to my board'}"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1 1 5.8L12 16.76l-5.21 2.76 1-5.8-4.21-4.1 5.82-.85L12 3.5z"/></svg></button>
-        ${canEdit && isAdmin ? `<button class="ann-admin-btn ${d.pinned ? 'pin-active' : ''}" data-action="pin" title="${d.pinned ? 'Unpin' : 'Pin'}">ðŸ“Œ</button>` : ''}
-        ${canEdit ? `<button class="ann-admin-btn edit" data-action="edit" title="Edit">âœï¸</button>` : ''}
-        ${canEdit && isAdmin ? `<button class="ann-admin-btn del" data-action="delete" title="Delete">ðŸ—‘ï¸</button>` : ''}
+        ${canEdit && isAdmin ? `<button class="ann-admin-btn ${d.pinned ? 'pin-active' : ''}" data-action="pin" title="${d.pinned ? 'Unpin' : 'Pin'}">📌</button>` : ''}
+        ${canEdit ? `<button class="ann-admin-btn edit" data-action="edit" title="Edit">✏️</button>` : ''}
+        ${canEdit && isAdmin ? `<button class="ann-admin-btn del" data-action="delete" title="Delete">🗑️</button>` : ''}
       </div>`;
 
     const plainText = stripHtml(d.body || '');
-    const preview = plainText.slice(0, 220) + (plainText.length > 220 ? 'â€¦' : '');
+    const preview = plainText.slice(0, 220) + (plainText.length > 220 ? '…' : '');
     const commentCount = d.commentCount || 0;
     const mediaHtml = d.imageUrl ? `<div class="ann-media"><img src="${escHtml(d.imageUrl)}" alt="Announcement image" loading="lazy"></div>` : '';
 
     const linksArr = d.links || [];
     const linksHtml = linksArr.length ? `
       <div class="ann-links">
-        ${linksArr.map(l => `<span class="ann-link-item"><a href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer">ðŸ”— ${escHtml(l.text || l.url)}</a></span>`).join('')}
+        ${linksArr.map(l => `<span class="ann-link-item"><a href="${escHtml(l.url)}" target="_blank" rel="noopener noreferrer">🔗 ${escHtml(l.text || l.url)}</a></span>`).join('')}
       </div>` : '';
 
     return `
       <div class="ann-card-header" data-action="toggle">
-        <span class="ann-pin-icon">ðŸ“Œ</span>
+        <span class="ann-pin-icon">📌</span>
         <div class="ann-type-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/>
@@ -1739,10 +1739,10 @@ body {
           <div class="ann-title">${escHtml(d.title || '')}</div>
           <div class="ann-meta">
             <span>${escHtml(d.authorName || 'Admin')}</span>
-            <span class="ann-meta-sep">Â·</span>
+            <span class="ann-meta-sep">·</span>
             <span>${relativeTime(d.createdAt)}</span>
             ${d.editedAt ? `<span class="ann-edited-tag">(edited)</span>` : ''}
-            <span class="ann-comment-chip">ðŸ’¬ ${commentCount}</span>
+            <span class="ann-comment-chip">💬 ${commentCount}</span>
           </div>
         </div>
         ${actionBtns}
@@ -1757,10 +1757,10 @@ body {
       </div>
       <div class="ann-comments">
         <div class="comments-list" id="comments-${id}">
-          <div class="no-comments" id="no-comments-${id}">Loading commentsâ€¦</div>
+          <div class="no-comments" id="no-comments-${id}">Loading comments…</div>
         </div>
         <div class="comment-input-row">
-          <textarea class="comment-input" id="comment-input-${id}" placeholder="Write a commentâ€¦" rows="1"></textarea>
+          <textarea class="comment-input" id="comment-input-${id}" placeholder="Write a comment…" rows="1"></textarea>
           <button class="comment-post-btn" id="comment-post-${id}">Post</button>
         </div>
       </div>`;
@@ -1793,7 +1793,7 @@ body {
         e.stopPropagation();
         const url = `${location.origin}${location.pathname}?id=${id}`;
         navigator.clipboard.writeText(url).catch(() => {});
-        showToast('ðŸ”— Link copied!');
+        showToast('🔗 Link copied!');
       });
     }
 
@@ -1858,7 +1858,7 @@ body {
     }
   }
 
-  // â”€â”€ Comments â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Comments ─────────────────────────────────────────────────
   const commentUnsubs = {};
 
   function cleanupCommentListeners(visibleIds) {
@@ -1900,7 +1900,7 @@ body {
             <div class="comment-text">${escHtml(c.body || '')}</div>
             <div class="comment-time">${relativeTime(c.createdAt)}</div>
           </div>
-          ${canDelete ? `<button class="comment-del-btn" title="Delete comment">âœ•</button>` : ''}`;
+          ${canDelete ? `<button class="comment-del-btn" title="Delete comment">✕</button>` : ''}`;
         item.prepend(avatarDiv);
 
         if (canDelete) {
@@ -1947,7 +1947,7 @@ body {
     btn.disabled = false;
   }
 
-  // â”€â”€ Announcement Modal (New + Edit) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Announcement Modal (New + Edit) ──────────────────────────
   const modalOverlay = document.getElementById('modalOverlay');
   let modalLinks = [];
   let modalImageFile = null;
@@ -2008,8 +2008,8 @@ body {
       row.className = 'link-form-row';
       row.innerHTML = `
         <input type="text" class="link-form-input" placeholder="Label (e.g. View Document)" value="${escHtml(link.text)}" data-li="${i}" data-field="text">
-        <input type="text" class="link-form-input" placeholder="https://â€¦" value="${escHtml(link.url)}" data-li="${i}" data-field="url">
-        <button type="button" class="link-remove-btn" data-ri="${i}" title="Remove">Ã—</button>`;
+        <input type="text" class="link-form-input" placeholder="https://…" value="${escHtml(link.url)}" data-li="${i}" data-field="url">
+        <button type="button" class="link-remove-btn" data-ri="${i}" title="Remove">×</button>`;
       row.querySelectorAll('.link-form-input').forEach(inp => {
         inp.addEventListener('input', e => { modalLinks[+e.target.dataset.li][e.target.dataset.field] = e.target.value; });
       });
@@ -2028,7 +2028,7 @@ body {
     document.getElementById('annPin').checked   = mode === 'edit' ? (d.pinned || false) : false;
     document.getElementById('annImageFile').value = '';
     document.getElementById('modalErr').textContent = '';
-    document.getElementById('modalHeading').textContent = mode === 'edit' ? 'âœï¸ Edit Announcement' : 'ðŸ“¢ New Announcement';
+    document.getElementById('modalHeading').textContent = mode === 'edit' ? '✏️ Edit Announcement' : '📢 New Announcement';
     document.getElementById('modalPublish').textContent = mode === 'edit' ? 'Save Changes' : 'Publish';
     modalLinks = mode === 'edit' ? [...(d.links || [])] : [];
     modalImageFile = null;
@@ -2116,7 +2116,7 @@ body {
     if (!bodyEl.textContent.trim()) { errEl.textContent = 'Please enter a body text.'; return; }
 
     const origText = btn.textContent;
-    btn.disabled = true; btn.textContent = editId ? 'Savingâ€¦' : 'Publishingâ€¦';
+    btn.disabled = true; btn.textContent = editId ? 'Saving…' : 'Publishing…';
     try {
       let imageUrl = modalExistingImageUrl;
       let imagePath = modalExistingImagePath;
@@ -2157,7 +2157,7 @@ body {
     btn.disabled = false; btn.textContent = origText;
   });
 
-  // â”€â”€ Speed Dial FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Speed Dial FAB ────────────────────────────────────────────
   (function(){
     const c = document.getElementById('fabContainer');
     const m = document.getElementById('fabMain');
@@ -2165,7 +2165,7 @@ body {
     m.addEventListener('click', e => { e.stopPropagation(); c.classList.toggle('open'); });
     document.addEventListener('click', e => { if(!c.contains(e.target)) c.classList.remove('open'); });
   })();
-  // â”€â”€ FAB Feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── FAB Feedback ──────────────────────────────────────────────
   const fabFbOverlay = document.getElementById('fabFeedbackOverlay');
   document.getElementById('fabFeedbackBtn')?.addEventListener('click', () => {
     document.getElementById('fabContainer').classList.remove('open');
@@ -2187,7 +2187,7 @@ body {
     if(!subject||!message){
       statusEl.textContent='Please fill in all fields.'; statusEl.className='feedback-status err'; return;
     }
-    btn.disabled=true; btn.textContent='Sendingâ€¦';
+    btn.disabled=true; btn.textContent='Sending…';
     try {
       await addDoc(collection(db,'feedbacks'),{
         subject, message,
@@ -2195,14 +2195,14 @@ body {
         userEmail: currentUser?.email||null,
         createdAt: serverTimestamp(),
       });
-      statusEl.textContent='Feedback sent â€” thank you!'; statusEl.className='feedback-status ok';
+      statusEl.textContent='Feedback sent — thank you!'; statusEl.className='feedback-status ok';
       setTimeout(closeFabFeedback, 2000);
     } catch {
       statusEl.textContent='Failed to send. Please try again.'; statusEl.className='feedback-status err';
     } finally { btn.disabled=false; btn.textContent='Send Feedback'; }
   });
 
-  // â”€â”€ Confirm Dialog â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Confirm Dialog ───────────────────────────────────────────
   let confirmCallback = null;
   function showConfirm(title, msg, cb) {
     document.querySelector('#confirmOverlay .confirm-box h4').textContent = title;
@@ -2220,9 +2220,9 @@ body {
     confirmCallback = null;
   });
 
-  // â”€â”€ Util â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Util ─────────────────────────────────────────────────────
   function escHtml(str) {
-    return String(str ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str ? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   function sanitizeHtml(html) {
@@ -2250,7 +2250,7 @@ body {
     return escHtml(body).replace(/\n/g, '<br>');
   }
 
-  // â”€â”€ Rich text editor toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Rich text editor toolbar ──────────────────────────────────
   function updateRteState() {
     document.getElementById('rteBold').classList.toggle('active', document.queryCommandState('bold'));
     document.getElementById('rteItalic').classList.toggle('active', document.queryCommandState('italic'));
@@ -2261,7 +2261,7 @@ body {
   document.getElementById('annBody').addEventListener('keyup', updateRteState);
   document.getElementById('annBody').addEventListener('mouseup', updateRteState);
 
-  // â”€â”€ Sidebar filter event listeners â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Sidebar filter event listeners ───────────────────────────
   document.getElementById('annSearch').addEventListener('input', e => {
     searchText = e.target.value;
     currentPage = 1;
