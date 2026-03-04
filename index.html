@@ -2304,7 +2304,14 @@
       }
 
       @media (max-width: 560px) {
-        .nav-actions { display: none !important; }
+        .nav-actions {
+          display: flex !important;
+          margin-left: auto;
+        }
+        .nav-actions .nav-btn,
+        .nav-actions .profile-wrap {
+          display: none !important;
+        }
         .hamburger-btn { display: flex; }
         .top-nav { padding: 0 14px; }
       }
