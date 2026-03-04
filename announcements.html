@@ -1342,6 +1342,7 @@ body {
 
       // Show UI
       populateNav(user, firestoreName);
+      await window.__initNavbarCounters?.({ db, user });
       if (isAdmin) document.getElementById('newAnnBtn').style.display = 'flex';
 
       document.getElementById('loginScreen').classList.remove('visible');
@@ -1356,6 +1357,7 @@ body {
       document.getElementById('loginScreen').classList.add('visible');
       document.getElementById('mainContent').style.display = 'none';
       document.getElementById('profileWrap').style.display = 'none';
+      window.__clearNavbarCounters?.();
     }
   });
 

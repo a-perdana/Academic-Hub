@@ -872,6 +872,7 @@ onAuthStateChanged(auth, async (user) => {
     } catch { isAdmin = false; }
 
     populateNav(user, firestoreName);
+    await window.__initNavbarCounters?.({ db, user });
     document.getElementById('loginScreen').classList.remove('visible');
     document.getElementById('mainContent').style.display = 'block';
     if (isAdmin) document.getElementById('addPromptBtn').style.display = 'flex';
@@ -883,6 +884,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById('loginScreen').classList.add('visible');
     document.getElementById('mainContent').style.display = 'none';
     document.getElementById('profileWrap').style.display = 'none';
+    window.__clearNavbarCounters?.();
   }
 });
 

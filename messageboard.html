@@ -1237,6 +1237,7 @@ body {
       } catch { currentUserRole = null; currentUserDisplayName = null; }
 
       populateNav(user, currentUserDisplayName);
+      await window.__initNavbarCounters?.({ db, user });
       document.getElementById("loginScreen").classList.remove("visible");
       document.getElementById("mainContent").style.display = "block";
       setDoc(doc(db,'users',user.uid),{ lastReadMessageboard: serverTimestamp() },{ merge: true }).catch(()=>{});
@@ -1248,6 +1249,7 @@ body {
       document.getElementById("loginScreen").classList.add("visible");
       document.getElementById("mainContent").style.display = "none";
       document.getElementById("profileWrap").style.display = "none";
+      window.__clearNavbarCounters?.();
     }
   });
 

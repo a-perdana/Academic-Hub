@@ -3937,6 +3937,7 @@
         if (msgUnsubscribe) { msgUnsubscribe(); msgUnsubscribe = null; }
         if (libUnsubscribe) { libUnsubscribe(); libUnsubscribe = null; }
         if (docUnsubscribe) { docUnsubscribe(); docUnsubscribe = null; }
+        window.__clearNavbarCounters?.();
       }
 
       // Dropdown toggle
@@ -4058,103 +4059,6 @@
       const ddSignOut = document.getElementById('ddSignOut');
       if (ddSignOut) ddSignOut.addEventListener('click', () => signOut(auth));
 
-      // â”€â”€ Announcements badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      function listenAnnBadge(user) {
-        const badge = document.getElementById('annBadge');
-        if (!badge) return;
-        const lastSeenKey = `ann_lastSeen_${user.uid}`;
-        const lastSeen = parseInt(localStorage.getItem(lastSeenKey) || '0', 10);
-        const cutoff = Timestamp.fromMillis(lastSeen);
-
-        const q = query(
-          collection(db, 'announcements'),
-          where('createdAt', '>', cutoff)
-        );
-        annUnsubscribe = onSnapshot(q, (snap) => {
-          const count = snap.size;
-          if (count > 0) {
-            badge.textContent = count > 99 ? '99+' : count;
-            badge.classList.add('visible');
-          } else {
-            badge.classList.remove('visible');
-          }
-        }, () => {});
-
-        // When user visits announcements, mark as seen
-        const navAnnBtn = document.getElementById('navAnnBtn');
-        if (navAnnBtn) {
-          navAnnBtn.addEventListener('click', () => {
-            localStorage.setItem(lastSeenKey, Date.now().toString());
-          }, { once: true });
-        }
-      }
-
-      // â”€â”€ Message Board badge (unread) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      function listenMsgBadge(user) {
-        const badge = document.getElementById('msgBadge');
-        if (!badge) return;
-        getDoc(doc(db, 'users', user.uid)).then(snap => {
-          const lastRead = snap.exists() && snap.data().lastReadMessageboard
-            ? snap.data().lastReadMessageboard.toMillis()
-            : 0;
-          const cutoff = Timestamp.fromMillis(lastRead);
-          const q = query(collection(db, 'topics'), where('createdAt', '>', cutoff));
-          msgUnsubscribe = onSnapshot(q, (s) => {
-            const count = s.size;
-            if (count > 0) {
-              badge.textContent = count > 99 ? '99+' : count;
-              badge.classList.add('visible');
-            } else {
-              badge.classList.remove('visible');
-            }
-          }, () => {});
-        });
-        const navMsgBtn = document.getElementById('navMsgBtn');
-        if (navMsgBtn) {
-          navMsgBtn.addEventListener('click', () => {
-            setDoc(doc(db, 'users', user.uid), { lastReadMessageboard: serverTimestamp() }, { merge: true });
-            badge.textContent = '';
-            badge.classList.remove('visible');
-          }, { once: true });
-        }
-        const mobileMsgBtn = document.getElementById('mobileMsgBtn');
-        if (mobileMsgBtn) {
-          mobileMsgBtn.addEventListener('click', () => {
-            setDoc(doc(db, 'users', user.uid), { lastReadMessageboard: serverTimestamp() }, { merge: true });
-          }, { once: true });
-        }
-      }
-
-      // â”€â”€ Library badge (total count) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      function listenLibBadge() {
-        const badge = document.getElementById('libBadge');
-        if (!badge) return;
-        libUnsubscribe = onSnapshot(collection(db, 'library'), (s) => {
-          const count = s.size;
-          if (count > 0) {
-            badge.textContent = count > 999 ? '999+' : count;
-            badge.classList.add('visible');
-          } else {
-            badge.classList.remove('visible');
-          }
-        }, () => {});
-      }
-
-      // â”€â”€ Documents badge (total count) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      function listenDocBadge() {
-        const badge = document.getElementById('docBadge');
-        if (!badge) return;
-        docUnsubscribe = onSnapshot(collection(db, 'documents'), (s) => {
-          const count = s.size;
-          if (count > 0) {
-            badge.textContent = count > 999 ? '999+' : count;
-            badge.classList.add('visible');
-          } else {
-            badge.classList.remove('visible');
-          }
-        }, () => {});
-      }
-
       // â”€â”€ Feedback modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       let currentUser = null;
 
@@ -4244,10 +4148,7 @@
           document.getElementById("mainContent").style.display = "block";
           document.getElementById("logoutBtn").style.display = "none"; // replaced by dropdown
           populateNav(user);
-          listenAnnBadge(user);
-          listenMsgBadge(user);
-          listenLibBadge();
-          listenDocBadge();
+          await window.__initNavbarCounters?.({ db, user });
         } else {
           currentUser = null;
           document.getElementById("loadingScreen").style.display = "none";

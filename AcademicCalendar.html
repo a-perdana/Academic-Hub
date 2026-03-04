@@ -792,7 +792,7 @@
         document.getElementById('profileWrap').style.display='flex';
         setupNav();
         loadActivities();
-        loadNavBadges();
+        await window.__initNavbarCounters?.({ db, user });
         loadMyCompletions();
       });
 
@@ -1457,24 +1457,6 @@
       window.addEventListener('scroll', () => {
         document.getElementById('topNav').classList.toggle('scrolled', window.scrollY>10);
       });
-
-      // ── Nav badges ─────────────────────────────────────────────────
-      async function loadNavBadges() {
-        try {
-          const lastAnn = localStorage.getItem('lastSeenAnn') || '0';
-          const qA = query(collection(db,'announcements'), orderBy('createdAt','desc'), limit(10));
-          const snapA = await getDocs(qA);
-          let unreadA = 0;
-          snapA.forEach(d => { if((d.data().createdAt?.seconds||0) > +lastAnn) unreadA++; });
-          if (unreadA) { const b=document.getElementById('annBadge'); b.textContent=unreadA; b.classList.add('visible'); }
-          const lastMsg = localStorage.getItem('lastSeenMsg') || '0';
-          const qM = query(collection(db,'topics'), orderBy('createdAt','desc'), limit(10));
-          const snapM = await getDocs(qM);
-          let unreadM = 0;
-          snapM.forEach(d => { if((d.data().createdAt?.seconds||0) > +lastMsg) unreadM++; });
-          if (unreadM) { const b=document.getElementById('msgBadge'); b.textContent=unreadM; b.classList.add('visible'); }
-        } catch(e) {}
-      }
 
       // ── Profile dropdown ───────────────────────────────────────────
       function setupNav() {
