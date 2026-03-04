@@ -1141,10 +1141,10 @@
           const sel = document.getElementById(id);
           sel.innerHTML = MONTHS.map((m,i)=>`<option value="${i}">${m.name} ${m.year}</option>`).join('');
         });
-        document.getElementById('editMonthStart').value = act?.monthStart ? 0;
-        document.getElementById('editWeekStart').value  = act?.weekStart  ? 1;
-        document.getElementById('editMonthEnd').value   = act?.monthEnd   ? 0;
-        document.getElementById('editWeekEnd').value    = act?.weekEnd    ? 1;
+        document.getElementById('editMonthStart').value = act?.monthStart ?? 0;
+        document.getElementById('editWeekStart').value  = act?.weekStart  ?? 1;
+        document.getElementById('editMonthEnd').value   = act?.monthEnd   ?? 0;
+        document.getElementById('editWeekEnd').value    = act?.weekEnd    ?? 1;
         // Schools
         const isAll = !act || act.schools==='all';
         document.getElementById('schoolsAllBtn').className    = isAll ? 'schools-toggle-btn active' : 'schools-toggle-btn';
