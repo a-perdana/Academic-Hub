@@ -147,14 +147,25 @@ body {
 }
 .dd-signout-btn:hover { background: rgba(231,76,60,0.22); color: #e74c3c; }
 .dd-signout-btn svg { width: 15px; height: 15px; }
+@media (max-width: 1024px) {
+  .top-nav { padding: 0 16px; gap: 10px; }
+  .nav-page-title { display: none; }
+  .nav-actions { margin-left: auto; gap: 6px; }
+  .nav-btn { padding: 8px 12px; }
+}
 @media (max-width: 768px) {
-  .top-nav { padding: 0 16px; }
+  .top-nav { padding: 0 12px; height: 58px; }
   .nav-brand-name { display: none; }
   .nav-btn span { display: none; }
-  .nav-btn { padding: 9px; border-radius: 10px; }
+  .nav-btn { padding: 8px; border-radius: 10px; }
   .profile-first-name { display: none; }
-  .profile-btn { padding: 5px; }
-  .nav-page-title { font-size: 13px; }
+  .profile-btn { padding: 4px; }
+  #newAnnBtn { padding: 8px; font-size: 0; }
+  #newAnnBtn svg { width: 14px; height: 14px; margin: 0; }
+}
+@media (max-width: 520px) {
+  .top-nav { padding: 0 8px; gap: 8px; }
+  .nav-btn { padding: 7px; }
 }
 
 /* ─── LOADING ─────────────────────────────────── */
@@ -215,13 +226,55 @@ body {
 #mainContent { display: none; }
 
 .page-wrap {
-  max-width: 780px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 32px 20px 100px;
 }
 
+.ann-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 22px;
+  align-items: start;
+}
+
+.ann-main-col { min-width: 0; }
+
 /* ─── ANNOUNCEMENTS LIST ─────────────────────── */
 .ann-list { display: flex; flex-direction: column; gap: 16px; }
+.ann-pagination {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.ann-page-btn {
+  min-width: 34px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--ink-2);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.ann-page-btn:hover:not(:disabled) {
+  background: #fff8ea;
+  border-color: rgba(217,119,6,.45);
+  color: var(--accent);
+}
+.ann-page-btn.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  border-color: transparent;
+  color: #fff;
+}
+.ann-page-btn:disabled { opacity: .45; cursor: not-allowed; }
 
 .ann-empty {
   text-align: center; padding: 60px 20px;
@@ -296,7 +349,114 @@ body {
 .ann-admin-btn.del:hover { background: #fee2e2; border-color: #fca5a5; color: #dc2626; }
 .ann-admin-btn.edit:hover { background: #e0e7ff; border-color: #a5b4fc; color: #4f46e5; }
 .ann-admin-btn.share:hover { background: #dcfce7; border-color: #86efac; color: #16a34a; }
+.ann-admin-btn.board-active { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
 .ann-edited-tag { font-size: 11px; color: var(--ink-3); font-style: italic; }
+
+.my-board {
+  position: sticky;
+  top: 80px;
+  border-radius: 16px;
+  border: 1px solid rgba(217,119,6,.28);
+  background: linear-gradient(180deg, #fffdf8, #fff9f0);
+  box-shadow: 0 12px 36px rgba(217,119,6,.12);
+  overflow: hidden;
+}
+.my-board-head {
+  padding: 14px 14px 12px;
+  border-bottom: 1px solid rgba(217,119,6,.16);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.my-board-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #b45309;
+  letter-spacing: .02em;
+}
+.my-board-count {
+  font-size: 11px;
+  font-weight: 700;
+  color: #92400e;
+  background: #ffedd5;
+  border: 1px solid #fdba74;
+  border-radius: 999px;
+  padding: 2px 8px;
+}
+.my-board-body { padding: 10px; max-height: min(70vh, 620px); overflow: auto; }
+.my-board-empty {
+  font-size: 12px;
+  color: #9a6f4d;
+  line-height: 1.5;
+  border: 1px dashed #fdba74;
+  border-radius: 12px;
+  padding: 14px;
+  background: rgba(255,255,255,.45);
+}
+.my-board-list { display: flex; flex-direction: column; gap: 8px; }
+.my-board-item {
+  border: 1px solid #f5d0a7;
+  border-radius: 12px;
+  background: #fff;
+  padding: 10px;
+}
+.my-board-item-title {
+  font-size: 12.5px;
+  color: var(--ink);
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 7px;
+}
+.my-board-item-meta {
+  font-size: 11.5px;
+  color: #8b6d50;
+  margin-bottom: 8px;
+}
+.my-board-item-actions { display: flex; gap: 6px; }
+.my-board-btn {
+  border: 1px solid #e7c39f;
+  background: #fff8ef;
+  color: #9a3412;
+  border-radius: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+.my-board-btn:hover { background: #ffedd5; border-color: #fb923c; }
+.my-board-btn.remove {
+  border-color: #fecaca;
+  background: #fff1f2;
+  color: #b91c1c;
+}
+.my-board-btn.remove:hover { background: #ffe4e6; border-color: #fca5a5; }
+.my-board-footer {
+  padding: 10px;
+  border-top: 1px solid rgba(217,119,6,.16);
+}
+.my-board-clear {
+  width: 100%;
+  border: 1px dashed #fdba74;
+  background: #fff;
+  color: #b45309;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+.my-board-clear:hover { background: #fff7ed; }
+
+.ann-card.board-focus { animation: boardFocus .7s ease; }
+@keyframes boardFocus {
+  0% { box-shadow: 0 0 0 0 rgba(245,158,11,.45); }
+  100% { box-shadow: var(--shadow); }
+}
+@media (max-width: 1040px) {
+  .ann-workspace { grid-template-columns: 1fr; }
+  .my-board { position: static; order: -1; }
+}
 
 /* Links in card */
 .ann-links { display: flex; flex-wrap: wrap; gap: 7px; padding: 0 20px 14px; }
@@ -839,18 +999,34 @@ body {
       </div>
     </div>
   </nav>
-
   <!-- Page content -->
   <div class="page-wrap">
-    <div class="ann-list" id="annList">
-      <div class="ann-empty" id="annEmpty" style="display:none;">
-        <div class="ann-empty-icon">📭</div>
-        <p>No announcements yet. Check back soon!</p>
+    <div class="ann-workspace">
+      <div class="ann-main-col">
+        <div class="ann-list" id="annList">
+          <div class="ann-empty" id="annEmpty" style="display:none;">
+            <div class="ann-empty-icon">&#128229;</div>
+            <p>No announcements yet. Check back soon!</p>
+          </div>
+        </div>
+        <div class="ann-pagination" id="annPagination"></div>
       </div>
+      <aside class="my-board" aria-label="Pinned announcements">
+        <div class="my-board-head">
+          <h3 class="my-board-title">My Reading Board</h3>
+          <span class="my-board-count" id="myBoardCount">0</span>
+        </div>
+        <div class="my-board-body">
+          <div class="my-board-empty" id="myBoardEmpty">Use the board button on any announcement to pin it here for later reading.</div>
+          <div class="my-board-list" id="myBoardList"></div>
+        </div>
+        <div class="my-board-footer">
+          <button class="my-board-clear" id="myBoardClearBtn" type="button">Clear Board</button>
+        </div>
+      </aside>
     </div>
   </div>
 </div>
-
 <!-- New / Edit Announcement Modal -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box">
@@ -1139,9 +1315,11 @@ body {
       document.getElementById('loginScreen').classList.remove('visible');
       document.getElementById('mainContent').style.display = 'block';
 
+      loadBoardIds();
       initAnnouncements();
     } else {
       currentUser = null; isAdmin = false; currentUserDisplayName = null;
+      boardIds = new Set();
       if (unsubAnn) { unsubAnn(); unsubAnn = null; }
       document.getElementById('loginScreen').classList.add('visible');
       document.getElementById('mainContent').style.display = 'none';
@@ -1207,76 +1385,44 @@ body {
   });
 
   let deepLinkHandled = false;
+  const PAGE_SIZE = 5;
+  let currentPage = 1;
+  let sortedAnnouncements = [];
+  let boardIds = new Set();
 
   // ── Announcements List ───────────────────────────────────────
-  function initAnnouncements() {
-    // Single-field orderBy — no composite index needed.
-    // Pinned-first sorting is handled client-side below.
+    function initAnnouncements() {
     const q = query(collection(db, 'announcements'), orderBy('createdAt', 'desc'));
-    unsubAnn = onSnapshot(q, async (snap) => {
-      const annList = document.getElementById('annList');
-      const annEmpty = document.getElementById('annEmpty');
-
-      // Only show announcements published to academichub (or legacy ones with no platforms field)
+    unsubAnn = onSnapshot(q, (snap) => {
       const filteredDocs = snap.docs.filter(d => {
         const plats = d.data().platforms;
         return !plats || plats.includes('academichub');
       });
 
-      if (!filteredDocs.length) {
-        annEmpty.style.display = 'block';
-        [...annList.children].forEach(c => { if (c !== annEmpty) c.remove(); });
-        return;
-      }
-      annEmpty.style.display = 'none';
-
-      // Sort client-side: pinned first, then by timestamp desc
-      const sorted = [...filteredDocs].sort((a, b) => {
+      sortedAnnouncements = [...filteredDocs].sort((a, b) => {
         const ap = a.data().pinned ? 1 : 0;
         const bp = b.data().pinned ? 1 : 0;
         if (bp !== ap) return bp - ap;
         const at = a.data().createdAt?.toMillis?.() || 0;
         const bt = b.data().createdAt?.toMillis?.() || 0;
         return bt - at;
-      });
+      }).map(d => ({ id: d.id, data: d.data() }));
 
-      // Build set of current IDs in DOM
-      const existingIds = new Set([...annList.querySelectorAll('.ann-card')].map(c => c.dataset.id));
-      const incomingIds = new Set(sorted.map(d => d.id));
-
-      // Remove stale cards
-      existingIds.forEach(id => {
-        if (!incomingIds.has(id)) {
-          const el = annList.querySelector(`.ann-card[data-id="${id}"]`);
-          if (el) el.remove();
-        }
-      });
-
-      // Add/update cards
-      for (const docSnap of sorted) {
-        const id = docSnap.id;
-        const d = docSnap.data();
-        let card = annList.querySelector(`.ann-card[data-id="${id}"]`);
-        if (!card) {
-          card = buildCard(id, d);
-          annList.appendChild(card);
-        } else {
-          updateCardData(card, id, d);
+      if (!deepLinkHandled) {
+        const targetId = new URLSearchParams(window.location.search).get('id');
+        if (targetId) {
+          const idx = sortedAnnouncements.findIndex(x => x.id === targetId);
+          if (idx >= 0) currentPage = Math.floor(idx / PAGE_SIZE) + 1;
         }
       }
 
-      // Re-sort DOM to match client-sorted order (pinned first, then newest)
-      sorted.forEach(docSnap => {
-        const card = annList.querySelector(`.ann-card[data-id="${docSnap.id}"]`);
-        if (card) annList.appendChild(card);
-      });
+      renderAnnouncementsPage();
 
-      // Deep link: auto-expand announcement from ?id= URL param
       if (!deepLinkHandled) {
         deepLinkHandled = true;
         const targetId = new URLSearchParams(window.location.search).get('id');
         if (targetId) {
-          const targetCard = annList.querySelector(`.ann-card[data-id="${targetId}"]`);
+          const targetCard = document.querySelector(`#annList .ann-card[data-id="${targetId}"]`);
           if (targetCard) {
             if (!targetCard.classList.contains('expanded')) {
               targetCard.classList.add('expanded');
@@ -1291,6 +1437,150 @@ body {
     }, (err) => console.error('Announcements listener error:', err));
   }
 
+  function renderAnnouncementsPage() {
+    const annList = document.getElementById('annList');
+    const annEmpty = document.getElementById('annEmpty');
+    const annPagination = document.getElementById('annPagination');
+
+    if (!sortedAnnouncements.length) {
+      annEmpty.style.display = 'block';
+      annPagination.innerHTML = '';
+      cleanupCommentListeners(new Set());
+      [...annList.children].forEach(c => { if (c !== annEmpty) c.remove(); });
+      renderBoardPanel();
+      return;
+    }
+
+    annEmpty.style.display = 'none';
+    const totalPages = Math.max(1, Math.ceil(sortedAnnouncements.length / PAGE_SIZE));
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = sortedAnnouncements.slice(start, start + PAGE_SIZE);
+    const visibleIds = new Set(pageItems.map(x => x.id));
+    cleanupCommentListeners(visibleIds);
+
+    [...annList.querySelectorAll('.ann-card')].forEach(c => c.remove());
+    pageItems.forEach(({ id, data }) => annList.appendChild(buildCard(id, data)));
+    renderBoardPanel();
+
+    if (totalPages <= 1) {
+      annPagination.innerHTML = '';
+      return;
+    }
+
+    const nums = Array.from({ length: totalPages }, (_, i) => i + 1).map(p => `
+      <button class="ann-page-btn ${p === currentPage ? 'active' : ''}" data-page="${p}" ${p === currentPage ? 'aria-current="page"' : ''}>${p}</button>
+    `).join('');
+
+    annPagination.innerHTML = `
+      <button class="ann-page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>Prev</button>
+      ${nums}
+      <button class="ann-page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+    `;
+
+    annPagination.querySelectorAll('[data-page]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        setAnnouncementsPage(Number(btn.dataset.page));
+      });
+    });
+  }
+
+  function setAnnouncementsPage(page) {
+    currentPage = page;
+    renderAnnouncementsPage();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function boardStorageKey() {
+    return `academichub_ann_board_${currentUser?.uid || 'guest'}`;
+  }
+
+  function loadBoardIds() {
+    try {
+      const raw = localStorage.getItem(boardStorageKey());
+      const ids = raw ? JSON.parse(raw) : [];
+      boardIds = new Set(Array.isArray(ids) ? ids : []);
+    } catch {
+      boardIds = new Set();
+    }
+  }
+
+  function persistBoardIds() {
+    localStorage.setItem(boardStorageKey(), JSON.stringify([...boardIds]));
+  }
+
+  function toggleBoardItem(id) {
+    if (boardIds.has(id)) boardIds.delete(id);
+    else boardIds.add(id);
+    persistBoardIds();
+    renderAnnouncementsPage();
+  }
+
+  function removeBoardItem(id) {
+    if (!boardIds.has(id)) return;
+    boardIds.delete(id);
+    persistBoardIds();
+    renderAnnouncementsPage();
+  }
+
+  function renderBoardPanel() {
+    const listEl = document.getElementById('myBoardList');
+    const emptyEl = document.getElementById('myBoardEmpty');
+    const countEl = document.getElementById('myBoardCount');
+    const map = new Map(sortedAnnouncements.map(x => [x.id, x.data]));
+
+    let pruned = false;
+    [...boardIds].forEach(id => {
+      if (map.has(id)) return;
+      boardIds.delete(id);
+      pruned = true;
+    });
+    if (pruned) persistBoardIds();
+
+    const items = [...boardIds].map(id => ({ id, data: map.get(id) })).filter(x => x.data);
+    countEl.textContent = String(items.length);
+
+    if (!items.length) {
+      listEl.innerHTML = '';
+      emptyEl.style.display = 'block';
+      return;
+    }
+
+    emptyEl.style.display = 'none';
+    listEl.innerHTML = items.map(({ id, data }) => `
+      <article class="my-board-item">
+        <div class="my-board-item-title">${escHtml(data.title || 'Untitled')}</div>
+        <div class="my-board-item-meta">${relativeTime(data.createdAt)}</div>
+        <div class="my-board-item-actions">
+          <button class="my-board-btn" data-open-board="${id}" type="button">Open</button>
+          <button class="my-board-btn remove" data-remove-board="${id}" type="button">Remove</button>
+        </div>
+      </article>
+    `).join('');
+
+    listEl.querySelectorAll('[data-open-board]').forEach(btn => {
+      btn.addEventListener('click', () => openFromBoard(btn.dataset.openBoard));
+    });
+    listEl.querySelectorAll('[data-remove-board]').forEach(btn => {
+      btn.addEventListener('click', () => removeBoardItem(btn.dataset.removeBoard));
+    });
+  }
+
+  function openFromBoard(id) {
+    const idx = sortedAnnouncements.findIndex(x => x.id === id);
+    if (idx < 0) return;
+    currentPage = Math.floor(idx / PAGE_SIZE) + 1;
+    renderAnnouncementsPage();
+    const card = document.querySelector(`#annList .ann-card[data-id="${id}"]`);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    card.classList.remove('board-focus');
+    void card.offsetWidth;
+    card.classList.add('board-focus');
+  }
   function buildCard(id, d) {
     const card = document.createElement('div');
     card.className = 'ann-card' + (d.pinned ? ' pinned' : '');
@@ -1313,6 +1603,7 @@ body {
         <button class="ann-admin-btn share" data-action="share" title="Copy link">
           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
         </button>
+        <button class="ann-admin-btn ${boardIds.has(id) ? 'board-active' : ''}" data-action="board" title="${boardIds.has(id) ? 'Remove from board' : 'Pin to my board'}"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 3.5l2.6 5.27 5.82.85-4.21 4.1 1 5.8L12 16.76l-5.21 2.76 1-5.8-4.21-4.1 5.82-.85L12 3.5z"/></svg></button>
         ${canEdit && isAdmin ? `<button class="ann-admin-btn ${d.pinned ? 'pin-active' : ''}" data-action="pin" title="${d.pinned ? 'Unpin' : 'Pin'}">📌</button>` : ''}
         ${canEdit ? `<button class="ann-admin-btn edit" data-action="edit" title="Edit">✏️</button>` : ''}
         ${canEdit && isAdmin ? `<button class="ann-admin-btn del" data-action="delete" title="Delete">🗑️</button>` : ''}
@@ -1398,6 +1689,14 @@ body {
       });
     }
 
+
+    const boardBtn = card.querySelector('[data-action="board"]');
+    if (boardBtn) {
+      boardBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleBoardItem(id);
+      });
+    }
     // Author / Admin: edit
     const editBtn = card.querySelector('[data-action="edit"]');
     if (editBtn) {
@@ -1453,6 +1752,14 @@ body {
 
   // ── Comments ─────────────────────────────────────────────────
   const commentUnsubs = {};
+
+  function cleanupCommentListeners(visibleIds) {
+    Object.keys(commentUnsubs).forEach(annId => {
+      if (visibleIds.has(annId)) return;
+      try { commentUnsubs[annId]?.(); } catch {}
+      delete commentUnsubs[annId];
+    });
+  }
 
   function loadComments(card, annId) {
     if (commentUnsubs[annId]) return; // already listening
@@ -1626,6 +1933,12 @@ body {
     modalOverlay.classList.add('open');
   }
 
+  document.getElementById('myBoardClearBtn').addEventListener('click', () => {
+    if (!boardIds.size) return;
+    boardIds = new Set();
+    persistBoardIds();
+    renderAnnouncementsPage();
+  });
   document.getElementById('newAnnBtn').addEventListener('click', () => openAnnModal('new', null, null));
   document.getElementById('modalCancel').addEventListener('click', () => {
     cleanupModalImageObjectUrl();
