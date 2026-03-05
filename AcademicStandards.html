@@ -956,25 +956,23 @@
         const [selected, setSelected] = useState(null);
         const [expandedSub, setExpandedSub] = useState(null);
         const [sectionsData, setSectionsData] = useState({});
-        const [dataLoading, setDataLoading] = useState(true);
+        const [loadedCount, setLoadedCount] = useState(0);
+        const totalSections = indexData.sections.filter(s => s.status === "complete").length;
 
         useEffect(() => {
           const completeSections = indexData.sections.filter(
             (s) => s.status === "complete",
           );
-          Promise.all(
-            completeSections.map((s) =>
-              fetch(`Sections/Section ${s.id}.json`)
-                .then((r) => (r.ok ? r.json() : null))
-                .catch(() => null),
-            ),
-          ).then((results) => {
-            const data = {};
-            completeSections.forEach((s, i) => {
-              if (results[i]) data[s.id] = results[i];
-            });
-            setSectionsData(data);
-            setDataLoading(false);
+          completeSections.forEach((s) => {
+            fetch(`Sections/Section ${s.id}.json`)
+              .then((r) => (r.ok ? r.json() : null))
+              .catch(() => null)
+              .then((data) => {
+                if (data) {
+                  setSectionsData((prev) => ({ ...prev, [s.id]: data }));
+                }
+                setLoadedCount((n) => n + 1);
+              });
           });
         }, []);
 
@@ -1005,25 +1003,7 @@
         const currentSection = indexData.sections.find(
           (s) => s.id === selected,
         );
-
-        if (dataLoading) {
-          return (
-            <div
-              className={`min-h-screen flex items-center justify-center ${bg}`}
-            >
-              <div className="text-center">
-                <div
-                  className="inline-block w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full"
-                  style={{ animation: "spin 1s linear infinite" }}
-                ></div>
-                <p className={`mt-4 text-sm ${muted}`}>
-                  Loading academic standards...
-                </p>
-                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-              </div>
-            </div>
-          );
-        }
+        const allLoaded = loadedCount >= totalSections;
 
         return (
           <div className={`min-h-screen ${bg} ${text}`}>
@@ -1064,7 +1044,7 @@
                     />
                     <input
                       type="text"
-                      placeholder="Search..."
+                      placeholder={allLoaded ? "Search..." : `Loading ${loadedCount}/${totalSections}…`}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
                       className={`pl-9 pr-4 py-2 rounded-lg text-sm w-40 ${
@@ -1441,26 +1421,35 @@
                     </div>
                     <div
                       className={`p-8 rounded-xl text-center ${
-                        dark ? "bg-gray-800" : "bg-white"
-                      } border ${dark ? "border-gray-700" : "border-gray-200"}`}
+                        dark ? “bg-gray-800” : “bg-white”
+                      } border ${dark ? “border-gray-700” : “border-gray-200”}`}
                     >
-                      <Icon
-                        name={currentSection?.icon}
-                        size={48}
-                        style={{ color: currentSection?.color }}
-                        className="mx-auto mb-4"
-                      />
-                      <h2 className="text-xl font-bold mb-2">
-                        Section {selected}: {currentSection?.title}
-                      </h2>
-                      <p className={muted}>Dashboard content coming soon...</p>
-                      <p
-                        className={`text-sm mt-4 ${
-                          dark ? "text-yellow-400" : "text-yellow-600"
-                        }`}
-                      >
-                        ðŸ“„ Click "Open Doc" to view the full document
-                      </p>
+                      {!allLoaded ? (
+                        <>
+                          <div
+                            className=”inline-block w-10 h-10 border-4 border-blue-200 border-t-blue-500 rounded-full mx-auto mb-4”
+                            style={{ animation: “spin 1s linear infinite” }}
+                          />
+                          <p className={muted}>Loading section content…</p>
+                          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+                        </>
+                      ) : (
+                        <>
+                          <Icon
+                            name={currentSection?.icon}
+                            size={48}
+                            style={{ color: currentSection?.color }}
+                            className=”mx-auto mb-4”
+                          />
+                          <h2 className=”text-xl font-bold mb-2”>
+                            Section {selected}: {currentSection?.title}
+                          </h2>
+                          <p className={muted}>Dashboard content coming soon...</p>
+                          <p className={`text-sm mt-4 ${dark ? “text-yellow-400” : “text-yellow-600”}`}>
+                            Click “Open Doc” to view the full document
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
                 )}
