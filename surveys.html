@@ -30,90 +30,6 @@
       color: var(--ink);
       min-height: 100vh;
     }
-    .top-nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      height: 62px;
-      padding: 0 20px;
-      background: rgba(5, 5, 16, 0.95);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      backdrop-filter: blur(18px);
-    }
-    .nav-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-    .nav-link {
-      text-decoration: none;
-      color: rgba(255, 255, 255, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      padding: 6px 11px;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      white-space: nowrap;
-      transition: 0.18s ease;
-    }
-    .nav-link:hover {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.30);
-      background: rgba(255, 255, 255, 0.08);
-    }
-    .nav-title {
-      color: #fff;
-      font-size: 0.95rem;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-shrink: 0;
-    }
-    .nav-user-name {
-      font-size: 0.84rem;
-      color: rgba(255, 255, 255, 0.68);
-    }
-    .nav-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #7c3aed, #0891b2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: #fff;
-      user-select: none;
-    }
-    .btn-logout {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: transparent;
-      border-radius: 8px;
-      padding: 6px 12px;
-      cursor: pointer;
-      transition: 0.18s ease;
-    }
-    .btn-logout:hover {
-      color: #fff;
-      border-color: rgba(255, 255, 255, 0.32);
-      background: rgba(255, 255, 255, 0.08);
-    }
-
     .page-wrap {
       max-width: 980px;
       margin: 0 auto;
@@ -292,6 +208,11 @@
       display: grid;
       gap: 5px;
     }
+    .response-item + .response-item {
+      border-top: 1px solid var(--border);
+      padding-top: 13px;
+      margin-top: 4px;
+    }
     .response-label {
       font-size: 0.79rem;
       color: var(--ink-2);
@@ -397,7 +318,6 @@
 
     @media (max-width: 760px) {
       .controls { grid-template-columns: 1fr; }
-      .nav-user-name, .btn-logout { display: none; }
       .response-likert { flex-direction: column; }
       .likert-opt { min-width: unset; flex-direction: row; }
       .likert-opt label { text-align: left; padding: 7px 10px; }
@@ -405,18 +325,7 @@
   </style>
 </head>
 <body>
-  <nav class="top-nav">
-    <div class="nav-left">
-      <a class="nav-link" href="index.html">Back</a>
-      <a class="nav-link" href="announcements.html">Announcements</a>
-      <span class="nav-title">Academic Hub Surveys</span>
-    </div>
-    <div class="nav-right">
-      <span class="nav-user-name"></span>
-      <div class="nav-avatar" id="navAvatar" aria-hidden="true"></div>
-      <button class="btn-logout" id="logoutBtn">Sign Out</button>
-    </div>
-  </nav>
+  <div id="navbarMount"></div>
 
   <main class="page-wrap">
     <section class="hero">
@@ -454,6 +363,7 @@
       FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
     };
   </script>
+  <script src="partials/navbar-loader.js"></script>
   <script type="module" src="auth-guard.js"></script>
   <script type="module">
     import {
@@ -474,7 +384,42 @@
     let statusFilter = "all";
     let controlsBound = false;
 
-    document.addEventListener("authReady", async ({ detail: { user } }) => {
+    // Load navbar partial immediately (top-level await works in ES modules)
+    await window.__loadAcademicNavbar?.("surveys");
+
+    // Wire up profile dropdown and sign-out (elements exist after navbar load)
+    document.getElementById("profileBtn")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.getElementById("profileWrap")?.classList.toggle("open");
+    });
+    document.addEventListener("click", () => {
+      document.getElementById("profileWrap")?.classList.remove("open");
+    });
+    document.getElementById("ddSignOut")?.addEventListener("click", async () => {
+      const { signOut } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+      await signOut(window.auth);
+      window.location.href = "index.html";
+    });
+
+    document.addEventListener("authReady", async ({ detail: { user, profile } }) => {
+      // Populate navbar profile
+      const displayName = profile?.displayName || user.displayName || user.email;
+      const firstName = displayName.split(" ")[0];
+      const initials = displayName.split(" ").filter(Boolean).map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "?";
+      const navFirstName = document.getElementById("navFirstName");
+      const profileWrap = document.getElementById("profileWrap");
+      const ddFullName = document.getElementById("ddFullName");
+      const ddEmail = document.getElementById("ddEmail");
+      const navAvEl = document.getElementById("navAvatar");
+      const ddAvEl = document.getElementById("ddAvatar");
+      if (navFirstName) navFirstName.textContent = firstName;
+      if (ddFullName) ddFullName.textContent = displayName;
+      if (ddEmail) ddEmail.textContent = user.email;
+      if (profileWrap) profileWrap.style.display = "flex";
+      if (navAvEl) navAvEl.textContent = initials;
+      if (ddAvEl) ddAvEl.textContent = initials;
+      window.__initNavbarCounters?.({ db: window.db, user });
+
       db = window.db;
       currentUser = user;
       bindControls();
