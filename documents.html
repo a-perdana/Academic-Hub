@@ -33,7 +33,7 @@ body {
 
 /* ─── TOP NAV ─────────────────────────────────── */
 .top-nav {
-  position: sticky; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 28px; height: 62px;
   background: rgba(5, 5, 16, 0.95);
@@ -207,17 +207,21 @@ body {
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
 /* ─── MAIN CONTENT ────────────────────────────── */
-#mainContent { display: none; }
+#mainContent { display: none; padding-top: 62px; }
 
-/* ─── FILTER BAR ─────────────────────────────── */
-.filter-bar {
-  background: var(--white); border-bottom: 1px solid var(--border);
-  padding: 14px 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  position: sticky; top: 60px; z-index: 100; box-shadow: var(--shadow-sm);
+/* ─── LEFT SIDEBAR ────────────────────────────── */
+.docs-sidebar {
+  position: sticky; top: 80px; height: fit-content;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 14px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow-sm);
 }
-.search-wrap {
-  position: relative; flex: 1; min-width: 180px; max-width: 300px;
+.sidebar-section-label {
+  font-size: 11px; font-weight: 700; color: var(--ink-3);
+  text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 6px;
 }
+.search-wrap { position: relative; }
 .search-wrap svg {
   position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
   color: var(--ink-3); pointer-events: none; width: 15px; height: 15px;
@@ -230,23 +234,24 @@ body {
 }
 .search-input:focus { border-color: var(--accent); background: var(--white); }
 .search-input::placeholder { color: var(--ink-3); }
-.filter-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.filter-pills { display: flex; flex-direction: column; gap: 4px; }
 .pill {
-  padding: 5px 13px; border-radius: 20px;
+  padding: 6px 12px; border-radius: 8px;
   border: 1px solid var(--border); background: var(--paper);
   font-size: 12.5px; font-weight: 500; color: var(--ink-2);
-  cursor: pointer; transition: all .15s; white-space: nowrap; font-family: 'DM Sans', sans-serif;
+  cursor: pointer; transition: all .15s; text-align: left; font-family: 'DM Sans', sans-serif;
+  width: 100%;
 }
 .pill:hover { border-color: var(--accent); color: var(--accent); }
 .pill.active { background: var(--accent); border-color: var(--accent); color: white; }
 
 /* ─── PAGE LAYOUT ────────────────────────────── */
 .docs-layout {
-  max-width: 1160px; margin: 0 auto; padding: 28px 20px 100px;
-  display: grid; grid-template-columns: 248px 1fr; gap: 24px; align-items: start;
+  max-width: 1300px; margin: 0 auto; padding: 28px 20px 100px;
+  display: grid; grid-template-columns: 220px minmax(0,1fr) 268px; gap: 22px; align-items: start;
 }
 .focused-panel {
-  position: sticky; top: 130px;
+  position: sticky; top: 80px;
   background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow-sm); overflow: hidden;
 }
@@ -610,18 +615,19 @@ body {
 .feedback-status.err { color: #e74c3c; display: block; }
 
 /* ─── RESPONSIVE ─────────────────────────────── */
+@media (max-width: 1100px) {
+  .docs-layout { grid-template-columns: 200px minmax(0,1fr); }
+  .focused-panel { display: none; }
+}
 @media (max-width: 860px) {
   .docs-layout { grid-template-columns: 1fr; }
-  .focused-panel { position: static; }
+  .docs-sidebar { position: static; }
 }
 @media (max-width: 640px) {
-  .topbar { padding: 0 14px; }
-  .filter-bar { padding: 10px 14px; }
   .docs-layout { padding: 16px 10px 100px; gap: 16px; }
   .doc-row { padding: 12px 12px; gap: 10px; }
   .doc-desc { display: none; }
   .modal-row { grid-template-columns: 1fr; }
-  .search-wrap { max-width: 100%; }
   .doc-version, .doc-date { display: none; }
 }
 </style>
@@ -659,32 +665,45 @@ body {
   <!-- Top Nav -->
   <div id="navbarMount"></div>
 
-  <!-- Filter Bar -->
-  <div class="filter-bar">
-    <div style="display:flex; justify-content:flex-end;">
-      <button class="nav-add-btn" id="addBtn" style="display:none;">
+  <!-- 3-column layout -->
+  <div class="docs-layout">
+
+    <!-- LEFT: Sidebar (add + search + filters) -->
+    <aside class="docs-sidebar">
+      <button class="nav-add-btn" id="addBtn" style="display:none; width:100%; justify-content:center;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         Add Document
       </button>
-    </div>
-    <div class="search-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="search-input" id="searchInput" placeholder="Search documents…">
-    </div>
-    <div class="filter-pills" id="categoryFilters">
-      <button class="pill active" data-cat="All">All</button>
-      <button class="pill" data-cat="Policy">Policy</button>
-      <button class="pill" data-cat="Guideline">Guideline</button>
-      <button class="pill" data-cat="Handbook">Handbook</button>
-      <button class="pill" data-cat="Circular">Circular</button>
-      <button class="pill" data-cat="Report">Report</button>
-      <button class="pill" data-cat="Form">Form</button>
-      <button class="pill" data-cat="Other">Other</button>
-    </div>
-  </div>
+      <div>
+        <div class="sidebar-section-label">Search</div>
+        <div class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search documents…">
+        </div>
+      </div>
+      <div>
+        <div class="sidebar-section-label">Category</div>
+        <div class="filter-pills" id="categoryFilters">
+          <button class="pill active" data-cat="All">All</button>
+          <button class="pill" data-cat="Policy">Policy</button>
+          <button class="pill" data-cat="Guideline">Guideline</button>
+          <button class="pill" data-cat="Handbook">Handbook</button>
+          <button class="pill" data-cat="Circular">Circular</button>
+          <button class="pill" data-cat="Report">Report</button>
+          <button class="pill" data-cat="Form">Form</button>
+          <button class="pill" data-cat="Other">Other</button>
+        </div>
+      </div>
+    </aside>
 
-  <!-- Document List -->
-  <div class="docs-layout">
+    <!-- MIDDLE: Document list -->
+    <div class="main-col">
+      <div class="doc-count" id="docCount"></div>
+      <div class="doc-list" id="docList"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- RIGHT: Focused Documents -->
     <aside class="focused-panel">
       <div class="focused-panel-hd">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -692,11 +711,7 @@ body {
       </div>
       <div class="focused-items" id="focusedList"></div>
     </aside>
-    <div class="main-col">
-      <div class="doc-count" id="docCount"></div>
-      <div class="doc-list" id="docList"></div>
-      <div class="pagination" id="pagination"></div>
-    </div>
+
   </div>
 </div>
 
