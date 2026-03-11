@@ -378,9 +378,12 @@ body {
 .ann-admin-btn.board-active { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
 .ann-edited-tag { font-size: 11px; color: var(--ink-3); font-style: italic; }
 
-.my-board {
+.ann-right-col {
   position: sticky;
   top: 80px;
+  height: fit-content;
+}
+.my-board {
   border-radius: 16px;
   border: 1px solid rgba(217,119,6,.28);
   background: linear-gradient(180deg, #fffdf8, #fff9f0);
@@ -481,12 +484,12 @@ body {
 }
 @media (max-width: 1200px) {
   .ann-workspace { grid-template-columns: 180px minmax(0, 1fr); }
-  .my-board { display: none; }
+  .ann-right-col { display: none; }
 }
 @media (max-width: 1040px) {
   .ann-workspace { grid-template-columns: 1fr; }
   .ann-sidebar { position: static; }
-  .my-board { display: block; position: static; order: -1; }
+  .ann-right-col { display: block; position: static; order: -1; }
 }
 
 /* Links in card */
@@ -1024,23 +1027,25 @@ body {
         </div>
         <div class="ann-pagination" id="annPagination"></div>
       </div>
-      <aside class="my-board" aria-label="Pinned announcements">
-        <div class="my-board-head">
-          <h3 class="my-board-title">My Reading Board</h3>
-          <span class="my-board-count" id="myBoardCount">0</span>
-        </div>
-        <div class="my-board-body">
-          <div class="my-board-empty" id="myBoardEmpty">Use the board button on any announcement to pin it here for later reading.</div>
-          <div class="my-board-list" id="myBoardList"></div>
-        </div>
-        <div class="my-board-footer">
-          <button class="my-board-clear" id="myBoardClearBtn" type="button">Clear Board</button>
-        </div>
-        <button class="nav-add-btn" id="newAnnBtn" style="display:none; margin: 12px 10px 4px; width: calc(100% - 20px);">
+      <div class="ann-right-col">
+        <aside class="my-board" aria-label="Pinned announcements">
+          <div class="my-board-head">
+            <h3 class="my-board-title">My Reading Board</h3>
+            <span class="my-board-count" id="myBoardCount">0</span>
+          </div>
+          <div class="my-board-body">
+            <div class="my-board-empty" id="myBoardEmpty">Use the board button on any announcement to pin it here for later reading.</div>
+            <div class="my-board-list" id="myBoardList"></div>
+          </div>
+          <div class="my-board-footer">
+            <button class="my-board-clear" id="myBoardClearBtn" type="button">Clear Board</button>
+          </div>
+        </aside>
+        <button class="nav-add-btn" id="newAnnBtn" style="display:none; margin-top: 12px; width: 100%;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Add New
         </button>
-      </aside>
+      </div>
     </div>
   </div>
 </div>
