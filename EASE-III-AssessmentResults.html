@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EASE III — Assessment Results</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+
+    <script src="firebase-config.js"></script>
+    <script>
+      if (!window.ENV) window.ENV = {
+        FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+        FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+        FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+        FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+        FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+        FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+      };
+    </script>
+    <script type="module" src="auth-guard.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      :root {
+        --bg-primary: #0a0f1a;
+        --bg-secondary: #111827;
+        --bg-card: #1a2234;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --accent-orange: #f97316;
+        --accent-blue: #3b82f6;
+        --border-color: #2d3a4f;
+        --score-low: #dc2626;
+        --score-mid: #f59e0b;
+        --score-good: #3b82f6;
+        --score-high: #22c55e;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .dashboard { max-width: 1600px; margin: 0 auto; }
+
+      /* ── Header ── */
+      .header {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .header-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+      .badge {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        background: var(--accent-orange);
+        color: var(--bg-primary);
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+      h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
+      .subtitle { color: var(--text-secondary); font-size: 1rem; margin-top: 0.5rem; }
+
+      /* ── Subject selector ── */
+      .subject-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-bottom: 1.75rem;
+      }
+      .subject-btn {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.875rem;
+        font-weight: 600;
+        padding: 0.6rem 1.25rem;
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        background: var(--bg-card);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      .subject-btn:hover { border-color: var(--accent-orange); color: var(--text-primary); }
+      .subject-btn.active { background: var(--accent-orange); border-color: var(--accent-orange); color: var(--bg-primary); }
+      .subject-icon { margin-right: 0.4rem; }
+
+      /* English dropdown */
+      .english-dropdown { position: relative; display: inline-block; }
+      .dropdown-arrow { font-size: 0.6rem; margin-left: 0.25rem; }
+      .english-dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        min-width: 140px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+        z-index: 100;
+        margin-top: 0.25rem;
+        overflow: hidden;
+      }
+      .english-dropdown-content.show { display: block; }
+      .dropdown-item {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border: none;
+        background: transparent;
+        color: var(--text-secondary);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        text-align: left;
+        cursor: pointer;
+        transition: all 0.15s ease;
+      }
+      .dropdown-item:hover { background: var(--bg-secondary); color: var(--text-primary); }
+      .dropdown-item.active { color: var(--accent-orange); font-weight: 600; }
+
+      /* ── Stats row ── */
+      .stats-row {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem;
+        transition: border-color 0.2s;
+      }
+      .stat-card:hover { border-color: var(--accent-orange); }
+      .stat-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+      }
+      .stat-value {
+        font-family: "Space Mono", monospace;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.2;
+      }
+      .stat-value.highlight { color: var(--accent-orange); }
+      .stat-value.small { font-size: 1rem; }
+      .stat-sub {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+        margin-top: 0.3rem;
+        font-family: "Space Mono", monospace;
+      }
+
+      /* ── Cards ── */
+      .card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 1.5rem;
+      }
+      .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .card-title::before {
+        content: "";
+        width: 4px;
+        height: 16px;
+        background: var(--accent-orange);
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+      .card-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+      }
+      .card-header-row .card-title { margin-bottom: 0; }
+
+      /* ── Grid layouts ── */
+      .grid-2 { display: grid; grid-template-columns: 3fr 2fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+
+      /* ── Grade selector ── */
+      .grade-selector { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+      .grade-btn {
+        font-family: "Space Mono", monospace;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.35rem 0.7rem;
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        background: var(--bg-secondary);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+      .grade-btn:hover:not(:disabled) { border-color: var(--accent-blue); color: var(--text-primary); }
+      .grade-btn.active { background: var(--accent-blue); border-color: var(--accent-blue); color: white; }
+      .grade-btn:disabled { opacity: 0.25; cursor: not-allowed; }
+
+      /* ── Chart containers ── */
+      .chart-wrap { position: relative; height: 480px; }
+      .chart-wrap-sm { position: relative; height: 480px; }
+      .progression-wrap { position: relative; height: 200px; }
+
+      /* ── Heatmap ── */
+      .heatmap-scroll { overflow-x: auto; padding-bottom: 0.5rem; }
+      .heatmap {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 3px;
+        font-size: 0.8rem;
+      }
+      .heatmap th {
+        font-family: "Space Mono", monospace;
+        font-weight: 600;
+        padding: 0.5rem 0.4rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.68rem;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+      }
+      .heatmap th.school-hdr { text-align: left; min-width: 170px; }
+      .heatmap td {
+        text-align: center;
+        padding: 0.45rem 0.3rem;
+        border-radius: 6px;
+        font-family: "Space Mono", monospace;
+        font-weight: 500;
+        font-size: 0.75rem;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        cursor: default;
+        min-width: 82px;
+      }
+      .heatmap td:not(.school-name):hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+        z-index: 10;
+        position: relative;
+      }
+      .heatmap td.school-name {
+        text-align: left;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        color: var(--text-primary);
+        background: transparent !important;
+        font-size: 0.8rem;
+        padding-right: 1rem;
+      }
+      .heatmap td.school-name:hover { transform: none; box-shadow: none; }
+      .heatmap td.total-row {
+        font-weight: 700;
+        font-size: 0.8rem;
+      }
+      .heatmap tr.total-row-tr td.school-name {
+        color: var(--accent-orange);
+        font-weight: 700;
+      }
+      .heatmap td.na { background: var(--bg-secondary); color: var(--text-muted); }
+      .heatmap td.dnp { background: #131b2b; color: #374151; }
+      .cell-c { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+      .cell-avg { font-size: 0.85rem; font-weight: 700; }
+      .cell-part { font-size: 0.58rem; opacity: 0.7; letter-spacing: 0.02em; }
+
+      /* ── Legend ── */
+      .legend {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--border-color);
+        flex-wrap: wrap;
+      }
+      .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); }
+      .legend-dot { width: 22px; height: 10px; border-radius: 3px; }
+
+      /* ── Responsive ── */
+      @media (max-width: 1200px) {
+        .grid-2 { grid-template-columns: 1fr; }
+        .stats-row { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 768px) {
+        body { padding: 1rem; }
+        .stats-row { grid-template-columns: 1fr 1fr; }
+        h1 { font-size: 1.5rem; }
+        .chart-wrap, .chart-wrap-sm { height: 360px; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="dashboard">
+
+      <!-- ══ HEADER ══ -->
+      <header class="header">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+          <div>
+            <div class="header-top">
+              <span class="badge">EASE III</span>
+              <h1>Assessment Results</h1>
+            </div>
+            <p class="subtitle">Eduversal Partner Schools &nbsp;·&nbsp; Grade 7–11 &nbsp;·&nbsp; 8 Subjects &nbsp;·&nbsp; 14 Schools</p>
+          </div>
+        </div>
+      </header>
+
+      <!-- ══ SUBJECT SELECTOR ══ -->
+      <div class="subject-selector">
+        <button class="subject-btn active" data-subject="Mathematics" onclick="switchSubject('Mathematics')">
+          <span class="subject-icon">📐</span>Mathematics
+        </button>
+        <button class="subject-btn" data-subject="Religion" onclick="switchSubject('Religion')">
+          <span class="subject-icon">📖</span>Religion
+        </button>
+        <button class="subject-btn" data-subject="Science" onclick="switchSubject('Science')">
+          <span class="subject-icon">🔬</span>Science
+        </button>
+        <button class="subject-btn" data-subject="Biology" onclick="switchSubject('Biology')">
+          <span class="subject-icon">🧬</span>Biology
+        </button>
+        <button class="subject-btn" data-subject="Physics" onclick="switchSubject('Physics')">
+          <span class="subject-icon">⚛️</span>Physics
+        </button>
+        <button class="subject-btn" data-subject="Chemistry" onclick="switchSubject('Chemistry')">
+          <span class="subject-icon">🧪</span>Chemistry
+        </button>
+        <div class="english-dropdown">
+          <button class="subject-btn" id="englishBtn" onclick="toggleEnglishDropdown(event)">
+            <span class="subject-icon">📝</span>English&nbsp;<span class="dropdown-arrow">▼</span>
+          </button>
+          <div class="english-dropdown-content" id="englishDropdown">
+            <button class="dropdown-item" id="coreItem" onclick="switchSubject('English Core')">Core</button>
+            <button class="dropdown-item" id="extItem" onclick="switchSubject('English Extended')">Extended</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ KPI CARDS ══ -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Network Average</div>
+          <div class="stat-value highlight" id="kpi-avg">—</div>
+          <div class="stat-sub">score out of 100</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Participants</div>
+          <div class="stat-value" id="kpi-part">—</div>
+          <div class="stat-sub" id="kpi-part-sub">test entries</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Top Performing School</div>
+          <div class="stat-value small" id="kpi-top">—</div>
+          <div class="stat-sub" id="kpi-top-sub">&nbsp;</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Active Schools</div>
+          <div class="stat-value" id="kpi-schools">—</div>
+          <div class="stat-sub">out of 14</div>
+        </div>
+      </div>
+
+      <!-- ══ CHARTS ROW ══ -->
+      <div class="grid-2">
+        <!-- Average Score by School -->
+        <div class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">Average Score by School</h2>
+            <div class="grade-selector" id="gradeSelector">
+              <button class="grade-btn active" data-grade="all" onclick="switchGrade('all')">All</button>
+              <button class="grade-btn" data-grade="G7" onclick="switchGrade('G7')">G7</button>
+              <button class="grade-btn" data-grade="G8" onclick="switchGrade('G8')">G8</button>
+              <button class="grade-btn" data-grade="G9" onclick="switchGrade('G9')">G9</button>
+              <button class="grade-btn" data-grade="G10" onclick="switchGrade('G10')">G10</button>
+              <button class="grade-btn" data-grade="G11" onclick="switchGrade('G11')">G11</button>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="avgChart"></canvas></div>
+        </div>
+
+        <!-- Participation by School -->
+        <div class="card">
+          <div class="card-header-row">
+            <h2 class="card-title">Participation by School</h2>
+          </div>
+          <div class="chart-wrap-sm"><canvas id="partChart"></canvas></div>
+        </div>
+      </div>
+
+      <!-- ══ GRADE PROGRESSION ══ -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h2 class="card-title">Grade Progression — Network Average &amp; Participants</h2>
+        <div class="progression-wrap"><canvas id="progressionChart"></canvas></div>
+      </div>
+
+      <!-- ══ HEATMAP ══ -->
+      <div class="card">
+        <h2 class="card-title">School × Subject Performance Heatmap</h2>
+        <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1rem;">
+          Weighted average across all applicable grades &nbsp;·&nbsp; participant count below score &nbsp;·&nbsp; hover to highlight
+        </p>
+        <div class="heatmap-scroll">
+          <table class="heatmap" id="heatmapTable"></table>
+        </div>
+        <div class="legend">
+          <div class="legend-item"><div class="legend-dot" style="background:#dc2626"></div>Below 50</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>50 – 69</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>70 – 84</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#22c55e"></div>85 +</div>
+          <div class="legend-item"><div class="legend-dot" style="background:#131b2b;border:1px solid #2d3a4f"></div>Did not participate</div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--bg-secondary);border:1px solid #2d3a4f"></div>Not applicable</div>
+        </div>
+      </div>
+
+    </div><!-- end .dashboard -->
+
+    <script>
+      const SCHOOLS = [
+        "Cahaya Rancamaya","Emer Islamic Boarding School","Kesatuan Bangsa","Kharisma Bangsa",
+        "Mega Islamic School","Pakar Belia Islamic School","Prestige School","Pribadi Bandung",
+        "Pribadi Depok","Pribadi Premiere","Semesta 1","Semesta 3","Fatih Bilingual School","TNA Fatih"
+      ];
+      const SUBJECTS = ["Mathematics","Religion","Biology","English Core","English Extended","Physics","Chemistry","Science"];
+      const GRADE_AVAIL = {
+        "Mathematics":     ["G7","G8","G9","G10","G11"],
+        "Religion":        ["G7","G8","G9","G10","G11"],
+        "Biology":         ["G9","G10","G11"],
+        "English Core":    ["G7","G8","G9","G10","G11"],
+        "English Extended":["G7","G8","G9","G10","G11"],
+        "Physics":         ["G9","G10","G11"],
+        "Chemistry":       ["G9","G10","G11"],
+        "Science":         ["G7","G8"]
+      };
+      const SUBJ_ICON = {
+        "Mathematics":"📐","Religion":"📖","Biology":"🧬",
+        "English Core":"📝","English Extended":"📝","Physics":"⚛️","Chemistry":"🧪","Science":"🔬"
+      };
+      const SUBJ_SHORT = {
+        "Mathematics":"Math","Religion":"Religion","Biology":"Biology",
+        "English Core":"Eng Core","English Extended":"Eng Ext",
+        "Physics":"Physics","Chemistry":"Chem","Science":"Science"
+      };
+
+      const DATA = {
+        "Mathematics": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:65,part:51},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:61,part:52},G11:{avg:0,part:0}},
+            "Emer Islamic Boarding School":{G7:{avg:47,part:34},G8:{avg:52,part:24},G9:{avg:0,part:0},G10:{avg:43,part:21},G11:{avg:51,part:26}},
+            "Kesatuan Bangsa":             {G7:{avg:73,part:34},G8:{avg:74,part:26},G9:{avg:71,part:58},G10:{avg:62,part:85},G11:{avg:55,part:72}},
+            "Kharisma Bangsa":             {G7:{avg:67,part:59},G8:{avg:70,part:68},G9:{avg:69,part:70},G10:{avg:57,part:117},G11:{avg:58,part:92}},
+            "Mega Islamic School":         {G7:{avg:65,part:13},G8:{avg:76,part:16},G9:{avg:75,part:15},G10:{avg:59,part:15},G11:{avg:52,part:15}},
+            "Pakar Belia Islamic School":  {G7:{avg:67,part:37},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:64,part:28},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:61,part:13},G8:{avg:52,part:6},G9:{avg:77,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:62,part:36},G8:{avg:60,part:28},G9:{avg:66,part:36},G10:{avg:49,part:60},G11:{avg:57,part:39}},
+            "Pribadi Depok":               {G7:{avg:72,part:24},G8:{avg:70,part:34},G9:{avg:72,part:29},G10:{avg:65,part:33},G11:{avg:71,part:48}},
+            "Pribadi Premiere":            {G7:{avg:76,part:8},G8:{avg:81,part:10},G9:{avg:76,part:5},G10:{avg:50,part:7},G11:{avg:46,part:8}},
+            "Semesta 1":                   {G7:{avg:65,part:30},G8:{avg:73,part:36},G9:{avg:61,part:19},G10:{avg:53,part:89},G11:{avg:54,part:72}},
+            "Semesta 3":                   {G7:{avg:71,part:18},G8:{avg:80,part:18},G9:{avg:77,part:27},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:42,part:32},G8:{avg:51,part:33},G9:{avg:57,part:25},G10:{avg:43,part:25},G11:{avg:43,part:36}},
+            "TNA Fatih":                   {G7:{avg:51,part:17},G8:{avg:57,part:19},G9:{avg:54,part:22},G10:{avg:47,part:35},G11:{avg:52,part:32}}
+          },
+          totals: {G7:{avg:63,part:406},G8:{avg:66,part:316},G9:{avg:68,part:307},G10:{avg:56,part:567},G11:{avg:56,part:440}}
+        },
+        "Religion": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:85,part:51},G8:{avg:80,part:24},G9:{avg:94,part:48},G10:{avg:90,part:52},G11:{avg:92,part:33}},
+            "Emer Islamic Boarding School":{G7:{avg:82,part:34},G8:{avg:75,part:24},G9:{avg:0,part:0},G10:{avg:89,part:21},G11:{avg:95,part:26}},
+            "Kesatuan Bangsa":             {G7:{avg:80,part:30},G8:{avg:81,part:21},G9:{avg:91,part:54},G10:{avg:89,part:78},G11:{avg:86,part:63}},
+            "Kharisma Bangsa":             {G7:{avg:83,part:56},G8:{avg:78,part:61},G9:{avg:85,part:64},G10:{avg:85,part:112},G11:{avg:87,part:87}},
+            "Mega Islamic School":         {G7:{avg:80,part:13},G8:{avg:86,part:16},G9:{avg:92,part:17},G10:{avg:89,part:15},G11:{avg:93,part:14}},
+            "Pakar Belia Islamic School":  {G7:{avg:84,part:37},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:90,part:29},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:83,part:14},G8:{avg:72,part:6},G9:{avg:93,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:79,part:34},G8:{avg:72,part:28},G9:{avg:88,part:34},G10:{avg:86,part:58},G11:{avg:87,part:36}},
+            "Pribadi Depok":               {G7:{avg:87,part:23},G8:{avg:81,part:33},G9:{avg:87,part:26},G10:{avg:90,part:32},G11:{avg:92,part:46}},
+            "Pribadi Premiere":            {G7:{avg:93,part:6},G8:{avg:80,part:10},G9:{avg:96,part:5},G10:{avg:86,part:7},G11:{avg:92,part:8}},
+            "Semesta 1":                   {G7:{avg:80,part:30},G8:{avg:82,part:36},G9:{avg:85,part:19},G10:{avg:88,part:80},G11:{avg:88,part:65}},
+            "Semesta 3":                   {G7:{avg:86,part:18},G8:{avg:77,part:25},G9:{avg:90,part:32},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:68,part:31},G8:{avg:66,part:33},G9:{avg:82,part:25},G10:{avg:75,part:25},G11:{avg:78,part:35}},
+            "TNA Fatih":                   {G7:{avg:81,part:17},G8:{avg:75,part:19},G9:{avg:85,part:21},G10:{avg:87,part:35},G11:{avg:91,part:32}}
+          },
+          totals: {G7:{avg:82,part:393},G8:{avg:77,part:336},G9:{avg:89,part:348},G10:{avg:87,part:543},G11:{avg:88,part:444}}
+        },
+        "Biology": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:74,part:52},G11:{avg:0,part:0}},
+            "Emer Islamic Boarding School":{G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:58,part:21},G11:{avg:45,part:25}},
+            "Kesatuan Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:80,part:36},G10:{avg:74,part:85},G11:{avg:55,part:38}},
+            "Kharisma Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:75,part:70},G10:{avg:75,part:116},G11:{avg:62,part:71}},
+            "Mega Islamic School":         {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:79,part:16},G10:{avg:69,part:15},G11:{avg:42,part:14}},
+            "Pakar Belia Islamic School":  {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:68,part:28},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:86,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:70,part:34},G10:{avg:67,part:60},G11:{avg:51,part:28}},
+            "Pribadi Depok":               {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:78,part:29},G10:{avg:75,part:34},G11:{avg:68,part:48}},
+            "Pribadi Premiere":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:82,part:5},G10:{avg:68,part:7},G11:{avg:53,part:8}},
+            "Semesta 1":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:68,part:19},G10:{avg:65,part:59},G11:{avg:62,part:38}},
+            "Semesta 3":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:83,part:3},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:67,part:25},G10:{avg:60,part:25},G11:{avg:40,part:14}},
+            "TNA Fatih":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:68,part:22},G10:{avg:61,part:34},G11:{avg:63,part:25}}
+          },
+          totals: {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:75,part:290},G10:{avg:70,part:537},G11:{avg:58,part:309}}
+        },
+        "English Core": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Emer Islamic Boarding School":{G7:{avg:67,part:1},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:59,part:21},G11:{avg:0,part:0}},
+            "Kesatuan Bangsa":             {G7:{avg:87,part:34},G8:{avg:90,part:25},G9:{avg:83,part:58},G10:{avg:74,part:83},G11:{avg:69,part:72}},
+            "Kharisma Bangsa":             {G7:{avg:0,part:0},G8:{avg:87,part:1},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Mega Islamic School":         {G7:{avg:78,part:13},G8:{avg:94,part:16},G9:{avg:81,part:17},G10:{avg:68,part:15},G11:{avg:57,part:14}},
+            "Pakar Belia Islamic School":  {G7:{avg:79,part:37},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:67,part:29},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:78,part:14},G8:{avg:76,part:6},G9:{avg:93,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Depok":               {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Premiere":            {G7:{avg:0,part:0},G8:{avg:77,part:1},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Semesta 1":                   {G7:{avg:79,part:30},G8:{avg:90,part:37},G9:{avg:70,part:19},G10:{avg:60,part:50},G11:{avg:59,part:35}},
+            "Semesta 3":                   {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:70,part:32},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:56,part:26},G11:{avg:62,part:2}},
+            "TNA Fatih":                   {G7:{avg:62,part:9},G8:{avg:79,part:8},G9:{avg:75,part:10},G10:{avg:54,part:18},G11:{avg:57,part:17}}
+          },
+          totals: {G7:{avg:78,part:170},G8:{avg:89,part:94},G9:{avg:80,part:108},G10:{avg:65,part:241},G11:{avg:64,part:140}}
+        },
+        "English Extended": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:77,part:51},G8:{avg:95,part:24},G9:{avg:87,part:48},G10:{avg:74,part:52},G11:{avg:86,part:33}},
+            "Emer Islamic Boarding School":{G7:{avg:54,part:34},G8:{avg:82,part:24},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:76,part:26}},
+            "Kesatuan Bangsa":             {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Kharisma Bangsa":             {G7:{avg:90,part:59},G8:{avg:96,part:68},G9:{avg:88,part:70},G10:{avg:79,part:118},G11:{avg:90,part:92}},
+            "Mega Islamic School":         {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pakar Belia Islamic School":  {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:79,part:35},G8:{avg:91,part:28},G9:{avg:86,part:34},G10:{avg:83,part:60},G11:{avg:83,part:39}},
+            "Pribadi Depok":               {G7:{avg:90,part:23},G8:{avg:94,part:34},G9:{avg:88,part:29},G10:{avg:75,part:35},G11:{avg:87,part:48}},
+            "Pribadi Premiere":            {G7:{avg:86,part:8},G8:{avg:98,part:10},G9:{avg:91,part:5},G10:{avg:83,part:7},G11:{avg:82,part:8}},
+            "Semesta 1":                   {G7:{avg:0,part:0},G8:{avg:0,part:0},G9:{avg:0,part:0},G10:{avg:78,part:38},G11:{avg:88,part:37}},
+            "Semesta 3":                   {G7:{avg:92,part:18},G8:{avg:96,part:24},G9:{avg:91,part:33},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:0,part:0},G8:{avg:73,part:33},G9:{avg:78,part:25},G10:{avg:0,part:0},G11:{avg:73,part:34}},
+            "TNA Fatih":                   {G7:{avg:87,part:8},G8:{avg:93,part:11},G9:{avg:92,part:11},G10:{avg:72,part:17},G11:{avg:94,part:15}}
+          },
+          totals: {G7:{avg:81,part:236},G8:{avg:91,part:256},G9:{avg:87,part:255},G10:{avg:78,part:326},G11:{avg:85,part:330}}
+        },
+        "Physics": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:73,part:52},G11:{avg:0,part:0}},
+            "Emer Islamic Boarding School":{G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:54,part:21},G11:{avg:52,part:27}},
+            "Kesatuan Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:75,part:35},G10:{avg:72,part:84},G11:{avg:60,part:31}},
+            "Kharisma Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:74,part:70},G10:{avg:71,part:119},G11:{avg:65,part:59}},
+            "Mega Islamic School":         {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:71,part:17},G10:{avg:63,part:15},G11:{avg:58,part:14}},
+            "Pakar Belia Islamic School":  {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:66,part:29},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:87,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:70,part:34},G10:{avg:68,part:60},G11:{avg:56,part:24}},
+            "Pribadi Depok":               {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:77,part:29},G10:{avg:78,part:34},G11:{avg:67,part:48}},
+            "Pribadi Premiere":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:85,part:5},G10:{avg:69,part:7},G11:{avg:55,part:8}},
+            "Semesta 1":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:64,part:19},G10:{avg:66,part:30},G11:{avg:57,part:34}},
+            "Semesta 3":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:80,part:32},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:61,part:25},G10:{avg:53,part:26},G11:{avg:55,part:21}},
+            "TNA Fatih":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:65,part:22},G10:{avg:60,part:35},G11:{avg:70,part:12}}
+          },
+          totals: {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:73,part:291},G10:{avg:68,part:512},G11:{avg:60,part:278}}
+        },
+        "Chemistry": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:66,part:52},G11:{avg:0,part:0}},
+            "Emer Islamic Boarding School":{G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:60,part:21},G11:{avg:56,part:27}},
+            "Kesatuan Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:80,part:58},G10:{avg:69,part:85},G11:{avg:61,part:45}},
+            "Kharisma Bangsa":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:77,part:70},G10:{avg:70,part:119},G11:{avg:64,part:56}},
+            "Mega Islamic School":         {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:80,part:17},G10:{avg:58,part:15},G11:{avg:45,part:14}},
+            "Pakar Belia Islamic School":  {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:0,part:0},G10:{avg:59,part:27},G11:{avg:0,part:0}},
+            "Prestige School":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:89,part:4},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Pribadi Bandung":             {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:77,part:33},G10:{avg:63,part:59},G11:{avg:61,part:25}},
+            "Pribadi Depok":               {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:82,part:28},G10:{avg:77,part:33},G11:{avg:64,part:47}},
+            "Pribadi Premiere":            {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:87,part:5},G10:{avg:63,part:7},G11:{avg:49,part:8}},
+            "Semesta 1":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:67,part:19},G10:{avg:66,part:89},G11:{avg:59,part:72}},
+            "Semesta 3":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:83,part:32},G10:{avg:0,part:0},G11:{avg:0,part:0}},
+            "Fatih Bilingual School":      {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:65,part:24},G10:{avg:53,part:26},G11:{avg:44,part:35}},
+            "TNA Fatih":                   {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:66,part:22},G10:{avg:58,part:36},G11:{avg:55,part:21}}
+          },
+          totals: {G7:{avg:null,part:null},G8:{avg:null,part:null},G9:{avg:77,part:312},G10:{avg:66,part:569},G11:{avg:58,part:349}}
+        },
+        "Science": {
+          schools: {
+            "Cahaya Rancamaya":            {G7:{avg:82,part:50},G8:{avg:0,part:0},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Emer Islamic Boarding School":{G7:{avg:67,part:34},G8:{avg:60,part:24},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Kesatuan Bangsa":             {G7:{avg:89,part:32},G8:{avg:76,part:26},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Kharisma Bangsa":             {G7:{avg:91,part:59},G8:{avg:79,part:69},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Mega Islamic School":         {G7:{avg:80,part:13},G8:{avg:74,part:16},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Pakar Belia Islamic School":  {G7:{avg:79,part:35},G8:{avg:0,part:0},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Prestige School":             {G7:{avg:80,part:14},G8:{avg:59,part:6},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Pribadi Bandung":             {G7:{avg:79,part:36},G8:{avg:70,part:29},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Pribadi Depok":               {G7:{avg:90,part:24},G8:{avg:81,part:34},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Pribadi Premiere":            {G7:{avg:84,part:8},G8:{avg:76,part:10},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Semesta 1":                   {G7:{avg:80,part:30},G8:{avg:80,part:36},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Semesta 3":                   {G7:{avg:91,part:18},G8:{avg:79,part:24},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "Fatih Bilingual School":      {G7:{avg:67,part:32},G8:{avg:61,part:33},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}},
+            "TNA Fatih":                   {G7:{avg:76,part:17},G8:{avg:67,part:19},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}}
+          },
+          totals: {G7:{avg:81,part:402},G8:{avg:74,part:326},G9:{avg:null,part:null},G10:{avg:null,part:null},G11:{avg:null,part:null}}
+        }
+      };
+
+      // ── State ──
+      let currentSubject = "Mathematics";
+      let currentGrade   = "all";
+      let avgChart, partChart, progressionChart;
+
+      // ── Helpers ──
+      function scoreColor(avg, a) {
+        if (avg >= 85) return `rgba(34,197,94,${a})`;
+        if (avg >= 70) return `rgba(59,130,246,${a})`;
+        if (avg >= 50) return `rgba(245,158,11,${a})`;
+        return `rgba(220,38,38,${a})`;
+      }
+
+      function getSchoolData(subject, grade) {
+        return SCHOOLS.map(school => {
+          const grades = DATA[subject].schools[school];
+          if (grade === "all") {
+            let tp = 0, ws = 0;
+            for (const d of Object.values(grades)) {
+              if (d.avg !== null && d.avg > 0 && d.part > 0) { tp += d.part; ws += d.avg * d.part; }
+            }
+            return { school, avg: tp > 0 ? Math.round(ws / tp) : 0, part: tp };
+          }
+          const d = grades[grade];
+          if (!d || d.avg === null) return { school, avg: null, part: null };
+          return { school, avg: d.avg, part: d.part };
+        });
+      }
+
+      function schoolLabel(name) {
+        return name
+          .replace("Islamic Boarding School", "IBS")
+          .replace("Bilingual School", "Bil. Sch.")
+          .replace("Islamic School", "IS");
+      }
+
+      // ── KPI ──
+      function updateKPIs(data) {
+        let tp = 0, ws = 0, active = 0, topSchool = "", topAvg = 0;
+        data.forEach(({ school, avg, part }) => {
+          if (avg !== null && avg > 0 && part > 0) {
+            tp += part; ws += avg * part; active++;
+            if (avg > topAvg) { topAvg = avg; topSchool = school; }
+          }
+        });
+        const na = tp > 0 ? (ws / tp).toFixed(1) : "—";
+        document.getElementById("kpi-avg").textContent     = na;
+        document.getElementById("kpi-part").textContent    = tp.toLocaleString();
+        document.getElementById("kpi-top").textContent     = topSchool || "—";
+        document.getElementById("kpi-top-sub").textContent = topSchool ? `avg score: ${topAvg}` : " ";
+        document.getElementById("kpi-schools").textContent = active;
+      }
+
+      // ── Avg chart ──
+      function renderAvgChart(data) {
+        const participating = data.filter(d => d.avg !== null && d.avg > 0).sort((a,b) => b.avg - a.avg);
+        const noParticip    = data.filter(d => d.avg === 0);
+        const naData        = data.filter(d => d.avg === null);
+        const sorted = [...participating, ...noParticip, ...naData];
+
+        const labels  = sorted.map(d => schoolLabel(d.school));
+        const avgs    = sorted.map(d => (d.avg !== null && d.avg > 0) ? d.avg : 0);
+        const bgColors = sorted.map(d =>
+          (d.avg !== null && d.avg > 0) ? scoreColor(d.avg, 0.8)
+          : d.avg === null ? "rgba(30,40,55,0.4)"
+          : "rgba(45,58,79,0.35)"
+        );
+        const brColors = sorted.map(d =>
+          (d.avg !== null && d.avg > 0) ? scoreColor(d.avg, 1)
+          : "rgba(45,58,79,0.5)"
+        );
+
+        const ctx = document.getElementById("avgChart").getContext("2d");
+        if (avgChart) avgChart.destroy();
+        avgChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [{
+              label: "Average Score",
+              data: avgs,
+              backgroundColor: bgColors,
+              borderColor: brColors,
+              borderWidth: 1,
+              borderRadius: 5,
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  title: ctx => sorted[ctx[0].dataIndex].school,
+                  label: ctx => {
+                    const d = sorted[ctx.dataIndex];
+                    if (d.avg === null) return " Not applicable for this grade";
+                    if (d.avg === 0)    return " Did not participate";
+                    return [` Score: ${d.avg}`, ` Participants: ${d.part}`];
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                min: 0, max: 100,
+                grid: { color: "rgba(45,58,79,0.5)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 11 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 10 }, autoSkip: false },
+                border: { color: "#2d3a4f" }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Participation chart ──
+      function renderPartChart(data) {
+        const active = data.filter(d => d.part !== null && d.part > 0).sort((a,b) => b.part - a.part);
+        const maxP   = active.length ? active[0].part : 1;
+
+        const ctx = document.getElementById("partChart").getContext("2d");
+        if (partChart) partChart.destroy();
+        partChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: active.map(d => schoolLabel(d.school)),
+            datasets: [{
+              label: "Participants",
+              data: active.map(d => d.part),
+              backgroundColor: active.map(d => `rgba(59,130,246,${0.3 + (d.part / maxP) * 0.65})`),
+              borderColor: "rgba(59,130,246,0.7)",
+              borderWidth: 1,
+              borderRadius: 5,
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  title: ctx => active[ctx[0].dataIndex].school,
+                  label: ctx => ` ${ctx.raw} participants`
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: "rgba(45,58,79,0.5)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 11 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 10 }, autoSkip: false },
+                border: { color: "#2d3a4f" }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Grade progression chart ──
+      function renderProgressionChart() {
+        const totals = DATA[currentSubject].totals;
+        const grades = GRADE_AVAIL[currentSubject];
+        const avgs   = grades.map(g => totals[g]?.avg  ?? null);
+        const parts  = grades.map(g => totals[g]?.part ?? 0);
+
+        const ctx = document.getElementById("progressionChart").getContext("2d");
+        if (progressionChart) progressionChart.destroy();
+        progressionChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: grades,
+            datasets: [
+              {
+                label: "Network Avg Score",
+                data: avgs,
+                backgroundColor: avgs.map(v => v ? scoreColor(v, 0.75) : "transparent"),
+                borderColor:     avgs.map(v => v ? scoreColor(v, 1)    : "transparent"),
+                borderWidth: 2,
+                borderRadius: 6,
+                yAxisID: "y",
+                order: 2,
+              },
+              {
+                label: "Total Participants",
+                data: parts,
+                type: "line",
+                borderColor: "rgba(249,115,22,0.8)",
+                backgroundColor: "rgba(249,115,22,0.08)",
+                borderWidth: 2,
+                pointBackgroundColor: "rgba(249,115,22,1)",
+                pointRadius: 5,
+                tension: 0.35,
+                fill: true,
+                yAxisID: "y2",
+                order: 1,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                labels: { color: "#94a3b8", font: { family: "DM Sans", size: 11 }, boxWidth: 14 }
+              },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ctx.dataset.label === "Network Avg Score"
+                    ? ` Avg: ${ctx.raw}`
+                    : ` Participants: ${ctx.raw}`
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: "rgba(45,58,79,0.4)" },
+                ticks: { color: "#94a3b8", font: { family: "Space Mono", size: 11 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                min: 0, max: 100,
+                grid: { color: "rgba(45,58,79,0.4)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" },
+                title: { display: true, text: "Score", color: "#64748b", font: { size: 10 } }
+              },
+              y2: {
+                position: "right",
+                grid: { display: false },
+                ticks: { color: "rgba(249,115,22,0.7)", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" },
+                title: { display: true, text: "Students", color: "rgba(249,115,22,0.7)", font: { size: 10 } }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Heatmap ──
+      function schoolSubjectOverall(school, subject) {
+        const grades = DATA[subject].schools[school];
+        let tp = 0, ws = 0, hasData = false;
+        for (const d of Object.values(grades)) {
+          if (d.avg !== null) hasData = true;
+          if (d.avg !== null && d.avg > 0 && d.part > 0) { tp += d.part; ws += d.avg * d.part; }
+        }
+        return { avg: tp > 0 ? Math.round(ws / tp) : 0, part: tp, applicable: hasData };
+      }
+
+      function renderHeatmap() {
+        const table = document.getElementById("heatmapTable");
+        let html = "<thead><tr><th class='school-hdr'>School</th>";
+        SUBJECTS.forEach(s => { html += `<th>${SUBJ_SHORT[s]}</th>`; });
+        html += "</tr></thead><tbody>";
+
+        SCHOOLS.forEach(school => {
+          html += `<tr><td class='school-name'>${school}</td>`;
+          SUBJECTS.forEach(subject => {
+            const { avg, part, applicable } = schoolSubjectOverall(school, subject);
+            if (!applicable) {
+              html += `<td class='na'><div class='cell-c'><span class='cell-avg'>N/A</span></div></td>`;
+            } else if (avg === 0) {
+              html += `<td class='dnp'><div class='cell-c'><span class='cell-avg'>—</span><span class='cell-part'>n/p</span></div></td>`;
+            } else {
+              const bg  = scoreColor(avg, 0.22);
+              const bdr = scoreColor(avg, 0.65);
+              html += `<td style="background:${bg};border:1px solid ${bdr};">
+                <div class='cell-c'>
+                  <span class='cell-avg'>${avg}</span>
+                  <span class='cell-part'>${part}p</span>
+                </div></td>`;
+            }
+          });
+          html += "</tr>";
+        });
+
+        // Totals row
+        html += "<tr class='total-row-tr'><td class='school-name total-row'>Network Total</td>";
+        SUBJECTS.forEach(subject => {
+          let tp = 0, ws = 0;
+          GRADE_AVAIL[subject].forEach(g => {
+            const t = DATA[subject].totals[g];
+            if (t && t.avg !== null && t.avg > 0 && t.part > 0) { tp += t.part; ws += t.avg * t.part; }
+          });
+          const avg = tp > 0 ? Math.round(ws / tp) : 0;
+          const bg  = scoreColor(avg, 0.28);
+          const bdr = scoreColor(avg, 0.8);
+          html += `<td class='total-row' style="background:${bg};border:1px solid ${bdr};">
+            <div class='cell-c'>
+              <span class='cell-avg'>${avg}</span>
+              <span class='cell-part'>${tp.toLocaleString()}p</span>
+            </div></td>`;
+        });
+        html += "</tr></tbody>";
+        table.innerHTML = html;
+      }
+
+      // ── Grade button state ──
+      function updateGradeButtons() {
+        const avail = GRADE_AVAIL[currentSubject];
+        document.querySelectorAll(".grade-btn[data-grade]").forEach(btn => {
+          const g = btn.dataset.grade;
+          if (g === "all") return;
+          btn.disabled = !avail.includes(g);
+        });
+        // If current grade no longer available, reset to all
+        if (currentGrade !== "all" && !avail.includes(currentGrade)) {
+          currentGrade = "all";
+          document.querySelectorAll(".grade-btn").forEach(b =>
+            b.classList.toggle("active", b.dataset.grade === "all")
+          );
+        }
+      }
+
+      // ── Subject switch ──
+      function switchSubject(subject) {
+        currentSubject = subject;
+        const isEnglish = subject === "English Core" || subject === "English Extended";
+
+        document.querySelectorAll(".subject-btn").forEach(btn => {
+          const match = btn.dataset.subject === subject || (btn.id === "englishBtn" && isEnglish);
+          btn.classList.toggle("active", match);
+        });
+
+        const eb = document.getElementById("englishBtn");
+        if (subject === "English Core")     eb.innerHTML = `<span class="subject-icon">📝</span>Eng Core&nbsp;<span class="dropdown-arrow">▼</span>`;
+        else if (subject === "English Extended") eb.innerHTML = `<span class="subject-icon">📝</span>Eng Ext&nbsp;<span class="dropdown-arrow">▼</span>`;
+        else eb.innerHTML = `<span class="subject-icon">📝</span>English&nbsp;<span class="dropdown-arrow">▼</span>`;
+
+        document.getElementById("englishDropdown").classList.remove("show");
+        document.getElementById("coreItem").classList.toggle("active", subject === "English Core");
+        document.getElementById("extItem").classList.toggle("active", subject === "English Extended");
+
+        updateGradeButtons();
+        const data = getSchoolData(currentSubject, currentGrade);
+        updateKPIs(data);
+        renderAvgChart(data);
+        renderPartChart(data);
+        renderProgressionChart();
+      }
+
+      // ── Grade switch ──
+      function switchGrade(grade) {
+        currentGrade = grade;
+        document.querySelectorAll(".grade-btn").forEach(b =>
+          b.classList.toggle("active", b.dataset.grade === grade)
+        );
+        const data = getSchoolData(currentSubject, currentGrade);
+        updateKPIs(data);
+        renderAvgChart(data);
+        renderPartChart(data);
+      }
+
+      // ── English dropdown ──
+      function toggleEnglishDropdown(e) {
+        e.stopPropagation();
+        document.getElementById("englishDropdown").classList.toggle("show");
+      }
+      document.addEventListener("click", () => {
+        document.getElementById("englishDropdown").classList.remove("show");
+      });
+
+      // ── Init ──
+      function init() {
+        renderHeatmap();
+        updateGradeButtons();
+        const data = getSchoolData(currentSubject, currentGrade);
+        updateKPIs(data);
+        renderAvgChart(data);
+        renderPartChart(data);
+        renderProgressionChart();
+      }
+
+      document.addEventListener("authReady", init);
+      // Fallback for local dev
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", () => { setTimeout(() => { if (!avgChart) init(); }, 600); });
+      } else {
+        setTimeout(() => { if (!avgChart) init(); }, 600);
+      }
+    </script>
+  </body>
+</html>

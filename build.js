@@ -49,6 +49,7 @@ const cleanUrls = {
   "ParentSatisfactionSurvey.html":   "parent-survey",
   "EASE-I-AssessmentResults.html":   "ease-1",
   "EASE-II-AssessmentResults.html":  "ease-2",
+  "EASE-III-AssessmentResults.html": "ease-3",
   "A-EASE-I-AssessmentResults.html": "a-ease-1",
   "EASE-Archive.html":               "ease-archive",
   "AccreditationDashboard.html":     "accreditation-dashboard",
