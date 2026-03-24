@@ -102,6 +102,7 @@ const htmlFiles = [
   "EASE-Archive.html",
   "EASE-I-AssessmentResults.html",
   "EASE-II-AssessmentResults.html",
+  "EASE-III-AssessmentResults.html",
   "A-EASE-I-AssessmentResults.html",
   "AcademicCalendar.html",
   "AccreditationDashboard.html",
