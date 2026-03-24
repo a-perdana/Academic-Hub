@@ -308,6 +308,149 @@
         h1 { font-size: 1.5rem; }
         .chart-wrap, .chart-wrap-sm { height: 360px; }
       }
+
+      /* ── Section divider ── */
+      .section-divider {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 2.5rem 0 1.75rem;
+      }
+      .sdiv-line { flex: 1; height: 1px; background: var(--border-color); }
+      .sdiv-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.68rem;
+        font-weight: 700;
+        color: var(--accent-orange);
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        white-space: nowrap;
+        padding: 0.3rem 0.8rem;
+        border: 1px solid rgba(249,115,22,0.3);
+        border-radius: 20px;
+        background: rgba(249,115,22,0.06);
+      }
+
+      /* ── Advanced grid ── */
+      .grid-adv { display: grid; grid-template-columns: 1fr 1.65fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+      @media (max-width: 1200px) { .grid-adv { grid-template-columns: 1fr; } }
+
+      /* ── Stat metrics ── */
+      .stat-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
+      .stat-metric {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.85rem;
+        transition: border-color 0.2s;
+      }
+      .stat-metric:hover { border-color: rgba(249,115,22,0.35); }
+      .sm-label {
+        font-size: 0.65rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        font-weight: 700;
+        margin-bottom: 0.35rem;
+      }
+      .sm-value {
+        font-family: "Space Mono", monospace;
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--accent-orange);
+        line-height: 1.1;
+      }
+      .sm-sub {
+        font-size: 0.62rem;
+        color: var(--text-muted);
+        margin-top: 0.2rem;
+        font-family: "Space Mono", monospace;
+      }
+
+      /* ── Extreme cards ── */
+      .extreme-card {
+        border: 1px solid;
+        border-radius: 10px;
+        padding: 0.7rem 0.85rem;
+      }
+      .ec-label  { font-size: 0.68rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+      .ec-school { font-size: 0.78rem; font-weight: 600; color: var(--text-primary); line-height: 1.3; margin-bottom: 0.2rem; }
+      .ec-score  { font-family: "Space Mono", monospace; font-size: 1.1rem; font-weight: 700; }
+
+      /* ── Correlation matrix ── */
+      .corr-table {
+        border-collapse: separate;
+        border-spacing: 3px;
+        font-size: 0.75rem;
+        min-width: 560px;
+      }
+      .corr-table th {
+        font-family: "Space Mono", monospace;
+        font-size: 0.62rem;
+        color: var(--text-secondary);
+        font-weight: 700;
+        padding: 0.35rem 0.5rem;
+        white-space: nowrap;
+        letter-spacing: 0.03em;
+      }
+      .corr-table thead th { text-align: center; }
+      .corr-table tbody th { text-align: right; padding-right: 0.75rem; }
+      .corr-cell {
+        text-align: center;
+        padding: 0.5rem 0.4rem;
+        border-radius: 5px;
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        font-size: 0.72rem;
+        min-width: 56px;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+        cursor: default;
+      }
+      .corr-cell:hover { transform: scale(1.12); box-shadow: 0 4px 12px rgba(0,0,0,0.4); z-index: 5; position: relative; }
+      .corr-diag { background: var(--bg-secondary); color: var(--text-secondary); }
+      .corr-na   { background: #0d1320; color: #374151; font-size: 0.62rem; }
+
+      /* ── Rankings table ── */
+      .rankings-wrap { overflow-x: auto; }
+      .rankings-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 0.85rem;
+        min-width: 700px;
+      }
+      .rankings-table thead th {
+        font-size: 0.65rem;
+        font-weight: 700;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding: 0.6rem 0.75rem;
+        text-align: left;
+        border-bottom: 2px solid var(--border-color);
+        white-space: nowrap;
+      }
+      .rankings-table tbody tr {
+        border-bottom: 1px solid rgba(45,58,79,0.4);
+        transition: background 0.15s;
+      }
+      .rankings-table tbody tr:hover { background: rgba(255,255,255,0.025); }
+      .rankings-table tbody td { padding: 0.7rem 0.75rem; vertical-align: middle; }
+      .rank-num    { font-family: "Space Mono", monospace; font-weight: 700; font-size: 1rem; color: var(--text-muted); }
+      .rank-school { font-weight: 600; color: var(--text-primary); }
+      .rank-avg    { font-family: "Space Mono", monospace; font-weight: 700; font-size: 1.05rem; color: var(--accent-orange); }
+      .pct-bar-wrap { display: flex; align-items: center; gap: 0.5rem; }
+      .pct-bar-bg   { width: 70px; height: 5px; background: var(--bg-secondary); border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+      .pct-bar      { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+      .tier-badge {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        font-weight: 700;
+        padding: 0.2rem 0.5rem;
+        border: 1px solid;
+        border-radius: 4px;
+        letter-spacing: 0.03em;
+        white-space: nowrap;
+      }
     </style>
   </head>
   <body>
@@ -431,6 +574,123 @@
           <div class="legend-item"><div class="legend-dot" style="background:#131b2b;border:1px solid #2d3a4f"></div>Did not participate</div>
           <div class="legend-item"><div class="legend-dot" style="background:var(--bg-secondary);border:1px solid #2d3a4f"></div>Not applicable</div>
         </div>
+      </div>
+
+      <!-- ══ SECTION DIVIDER ══ -->
+      <div class="section-divider">
+        <div class="sdiv-line"></div>
+        <span class="sdiv-label">⚡ Advanced Network Analytics</span>
+        <div class="sdiv-line"></div>
+      </div>
+
+      <!-- ══ ROW: Network Stats + Z-Score ══ -->
+      <div class="grid-adv">
+
+        <!-- Network Statistics -->
+        <div class="card">
+          <h2 class="card-title">Network Statistics</h2>
+          <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1.25rem;">Updates with subject &amp; grade selection</p>
+          <div class="stat-metrics">
+            <div class="stat-metric">
+              <div class="sm-label">Std. Deviation</div>
+              <div class="sm-value" id="ns-sd">—</div>
+              <div class="sm-sub">unweighted</div>
+            </div>
+            <div class="stat-metric">
+              <div class="sm-label">Weighted SD</div>
+              <div class="sm-value" id="ns-wsd">—</div>
+              <div class="sm-sub">by participants</div>
+            </div>
+            <div class="stat-metric">
+              <div class="sm-label">Score Range</div>
+              <div class="sm-value" id="ns-range">—</div>
+              <div class="sm-sub">max – min pts</div>
+            </div>
+            <div class="stat-metric">
+              <div class="sm-label">Subject Difficulty</div>
+              <div class="sm-value" id="ns-diff" style="font-size:1rem;line-height:1.2;">—</div>
+              <div class="sm-sub">vs. all 8 subjects</div>
+            </div>
+          </div>
+          <div style="margin-top:1.1rem;padding-top:1rem;border-top:1px solid var(--border-color);">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;">
+              <div class="extreme-card" style="border-color:rgba(34,197,94,0.4);background:rgba(34,197,94,0.05);">
+                <div class="ec-label">🏆 Highest</div>
+                <div class="ec-school" id="ns-top-school">—</div>
+                <div class="ec-score" style="color:#22c55e;" id="ns-top-avg">—</div>
+              </div>
+              <div class="extreme-card" style="border-color:rgba(220,38,38,0.4);background:rgba(220,38,38,0.05);">
+                <div class="ec-label">🔴 Lowest</div>
+                <div class="ec-school" id="ns-bot-school">—</div>
+                <div class="ec-score" style="color:#dc2626;" id="ns-bot-avg">—</div>
+              </div>
+            </div>
+            <div style="margin-top:0.65rem;font-size:0.68rem;color:var(--text-muted);font-family:'Space Mono',monospace;">
+              <span id="ns-n">—</span> participating schools in current view
+            </div>
+          </div>
+        </div>
+
+        <!-- Z-Score Chart -->
+        <div class="card">
+          <h2 class="card-title">School Z-Scores</h2>
+          <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1.25rem;">
+            Standard deviations from network mean &nbsp;·&nbsp;
+            <span style="color:#22c55e;">▲ above avg</span> &nbsp;
+            <span style="color:#dc2626;">▼ below avg</span>
+          </p>
+          <div style="position:relative;height:340px;"><canvas id="zScoreChart"></canvas></div>
+        </div>
+
+      </div>
+
+      <!-- ══ ROW: Subject Difficulty + Participation vs Score ══ -->
+      <div class="grid-2" style="margin-bottom:1.5rem;">
+
+        <!-- Subject Difficulty Index -->
+        <div class="card">
+          <h2 class="card-title">Subject Difficulty Index</h2>
+          <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1.25rem;">
+            Network weighted average per subject — sorted hardest → easiest
+          </p>
+          <div style="position:relative;height:220px;"><canvas id="difficultyChart"></canvas></div>
+        </div>
+
+        <!-- Participation vs Score Scatter -->
+        <div class="card">
+          <h2 class="card-title">Participation vs. Score</h2>
+          <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1rem;">
+            Each dot = school–subject pair &nbsp;·&nbsp;
+            Pearson <em>r</em> = <strong id="part-score-r" style="color:var(--accent-orange);font-family:'Space Mono',monospace;">—</strong>
+            &nbsp;·&nbsp; dashed = trend line
+          </p>
+          <div style="position:relative;height:220px;"><canvas id="partScoreChart"></canvas></div>
+        </div>
+
+      </div>
+
+      <!-- ══ Cross-Subject Correlation Matrix ══ -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h2 class="card-title">Cross-Subject Correlation Matrix</h2>
+        <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1.25rem;">
+          Pearson <em>r</em> between school-level subject averages &nbsp;·&nbsp;
+          <span style="color:#22c55e;">■ positive correlation</span> &nbsp;
+          <span style="color:#dc2626;">■ negative</span> &nbsp;
+          <span style="color:var(--text-muted);">■ N/A = insufficient data</span>
+        </p>
+        <div class="heatmap-scroll">
+          <div id="corrMatrix"></div>
+        </div>
+      </div>
+
+      <!-- ══ School Performance Rankings ══ -->
+      <div class="card" style="margin-bottom:1.5rem;">
+        <h2 class="card-title">School Performance Rankings</h2>
+        <p style="color:var(--text-muted);font-size:0.78rem;margin-top:-0.75rem;margin-bottom:1.25rem;">
+          Overall weighted average across all subjects &amp; grades &nbsp;·&nbsp;
+          grade trend direction &nbsp;·&nbsp; performance tier &nbsp;·&nbsp; cross-subject consistency
+        </p>
+        <div id="rankingsContainer" class="rankings-wrap"></div>
       </div>
 
     </div><!-- end .dashboard -->
@@ -927,6 +1187,453 @@
         table.innerHTML = html;
       }
 
+      // ══════════════════════════════════════════
+      // ── Advanced Statistics ──
+      // ══════════════════════════════════════════
+
+      let zScoreChart, difficultyChart, partScoreChart;
+
+      function calcMean(vals) {
+        return vals.reduce((a, b) => a + b, 0) / vals.length;
+      }
+      function calcSD(vals, m) {
+        const mean = m ?? calcMean(vals);
+        return Math.sqrt(vals.reduce((a, v) => a + (v - mean) ** 2, 0) / vals.length);
+      }
+      function calcWMean(vals, weights) {
+        const tw = weights.reduce((a, b) => a + b, 0);
+        return tw > 0 ? vals.reduce((a, v, i) => a + v * weights[i], 0) / tw : 0;
+      }
+      function calcWSD(vals, weights, wm) {
+        const tw = weights.reduce((a, b) => a + b, 0);
+        if (tw === 0) return 0;
+        const m = wm ?? calcWMean(vals, weights);
+        return Math.sqrt(vals.reduce((a, v, i) => a + weights[i] * (v - m) ** 2, 0) / tw);
+      }
+      function pearsonR(as, bs) {
+        const pairs = as.map((a, i) => [a, bs[i]]).filter(([a, b]) => a > 0 && b > 0);
+        if (pairs.length < 3) return null;
+        const n  = pairs.length;
+        const ma = pairs.reduce((s, [a])    => s + a,           0) / n;
+        const mb = pairs.reduce((s, [, b])  => s + b,           0) / n;
+        const num = pairs.reduce((s, [a, b]) => s + (a-ma)*(b-mb), 0);
+        const da  = Math.sqrt(pairs.reduce((s, [a])   => s + (a-ma)**2, 0));
+        const db  = Math.sqrt(pairs.reduce((s, [, b]) => s + (b-mb)**2, 0));
+        return (da === 0 || db === 0) ? null : +(num / (da * db)).toFixed(3);
+      }
+      function linRegSlope(ys) {
+        const pts = ys.map((y, i) => [i, y]).filter(([, y]) => y !== null && y > 0);
+        if (pts.length < 2) return null;
+        const n  = pts.length;
+        const mx = pts.reduce((a, [x])    => a + x, 0) / n;
+        const my = pts.reduce((a, [, y])  => a + y, 0) / n;
+        const num = pts.reduce((a, [x, y]) => a + (x - mx) * (y - my), 0);
+        const den = pts.reduce((a, [x])    => a + (x - mx) ** 2,        0);
+        return den === 0 ? 0 : num / den;
+      }
+      function linRegLine(xs, ys) {
+        const pairs = xs.map((x, i) => [x, ys[i]]).filter(([x, y]) => x > 0 && y > 0);
+        if (pairs.length < 3) return null;
+        const n  = pairs.length;
+        const mx = pairs.reduce((s, [x])    => s + x, 0) / n;
+        const my = pairs.reduce((s, [, y])  => s + y, 0) / n;
+        const num = pairs.reduce((s, [x, y]) => s + (x - mx) * (y - my), 0);
+        const den = pairs.reduce((s, [x])    => s + (x - mx) ** 2,        0);
+        if (den === 0) return null;
+        const slope = num / den;
+        const intcp = my - slope * mx;
+        const minX  = Math.min(...pairs.map(([x]) => x));
+        const maxX  = Math.max(...pairs.map(([x]) => x));
+        return [{ x: minX, y: +(slope * minX + intcp).toFixed(1) },
+                { x: maxX, y: +(slope * maxX + intcp).toFixed(1) }];
+      }
+      function schoolOverallAvg(school) {
+        let tp = 0, ws = 0;
+        SUBJECTS.forEach(subject => {
+          const { avg, part } = schoolSubjectOverall(school, subject);
+          if (avg > 0 && part > 0) { tp += part; ws += avg * part; }
+        });
+        return tp > 0 ? ws / tp : 0;
+      }
+      function schoolGradeAvgs(school) {
+        return ["G7","G8","G9","G10","G11"].map(grade => {
+          let tp = 0, ws = 0;
+          SUBJECTS.forEach(subject => {
+            if (!GRADE_AVAIL[subject].includes(grade)) return;
+            const d = DATA[subject].schools[school][grade];
+            if (d && d.avg > 0 && d.part > 0) { tp += d.part; ws += d.avg * d.part; }
+          });
+          return tp > 0 ? Math.round(ws / tp) : null;
+        });
+      }
+
+      // ── Network Stats card ──
+      function renderNetworkStats(data) {
+        const active = data.filter(d => d.avg !== null && d.avg > 0);
+        const ids = ["ns-sd","ns-wsd","ns-range","ns-diff","ns-top-school","ns-top-avg","ns-bot-school","ns-bot-avg"];
+        if (active.length < 2) {
+          ids.forEach(id => { document.getElementById(id).textContent = "—"; });
+          document.getElementById("ns-n").textContent = "0";
+          return;
+        }
+        const avgs    = active.map(d => d.avg);
+        const weights = active.map(d => d.part || 1);
+        const mean    = calcMean(avgs);
+        const sd      = calcSD(avgs, mean);
+        const wMean   = calcWMean(avgs, weights);
+        const wSD     = calcWSD(avgs, weights, wMean);
+        const range   = Math.max(...avgs) - Math.min(...avgs);
+        const top     = active.reduce((a, b) => b.avg > a.avg ? b : a);
+        const bot     = active.reduce((a, b) => b.avg < a.avg ? b : a);
+
+        // Subject difficulty rank (by network weighted avg, ascending = hardest)
+        const subjRanks = SUBJECTS.map(s => {
+          let tp = 0, ws = 0;
+          GRADE_AVAIL[s].forEach(g => {
+            const t = DATA[s].totals[g];
+            if (t && t.avg > 0 && t.part > 0) { tp += t.part; ws += t.avg * t.part; }
+          });
+          return { s, avg: tp > 0 ? Math.round(ws / tp) : 0 };
+        }).filter(x => x.avg > 0).sort((a, b) => a.avg - b.avg);
+
+        const rank  = subjRanks.findIndex(x => x.s === currentSubject) + 1;
+        const total = subjRanks.length;
+        const diffLabel =
+          rank === 1           ? "Hardest"      :
+          rank === 2           ? "2nd Hardest"  :
+          rank === total       ? "Easiest"       :
+          rank === total - 1   ? "2nd Easiest"  :
+                                 `#${rank} / ${total}`;
+
+        document.getElementById("ns-sd").textContent         = sd.toFixed(1);
+        document.getElementById("ns-wsd").textContent        = wSD.toFixed(1);
+        document.getElementById("ns-range").textContent      = range;
+        document.getElementById("ns-diff").textContent       = diffLabel;
+        document.getElementById("ns-top-school").textContent = schoolLabel(top.school);
+        document.getElementById("ns-top-avg").textContent    = top.avg;
+        document.getElementById("ns-bot-school").textContent = schoolLabel(bot.school);
+        document.getElementById("ns-bot-avg").textContent    = bot.avg;
+        document.getElementById("ns-n").textContent          = active.length;
+      }
+
+      // ── Z-Score chart ──
+      function renderZScoreChart(data) {
+        const ctx = document.getElementById("zScoreChart").getContext("2d");
+        if (zScoreChart) zScoreChart.destroy();
+        const active = data.filter(d => d.avg !== null && d.avg > 0);
+        if (active.length < 2) return;
+
+        const avgs = active.map(d => d.avg);
+        const mean = calcMean(avgs);
+        const sd   = calcSD(avgs, mean);
+
+        const sorted = active
+          .map(d => ({ ...d, z: sd > 0 ? +((d.avg - mean) / sd).toFixed(2) : 0 }))
+          .sort((a, b) => b.z - a.z);
+
+        zScoreChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: sorted.map(d => schoolLabel(d.school)),
+            datasets: [{
+              label: "Z-Score",
+              data: sorted.map(d => d.z),
+              backgroundColor: sorted.map(d => d.z >= 0 ? "rgba(34,197,94,0.78)" : "rgba(220,38,38,0.78)"),
+              borderColor:     sorted.map(d => d.z >= 0 ? "rgba(34,197,94,1)"    : "rgba(220,38,38,1)"),
+              borderWidth: 1,
+              borderRadius: 4,
+            }]
+          },
+          options: {
+            indexAxis: "y",
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  title: ctx => sorted[ctx[0].dataIndex].school,
+                  label: ctx => [
+                    ` Z-Score: ${ctx.raw}`,
+                    ` Avg: ${sorted[ctx.dataIndex].avg}`,
+                    ` Participants: ${sorted[ctx.dataIndex].part}`
+                  ]
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: "rgba(45,58,79,0.5)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                grid: { display: false },
+                ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 10 }, autoSkip: false },
+                border: { color: "#2d3a4f" }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Subject Difficulty Index chart ──
+      function renderDifficultyChart() {
+        const items = SUBJECTS.map(s => {
+          let tp = 0, ws = 0;
+          GRADE_AVAIL[s].forEach(g => {
+            const t = DATA[s].totals[g];
+            if (t && t.avg > 0 && t.part > 0) { tp += t.part; ws += t.avg * t.part; }
+          });
+          return { label: SUBJ_SHORT[s], avg: tp > 0 ? Math.round(ws / tp) : 0 };
+        }).sort((a, b) => a.avg - b.avg);
+
+        const ctx = document.getElementById("difficultyChart").getContext("2d");
+        if (difficultyChart) difficultyChart.destroy();
+        difficultyChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: items.map(i => i.label),
+            datasets: [{
+              label: "Network Average",
+              data: items.map(i => i.avg),
+              backgroundColor: items.map(i => scoreColor(i.avg, 0.82)),
+              borderColor:     items.map(i => scoreColor(i.avg, 1)),
+              borderWidth: 1,
+              borderRadius: 6,
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: { callbacks: { label: ctx => ` Network Avg: ${ctx.raw}` } }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { color: "#94a3b8", font: { family: "DM Sans", size: 11 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                min: 0, max: 100,
+                grid: { color: "rgba(45,58,79,0.5)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Participation vs Score scatter ──
+      function renderPartScoreChart() {
+        const points = [];
+        SUBJECTS.forEach(subject => {
+          SCHOOLS.forEach(school => {
+            const { avg, part } = schoolSubjectOverall(school, subject);
+            if (avg > 0 && part > 0) points.push({ x: part, y: avg, school, subj: SUBJ_SHORT[subject] });
+          });
+        });
+
+        const xs = points.map(p => p.x);
+        const ys = points.map(p => p.y);
+        const r  = pearsonR(xs, ys);
+        document.getElementById("part-score-r").textContent = r !== null ? r.toFixed(3) : "—";
+
+        const trendPts = linRegLine(xs, ys);
+        const ctx = document.getElementById("partScoreChart").getContext("2d");
+        if (partScoreChart) partScoreChart.destroy();
+
+        const datasets = [{
+          label: "School–Subject",
+          data: points.map(p => ({ x: p.x, y: p.y })),
+          backgroundColor: points.map(p => scoreColor(p.y, 0.65)),
+          borderColor:     points.map(p => scoreColor(p.y, 0.9)),
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          type: "scatter",
+        }];
+        if (trendPts) {
+          datasets.push({
+            label: "Trend",
+            data: trendPts,
+            type: "line",
+            showLine: true,
+            borderColor: "rgba(249,115,22,0.55)",
+            borderWidth: 2,
+            borderDash: [5, 4],
+            pointRadius: 0,
+            tension: 0,
+            fill: false,
+          });
+        }
+
+        partScoreChart = new Chart(ctx, {
+          type: "scatter",
+          data: { datasets },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                filter: item => item.datasetIndex === 0,
+                callbacks: {
+                  title: () => "",
+                  label: ctx => {
+                    const p = points[ctx.dataIndex];
+                    return [`${p.school}`, `${p.subj} — score: ${ctx.raw.y}`, `Participants: ${ctx.raw.x}`];
+                  }
+                }
+              }
+            },
+            scales: {
+              x: {
+                title: { display: true, text: "Participants", color: "#64748b", font: { size: 10 } },
+                grid: { color: "rgba(45,58,79,0.4)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" }
+              },
+              y: {
+                min: 30, max: 100,
+                title: { display: true, text: "Avg Score", color: "#64748b", font: { size: 10 } },
+                grid: { color: "rgba(45,58,79,0.4)" },
+                ticks: { color: "#64748b", font: { family: "Space Mono", size: 10 } },
+                border: { color: "#2d3a4f" }
+              }
+            }
+          }
+        });
+      }
+
+      // ── Correlation Matrix ──
+      function renderCorrelationMatrix() {
+        // Each vector: school overall avgs for one subject
+        const vectors = SUBJECTS.map(s => SCHOOLS.map(sch => schoolSubjectOverall(sch, s).avg));
+
+        let html = `<table class="corr-table"><thead><tr><th></th>`;
+        SUBJECTS.forEach(s => { html += `<th>${SUBJ_SHORT[s]}</th>`; });
+        html += `</tr></thead><tbody>`;
+
+        SUBJECTS.forEach((si, i) => {
+          html += `<tr><th>${SUBJ_SHORT[si]}</th>`;
+          SUBJECTS.forEach((sj, j) => {
+            if (i === j) {
+              html += `<td class="corr-cell corr-diag">1.00</td>`;
+            } else {
+              const r = pearsonR(vectors[i], vectors[j]);
+              if (r === null) {
+                html += `<td class="corr-cell corr-na">N/A</td>`;
+              } else {
+                const absR  = Math.abs(r);
+                const alpha = 0.1 + absR * 0.75;
+                const bg    = r > 0 ? `rgba(34,197,94,${alpha})` : `rgba(220,38,38,${alpha})`;
+                const col   = absR > 0.45 ? "#f1f5f9" : "#94a3b8";
+                html += `<td class="corr-cell" style="background:${bg};color:${col};">${r.toFixed(2)}</td>`;
+              }
+            }
+          });
+          html += `</tr>`;
+        });
+        html += `</tbody></table>`;
+        document.getElementById("corrMatrix").innerHTML = html;
+      }
+
+      // ── School Rankings Table ──
+      function renderRankingsTable() {
+        const rows = SCHOOLS.map(school => {
+          const overall = schoolOverallAvg(school);
+          if (overall === 0) return null;
+
+          // Cross-subject consistency (SD of school's per-subject averages)
+          const sAvgs = SUBJECTS.map(s => schoolSubjectOverall(school, s).avg).filter(a => a > 0);
+          const consistency = sAvgs.length >= 2 ? calcSD(sAvgs, calcMean(sAvgs)) : null;
+
+          // Grade trend slope (weighted across all subjects)
+          const gAvgs = schoolGradeAvgs(school);
+          const slope = linRegSlope(gAvgs);
+
+          // Best and worst subjects
+          const scored = SUBJECTS
+            .map(s => ({ s, avg: schoolSubjectOverall(school, s).avg }))
+            .filter(x => x.avg > 0)
+            .sort((a, b) => b.avg - a.avg);
+          const bestSubject  = scored[0]?.s   ?? null;
+          const worstSubject = scored.at(-1)?.s ?? null;
+
+          return { school, overall, consistency, slope, bestSubject, worstSubject };
+        }).filter(Boolean).sort((a, b) => b.overall - a.overall);
+
+        const n = rows.length;
+
+        const tier = avg =>
+          avg >= 80 ? { label: "Elite",        color: "#22c55e" } :
+          avg >= 70 ? { label: "Strong",        color: "#3b82f6" } :
+          avg >= 60 ? { label: "Developing",    color: "#f59e0b" } :
+                      { label: "Needs Support", color: "#dc2626" };
+
+        let html = `<table class="rankings-table">
+          <thead><tr>
+            <th>#</th>
+            <th>School</th>
+            <th>Overall Avg</th>
+            <th>Percentile</th>
+            <th>Tier</th>
+            <th style="text-align:center;">Grade Trend</th>
+            <th style="text-align:center;">Consistency</th>
+            <th>Best Subject</th>
+            <th>Lowest Subject</th>
+          </tr></thead><tbody>`;
+
+        rows.forEach((r, idx) => {
+          const pct = Math.round(((n - idx - 1) / Math.max(n - 1, 1)) * 100);
+          const { label: tierLabel, color: tc } = tier(r.overall);
+          const sl = r.slope;
+          const trendSymbol =
+            sl === null  ? "—"  :
+            sl >  1.2   ? "↑↑" :
+            sl >  0.35  ? "↑"  :
+            sl < -1.2   ? "↓↓" :
+            sl < -0.35  ? "↓"  : "→";
+          const trendColor =
+            sl === null  ? "#64748b" :
+            sl >  0.35  ? "#22c55e" :
+            sl < -0.35  ? "#dc2626" : "#f59e0b";
+          const consLabel =
+            r.consistency === null     ? "—"        :
+            r.consistency <  5        ? "High"      :
+            r.consistency < 12        ? "Medium"    : "Variable";
+          const consColor =
+            r.consistency === null     ? "#64748b"  :
+            r.consistency <  5        ? "#22c55e"  :
+            r.consistency < 12        ? "#f59e0b"  : "#dc2626";
+
+          html += `<tr>
+            <td class="rank-num">${idx + 1}</td>
+            <td class="rank-school">${r.school}</td>
+            <td class="rank-avg">${r.overall.toFixed(1)}</td>
+            <td>
+              <div class="pct-bar-wrap">
+                <div class="pct-bar-bg">
+                  <div class="pct-bar" style="width:${pct}%;background:${scoreColor(r.overall, 0.85)};"></div>
+                </div>
+                <span style="font-family:'Space Mono',monospace;font-size:0.68rem;color:var(--text-muted);">${pct}th</span>
+              </div>
+            </td>
+            <td><span class="tier-badge" style="color:${tc};border-color:${tc};">${tierLabel}</span></td>
+            <td style="text-align:center;font-size:1.2rem;font-weight:700;color:${trendColor};">${trendSymbol}</td>
+            <td style="text-align:center;font-size:0.78rem;font-weight:600;color:${consColor};">${consLabel}</td>
+            <td style="color:#22c55e;font-size:0.78rem;">${r.bestSubject  ? SUBJ_SHORT[r.bestSubject]  : "—"}</td>
+            <td style="color:#ef4444;font-size:0.78rem;">${r.worstSubject ? SUBJ_SHORT[r.worstSubject] : "—"}</td>
+          </tr>`;
+        });
+
+        html += `</tbody></table>`;
+        document.getElementById("rankingsContainer").innerHTML = html;
+      }
+
       // ── Grade button state ──
       function updateGradeButtons() {
         const avail = GRADE_AVAIL[currentSubject];
@@ -969,6 +1676,8 @@
         renderAvgChart(data);
         renderPartChart(data);
         renderProgressionChart();
+        renderNetworkStats(data);
+        renderZScoreChart(data);
       }
 
       // ── Grade switch ──
@@ -981,6 +1690,8 @@
         updateKPIs(data);
         renderAvgChart(data);
         renderPartChart(data);
+        renderNetworkStats(data);
+        renderZScoreChart(data);
       }
 
       // ── English dropdown ──
@@ -1001,6 +1712,12 @@
         renderAvgChart(data);
         renderPartChart(data);
         renderProgressionChart();
+        renderNetworkStats(data);
+        renderZScoreChart(data);
+        renderDifficultyChart();
+        renderPartScoreChart();
+        renderCorrelationMatrix();
+        renderRankingsTable();
       }
 
       document.addEventListener("authReady", init);
