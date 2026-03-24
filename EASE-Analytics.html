@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EASE Analytics — Comparative Dashboard</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><rect x='14' y='60' width='16' height='28' rx='3' fill='%233b82f6'/><rect x='35' y='40' width='16' height='48' rx='3' fill='%23f59e0b'/><rect x='56' y='24' width='16' height='64' rx='3' fill='%238b5cf6'/><polyline points='22,60 43,40 64,24' stroke='%2322c55e' stroke-width='4' stroke-linecap='round' fill='none'/></svg>">
+
+    <script src="firebase-config.js"></script>
+    <script>
+      if (!window.ENV) window.ENV = {
+        FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+        FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+        FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+        FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+        FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+        FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+      };
+    </script>
+    <script type="module" src="auth-guard.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+      :root {
+        --bg-primary: #0a0f1a;
+        --bg-secondary: #111827;
+        --bg-card: #1a2234;
+        --bg-card-hover: #1f2d44;
+        --text-primary: #f1f5f9;
+        --text-secondary: #94a3b8;
+        --text-muted: #64748b;
+        --border-color: #2d3a4f;
+        --ease1: #3b82f6;
+        --ease1-dim: rgba(59,130,246,0.15);
+        --ease2: #f59e0b;
+        --ease2-dim: rgba(245,158,11,0.15);
+        --ease3: #8b5cf6;
+        --ease3-dim: rgba(139,92,246,0.15);
+        --green: #22c55e;
+        --red: #ef4444;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+      .dashboard { max-width: 1600px; margin: 0 auto; }
+
+      /* ── Header ── */
+      .header {
+        margin-bottom: 2rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .header-left { display: flex; align-items: center; gap: 0.75rem; }
+      .badge {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        color: #fff;
+        padding: 0.3rem 0.75rem;
+        border-radius: 4px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .back-link {
+        color: var(--text-muted);
+        font-size: 0.8rem;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: color 0.2s;
+      }
+      .back-link:hover { color: var(--text-secondary); }
+      h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; }
+      .subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.4rem; }
+
+      /* ── EASE summary row ── */
+      .ease-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr) auto;
+        gap: 1rem;
+        margin-bottom: 2rem;
+      }
+      .ease-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .ease-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+      }
+      .ease-card.e1::before { background: var(--ease1); }
+      .ease-card.e2::before { background: var(--ease2); }
+      .ease-card.e3::before { background: var(--ease3); }
+      .ease-card-label {
+        font-family: "Space Mono", monospace;
+        font-size: 0.65rem;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+      }
+      .ease-card.e1 .ease-card-label { color: var(--ease1); }
+      .ease-card.e2 .ease-card-label { color: var(--ease2); }
+      .ease-card.e3 .ease-card-label { color: var(--ease3); }
+      .ease-card-score {
+        font-size: 2.5rem;
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin-bottom: 0.3rem;
+      }
+      .ease-card-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        display: flex;
+        flex-direction: column;
+        gap: 0.15rem;
+      }
+      .trend-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        min-width: 160px;
+      }
+      .trend-icon {
+        font-size: 2.5rem;
+        line-height: 1;
+      }
+      .trend-text {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        text-align: center;
+      }
+      .trend-delta {
+        font-family: "Space Mono", monospace;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--green);
+      }
+
+      /* ── Tabs ── */
+      .tab-nav {
+        display: flex;
+        gap: 0.25rem;
+        margin-bottom: 1.5rem;
+        background: var(--bg-secondary);
+        padding: 0.3rem;
+        border-radius: 10px;
+        width: fit-content;
+        flex-wrap: wrap;
+      }
+      .tab-btn {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        padding: 0.55rem 1.2rem;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .tab-btn:hover { color: var(--text-secondary); background: var(--bg-card); }
+      .tab-btn.active {
+        background: var(--bg-card);
+        color: var(--text-primary);
+        box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      }
+
+      .tab-pane { display: none; }
+      .tab-pane.active { display: block; }
+
+      /* ── Section title ── */
+      .section-title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: 0.3rem;
+      }
+      .section-subtitle {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-bottom: 1.25rem;
+      }
+
+      /* ── Charts grid ── */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+      }
+      .charts-grid.full { grid-template-columns: 1fr; }
+      .chart-card {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 1.5rem;
+      }
+      .chart-card-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+        flex-wrap: wrap;
+      }
+      .chart-card-title { font-size: 0.9rem; font-weight: 700; }
+      .chart-card-sub { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+      .chart-wrap { position: relative; height: 280px; }
+      .chart-wrap.tall { height: 340px; }
+      .chart-wrap.xlarge { height: 400px; }
+
+      /* ── Selector ── */
+      .selector-row {
+        display: flex;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+      .selector-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+      select {
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.85rem;
+        background: var(--bg-secondary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 0.5rem 0.85rem;
+        cursor: pointer;
+        outline: none;
+        transition: border-color 0.2s;
+        min-width: 200px;
+      }
+      select:hover, select:focus { border-color: #4a5a78; }
+
+      /* ── Insight chips ── */
+      .insight-row {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+      .insight-chip {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
+        font-size: 0.8rem;
+        flex: 1;
+        min-width: 180px;
+      }
+      .insight-chip-label {
+        color: var(--text-muted);
+        font-size: 0.7rem;
+        font-family: "Space Mono", monospace;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.3rem;
+        text-transform: uppercase;
+      }
+      .insight-chip-value { font-weight: 700; font-size: 0.9rem; }
+
+      /* ── Legend ── */
+      .legend {
+        display: flex;
+        gap: 1.25rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.75rem;
+      }
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+      }
+      .legend-dot {
+        width: 10px; height: 10px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .legend-line {
+        width: 24px; height: 3px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      /* ── School profile row ── */
+      .school-metrics {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+      }
+      .metric-box {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 1rem;
+        text-align: center;
+      }
+      .metric-box-label {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        margin-bottom: 0.4rem;
+        font-family: "Space Mono", monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .metric-box-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        line-height: 1;
+      }
+      .metric-box-sub {
+        font-size: 0.72rem;
+        color: var(--text-muted);
+        margin-top: 0.2rem;
+      }
+      .pos { color: var(--green); }
+      .neg { color: var(--red); }
+
+      /* ── Note ── */
+      .note {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-style: italic;
+        margin-top: 0.75rem;
+      }
+
+      /* ── Responsive ── */
+      @media (max-width: 900px) {
+        .ease-summary { grid-template-columns: 1fr 1fr; }
+        .charts-grid { grid-template-columns: 1fr; }
+        .school-metrics { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        body { padding: 1rem; }
+        h1 { font-size: 1.6rem; }
+        .ease-summary { grid-template-columns: 1fr; }
+        .trend-card { min-width: unset; }
+        .school-metrics { grid-template-columns: 1fr 1fr; }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="dashboard">
+
+      <!-- ── Header ──────────────────────────────── -->
+      <div class="header">
+        <div class="header-top">
+          <div class="header-left">
+            <span class="badge">Comparative Analytics</span>
+          </div>
+          <a href="EASE-III-AssessmentResults.html" class="back-link">← Back to EASE III Results</a>
+        </div>
+        <h1>EASE Analytics</h1>
+        <p class="subtitle">Cross-cycle performance intelligence across EASE I · EASE II · EASE III &mdash; 14 partner schools, 8 subjects, 6 grade levels</p>
+      </div>
+
+      <!-- ── EASE Summary Cards ───────────────────── -->
+      <div class="ease-summary">
+        <div class="ease-card e1">
+          <div class="ease-card-label">EASE I</div>
+          <div class="ease-card-score" style="color:var(--ease1)">70.5</div>
+          <div class="ease-card-meta">
+            <span>Network avg score</span>
+            <span>11,999 student entries</span>
+            <span>14 schools · G7–G12</span>
+          </div>
+        </div>
+        <div class="ease-card e2">
+          <div class="ease-card-label">EASE II</div>
+          <div class="ease-card-score" style="color:var(--ease2)">72.5</div>
+          <div class="ease-card-meta">
+            <span>Network avg score</span>
+            <span>10,715 student entries</span>
+            <span>12 schools · G7–G12</span>
+          </div>
+        </div>
+        <div class="ease-card e3">
+          <div class="ease-card-label">EASE III</div>
+          <div class="ease-card-score" style="color:var(--ease3)">72.9</div>
+          <div class="ease-card-meta">
+            <span>Network avg score</span>
+            <span>10,431 student entries</span>
+            <span>14 schools · G7–G11</span>
+          </div>
+        </div>
+        <div class="trend-card">
+          <div class="trend-icon">📈</div>
+          <div class="trend-delta">+2.4 pts</div>
+          <div class="trend-text">Overall network improvement<br>EASE I → III</div>
+        </div>
+      </div>
+
+      <!-- ── Tab Navigation ──────────────────────── -->
+      <div class="tab-nav">
+        <button class="tab-btn active" data-tab="overview">Network Overview</button>
+        <button class="tab-btn" data-tab="school">School Tracker</button>
+        <button class="tab-btn" data-tab="subject">Subject Analysis</button>
+        <button class="tab-btn" data-tab="participation">Participation</button>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           TAB 1 — NETWORK OVERVIEW
+      ════════════════════════════════════════════ -->
+      <div class="tab-pane active" id="tab-overview">
+
+        <div class="insight-row">
+          <div class="insight-chip">
+            <div class="insight-chip-label">Most Improved Subject</div>
+            <div class="insight-chip-value" style="color:var(--ease3)">English Extended <span class="pos">+7.4 pts</span></div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Most Consistent Subject</div>
+            <div class="insight-chip-value" style="color:var(--ease2)">Religion <span style="color:var(--text-muted)">86–88 avg</span></div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Best Math Cycle</div>
+            <div class="insight-chip-value" style="color:var(--ease2)">EASE II <span class="pos">64.8 avg</span></div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Absent from EASE II</div>
+            <div class="insight-chip-value" style="color:var(--red)">Fatih &amp; TNA Fatih</div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card" style="grid-column: 1 / -1;">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Subject Performance Across EASE Cycles</div>
+                <div class="chart-card-sub">Weighted average scores per subject — EASE I vs II vs III</div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease1)"></span>EASE I</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease2)"></span>EASE II</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease3)"></span>EASE III</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartSubjectComparison"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Grade-Level Performance Trend</div>
+                <div class="chart-card-sub">How each grade performs across EASE cycles</div>
+              </div>
+              <select id="selectGradeSubject">
+                <option value="Mathematics">Mathematics</option>
+                <option value="Religion">Religion</option>
+                <option value="English Extended">English Extended</option>
+                <option value="English Core">English Core</option>
+                <option value="Biology">Biology (G9+)</option>
+                <option value="Physics">Physics (G9+)</option>
+                <option value="Chemistry">Chemistry (G9+)</option>
+                <option value="Science">Science (G7–G8)</option>
+              </select>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartGradeTrend"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Network Average Trajectory</div>
+                <div class="chart-card-sub">Overall avg per EASE cycle across all subjects</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartOverallTrajectory"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           TAB 2 — SCHOOL TRACKER
+      ════════════════════════════════════════════ -->
+      <div class="tab-pane" id="tab-school">
+
+        <div class="selector-row">
+          <span class="selector-label">Select School:</span>
+          <select id="selectSchool">
+            <option value="0">Cahaya Rancamaya</option>
+            <option value="1">Emer Islamic Boarding School</option>
+            <option value="2">Kesatuan Bangsa</option>
+            <option value="3">Kharisma Bangsa</option>
+            <option value="4">Mega Islamic School</option>
+            <option value="5">Pakar Belia Islamic School</option>
+            <option value="6">Prestige School</option>
+            <option value="7">Pribadi Bandung</option>
+            <option value="8" selected>Pribadi Depok</option>
+            <option value="9">Pribadi Premiere</option>
+            <option value="10">Semesta 1</option>
+            <option value="11">Semesta 3</option>
+            <option value="12">Fatih Bilingual School</option>
+            <option value="13">TNA Fatih</option>
+          </select>
+        </div>
+
+        <div class="school-metrics" id="schoolMetrics">
+          <!-- Populated by JS -->
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title" id="schoolJourneyTitle">School Performance Journey</div>
+                <div class="chart-card-sub">Score across EASE I → II → III by subject</div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease1)"></span>EASE I</div>
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease2)"></span>EASE II</div>
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease3)"></span>EASE III</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartSchoolJourney"></canvas>
+            </div>
+            <p class="note" id="schoolNote"></p>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Subject Profile Radar</div>
+                <div class="chart-card-sub">Subject strengths across all three EASE cycles</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartSchoolRadar"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card" style="grid-column: 1 / -1;">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">School vs Network Average — Mathematics</div>
+                <div class="chart-card-sub">Comparing this school's Math performance against the network mean</div>
+              </div>
+            </div>
+            <div class="chart-wrap">
+              <canvas id="chartSchoolVsNetwork"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           TAB 3 — SUBJECT ANALYSIS
+      ════════════════════════════════════════════ -->
+      <div class="tab-pane" id="tab-subject">
+
+        <div class="selector-row">
+          <span class="selector-label">Select Subject:</span>
+          <select id="selectSubject">
+            <option value="Mathematics">Mathematics</option>
+            <option value="Religion">Religion</option>
+            <option value="English Extended" selected>English Extended</option>
+            <option value="English Core">English Core</option>
+            <option value="Biology">Biology (G9+)</option>
+            <option value="Physics">Physics (G9+)</option>
+            <option value="Chemistry">Chemistry (G9+)</option>
+            <option value="Science">Science (G7–G8)</option>
+          </select>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title" id="subjectGradeTitle">Grade Performance by Assessment</div>
+                <div class="chart-card-sub">How each grade level scores across EASE cycles</div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease1)"></span>EASE I</div>
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease2)"></span>EASE II</div>
+                <div class="legend-item"><span class="legend-line" style="background:var(--ease3)"></span>EASE III</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartSubjectGrade"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title" id="subjectSchoolTitle">School Rankings</div>
+                <div class="chart-card-sub">Per-school average for selected subject</div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease1)"></span>EASE I</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease2)"></span>EASE II</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease3)"></span>EASE III</div>
+              </div>
+            </div>
+            <div class="chart-wrap xlarge">
+              <canvas id="chartSubjectSchools"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════════════
+           TAB 4 — PARTICIPATION
+      ════════════════════════════════════════════ -->
+      <div class="tab-pane" id="tab-participation">
+
+        <div class="insight-row">
+          <div class="insight-chip">
+            <div class="insight-chip-label">EASE I Total Entries</div>
+            <div class="insight-chip-value" style="color:var(--ease1)">11,999</div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">EASE II Total Entries</div>
+            <div class="insight-chip-value" style="color:var(--ease2)">10,715</div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">EASE III Total Entries</div>
+            <div class="insight-chip-value" style="color:var(--ease3)">10,431</div>
+          </div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Largest Subject</div>
+            <div class="insight-chip-value">Religion <span style="color:var(--text-muted)">~2,200+ entries</span></div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card" style="grid-column: 1 / -1;">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Participation by Subject — All Cycles</div>
+                <div class="chart-card-sub">Total student entries per subject per EASE cycle</div>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease1)"></span>EASE I</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease2)"></span>EASE II</div>
+                <div class="legend-item"><span class="legend-dot" style="background:var(--ease3)"></span>EASE III</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartParticipationSubject"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Participation Trend Per Subject</div>
+                <div class="chart-card-sub">How participation changed across cycles</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartParticipationTrend"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Total Network Participation</div>
+                <div class="chart-card-sub">Overall entries across all subjects per cycle</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartParticipationTotal"></canvas>
+            </div>
+            <p class="note">Note: EASE III excludes Grade 12. EASE II excludes Fatih Bilingual &amp; TNA Fatih schools.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dashboard -->
+
+    <script>
+    // ─── DATA ────────────────────────────────────────────────────────────────────
+
+    const SUBJECTS = ['Mathematics','Religion','Biology','Physics','Chemistry','English Core','English Extended','Science'];
+    const GRADE_LABELS = ['G7','G8','G9','G10','G11','G12'];
+    const EASE_LABELS = ['EASE I','EASE II','EASE III'];
+
+    // Weighted avg scores per subject per EASE [I, II, III]
+    const SUBJECT_AVGS = {
+      'Mathematics':      [59.5, 64.8, 60.8],
+      'Religion':         [88.3, 84.8, 85.0],
+      'Biology':          [60.4, 69.9, 68.0],
+      'Physics':          [63.7, 64.1, 67.3],
+      'Chemistry':        [64.3, 63.6, 66.5],
+      'English Core':     [70.4, 73.6, 72.9],
+      'English Extended': [76.8, 81.3, 84.2],
+      'Science':          [74.6, 75.6, 77.9]
+    };
+
+    // Overall network avg per EASE cycle [I, II, III]
+    const NETWORK_AVG = [70.5, 72.5, 72.9];
+
+    // Grade-level averages per subject per EASE — [G7,G8,G9,G10,G11,G12]
+    const GRADE_AVGS = {
+      'Mathematics':      [[65,59,67,56,51,62],[74,68,70,61,59,61],[63,66,68,56,56,null]],
+      'Religion':         [[87,82,90,91,86,92],[84,83,87,87,83,84],[82,77,89,87,88,null]],
+      'Biology':          [[null,null,65,63,51,60],[null,null,77,71,60,71],[null,null,75,70,58,null]],
+      'Physics':          [[null,null,69,68,56,56],[null,null,64,67,60,63],[null,null,73,68,60,null]],
+      'Chemistry':        [[null,null,73,61,59,67],[null,null,71,60,59,67],[null,null,77,66,58,null]],
+      'English Core':     [[67,81,79,63,72,72],[81,77,75,70,74,69],[78,89,80,65,64,null]],
+      'English Extended': [[73,84,78,74,75,78],[74,86,90,81,77,81],[81,91,87,78,85,null]],
+      'Science':          [[75,74,null,null,null,null],[80,70,null,null,null,null],[81,74,null,null,null,null]]
+    };
+
+    // Total participation per subject per EASE [I, II, III]
+    const PARTICIPATION = {
+      'Mathematics':      [2267, 2081, 2036],
+      'Religion':         [2439, 2100, 2064],
+      'Biology':          [1389, 1242, 1136],
+      'Physics':          [1250, 1143, 1081],
+      'Chemistry':        [1468, 1343, 1230],
+      'English Core':     [888,  755,  753],
+      'English Extended': [1648, 1444, 1403],
+      'Science':          [650,  607,  728]
+    };
+
+    // Per-school averages [EASE I, EASE II, EASE III] — null = no data that cycle
+    const SCHOOL_DATA = [
+      { name:'Cahaya Rancamaya',
+        math:[62.0,68.5,63.0], religion:[88.7,86.2,88.2], biology:[63.0,72.0,74.0],
+        physics:[68.0,68.0,73.0], chemistry:[61.0,64.0,66.0],
+        engCore:[69.0,null,null], engExt:[73.3,76.5,83.8], science:[78.0,79.0,82.0] },
+      { name:'Emer Islamic Boarding School',
+        math:[null,50.3,48.3], religion:[86.5,86.5,85.3], biology:[null,59.0,51.5],
+        physics:[null,60.0,53.0], chemistry:[null,52.0,58.0],
+        engCore:[64.0,62.0,59.0], engExt:[57.3,61.0,70.7], science:[null,61.0,63.5] },
+      { name:'Kesatuan Bangsa',
+        math:[63.8,68.8,67.0], religion:[87.8,83.3,85.4], biology:[62.0,73.5,69.7],
+        physics:[66.8,67.0,69.0], chemistry:[72.0,67.8,70.0],
+        engCore:[79.2,78.2,80.6], engExt:[87.0,null,null], science:[74.5,77.0,82.5] },
+      { name:'Kharisma Bangsa',
+        math:[63.5,65.3,64.2], religion:[87.0,82.7,83.6], biology:[64.3,73.3,70.7],
+        physics:[66.3,67.0,70.0], chemistry:[71.3,67.8,70.3],
+        engCore:[null,null,null], engExt:[81.5,85.2,88.6], science:[81.0,80.0,85.0] },
+      { name:'Mega Islamic School',
+        math:[57.8,66.0,65.4], religion:[91.2,88.8,88.0], biology:[53.3,65.8,63.3],
+        physics:[57.0,57.0,64.0], chemistry:[64.5,62.5,61.0],
+        engCore:[70.0,71.5,75.6], engExt:[null,null,null], science:[74.0,73.0,77.0] },
+      { name:'Pakar Belia Islamic School',
+        math:[69.5,77.5,65.5], religion:[89.5,88.5,87.0], biology:[null,null,null],
+        physics:[null,null,null], chemistry:[null,null,null],
+        engCore:[67.0,75.5,73.0], engExt:[null,null,null], science:[72.0,79.0,79.0] },
+      { name:'Prestige School',
+        math:[58.7,58.0,63.3], religion:[87.7,84.3,82.7], biology:[77.0,66.0,86.0],
+        physics:[56.0,60.0,87.0], chemistry:[54.0,71.0,89.0],
+        engCore:[80.0,75.7,82.3], engExt:[null,null,null], science:[66.0,66.5,69.5] },
+      { name:'Pribadi Bandung',
+        math:[58.0,61.0,58.8], religion:[86.7,84.2,82.4], biology:[56.0,63.5,62.7],
+        physics:[58.3,55.8,64.7], chemistry:[64.8,61.0,67.0],
+        engCore:[93.0,null,null], engExt:[77.2,81.3,84.4], science:[75.0,70.5,74.5] },
+      { name:'Pribadi Depok',
+        math:[63.2,68.7,70.0], religion:[87.8,84.8,87.4], biology:[60.8,70.5,73.7],
+        physics:[63.5,64.5,74.0], chemistry:[66.0,63.8,74.3],
+        engCore:[72.0,null,null], engExt:[78.7,84.5,86.8], science:[80.5,80.0,85.5] },
+      { name:'Pribadi Premiere',
+        math:[62.8,65.3,65.8], religion:[88.8,87.7,89.4], biology:[58.0,67.5,67.7],
+        physics:[60.8,59.5,69.7], chemistry:[66.3,59.8,66.3],
+        engCore:[63.5,null,null], engExt:[79.0,79.2,88.0], science:[77.0,78.0,80.0] },
+      { name:'Semesta 1',
+        math:[58.7,66.2,61.2], religion:[88.5,85.8,84.6], biology:[56.8,67.5,65.0],
+        physics:[61.5,61.3,62.3], chemistry:[65.3,60.5,64.0],
+        engCore:[69.2,69.0,71.6], engExt:[78.7,81.5,83.0], science:[76.5,79.5,80.0] },
+      { name:'Semesta 3',
+        math:[68.7,81.0,76.0], religion:[86.3,84.7,84.3], biology:[74.0,81.0,83.0],
+        physics:[77.0,70.0,80.0], chemistry:[77.0,80.0,83.0],
+        engCore:[null,null,null], engExt:[86.3,89.0,93.0], science:[81.0,78.5,85.0] },
+      { name:'Fatih Bilingual School',
+        math:[49.0,null,47.2], religion:[80.2,null,73.8], biology:[51.8,null,55.7],
+        physics:[56.5,null,56.3], chemistry:[47.8,null,54.0],
+        engCore:[59.3,null,62.7], engExt:[68.6,null,74.7], science:[60.5,null,64.0] },
+      { name:'TNA Fatih',
+        math:[48.8,null,52.2], religion:[88.7,null,83.8], biology:[54.3,null,64.0],
+        physics:[61.0,null,65.0], chemistry:[53.3,null,59.7],
+        engCore:[63.2,null,65.4], engExt:[79.5,null,87.6], science:[61.0,null,71.5] }
+    ];
+
+    const SUBJECT_KEYS = ['math','religion','biology','physics','chemistry','engCore','engExt','science'];
+    const SUBJECT_NICE  = ['Mathematics','Religion','Biology','Physics','Chemistry','Eng. Core','Eng. Extended','Science'];
+
+    const EASE_COLORS = ['#3b82f6','#f59e0b','#8b5cf6'];
+    const EASE_FILLS  = ['rgba(59,130,246,0.12)','rgba(245,158,11,0.12)','rgba(139,92,246,0.12)'];
+    const EASE_FILLS2 = ['rgba(59,130,246,0.4)','rgba(245,158,11,0.4)','rgba(139,92,246,0.4)'];
+
+    // ─── CHART DEFAULTS ──────────────────────────────────────────────────────────
+
+    Chart.defaults.color = '#94a3b8';
+    Chart.defaults.borderColor = '#2d3a4f';
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+    const GRID_OPTS = {
+      color: 'rgba(45,58,79,0.7)',
+      drawBorder: false
+    };
+
+    // ─── CHART 1: Subject Comparison Grouped Bar ──────────────────────────────
+
+    const ctxSubComp = document.getElementById('chartSubjectComparison').getContext('2d');
+    const chartSubjectComparison = new Chart(ctxSubComp, {
+      type: 'bar',
+      data: {
+        labels: SUBJECTS.map(s => s.replace('English ','Eng. ')),
+        datasets: EASE_LABELS.map((lbl, i) => ({
+          label: lbl,
+          data: SUBJECTS.map(s => SUBJECT_AVGS[s][i]),
+          backgroundColor: EASE_FILLS2[i],
+          borderColor: EASE_COLORS[i],
+          borderWidth: 2,
+          borderRadius: 5,
+          borderSkipped: false
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS, ticks: { font: { size: 11 } } },
+          y: {
+            grid: GRID_OPTS,
+            min: 40, max: 100,
+            ticks: { stepSize: 10 }
+          }
+        }
+      }
+    });
+
+    // ─── CHART 2: Grade Trend (subject selector) ─────────────────────────────
+
+    const ctxGradeTrend = document.getElementById('chartGradeTrend').getContext('2d');
+    const chartGradeTrend = new Chart(ctxGradeTrend, {
+      type: 'line',
+      data: {
+        labels: GRADE_LABELS,
+        datasets: EASE_LABELS.map((lbl, i) => ({
+          label: lbl,
+          data: GRADE_AVGS['Mathematics'][i],
+          borderColor: EASE_COLORS[i],
+          backgroundColor: EASE_FILLS[i],
+          borderWidth: 2.5,
+          pointRadius: 5,
+          pointHoverRadius: 7,
+          tension: 0.3,
+          fill: false,
+          spanGaps: false
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { boxWidth: 12, padding: 16, usePointStyle: true }
+          },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y != null ? ctx.parsed.y.toFixed(0) : 'N/A'}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS },
+          y: {
+            grid: GRID_OPTS,
+            min: 40, max: 100,
+            ticks: { stepSize: 10 }
+          }
+        }
+      }
+    });
+
+    document.getElementById('selectGradeSubject').addEventListener('change', function() {
+      const subj = this.value;
+      EASE_LABELS.forEach((lbl, i) => {
+        chartGradeTrend.data.datasets[i].data = GRADE_AVGS[subj][i];
+      });
+      chartGradeTrend.update();
+    });
+
+    // ─── CHART 3: Network Average Trajectory ─────────────────────────────────
+
+    const ctxTraj = document.getElementById('chartOverallTrajectory').getContext('2d');
+    new Chart(ctxTraj, {
+      type: 'line',
+      data: {
+        labels: EASE_LABELS,
+        datasets: [
+          {
+            label: 'Network Avg Score',
+            data: NETWORK_AVG,
+            borderColor: '#22c55e',
+            backgroundColor: 'rgba(34,197,94,0.15)',
+            borderWidth: 3,
+            pointRadius: 8,
+            pointHoverRadius: 10,
+            pointBackgroundColor: '#22c55e',
+            pointBorderColor: '#0a0f1a',
+            pointBorderWidth: 2,
+            tension: 0.2,
+            fill: true
+          }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` Overall avg: ${ctx.parsed.y.toFixed(1)}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS },
+          y: {
+            grid: GRID_OPTS,
+            min: 65, max: 80,
+            ticks: { stepSize: 5 }
+          }
+        }
+      }
+    });
+
+    // ─── SCHOOL TRACKER ──────────────────────────────────────────────────────
+
+    let chartSchoolJourney = null;
+    let chartSchoolRadar   = null;
+    let chartSchoolVsNet   = null;
+
+    function computeSchoolAvgAcrossSubjects(school) {
+      // Compute composite (mean of available subjects) per EASE cycle
+      return [0,1,2].map(ei => {
+        const vals = SUBJECT_KEYS
+          .map(k => school[k][ei])
+          .filter(v => v !== null && v > 0);
+        return vals.length > 0 ? vals.reduce((a,b) => a+b) / vals.length : null;
+      });
+    }
+
+    function renderSchoolMetrics(idx) {
+      const s = SCHOOL_DATA[idx];
+      const comp = computeSchoolAvgAcrossSubjects(s);
+      const metricBox = document.getElementById('schoolMetrics');
+
+      const delta12 = (comp[0] != null && comp[2] != null)
+        ? (comp[2] - comp[0]).toFixed(1) : 'N/A';
+      const deltaClass = parseFloat(delta12) >= 0 ? 'pos' : 'neg';
+      const deltaStr = parseFloat(delta12) > 0 ? `+${delta12}` : `${delta12}`;
+
+      const mathDelta = (s.math[0] != null && s.math[2] != null)
+        ? (s.math[2] - s.math[0]).toFixed(1) : 'N/A';
+      const relDelta  = (s.religion[0] != null && s.religion[2] != null)
+        ? (s.religion[2] - s.religion[0]).toFixed(1) : 'N/A';
+      const engXDelta = (s.engExt[0] != null && s.engExt[2] != null)
+        ? (s.engExt[2] - s.engExt[0]).toFixed(1) : 'N/A';
+
+      metricBox.innerHTML = [
+        { label:'EASE III Composite', value: comp[2] != null ? comp[2].toFixed(1) : 'N/A', sub:'avg across subjects', color:'' },
+        { label:'I→III Change', value: deltaStr !== 'N/A' ? deltaStr : 'N/A', sub:'composite score', color: deltaClass },
+        { label:'Math Trend', value: mathDelta !== 'N/A' ? (parseFloat(mathDelta)>0?`+${mathDelta}`:mathDelta) : 'N/A', sub:'I→III pts change', color: parseFloat(mathDelta)>=0?'pos':'neg' },
+        { label:'Eng. Extended Trend', value: engXDelta !== 'N/A' ? (parseFloat(engXDelta)>0?`+${engXDelta}`:engXDelta) : 'N/A', sub:'I→III pts change', color: parseFloat(engXDelta)>=0?'pos':'neg' }
+      ].map(m => `
+        <div class="metric-box">
+          <div class="metric-box-label">${m.label}</div>
+          <div class="metric-box-value ${m.color}">${m.value}</div>
+          <div class="metric-box-sub">${m.sub}</div>
+        </div>`).join('');
+    }
+
+    function renderSchoolJourney(idx) {
+      const s = SCHOOL_DATA[idx];
+      document.getElementById('schoolJourneyTitle').textContent = s.name + ' — Performance Journey';
+
+      if (s.math[1] === null) {
+        document.getElementById('schoolNote').textContent =
+          `⚠ ${s.name} did not participate in EASE II. Data shown for EASE I and EASE III only.`;
+      } else {
+        document.getElementById('schoolNote').textContent = '';
+      }
+
+      const subjectSeries = [
+        { key:'math',     label:'Mathematics',      color:'#3b82f6' },
+        { key:'religion', label:'Religion',          color:'#22c55e' },
+        { key:'engExt',   label:'Eng. Extended',     color:'#8b5cf6' },
+        { key:'science',  label:'Science',           color:'#f59e0b' }
+      ];
+
+      const datasets = subjectSeries
+        .filter(ss => s[ss.key].some(v => v !== null))
+        .map(ss => ({
+          label: ss.label,
+          data: s[ss.key],
+          borderColor: ss.color,
+          backgroundColor: ss.color + '20',
+          borderWidth: 2.5,
+          pointRadius: 6,
+          pointHoverRadius: 8,
+          tension: 0.2,
+          spanGaps: false,
+          fill: false
+        }));
+
+      if (chartSchoolJourney) chartSchoolJourney.destroy();
+      const ctx = document.getElementById('chartSchoolJourney').getContext('2d');
+      chartSchoolJourney = new Chart(ctx, {
+        type: 'line',
+        data: { labels: EASE_LABELS, datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position:'bottom', labels:{ boxWidth:12, padding:14, usePointStyle:true } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y != null ? ctx.parsed.y.toFixed(1) : 'N/A'}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS },
+            y: { grid: GRID_OPTS, min:30, max:100, ticks:{stepSize:10} }
+          }
+        }
+      });
+    }
+
+    function renderSchoolRadar(idx) {
+      const s = SCHOOL_DATA[idx];
+      const radarLabels = ['Math','Religion','Biology','Physics','Chemistry','Eng. Core','Eng. Extended','Science'];
+
+      function getVals(ease_i) {
+        return [s.math,s.religion,s.biology,s.physics,s.chemistry,s.engCore,s.engExt,s.science]
+          .map(arr => arr[ease_i] !== null && arr[ease_i] > 0 ? arr[ease_i] : null);
+      }
+
+      if (chartSchoolRadar) chartSchoolRadar.destroy();
+      const ctx = document.getElementById('chartSchoolRadar').getContext('2d');
+      chartSchoolRadar = new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: radarLabels,
+          datasets: EASE_LABELS.map((lbl, i) => ({
+            label: lbl,
+            data: getVals(i),
+            borderColor: EASE_COLORS[i],
+            backgroundColor: EASE_FILLS[i],
+            borderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            spanGaps: true
+          }))
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position:'bottom', labels:{ boxWidth:10, padding:14, usePointStyle:true } }
+          },
+          scales: {
+            r: {
+              grid: { color: 'rgba(45,58,79,0.7)' },
+              angleLines: { color: 'rgba(45,58,79,0.7)' },
+              ticks: { display: false },
+              pointLabels: { font: { size: 10 } },
+              min: 0, max: 100,
+              suggestedMin: 40
+            }
+          }
+        }
+      });
+    }
+
+    function renderSchoolVsNetwork(idx) {
+      const s = SCHOOL_DATA[idx];
+      const networkMath = SUBJECTS.map(sub => SUBJECT_AVGS[sub]).map(() => null);
+      // Get network Math averages per EASE cycle
+      const netMath = [59.5, 64.8, 60.8];
+
+      if (chartSchoolVsNet) chartSchoolVsNet.destroy();
+      const ctx = document.getElementById('chartSchoolVsNetwork').getContext('2d');
+      chartSchoolVsNet = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: EASE_LABELS,
+          datasets: [
+            {
+              label: s.name,
+              data: s.math,
+              backgroundColor: EASE_FILLS2,
+              borderColor: EASE_COLORS,
+              borderWidth: 2,
+              borderRadius: 6
+            },
+            {
+              label: 'Network Average',
+              data: netMath,
+              type: 'line',
+              borderColor: '#22c55e',
+              backgroundColor: 'transparent',
+              borderWidth: 2.5,
+              borderDash: [6,3],
+              pointRadius: 5,
+              pointHoverRadius: 7,
+              tension: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position:'bottom', labels:{ boxWidth:12, padding:14, usePointStyle:true } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y != null ? ctx.parsed.y.toFixed(1) : 'N/A'}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS },
+            y: { grid: GRID_OPTS, min:30, max:90, ticks:{stepSize:10} }
+          }
+        }
+      });
+    }
+
+    function renderAllSchoolCharts(idx) {
+      renderSchoolMetrics(idx);
+      renderSchoolJourney(idx);
+      renderSchoolRadar(idx);
+      renderSchoolVsNetwork(idx);
+    }
+
+    document.getElementById('selectSchool').addEventListener('change', function() {
+      renderAllSchoolCharts(parseInt(this.value));
+    });
+
+    // ─── SUBJECT ANALYSIS ────────────────────────────────────────────────────
+
+    let chartSubjectGrade  = null;
+    let chartSubjectSchools = null;
+
+    function renderSubjectAnalysis(subj) {
+      document.getElementById('subjectGradeTitle').textContent = subj + ' — Grade Performance';
+      document.getElementById('subjectSchoolTitle').textContent = subj + ' — School Rankings';
+
+      // Grade chart
+      if (chartSubjectGrade) chartSubjectGrade.destroy();
+      const ctx1 = document.getElementById('chartSubjectGrade').getContext('2d');
+      chartSubjectGrade = new Chart(ctx1, {
+        type: 'line',
+        data: {
+          labels: GRADE_LABELS,
+          datasets: EASE_LABELS.map((lbl,i) => ({
+            label: lbl,
+            data: GRADE_AVGS[subj][i],
+            borderColor: EASE_COLORS[i],
+            backgroundColor: EASE_FILLS[i],
+            borderWidth: 2.5,
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.3,
+            fill: false,
+            spanGaps: false
+          }))
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position:'bottom', labels:{ boxWidth:12, padding:14, usePointStyle:true } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y != null ? ctx.parsed.y.toFixed(0) : 'N/A'}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS },
+            y: { grid: GRID_OPTS, min:30, max:100, ticks:{stepSize:10} }
+          }
+        }
+      });
+
+      // School rankings horizontal bar
+      const keyMap = {
+        'Mathematics':'math','Religion':'religion','Biology':'biology',
+        'Physics':'physics','Chemistry':'chemistry','English Core':'engCore',
+        'English Extended':'engExt','Science':'science'
+      };
+      const key = keyMap[subj];
+
+      // Get schools that have any data for this subject
+      const schoolEntries = SCHOOL_DATA
+        .map((s,i) => ({ name: s.name.replace('Islamic Boarding School','IBS').replace('Islamic School','IS').replace('Bilingual School','Bil.'), vals: s[key] }))
+        .filter(s => s.vals.some(v => v !== null && v > 0));
+
+      // Sort by EASE III value desc, fall back to EASE I
+      schoolEntries.sort((a,b) => {
+        const av = a.vals[2] ?? a.vals[0] ?? 0;
+        const bv = b.vals[2] ?? b.vals[0] ?? 0;
+        return bv - av;
+      });
+
+      if (chartSubjectSchools) chartSubjectSchools.destroy();
+      const ctx2 = document.getElementById('chartSubjectSchools').getContext('2d');
+      chartSubjectSchools = new Chart(ctx2, {
+        type: 'bar',
+        data: {
+          labels: schoolEntries.map(s => s.name),
+          datasets: EASE_LABELS.map((lbl,i) => ({
+            label: lbl,
+            data: schoolEntries.map(s => s.vals[i]),
+            backgroundColor: EASE_FILLS2[i],
+            borderColor: EASE_COLORS[i],
+            borderWidth: 1.5,
+            borderRadius: 3
+          }))
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { position:'bottom', labels:{ boxWidth:10, padding:12, usePointStyle:true } },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.x != null ? ctx.parsed.x.toFixed(1) : 'N/A'}`
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS, min:30, max:100 },
+            y: { grid: GRID_OPTS, ticks: { font:{ size:10 } } }
+          }
+        }
+      });
+    }
+
+    document.getElementById('selectSubject').addEventListener('change', function() {
+      renderSubjectAnalysis(this.value);
+    });
+
+    // ─── PARTICIPATION CHARTS ────────────────────────────────────────────────
+
+    const ctxPartSubj = document.getElementById('chartParticipationSubject').getContext('2d');
+    new Chart(ctxPartSubj, {
+      type: 'bar',
+      data: {
+        labels: SUBJECTS.map(s => s.replace('English ','Eng. ')),
+        datasets: EASE_LABELS.map((lbl,i) => ({
+          label: lbl,
+          data: SUBJECTS.map(s => PARTICIPATION[s][i]),
+          backgroundColor: EASE_FILLS2[i],
+          borderColor: EASE_COLORS[i],
+          borderWidth: 2,
+          borderRadius: 5
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS },
+          y: { grid: GRID_OPTS, ticks: { callback: v => v.toLocaleString() } }
+        }
+      }
+    });
+
+    const ctxPartTrend = document.getElementById('chartParticipationTrend').getContext('2d');
+    const subjectColors = ['#3b82f6','#22c55e','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899','#84cc16'];
+    new Chart(ctxPartTrend, {
+      type: 'line',
+      data: {
+        labels: EASE_LABELS,
+        datasets: SUBJECTS.map((subj, si) => ({
+          label: subj.replace('English ','Eng. '),
+          data: PARTICIPATION[subj],
+          borderColor: subjectColors[si],
+          backgroundColor: subjectColors[si] + '15',
+          borderWidth: 2,
+          pointRadius: 4,
+          tension: 0.2,
+          fill: false
+        }))
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { position:'bottom', labels:{ boxWidth:10, padding:10, usePointStyle:true, font:{size:10} } },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS },
+          y: { grid: GRID_OPTS, ticks:{ callback: v => v.toLocaleString() } }
+        }
+      }
+    });
+
+    const ctxPartTotal = document.getElementById('chartParticipationTotal').getContext('2d');
+    const totalPart = EASE_LABELS.map((_,ei) =>
+      SUBJECTS.reduce((sum, subj) => sum + PARTICIPATION[subj][ei], 0)
+    );
+    new Chart(ctxPartTotal, {
+      type: 'bar',
+      data: {
+        labels: EASE_LABELS,
+        datasets: [{
+          label: 'Total Entries',
+          data: totalPart,
+          backgroundColor: EASE_FILLS2,
+          borderColor: EASE_COLORS,
+          borderWidth: 2.5,
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => ` Total: ${ctx.parsed.y.toLocaleString()}`
+            }
+          }
+        },
+        scales: {
+          x: { grid: GRID_OPTS },
+          y: { grid: GRID_OPTS, min: 8000, ticks:{ callback: v => v.toLocaleString() } }
+        }
+      }
+    });
+
+    // ─── TAB SWITCHING ───────────────────────────────────────────────────────
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+
+        // Lazy init school/subject charts on first open
+        if (this.dataset.tab === 'school' && !chartSchoolJourney) {
+          renderAllSchoolCharts(8); // default Pribadi Depok
+        }
+        if (this.dataset.tab === 'subject' && !chartSubjectGrade) {
+          renderSubjectAnalysis('English Extended');
+        }
+      });
+    });
+
+    // ─── INIT ────────────────────────────────────────────────────────────────
+    // Pre-init school charts so they render when user switches
+    setTimeout(() => {
+      renderAllSchoolCharts(8);
+      renderSubjectAnalysis('English Extended');
+    }, 100);
+
+    </script>
+  </body>
+</html>
