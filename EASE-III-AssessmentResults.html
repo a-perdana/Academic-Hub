@@ -297,6 +297,30 @@
       .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; color: var(--text-secondary); }
       .legend-dot { width: 22px; height: 10px; border-radius: 3px; }
 
+      /* ── Analytics tab button ── */
+      .analytics-tab-divider {
+        width: 1px;
+        height: 28px;
+        background: var(--border-color);
+        align-self: center;
+        margin: 0 0.25rem;
+        flex-shrink: 0;
+      }
+      .analytics-tab-btn {
+        border-color: rgba(249,115,22,0.35) !important;
+        color: var(--accent-orange) !important;
+      }
+      .analytics-tab-btn:hover {
+        background: rgba(249,115,22,0.1) !important;
+        border-color: var(--accent-orange) !important;
+      }
+      .analytics-tab-btn.active {
+        background: rgba(249,115,22,0.15) !important;
+        border-color: var(--accent-orange) !important;
+        color: var(--accent-orange) !important;
+        box-shadow: 0 0 0 2px rgba(249,115,22,0.25);
+      }
+
       /* ── Responsive ── */
       @media (max-width: 1200px) {
         .grid-2 { grid-template-columns: 1fr; }
@@ -498,7 +522,15 @@
             <button class="dropdown-item" id="extItem" onclick="switchSubject('English Extended')">Extended</button>
           </div>
         </div>
+
+        <div class="analytics-tab-divider"></div>
+        <button class="subject-btn analytics-tab-btn" id="analyticsTabBtn" onclick="switchToAnalytics()">
+          <span class="subject-icon">⚡</span>Analytics
+        </button>
       </div>
+
+      <!-- ══ SUBJECT VIEW ══ -->
+      <div id="subjectView">
 
       <!-- ══ KPI CARDS ══ -->
       <div class="stats-row">
@@ -576,12 +608,10 @@
         </div>
       </div>
 
-      <!-- ══ SECTION DIVIDER ══ -->
-      <div class="section-divider">
-        <div class="sdiv-line"></div>
-        <span class="sdiv-label">⚡ Advanced Network Analytics</span>
-        <div class="sdiv-line"></div>
-      </div>
+      </div><!-- end #subjectView -->
+
+      <!-- ══ ANALYTICS VIEW ══ -->
+      <div id="analyticsView" style="display:none;">
 
       <!-- ══ ROW: Network Stats + Z-Score ══ -->
       <div class="grid-adv">
@@ -692,6 +722,8 @@
         </p>
         <div id="rankingsContainer" class="rankings-wrap"></div>
       </div>
+
+      </div><!-- end #analyticsView -->
 
     </div><!-- end .dashboard -->
 
@@ -1652,13 +1684,25 @@
       }
 
       // ── Subject switch ──
+      function switchToAnalytics() {
+        document.getElementById("subjectView").style.display = "none";
+        document.getElementById("analyticsView").style.display = "";
+        document.querySelectorAll(".subject-btn").forEach(b => b.classList.remove("active"));
+        document.getElementById("analyticsTabBtn").classList.add("active");
+        document.getElementById("englishDropdown").classList.remove("show");
+      }
+
       function switchSubject(subject) {
+        document.getElementById("subjectView").style.display = "";
+        document.getElementById("analyticsView").style.display = "none";
+        document.getElementById("analyticsTabBtn").classList.remove("active");
+
         currentSubject = subject;
         const isEnglish = subject === "English Core" || subject === "English Extended";
 
         document.querySelectorAll(".subject-btn").forEach(btn => {
           const match = btn.dataset.subject === subject || (btn.id === "englishBtn" && isEnglish);
-          btn.classList.toggle("active", match);
+          btn.classList.toggle("active", !!match && btn.id !== "analyticsTabBtn");
         });
 
         const eb = document.getElementById("englishBtn");
