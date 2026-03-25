@@ -3088,7 +3088,7 @@
 
         <!-- ══ Uncategorized cards (always visible at bottom) ══ -->
         <div class="uncategorized-section" id="uncategorizedSection">
-          <div class="category-section" id="uncategorizedAccordion" data-cat-id="__uncategorized__">
+          <div class="category-section collapsed" id="uncategorizedAccordion" data-cat-id="__uncategorized__">
             <div class="category-header" data-cat-id="__uncategorized__">
               <span class="category-color-dot" style="background:#6b7280; color:#6b7280;"></span>
               <span class="category-name">Uncategorized</span>
@@ -5002,7 +5002,8 @@
         const assignedIds = new Set();
         cats.forEach(cat => (cat.cardIds || []).forEach(id => assignedIds.add(id)));
 
-        // Preserve collapsed state
+        // Preserve user-toggled collapsed state; on first render default all-but-first to collapsed
+        const isFirstRender = container.children.length === 0;
         const collapsedState = {};
         container.querySelectorAll('.category-section[data-cat-id]').forEach(sec => {
           collapsedState[sec.dataset.catId] = sec.classList.contains('collapsed');
@@ -5010,7 +5011,7 @@
 
         container.innerHTML = '';
 
-        cats.forEach(cat => {
+        cats.forEach((cat, idx) => {
           const catCards = (cat.cardIds || [])
             .map(id => cardMap.get(id))
             .filter(Boolean);
@@ -5018,7 +5019,10 @@
           const sec = document.createElement('div');
           sec.className = 'category-section';
           sec.dataset.catId = cat.id;
-          if (collapsedState[cat.id]) sec.classList.add('collapsed');
+
+          // Default: first category open, rest collapsed; preserve user state after first render
+          const defaultCollapsed = isFirstRender ? idx > 0 : (collapsedState[cat.id] ?? idx > 0);
+          if (defaultCollapsed) sec.classList.add('collapsed');
 
           const isFirst = cats.indexOf(cat) === 0;
           const isLast  = cats.indexOf(cat) === cats.length - 1;
