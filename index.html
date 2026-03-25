@@ -1268,6 +1268,31 @@
       .manage-modal-status.ok  { color: #10b981; }
       .manage-modal-status.err { color: #f87171; }
 
+      .modal-reorder-btns {
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        flex-shrink: 0;
+        margin-left: auto;
+      }
+
+      .modal-reorder-btn {
+        width: 22px;
+        height: 22px;
+        border: none;
+        background: rgba(255,255,255,0.08);
+        border-radius: 5px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: background 0.15s;
+      }
+
+      .modal-reorder-btn:hover { background: rgba(255,255,255,0.18); }
+      .modal-reorder-btn svg { width: 14px; height: 14px; fill: rgba(255,255,255,0.7); }
+
       /* Uncategorized section */
       .uncategorized-section {
         margin-bottom: 1.5rem;
@@ -4866,9 +4891,23 @@
         return href.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/^_+|_+$/g, '') || `card_${Math.random().toString(36).slice(2,7)}`;
       }
 
-      // All static cards from the HTML (excluding coming-soon)
+      // All static card elements — collected ONCE from the entire page at startup
+      // After first render cards move between grids, so we cache them by ID.
+      let _allCardCache = null;
       function getAllCards() {
-        return Array.from(document.querySelectorAll('#uncategorizedGrid .card:not(.card-coming-soon), #uncategorizedGrid .card.card-frameworks'));
+        if (_allCardCache) return _allCardCache;
+        // On first call cards are still in #uncategorizedGrid (initial HTML)
+        _allCardCache = Array.from(
+          document.querySelectorAll('.card:not(.card-coming-soon):not(.card-frameworks), .card.card-frameworks')
+        ).filter(c => c.id !== 'comingSoonCard');
+        // Assign stable IDs immediately
+        _allCardCache.forEach(card => {
+          if (!card.getAttribute('data-card-id')) {
+            const id = getCardId(card);
+            card.setAttribute('data-card-id', id);
+          }
+        });
+        return _allCardCache;
       }
 
       function initCategorySystem(db) {
@@ -4951,14 +4990,12 @@
       // ── Render category accordion sections ────────────────────
       function renderCategories(cats, db, isAdmin) {
         const container = document.getElementById('categorySections');
-        const allCards = getAllCards();
+        const allCards = getAllCards(); // uses cached list — cards may be anywhere in DOM
 
-        // Build map: cardId → card element
+        // Build map: cardId → card element (from cache, works regardless of current DOM position)
         const cardMap = new Map();
         allCards.forEach(card => {
-          const id = getCardId(card);
-          card.setAttribute('data-card-id', id);
-          cardMap.set(id, card);
+          cardMap.set(card.getAttribute('data-card-id'), card);
         });
 
         // Which card IDs are already in a category?
@@ -4983,9 +5020,18 @@
           sec.dataset.catId = cat.id;
           if (collapsedState[cat.id]) sec.classList.add('collapsed');
 
+          const isFirst = cats.indexOf(cat) === 0;
+          const isLast  = cats.indexOf(cat) === cats.length - 1;
+
           // Admin action buttons HTML
           const adminHtml = isAdmin ? `
             <div class="category-admin-actions">
+              <button class="cat-action-btn move-up-btn" title="Move up" data-cat-id="${cat.id}" ${isFirst ? 'disabled' : ''}>
+                <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+              </button>
+              <button class="cat-action-btn move-down-btn" title="Move down" data-cat-id="${cat.id}" ${isLast ? 'disabled' : ''}>
+                <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+              </button>
               <button class="cat-action-btn manage-btn" title="Manage cards" data-cat-id="${cat.id}">
                 <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
               </button>
@@ -5018,6 +5064,20 @@
           container.appendChild(sec);
 
           if (isAdmin) {
+            // Move up
+            sec.querySelector('.move-up-btn')?.addEventListener('click', async e => {
+              e.stopPropagation();
+              const idx = cats.indexOf(cat);
+              if (idx <= 0) return;
+              await swapCatOrder(db, cats[idx], cats[idx - 1]);
+            });
+            // Move down
+            sec.querySelector('.move-down-btn')?.addEventListener('click', async e => {
+              e.stopPropagation();
+              const idx = cats.indexOf(cat);
+              if (idx >= cats.length - 1) return;
+              await swapCatOrder(db, cats[idx], cats[idx + 1]);
+            });
             // Manage cards
             sec.querySelector('.manage-btn')?.addEventListener('click', e => {
               e.stopPropagation();
@@ -5062,6 +5122,15 @@
           document.getElementById('uncategorizedSection').style.display = '';
         }
 
+      }
+
+      // ── Swap category order ───────────────────────────────────
+      async function swapCatOrder(db, catA, catB) {
+        const [orderA, orderB] = [catA.order ?? 0, catB.order ?? 0];
+        await Promise.all([
+          setDoc(doc(db, 'ah_categories', catA.id), { order: orderB }, { merge: true }),
+          setDoc(doc(db, 'ah_categories', catB.id), { order: orderA }, { merge: true }),
+        ]);
       }
 
       // ── Inline rename ─────────────────────────────────────────
@@ -5136,33 +5205,97 @@
         statusEl.textContent = '';
         statusEl.className = 'manage-modal-status';
 
-        // Current selection = cat.cardIds
-        const selected = new Set(cat.cardIds || []);
+        // Ordered list of selected card IDs (preserves custom order)
+        let selectedOrder = [...(cat.cardIds || [])];
 
         function renderList(filter) {
           listEl.innerHTML = '';
           const q = (filter || '').toLowerCase();
-          cardMeta.forEach(m => {
-            if (q && !m.title.toLowerCase().includes(q) && !m.desc.toLowerCase().includes(q)) return;
-            const inOther = otherCatIds.has(m.id);
-            const row = document.createElement('label');
+
+          // First: selected cards in their current order (respecting search filter)
+          // Then: unselected cards
+          const selectedMeta = selectedOrder
+            .map(id => cardMeta.find(m => m.id === id))
+            .filter(Boolean)
+            .filter(m => !q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q));
+
+          const unselectedMeta = cardMeta.filter(m =>
+            !selectedOrder.includes(m.id) &&
+            !otherCatIds.has(m.id) &&
+            (!q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q))
+          );
+
+          const inOtherMeta = cardMeta.filter(m =>
+            otherCatIds.has(m.id) &&
+            (!q || m.title.toLowerCase().includes(q) || m.desc.toLowerCase().includes(q))
+          );
+
+          function makeRow(m, isChecked, isOther) {
+            const row = document.createElement('div');
             row.className = 'modal-card-row';
+            row.dataset.cardId = m.id;
+
+            const reorderHtml = (isChecked && !isOther) ? `
+              <div class="modal-reorder-btns">
+                <button class="modal-reorder-btn move-card-up" title="Move up" data-id="${m.id}">
+                  <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+                </button>
+                <button class="modal-reorder-btn move-card-down" title="Move down" data-id="${m.id}">
+                  <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </button>
+              </div>` : '<div class="modal-reorder-btns" style="visibility:hidden"><button class="modal-reorder-btn" style="pointer-events:none"><svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg></button><button class="modal-reorder-btn" style="pointer-events:none"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></button></div>';
+
             row.innerHTML = `
-              <input type="checkbox" value="${m.id}" ${selected.has(m.id) ? 'checked' : ''} ${inOther ? 'disabled title="Already in another category"' : ''}>
+              <input type="checkbox" value="${m.id}" ${isChecked ? 'checked' : ''} ${isOther ? 'disabled' : ''}>
               <span class="modal-card-thumb" style="background:${themeColor(m.theme)}"></span>
               <span class="modal-card-label">
                 ${escHtml(m.title)}
-                ${inOther ? '<small>Already in another category</small>' : ''}
-              </span>`;
-            const checkbox = row.querySelector('input');
-            if (!inOther) {
+                ${isOther ? '<small>Already in another category</small>' : ''}
+              </span>
+              ${reorderHtml}`;
+
+            const checkbox = row.querySelector('input[type="checkbox"]');
+            if (!isOther) {
               checkbox.addEventListener('change', () => {
-                if (checkbox.checked) selected.add(m.id);
-                else selected.delete(m.id);
+                if (checkbox.checked) {
+                  if (!selectedOrder.includes(m.id)) selectedOrder.push(m.id);
+                } else {
+                  selectedOrder = selectedOrder.filter(id => id !== m.id);
+                }
+                renderList(searchEl.value);
               });
             }
-            listEl.appendChild(row);
-          });
+
+            if (isChecked && !isOther) {
+              row.querySelector('.move-card-up')?.addEventListener('click', e => {
+                e.stopPropagation();
+                const idx = selectedOrder.indexOf(m.id);
+                if (idx > 0) {
+                  [selectedOrder[idx - 1], selectedOrder[idx]] = [selectedOrder[idx], selectedOrder[idx - 1]];
+                  renderList(searchEl.value);
+                }
+              });
+              row.querySelector('.move-card-down')?.addEventListener('click', e => {
+                e.stopPropagation();
+                const idx = selectedOrder.indexOf(m.id);
+                if (idx < selectedOrder.length - 1) {
+                  [selectedOrder[idx], selectedOrder[idx + 1]] = [selectedOrder[idx + 1], selectedOrder[idx]];
+                  renderList(searchEl.value);
+                }
+              });
+            }
+
+            return row;
+          }
+
+          selectedMeta.forEach(m => listEl.appendChild(makeRow(m, true, false)));
+          if (selectedMeta.length && (unselectedMeta.length || inOtherMeta.length)) {
+            const divider = document.createElement('div');
+            divider.style.cssText = 'height:1px;background:rgba(255,255,255,0.07);margin:0.4rem 0.5rem';
+            listEl.appendChild(divider);
+          }
+          unselectedMeta.forEach(m => listEl.appendChild(makeRow(m, false, false)));
+          inOtherMeta.forEach(m => listEl.appendChild(makeRow(m, false, true)));
         }
 
         // abortCtrl MUST be declared before any usage (including renderList's search listener)
@@ -5178,7 +5311,7 @@
           statusEl.textContent = 'Saving…';
           statusEl.className = 'manage-modal-status';
           try {
-            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selected] }, { merge: true });
+            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selectedOrder] }, { merge: true });
             statusEl.textContent = 'Saved!';
             statusEl.className = 'manage-modal-status ok';
             setTimeout(closeModal, 700);
