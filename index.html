@@ -5165,10 +5165,13 @@
           });
         }
 
-        renderList('');
-        searchEl.addEventListener('input', () => renderList(searchEl.value), { signal: abortCtrl.signal });
+        // abortCtrl MUST be declared before any usage (including renderList's search listener)
+        const abortCtrl = new AbortController();
 
-        modal.classList.add('open');
+        function closeModal() {
+          modal.classList.remove('open');
+          abortCtrl.abort();
+        }
 
         async function save() {
           saveBtn.disabled = true;
@@ -5186,28 +5189,17 @@
           }
         }
 
-        const abortCtrl = new AbortController();
+        renderList('');
+        searchEl.addEventListener('input', () => renderList(searchEl.value), { signal: abortCtrl.signal });
 
-        function closeModal() {
-          modal.classList.remove('open');
-          abortCtrl.abort();
-        }
         saveBtn.disabled = false;
         saveBtn.addEventListener('click', save, { signal: abortCtrl.signal });
         document.getElementById('manageCatCancel').addEventListener('click', closeModal, { signal: abortCtrl.signal });
         document.getElementById('manageCatClose').addEventListener('click', closeModal, { signal: abortCtrl.signal });
+        modal.addEventListener('click', e => { if (e.target === modal) closeModal(); }, { signal: abortCtrl.signal });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); }, { signal: abortCtrl.signal });
 
-        // Close on backdrop click
-        modal.addEventListener('click', e => {
-          if (e.target === modal) closeModal();
-        }, { signal: abortCtrl.signal });
-
-        // Close on Escape
-        document.addEventListener('keydown', e => {
-          if (e.key === 'Escape') closeModal();
-        }, { signal: abortCtrl.signal });
-
-        // Focus search
+        modal.classList.add('open');
         requestAnimationFrame(() => searchEl.focus());
       }
 
