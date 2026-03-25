@@ -959,10 +959,6 @@
         transition: box-shadow 0.3s ease;
       }
 
-      .category-section.drag-over {
-        box-shadow: 0 0 0 2px rgba(102,126,234,0.6), 0 0 30px rgba(102,126,234,0.2);
-        background: rgba(102,126,234,0.08);
-      }
 
       .category-header {
         display: flex;
@@ -1074,31 +1070,203 @@
         padding: 0 1.5rem 1.5rem;
       }
 
-      .category-cards-grid.drag-active .card {
-        cursor: grab;
+      /* ── Manage Cards Modal ─────────────────────────────────── */
+      #manageCatModal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 9000;
+        background: rgba(0,0,0,0.65);
+        backdrop-filter: blur(6px);
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
       }
 
-      /* Drop zone placeholder shown while dragging */
-      .card-drop-placeholder {
-        border-radius: 24px;
-        border: 2px dashed rgba(102,126,234,0.5);
-        background: rgba(102,126,234,0.06);
-        min-height: 120px;
-        pointer-events: none;
-        animation: placeholderPulse 1.2s ease-in-out infinite alternate;
+      #manageCatModal.open {
+        display: flex;
       }
 
-      @keyframes placeholderPulse {
-        from { border-color: rgba(102,126,234,0.3); }
-        to   { border-color: rgba(102,126,234,0.7); }
+      .manage-modal-box {
+        background: #13132a;
+        border: 1px solid rgba(102,126,234,0.35);
+        border-radius: 22px;
+        width: 100%;
+        max-width: 520px;
+        max-height: 80vh;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+        overflow: hidden;
       }
 
-      /* Card dragging state */
-      .card.dragging {
-        opacity: 0.35;
-        cursor: grabbing !important;
-        pointer-events: none;
+      .manage-modal-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 1.2rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        flex-shrink: 0;
       }
+
+      .manage-modal-color {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+
+      .manage-modal-title {
+        font-family: "Playfair Display", serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        flex: 1;
+      }
+
+      .manage-modal-close {
+        width: 30px;
+        height: 30px;
+        border: none;
+        background: rgba(255,255,255,0.08);
+        border-radius: 8px;
+        color: white;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        line-height: 1;
+        transition: background 0.2s;
+      }
+
+      .manage-modal-close:hover { background: rgba(255,255,255,0.16); }
+
+      .manage-modal-search {
+        margin: 1rem 1.5rem 0.5rem;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 10px;
+        padding: 0.55rem 1rem;
+        color: white;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.88rem;
+        outline: none;
+        width: calc(100% - 3rem);
+        transition: border-color 0.2s;
+      }
+
+      .manage-modal-search:focus {
+        border-color: rgba(102,126,234,0.6);
+      }
+
+      .manage-modal-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 1rem 1rem;
+      }
+
+      .manage-modal-list::-webkit-scrollbar { width: 4px; }
+      .manage-modal-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+      .modal-card-row {
+        display: flex;
+        align-items: center;
+        gap: 0.85rem;
+        padding: 0.65rem 0.5rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background 0.15s;
+        user-select: none;
+      }
+
+      .modal-card-row:hover { background: rgba(255,255,255,0.06); }
+
+      .modal-card-row input[type="checkbox"] {
+        width: 17px;
+        height: 17px;
+        accent-color: #667eea;
+        cursor: pointer;
+        flex-shrink: 0;
+      }
+
+      .modal-card-thumb {
+        width: 36px;
+        height: 36px;
+        border-radius: 9px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .modal-card-thumb svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+      }
+
+      .modal-card-label {
+        font-size: 0.9rem;
+        color: rgba(255,255,255,0.88);
+        flex: 1;
+        line-height: 1.3;
+      }
+
+      .modal-card-label small {
+        display: block;
+        font-size: 0.75rem;
+        color: rgba(255,255,255,0.4);
+        margin-top: 1px;
+      }
+
+      .manage-modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-shrink: 0;
+      }
+
+      .manage-modal-save {
+        flex: 1;
+        padding: 0.6rem 1.25rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.2s;
+      }
+
+      .manage-modal-save:hover { opacity: 0.88; }
+      .manage-modal-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+      .manage-modal-cancel {
+        padding: 0.6rem 1rem;
+        background: rgba(255,255,255,0.07);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 10px;
+        color: rgba(255,255,255,0.7);
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .manage-modal-cancel:hover { background: rgba(255,255,255,0.12); }
+
+      .manage-modal-status {
+        font-size: 0.8rem;
+        min-height: 1em;
+        transition: color 0.2s;
+      }
+
+      .manage-modal-status.ok  { color: #10b981; }
+      .manage-modal-status.err { color: #f87171; }
 
       /* Uncategorized section */
       .uncategorized-section {
@@ -4181,6 +4349,24 @@
         </div><!-- /uncategorized-section -->
       </main>
 
+      <!-- ══ Manage Cards Modal ══ -->
+      <div id="manageCatModal" role="dialog" aria-modal="true" aria-labelledby="manageCatModalTitle">
+        <div class="manage-modal-box">
+          <div class="manage-modal-header">
+            <span class="manage-modal-color" id="manageCatColor"></span>
+            <span class="manage-modal-title" id="manageCatModalTitle">Manage Cards</span>
+            <button class="manage-modal-close" id="manageCatClose" aria-label="Close">&#x2715;</button>
+          </div>
+          <input class="manage-modal-search" id="manageCatSearch" type="search" placeholder="Search cards…">
+          <div class="manage-modal-list" id="manageCatList"></div>
+          <div class="manage-modal-footer">
+            <span class="manage-modal-status" id="manageCatStatus"></span>
+            <button class="manage-modal-cancel" id="manageCatCancel">Cancel</button>
+            <button class="manage-modal-save" id="manageCatSave">Save</button>
+          </div>
+        </div>
+      </div>
+
       <footer>
         <p>
           Â© 2025 Eduversal Indonesia Education Department. All rights reserved.
@@ -4800,6 +4986,9 @@
           // Admin action buttons HTML
           const adminHtml = isAdmin ? `
             <div class="category-admin-actions">
+              <button class="cat-action-btn manage-btn" title="Manage cards" data-cat-id="${cat.id}">
+                <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+              </button>
               <button class="cat-action-btn rename-btn" title="Rename" data-cat-id="${cat.id}">
                 <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
               </button>
@@ -4829,6 +5018,11 @@
           container.appendChild(sec);
 
           if (isAdmin) {
+            // Manage cards
+            sec.querySelector('.manage-btn')?.addEventListener('click', e => {
+              e.stopPropagation();
+              openManageModal(cat, cats, db);
+            });
             // Rename
             sec.querySelector('.rename-btn')?.addEventListener('click', e => {
               e.stopPropagation();
@@ -4868,7 +5062,6 @@
           document.getElementById('uncategorizedSection').style.display = '';
         }
 
-        if (isAdmin) setupDragDrop(db);
       }
 
       // ── Inline rename ─────────────────────────────────────────
@@ -4902,110 +5095,155 @@
         });
       }
 
-      // ── Drag-and-Drop (event delegation — one listener on document) ──
-      let draggedCard = null;
-      let draggedFromCatId = null;
-      let dragDropDb = null;
-      let dragInitialised = false;
-
-      function setupDragDrop(db) {
-        dragDropDb = db;
-
-        // Mark all draggable cards with the attribute (needed for CSS cursor: grab)
+      // ── Manage Cards Modal ────────────────────────────────────
+      // Collects all static card metadata once from the DOM
+      function buildCardMeta() {
+        const meta = [];
         document.querySelectorAll('.card:not(.card-coming-soon)').forEach(card => {
-          card.setAttribute('draggable', 'true');
+          const id    = card.getAttribute('data-card-id') || '';
+          const title = card.querySelector('.card-title')?.textContent?.trim() || id;
+          const desc  = card.querySelector('.card-description')?.textContent?.trim() || '';
+          const iconEl = card.querySelector('.card-icon, .frameworks-icon');
+          const iconHtml = iconEl ? iconEl.outerHTML : '';
+          const theme = card.dataset.theme || '';
+          if (id) meta.push({ id, title, desc, iconHtml, theme });
         });
-
-        if (dragInitialised) return; // listeners already on document
-        dragInitialised = true;
-
-        // ── dragstart ────────────────────────────────────────────
-        document.addEventListener('dragstart', e => {
-          const card = e.target.closest('.card:not(.card-coming-soon)');
-          if (!card || !document.body.classList.contains('is-admin')) return;
-          draggedCard = card;
-          draggedFromCatId = card.closest('.category-cards-grid')?.dataset.catId || '__uncategorized__';
-          card.classList.add('dragging');
-          e.dataTransfer.effectAllowed = 'move';
-          e.dataTransfer.setData('text/plain', card.getAttribute('data-card-id') || '');
-        });
-
-        // ── dragend ──────────────────────────────────────────────
-        document.addEventListener('dragend', () => {
-          draggedCard?.classList.remove('dragging');
-          document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-          draggedCard = null;
-          draggedFromCatId = null;
-        });
-
-        // ── dragover ─────────────────────────────────────────────
-        document.addEventListener('dragover', e => {
-          if (!draggedCard) return;
-          const zone = e.target.closest('.category-cards-grid, .category-section');
-          if (!zone) return;
-          e.preventDefault();
-          e.dataTransfer.dropEffect = 'move';
-          zone.closest('.category-section')?.classList.add('drag-over');
-        });
-
-        // ── dragleave ────────────────────────────────────────────
-        document.addEventListener('dragleave', e => {
-          const section = e.target.closest('.category-section');
-          if (!section) return;
-          // Only remove if leaving the section entirely
-          if (!section.contains(e.relatedTarget)) {
-            section.classList.remove('drag-over');
-          }
-        });
-
-        // ── drop ─────────────────────────────────────────────────
-        document.addEventListener('drop', async e => {
-          if (!draggedCard || !dragDropDb) return;
-          const zone = e.target.closest('.category-cards-grid, .category-section');
-          if (!zone) return;
-          e.preventDefault();
-          zone.closest('.category-section')?.classList.remove('drag-over');
-
-          // Resolve target category id
-          const targetCatId = zone.dataset.catId
-            || zone.closest('.category-section')?.dataset.catId
-            || '__uncategorized__';
-
-          if (targetCatId !== draggedFromCatId) {
-            const cardId = draggedCard.getAttribute('data-card-id');
-            await moveToCat(dragDropDb, cardId, draggedFromCatId, targetCatId);
-          }
-        });
+        return meta;
       }
 
-      async function moveToCat(db, cardId, fromCatId, toCatId) {
-        const batch = [];
+      let cardMeta = null; // lazy-built once
 
-        // Remove from source category
-        if (fromCatId !== '__uncategorized__') {
-          const fromRef = doc(db, 'ah_categories', fromCatId);
-          const fromSnap = await getDoc(fromRef);
-          if (fromSnap.exists()) {
-            const ids = (fromSnap.data().cardIds || []).filter(id => id !== cardId);
-            batch.push(setDoc(fromRef, { cardIds: ids }, { merge: true }));
+      function openManageModal(cat, allCats, db) {
+        if (!cardMeta) cardMeta = buildCardMeta();
+
+        // Which cardIds are in OTHER categories (not this one)
+        const otherCatIds = new Set();
+        allCats.forEach(c => {
+          if (c.id !== cat.id) (c.cardIds || []).forEach(id => otherCatIds.add(id));
+        });
+
+        const modal      = document.getElementById('manageCatModal');
+        const listEl     = document.getElementById('manageCatList');
+        const titleEl    = document.getElementById('manageCatModalTitle');
+        const colorEl    = document.getElementById('manageCatColor');
+        const searchEl   = document.getElementById('manageCatSearch');
+        const statusEl   = document.getElementById('manageCatStatus');
+        const saveBtn    = document.getElementById('manageCatSave');
+
+        titleEl.textContent = `Cards in "${cat.name}"`;
+        colorEl.style.background = cat.color;
+        searchEl.value = '';
+        statusEl.textContent = '';
+        statusEl.className = 'manage-modal-status';
+
+        // Current selection = cat.cardIds
+        const selected = new Set(cat.cardIds || []);
+
+        function renderList(filter) {
+          listEl.innerHTML = '';
+          const q = (filter || '').toLowerCase();
+          cardMeta.forEach(m => {
+            if (q && !m.title.toLowerCase().includes(q) && !m.desc.toLowerCase().includes(q)) return;
+            const inOther = otherCatIds.has(m.id);
+            const row = document.createElement('label');
+            row.className = 'modal-card-row';
+            row.innerHTML = `
+              <input type="checkbox" value="${m.id}" ${selected.has(m.id) ? 'checked' : ''} ${inOther ? 'disabled title="Already in another category"' : ''}>
+              <span class="modal-card-thumb" style="background:${themeColor(m.theme)}"></span>
+              <span class="modal-card-label">
+                ${escHtml(m.title)}
+                ${inOther ? '<small>Already in another category</small>' : ''}
+              </span>`;
+            const checkbox = row.querySelector('input');
+            if (!inOther) {
+              checkbox.addEventListener('change', () => {
+                if (checkbox.checked) selected.add(m.id);
+                else selected.delete(m.id);
+              });
+            }
+            listEl.appendChild(row);
+          });
+        }
+
+        renderList('');
+        searchEl.addEventListener('input', () => renderList(searchEl.value), { signal: abortCtrl.signal });
+
+        modal.classList.add('open');
+
+        async function save() {
+          saveBtn.disabled = true;
+          statusEl.textContent = 'Saving…';
+          statusEl.className = 'manage-modal-status';
+          try {
+            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selected] }, { merge: true });
+            statusEl.textContent = 'Saved!';
+            statusEl.className = 'manage-modal-status ok';
+            setTimeout(closeModal, 700);
+          } catch {
+            statusEl.textContent = 'Failed to save.';
+            statusEl.className = 'manage-modal-status err';
+            saveBtn.disabled = false;
           }
         }
 
-        // Add to target category
-        if (toCatId !== '__uncategorized__') {
-          const toRef = doc(db, 'ah_categories', toCatId);
-          const toSnap = await getDoc(toRef);
-          if (toSnap.exists()) {
-            const ids = [...new Set([...(toSnap.data().cardIds || []), cardId])];
-            batch.push(setDoc(toRef, { cardIds: ids }, { merge: true }));
-          }
+        function closeModal() {
+          modal.classList.remove('open');
+          abortCtrl.abort();
+          saveBtn.removeEventListener('click', save);
+          document.getElementById('manageCatCancel').removeEventListener('click', closeModal);
+          document.getElementById('manageCatClose').removeEventListener('click', closeModal);
         }
 
-        await Promise.all(batch);
+        const abortCtrl = new AbortController();
+        saveBtn.disabled = false;
+        saveBtn.addEventListener('click', save, { signal: abortCtrl.signal });
+        document.getElementById('manageCatCancel').addEventListener('click', closeModal, { signal: abortCtrl.signal });
+        document.getElementById('manageCatClose').addEventListener('click', closeModal, { signal: abortCtrl.signal });
+
+        // Close on backdrop click
+        modal.addEventListener('click', e => {
+          if (e.target === modal) closeModal();
+        }, { signal: abortCtrl.signal });
+
+        // Close on Escape
+        document.addEventListener('keydown', e => {
+          if (e.key === 'Escape') closeModal();
+        }, { signal: abortCtrl.signal });
+
+        // Focus search
+        requestAnimationFrame(() => searchEl.focus());
       }
 
       function escHtml(str) {
         return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      const THEME_COLORS = {
+        kpi:               '#f6d365',
+        quality:           '#ff9a9e',
+        'ease-analytics':  '#f7971e',
+        'ease-archive':    '#14b8a6',
+        calendar:          '#f7971e',
+        academic:          '#667eea',
+        evaluation:        '#11998e',
+        islamic:           '#11998e',
+        appraisal:         '#f093fb',
+        pathway:           '#4481eb',
+        cambridge:         '#fa709a',
+        satisfaction:      '#4facfe',
+        student:           '#667eea',
+        parent:            '#f093fb',
+        'aease-primary':   '#5f72bd',
+        'ease-primary':    '#56ab2f',
+        'assessment-policy':'#8e2de2',
+        aease:             '#6a11cb',
+        ease:              '#43e97b',
+        ease2:             '#0ba360',
+        ease3:             '#f97316',
+        frameworks:        '#a8edea',
+      };
+      function themeColor(theme) {
+        return THEME_COLORS[theme] || '#667eea';
       }
     </script>
 
