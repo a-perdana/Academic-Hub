@@ -946,6 +946,299 @@
         }
       }
 
+      /* ══════════════════════════════════════════════════════════
+         CATEGORY ACCORDION SYSTEM
+         ══════════════════════════════════════════════════════════ */
+
+      .category-section {
+        margin-bottom: 1.5rem;
+        border-radius: 18px;
+        border: 1px solid var(--glass-border);
+        background: rgba(255,255,255,0.04);
+        overflow: hidden;
+        transition: box-shadow 0.3s ease;
+      }
+
+      .category-section.drag-over {
+        box-shadow: 0 0 0 2px rgba(102,126,234,0.6), 0 0 30px rgba(102,126,234,0.2);
+        background: rgba(102,126,234,0.08);
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.1rem 1.5rem;
+        cursor: pointer;
+        user-select: none;
+        transition: background 0.2s ease;
+        position: relative;
+      }
+
+      .category-header:hover {
+        background: rgba(255,255,255,0.04);
+      }
+
+      .category-color-dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        box-shadow: 0 0 8px currentColor;
+      }
+
+      .category-name {
+        font-family: "Playfair Display", serif;
+        font-size: 1.1rem;
+        font-weight: 600;
+        flex: 1;
+        color: var(--text-primary);
+      }
+
+      .category-count {
+        font-size: 0.78rem;
+        color: var(--text-secondary);
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+      }
+
+      .category-chevron {
+        width: 20px;
+        height: 20px;
+        fill: var(--text-secondary);
+        transition: transform 0.3s cubic-bezier(0.23,1,0.32,1);
+        flex-shrink: 0;
+      }
+
+      .category-section.collapsed .category-chevron {
+        transform: rotate(-90deg);
+      }
+
+      .category-admin-actions {
+        display: none;
+        align-items: center;
+        gap: 0.5rem;
+        margin-right: 0.5rem;
+      }
+
+      body.is-admin .category-admin-actions {
+        display: flex;
+      }
+
+      .cat-action-btn {
+        width: 28px;
+        height: 28px;
+        border: none;
+        background: var(--glass-bg);
+        border-radius: 7px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0.6;
+        transition: opacity 0.2s, background 0.2s;
+        color: white;
+      }
+
+      .cat-action-btn:hover {
+        opacity: 1;
+        background: rgba(255,255,255,0.15);
+      }
+
+      .cat-action-btn svg {
+        width: 14px;
+        height: 14px;
+        fill: white;
+      }
+
+      .cat-action-btn.delete-btn:hover {
+        background: rgba(239,68,68,0.3);
+      }
+
+      .category-body {
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.23,1,0.32,1);
+        max-height: 5000px;
+      }
+
+      .category-section.collapsed .category-body {
+        max-height: 0;
+      }
+
+      .category-cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        gap: 1.5rem;
+        padding: 0 1.5rem 1.5rem;
+      }
+
+      .category-cards-grid.drag-active .card {
+        cursor: grab;
+      }
+
+      /* Drop zone placeholder shown while dragging */
+      .card-drop-placeholder {
+        border-radius: 24px;
+        border: 2px dashed rgba(102,126,234,0.5);
+        background: rgba(102,126,234,0.06);
+        min-height: 120px;
+        pointer-events: none;
+        animation: placeholderPulse 1.2s ease-in-out infinite alternate;
+      }
+
+      @keyframes placeholderPulse {
+        from { border-color: rgba(102,126,234,0.3); }
+        to   { border-color: rgba(102,126,234,0.7); }
+      }
+
+      /* Card dragging state */
+      .card.dragging {
+        opacity: 0.35;
+        cursor: grabbing !important;
+        pointer-events: none;
+      }
+
+      /* Uncategorized section */
+      .uncategorized-section {
+        margin-bottom: 1.5rem;
+      }
+
+      /* ══════════════════════════════════════════════════════════
+         ADMIN PANEL — Category Manager
+         ══════════════════════════════════════════════════════════ */
+
+      #adminCatPanel {
+        display: none;
+        max-width: 1400px;
+        margin: 0 auto 2rem;
+        padding: 0 2rem;
+      }
+
+      body.is-admin #adminCatPanel {
+        display: block;
+      }
+
+      .admin-cat-card {
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(102,126,234,0.3);
+        border-radius: 18px;
+        padding: 1.25rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .admin-cat-card .label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #a29bfe;
+        white-space: nowrap;
+      }
+
+      .admin-cat-input {
+        flex: 1;
+        min-width: 160px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 10px;
+        padding: 0.55rem 1rem;
+        color: white;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .admin-cat-input:focus {
+        border-color: rgba(102,126,234,0.6);
+      }
+
+      .color-swatches {
+        display: flex;
+        gap: 0.4rem;
+        flex-shrink: 0;
+      }
+
+      .color-swatch {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: transform 0.15s, border-color 0.15s;
+      }
+
+      .color-swatch:hover,
+      .color-swatch.selected {
+        transform: scale(1.2);
+        border-color: white;
+      }
+
+      .admin-cat-btn {
+        padding: 0.55rem 1.25rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        color: white;
+        font-family: "DM Sans", sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        white-space: nowrap;
+        transition: opacity 0.2s, transform 0.2s;
+      }
+
+      .admin-cat-btn:hover {
+        opacity: 0.9;
+        transform: translateY(-1px);
+      }
+
+      .admin-cat-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .admin-cat-status {
+        font-size: 0.82rem;
+        min-width: 80px;
+        transition: color 0.2s;
+      }
+
+      .admin-cat-status.ok  { color: #10b981; }
+      .admin-cat-status.err { color: #f87171; }
+
+      /* Rename inline input */
+      .category-name-input {
+        font-family: "Playfair Display", serif;
+        font-size: 1.05rem;
+        font-weight: 600;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(102,126,234,0.5);
+        border-radius: 8px;
+        color: white;
+        padding: 0.2rem 0.5rem;
+        outline: none;
+        width: 200px;
+      }
+
+      @media (max-width: 768px) {
+        .category-cards-grid {
+          grid-template-columns: 1fr;
+          padding: 0 1rem 1rem;
+        }
+        .admin-cat-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .admin-cat-input { width: 100%; }
+      }
+
       /* Celebration Banner */
       .celebration-banner {
         max-width: 1400px;
@@ -2584,9 +2877,34 @@
           </div>
         </div>
 
+        <!-- ══ Admin: Category Manager Panel (visible to academic_admin only) ══ -->
+        <div id="adminCatPanel">
+          <div class="admin-cat-card">
+            <span class="label">New Category</span>
+            <input id="newCatName" class="admin-cat-input" type="text" placeholder="Category name…" maxlength="40">
+            <div class="color-swatches" id="colorSwatches"></div>
+            <button id="addCatBtn" class="admin-cat-btn">+ Add</button>
+            <span class="admin-cat-status" id="catStatus"></span>
+          </div>
+        </div>
+
         <h2 class="section-title">Dashboard Collection</h2>
 
-        <div class="cards-grid">
+        <!-- ══ Category sections rendered by JS ══ -->
+        <div id="categorySections"></div>
+
+        <!-- ══ Uncategorized cards (always visible at bottom) ══ -->
+        <div class="uncategorized-section" id="uncategorizedSection">
+          <div class="category-section" id="uncategorizedAccordion">
+            <div class="category-header" data-cat-id="__uncategorized__">
+              <span class="category-color-dot" style="background:#6b7280; color:#6b7280;"></span>
+              <span class="category-name">Uncategorized</span>
+              <span class="category-count" id="uncategorizedCount">0</span>
+              <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+            <div class="category-body">
+              <div class="category-cards-grid" id="uncategorizedGrid">
+                <!-- CARDS INJECTED HERE -->
           <!-- School Performance KPI — Semester II data entry -->
           <a
             href="SchoolPerformanceKPI.html"
@@ -3847,8 +4165,8 @@
             </div>
           </div>
 
-          <!-- Coming Soon Card -->
-          <div class="card card-coming-soon">
+          <!-- Coming Soon Card (admin only — hidden via JS if needed) -->
+          <div class="card card-coming-soon" id="comingSoonCard">
             <div class="coming-soon-content">
               <svg viewBox="0 0 24 24">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
@@ -3857,7 +4175,10 @@
               <p>More dashboards will be added in the coming weeks</p>
             </div>
           </div>
-        </div>
+              </div><!-- /uncategorizedGrid -->
+            </div><!-- /category-body -->
+          </div><!-- /category-section#uncategorizedAccordion -->
+        </div><!-- /uncategorized-section -->
       </main>
 
       <footer>
@@ -3908,17 +4229,13 @@
     <!-- â•â• /FEEDBACK MODAL â•â• -->
 
     <script>
-      // Smooth scroll animation on card hover
-      document
-        .querySelectorAll(".card:not(.card-coming-soon)")
-        .forEach((card) => {
-          card.addEventListener("mouseenter", () => {
-            card.style.zIndex = "10";
-          });
-          card.addEventListener("mouseleave", () => {
-            card.style.zIndex = "1";
-          });
-        });
+      // Card hover z-index (event delegation — works after dynamic moves)
+      document.addEventListener("mouseenter", (e) => {
+        if (e.target.matches?.(".card:not(.card-coming-soon)")) e.target.style.zIndex = "10";
+      }, true);
+      document.addEventListener("mouseleave", (e) => {
+        if (e.target.matches?.(".card:not(.card-coming-soon)")) e.target.style.zIndex = "1";
+      }, true);
 
       // Parallax effect on orbs
       document.addEventListener("mousemove", (e) => {
@@ -3955,8 +4272,10 @@
         addDoc,
         getDoc,
         setDoc,
+        deleteDoc,
         query,
         where,
+        orderBy,
         onSnapshot,
         serverTimestamp,
         Timestamp,
@@ -4280,6 +4599,17 @@
           document.getElementById("logoutBtn").style.display = "none"; // replaced by dropdown
           populateNav(user);
           await window.__initNavbarCounters?.({ db, user });
+
+          // ── Category system ─────────────────────────────────────
+          try {
+            const userRef2 = doc(db, 'users', user.uid);
+            const snap2 = await getDoc(userRef2);
+            const role = snap2.exists() ? snap2.data().role_academichub : 'academic_user';
+            if (role === 'academic_admin') {
+              document.body.classList.add('is-admin');
+            }
+          } catch (_) {}
+          initCategorySystem(db);
         } else {
           currentUser = null;
           document.getElementById("loadingScreen").style.display = "none";
@@ -4334,6 +4664,371 @@
           googleBtn.innerHTML = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg> Sign in with Google`;
         }
       });
+
+      // ════════════════════════════════════════════════════════════
+      // CATEGORY SYSTEM
+      // ════════════════════════════════════════════════════════════
+
+      const CAT_COLORS = [
+        '#6c5ce7','#0984e3','#00b894','#e17055',
+        '#e84393','#f39c12','#00cec9','#a29bfe',
+      ];
+
+      // Build a stable card-id from the card's href or index
+      function getCardId(card) {
+        const href = card.getAttribute('href') || card.id || '';
+        return href.replace(/[^a-zA-Z0-9_-]/g, '_').replace(/^_+|_+$/g, '') || `card_${Math.random().toString(36).slice(2,7)}`;
+      }
+
+      // All static cards from the HTML (excluding coming-soon)
+      function getAllCards() {
+        return Array.from(document.querySelectorAll('#uncategorizedGrid .card:not(.card-coming-soon), #uncategorizedGrid .card.card-frameworks'));
+      }
+
+      function initCategorySystem(db) {
+        const isAdmin = document.body.classList.contains('is-admin');
+
+        // ── Build color swatches in admin panel ─────────────────
+        if (isAdmin) {
+          const swatchContainer = document.getElementById('colorSwatches');
+          let selectedColor = CAT_COLORS[0];
+          CAT_COLORS.forEach((color, i) => {
+            const sw = document.createElement('div');
+            sw.className = 'color-swatch' + (i === 0 ? ' selected' : '');
+            sw.style.background = color;
+            sw.title = color;
+            sw.addEventListener('click', () => {
+              swatchContainer.querySelectorAll('.color-swatch').forEach(s => s.classList.remove('selected'));
+              sw.classList.add('selected');
+              selectedColor = color;
+            });
+            swatchContainer.appendChild(sw);
+          });
+
+          // ── Add category ──────────────────────────────────────
+          document.getElementById('addCatBtn').addEventListener('click', async () => {
+            const nameInput = document.getElementById('newCatName');
+            const statusEl = document.getElementById('catStatus');
+            const name = nameInput.value.trim();
+            if (!name) {
+              statusEl.textContent = 'Enter a name.';
+              statusEl.className = 'admin-cat-status err';
+              setTimeout(() => { statusEl.className = 'admin-cat-status'; }, 2500);
+              return;
+            }
+            document.getElementById('addCatBtn').disabled = true;
+            try {
+              await addDoc(collection(db, 'ah_categories'), {
+                name,
+                color: selectedColor,
+                cardIds: [],
+                order: Date.now(),
+                createdAt: serverTimestamp(),
+              });
+              nameInput.value = '';
+              statusEl.textContent = 'Added!';
+              statusEl.className = 'admin-cat-status ok';
+            } catch {
+              statusEl.textContent = 'Failed.';
+              statusEl.className = 'admin-cat-status err';
+            } finally {
+              document.getElementById('addCatBtn').disabled = false;
+              setTimeout(() => { statusEl.className = 'admin-cat-status'; }, 2500);
+            }
+          });
+
+          // Allow Enter key in name input
+          document.getElementById('newCatName').addEventListener('keydown', e => {
+            if (e.key === 'Enter') document.getElementById('addCatBtn').click();
+          });
+        }
+
+        // ── Accordion toggle ──────────────────────────────────────
+        document.addEventListener('click', e => {
+          const header = e.target.closest('.category-header');
+          if (!header) return;
+          // Don't toggle if clicking an action button
+          if (e.target.closest('.category-admin-actions')) return;
+          const section = header.closest('.category-section');
+          if (section) section.classList.toggle('collapsed');
+        });
+
+        // ── Firestore: listen to categories ──────────────────────
+        const catQuery = query(collection(db, 'ah_categories'), orderBy('order', 'asc'));
+        onSnapshot(catQuery, snap => {
+          const cats = [];
+          snap.forEach(d => cats.push({ id: d.id, ...d.data() }));
+          renderCategories(cats, db, isAdmin);
+        });
+      }
+
+      // ── Render category accordion sections ────────────────────
+      function renderCategories(cats, db, isAdmin) {
+        const container = document.getElementById('categorySections');
+        const allCards = getAllCards();
+
+        // Build map: cardId → card element
+        const cardMap = new Map();
+        allCards.forEach(card => {
+          const id = getCardId(card);
+          card.setAttribute('data-card-id', id);
+          cardMap.set(id, card);
+        });
+
+        // Which card IDs are already in a category?
+        const assignedIds = new Set();
+        cats.forEach(cat => (cat.cardIds || []).forEach(id => assignedIds.add(id)));
+
+        // Preserve collapsed state
+        const collapsedState = {};
+        container.querySelectorAll('.category-section[data-cat-id]').forEach(sec => {
+          collapsedState[sec.dataset.catId] = sec.classList.contains('collapsed');
+        });
+
+        container.innerHTML = '';
+
+        cats.forEach(cat => {
+          const catCards = (cat.cardIds || [])
+            .map(id => cardMap.get(id))
+            .filter(Boolean);
+
+          const sec = document.createElement('div');
+          sec.className = 'category-section';
+          sec.dataset.catId = cat.id;
+          if (collapsedState[cat.id]) sec.classList.add('collapsed');
+
+          // Admin action buttons HTML
+          const adminHtml = isAdmin ? `
+            <div class="category-admin-actions">
+              <button class="cat-action-btn rename-btn" title="Rename" data-cat-id="${cat.id}">
+                <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+              </button>
+              <button class="cat-action-btn delete-btn" title="Delete category" data-cat-id="${cat.id}">
+                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+              </button>
+            </div>` : '';
+
+          sec.innerHTML = `
+            <div class="category-header" data-cat-id="${cat.id}">
+              <span class="category-color-dot" style="background:${cat.color}; color:${cat.color};"></span>
+              <span class="category-name">${escHtml(cat.name)}</span>
+              <span class="category-count">${catCards.length}</span>
+              ${adminHtml}
+              <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+            <div class="category-body">
+              <div class="category-cards-grid" data-cat-id="${cat.id}"></div>
+            </div>`;
+
+          const grid = sec.querySelector('.category-cards-grid');
+          catCards.forEach(card => {
+            card.draggable = isAdmin;
+            grid.appendChild(card);
+          });
+
+          container.appendChild(sec);
+
+          if (isAdmin) {
+            // Rename
+            sec.querySelector('.rename-btn')?.addEventListener('click', e => {
+              e.stopPropagation();
+              startRename(sec, cat, db);
+            });
+            // Delete
+            sec.querySelector('.delete-btn')?.addEventListener('click', async e => {
+              e.stopPropagation();
+              if (!confirm(`Delete category "${cat.name}"? Cards will move to Uncategorized.`)) return;
+              await deleteDoc(doc(db, 'ah_categories', cat.id));
+            });
+          }
+        });
+
+        // Update uncategorized grid
+        const uncatGrid = document.getElementById('uncategorizedGrid');
+        const comingSoon = document.getElementById('comingSoonCard');
+        // Move all cards back into uncategorized first (they may have been moved to category grids)
+        // then keep only the unassigned ones there
+        allCards.forEach(card => {
+          const id = card.getAttribute('data-card-id');
+          if (!assignedIds.has(id)) {
+            card.draggable = isAdmin;
+            uncatGrid.insertBefore(card, comingSoon);
+          }
+        });
+
+        // Count
+        const uncatCount = uncatGrid.querySelectorAll('.card:not(.card-coming-soon)').length;
+        document.getElementById('uncategorizedCount').textContent = uncatCount;
+
+        // Hide uncategorized section if empty and not admin
+        const uncatSection = document.getElementById('uncategorizedAccordion');
+        if (!isAdmin && uncatCount === 0) {
+          document.getElementById('uncategorizedSection').style.display = 'none';
+        } else {
+          document.getElementById('uncategorizedSection').style.display = '';
+        }
+
+        if (isAdmin) setupDragDrop(db);
+      }
+
+      // ── Inline rename ─────────────────────────────────────────
+      function startRename(sec, cat, db) {
+        const nameEl = sec.querySelector('.category-name');
+        const input = document.createElement('input');
+        input.className = 'category-name-input';
+        input.value = cat.name;
+        nameEl.replaceWith(input);
+        input.focus();
+        input.select();
+
+        async function save() {
+          const newName = input.value.trim();
+          if (newName && newName !== cat.name) {
+            try {
+              await setDoc(doc(db, 'ah_categories', cat.id), { name: newName }, { merge: true });
+            } catch (_) {}
+          }
+          // Revert to text (snapshot listener will re-render)
+          const span = document.createElement('span');
+          span.className = 'category-name';
+          span.textContent = newName || cat.name;
+          input.replaceWith(span);
+        }
+
+        input.addEventListener('blur', save);
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+          if (e.key === 'Escape') { input.value = cat.name; input.blur(); }
+        });
+      }
+
+      // ── Drag-and-Drop ─────────────────────────────────────────
+      let draggedCard = null;
+      let draggedFromCatId = null;
+
+      function setupDragDrop(db) {
+        // Cards
+        document.querySelectorAll('.card:not(.card-coming-soon)[draggable]').forEach(card => {
+          card.removeEventListener('dragstart', onDragStart);
+          card.removeEventListener('dragend', onDragEnd);
+          card.addEventListener('dragstart', onDragStart);
+          card.addEventListener('dragend', onDragEnd);
+        });
+
+        // Drop zones: all category-cards-grids + uncategorizedGrid
+        document.querySelectorAll('.category-cards-grid').forEach(grid => {
+          grid.removeEventListener('dragover', onDragOver);
+          grid.removeEventListener('dragleave', onDragLeave);
+          grid.removeEventListener('drop', onDrop);
+          grid.addEventListener('dragover', onDragOver);
+          grid.addEventListener('dragleave', onDragLeave);
+          grid.addEventListener('drop', e => onDrop(e, db));
+        });
+
+        // Category section headers as drop zones too
+        document.querySelectorAll('.category-section').forEach(sec => {
+          sec.removeEventListener('dragover', onSectionDragOver);
+          sec.removeEventListener('dragleave', onSectionDragLeave);
+          sec.removeEventListener('drop', onSectionDrop);
+          sec.addEventListener('dragover', onSectionDragOver);
+          sec.addEventListener('dragleave', onSectionDragLeave);
+          sec.addEventListener('drop', e => onSectionDrop(e, db));
+        });
+      }
+
+      function onDragStart(e) {
+        draggedCard = this;
+        draggedFromCatId = this.closest('.category-cards-grid')?.dataset.catId || '__uncategorized__';
+        this.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', this.getAttribute('data-card-id'));
+      }
+
+      function onDragEnd() {
+        if (draggedCard) draggedCard.classList.remove('dragging');
+        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+        draggedCard = null;
+        draggedFromCatId = null;
+      }
+
+      function onDragOver(e) {
+        if (!draggedCard) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        this.closest('.category-section')?.classList.add('drag-over');
+      }
+
+      function onDragLeave(e) {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          this.closest('.category-section')?.classList.remove('drag-over');
+        }
+      }
+
+      async function onDrop(e, db) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (!draggedCard) return;
+        const targetCatId = this.dataset.catId;
+        this.closest('.category-section')?.classList.remove('drag-over');
+        if (targetCatId && targetCatId !== draggedFromCatId) {
+          await moveToCat(db, draggedCard.getAttribute('data-card-id'), draggedFromCatId, targetCatId);
+        }
+      }
+
+      function onSectionDragOver(e) {
+        if (!draggedCard) return;
+        // Only handle if not already handled by a child grid
+        if (e.target.closest('.category-cards-grid')) return;
+        e.preventDefault();
+        this.classList.add('drag-over');
+      }
+
+      function onSectionDragLeave(e) {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          this.classList.remove('drag-over');
+        }
+      }
+
+      async function onSectionDrop(e, db) {
+        // Only handle if not already handled by grid drop (which calls stopPropagation)
+        if (!draggedCard) return;
+        e.preventDefault();
+        this.classList.remove('drag-over');
+        const targetCatId = this.dataset.catId;
+        if (targetCatId && targetCatId !== draggedFromCatId) {
+          await moveToCat(db, draggedCard.getAttribute('data-card-id'), draggedFromCatId, targetCatId);
+        }
+      }
+
+      async function moveToCat(db, cardId, fromCatId, toCatId) {
+        const batch = [];
+
+        // Remove from source category
+        if (fromCatId !== '__uncategorized__') {
+          const fromRef = doc(db, 'ah_categories', fromCatId);
+          const fromSnap = await getDoc(fromRef);
+          if (fromSnap.exists()) {
+            const ids = (fromSnap.data().cardIds || []).filter(id => id !== cardId);
+            batch.push(setDoc(fromRef, { cardIds: ids }, { merge: true }));
+          }
+        }
+
+        // Add to target category
+        if (toCatId !== '__uncategorized__') {
+          const toRef = doc(db, 'ah_categories', toCatId);
+          const toSnap = await getDoc(toRef);
+          if (toSnap.exists()) {
+            const ids = [...new Set([...(toSnap.data().cardIds || []), cardId])];
+            batch.push(setDoc(toRef, { cardIds: ids }, { merge: true }));
+          }
+        }
+
+        await Promise.all(batch);
+      }
+
+      function escHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
     </script>
 
     <!-- â”€â”€ Hamburger menu toggle â”€â”€ -->
