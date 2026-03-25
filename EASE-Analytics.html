@@ -367,6 +367,90 @@
       .pos { color: var(--green); }
       .neg { color: var(--red); }
 
+      /* ── Findings panel ── */
+      .findings-panel {
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+      .findings-panel-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 1rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid var(--border-color);
+      }
+      .findings-panel-icon {
+        width: 28px; height: 28px;
+        border-radius: 7px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 14px;
+        background: rgba(139,92,246,0.15);
+      }
+      .findings-panel-title {
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-primary);
+      }
+      .findings-panel-sub {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-left: auto;
+        font-family: "Space Mono", monospace;
+      }
+      .findings-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+      }
+      .finding-item {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-left: 3px solid transparent;
+        border-radius: 10px;
+        padding: 0.9rem 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+      }
+      .finding-item.finding-neutral { border-left-color: #64748b; }
+      .finding-item.finding-green   { border-left-color: #22c55e; }
+      .finding-item.finding-red     { border-left-color: #ef4444; }
+      .finding-item.finding-amber   { border-left-color: #f59e0b; }
+      .finding-verdict {
+        font-size: 0.65rem;
+        font-family: "Space Mono", monospace;
+        font-weight: 700;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        margin-bottom: 0.1rem;
+      }
+      .finding-neutral .finding-verdict { color: #64748b; }
+      .finding-green   .finding-verdict { color: #22c55e; }
+      .finding-red     .finding-verdict { color: #ef4444; }
+      .finding-amber   .finding-verdict { color: #f59e0b; }
+      .finding-heading {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.3;
+      }
+      .finding-body {
+        font-size: 0.77rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+        margin-top: 0.1rem;
+      }
+      @media (max-width: 900px) {
+        .findings-grid { grid-template-columns: repeat(2, 1fr); }
+      }
+      @media (max-width: 600px) {
+        .findings-grid { grid-template-columns: 1fr; }
+      }
+
       /* ── Note ── */
       .note {
         font-size: 0.75rem;
@@ -737,52 +821,90 @@
       <!-- ═══════════════════════════════════════════════════════════════════ -->
       <div class="tab-pane" id="tab-teacher">
 
-        <div class="kpi-row">
-          <div class="kpi-card">
-            <div class="kpi-value">224</div>
-            <div class="kpi-label">Teachers Assessed</div>
+        <div class="insight-row">
+          <div class="insight-chip">
+            <div class="insight-chip-label">Teachers Assessed (A-EASE)</div>
+            <div class="insight-chip-value" style="color:var(--ease3)">224 teachers · 13 schools</div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-value">77.3</div>
-            <div class="kpi-label">Network Avg Score</div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Network Teacher Avg</div>
+            <div class="insight-chip-value" style="color:var(--ease3)">77.3 <span style="color:var(--text-muted);font-weight:400">/ 100</span></div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-value accent2">Religion</div>
-            <div class="kpi-label">Strongest Alignment (−2.3 pt gap)</div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Strongest Teacher–Student Alignment</div>
+            <div class="insight-chip-value" style="color:var(--ease2)">Religion <span style="color:var(--text-muted);font-weight:400">−2.3 pt gap</span></div>
           </div>
-          <div class="kpi-card">
-            <div class="kpi-value accent3">Mathematics</div>
-            <div class="kpi-label">Widest Gap (−28.1 pts vs students)</div>
+          <div class="insight-chip">
+            <div class="insight-chip-label">Widest Teacher–Student Gap</div>
+            <div class="insight-chip-value" style="color:var(--red)">Mathematics <span style="color:var(--text-muted);font-weight:400">−28.1 pts</span></div>
           </div>
         </div>
 
+        <!-- Findings Panel -->
+        <div class="findings-panel">
+          <div class="findings-panel-header">
+            <div class="findings-panel-icon">🔍</div>
+            <div class="findings-panel-title">What the Data Says — Key Findings</div>
+            <div class="findings-panel-sub">A-EASE Teacher Data × EASE I · II · III Student Outcomes</div>
+          </div>
+          <div class="findings-grid">
+
+            <div class="finding-item finding-neutral">
+              <div class="finding-verdict">Overall</div>
+              <div class="finding-heading">No strong direct relationship</div>
+              <div class="finding-body">School-level Pearson r = 0.13 — a very weak correlation. A school's teacher exam average alone does not reliably predict its students' EASE performance. Other factors (pedagogy, curriculum delivery, school culture) play a bigger role.</div>
+            </div>
+
+            <div class="finding-item finding-green">
+              <div class="finding-verdict">Religion · Best alignment</div>
+              <div class="finding-heading">Teacher mastery reflects student outcomes</div>
+              <div class="finding-body">The only subject where teacher scores (90.6) closely track student results (85–88 across all three EASE cycles). High knowledge and strong student performance co-exist consistently here.</div>
+            </div>
+
+            <div class="finding-item finding-red">
+              <div class="finding-verdict">Mathematics · Biggest concern</div>
+              <div class="finding-heading">High teacher knowledge, low student transfer</div>
+              <div class="finding-body">Teachers average 87.6 in Math — yet students score 59–65 across EASE I–III. A 28-point gap persists network-wide. Fatih Bilingual is the extreme case: teacher avg 98.3, students 47–49. Knowledge is not reaching the classroom.</div>
+            </div>
+
+            <div class="finding-item finding-amber">
+              <div class="finding-verdict">English Extended · Reversed pattern</div>
+              <div class="finding-heading">Students outperform their teachers</div>
+              <div class="finding-body">Teachers scored only 63.8 on the English exam, yet students achieved 76.8 in EASE I and grew to 84.2 by EASE III. Student English development appears driven by exposure and practice — largely independent of teacher exam performance.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Chart 1: Teacher vs Students EASE I–III by subject -->
         <div class="charts-grid" style="grid-template-columns:1fr;">
           <div class="chart-card">
             <div class="chart-card-header">
               <div>
-                <div class="chart-card-title">Teacher Exam Score vs Student EASE I Performance — By Subject</div>
-                <div class="chart-card-sub">Does teacher subject mastery correlate with student outcomes? Direct side-by-side comparison.</div>
+                <div class="chart-card-title">Teacher A-EASE Score vs Student Performance Across All Cycles — By Subject</div>
+                <div class="chart-card-sub">How does teacher subject mastery (A-EASE) compare to student outcomes across EASE I, II, and III?</div>
               </div>
             </div>
             <div class="chart-wrap tall">
               <canvas id="chartTeacherVsStudent"></canvas>
             </div>
-            <p class="note">Teacher scores from EASE I Teacher Assessment (n=224). Student scores are EASE I network averages. English teacher score mapped to English Extended.</p>
+            <p class="note">Teacher scores from A-EASE I (n=224). Student scores are network averages per EASE cycle. English teacher score mapped to English Extended.</p>
           </div>
         </div>
 
+        <!-- Chart 2 + 3 -->
         <div class="charts-grid">
           <div class="chart-card">
             <div class="chart-card-header">
               <div>
-                <div class="chart-card-title">School-Level Correlation</div>
-                <div class="chart-card-sub">Teacher avg vs Student EASE I composite per school — each dot is a school</div>
+                <div class="chart-card-title">School-Level Correlation — Teacher Avg vs Student Composite</div>
+                <div class="chart-card-sub">Each dot is a school. Three colors = three EASE cycles. Does teacher score predict student performance?</div>
               </div>
             </div>
             <div class="chart-wrap tall">
               <canvas id="chartCorrelationScatter"></canvas>
             </div>
-            <p class="note">Pearson r = 0.13 (weak positive). Trend: y = 0.17x + 57.7. n=13 schools.</p>
+            <p class="note">Teacher avg from A-EASE (n=13 schools). Student composite = mean of all available subjects per school per cycle. TNA Fatih excluded (no teacher data).</p>
           </div>
           <div class="chart-card">
             <div class="chart-card-header">
@@ -798,18 +920,19 @@
           </div>
         </div>
 
+        <!-- Chart 4: Math gap across all cycles -->
         <div class="charts-grid" style="grid-template-columns:1fr;">
           <div class="chart-card">
             <div class="chart-card-header">
               <div>
-                <div class="chart-card-title">The Mathematics Gap — School by School</div>
-                <div class="chart-card-sub">Teachers scored dramatically higher in Math than their students. This chart shows how large the gap is at each school.</div>
+                <div class="chart-card-title">The Mathematics Gap — Teacher Scores vs Student Math Across EASE I · II · III</div>
+                <div class="chart-card-sub">Teachers outperform students in Math by a striking margin. Has this gap narrowed over time?</div>
               </div>
             </div>
             <div class="chart-wrap tall">
               <canvas id="chartMathGap"></canvas>
             </div>
-            <p class="note">Gap = Teacher Math Avg − Student EASE I Math Avg. Network: Teacher 87.6 | Student 59.5 → 28.1 pt gap.</p>
+            <p class="note">Teacher Math avg from A-EASE. Student Math per school per cycle from EASE I, II, III datasets. Network avg: Teacher 87.6 | EASE I 59.5 | EASE II 64.8 | EASE III 60.8.</p>
           </div>
         </div>
 
@@ -1494,70 +1617,75 @@
 
     // ─── TEACHER INSIGHTS DATA ───────────────────────────────────────────────
 
-    // Teacher subject averages from EASE I Teacher Assessment
-    const TEACHER_SUBJ_AVG = {
-      'Mathematics':      87.6,
-      'Religion':         90.6,
-      'Biology':          69.5,
-      'Physics':          74.6,
-      'Chemistry':        76.1,
-      'English Extended': 63.8,
-      'Science':          79.8
+    // Teacher subject averages from A-EASE (English teacher → English Extended)
+    const T_SUBJ_LABELS = ['Mathematics','Religion','Biology','Physics','Chemistry','English Extended','Science'];
+    const T_SUBJ_AVG    = [87.6, 90.6, 69.5, 74.6, 76.1, 63.8, 79.8];
+    // Pull matching EASE I / II / III student averages from existing SUBJECT_AVGS
+    const T_SUBJ_E1 = T_SUBJ_LABELS.map(s => SUBJECT_AVGS[s][0]);
+    const T_SUBJ_E2 = T_SUBJ_LABELS.map(s => SUBJECT_AVGS[s][1]);
+    const T_SUBJ_E3 = T_SUBJ_LABELS.map(s => SUBJECT_AVGS[s][2]);
+
+    // Teacher avg per school — keyed to match SCHOOL_DATA names
+    const TEACHER_AVG_BY_SCHOOL = {
+      'Cahaya Rancamaya':             73.8,
+      'Emer Islamic Boarding School': 76.2,
+      'Fatih Bilingual School':       76.2,
+      'Kesatuan Bangsa':              77.8,
+      'Kharisma Bangsa':              79.9,
+      'Mega Islamic School':          71.6,
+      'Pakar Belia Islamic School':   67.8,
+      'Prestige School':              75.5,
+      'Pribadi Bandung':              79.1,
+      'Pribadi Depok':                79.0,
+      'Pribadi Premiere':             73.4,
+      'Semesta 3':                    78.6,
+      'Semesta 1':                    79.3
+      // TNA Fatih: no A-EASE data
     };
 
-    // Student EASE I averages for matching subjects
-    const STUDENT_SUBJ_EASE1 = {
-      'Mathematics':      59.5,
-      'Religion':         88.3,
-      'Biology':          60.4,
-      'Physics':          63.7,
-      'Chemistry':        64.3,
-      'English Extended': 76.8,
-      'Science':          74.6
+    // Teacher math avg per school (from A-EASE raw data)
+    const TEACHER_MATH_BY_SCHOOL = {
+      'Cahaya Rancamaya':             89.2,
+      'Emer Islamic Boarding School': 85.4,
+      'Fatih Bilingual School':       98.3,
+      'Kesatuan Bangsa':              91.0,
+      'Kharisma Bangsa':              92.5,
+      'Mega Islamic School':          82.1,
+      'Pakar Belia Islamic School':   78.5,
+      'Prestige School':              88.9,
+      'Pribadi Bandung':              90.1,
+      'Pribadi Depok':                89.7,
+      'Pribadi Premiere':             84.6,
+      'Semesta 3':                    91.3,
+      'Semesta 1':                    90.2
     };
 
-    // School-level: [teacherAvg, studentEASE1Composite, schoolLabel]
-    const SCHOOL_CORRELATION = [
-      [73.8, 70.4, 'Cahaya Rancamaya'],
-      [76.2, 69.3, 'Emer'],
-      [76.2, 59.2, 'Fatih Bilingual'],
-      [77.8, 74.1, 'Kesatuan Bangsa'],
-      [79.9, 73.6, 'Kharisma'],
-      [71.6, 66.8, 'Mega Mendung'],
-      [67.8, 74.5, 'Pakar'],
-      [75.5, 68.5, 'Prestige'],
-      [79.1, 71.1, 'Pribadi Bandung'],
-      [79.0, 71.6, 'Pribadi Depok'],
-      [73.4, 69.5, 'Pribadi Premiere'],
-      [78.6, 78.6, 'Semesta 3'],
-      [79.3, 69.4, 'Semesta 1']
-    ];
+    // Short display names for schools
+    const SCHOOL_SHORT = {
+      'Cahaya Rancamaya':'Cahaya', 'Emer Islamic Boarding School':'Emer',
+      'Fatih Bilingual School':'Fatih', 'Kesatuan Bangsa':'Kesatuan',
+      'Kharisma Bangsa':'Kharisma', 'Mega Islamic School':'Mega',
+      'Pakar Belia Islamic School':'Pakar', 'Prestige School':'Prestige',
+      'Pribadi Bandung':'Pr.Bandung', 'Pribadi Depok':'Pr.Depok',
+      'Pribadi Premiere':'Pr.Premiere', 'Semesta 3':'Semesta 3', 'Semesta 1':'Semesta 1'
+    };
 
     // Score distribution bands: [label, count, color]
     const SCORE_BANDS = [
-      ['Expert (90–100)',      65, '#8b5cf6'],
-      ['Proficient (80–89)',   47, '#3b82f6'],
-      ['Developing (70–79)',   49, '#10b981'],
-      ['Emerging (60–69)',     27, '#f59e0b'],
-      ['Needs Support (<60)',  36, '#ef4444']
+      ['Expert (90–100)',     65, '#8b5cf6'],
+      ['Proficient (80–89)',  47, '#3b82f6'],
+      ['Developing (70–79)', 49, '#10b981'],
+      ['Emerging (60–69)',   27, '#f59e0b'],
+      ['Needs Support (<60)',36, '#ef4444']
     ];
 
-    // Math gap per school: [schoolLabel, teacherMath, studentMath]
-    const MATH_GAP_DATA = [
-      ['Cahaya Rancamaya',  89.2, 62.0],
-      ['Emer',              85.4, 60.0],
-      ['Fatih Bilingual',   98.3, 49.0],
-      ['Kesatuan Bangsa',   91.0, 63.0],
-      ['Kharisma',          92.5, 65.0],
-      ['Mega Mendung',      82.1, 58.0],
-      ['Pakar',             78.5, 57.0],
-      ['Prestige',          88.9, 61.0],
-      ['Pribadi Bandung',   90.1, 63.0],
-      ['Pribadi Depok',     89.7, 62.0],
-      ['Pribadi Premiere',  84.6, 60.0],
-      ['Semesta 3',         91.3, 67.0],
-      ['Semesta 1',         90.2, 64.0]
-    ];
+    // Helper: composite avg for a school for a given EASE cycle index
+    function schoolComposite(school, ei) {
+      const vals = ['math','religion','biology','physics','chemistry','engCore','engExt','science']
+        .map(k => school[k][ei])
+        .filter(v => v !== null && v !== undefined);
+      return vals.length ? +(vals.reduce((a,b) => a+b, 0) / vals.length).toFixed(1) : null;
+    }
 
     // ─── TEACHER INSIGHTS CHARTS ─────────────────────────────────────────────
 
@@ -1566,29 +1694,43 @@
     function initTeacherCharts() {
       teacherChartsInited = true;
 
-      const subjLabels = Object.keys(TEACHER_SUBJ_AVG);
-
-      // ── Chart 1: Teacher vs Student grouped bar by subject ──
+      // ── Chart 1: Teacher vs Student (EASE I, II, III) by subject — 4 grouped bars ──
       new Chart(document.getElementById('chartTeacherVsStudent'), {
         type: 'bar',
         data: {
-          labels: subjLabels,
+          labels: T_SUBJ_LABELS,
           datasets: [
             {
-              label: 'Teacher Exam Avg',
-              data: subjLabels.map(s => TEACHER_SUBJ_AVG[s]),
-              backgroundColor: 'rgba(139,92,246,0.75)',
+              label: 'Teacher A-EASE',
+              data: T_SUBJ_AVG,
+              backgroundColor: 'rgba(139,92,246,0.80)',
               borderColor: '#8b5cf6',
               borderWidth: 2,
-              borderRadius: 6
+              borderRadius: 5
             },
             {
-              label: 'Student EASE I Avg',
-              data: subjLabels.map(s => STUDENT_SUBJ_EASE1[s]),
+              label: 'Student EASE I',
+              data: T_SUBJ_E1,
               backgroundColor: 'rgba(59,130,246,0.75)',
               borderColor: '#3b82f6',
               borderWidth: 2,
-              borderRadius: 6
+              borderRadius: 5
+            },
+            {
+              label: 'Student EASE II',
+              data: T_SUBJ_E2,
+              backgroundColor: 'rgba(245,158,11,0.75)',
+              borderColor: '#f59e0b',
+              borderWidth: 2,
+              borderRadius: 5
+            },
+            {
+              label: 'Student EASE III',
+              data: T_SUBJ_E3,
+              backgroundColor: 'rgba(139,92,246,0.35)',
+              borderColor: '#a78bfa',
+              borderWidth: 2,
+              borderRadius: 5
             }
           ]
         },
@@ -1597,11 +1739,14 @@
           plugins: {
             legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
             tooltip: {
+              mode: 'index',
               callbacks: {
-                afterBody: (items) => {
-                  if (items.length === 2) {
-                    const gap = items[0].parsed.y - items[1].parsed.y;
-                    return [`Gap: ${gap > 0 ? '+' : ''}${gap.toFixed(1)} pts`];
+                footer: items => {
+                  const teacher = items.find(i => i.datasetIndex === 0);
+                  const e1 = items.find(i => i.datasetIndex === 1);
+                  if (teacher && e1) {
+                    const gap = +(teacher.parsed.y - e1.parsed.y).toFixed(1);
+                    return [`Gap vs EASE I: ${gap > 0 ? '+' : ''}${gap} pts`];
                   }
                   return [];
                 }
@@ -1610,34 +1755,36 @@
           },
           scales: {
             x: { grid: GRID_OPTS, ticks: { color: '#94a3b8' } },
-            y: {
-              grid: GRID_OPTS,
-              min: 40, max: 100,
-              ticks: { color: '#94a3b8', callback: v => v }
-            }
+            y: { grid: GRID_OPTS, min: 40, max: 100, ticks: { color: '#94a3b8' } }
           }
         }
       });
 
-      // ── Chart 2: Scatter — school-level correlation ──
-      const scatterPts = SCHOOL_CORRELATION.map(([tx, sx, label]) => ({ x: tx, y: sx, label }));
-      // Trend line endpoints using y = 0.169x + 57.661
-      const trendLine = [
-        { x: 65, y: 0.169 * 65 + 57.661 },
-        { x: 82, y: 0.169 * 82 + 57.661 }
-      ];
+      // ── Chart 2: Scatter — teacher avg vs student composite, 3 EASE cycles ──
+      const scatterE1 = [], scatterE2 = [], scatterE3 = [];
+      SCHOOL_DATA.forEach(school => {
+        const tx = TEACHER_AVG_BY_SCHOOL[school.name];
+        if (tx === undefined) return; // TNA Fatih — no teacher data
+        const lbl = SCHOOL_SHORT[school.name] || school.name;
+        const c1 = schoolComposite(school, 0);
+        const c2 = schoolComposite(school, 1);
+        const c3 = schoolComposite(school, 2);
+        if (c1 !== null) scatterE1.push({ x: tx, y: c1, label: lbl });
+        if (c2 !== null) scatterE2.push({ x: tx, y: c2, label: lbl });
+        if (c3 !== null) scatterE3.push({ x: tx, y: c3, label: lbl });
+      });
 
-      const labelPlugin = {
+      // Label plugin — draws school names only on EASE I set (index 0)
+      const scatterLabelPlugin = {
         id: 'scatterLabels',
         afterDatasetsDraw(chart) {
           const { ctx } = chart;
-          const meta = chart.getDatasetMeta(0);
+          const meta0 = chart.getDatasetMeta(0);
           ctx.save();
-          ctx.font = '11px DM Sans';
+          ctx.font = '10px DM Sans';
           ctx.fillStyle = '#94a3b8';
-          meta.data.forEach((pt, i) => {
-            const label = scatterPts[i].label;
-            ctx.fillText(label, pt.x + 6, pt.y - 4);
+          meta0.data.forEach((pt, i) => {
+            ctx.fillText(scatterE1[i].label, pt.x + 5, pt.y - 5);
           });
           ctx.restore();
         }
@@ -1648,22 +1795,25 @@
         data: {
           datasets: [
             {
-              label: 'School',
-              data: scatterPts,
-              backgroundColor: 'rgba(139,92,246,0.85)',
-              borderColor: '#8b5cf6',
-              pointRadius: 8,
-              pointHoverRadius: 11
+              label: 'EASE I',
+              data: scatterE1,
+              backgroundColor: 'rgba(59,130,246,0.85)',
+              borderColor: '#3b82f6',
+              pointRadius: 7, pointHoverRadius: 10
             },
             {
-              label: 'Trend line',
-              data: trendLine,
-              type: 'line',
-              borderColor: 'rgba(245,158,11,0.7)',
-              borderWidth: 2,
-              borderDash: [6, 4],
-              pointRadius: 0,
-              fill: false
+              label: 'EASE II',
+              data: scatterE2,
+              backgroundColor: 'rgba(245,158,11,0.85)',
+              borderColor: '#f59e0b',
+              pointRadius: 7, pointHoverRadius: 10
+            },
+            {
+              label: 'EASE III',
+              data: scatterE3,
+              backgroundColor: 'rgba(139,92,246,0.85)',
+              borderColor: '#8b5cf6',
+              pointRadius: 7, pointHoverRadius: 10
             }
           ]
         },
@@ -1672,7 +1822,7 @@
           plugins: {
             legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
             tooltip: {
-              filter: item => item.datasetIndex === 0,
+              filter: item => item.datasetIndex < 3,
               callbacks: {
                 label: ctx => {
                   const d = ctx.raw;
@@ -1684,23 +1834,21 @@
           scales: {
             x: {
               grid: GRID_OPTS,
-              title: { display: true, text: 'Teacher Avg Score', color: '#64748b' },
-              min: 64, max: 83,
-              ticks: { color: '#94a3b8' }
+              title: { display: true, text: 'Teacher A-EASE Avg', color: '#64748b' },
+              min: 64, max: 83, ticks: { color: '#94a3b8' }
             },
             y: {
               grid: GRID_OPTS,
-              title: { display: true, text: 'Student EASE I Composite', color: '#64748b' },
-              min: 56, max: 82,
-              ticks: { color: '#94a3b8' }
+              title: { display: true, text: 'Student Composite Score', color: '#64748b' },
+              min: 54, max: 83, ticks: { color: '#94a3b8' }
             }
           }
         },
-        plugins: [labelPlugin]
+        plugins: [scatterLabelPlugin]
       });
 
       // ── Chart 3: Score distribution doughnut ──
-      const doughnut = new Chart(document.getElementById('chartScoreDist'), {
+      new Chart(document.getElementById('chartScoreDist'), {
         type: 'doughnut',
         data: {
           labels: SCORE_BANDS.map(b => b[0]),
@@ -1725,7 +1873,6 @@
           }
         }
       });
-      // Build custom legend
       const leg = document.getElementById('scoreLegend');
       SCORE_BANDS.forEach(([label, count, color]) => {
         const pct = Math.round(count / 224 * 100);
@@ -1737,47 +1884,54 @@
         leg.appendChild(row);
       });
 
-      // ── Chart 4: Math gap per school ──
-      const mathLabels    = MATH_GAP_DATA.map(r => r[0]);
-      const mathTeacher   = MATH_GAP_DATA.map(r => r[1]);
-      const mathStudent   = MATH_GAP_DATA.map(r => r[2]);
-      const mathGap       = MATH_GAP_DATA.map(r => +(r[1] - r[2]).toFixed(1));
+      // ── Chart 4: Math gap — Teacher vs EASE I + II + III per school ──
+      const mathSchools = SCHOOL_DATA.filter(s => TEACHER_MATH_BY_SCHOOL[s.name] !== undefined);
+      const mLabels  = mathSchools.map(s => SCHOOL_SHORT[s.name] || s.name);
+      const mTeacher = mathSchools.map(s => TEACHER_MATH_BY_SCHOOL[s.name]);
+      const mE1 = mathSchools.map(s => s.math[0]);
+      const mE2 = mathSchools.map(s => s.math[1]);
+      const mE3 = mathSchools.map(s => s.math[2]);
 
       new Chart(document.getElementById('chartMathGap'), {
         type: 'bar',
         data: {
-          labels: mathLabels,
+          labels: mLabels,
           datasets: [
             {
-              label: 'Teacher Math Avg',
-              data: mathTeacher,
-              backgroundColor: 'rgba(139,92,246,0.75)',
+              label: 'Teacher A-EASE Math',
+              data: mTeacher,
+              backgroundColor: 'rgba(139,92,246,0.80)',
               borderColor: '#8b5cf6',
               borderWidth: 2,
-              borderRadius: 6,
+              borderRadius: 5,
               order: 1
             },
             {
-              label: 'Student Math EASE I',
-              data: mathStudent,
+              label: 'Student Math — EASE I',
+              data: mE1,
               backgroundColor: 'rgba(59,130,246,0.75)',
               borderColor: '#3b82f6',
               borderWidth: 2,
-              borderRadius: 6,
+              borderRadius: 5,
               order: 1
             },
             {
-              label: 'Gap',
-              data: mathGap,
-              type: 'line',
+              label: 'Student Math — EASE II',
+              data: mE2,
+              backgroundColor: 'rgba(245,158,11,0.65)',
               borderColor: '#f59e0b',
-              backgroundColor: 'rgba(245,158,11,0.15)',
-              borderWidth: 2.5,
-              pointRadius: 5,
-              pointBackgroundColor: '#f59e0b',
-              fill: false,
-              yAxisID: 'yGap',
-              order: 0
+              borderWidth: 2,
+              borderRadius: 5,
+              order: 1
+            },
+            {
+              label: 'Student Math — EASE III',
+              data: mE3,
+              backgroundColor: 'rgba(139,92,246,0.30)',
+              borderColor: '#a78bfa',
+              borderWidth: 2,
+              borderRadius: 5,
+              order: 1
             }
           ]
         },
@@ -1786,11 +1940,13 @@
           plugins: {
             legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
             tooltip: {
+              mode: 'index',
               callbacks: {
-                afterBody: items => {
-                  const bar = items.filter(i => i.datasetIndex < 2);
-                  if (bar.length === 2) {
-                    return [`Gap: +${(bar[0].parsed.y - bar[1].parsed.y).toFixed(1)} pts`];
+                footer: items => {
+                  const t = items.find(i => i.datasetIndex === 0);
+                  const s = items.find(i => i.datasetIndex === 1);
+                  if (t && s && s.parsed.y !== null) {
+                    return [`Gap vs EASE I: +${(t.parsed.y - s.parsed.y).toFixed(1)} pts`];
                   }
                   return [];
                 }
@@ -1798,19 +1954,12 @@
             }
           },
           scales: {
-            x: { grid: GRID_OPTS, ticks: { color: '#94a3b8', maxRotation: 35 } },
+            x: { grid: GRID_OPTS, ticks: { color: '#94a3b8', maxRotation: 40 } },
             y: {
               grid: GRID_OPTS,
               min: 40, max: 105,
               ticks: { color: '#94a3b8' },
               title: { display: true, text: 'Score', color: '#64748b' }
-            },
-            yGap: {
-              position: 'right',
-              grid: { display: false },
-              min: 10, max: 55,
-              ticks: { color: '#f59e0b', callback: v => '+' + v },
-              title: { display: true, text: 'Gap (pts)', color: '#f59e0b' }
             }
           }
         }
