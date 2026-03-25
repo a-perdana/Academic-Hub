@@ -2895,7 +2895,7 @@
 
         <!-- ══ Uncategorized cards (always visible at bottom) ══ -->
         <div class="uncategorized-section" id="uncategorizedSection">
-          <div class="category-section" id="uncategorizedAccordion">
+          <div class="category-section" id="uncategorizedAccordion" data-cat-id="__uncategorized__">
             <div class="category-header" data-cat-id="__uncategorized__">
               <span class="category-color-dot" style="background:#6b7280; color:#6b7280;"></span>
               <span class="category-name">Uncategorized</span>
@@ -2903,7 +2903,7 @@
               <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
             </div>
             <div class="category-body">
-              <div class="category-cards-grid" id="uncategorizedGrid">
+              <div class="category-cards-grid" id="uncategorizedGrid" data-cat-id="__uncategorized__">
                 <!-- CARDS INJECTED HERE -->
           <!-- School Performance KPI — Semester II data entry -->
           <a
@@ -4902,102 +4902,80 @@
         });
       }
 
-      // ── Drag-and-Drop ─────────────────────────────────────────
+      // ── Drag-and-Drop (event delegation — one listener on document) ──
       let draggedCard = null;
       let draggedFromCatId = null;
+      let dragDropDb = null;
+      let dragInitialised = false;
 
       function setupDragDrop(db) {
-        // Cards
-        document.querySelectorAll('.card:not(.card-coming-soon)[draggable]').forEach(card => {
-          card.removeEventListener('dragstart', onDragStart);
-          card.removeEventListener('dragend', onDragEnd);
-          card.addEventListener('dragstart', onDragStart);
-          card.addEventListener('dragend', onDragEnd);
+        dragDropDb = db;
+
+        // Mark all draggable cards with the attribute (needed for CSS cursor: grab)
+        document.querySelectorAll('.card:not(.card-coming-soon)').forEach(card => {
+          card.setAttribute('draggable', 'true');
         });
 
-        // Drop zones: all category-cards-grids + uncategorizedGrid
-        document.querySelectorAll('.category-cards-grid').forEach(grid => {
-          grid.removeEventListener('dragover', onDragOver);
-          grid.removeEventListener('dragleave', onDragLeave);
-          grid.removeEventListener('drop', onDrop);
-          grid.addEventListener('dragover', onDragOver);
-          grid.addEventListener('dragleave', onDragLeave);
-          grid.addEventListener('drop', e => onDrop(e, db));
+        if (dragInitialised) return; // listeners already on document
+        dragInitialised = true;
+
+        // ── dragstart ────────────────────────────────────────────
+        document.addEventListener('dragstart', e => {
+          const card = e.target.closest('.card:not(.card-coming-soon)');
+          if (!card || !document.body.classList.contains('is-admin')) return;
+          draggedCard = card;
+          draggedFromCatId = card.closest('.category-cards-grid')?.dataset.catId || '__uncategorized__';
+          card.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', card.getAttribute('data-card-id') || '');
         });
 
-        // Category section headers as drop zones too
-        document.querySelectorAll('.category-section').forEach(sec => {
-          sec.removeEventListener('dragover', onSectionDragOver);
-          sec.removeEventListener('dragleave', onSectionDragLeave);
-          sec.removeEventListener('drop', onSectionDrop);
-          sec.addEventListener('dragover', onSectionDragOver);
-          sec.addEventListener('dragleave', onSectionDragLeave);
-          sec.addEventListener('drop', e => onSectionDrop(e, db));
+        // ── dragend ──────────────────────────────────────────────
+        document.addEventListener('dragend', () => {
+          draggedCard?.classList.remove('dragging');
+          document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+          draggedCard = null;
+          draggedFromCatId = null;
         });
-      }
 
-      function onDragStart(e) {
-        draggedCard = this;
-        draggedFromCatId = this.closest('.category-cards-grid')?.dataset.catId || '__uncategorized__';
-        this.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('text/plain', this.getAttribute('data-card-id'));
-      }
+        // ── dragover ─────────────────────────────────────────────
+        document.addEventListener('dragover', e => {
+          if (!draggedCard) return;
+          const zone = e.target.closest('.category-cards-grid, .category-section');
+          if (!zone) return;
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          zone.closest('.category-section')?.classList.add('drag-over');
+        });
 
-      function onDragEnd() {
-        if (draggedCard) draggedCard.classList.remove('dragging');
-        document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
-        draggedCard = null;
-        draggedFromCatId = null;
-      }
+        // ── dragleave ────────────────────────────────────────────
+        document.addEventListener('dragleave', e => {
+          const section = e.target.closest('.category-section');
+          if (!section) return;
+          // Only remove if leaving the section entirely
+          if (!section.contains(e.relatedTarget)) {
+            section.classList.remove('drag-over');
+          }
+        });
 
-      function onDragOver(e) {
-        if (!draggedCard) return;
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-        this.closest('.category-section')?.classList.add('drag-over');
-      }
+        // ── drop ─────────────────────────────────────────────────
+        document.addEventListener('drop', async e => {
+          if (!draggedCard || !dragDropDb) return;
+          const zone = e.target.closest('.category-cards-grid, .category-section');
+          if (!zone) return;
+          e.preventDefault();
+          zone.closest('.category-section')?.classList.remove('drag-over');
 
-      function onDragLeave(e) {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          this.closest('.category-section')?.classList.remove('drag-over');
-        }
-      }
+          // Resolve target category id
+          const targetCatId = zone.dataset.catId
+            || zone.closest('.category-section')?.dataset.catId
+            || '__uncategorized__';
 
-      async function onDrop(e, db) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (!draggedCard) return;
-        const targetCatId = this.dataset.catId;
-        this.closest('.category-section')?.classList.remove('drag-over');
-        if (targetCatId && targetCatId !== draggedFromCatId) {
-          await moveToCat(db, draggedCard.getAttribute('data-card-id'), draggedFromCatId, targetCatId);
-        }
-      }
-
-      function onSectionDragOver(e) {
-        if (!draggedCard) return;
-        // Only handle if not already handled by a child grid
-        if (e.target.closest('.category-cards-grid')) return;
-        e.preventDefault();
-        this.classList.add('drag-over');
-      }
-
-      function onSectionDragLeave(e) {
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-          this.classList.remove('drag-over');
-        }
-      }
-
-      async function onSectionDrop(e, db) {
-        // Only handle if not already handled by grid drop (which calls stopPropagation)
-        if (!draggedCard) return;
-        e.preventDefault();
-        this.classList.remove('drag-over');
-        const targetCatId = this.dataset.catId;
-        if (targetCatId && targetCatId !== draggedFromCatId) {
-          await moveToCat(db, draggedCard.getAttribute('data-card-id'), draggedFromCatId, targetCatId);
-        }
+          if (targetCatId !== draggedFromCatId) {
+            const cardId = draggedCard.getAttribute('data-card-id');
+            await moveToCat(dragDropDb, cardId, draggedFromCatId, targetCatId);
+          }
+        });
       }
 
       async function moveToCat(db, cardId, fromCatId, toCatId) {
