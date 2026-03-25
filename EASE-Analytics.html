@@ -77,16 +77,29 @@
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
-      .back-link {
-        color: var(--text-muted);
-        font-size: 0.8rem;
-        text-decoration: none;
+      .fab-home {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
         display: flex;
         align-items: center;
-        gap: 0.4rem;
-        transition: color 0.2s;
+        justify-content: center;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        transition: background 0.2s, color 0.2s, transform 0.2s;
+        z-index: 1000;
       }
-      .back-link:hover { color: var(--text-secondary); }
+      .fab-home:hover {
+        background: var(--bg-card-hover);
+        color: var(--text-primary);
+        transform: scale(1.08);
+      }
       h1 { font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em; }
       .subtitle { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.4rem; }
 
@@ -387,7 +400,6 @@
           <div class="header-left">
             <span class="badge">Comparative Analytics</span>
           </div>
-          <a href="EASE-III-AssessmentResults.html" class="back-link">← Back to EASE III Results</a>
         </div>
         <h1>EASE Analytics</h1>
         <p class="subtitle">Cross-cycle performance intelligence across EASE I · EASE II · EASE III &mdash; 14 partner schools, 8 subjects, 6 grade levels</p>
@@ -435,6 +447,7 @@
         <button class="tab-btn" data-tab="school">School Tracker</button>
         <button class="tab-btn" data-tab="subject">Subject Analysis</button>
         <button class="tab-btn" data-tab="participation">Participation</button>
+        <button class="tab-btn" data-tab="teacher">Teacher Insights</button>
       </div>
 
       <!-- ════════════════════════════════════════════
@@ -718,6 +731,89 @@
           </div>
         </div>
       </div>
+
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <!-- TEACHER INSIGHTS TAB                                                -->
+      <!-- ═══════════════════════════════════════════════════════════════════ -->
+      <div class="tab-pane" id="tab-teacher">
+
+        <div class="kpi-row">
+          <div class="kpi-card">
+            <div class="kpi-value">224</div>
+            <div class="kpi-label">Teachers Assessed</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value">77.3</div>
+            <div class="kpi-label">Network Avg Score</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value accent2">Religion</div>
+            <div class="kpi-label">Strongest Alignment (−2.3 pt gap)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-value accent3">Mathematics</div>
+            <div class="kpi-label">Widest Gap (−28.1 pts vs students)</div>
+          </div>
+        </div>
+
+        <div class="charts-grid" style="grid-template-columns:1fr;">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Teacher Exam Score vs Student EASE I Performance — By Subject</div>
+                <div class="chart-card-sub">Does teacher subject mastery correlate with student outcomes? Direct side-by-side comparison.</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartTeacherVsStudent"></canvas>
+            </div>
+            <p class="note">Teacher scores from EASE I Teacher Assessment (n=224). Student scores are EASE I network averages. English teacher score mapped to English Extended.</p>
+          </div>
+        </div>
+
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">School-Level Correlation</div>
+                <div class="chart-card-sub">Teacher avg vs Student EASE I composite per school — each dot is a school</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartCorrelationScatter"></canvas>
+            </div>
+            <p class="note">Pearson r = 0.13 (weak positive). Trend: y = 0.17x + 57.7. n=13 schools.</p>
+          </div>
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">Teacher Score Distribution</div>
+                <div class="chart-card-sub">Proficiency band breakdown across all 224 teachers</div>
+              </div>
+            </div>
+            <div class="chart-wrap" style="max-width:300px;margin:0 auto;">
+              <canvas id="chartScoreDist"></canvas>
+            </div>
+            <div id="scoreLegend" style="margin-top:16px;display:flex;flex-direction:column;gap:6px;font-size:13px;"></div>
+          </div>
+        </div>
+
+        <div class="charts-grid" style="grid-template-columns:1fr;">
+          <div class="chart-card">
+            <div class="chart-card-header">
+              <div>
+                <div class="chart-card-title">The Mathematics Gap — School by School</div>
+                <div class="chart-card-sub">Teachers scored dramatically higher in Math than their students. This chart shows how large the gap is at each school.</div>
+              </div>
+            </div>
+            <div class="chart-wrap tall">
+              <canvas id="chartMathGap"></canvas>
+            </div>
+            <p class="note">Gap = Teacher Math Avg − Student EASE I Math Avg. Network: Teacher 87.6 | Student 59.5 → 28.1 pt gap.</p>
+          </div>
+        </div>
+
+      </div><!-- /tab-teacher -->
 
     </div><!-- /dashboard -->
 
@@ -1396,6 +1492,331 @@
       }
     });
 
+    // ─── TEACHER INSIGHTS DATA ───────────────────────────────────────────────
+
+    // Teacher subject averages from EASE I Teacher Assessment
+    const TEACHER_SUBJ_AVG = {
+      'Mathematics':      87.6,
+      'Religion':         90.6,
+      'Biology':          69.5,
+      'Physics':          74.6,
+      'Chemistry':        76.1,
+      'English Extended': 63.8,
+      'Science':          79.8
+    };
+
+    // Student EASE I averages for matching subjects
+    const STUDENT_SUBJ_EASE1 = {
+      'Mathematics':      59.5,
+      'Religion':         88.3,
+      'Biology':          60.4,
+      'Physics':          63.7,
+      'Chemistry':        64.3,
+      'English Extended': 76.8,
+      'Science':          74.6
+    };
+
+    // School-level: [teacherAvg, studentEASE1Composite, schoolLabel]
+    const SCHOOL_CORRELATION = [
+      [73.8, 70.4, 'Cahaya Rancamaya'],
+      [76.2, 69.3, 'Emer'],
+      [76.2, 59.2, 'Fatih Bilingual'],
+      [77.8, 74.1, 'Kesatuan Bangsa'],
+      [79.9, 73.6, 'Kharisma'],
+      [71.6, 66.8, 'Mega Mendung'],
+      [67.8, 74.5, 'Pakar'],
+      [75.5, 68.5, 'Prestige'],
+      [79.1, 71.1, 'Pribadi Bandung'],
+      [79.0, 71.6, 'Pribadi Depok'],
+      [73.4, 69.5, 'Pribadi Premiere'],
+      [78.6, 78.6, 'Semesta 3'],
+      [79.3, 69.4, 'Semesta 1']
+    ];
+
+    // Score distribution bands: [label, count, color]
+    const SCORE_BANDS = [
+      ['Expert (90–100)',      65, '#8b5cf6'],
+      ['Proficient (80–89)',   47, '#3b82f6'],
+      ['Developing (70–79)',   49, '#10b981'],
+      ['Emerging (60–69)',     27, '#f59e0b'],
+      ['Needs Support (<60)',  36, '#ef4444']
+    ];
+
+    // Math gap per school: [schoolLabel, teacherMath, studentMath]
+    const MATH_GAP_DATA = [
+      ['Cahaya Rancamaya',  89.2, 62.0],
+      ['Emer',              85.4, 60.0],
+      ['Fatih Bilingual',   98.3, 49.0],
+      ['Kesatuan Bangsa',   91.0, 63.0],
+      ['Kharisma',          92.5, 65.0],
+      ['Mega Mendung',      82.1, 58.0],
+      ['Pakar',             78.5, 57.0],
+      ['Prestige',          88.9, 61.0],
+      ['Pribadi Bandung',   90.1, 63.0],
+      ['Pribadi Depok',     89.7, 62.0],
+      ['Pribadi Premiere',  84.6, 60.0],
+      ['Semesta 3',         91.3, 67.0],
+      ['Semesta 1',         90.2, 64.0]
+    ];
+
+    // ─── TEACHER INSIGHTS CHARTS ─────────────────────────────────────────────
+
+    let teacherChartsInited = false;
+
+    function initTeacherCharts() {
+      teacherChartsInited = true;
+
+      const subjLabels = Object.keys(TEACHER_SUBJ_AVG);
+
+      // ── Chart 1: Teacher vs Student grouped bar by subject ──
+      new Chart(document.getElementById('chartTeacherVsStudent'), {
+        type: 'bar',
+        data: {
+          labels: subjLabels,
+          datasets: [
+            {
+              label: 'Teacher Exam Avg',
+              data: subjLabels.map(s => TEACHER_SUBJ_AVG[s]),
+              backgroundColor: 'rgba(139,92,246,0.75)',
+              borderColor: '#8b5cf6',
+              borderWidth: 2,
+              borderRadius: 6
+            },
+            {
+              label: 'Student EASE I Avg',
+              data: subjLabels.map(s => STUDENT_SUBJ_EASE1[s]),
+              backgroundColor: 'rgba(59,130,246,0.75)',
+              borderColor: '#3b82f6',
+              borderWidth: 2,
+              borderRadius: 6
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
+            tooltip: {
+              callbacks: {
+                afterBody: (items) => {
+                  if (items.length === 2) {
+                    const gap = items[0].parsed.y - items[1].parsed.y;
+                    return [`Gap: ${gap > 0 ? '+' : ''}${gap.toFixed(1)} pts`];
+                  }
+                  return [];
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS, ticks: { color: '#94a3b8' } },
+            y: {
+              grid: GRID_OPTS,
+              min: 40, max: 100,
+              ticks: { color: '#94a3b8', callback: v => v }
+            }
+          }
+        }
+      });
+
+      // ── Chart 2: Scatter — school-level correlation ──
+      const scatterPts = SCHOOL_CORRELATION.map(([tx, sx, label]) => ({ x: tx, y: sx, label }));
+      // Trend line endpoints using y = 0.169x + 57.661
+      const trendLine = [
+        { x: 65, y: 0.169 * 65 + 57.661 },
+        { x: 82, y: 0.169 * 82 + 57.661 }
+      ];
+
+      const labelPlugin = {
+        id: 'scatterLabels',
+        afterDatasetsDraw(chart) {
+          const { ctx } = chart;
+          const meta = chart.getDatasetMeta(0);
+          ctx.save();
+          ctx.font = '11px DM Sans';
+          ctx.fillStyle = '#94a3b8';
+          meta.data.forEach((pt, i) => {
+            const label = scatterPts[i].label;
+            ctx.fillText(label, pt.x + 6, pt.y - 4);
+          });
+          ctx.restore();
+        }
+      };
+
+      new Chart(document.getElementById('chartCorrelationScatter'), {
+        type: 'scatter',
+        data: {
+          datasets: [
+            {
+              label: 'School',
+              data: scatterPts,
+              backgroundColor: 'rgba(139,92,246,0.85)',
+              borderColor: '#8b5cf6',
+              pointRadius: 8,
+              pointHoverRadius: 11
+            },
+            {
+              label: 'Trend line',
+              data: trendLine,
+              type: 'line',
+              borderColor: 'rgba(245,158,11,0.7)',
+              borderWidth: 2,
+              borderDash: [6, 4],
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
+            tooltip: {
+              filter: item => item.datasetIndex === 0,
+              callbacks: {
+                label: ctx => {
+                  const d = ctx.raw;
+                  return ` ${d.label}  Teacher: ${d.x} | Student: ${d.y}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: GRID_OPTS,
+              title: { display: true, text: 'Teacher Avg Score', color: '#64748b' },
+              min: 64, max: 83,
+              ticks: { color: '#94a3b8' }
+            },
+            y: {
+              grid: GRID_OPTS,
+              title: { display: true, text: 'Student EASE I Composite', color: '#64748b' },
+              min: 56, max: 82,
+              ticks: { color: '#94a3b8' }
+            }
+          }
+        },
+        plugins: [labelPlugin]
+      });
+
+      // ── Chart 3: Score distribution doughnut ──
+      const doughnut = new Chart(document.getElementById('chartScoreDist'), {
+        type: 'doughnut',
+        data: {
+          labels: SCORE_BANDS.map(b => b[0]),
+          datasets: [{
+            data: SCORE_BANDS.map(b => b[1]),
+            backgroundColor: SCORE_BANDS.map(b => b[2]),
+            borderColor: '#0a0f1a',
+            borderWidth: 3,
+            hoverOffset: 8
+          }]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: true,
+          cutout: '62%',
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => ` ${ctx.label}: ${ctx.parsed} teachers (${Math.round(ctx.parsed/224*100)}%)`
+              }
+            }
+          }
+        }
+      });
+      // Build custom legend
+      const leg = document.getElementById('scoreLegend');
+      SCORE_BANDS.forEach(([label, count, color]) => {
+        const pct = Math.round(count / 224 * 100);
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:8px;';
+        row.innerHTML = `<span style="width:12px;height:12px;border-radius:3px;background:${color};flex-shrink:0;"></span>
+          <span style="color:#cbd5e1;">${label}</span>
+          <span style="margin-left:auto;color:#64748b;">${count} (${pct}%)</span>`;
+        leg.appendChild(row);
+      });
+
+      // ── Chart 4: Math gap per school ──
+      const mathLabels    = MATH_GAP_DATA.map(r => r[0]);
+      const mathTeacher   = MATH_GAP_DATA.map(r => r[1]);
+      const mathStudent   = MATH_GAP_DATA.map(r => r[2]);
+      const mathGap       = MATH_GAP_DATA.map(r => +(r[1] - r[2]).toFixed(1));
+
+      new Chart(document.getElementById('chartMathGap'), {
+        type: 'bar',
+        data: {
+          labels: mathLabels,
+          datasets: [
+            {
+              label: 'Teacher Math Avg',
+              data: mathTeacher,
+              backgroundColor: 'rgba(139,92,246,0.75)',
+              borderColor: '#8b5cf6',
+              borderWidth: 2,
+              borderRadius: 6,
+              order: 1
+            },
+            {
+              label: 'Student Math EASE I',
+              data: mathStudent,
+              backgroundColor: 'rgba(59,130,246,0.75)',
+              borderColor: '#3b82f6',
+              borderWidth: 2,
+              borderRadius: 6,
+              order: 1
+            },
+            {
+              label: 'Gap',
+              data: mathGap,
+              type: 'line',
+              borderColor: '#f59e0b',
+              backgroundColor: 'rgba(245,158,11,0.15)',
+              borderWidth: 2.5,
+              pointRadius: 5,
+              pointBackgroundColor: '#f59e0b',
+              fill: false,
+              yAxisID: 'yGap',
+              order: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#cbd5e1', font: { family: 'DM Sans' } } },
+            tooltip: {
+              callbacks: {
+                afterBody: items => {
+                  const bar = items.filter(i => i.datasetIndex < 2);
+                  if (bar.length === 2) {
+                    return [`Gap: +${(bar[0].parsed.y - bar[1].parsed.y).toFixed(1)} pts`];
+                  }
+                  return [];
+                }
+              }
+            }
+          },
+          scales: {
+            x: { grid: GRID_OPTS, ticks: { color: '#94a3b8', maxRotation: 35 } },
+            y: {
+              grid: GRID_OPTS,
+              min: 40, max: 105,
+              ticks: { color: '#94a3b8' },
+              title: { display: true, text: 'Score', color: '#64748b' }
+            },
+            yGap: {
+              position: 'right',
+              grid: { display: false },
+              min: 10, max: 55,
+              ticks: { color: '#f59e0b', callback: v => '+' + v },
+              title: { display: true, text: 'Gap (pts)', color: '#f59e0b' }
+            }
+          }
+        }
+      });
+    }
+
     // ─── TAB SWITCHING ───────────────────────────────────────────────────────
 
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1412,6 +1833,9 @@
         if (this.dataset.tab === 'subject' && !chartSubjectGrade) {
           renderSubjectAnalysis('English Extended');
         }
+        if (this.dataset.tab === 'teacher' && !teacherChartsInited) {
+          initTeacherCharts();
+        }
       });
     });
 
@@ -1423,5 +1847,8 @@
     }, 100);
 
     </script>
+  <a href="index.html" class="fab-home" title="Home">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+  </a>
   </body>
 </html>
