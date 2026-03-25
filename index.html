@@ -5186,15 +5186,12 @@
           }
         }
 
+        const abortCtrl = new AbortController();
+
         function closeModal() {
           modal.classList.remove('open');
           abortCtrl.abort();
-          saveBtn.removeEventListener('click', save);
-          document.getElementById('manageCatCancel').removeEventListener('click', closeModal);
-          document.getElementById('manageCatClose').removeEventListener('click', closeModal);
         }
-
-        const abortCtrl = new AbortController();
         saveBtn.disabled = false;
         saveBtn.addEventListener('click', save, { signal: abortCtrl.signal });
         document.getElementById('manageCatCancel').addEventListener('click', closeModal, { signal: abortCtrl.signal });
