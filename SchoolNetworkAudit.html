@@ -985,8 +985,19 @@
             tests: [
               { name: "TikTok",     urls: ["tiktok.com","www.tiktok.com"],          pts: 4, critical: true,  attempts: 1 },
               { name: "Instagram",  urls: ["instagram.com","www.instagram.com"],    pts: 4, critical: true,  attempts: 1 },
-              { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],           pts: 4, critical: true,  attempts: 1 },
-              { name: "Facebook",   urls: ["facebook.com","www.facebook.com"],            pts: 2, critical: false, attempts: 1 },
+              { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],      pts: 4, critical: true,  attempts: 1 },
+              { name: "Facebook",   urls: ["facebook.com","www.facebook.com"],      pts: 2, critical: false, attempts: 1 },
+              { name: "Discord (Student Chat Risk)",  urls: ["discord.com","www.discord.com"],   pts: 3, critical: true,  attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels — should be blocked on school WiFi" },
+              { name: "Telegram (Unmoderated Groups)",urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true,  attempts: 1, info: "Telegram has uncensored channels with adult and extremist content — no content moderation" },
+              { name: "Reddit (NSFW Content)",        urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true,  attempts: 1, info: "Reddit hosts adult subreddits accessible without login — DNS filtering is the only effective block" },
+            ],
+          },
+          {
+            cat: "⚠️ Platforms With Built-In Adult Content",
+            tests: [
+              { name: "X / Twitter (Adult Videos)", urls: ["x.com","twitter.com"],         pts: 5, critical: true, attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering (1.1.1.3 or OpenDNS) stops this" },
+              { name: "YouTube Restricted Mode DNS", urls: ["restrict.youtube.com"],        pts: 6, critical: true, attempts: 1, invertLogic: true, info: "If restrict.youtube.com is reachable, your router is NOT enforcing YouTube Restricted Mode via DNS override. Set your DNS to force restrict.youtube.com for all devices." },
+              { name: "Twitch (Unmoderated Streams)",urls: ["twitch.tv","www.twitch.tv"],   pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams — consider blocking if not used for education" },
             ],
           },
           {
@@ -1048,8 +1059,19 @@
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 1 },
-              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],   pts: 3, critical: true,  attempts: 1 },
+              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],   pts: 2, critical: false, attempts: 1 },
+              { name: "Discord (Student Chat Risk)",   urls: ["discord.com","www.discord.com"],   pts: 3, critical: true, attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels" },
+              { name: "Telegram (Unmoderated Groups)", urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true, attempts: 1, info: "Telegram has uncensored channels with adult and extremist content" },
+              { name: "Reddit (NSFW Content)",         urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true, attempts: 1, info: "Reddit hosts adult subreddits accessible without login" },
+            ],
+          },
+          {
+            cat: "⚠️ Platforms With Built-In Adult Content",
+            tests: [
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],        pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],       pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
+              { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"],  pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
@@ -1111,8 +1133,19 @@
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 1 },
-              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],   pts: 3, critical: true,  attempts: 1 },
+              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],   pts: 2, critical: false, attempts: 1 },
+              { name: "Discord (Student Chat Risk)",   urls: ["discord.com","www.discord.com"],   pts: 3, critical: true, attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels" },
+              { name: "Telegram (Unmoderated Groups)", urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true, attempts: 1, info: "Telegram has uncensored channels with adult and extremist content" },
+              { name: "Reddit (NSFW Content)",         urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true, attempts: 1, info: "Reddit hosts adult subreddits accessible without login" },
+            ],
+          },
+          {
+            cat: "⚠️ Platforms With Built-In Adult Content",
+            tests: [
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],      pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
+              { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"], pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
@@ -1167,7 +1200,18 @@
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 4, critical: true, attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 4, critical: true, attempts: 1 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 4, critical: true, attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],   pts: 4, critical: true, attempts: 1 },
+              { name: "Discord (Student Chat Risk)",   urls: ["discord.com","www.discord.com"],   pts: 3, critical: true, attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels" },
+              { name: "Telegram (Unmoderated Groups)", urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true, attempts: 1, info: "Telegram has uncensored channels with adult and extremist content" },
+              { name: "Reddit (NSFW Content)",         urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true, attempts: 1, info: "Reddit hosts adult subreddits accessible without login" },
+            ],
+          },
+          {
+            cat: "⚠️ Platforms With Built-In Adult Content",
+            tests: [
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],      pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
+              { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"], pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
@@ -1677,10 +1721,23 @@
                 </div>
               </div>
 
-              <div style="background:#fefce8;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;font-size:12px;color:#78350f;line-height:1.6;">
+              <div style="background:#fefce8;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;font-size:12px;color:#78350f;line-height:1.6;margin-bottom:12px;">
                 <strong>How to apply:</strong> Router admin panel → WAN/LAN Settings → DNS Server → enter the numbers above → Save → Restart router.
                 All devices on the WiFi are protected instantly — no software installation needed on student devices.
-                <br><strong>This also blocks:</strong> pornography sites, gambling, drug sites, and reduces malware risk significantly.
+                <br><strong>This also blocks:</strong> pornography sites, gambling, drug sites, Discord NSFW, Reddit adult content, and reduces malware risk significantly.
+              </div>
+
+              <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:10px;padding:14px 16px;">
+                <div style="font-size:14px;font-weight:800;color:#1e40af;margin-bottom:8px;">📺 Bonus: Force YouTube Safe Mode for All Devices</div>
+                <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
+                  YouTube cannot be simply blocked — it is an essential educational tool. But its algorithm can show inappropriate content.
+                  <strong>YouTube Restricted Mode</strong> filters out mature content and can be enforced at the router level so students cannot turn it off.<br><br>
+                  <strong>How:</strong> In your router's DNS settings, add a custom DNS entry:<br>
+                  <span style="font-family:monospace;background:#dbeafe;padding:4px 8px;border-radius:4px;display:inline-block;margin:4px 0;font-size:13px;font-weight:700;">youtube.com → restrict.youtube.com</span><br>
+                  This tells every device on your WiFi to always open YouTube in Restricted Mode — students cannot bypass it even in browser settings.
+                  <br><br>
+                  <strong>Also covers:</strong> youtu.be, m.youtube.com, youtubei.googleapis.com
+                </div>
               </div>
             </div>
           </div>`;
