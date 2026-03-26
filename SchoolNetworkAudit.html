@@ -1283,10 +1283,17 @@
         const failed  = testResults.filter((r) => r.status === "fail").length;
         const percent = Math.round((passed / testResults.length) * 100);
 
-        document.getElementById("scoreNum").textContent = totalScore;
+        // Normalize score to 100 regardless of raw point total
+        const maxPossible = testResults.reduce((sum, r) => sum + r.pts, 0);
+        const normalizedScore = maxPossible > 0 ? Math.min(100, Math.round((totalScore / maxPossible) * 100)) : 0;
+
+        document.getElementById("scoreNum").textContent = normalizedScore;
         document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}⚡)` : "");
         document.getElementById("failCount").textContent = failed;
         document.getElementById("percent").textContent = percent + "%";
+
+        // Store normalized for grade/report use
+        totalScore = normalizedScore;
 
         const grade = document.getElementById("grade");
         let gradeText, gradeClass;
