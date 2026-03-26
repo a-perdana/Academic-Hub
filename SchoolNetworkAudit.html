@@ -752,9 +752,9 @@
         // OpenVPN: 1194/UDP (test TCP too as many run dual-stack), 443/TCP (common fallback)
         // WireGuard: 51820/UDP (test server-side TCP connect will timeout — still informative)
         const VPN_PORT_TESTS = [
-          { host: "vpn.mullvad.net",   port: 1194 },
-          { host: "vpn.mullvad.net",   port: 51820 },
-          { host: "vpn.nordvpn.com",   port: 1194 },
+          { host: "193.138.218.74",  port: 1194  },  // Mullvad OpenVPN
+          { host: "193.138.218.74",  port: 51820 },  // Mullvad WireGuard
+          { host: "37.120.219.218",  port: 1194  },  // NordVPN OpenVPN
         ];
         let openCount = 0;
         const details = [];
