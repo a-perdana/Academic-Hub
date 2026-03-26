@@ -391,36 +391,34 @@
               "Engineering (all disciplines), Computer Science, Architecture, Data Science, Technology Innovation, Applied Sciences",
             universityPrograms:
               "Engineering, Computer Science, Information Technology, Applied Physics, Robotics, Aerospace",
-            mandatory: [
-              {
-                code: "9709",
-                name: "Mathematics",
-                description:
-                  "Essential foundation for all technical and engineering programs.",
-              },
-            ],
             subjects: [
               {
                 code: "9702",
                 name: "Physics",
+                gradeGroup: "G-I",
+                pathTags: ["engineering"],
                 description:
                   "Study mechanics, electricity, thermodynamics, and modern physics at advanced level.",
               },
               {
-                code: "9618",
-                name: "Computer Science",
-                description:
-                  "Advanced programming, algorithms, data structures, and computational systems.",
-              },
-              {
                 code: "9701",
                 name: "Chemistry",
+                gradeGroup: "G-I",
+                pathTags: ["engineering", "medical"],
                 description:
                   "In-depth chemistry for engineering applications and materials science.",
               },
               {
+                code: "9618",
+                name: "Computer Science",
+                pathTags: [],
+                description:
+                  "Advanced programming, algorithms, data structures, and computational systems.",
+              },
+              {
                 code: "9626",
                 name: "Information Technology",
+                pathTags: [],
                 description:
                   "Practical IT systems, networks, and digital technology management.",
               },
@@ -434,30 +432,27 @@
               "Business Management, Economics, Finance, Investment Banking, Consulting, Entrepreneurship, Business Analytics",
             universityPrograms:
               "Business Administration, Economics, Finance, Accounting, Management, International Business",
-            mandatory: [
-              {
-                code: "9709",
-                name: "Mathematics",
-                description:
-                  "Critical for quantitative analysis in business and economics.",
-              },
-            ],
             subjects: [
-              {
-                code: "9609",
-                name: "Business",
-                description:
-                  "Business strategy, management, marketing, and organizational behavior.",
-              },
               {
                 code: "9708",
                 name: "Economics",
+                gradeGroup: "G-III",
+                pathTags: ["business"],
                 description:
                   "Microeconomics, macroeconomics, and economic theory at advanced level.",
               },
               {
+                code: "9609",
+                name: "Business",
+                gradeGroup: "G-III",
+                pathTags: ["business"],
+                description:
+                  "Business strategy, management, marketing, and organizational behavior.",
+              },
+              {
                 code: "9706",
                 name: "Accounting",
+                pathTags: [],
                 description:
                   "Financial accounting, management accounting, and business finance.",
               },
@@ -471,30 +466,27 @@
               "Medicine, Dentistry, Pharmacy, Biomedical Sciences, Biotechnology, Neuroscience, Medical Research",
             universityPrograms:
               "Medicine, Biomedical Sciences, Pharmacy, Biotechnology, Biochemistry, Molecular Biology",
-            mandatory: [
-              {
-                code: "9709",
-                name: "Mathematics",
-                description:
-                  "Required for scientific analysis and medical research.",
-              },
-            ],
             subjects: [
-              {
-                code: "9701",
-                name: "Chemistry",
-                description:
-                  "Essential for medicine - covers biochemistry, organic, and pharmaceutical chemistry.",
-              },
               {
                 code: "9700",
                 name: "Biology",
+                gradeGroup: "G-I",
+                pathTags: ["medical"],
                 description:
                   "Comprehensive life sciences - human biology, genetics, and cellular processes.",
               },
               {
+                code: "9701",
+                name: "Chemistry",
+                gradeGroup: "G-I",
+                pathTags: ["engineering", "medical"],
+                description:
+                  "Essential for medicine - covers biochemistry, organic, and pharmaceutical chemistry.",
+              },
+              {
                 code: "9990",
                 name: "Psychology",
+                pathTags: [],
                 description:
                   "Understanding human behavior, mental processes, and psychological health.",
               },
@@ -508,53 +500,53 @@
               "Law, International Relations, Psychology, Social Work, Policy Analysis, Research, Education, Journalism",
             universityPrograms:
               "Law, Psychology, Economics, Political Science, International Relations, Sociology, Philosophy",
-            mandatory: [
-              {
-                code: "9709",
-                name: "Mathematics",
-                description: "Supports analytical and research skills.",
-              },
-            ],
             subjects: [
+              {
+                code: "9696",
+                name: "Geography",
+                pathTags: ["social"],
+                description:
+                  "Physical and human geography with fieldwork and analysis.",
+              },
+              {
+                code: "9489",
+                name: "History",
+                pathTags: ["social"],
+                description:
+                  "Study historical analysis, interpretation, and research methods.",
+              },
               {
                 code: "9708",
                 name: "Economics",
+                pathTags: [],
                 description:
                   "Economic theory and its application to social policy and global issues.",
               },
               {
                 code: "9990",
                 name: "Psychology",
+                pathTags: [],
                 description:
                   "Scientific study of mind and behavior for humanities students.",
               },
               {
-                code: "9489",
-                name: "History",
-                description:
-                  "Study historical analysis, interpretation, and research methods.",
-              },
-              {
-                code: "9696",
-                name: "Geography",
-                description:
-                  "Physical and human geography with fieldwork and analysis.",
-              },
-              {
                 code: "9695",
                 name: "English Literature",
+                pathTags: [],
                 description:
                   "Advanced literary analysis and critical interpretation.",
               },
               {
                 code: "9699",
                 name: "Sociology",
+                pathTags: [],
                 description:
                   "Study of society, social structures, and human behavior.",
               },
               {
                 code: "9084",
                 name: "Law",
+                pathTags: [],
                 description: "Introduction to legal systems and jurisprudence.",
               },
             ],
@@ -566,18 +558,6 @@
           description:
             "These subjects can complement any pathway and strengthen university applications.",
           subjects: [
-            {
-              code: "9239",
-              name: "Global Perspectives & Research",
-              description:
-                "Develop research skills and critical analysis of global issues.",
-            },
-            {
-              code: "8021",
-              name: "English General Paper",
-              description:
-                "Advanced English communication and general knowledge.",
-            },
             {
               code: "9093",
               name: "English Language",
@@ -1482,42 +1462,73 @@
                         </div>
                       </div>
 
-                      {/* Mandatory Mathematics Section */}
+                      {/* Mandatory Subjects Section */}
                       <div className="mb-6">
                         <h3 className="font-bold text-2xl mb-4 text-gray-800">
-                          Mandatory Subject (All Students)
+                          Mandatory Subjects (All Students)
                         </h3>
                         <div className="bg-red-50 p-4 rounded-lg mb-4 border-2 border-red-200">
                           <p className="text-gray-700 font-semibold">
-                            Mathematics is required for ALL AS/A Level students
-                            regardless of pathway.
+                            These three subjects are required for ALL AS/A Level
+                            students regardless of pathway.
                           </p>
                         </div>
-                        <div className="bg-white border-2 border-red-300 rounded-xl p-5 shadow-sm">
-                          <div className="flex items-start gap-3">
-                            <CheckCircle2
-                              className="text-red-600 flex-shrink-0 mt-1"
-                              size={28}
-                            />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2 mb-2">
-                                <span className="font-bold text-xl text-gray-800">
-                                  Mathematics
-                                </span>
-                                <span className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded font-semibold">
-                                  9709
-                                </span>
-                                <span className="text-xs px-3 py-1 bg-red-600 text-white rounded font-bold">
-                                  MANDATORY
-                                </span>
+                        <div className="space-y-3">
+                          {[
+                            {
+                              name: "English General Paper",
+                              code: "8021",
+                              gradeGroup: "G-IV",
+                              description:
+                                "Advanced English communication, critical thinking, and general knowledge across disciplines.",
+                            },
+                            {
+                              name: "Mathematics",
+                              code: "9709",
+                              gradeGroup: "G-I",
+                              description:
+                                "Pure mathematics, mechanics, and statistics at university preparation level. Essential for all pathways.",
+                            },
+                            {
+                              name: "Global Perspectives & Research",
+                              code: "9239",
+                              description:
+                                "Develop research skills and critical analysis of global issues. Builds academic writing and independent inquiry.",
+                            },
+                          ].map((subject) => (
+                            <div
+                              key={subject.code}
+                              className="bg-white border-2 border-red-300 rounded-xl p-5 shadow-sm"
+                            >
+                              <div className="flex items-start gap-3">
+                                <CheckCircle2
+                                  className="text-red-600 flex-shrink-0 mt-1"
+                                  size={28}
+                                />
+                                <div className="flex-1">
+                                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                                    <span className="font-bold text-xl text-gray-800">
+                                      {subject.name}
+                                    </span>
+                                    <span className="text-sm px-3 py-1 bg-red-100 text-red-700 rounded font-semibold">
+                                      {subject.code}
+                                    </span>
+                                    {subject.gradeGroup && (
+                                      <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded font-mono">
+                                        {subject.gradeGroup}
+                                      </span>
+                                    )}
+                                    <span className="text-xs px-3 py-1 bg-red-600 text-white rounded font-bold">
+                                      MANDATORY
+                                    </span>
+                                  </div>
+                                  <p className="text-gray-700">
+                                    {subject.description}
+                                  </p>
+                                </div>
                               </div>
-                              <p className="text-gray-700">
-                                Pure mathematics, mechanics, and statistics at
-                                university preparation level. Essential for all
-                                pathways.
-                              </p>
                             </div>
-                          </div>
+                          ))}
                         </div>
                       </div>
 
@@ -1644,13 +1655,23 @@
                                     )}
                                   </div>
                                   <div className="flex-1">
-                                    <div className="flex items-center gap-2 mb-2">
+                                    <div className="flex flex-wrap items-center gap-2 mb-2">
                                       <span className="font-bold text-lg text-gray-800">
                                         {subject.name}
                                       </span>
                                       <span className="text-sm px-2 py-1 bg-gray-100 text-gray-700 rounded">
                                         {subject.code}
                                       </span>
+                                      {subject.gradeGroup && (
+                                        <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded font-mono">
+                                          {subject.gradeGroup}
+                                        </span>
+                                      )}
+                                      {subject.pathTags && subject.pathTags.map((tag) => (
+                                        <span key={tag} className={`text-xs px-2 py-1 rounded font-semibold border ${pathwayColors[tag].bg} ${pathwayColors[tag].text} ${pathwayColors[tag].border}`}>
+                                          {pathwayColors[tag].label}
+                                        </span>
+                                      ))}
                                       {isSelected && (
                                         <span className="text-xs px-2 py-1 bg-indigo-100 text-indigo-700 rounded font-semibold">
                                           SELECTED
