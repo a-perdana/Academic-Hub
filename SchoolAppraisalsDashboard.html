@@ -41,6 +41,7 @@ const ComprehensiveDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedPriority, setSelectedPriority] = useState("all");
   const [expandedCards, setExpandedCards] = useState({});
+  const [openGroups, setOpenGroups] = useState({ "📊 Data": true });
 
   // Data structures (same as before)
   const dashboardData = {
@@ -1611,57 +1612,91 @@ const ComprehensiveDashboard = () => {
           ]},
         ].map((section) => {
           const isGroupActive = section.tabs.some(t => t.id === activeTab);
+          const isOpen = openGroups[section.group] || isGroupActive;
+          const toggleGroup = () => setOpenGroups(prev => ({ ...prev, [section.group]: !isOpen }));
           return (
             <div key={section.group} style={{
               background: "#fff",
               borderRadius: "16px",
-              padding: "16px",
+              overflow: "hidden",
               boxShadow: isGroupActive
                 ? `0 4px 20px ${section.color}44`
                 : "0 2px 10px rgba(0,0,0,0.08)",
               border: isGroupActive ? `2px solid ${section.color}66` : "2px solid transparent",
               transition: "all 0.3s",
             }}>
-              <div style={{
-                fontSize: "11px",
-                fontWeight: "800",
-                color: section.color,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                marginBottom: "10px",
-                paddingBottom: "8px",
-                borderBottom: `2px solid ${section.color}22`,
-              }}>
-                {section.group}
+              {/* Grup başlığı — tıklanabilir */}
+              <div
+                onClick={toggleGroup}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "14px 16px",
+                  cursor: "pointer",
+                  background: isOpen ? `${section.color}11` : "transparent",
+                  borderBottom: isOpen ? `2px solid ${section.color}22` : "2px solid transparent",
+                  transition: "all 0.25s",
+                  userSelect: "none",
+                }}
+              >
+                <span style={{
+                  fontSize: "11px",
+                  fontWeight: "800",
+                  color: section.color,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                }}>
+                  {section.group}
+                </span>
+                <span style={{
+                  fontSize: "12px",
+                  color: section.color,
+                  fontWeight: "700",
+                  transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
+                  transition: "transform 0.25s",
+                  display: "inline-block",
+                }}>
+                  ▾
+                </span>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {section.tabs.map((tab) => {
-                  const isActive = activeTab === tab.id;
-                  return (
-                    <button
-                      key={tab.id}
-                      onClick={() => setActiveTab(tab.id)}
-                      style={{
-                        width: "100%",
-                        padding: "8px 14px",
-                        borderRadius: "10px",
-                        fontWeight: isActive ? "700" : "500",
-                        fontSize: "13px",
-                        cursor: "pointer",
-                        border: "none",
-                        textAlign: "left",
-                        transition: "all 0.2s",
-                        background: isActive
-                          ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
-                          : "transparent",
-                        color: isActive ? "#fff" : "#6b7280",
-                        boxShadow: isActive ? `0 4px 12px ${section.color}55` : "none",
-                      }}
-                    >
-                      {tab.label}
-                    </button>
-                  );
-                })}
+
+              {/* Tab listesi — açılır/kapanır */}
+              <div style={{
+                maxHeight: isOpen ? "400px" : "0px",
+                overflow: "hidden",
+                transition: "max-height 0.3s ease",
+                padding: isOpen ? "10px 12px 12px" : "0 12px",
+              }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  {section.tabs.map((tab) => {
+                    const isActive = activeTab === tab.id;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        style={{
+                          width: "100%",
+                          padding: "8px 14px",
+                          borderRadius: "10px",
+                          fontWeight: isActive ? "700" : "500",
+                          fontSize: "13px",
+                          cursor: "pointer",
+                          border: "none",
+                          textAlign: "left",
+                          transition: "all 0.2s",
+                          background: isActive
+                            ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
+                            : "transparent",
+                          color: isActive ? "#fff" : "#6b7280",
+                          boxShadow: isActive ? `0 4px 12px ${section.color}55` : "none",
+                        }}
+                      >
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           );
