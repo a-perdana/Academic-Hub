@@ -963,6 +963,10 @@
           <div class="stat-card"><h3>Average Satisfaction</h3><div class="value">${avgRating}/5.0</div><div class="subtext">${getPerformanceLabel(avgRating)}</div></div>
           <div class="stat-card"><h3>Would Recommend</h3><div class="value">${avgRec}%</div><div class="subtext">Yes, definitely or probably</div></div>
           <div class="stat-card"><h3>Schools Shown</h3><div class="value">${numSchools}</div><div class="subtext">of ${Object.keys(surveyData.schools).length} total</div></div>`;
+        const totalAll = Object.values(surveyData.schools).reduce((s,v)=>s+v.total_responses,0);
+        const totalSchools = Object.keys(surveyData.schools).length;
+        document.getElementById('participationStats').textContent =
+          `${totalAll} Students Responded | ${totalSchools} out of 14 Schools (${((totalSchools/14)*100).toFixed(1)}% Participation)`;
       }
 
       function renderHeatmapFiltered(schools) {
