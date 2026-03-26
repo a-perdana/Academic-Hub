@@ -1579,22 +1579,22 @@ const ComprehensiveDashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div style={{ marginBottom: "40px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "40px" }}>
         {[
-          { group: "📊 Data", tabs: [
+          { group: "📊 Data", color: "#667eea", tabs: [
             { id: "overview", label: "Overview" },
             { id: "schools", label: "Schools" },
             { id: "subjects", label: "Subjects" },
             { id: "appraisers", label: "Appraisers" },
             { id: "meetings", label: "Meetings" },
           ]},
-          { group: "🔍 Findings", tabs: [
+          { group: "🔍 Findings", color: "#f093fb", tabs: [
             { id: "findings", label: "Findings" },
             { id: "compliance", label: "Compliance" },
             { id: "teaching", label: "Teaching" },
             { id: "expectations", label: "Expectations" },
           ]},
-          { group: "⚡ Strategic", tabs: [
+          { group: "⚡ Strategic", color: "#f5576c", tabs: [
             { id: "strategic", label: "Strategic" },
             { id: "priorities", label: "Priorities" },
             { id: "gaps", label: "Gaps" },
@@ -1602,31 +1602,70 @@ const ComprehensiveDashboard = () => {
             { id: "roadmap", label: "Roadmap" },
             { id: "discussion", label: "Discussion" },
           ]},
-          { group: "🎓 Framework", tabs: [
+          { group: "🎓 Framework", color: "#43e97b", tabs: [
             { id: "pdframework", label: "PD System" },
             { id: "network", label: "Network" },
             { id: "cambridge", label: "Cambridge" },
             { id: "islamic", label: "Islamic" },
             { id: "data", label: "Data Rhythm" },
           ]},
-        ].map((section) => (
-          <div key={section.group} style={{ marginBottom: "12px" }}>
-            <div style={{ fontSize: "11px", fontWeight: "700", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "8px", paddingLeft: "4px" }}>
-              {section.group}
+        ].map((section) => {
+          const isGroupActive = section.tabs.some(t => t.id === activeTab);
+          return (
+            <div key={section.group} style={{
+              background: "#fff",
+              borderRadius: "16px",
+              padding: "16px",
+              boxShadow: isGroupActive
+                ? `0 4px 20px ${section.color}44`
+                : "0 2px 10px rgba(0,0,0,0.08)",
+              border: isGroupActive ? `2px solid ${section.color}66` : "2px solid transparent",
+              transition: "all 0.3s",
+            }}>
+              <div style={{
+                fontSize: "11px",
+                fontWeight: "800",
+                color: section.color,
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                marginBottom: "10px",
+                paddingBottom: "8px",
+                borderBottom: `2px solid ${section.color}22`,
+              }}>
+                {section.group}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                {section.tabs.map((tab) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      style={{
+                        width: "100%",
+                        padding: "8px 14px",
+                        borderRadius: "10px",
+                        fontWeight: isActive ? "700" : "500",
+                        fontSize: "13px",
+                        cursor: "pointer",
+                        border: "none",
+                        textAlign: "left",
+                        transition: "all 0.2s",
+                        background: isActive
+                          ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
+                          : "transparent",
+                        color: isActive ? "#fff" : "#6b7280",
+                        boxShadow: isActive ? `0 4px 12px ${section.color}55` : "none",
+                      }}
+                    >
+                      {tab.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
-            <div style={styles.tabContainer}>
-              {section.tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={styles.tab(activeTab === tab.id)}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* ORIGINAL OVERVIEW TAB */}
