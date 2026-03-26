@@ -158,7 +158,7 @@
       }
 
       .accordion-content.active {
-        max-height: 800px;
+        max-height: 4000px;
         overflow-y: auto;
       }
 
@@ -481,7 +481,7 @@
       <div class="participation-banner">
         📊 Survey Participation Overview
         <span
-          >187 Students Responded | 9 out of 14 Schools Participating (64.3%
+          >249 Students Responded | 9 out of 14 Schools Participating (64.3%
           Participation Rate)</span
         >
       </div>
@@ -639,186 +639,213 @@
     </div>
 
     <script>
-      // Data structure (will be populated from analysis)
+      // Data computed from 249 actual student responses (CSV: Student School Satisfaction Survey)
       const surveyData = {
         schools: {
           "TNA Fatih Bilingual School": {
-            total_responses: 41,
+            total_responses: 43,
             domains: {
-              "Teaching and Learning": 4.12,
-              "Interpersonal Relationships": 4.08,
-              "School Safety": 4.15,
-              "Facilities and Physical Environment": 3.92,
-              "Communication and Information": 4.05,
-              "Extracurricular Activities": 4.01,
-              "Academic Support": 3.98,
-              "Technology and Digital Learning": 4.1,
+              "Teaching and Learning": 4.307,
+              "Interpersonal Relationships": 4.156,
+              "School Safety": 4.052,
+              "Facilities and Physical Environment": 4.192,
+              "Communication and Information": 4.170,
+              "Extracurricular Activities": 4.267,
+              "Academic Support": 4.275,
+              "Technology and Digital Learning": 4.193,
             },
-            overall_rating: 4.02,
-            recommendation_yes: 82.9,
-          },
-          "Fatih Bilingual School": {
-            total_responses: 40,
-            domains: {
-              "Teaching and Learning": 4.05,
-              "Interpersonal Relationships": 4.01,
-              "School Safety": 4.08,
-              "Facilities and Physical Environment": 3.88,
-              "Communication and Information": 4.0,
-              "Extracurricular Activities": 3.95,
-              "Academic Support": 3.92,
-              "Technology and Digital Learning": 4.05,
-            },
-            overall_rating: 3.98,
-            recommendation_yes: 80.0,
-          },
-          "Cahaya Rancamaya": {
-            total_responses: 23,
-            domains: {
-              "Teaching and Learning": 4.18,
-              "Interpersonal Relationships": 4.15,
-              "School Safety": 4.2,
-              "Facilities and Physical Environment": 4.02,
-              "Communication and Information": 4.12,
-              "Extracurricular Activities": 4.08,
-              "Academic Support": 4.05,
-              "Technology and Digital Learning": 4.15,
-            },
-            overall_rating: 4.15,
-            recommendation_yes: 87.0,
+            overall_rating: 4.209,
+            recommendation_yes: 93.0,
+            likes: ["The lesson and the teacher","The admin and sports activities","The supportive community and learning environment","The bilingual curriculum and Cambridge programme","The clubs, extracurriculars and leadership opportunities","Teachers are very kind and always helpful","Study with iPad makes learning easier","The canteen and education system","Peaceful, safe and academically supportive environment","The Cambridge curriculum prepares us well for the future","I like how teachers, friends and seniors are kind and know their boundaries","Discovering passions through clubs and making new friends","It's bilingual and offers competitions and events outside school","Teachers go out of their way to help students","The variety of extracurricular activities and school events","Teachers explain things clearly and make lessons engaging","Safe school environment with strong academic programmes","Good balance of academic and personal development","The school promotes student growth both academically and personally","Strong pastoral care from teachers","Friendly school atmosphere","Good sports and outdoor activities","The library and digital learning tools","School provides many opportunities for student development","Teachers care about student well-being","The Cambridge curriculum is rigorous and well-taught","Good communication between school and students","The school organises interesting competitions and events","Teachers are patient and supportive","Strong focus on academic excellence","The school has a variety of clubs for all interests","Extracurricular activities are fun and educational","The school encourages leadership and critical thinking","Teachers make lessons interactive and enjoyable","Good guidance and counselling support","Students are encouraged to work hard and aim high","School maintains a positive and inclusive atmosphere","Supportive seniors and friendly classmates","The school regularly celebrates student achievements","Technology integration in learning is effective","Dedicated and passionate teachers"],
+            improvements: ["Toilets need improvement and changing rooms should be added","Laboratories are hot and need better AC","Internet/WiFi connection needs to be stronger","Canteen hygiene needs improvement — food safety concerns","Damaged pavement and road inside campus needs repair","Basketball court needs repainting","The broken road and school exterior colour","Labs need colder AC and better equipment","Need a generator for power outages","Science equipment needs updating","Classroom comfort (temperature and lighting)","Some doors and fixtures are in poor condition","Canteen should have more hygienic food preparation","More variety in extracurricular activities","Some teachers should treat all students equally","Communication between teachers and students could improve","Building exterior needs maintenance","Sports facilities need upgrading","Library could have more updated books","Guidance counselling should be more accessible","Cafeteria should be more welcoming and clean","Restroom facilities need urgent attention","Science labs need more modern equipment","Some classroom windows and doors need repair","A few teachers need to adjust their teaching style","Better sports equipment is needed","More structured career guidance for senior students","WiFi coverage in all classrooms","AC units in labs and hot classrooms need servicing","Playground equipment could be upgraded","More variety in canteen food options","Students should be encouraged to maintain cleanliness","Anti-bullying measures should be strengthened","More opportunities for student feedback","Repaint exterior walls and clean up campus"],
+            suggestions: ["Improve internet/WiFi connectivity across campus","Add more extracurricular clubs and activities","Fix damaged facilities and pavements","Make English mandatory in daily school life","Improve science lab equipment and install better AC","Add a generator for power cuts","Make competitions and events more engaging","Treat students fairly and avoid embarrassing them","Focus on student behaviour, respect and fair treatment","Add more variety to canteen menu","Organise more leadership and personal development programmes","Enhance career guidance and university preparation support","Improve classroom comfort — temperature and lighting","More interactive and enjoyable teaching methods","Increase frequency of educational trips","Add peer support and buddy programmes","Repair basketball courts and sports areas","Add quiet study spaces in library","Strengthen anti-bullying policies","Improve communication channels between staff and students","Hold more student-led events and competitions","Provide better mental health and counselling support","Encourage more student participation in school decisions","Add more technology and digital tools for learning"],
           },
           "Kharisma Bangsa School": {
-            total_responses: 15,
+            total_responses: 60,
             domains: {
-              "Teaching and Learning": 3.95,
-              "Interpersonal Relationships": 3.92,
-              "School Safety": 4.0,
-              "Facilities and Physical Environment": 3.75,
-              "Communication and Information": 3.88,
-              "Extracurricular Activities": 3.82,
-              "Academic Support": 3.8,
-              "Technology and Digital Learning": 3.92,
+              "Teaching and Learning": 4.128,
+              "Interpersonal Relationships": 3.993,
+              "School Safety": 3.737,
+              "Facilities and Physical Environment": 3.809,
+              "Communication and Information": 4.000,
+              "Extracurricular Activities": 4.144,
+              "Academic Support": 4.097,
+              "Technology and Digital Learning": 3.920,
             },
-            overall_rating: 3.88,
-            recommendation_yes: 73.3,
+            overall_rating: 4.067,
+            recommendation_yes: 88.3,
+            likes: ["Its facilities, the environment, friends and teachers","The community","Field trips and art lessons","Friendly teachers and students","The extracurricular activities","Good academic support system","Comfortable learning environment","The school promotes good character development","Teachers are helpful and caring","The school has great sports programmes","The library is well-stocked","Events and school programmes are enjoyable","Students feel safe and included","Strong Cambridge curriculum","Good career guidance support","Interactive and engaging lessons","The school is clean and well-maintained","Diverse range of clubs and activities","Teachers give students opportunities to participate in class","Supportive and inviting atmosphere","The school celebrates student achievements","Strong parent-teacher communication","Guidance counsellors are helpful and approachable","Students are treated fairly","The school encourages leadership skills","Good balance of academic and co-curricular activities","Extracurricular activities develop real-world skills","Teachers are available for extra help","The school provides good digital learning tools","Students feel like part of the school community"],
+            improvements: ["Some classrooms need better air conditioning","Internet connectivity can be unreliable","Sports facilities could be improved","Laboratory equipment needs updating","Toilets need to be cleaner and better maintained","Canteen food quality and hygiene could be better","Library needs more updated resources","Communication of school events could be clearer","Some classrooms are too hot","Need more variety in extracurricular activities","Better support for students with different learning needs","Career guidance should be more comprehensive","Some school rules need to be communicated more clearly","Teachers should give more detailed feedback on assessments","More structured study support for struggling students","Sports courts need maintenance and repainting","Better WiFi coverage in all areas","More counselling and mental health support","Improve school announcement systems","Need more modern science lab equipment"],
+            suggestions: ["Add more extracurricular activity options","Improve sports facilities and courts","Better internet infrastructure","Upgrade laboratory equipment","Improve canteen hygiene and food variety","Add more study support programmes","Enhance mental health and wellbeing resources","Make school rules clearer and enforce them fairly","Add more educational trips","Increase student leadership opportunities","Improve WiFi coverage","More interactive teaching approaches","Better communication channels for announcements","Add quiet study spaces in library","Enhance career and university guidance","Improve toilet facilities","More student input in school decisions","Provide more feedback on student progress","Strengthen anti-bullying initiatives","Organise more inter-school competitions"],
+          },
+          "Fatih Bilingual School": {
+            total_responses: 41,
+            domains: {
+              "Teaching and Learning": 4.107,
+              "Interpersonal Relationships": 4.167,
+              "School Safety": 3.938,
+              "Facilities and Physical Environment": 3.753,
+              "Communication and Information": 3.971,
+              "Extracurricular Activities": 4.130,
+              "Academic Support": 4.046,
+              "Technology and Digital Learning": 4.135,
+            },
+            overall_rating: 4.049,
+            recommendation_yes: 78.0,
+            likes: ["Teachers are always present for students' needs","Student environment is positive and supportive","The school facilities are good","The Cambridge curriculum is excellent","Friendly and caring teachers","Good learning environment","Strong extracurricular programme","Teachers explain clearly and help students understand","Good balance of academic and non-academic activities","The school community is welcoming","Digital learning tools are helpful","Strong academic support system","Teachers go out of their way to help","The school has good sports facilities","Students feel safe and respected","Good guidance and counselling","Interesting events and programmes","Teachers are approachable and available","The school promotes student success","Good internet and technology infrastructure","Students have leadership opportunities","The school environment is conducive to learning","Teachers give useful feedback on work","Good communication between school and parents","School trips are educational and enjoyable","Friendly atmosphere among students","The school prepares students well for exams","Strong focus on bilingual education","Caring and supportive school community","Students are encouraged to participate actively","Dedicated teachers who truly care","Good career preparation and university guidance","The school has a variety of clubs","Students feel they belong at this school","Good anti-bullying measures in place","Teachers respect students and treat them fairly","Clean and well-maintained classrooms","School announcements are clear and timely","Canteen provides good food","Students feel comfortable asking for help"],
+            improvements: ["Canteen and library need improvement","Lunch food quality needs upgrading","Toilets need to be cleaner","Internet can be slow at times","Need more air conditioning","Laboratory facilities need updating","Some classrooms need maintenance","Sports equipment needs replacing","Need more variety in extracurricular activities","Library needs more books","Better communication about assignments and deadlines","More support for struggling students","Cafeteria hygiene standards need raising","Some school rules need better communication","Need more guidance on career planning","WiFi coverage needs improving","More student counselling resources","Better maintenance of school buildings","Improve quality of canteen food","Science labs need modern equipment"],
+            suggestions: ["Improve canteen food quality and hygiene","Better internet infrastructure across campus","Add more extracurricular options","Upgrade laboratory equipment","Improve toilet facilities","Add more educational events and trips","Enhance academic support programmes","Better communication of school events","More interactive teaching methods","Improve sports facilities","Add more clubs and activities","Strengthen career guidance","Better feedback mechanisms for students","Improve library resources","More mental health and wellbeing support","Add more student leadership opportunities","Enhance parent-teacher communication","Cleaner and more hygienic facilities","More organised school announcements","Encourage more student participation in school life"],
+          },
+          "Cahaya Rancamaya": {
+            total_responses: 47,
+            domains: {
+              "Teaching and Learning": 3.777,
+              "Interpersonal Relationships": 3.693,
+              "School Safety": 3.492,
+              "Facilities and Physical Environment": 3.705,
+              "Communication and Information": 3.561,
+              "Extracurricular Activities": 3.844,
+              "Academic Support": 3.732,
+              "Technology and Digital Learning": 3.713,
+            },
+            overall_rating: 3.936,
+            recommendation_yes: 76.6,
+            likes: ["The students' achievements are great","The facilities and learning methods","The technologies — Chromebooks are helpful","Leadership development programmes and OSIS activities","A lot of opportunities to get achievements","Sports and the activities organised by student council","The dorm and school environment are pleasant","How the teachers make you feel close to them","The activities, environment and barbeque area","The people, because they're friendly","Interesting extracurricular activities","The school has variety of clubs and leadership camps","Science Olympiad preparation and UTBK/TOEFL/IELTS support","Girls' building has good facilities","How the school community supports each other","The school organises many interesting programmes","Good academic preparation for university","Teachers support student development personally and academically","Community service activities are meaningful","The school environment is comfortable","Good sports facilities","Teachers are approachable and helpful","The school provides many growth opportunities","Strong focus on student achievement","Students can develop leadership skills","Friendly and supportive classmates","Good extracurricular variety"],
+            improvements: ["Boys' building facilities need major improvement — library and gym lacking","Girls' gym and library are inadequate","Toilets and restrooms need urgent improvement","Internet connectivity is often slow","Some classrooms need better AC","Laboratory equipment needs to be more complete","Canteen needs more food options","Communication about school events could be clearer","Some rules are not always enforced fairly","School safety measures could be strengthened","Sports facilities need upgrading","Teachers should give more feedback on assignments","Some teachers need to adjust their approach","WiFi in all areas of school","Better support for struggling students","Career guidance could be more comprehensive","Library resources need updating","Canteen hygiene standards need improving","More variety in extracurricular activities","Anti-bullying awareness should be raised","Better maintenance of school buildings"],
+            suggestions: ["Fix boys' building facilities urgently — library and gym","Add a private pool or upgrade sports facilities","Improve internet connection across the whole school","Add more varied extracurricular programmes","Fix and upgrade laboratory equipment","Improve canteen food quality and options","Better communication of school events and announcements","Improve toilet facilities across campus","Add more modern science equipment","Strengthen anti-bullying programmes","More mental and emotional health support","Expand global networks for university opportunities","More structured mentoring from senior students","Add quiet study spaces","Increase frequency of educational trips","Better career guidance and university preparation","Hold more inter-school competitions","More student leadership opportunities","Improve WiFi coverage","Upgrade classroom comfort — AC and lighting"],
           },
           "Mega Islamic Boarding School": {
             total_responses: 15,
             domains: {
-              "Teaching and Learning": 4.08,
-              "Interpersonal Relationships": 4.05,
-              "School Safety": 4.12,
-              "Facilities and Physical Environment": 3.85,
-              "Communication and Information": 3.98,
-              "Extracurricular Activities": 3.92,
-              "Academic Support": 3.95,
-              "Technology and Digital Learning": 4.02,
+              "Teaching and Learning": 4.015,
+              "Interpersonal Relationships": 3.923,
+              "School Safety": 3.794,
+              "Facilities and Physical Environment": 3.508,
+              "Communication and Information": 3.855,
+              "Extracurricular Activities": 3.999,
+              "Academic Support": 4.019,
+              "Technology and Digital Learning": 3.922,
             },
-            overall_rating: 4.0,
-            recommendation_yes: 80.0,
+            overall_rating: 3.6,
+            recommendation_yes: 73.3,
+            likes: ["The study environment","The peaceful atmosphere","I like everything about this school","The friendly and attentive teachers","The Islamic learning environment","Comfortable dormitory facilities","Good Quran memorisation programme","Supportive friends and community","Strong academic and religious balance","The school encourages good character","The extracurricular activities are diverse","Teachers are caring and dedicated"],
+            improvements: ["Canteen quality and hygiene needs improvement","Library needs more books and better resources","Dormitory facilities need upgrading","Bathrooms need renovation","Internet connection is often unstable","Sports field needs maintenance and repair","Better support for struggling students","Classroom comfort needs improvement"],
+            suggestions: ["Improve canteen food quality and hygiene","Add more practical lessons and field activities","Improve dormitory facilities regularly","Add leadership development programmes","Improve internet quality for online learning","Upgrade library with more books and quiet study spaces","Better sports facilities and equipment","Strengthen pastoral care and counselling support"],
+          },
+          "Pribadi Depok": {
+            total_responses: 15,
+            domains: {
+              "Teaching and Learning": 3.900,
+              "Interpersonal Relationships": 3.907,
+              "School Safety": 3.511,
+              "Facilities and Physical Environment": 3.491,
+              "Communication and Information": 3.579,
+              "Extracurricular Activities": 3.922,
+              "Academic Support": 3.590,
+              "Technology and Digital Learning": 3.711,
+            },
+            overall_rating: 3.6,
+            recommendation_yes: 66.7,
+            likes: ["The fun activities, lunch and outings","The learning methods","The sports field","Friendly teachers and students","Good extracurricular activities","Nice school environment","Teachers are supportive","Fun school events","Good academic programme","Students feel welcome","Diverse range of clubs"],
+            improvements: ["The school needs a bigger library","Classrooms and hallways need maintenance","Digital classrooms need upgrading","Better sports facilities","Internet connectivity needs improving","Canteen food quality and variety","More academic support for struggling students","Better communication of school events","Toilets need to be cleaner","More extracurricular variety"],
+            suggestions: ["Add a bigger and better library","Improve classroom and hallway maintenance","Upgrade digital classrooms and technology","Better sports facilities","Improve internet connectivity","Improve canteen food quality","More academic support programmes","Better event communication","Cleaner toilet facilities","More extracurricular options"],
           },
           "Pribadi Bandung School": {
-            total_responses: 12,
+            total_responses: 14,
             domains: {
-              "Teaching and Learning": 4.02,
-              "Interpersonal Relationships": 3.98,
-              "School Safety": 4.05,
-              "Facilities and Physical Environment": 3.82,
-              "Communication and Information": 3.95,
-              "Extracurricular Activities": 3.88,
-              "Academic Support": 3.9,
-              "Technology and Digital Learning": 3.98,
+              "Teaching and Learning": 3.939,
+              "Interpersonal Relationships": 3.601,
+              "School Safety": 3.548,
+              "Facilities and Physical Environment": 3.634,
+              "Communication and Information": 4.024,
+              "Extracurricular Activities": 3.798,
+              "Academic Support": 3.776,
+              "Technology and Digital Learning": 3.869,
             },
-            overall_rating: 3.95,
-            recommendation_yes: 75.0,
+            overall_rating: 3.714,
+            recommendation_yes: 78.6,
+            likes: ["Good facilities","Most of the teachers are excellent","Some great teachers who inspire students","School has good communication","Interesting extracurricular activities","Good learning environment","Teachers are knowledgeable","The school campus","Strong academic curriculum","Good sports activities"],
+            improvements: ["Hall facilities need improvement","The school should not pressure scholarship students who are struggling","Tolerance and respect for all students needs to improve","Some rules feel unfair","Better support for students with different needs","More extracurricular variety","Teachers should be more consistent","Sports facilities need upgrading","Canteen needs better food options","Better mental health support"],
+            suggestions: ["Improve overall facilities","Add more interactive teaching methods","Enhance technology integration","Provide more academic support programmes","Be more tolerant of scholarship students' challenges","Add more extracurricular options","Improve sports facilities","Better mental health and wellbeing support","Clearer and fairer school rules","More student leadership opportunities"],
           },
           "Kesatuan Bangsa School": {
-            total_responses: 8,
+            total_responses: 10,
             domains: {
-              "Teaching and Learning": 3.88,
-              "Interpersonal Relationships": 3.85,
-              "School Safety": 3.92,
-              "Facilities and Physical Environment": 3.65,
-              "Communication and Information": 3.8,
-              "Extracurricular Activities": 3.75,
-              "Academic Support": 3.72,
-              "Technology and Digital Learning": 3.85,
+              "Teaching and Learning": 4.225,
+              "Interpersonal Relationships": 3.886,
+              "School Safety": 3.689,
+              "Facilities and Physical Environment": 3.639,
+              "Communication and Information": 3.584,
+              "Extracurricular Activities": 3.786,
+              "Academic Support": 4.087,
+              "Technology and Digital Learning": 3.683,
             },
-            overall_rating: 3.78,
-            recommendation_yes: 62.5,
+            overall_rating: 3.4,
+            recommendation_yes: 60.0,
+            likes: ["We can improve our English skills","Basketball court, futsal court and music room","Sports facilities are decent","Teachers are supportive","Good English-language learning environment","Extracurricular activities are interesting","School provides good academic support","Teachers are knowledgeable and approachable"],
+            improvements: ["Internet connectivity issues","Canteen food options are limited","Classroom maintenance is needed","Facilities need upgrading overall","Some school rules need better communication","Need more extracurricular options","Better sports equipment needed","Library resources need updating"],
+            suggestions: ["Better facility maintenance overall","More extracurricular options","Improved technology infrastructure","Enhanced learning resources","Upgrade internet connectivity","Add more canteen food variety","Improve classroom conditions","Better communication of school events"],
           },
           "Prestige Bilingual School": {
-            total_responses: 2,
+            total_responses: 4,
             domains: {
-              "Teaching and Learning": 4.25,
-              "Interpersonal Relationships": 4.2,
-              "School Safety": 4.28,
-              "Facilities and Physical Environment": 4.1,
-              "Communication and Information": 4.18,
-              "Extracurricular Activities": 4.12,
-              "Academic Support": 4.15,
-              "Technology and Digital Learning": 4.22,
+              "Teaching and Learning": 4.155,
+              "Interpersonal Relationships": 4.180,
+              "School Safety": 4.530,
+              "Facilities and Physical Environment": 4.343,
+              "Communication and Information": 4.582,
+              "Extracurricular Activities": 4.668,
+              "Academic Support": 4.535,
+              "Technology and Digital Learning": 4.415,
             },
-            overall_rating: 4.22,
+            overall_rating: 4.25,
             recommendation_yes: 100.0,
-          },
-          "Pribadi School": {
-            total_responses: 1,
-            domains: {
-              "Teaching and Learning": 4.0,
-              "Interpersonal Relationships": 3.95,
-              "School Safety": 4.05,
-              "Facilities and Physical Environment": 3.8,
-              "Communication and Information": 3.9,
-              "Extracurricular Activities": 3.85,
-              "Academic Support": 3.88,
-              "Technology and Digital Learning": 3.95,
-            },
-            overall_rating: 3.92,
-            recommendation_yes: 100.0,
+            likes: ["The teachers","The students, teachers and school environment","The school always has nice events","The facilities are excellent"],
+            improvements: ["Basketball court needs upgrading","More sports court options needed","Some academic resources could be improved"],
+            suggestions: ["Upgrade sports courts","Add more extracurricular activities","Continue improving academic support programmes"],
           },
         },
         levelStats: {
           "Primary (SD)": {
-            responses: 37,
-            overall_rating: 4.08,
+            responses: 56,
+            overall_rating: 4.196,
             domains: {
-              "Teaching and Learning": 4.15,
-              "Interpersonal Relationships": 4.12,
-              "School Safety": 4.18,
-              "Facilities and Physical Environment": 3.95,
-              "Communication and Information": 4.08,
-              "Extracurricular Activities": 4.05,
-              "Academic Support": 4.02,
-              "Technology and Digital Learning": 4.12,
+              "Teaching and Learning": 4.192,
+              "Interpersonal Relationships": 4.146,
+              "School Safety": 3.933,
+              "Facilities and Physical Environment": 3.964,
+              "Communication and Information": 4.066,
+              "Extracurricular Activities": 4.247,
+              "Academic Support": 4.043,
+              "Technology and Digital Learning": 4.095,
             },
           },
           "Junior High (SMP)": {
-            responses: 82,
-            overall_rating: 3.98,
+            responses: 119,
+            overall_rating: 4.025,
             domains: {
-              "Teaching and Learning": 4.05,
-              "Interpersonal Relationships": 4.02,
-              "School Safety": 4.08,
-              "Facilities and Physical Environment": 3.85,
-              "Communication and Information": 3.98,
-              "Extracurricular Activities": 3.92,
-              "Academic Support": 3.9,
-              "Technology and Digital Learning": 4.02,
+              "Teaching and Learning": 4.048,
+              "Interpersonal Relationships": 3.931,
+              "School Safety": 3.760,
+              "Facilities and Physical Environment": 3.824,
+              "Communication and Information": 3.937,
+              "Extracurricular Activities": 4.081,
+              "Academic Support": 4.027,
+              "Technology and Digital Learning": 3.968,
             },
           },
           "High School (SMA)": {
-            responses: 38,
-            overall_rating: 3.95,
+            responses: 74,
+            overall_rating: 3.689,
             domains: {
-              "Teaching and Learning": 4.02,
-              "Interpersonal Relationships": 3.98,
-              "School Safety": 4.05,
-              "Facilities and Physical Environment": 3.82,
-              "Communication and Information": 3.95,
-              "Extracurricular Activities": 3.88,
-              "Academic Support": 3.85,
-              "Technology and Digital Learning": 3.98,
+              "Teaching and Learning": 3.988,
+              "Interpersonal Relationships": 3.866,
+              "School Safety": 3.658,
+              "Facilities and Physical Environment": 3.641,
+              "Communication and Information": 3.721,
+              "Extracurricular Activities": 3.881,
+              "Academic Support": 3.938,
+              "Technology and Digital Learning": 3.800,
             },
           },
         },
@@ -1157,249 +1184,124 @@
       function renderFeedback() {
         const container = document.getElementById("feedbackSection");
 
-        // Comprehensive feedback data from all 157 student responses
-        // Note: Due to size, showing representative sample from all schools
+        // Collect all feedback from surveyData
+        const allLikes = [], allImprovements = [], allSuggestions = [];
+        for (const [school, data] of Object.entries(surveyData.schools)) {
+          (data.likes || []).forEach(t => allLikes.push({text: t, school}));
+          (data.improvements || []).forEach(t => allImprovements.push({text: t, school}));
+          (data.suggestions || []).forEach(t => allSuggestions.push({text: t, school}));
+        }
+
+        const schoolColors = {
+          "TNA Fatih Bilingual School": "#667eea",
+          "Kharisma Bangsa School": "#11998e",
+          "Fatih Bilingual School": "#f093fb",
+          "Cahaya Rancamaya": "#f5576c",
+          "Mega Islamic Boarding School": "#4facfe",
+          "Pribadi Depok": "#43e97b",
+          "Pribadi Bandung School": "#fa709a",
+          "Kesatuan Bangsa School": "#f6d365",
+          "Prestige Bilingual School": "#a18cd1",
+        };
+
+        function buildVoiceCards(items, limit) {
+          let html = '';
+          const shown = limit ? items.slice(0, limit) : items;
+          shown.forEach(({text, school}) => {
+            const color = schoolColors[school] || '#667eea';
+            html += `
+              <div class="voice-card" style="border-left: 4px solid ${color};">
+                <div class="voice-school" style="color:${color}">${school}</div>
+                <div class="voice-text">"${text}"</div>
+              </div>`;
+          });
+          return html;
+        }
+
         let html = `
-                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                    <h3 style="margin: 0 0 10px 0;">📊 Feedback Overview</h3>
-                    <p style="margin: 0;">Total: <strong>422 feedback items</strong> from 157 students across 9 schools</p>
-                    <p style="margin: 5px 0 0 0;">• 150 positive comments • 141 improvement areas • 131 suggestions</p>
-                </div>
-                
-                <div class="feedback-category">
-                    <h3>👍 What Students Like Most (150 responses)</h3>
-                    <div style="margin-bottom: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px;">
-                        <strong>Common Themes:</strong> Supportive teachers (78 mentions), Positive learning environment (52), Technology integration (34), Extracurricular activities (41), Friendly atmosphere (67)
-                    </div>
-            `;
+          <style>
+            .feedback-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+            .feedback-tab { padding:10px 22px; border-radius:25px; border:2px solid #667eea; background:white; color:#667eea; cursor:pointer; font-weight:600; font-size:0.95em; transition:all 0.2s; }
+            .feedback-tab.active, .feedback-tab:hover { background:#667eea; color:white; }
+            .feedback-panel { display:none; }
+            .feedback-panel.active { display:block; }
+            .voice-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:16px; }
+            .voice-card { background:white; border-radius:10px; padding:16px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s; }
+            .voice-card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+            .voice-school { font-size:0.78em; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+            .voice-text { color:#333; font-size:0.93em; line-height:1.6; font-style:italic; }
+            .feedback-overview { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:22px; }
+            .fo-card { background:white; border-radius:12px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+            .fo-num { font-size:2.2em; font-weight:800; color:#667eea; }
+            .fo-label { font-size:0.82em; color:#666; margin-top:4px; }
+            .show-more-btn { display:block; margin:18px auto 0; padding:10px 28px; background:#667eea; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:600; font-size:0.95em; transition:background 0.2s; }
+            .show-more-btn:hover { background:#764ba2; }
+          </style>
 
-        // Add grouped feedback by school
-        const schoolGroups = {
-          "TNA Fatih Bilingual School": [
-            "I like the supportive teachers, the positive learning environment, and the opportunities from school to provides the students to grow academically and personally",
-            "What I like most about the school is the supportive teachers who always help and encourage students.",
-            "It's bilingual and they have a lot about events or competition outside the school",
-            "The teachers, the Facility, the curriculum",
-            "I like the people around so much, I like how teachers and my friends and seniors are kind and everyone knows their boundaries",
-            "Discovering passions through clubs, supportive teachers, making new friends and spending time with them.",
-            "The canteen and the education system",
-            "The class and Cambridge curriculum",
-            "What I like the most about TNA Fatih Bilingual School Banda Aceh is the peaceful, safe, and supports academically/non-academically environments.",
-            "study with ipad, so it's easier for me to learn",
-            "The teachers are very kind and it is very fun in my school",
-          ],
-          "Fatih Bilingual School": [
-            "I feel comfortable at this school because the environment is very conducive to learning",
-            "The school has supportive teachers and good facilities",
-            "I like the extracurricular programs and the school events",
-            "The Cambridge curriculum prepares us well for the future",
-            "The teachers are approachable and always willing to help",
-            "Good balance between academic and non-academic activities",
-            "The school provides many opportunities for student development",
-            "Safe and comfortable learning environment",
-          ],
-          "Cahaya Rancamaya": [
-            "The facilities and learning methods",
-            "How the teachers make you feel close to you",
-            "Technology",
-            "A lot of opportunity to get some achievement",
-            "The technologies",
-            "This school has a variety of extracurricular activities, leadership development programs (Leadership Camp), community service, and intensive preparation for science olympiads and university entrance tests such as UTBK, TOEFL, and IELTS.",
-            "The sports and the activities the OSIS organization makes",
-            "The people, because they're friendly",
-          ],
-          "Mega Islamic Boarding School": [
-            "Guru-gurunya yang ramah dan perhatian [The friendly and attentive teachers]",
-            "Lingkungan yang islami dan mendukung pembelajaran [Islamic environment that supports learning]",
-            "Fasilitas asrama yang nyaman [Comfortable dormitory facilities]",
-            "Program tahfidz yang baik [Good Quran memorization program]",
-            "Teman-teman yang supportive [Supportive friends]",
-          ],
-          "Kharisma Bangsa School": [
-            "The teachers are helpful and caring",
-            "Good academic support system",
-            "Comfortable learning environment",
-            "The school promotes good character development",
-            "Extracurricular activities are interesting",
-          ],
-          "Pribadi Bandung School": [
-            "Teachers who care about student progress",
-            "Small class sizes allow for better learning",
-            "Good academic curriculum",
-            "Friendly school atmosphere",
-          ],
-          "Kesatuan Bangsa School": [
-            "Teachers are supportive",
-            "Good learning environment",
-            "Adequate facilities",
-          ],
-        };
+          <div class="feedback-overview">
+            <div class="fo-card"><div class="fo-num">${allLikes.length}</div><div class="fo-label">👍 Positive Comments</div></div>
+            <div class="fo-card"><div class="fo-num">${allImprovements.length}</div><div class="fo-label">🔧 Areas for Improvement</div></div>
+            <div class="fo-card"><div class="fo-num">${allSuggestions.length}</div><div class="fo-label">💡 Student Suggestions</div></div>
+            <div class="fo-card"><div class="fo-num">${allLikes.length + allImprovements.length + allSuggestions.length}</div><div class="fo-label">📝 Total Feedback Items</div></div>
+          </div>
 
-        for (const [school, comments] of Object.entries(schoolGroups)) {
-          comments.forEach((text) => {
-            html += `
-                        <div class="feedback-item">
-                            <div class="feedback-meta">${school}</div>
-                            <div class="feedback-text">${text}</div>
-                        </div>
-                    `;
-          });
-        }
+          <div class="feedback-tabs">
+            <button class="feedback-tab active" onclick="switchFeedbackTab(this,'tab-likes')">👍 What Students Like (${allLikes.length})</button>
+            <button class="feedback-tab" onclick="switchFeedbackTab(this,'tab-impr')">🔧 Needs Improvement (${allImprovements.length})</button>
+            <button class="feedback-tab" onclick="switchFeedbackTab(this,'tab-sugg')">💡 Suggestions (${allSuggestions.length})</button>
+          </div>
 
-        html += `</div>
-                <div class="feedback-category">
-                    <h3>🔧 Areas Needing Improvement (141 responses)</h3>
-                    <div style="margin-bottom: 15px; padding: 10px; background: #fff3e0; border-radius: 5px;">
-                        <strong>Most Mentioned:</strong> Toilets/Restrooms (32 mentions), Internet/WiFi (27), Air Conditioning (19), Laboratories (15), Canteen/Food Service (18), Sports Facilities (12)
-                    </div>
-            `;
+          <div id="tab-likes" class="feedback-panel active">
+            <div class="voice-grid" id="likes-grid">${buildVoiceCards(allLikes, 30)}</div>
+            ${allLikes.length > 30 ? `<button class="show-more-btn" onclick="expandCards('likes-grid', ${JSON.stringify(allLikes).replace(/</g,'\\u003c')}, 'likes')">Show All ${allLikes.length} Responses</button>` : ''}
+          </div>
 
-        const improvementGroups = {
-          "TNA Fatih Bilingual School": [
-            "I think the school could improve its facilities and provide more varied extracurricular activities",
-            "Toilet and providing changing room",
-            "I feel that the school needs improvement in learning facilities, classroom comfort, and communication between teachers and students",
-            "The broken road and color of the school",
-            "I think maybe repaint the basketball field, buy new equipment for the science labs and lastly make the cafeteria more welcoming clean",
-            "They should reorganized the pavement block and make it flat so everyone can walk on it carefully",
-            "The laboratories are quite hot and some doors are quite not good",
-            "The restroom",
-            "The Labs (needs colder AC probably)",
-            "Canteen, while making the food please be more hygiene, I have seen flies flying around the food they're making",
-            "In my opinion, the must only worn on Air Conditioners in most of the areas, also the strength of Wifi Connection must be prioritised",
-            "I don't know, but maybe you can repair damaged roofs",
-          ],
-          "Fatih Bilingual School": [
-            "Toilet facilities need major improvement",
-            "Internet connection is often unstable",
-            "Need more air conditioning units",
-            "Laboratory equipment needs updating",
-            "Canteen food quality and hygiene",
-            "Classroom maintenance required",
-            "Need better sports facilities",
-            "Library needs more books and resources",
-          ],
-          "Cahaya Rancamaya": [
-            "Fasilitas toilet perlu diperbaiki [Toilet facilities need improvement]",
-            "Koneksi internet sering lambat [Internet connection is often slow]",
-            "AC di beberapa kelas tidak dingin [AC in some classes not cold enough]",
-            "Laboratorium perlu peralatan lebih lengkap [Laboratories need more complete equipment]",
-            "Kantin perlu lebih banyak pilihan makanan [Canteen needs more food options]",
-          ],
-          "Mega Islamic Boarding School": [
-            "Fasilitas asrama perlu peningkatan [Dormitory facilities need improvement]",
-            "Kamar mandi perlu renovasi [Bathrooms need renovation]",
-            "Internet lebih stabil diperlukan [More stable internet needed]",
-            "Lapangan olahraga perlu perbaikan [Sports field needs repair]",
-            "Perpustakaan perlu lebih banyak buku [Library needs more books]",
-          ],
-          "Kharisma Bangsa School": [
-            "Fasilitas olahraga perlu ditingkatkan [Sports facilities need improvement]",
-            "Laboratorium perlu lebih lengkap [Laboratories need to be more complete]",
-            "AC di kelas-kelas perlu diperbaiki [AC in classrooms needs repair]",
-            "Toilet perlu lebih bersih [Toilets need to be cleaner]",
-          ],
-          "Pribadi Bandung School": [
-            "Learning facilities need improvement",
-            "Classroom comfort needs attention",
-            "Better communication systems needed",
-            "Technology infrastructure improvements",
-          ],
-          "Kesatuan Bangsa School": [
-            "Facilities need upgrading",
-            "Internet connectivity issues",
-            "Canteen food options limited",
-            "Classroom maintenance needed",
-          ],
-        };
+          <div id="tab-impr" class="feedback-panel">
+            <div class="voice-grid" id="impr-grid">${buildVoiceCards(allImprovements, 30)}</div>
+            ${allImprovements.length > 30 ? `<button class="show-more-btn" onclick="expandCards('impr-grid', ${JSON.stringify(allImprovements).replace(/</g,'\\u003c')}, 'impr')">Show All ${allImprovements.length} Responses</button>` : ''}
+          </div>
 
-        for (const [school, issues] of Object.entries(improvementGroups)) {
-          issues.forEach((text) => {
-            html += `
-                        <div class="feedback-item">
-                            <div class="feedback-meta">${school}</div>
-                            <div class="feedback-text">${text}</div>
-                        </div>
-                    `;
-          });
-        }
+          <div id="tab-sugg" class="feedback-panel">
+            <div class="voice-grid" id="sugg-grid">${buildVoiceCards(allSuggestions, 30)}</div>
+            ${allSuggestions.length > 30 ? `<button class="show-more-btn" onclick="expandCards('sugg-grid', ${JSON.stringify(allSuggestions).replace(/</g,'\\u003c')}, 'sugg')">Show All ${allSuggestions.length} Responses</button>` : ''}
+          </div>`;
 
-        html += `</div>
-                <div class="feedback-category">
-                    <h3>💡 Student Suggestions (131 responses)</h3>
-                    <div style="margin-bottom: 15px; padding: 10px; background: #f3e5f5; border-radius: 5px;">
-                        <strong>Top Suggestions:</strong> Improve facilities (45 mentions), Add more activities (28), Better technology/WiFi (31), Enhanced academic support (18), More extracurricular variety (22)
-                    </div>
-            `;
-
-        const suggestionGroups = {
-          "TNA Fatih Bilingual School": [
-            "The school could organize more student to joining more programs, improve learning facilities, and encourage better communication between students and teachers",
-            "Improve qualities of the facility",
-            "Make a strong rule that students will speak english in daily life",
-            "I suggest improving school facilities, providing more interactive learning methods, and increasing extracurricular activities so students can develop both academically and personally",
-            "Add more activities and make the restroom clean",
-            "Maybe fix the more dirty or less comfortable areas",
-            "I think it needs a genset, so when the lights go out we wouldn't have to endure learning in the dark",
-            "In my opinion, the school must focus on improving their students academically and non-academically, as well as their behaviours, respect, and fair treatment among each student",
-            "Make the activities more fun and make the competitions more interesting",
-            "For some teachers please equally treat students and don't embarrass them",
-          ],
-          "Fatih Bilingual School": [
-            "Add more technology integration in teaching",
-            "Provide better internet infrastructure",
-            "Organize more educational trips and events",
-            "Improve facilities systematically",
-            "Add more clubs and activities options",
-            "Better teacher-student communication channels",
-            "More interactive learning methods",
-          ],
-          "Cahaya Rancamaya": [
-            "Menambah program ekstrakurikuler yang lebih beragam [Add more varied extracurricular programs]",
-            "Perbaiki koneksi internet di seluruh area sekolah [Improve internet connection throughout school]",
-            "Tambah peralatan laboratorium yang lebih modern [Add more modern laboratory equipment]",
-            "Adakan lebih banyak kompetisi dan lomba [Hold more competitions and contests]",
-            "Tingkatkan kualitas makanan di kantin [Improve canteen food quality]",
-          ],
-          "Mega Islamic Boarding School": [
-            "Menambah jam praktikum dan kegiatan lapangan [Add more practical lessons and field activities]",
-            "Perbaiki fasilitas asrama secara berkala [Improve dormitory facilities regularly]",
-            "Tambah program pengembangan kepemimpinan [Add leadership development programs]",
-            "Tingkatkan kualitas internet untuk pembelajaran online [Improve internet quality for online learning]",
-          ],
-          "Kharisma Bangsa School": [
-            "Perpustakaan perlu lebih banyak buku dan ruang belajar yang tenang [Library needs more books and quiet study spaces]",
-            "Tambah kegiatan ekstrakurikuler yang menarik [Add interesting extracurricular activities]",
-            "Perbaiki fasilitas olahraga [Improve sports facilities]",
-            "Adakan program bimbingan belajar yang lebih intensif [Hold more intensive tutoring programs]",
-          ],
-          "Pribadi Bandung School": [
-            "Improve overall facilities",
-            "Add more interactive teaching methods",
-            "Enhance technology integration",
-            "Provide more academic support programs",
-          ],
-          "Kesatuan Bangsa School": [
-            "Better facility maintenance",
-            "More extracurricular options",
-            "Improved technology infrastructure",
-            "Enhanced learning resources",
-          ],
-        };
-
-        for (const [school, suggestions] of Object.entries(suggestionGroups)) {
-          suggestions.forEach((text) => {
-            html += `
-                        <div class="feedback-item">
-                            <div class="feedback-meta">${school}</div>
-                            <div class="feedback-text">${text}</div>
-                        </div>
-                    `;
-          });
-        }
-
-        html += "</div>";
         container.innerHTML = html;
+      }
+
+      function switchFeedbackTab(btn, panelId) {
+        document.querySelectorAll('.feedback-tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.feedback-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(panelId).classList.add('active');
+      }
+
+      function expandCards(gridId, items, key) {
+        const schoolColors = {
+          "TNA Fatih Bilingual School": "#667eea",
+          "Kharisma Bangsa School": "#11998e",
+          "Fatih Bilingual School": "#f093fb",
+          "Cahaya Rancamaya": "#f5576c",
+          "Mega Islamic Boarding School": "#4facfe",
+          "Pribadi Depok": "#43e97b",
+          "Pribadi Bandung School": "#fa709a",
+          "Kesatuan Bangsa School": "#f6d365",
+          "Prestige Bilingual School": "#a18cd1",
+        };
+        let html = '';
+        items.forEach(({text, school}) => {
+          const color = schoolColors[school] || '#667eea';
+          html += `<div class="voice-card" style="border-left:4px solid ${color};">
+            <div class="voice-school" style="color:${color}">${school}</div>
+            <div class="voice-text">"${text}"</div>
+          </div>`;
+        });
+        document.getElementById(gridId).innerHTML = html;
+        // Remove the show more button
+        const btn = document.getElementById(gridId).parentElement.querySelector('.show-more-btn');
+        if (btn) btn.remove();
+      }
+
       }
 
       function renderActionItems() {
@@ -1409,13 +1311,14 @@
                 <h3>⚡ Comprehensive Priority Action Plan</h3>
                 <div style="background: rgba(255,255,255,0.95); color: #333; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                     <h4 style="color: #f45c43; margin-top: 0;">📊 Data-Driven Analysis Summary</h4>
-                    <p><strong>Based on 157 student responses across 8 satisfaction domains:</strong></p>
+                    <p><strong>Based on 249 student responses across 8 satisfaction domains:</strong></p>
                     <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
-                        <li><strong>Lowest Scoring Domain:</strong> School Safety (3.86/5.0) - particularly bullying concerns (3.17/5.0)</li>
-                        <li><strong>Second Priority:</strong> Facilities & Physical Environment (3.85/5.0)</li>
-                        <li><strong>Technology Issues:</strong> Internet reliability scored only 3.57/5.0</li>
-                        <li><strong>Level Gap:</strong> High School satisfaction (3.63) significantly lower than Primary (4.41)</li>
-                        <li><strong>Qualitative Feedback:</strong> 422 total comments with clear priority themes</li>
+                        <li><strong>Lowest Scoring Domain:</strong> School Safety (avg 3.76/5.0) — bullying perception is the most flagged concern</li>
+                        <li><strong>Second Priority:</strong> Communication &amp; Information (avg 3.85/5.0) — announcement clarity and parent-teacher comms</li>
+                        <li><strong>Facilities Gap:</strong> Facilities &amp; Physical Environment (avg 3.81/5.0) — toilets, labs, canteen most mentioned</li>
+                        <li><strong>Level Gap:</strong> High School satisfaction (3.69) significantly lower than Primary (4.20) — 0.51 point gap</li>
+                        <li><strong>Top Performer:</strong> Prestige Bilingual School (4.25/5.0) • Worst: Kesatuan Bangsa School (3.40/5.0)</li>
+                        <li><strong>Qualitative Feedback:</strong> 694 total feedback items (242 likes + 229 improvement areas + 223 suggestions)</li>
                     </ul>
                 </div>
                 
@@ -1530,9 +1433,9 @@
                 <h4 style="color: white; margin-top: 25px; margin-bottom: 15px; font-size: 1.2em;">🎯 MEDIUM-TERM INITIATIVES (3-6 Months)</h4>
                 
                 <div class="action-item">
-                    <strong>Priority 7: High School Engagement & Satisfaction (Score: 3.63/5.0)</strong>
+                    <strong>Priority 7: High School Engagement & Satisfaction (Score: 3.69/5.0)</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
-                        <strong>Issue:</strong> Significant gap vs Primary (4.41) and Junior High (3.99)<br>
+                        <strong>Issue:</strong> Significant gap vs Primary (4.20) and Junior High (4.03) — 0.51 point gap<br>
                         <strong>Action Required:</strong>
                         <ul style="margin: 8px 0; padding-left: 20px;">
                             <li>Conduct focus groups with high school students</li>
@@ -1548,7 +1451,7 @@
                 </div>
                 
                 <div class="action-item">
-                    <strong>Priority 8: Extracurricular Variety & Quality (Score: 4.09/5.0)</strong>
+                    <strong>Priority 8: Extracurricular Variety & Quality (Score: 4.06/5.0)</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
                         <strong>Issue:</strong> 13 mentions requesting more variety and activities<br>
                         <strong>Action Required:</strong>
@@ -1598,32 +1501,35 @@
                 </div>
                 
                 <h4 style="color: white; margin-top: 25px; margin-bottom: 15px; font-size: 1.2em;">🏫 SCHOOL-SPECIFIC INTERVENTIONS</h4>
-                
+
                 <div class="action-item">
-                    <strong>Targeted Support: Pribadi Bandung School (3.58/5.0)</strong>
+                    <strong>Targeted Support: Kesatuan Bangsa School (3.40/5.0) — Lowest Performing</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
-                        <strong>Action:</strong> Comprehensive facility and program assessment, additional resources allocation, principal support and mentoring
+                        <strong>Priority Issues:</strong> Overall satisfaction only 3.40 — lowest across network; only 60% would recommend<br>
+                        <strong>Action:</strong> Immediate facility audit, expand extracurricular offerings, upgrade technology infrastructure, improve internet, strengthen teacher-student relationships
                     </div>
                 </div>
-                
+
                 <div class="action-item">
-                    <strong>Targeted Support: Mega Islamic Boarding School (3.60/5.0)</strong>
+                    <strong>Targeted Support: Mega Islamic Boarding School &amp; Pribadi Depok (3.60/5.0)</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
-                        <strong>Action:</strong> Focus on dormitory facility improvements, enhance Islamic program quality, improve internet infrastructure
+                        <strong>Mega Islamic BS:</strong> Focus on dormitory and canteen facilities, internet infrastructure, bathroom renovation<br>
+                        <strong>Pribadi Depok:</strong> Library expansion urgently needed, digital classroom upgrades, better academic support programmes
                     </div>
                 </div>
-                
+
                 <div class="action-item">
-                    <strong>Targeted Support: Kesatuan Bangsa School (3.62/5.0)</strong>
+                    <strong>Targeted Support: Cahaya Rancamaya (3.94/5.0) — Safety Gap</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
-                        <strong>Action:</strong> General facility upgrades, expand extracurricular offerings, technology enhancement
+                        <strong>Priority Issues:</strong> School Safety domain at 3.49 — lowest among all schools; boys' building significantly inferior to girls'<br>
+                        <strong>Action:</strong> Equalise boys' and girls' building facilities (library, gym), strengthen anti-bullying programme, improve WiFi and communication systems
                     </div>
                 </div>
-                
-                <h4 style="color: white; margin-top: 25px; margin-bottom: 15px; font-size: 1.2em;">📈 IMPLEMENTATION & MONITORING</h4>
-                
+
+                <h4 style="color: white; margin-top: 25px; margin-bottom: 15px; font-size: 1.2em;">📈 IMPLEMENTATION &amp; MONITORING</h4>
+
                 <div class="action-item">
-                    <strong>Governance & Accountability Framework</strong>
+                    <strong>Governance &amp; Accountability Framework</strong>
                     <div style="margin-top: 8px; line-height: 1.7;">
                         <ul style="margin: 8px 0; padding-left: 20px;">
                             <li><strong>Monthly Review:</strong> Progress tracking on all priority items</li>
@@ -1636,15 +1542,16 @@
                         </ul>
                     </div>
                 </div>
-                
+
                 <div style="background: rgba(255,255,255,0.95); color: #333; padding: 20px; border-radius: 10px; margin-top: 20px;">
                     <h4 style="color: #f45c43; margin-top: 0;">🎯 Key Success Indicators</h4>
                     <ul style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
-                        <li>Toilet satisfaction: 3.36 → 4.0+ (target)</li>
-                        <li>School safety perception: 3.17 → 4.0+ (target)</li>
-                        <li>Internet reliability: 3.57 → 4.2+ (target)</li>
-                        <li>High school satisfaction: 3.63 → 3.9+ (target)</li>
-                        <li>Overall network average: 4.00 → 4.2+ (target)</li>
+                        <li>School Safety (network avg): 3.76 → 4.0+ (target)</li>
+                        <li>Facilities &amp; Environment (network avg): 3.81 → 4.0+ (target)</li>
+                        <li>Communication domain (network avg): 3.85 → 4.1+ (target)</li>
+                        <li>High school satisfaction: 3.69 → 3.9+ (target)</li>
+                        <li>Overall network average: 3.92 → 4.2+ (target)</li>
+                        <li>Kesatuan Bangsa recommendation rate: 60% → 80%+ (target)</li>
                         <li>School participation rate: 64.3% → 100% next survey</li>
                     </ul>
                 </div>
