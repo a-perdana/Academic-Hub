@@ -809,7 +809,7 @@
         }
         const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
         // timeout = 3× baseline, capped between 1500ms and 6000ms
-        baselineMs = Math.min(6000, Math.max(1500, Math.round(avg * 3)));
+        baselineMs = Math.min(8000, Math.max(2000, Math.round(avg * 4)));
         addLog(`Baseline: ${Math.round(avg)}ms avg → using ${baselineMs}ms timeout per probe`, "info");
       }
 
@@ -820,16 +820,16 @@
           {
             cat: "🔞 Adult Content (CRITICAL)",
             tests: [
-              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],     pts: 12, critical: true,  attempts: 2 },
-              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],       pts: 12, critical: true,  attempts: 2 },
-              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com","danbooru.donmai.us"],pts: 8,  critical: true,  attempts: 2 },
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],     pts: 12, critical: true,  attempts: 1 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],       pts: 12, critical: true,  attempts: 1 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com","danbooru.donmai.us"],pts: 8,  critical: true,  attempts: 1 },
             ],
           },
           {
             cat: "🎰 Gambling & Betting",
             tests: [
-              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"], pts: 8, critical: true,  attempts: 2 },
-              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com","casinoroom.com"], pts: 7, critical: true,  attempts: 2 },
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"], pts: 8, critical: true,  attempts: 1 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com","casinoroom.com"], pts: 7, critical: true,  attempts: 1 },
             ],
           },
           {
@@ -843,15 +843,15 @@
           {
             cat: "🔒 VPN/Proxy Circumvention",
             tests: [
-              { name: "Web Proxy Sites",  urls: ["proxysite.com","hide.me","croxyproxy.com","kproxy.com"],   pts: 7, critical: true, attempts: 2 },
-              { name: "VPN Services",     urls: ["nordvpn.com","expressvpn.com","mullvad.net"],              pts: 6, critical: true, attempts: 2 },
+              { name: "Web Proxy Sites",  urls: ["proxysite.com","hide.me","croxyproxy.com","kproxy.com"],   pts: 7, critical: true, attempts: 1 },
+              { name: "VPN Services",     urls: ["nordvpn.com","expressvpn.com","mullvad.net"],              pts: 6, critical: true, attempts: 1 },
               { name: "Tor Project",      urls: ["tor"],                                                      pts: 5, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked suggests Tor exit nodes are filtered" },
             ],
           },
           {
             cat: "⚔️ Violence & Harmful Content",
             tests: [
-              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com","theync.com"],   pts: 8, critical: true,  attempts: 2 },
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com","theync.com"],   pts: 8, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"],                pts: 5, critical: false, attempts: 1 },
             ],
           },
@@ -865,9 +865,9 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",     urls: ["tiktok.com","www.tiktok.com"],          pts: 4, critical: true,  attempts: 2 },
-              { name: "Instagram",  urls: ["instagram.com","www.instagram.com"],    pts: 4, critical: true,  attempts: 2 },
-              { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],           pts: 4, critical: true,  attempts: 2 },
+              { name: "TikTok",     urls: ["tiktok.com","www.tiktok.com"],          pts: 4, critical: true,  attempts: 1 },
+              { name: "Instagram",  urls: ["instagram.com","www.instagram.com"],    pts: 4, critical: true,  attempts: 1 },
+              { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],           pts: 4, critical: true,  attempts: 1 },
               { name: "Facebook",   urls: ["facebook.com","www.facebook.com"],            pts: 2, critical: false, attempts: 1 },
             ],
           },
@@ -882,16 +882,16 @@
           {
             cat: "🔞 Adult Content (CRITICAL)",
             tests: [
-              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 2 },
-              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 2 },
-              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 2 },
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 1 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 1 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 1 },
             ],
           },
           {
             cat: "🎰 Gambling & Betting",
             tests: [
-              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 2 },
-              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 2 },
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 1 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 1 },
             ],
           },
           {
@@ -905,15 +905,15 @@
           {
             cat: "🔒 VPN/Proxy Circumvention",
             tests: [
-              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 2 },
-              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 2 },
+              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
+              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
               { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
             ],
           },
           {
             cat: "⚔️ Violence & Harmful Content",
             tests: [
-              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 2 },
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
             ],
           },
@@ -927,9 +927,9 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 1 },
               { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
             ],
           },
@@ -944,16 +944,16 @@
           {
             cat: "🔞 Adult Content (CRITICAL)",
             tests: [
-              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 2 },
-              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 2 },
-              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 2 },
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 1 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 1 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 1 },
             ],
           },
           {
             cat: "🎰 Gambling & Betting",
             tests: [
-              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 2 },
-              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 2 },
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 1 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 1 },
             ],
           },
           {
@@ -967,15 +967,15 @@
           {
             cat: "🔒 VPN/Proxy Circumvention",
             tests: [
-              { name: "Web Proxy Sites",    urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 2 },
-              { name: "VPN Services",       urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 2 },
+              { name: "Web Proxy Sites",    urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
+              { name: "VPN Services",       urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
               { name: "Tor Project",        urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
             ],
           },
           {
             cat: "⚔️ Violence & Harmful Content",
             tests: [
-              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 2 },
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
             ],
           },
@@ -989,9 +989,9 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 1 },
               { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
             ],
           },
@@ -1006,16 +1006,16 @@
           {
             cat: "🔞 Adult Content (CRITICAL)",
             tests: [
-              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 15, critical: true,  attempts: 2 },
-              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 15, critical: true,  attempts: 2 },
-              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 10, critical: true,  attempts: 2 },
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 15, critical: true,  attempts: 1 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 15, critical: true,  attempts: 1 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 10, critical: true,  attempts: 1 },
             ],
           },
           {
             cat: "🎰 Gambling & Betting",
             tests: [
-              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 10, critical: true, attempts: 2 },
-              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 5,  critical: true, attempts: 2 },
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 10, critical: true, attempts: 1 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 5,  critical: true, attempts: 1 },
             ],
           },
           {
@@ -1029,24 +1029,24 @@
           {
             cat: "🔒 VPN/Proxy Circumvention",
             tests: [
-              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 8, critical: true,  attempts: 2 },
-              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true,  attempts: 2 },
+              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 8, critical: true,  attempts: 1 },
+              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true,  attempts: 1 },
               { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: false, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
             ],
           },
           {
             cat: "⚔️ Violence & Harmful Content",
             tests: [
-              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 8, critical: true,  attempts: 2 },
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 8, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 5, critical: false, attempts: 1 },
             ],
           },
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 4, critical: true, attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 4, critical: true, attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 4, critical: true, attempts: 2 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 4, critical: true, attempts: 1 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 4, critical: true, attempts: 1 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 4, critical: true, attempts: 1 },
             ],
           },
           {
