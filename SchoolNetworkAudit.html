@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eduversal Network Security Assessment</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        padding: 40px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 40px;
+        padding-bottom: 20px;
+        border-bottom: 3px solid #1a1a2e;
+      }
+      .logo {
+        font-size: 50px;
+        margin-bottom: 10px;
+      }
+      h1 {
+        color: #1a1a2e;
+        font-size: 28px;
+        margin-bottom: 10px;
+      }
+      .subtitle {
+        color: #666;
+        font-size: 14px;
+      }
+      .badge {
+        display: inline-block;
+        background: #10b981;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        margin-top: 10px;
+      }
+      .input-group {
+        margin: 25px 0;
+      }
+      .input-group label {
+        display: block;
+        color: #1a1a2e;
+        font-weight: 700;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+      .input-group input {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 16px;
+        transition: all 0.3s;
+      }
+      .input-group input:focus {
+        outline: none;
+        border-color: #1a1a2e;
+        box-shadow: 0 0 0 3px rgba(26, 26, 46, 0.1);
+      }
+      .device-selector {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin: 30px 0;
+      }
+      .device-type-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .device-option {
+        padding: 30px 20px;
+        border: 3px solid #e0e0e0;
+        border-radius: 15px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        background: #f9fafb;
+      }
+      .device-option:hover {
+        border-color: #1a1a2e;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+      .device-option.selected {
+        border-color: #10b981;
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+      }
+      .device-icon {
+        font-size: 60px;
+        margin-bottom: 15px;
+      }
+      .device-name {
+        font-size: 20px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin-bottom: 5px;
+      }
+      .device-desc {
+        font-size: 12px;
+        color: #666;
+      }
+      .test-button {
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .test-button:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 30px rgba(26, 26, 46, 0.4);
+      }
+      .test-button:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .loading {
+        text-align: center;
+        display: none;
+        margin: 30px 0;
+      }
+      .spinner {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #1a1a2e;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+      .loading-text {
+        color: #1a1a2e;
+        font-size: 15px;
+        font-weight: 600;
+        margin: 10px 0;
+      }
+      .test-log {
+        background: #1e293b;
+        color: #10b981;
+        padding: 15px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 12px;
+        max-height: 180px;
+        overflow-y: auto;
+        margin-top: 15px;
+      }
+      .log-line {
+        margin: 3px 0;
+      }
+      .log-line.success {
+        color: #10b981;
+      }
+      .log-line.error {
+        color: #ef4444;
+      }
+      .log-line.info {
+        color: #3b82f6;
+      }
+      .results {
+        display: none;
+        margin-top: 30px;
+      }
+      .score-section {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        color: white;
+        margin-bottom: 30px;
+      }
+      .score-display {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+      .score-number {
+        font-size: 80px;
+        font-weight: 900;
+      }
+      .score-max {
+        font-size: 40px;
+        opacity: 0.7;
+      }
+      .grade {
+        font-size: 24px;
+        font-weight: 700;
+        padding: 10px 25px;
+        border-radius: 25px;
+        display: inline-block;
+        margin-top: 10px;
+      }
+      .grade.excellent {
+        background: rgba(16, 185, 129, 0.2);
+        color: #10b981;
+      }
+      .grade.good {
+        background: rgba(59, 130, 246, 0.2);
+        color: #3b82f6;
+      }
+      .grade.fair {
+        background: rgba(245, 158, 11, 0.2);
+        color: #f59e0b;
+      }
+      .grade.poor {
+        background: rgba(239, 68, 68, 0.2);
+        color: #ef4444;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin: 25px 0;
+      }
+      .stat-card {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .stat-number {
+        font-size: 36px;
+        font-weight: 900;
+        color: #1a1a2e;
+      }
+      .stat-label {
+        font-size: 11px;
+        color: #666;
+        text-transform: uppercase;
+        margin-top: 5px;
+        font-weight: 600;
+      }
+      .recommendations {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-left: 5px solid #f59e0b;
+        border-radius: 12px;
+        padding: 25px;
+        margin: 25px 0;
+      }
+      .recommendations h3 {
+        color: #92400e;
+        font-size: 18px;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .action-steps {
+        background: white;
+        border-radius: 10px;
+        padding: 20px;
+        margin-top: 15px;
+      }
+      .action-step {
+        padding: 15px;
+        margin: 10px 0;
+        border-left: 4px solid #3b82f6;
+        background: #f0f9ff;
+        border-radius: 8px;
+      }
+      .action-step h4 {
+        color: #1e40af;
+        font-size: 15px;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .action-step p {
+        color: #1e3a8a;
+        font-size: 13px;
+        line-height: 1.6;
+      }
+      .action-step .cost {
+        display: inline-block;
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 3px 8px;
+        border-radius: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        margin-top: 5px;
+      }
+      .test-details {
+        margin-top: 25px;
+      }
+      .category {
+        margin-bottom: 20px;
+      }
+      .category-header {
+        background: #1a1a2e;
+        color: white;
+        padding: 12px 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .test-item {
+        padding: 12px 15px;
+        margin: 8px 0;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        border-left: 4px solid;
+      }
+      .test-item.pass {
+        background: #f0fdf4;
+        border-color: #10b981;
+      }
+      .test-item.fail {
+        background: #fef2f2;
+        border-color: #ef4444;
+      }
+      .test-item.partial {
+        background: #fffbeb;
+        border-color: #f59e0b;
+      }
+      .test-status.partial { color: #d97706; }
+      .test-name {
+        font-weight: 600;
+        color: #1a1a2e;
+      }
+      .test-status {
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .test-status.pass {
+        color: #10b981;
+      }
+      .test-status.fail {
+        color: #ef4444;
+      }
+      .share-section {
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 3px solid #e5e7eb;
+      }
+      .share-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .share-button {
+        padding: 16px;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        transition: all 0.3s;
+      }
+      .share-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      }
+      .whatsapp-btn {
+        background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+      }
+      .copy-btn {
+        background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      }
+      .footer {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 2px solid #e5e7eb;
+        text-align: center;
+        color: #666;
+        font-size: 12px;
+      }
+      .checklist-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 14px 16px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .checklist-item:hover { border-color: #1a1a2e; background: #f0f9ff; }
+      .checklist-item.checked { border-color: #10b981; background: #ecfdf5; }
+      .checklist-item input[type="checkbox"] {
+        width: 20px; height: 20px; margin-top: 2px; flex-shrink: 0; cursor: pointer;
+        accent-color: #10b981;
+      }
+      .checklist-label { flex: 1; }
+      .checklist-label strong { display:block; color:#1a1a2e; font-size:13px; margin-bottom:3px; }
+      .checklist-label span { color:#666; font-size:12px; line-height:1.5; }
+      .checklist-pts { font-size:11px; font-weight:700; color:#6366f1; background:#eef2ff; padding:3px 8px; border-radius:6px; flex-shrink:0; margin-top:2px; }
+      @media print {
+        body { background: white; padding: 0; }
+        .container { box-shadow: none; border-radius: 0; padding: 20px; max-width: 100%; }
+        .input-group, #modeInfo, #manualChecklist, #deviceTypeSelector,
+        #startBtn, .loading, .share-section, .footer { display: none !important; }
+        .results { display: block !important; }
+        .test-log { display: none; }
+        .score-section { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .category-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .test-item { break-inside: avoid; }
+        .recommendations { break-inside: avoid; }
+        #methodologySection { break-inside: avoid; }
+        h1 { font-size: 20px; }
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 25px;
+        }
+        .device-selector {
+          grid-template-columns: 1fr;
+        }
+        .device-type-grid {
+          grid-template-columns: 1fr;
+        }
+        .device-option {
+          padding: 20px 15px;
+        }
+        .device-icon {
+          font-size: 50px;
+          margin-bottom: 10px;
+        }
+        .device-name {
+          font-size: 18px;
+        }
+        .device-desc {
+          font-size: 11px;
+        }
+        .summary-grid {
+          grid-template-columns: 1fr;
+        }
+        .share-buttons {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  <!-- Firebase config for local dev -->
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <div class="logo">🔒</div>
+        <h1>Network Security Assessment</h1>
+        <p class="subtitle">
+          Eduversal Indonesia - Cambridge International Schools
+        </p>
+        <span class="badge">PP 17/2025 Compliance Test</span>
+        <div id="userBadge" style="margin-top:10px;font-size:12px;color:#666;display:none;">
+          Signed in as <strong id="userEmail"></strong>
+          &nbsp;·&nbsp;<a href="#" onclick="signOutUser()" style="color:#ef4444;text-decoration:none;">Sign out</a>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>🏫 School Name:</label>
+        <input
+          type="text"
+          id="schoolName"
+          placeholder="Eduversal Partner School"
+          required
+        />
+      </div>
+
+      <div class="input-group">
+        <label>🔍 Testing Mode:</label>
+        <div class="device-selector">
+          <div class="device-option" onclick="selectTestMode('principal')">
+            <div class="device-icon">💼</div>
+            <div class="device-name">Quick Test</div>
+            <div class="device-desc">From my laptop (network only)</div>
+          </div>
+          <div class="device-option" onclick="selectTestMode('student')">
+            <div class="device-icon">🎯</div>
+            <div class="device-name">Full Test</div>
+            <div class="device-desc">From student device (recommended)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group" id="deviceTypeSelector" style="display: none">
+        <label>📱 Student Device Type:</label>
+        <div class="device-selector device-type-grid">
+          <div class="device-option" onclick="selectDevice('ipad')">
+            <div class="device-icon">📱</div>
+            <div class="device-name">iPad</div>
+            <div class="device-desc">School device</div>
+          </div>
+          <div class="device-option" onclick="selectDevice('chromebook')">
+            <div class="device-icon">💻</div>
+            <div class="device-name">Chromebook</div>
+            <div class="device-desc">School device</div>
+          </div>
+          <div class="device-option" onclick="selectDevice('phone')">
+            <div class="device-icon">📲</div>
+            <div class="device-name">Phone</div>
+            <div class="device-desc">Android/iPhone</div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="modeInfo"
+        style="
+          display: none;
+          background: #f0f9ff;
+          border-left: 4px solid #3b82f6;
+          padding: 15px;
+          border-radius: 8px;
+          margin: 20px 0;
+        "
+      >
+        <p
+          id="modeInfoText"
+          style="color: #1e3a8a; font-size: 12px; line-height: 1.6"
+        ></p>
+      </div>
+
+      <!-- Manual device management checklist — shown only for iPad/Chromebook -->
+      <div id="manualChecklist" style="display:none; margin: 25px 0;">
+        <div style="background:#1a1a2e; color:white; padding:12px 15px; border-radius:8px; font-weight:700; font-size:14px; margin-bottom:12px;">
+          🔧 Device Management — Manual Verification
+          <div style="font-size:11px; font-weight:400; opacity:0.7; margin-top:4px;">These cannot be tested automatically. Check each item on the device before proceeding.</div>
+        </div>
+        <div id="checklistItems" style="display:flex; flex-direction:column; gap:10px;"></div>
+      </div>
+
+      <button class="test-button" onclick="startTest()" id="startBtn" disabled>
+        🚀 Start Security Assessment
+      </button>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p class="loading-text">Testing your network security...</p>
+        <p class="loading-text" style="font-size: 13px">
+          <span id="progress">0/—</span> checks completed
+        </p>
+        <div class="test-log" id="testLog"></div>
+      </div>
+
+      <div class="results" id="results">
+        <div class="score-section">
+          <div>Security Score</div>
+          <div class="score-display">
+            <div class="score-number" id="scoreNum">0</div>
+            <div class="score-max">/100</div>
+          </div>
+          <div class="grade" id="grade"></div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="stat-card">
+            <div class="stat-number" id="passCount">0</div>
+            <div class="stat-label">Protected</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="failCount">0</div>
+            <div class="stat-label">Vulnerable</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="percent">0%</div>
+            <div class="stat-label">Compliant</div>
+          </div>
+        </div>
+
+        <div style="background:#f0f9ff; border-left:4px solid #3b82f6; border-radius:10px; padding:16px 20px; margin-bottom:20px; font-size:12px; color:#1e3a8a; line-height:1.6;">
+          <strong>📋 About this assessment</strong><br>
+          Network tests use dual HTTP probes (fetch + image) with adaptive timeout calibrated to your connection speed.
+          Results indicate whether sites are <em>reachable from this browser</em> — a blocked result is strong evidence of filtering, but not a guarantee.
+          Items marked <strong>⚠ low confidence</strong> should be verified manually.
+          Device management items are self-reported — verify against your MDM/Admin Console.
+          This tool does not perform DNS resolution bypass testing or SSL inspection.
+        </div>
+
+        <div class="recommendations" id="recommendations"></div>
+
+        <div class="test-details" id="testDetails"></div>
+
+        <!-- Methodology section (visible in PDF) -->
+        <div id="methodologySection" style="margin-top:30px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:20px;">
+          <h3 style="color:#1a1a2e;font-size:15px;margin-bottom:12px;">📐 Test Methodology</h3>
+          <div id="methodologyBody" style="font-size:12px;color:#475569;line-height:1.7;"></div>
+        </div>
+
+        <div class="share-section">
+          <div class="share-buttons" style="grid-template-columns:1fr 1fr;">
+            <button class="share-button copy-btn" onclick="copyResults()">
+              <span>📋</span><span>Copy Report</span>
+            </button>
+            <button class="share-button" style="background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);" onclick="exportPdf()">
+              <span>📄</span><span>Save as PDF</span>
+            </button>
+          </div>
+          <p style="text-align:center;color:#666;font-size:12px;margin-top:15px;">
+            Send the PDF or copied report to your IT coordinator or Eduversal representative.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p><strong>© 2025 Eduversal Indonesia</strong></p>
+        <p>Cambridge International Schools Network</p>
+      </div>
+    </div>
+
+    <script>
+      // Auth integration — show user badge once auth-guard.js fires authReady
+      document.addEventListener("authReady", ({ detail: { user } }) => {
+        const badge = document.getElementById("userBadge");
+        const emailEl = document.getElementById("userEmail");
+        if (badge && emailEl && user) {
+          emailEl.textContent = user.email;
+          badge.style.display = "block";
+        }
+      });
+
+      async function signOutUser() {
+        if (window.auth) {
+          const { signOut } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
+          await signOut(window.auth);
+          window.location.href = "index.html";
+        }
+      }
+
+      let selectedDevice = "";
+      let testingMode = "";
+      let schoolName = "";
+      let testResults = [];
+      let totalScore = 0;
+      let baselineMs = 1500; // adaptive: calibrated before tests start
+
+      // Known Tor directory authority IPs (stable, maintained by Tor Project)
+      const TOR_IPS = ["128.31.0.39","86.59.21.38","194.109.206.212","131.188.40.189","199.58.81.140","204.13.164.118"];
+      // DoH endpoint for DNS-over-HTTPS bypass test
+      const DOH_URL = "https://cloudflare-dns.com/dns-query?name=example.com&type=A";
+
+      // Special probe: DNS-over-HTTPS
+      async function probeDoh(timeoutMs) {
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), timeoutMs);
+          const r = await fetch(DOH_URL, { headers: { Accept: "application/dns-json" }, signal: ctrl.signal, cache: "no-cache" });
+          clearTimeout(t);
+          // If we get a valid JSON response, DoH is accessible (NOT blocked)
+          const data = await r.json();
+          return { blocked: false, confidence: data && data.Answer ? "high" : "low" };
+        } catch {
+          return { blocked: true, confidence: "high" };
+        }
+      }
+
+      // Special probe: Tor directory authorities
+      async function probeTor(timeoutMs) {
+        let blockedCount = 0;
+        for (const ip of TOR_IPS.slice(0, 4)) {
+          const { blocked } = await probeUrl(ip, timeoutMs);
+          if (blocked) blockedCount++;
+        }
+        // Majority blocked = Tor filtered
+        const blocked = blockedCount >= 3;
+        return { blocked, confidence: blocked ? "high" : "low", detail: `${blockedCount}/4 Tor directory IPs blocked` };
+      }
+
+      // Dual-probe: fetch HEAD + Image load. Both failing = blocked (high confidence).
+      // Only one failing = likely blocked (low confidence). Both succeed = accessible.
+      async function probeUrl(hostname, timeoutMs) {
+        const url = `https://${hostname}`;
+        let fetchBlocked = false;
+        let imgBlocked = false;
+
+        // Probe 1: fetch HEAD
+        try {
+          const ctrl = new AbortController();
+          const t = setTimeout(() => ctrl.abort(), timeoutMs);
+          const t0 = Date.now();
+          await fetch(url, { method: "HEAD", mode: "no-cors", cache: "no-cache", signal: ctrl.signal });
+          clearTimeout(t);
+          if (Date.now() - t0 >= timeoutMs - 50) fetchBlocked = true;
+        } catch {
+          fetchBlocked = true;
+        }
+
+        // Probe 2: Image (favicon) load — different TCP path, helps confirm
+        await new Promise((resolve) => {
+          const img = new Image();
+          const t = setTimeout(() => { imgBlocked = true; resolve(); }, timeoutMs);
+          img.onload  = () => { clearTimeout(t); resolve(); };
+          img.onerror = () => { clearTimeout(t); imgBlocked = true; resolve(); };
+          img.src = `${url}/favicon.ico?_=${Date.now()}`;
+        });
+
+        if (fetchBlocked && imgBlocked) return { blocked: true, confidence: "high" };
+        if (fetchBlocked || imgBlocked)  return { blocked: true, confidence: "low" };
+        return { blocked: false, confidence: "high" };
+      }
+
+      // Multi-URL probe: returns { status: "pass"|"partial"|"fail", blockedCount, totalCount, confidence, detail }
+      // "pass" = all URLs blocked. "partial" = some blocked. "fail" = none blocked.
+      // invertLogic: for YouTube — "pass" means accessible (not blocked)
+      async function probeTest(test, timeoutMs) {
+        const urls = test.urls || [test.url];
+        const attempts = test.attempts || 1;
+
+        // Special cases
+        if (urls[0] === "doh") {
+          const r = await probeDoh(timeoutMs);
+          return { status: r.blocked ? "pass" : "fail", blockedCount: r.blocked ? 1 : 0, totalCount: 1, confidence: r.confidence, detail: "" };
+        }
+        if (urls[0] === "tor") {
+          const r = await probeTor(timeoutMs);
+          return { status: r.blocked ? "pass" : "fail", blockedCount: r.blocked ? 1 : 0, totalCount: 1, confidence: r.confidence, detail: r.detail };
+        }
+
+        let blockedCount = 0;
+        let lowConfCount = 0;
+        const details = [];
+
+        for (const hostname of urls) {
+          let votes = 0;
+          let thisLowConf = 0;
+          for (let i = 0; i < attempts; i++) {
+            const { blocked: b, confidence: c } = await probeUrl(hostname, timeoutMs);
+            if (b) votes++;
+            if (c === "low") thisLowConf++;
+            if (i < attempts - 1) await new Promise(r => setTimeout(r, 250));
+          }
+          const isBlocked = votes >= Math.ceil(attempts / 2);
+          if (isBlocked) blockedCount++;
+          if (thisLowConf > 0) lowConfCount++;
+          details.push(`${hostname}: ${isBlocked ? "blocked" : "accessible"}${thisLowConf > 0 ? " ⚠" : ""}`);
+        }
+
+        const totalCount = urls.length;
+        let status;
+        if (test.invertLogic) {
+          // For YouTube: "pass" = accessible (blockedCount === 0)
+          status = blockedCount === 0 ? "pass" : blockedCount === totalCount ? "fail" : "partial";
+        } else {
+          status = blockedCount === totalCount ? "pass" : blockedCount > 0 ? "partial" : "fail";
+        }
+
+        const confidence = lowConfCount > 0 ? "low" : "high";
+        return { status, blockedCount, totalCount, confidence, detail: details.join(" | ") };
+      }
+
+      // Calibrate baseline latency using a known-reachable endpoint (google.com)
+      async function calibrateBaseline() {
+        addLog("Calibrating network baseline...", "info");
+        const samples = [];
+        for (let i = 0; i < 3; i++) {
+          try {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), 5000);
+            const t0 = Date.now();
+            await fetch("https://www.google.com/generate_204", { mode: "no-cors", cache: "no-cache", signal: ctrl.signal });
+            clearTimeout(t);
+            samples.push(Date.now() - t0);
+          } catch { samples.push(5000); }
+          if (i < 2) await new Promise(r => setTimeout(r, 200));
+        }
+        const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
+        // timeout = 3× baseline, capped between 1500ms and 6000ms
+        baselineMs = Math.min(6000, Math.max(1500, Math.round(avg * 3)));
+        addLog(`Baseline: ${Math.round(avg)}ms avg → using ${baselineMs}ms timeout per probe`, "info");
+      }
+
+      // Each test now supports urls[] (array). All must be blocked for full pts.
+      // If some blocked = partial credit. status: "pass"|"partial"|"fail"
+      const testSuites = {
+        principal: [
+          {
+            cat: "🔞 Adult Content (CRITICAL)",
+            tests: [
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],     pts: 12, critical: true,  attempts: 2 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],       pts: 12, critical: true,  attempts: 2 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com","danbooru.donmai.us"],pts: 8,  critical: true,  attempts: 2 },
+            ],
+          },
+          {
+            cat: "🎰 Gambling & Betting",
+            tests: [
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"], pts: 8, critical: true,  attempts: 2 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com","casinoroom.com"], pts: 7, critical: true,  attempts: 2 },
+            ],
+          },
+          {
+            cat: "🌐 DNS/Firewall Filtering",
+            tests: [
+              { name: "Cloudflare DNS IP Block",  urls: ["1.1.1.1","1.0.0.1"],  pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests outbound port-53/firewall filtering active" },
+              { name: "Google DNS IP Block",      urls: ["8.8.8.8","8.8.4.4"],  pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS/firewall filtering active" },
+              { name: "DNS-over-HTTPS Bypass",    urls: ["doh"],                pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver (cloudflare-dns.com/dns-query) is accessible — blocked means DoH bypass is prevented" },
+            ],
+          },
+          {
+            cat: "🔒 VPN/Proxy Circumvention",
+            tests: [
+              { name: "Web Proxy Sites",  urls: ["proxysite.com","hide.me","croxyproxy.com","kproxy.com"],   pts: 7, critical: true, attempts: 2 },
+              { name: "VPN Services",     urls: ["nordvpn.com","expressvpn.com","mullvad.net"],              pts: 6, critical: true, attempts: 2 },
+              { name: "Tor Project",      urls: ["tor"],                                                      pts: 5, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked suggests Tor exit nodes are filtered" },
+            ],
+          },
+          {
+            cat: "⚔️ Violence & Harmful Content",
+            tests: [
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com","theync.com"],   pts: 8, critical: true,  attempts: 2 },
+              { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"],                pts: 5, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "💊 Drugs & Substances",
+            tests: [
+              { name: "Drug Information", urls: ["erowid.org","tripsit.me","psychonautwiki.org"], pts: 5, critical: false, attempts: 1 },
+              { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"],                   pts: 4, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "📱 Social Media Control",
+            tests: [
+              { name: "TikTok",     urls: ["tiktok.com","vm.tiktok.com"],          pts: 4, critical: true,  attempts: 2 },
+              { name: "Instagram",  urls: ["instagram.com","cdninstagram.com"],    pts: 4, critical: true,  attempts: 2 },
+              { name: "Snapchat",   urls: ["snapchat.com","sc-cdn.net"],           pts: 4, critical: true,  attempts: 2 },
+              { name: "Facebook",   urls: ["facebook.com","fbcdn.net"],            pts: 2, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "🛡️ Safety Controls",
+            tests: [
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true,  attempts: 2, invertLogic: true, info: "YouTube itself should be reachable — Restricted Mode is enforced server-side or via DNS" },
+            ],
+          },
+        ],
+        ipad: [
+          {
+            cat: "🔞 Adult Content (CRITICAL)",
+            tests: [
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 2 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 2 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 2 },
+            ],
+          },
+          {
+            cat: "🎰 Gambling & Betting",
+            tests: [
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 2 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 2 },
+            ],
+          },
+          {
+            cat: "🌐 DNS/Firewall Filtering",
+            tests: [
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS/firewall filtering active" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+            ],
+          },
+          {
+            cat: "🔒 VPN/Proxy Circumvention",
+            tests: [
+              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 2 },
+              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 2 },
+              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+            ],
+          },
+          {
+            cat: "⚔️ Violence & Harmful Content",
+            tests: [
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 2 },
+              { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "💊 Drugs & Substances",
+            tests: [
+              { name: "Drug Information", urls: ["erowid.org","tripsit.me"],   pts: 4, critical: false, attempts: 1 },
+              { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"], pts: 3, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "📱 Social Media Control",
+            tests: [
+              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 3, critical: true,  attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "Facebook",  urls: ["facebook.com","fbcdn.net"],         pts: 2, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "🛡️ Safety Controls",
+            tests: [
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable — Restricted Mode enforced via MDM or DNS policy" },
+            ],
+          },
+        ],
+        chromebook: [
+          {
+            cat: "🔞 Adult Content (CRITICAL)",
+            tests: [
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 2 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 2 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 6,  critical: true,  attempts: 2 },
+            ],
+          },
+          {
+            cat: "🎰 Gambling & Betting",
+            tests: [
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 2 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 2 },
+            ],
+          },
+          {
+            cat: "🌐 DNS/Firewall Filtering",
+            tests: [
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS policy enforced" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+            ],
+          },
+          {
+            cat: "🔒 VPN/Proxy Circumvention",
+            tests: [
+              { name: "Web Proxy Sites",    urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 2 },
+              { name: "VPN Services",       urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 2 },
+              { name: "Tor Project",        urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+            ],
+          },
+          {
+            cat: "⚔️ Violence & Harmful Content",
+            tests: [
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 2 },
+              { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "💊 Drugs & Substances",
+            tests: [
+              { name: "Drug Information", urls: ["erowid.org","tripsit.me"],   pts: 4, critical: false, attempts: 1 },
+              { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"], pts: 3, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "📱 Social Media Control",
+            tests: [
+              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 3, critical: true,  attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "Facebook",  urls: ["facebook.com","fbcdn.net"],         pts: 2, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "🛡️ Safety Controls",
+            tests: [
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable — Restricted Mode enforced via Chrome policy" },
+            ],
+          },
+        ],
+        phone: [
+          {
+            cat: "🔞 Adult Content (CRITICAL)",
+            tests: [
+              { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 15, critical: true,  attempts: 2 },
+              { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 15, critical: true,  attempts: 2 },
+              { name: "Adult Image Sites",    urls: ["rule34.xxx","gelbooru.com"],                     pts: 10, critical: true,  attempts: 2 },
+            ],
+          },
+          {
+            cat: "🎰 Gambling & Betting",
+            tests: [
+              { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 10, critical: true, attempts: 2 },
+              { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 5,  critical: true, attempts: 2 },
+            ],
+          },
+          {
+            cat: "🌐 DNS/Firewall Filtering",
+            tests: [
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS-level filtering active" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS filtering active" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+            ],
+          },
+          {
+            cat: "🔒 VPN/Proxy Circumvention",
+            tests: [
+              { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 8, critical: true,  attempts: 2 },
+              { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true,  attempts: 2 },
+              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: false, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+            ],
+          },
+          {
+            cat: "⚔️ Violence & Harmful Content",
+            tests: [
+              { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 8, critical: true,  attempts: 2 },
+              { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 5, critical: false, attempts: 1 },
+            ],
+          },
+          {
+            cat: "📱 Social Media Control",
+            tests: [
+              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 4, critical: true, attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 4, critical: true, attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 4, critical: true, attempts: 2 },
+            ],
+          },
+          {
+            cat: "🛡️ Safety Controls",
+            tests: [
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true, attempts: 2, invertLogic: true, info: "YouTube must be reachable — network-level Restricted Mode enforced via DNS or firewall redirect" },
+            ],
+          },
+        ],
+      };
+
+      function selectTestMode(mode) {
+        testingMode = mode;
+        document
+          .querySelectorAll(".device-option")
+          .forEach((el) => el.classList.remove("selected"));
+        event.target.closest(".device-option").classList.add("selected");
+
+        const deviceSelector = document.getElementById("deviceTypeSelector");
+        const modeInfo = document.getElementById("modeInfo");
+        const modeInfoText = document.getElementById("modeInfoText");
+
+        if (mode === "principal") {
+          deviceSelector.style.display = "none";
+          selectedDevice = "principal";
+          modeInfo.style.display = "block";
+          modeInfoText.innerHTML =
+            "<strong>Quick Test Mode:</strong> Tests network-level filtering only (DNS, firewall, content blocking). Score out of 100. This gives a baseline but may not reflect student device restrictions.";
+          document.getElementById("startBtn").disabled = false;
+        } else {
+          deviceSelector.style.display = "block";
+          selectedDevice = "";
+          modeInfo.style.display = "block";
+          modeInfoText.innerHTML =
+            '<strong>Full Test Mode:</strong> Tests both network filtering AND device management (MDM/enrollment, app restrictions, policy enforcement). Score out of 100. <span style="color:#065f46;font-weight:600;">✓ Recommended for accurate results.</span>';
+          document.getElementById("startBtn").disabled = true;
+        }
+      }
+
+      const manualChecks = {
+        ipad: [
+          { id: "mdm",        pts: 8, critical: true,  label: "MDM Profile Installed",       how: "Settings → General → VPN & Device Management — an enrollment profile must appear." },
+          { id: "supervised", pts: 5, critical: true,  label: "Supervision Mode Enabled",    how: "Settings → General → About — look for 'This iPad is supervised and managed by…'." },
+          { id: "apprestrict",pts: 3, critical: false, label: "App Installation Restricted", how: "Open App Store — if installation is blocked by MDM, this is passing." },
+          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "Open Safari → google.com → search 'how to turn off SafeSearch' — if the toggle is greyed out, passing." },
+        ],
+        chromebook: [
+          { id: "enrolled",   pts: 7, critical: true,  label: "Chrome Device Enrollment",    how: "chrome://policy — look for 'DeviceEnrollmentDomain'. If empty, device is NOT enrolled." },
+          { id: "extpolicy",  pts: 5, critical: true,  label: "Extension Policy Applied",    how: "chrome://policy — look for ExtensionInstallForcelist or BlockList entries." },
+          { id: "reenroll",   pts: 4, critical: true,  label: "Force Re-enrollment Active",  how: "Admin Console → Devices → Settings → Enrollment & Access → 'Keep device enrolled'." },
+          { id: "userpolicy", pts: 2, critical: false, label: "User Policy Enforced",        how: "chrome://policy — filter by 'user' scope; policies should be populated after sign-in." },
+          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "google.com → search settings — if SafeSearch is locked ON by admin, passing." },
+        ],
+      };
+
+      let manualCheckState = {}; // id → true/false
+
+      function renderManualChecklist(device) {
+        const checks = manualChecks[device];
+        if (!checks) { document.getElementById("manualChecklist").style.display = "none"; return; }
+        manualCheckState = {};
+        checks.forEach(c => { manualCheckState[c.id] = false; });
+
+        const container = document.getElementById("checklistItems");
+        container.innerHTML = "";
+        checks.forEach(c => {
+          const div = document.createElement("label");
+          div.className = "checklist-item";
+          div.setAttribute("for", "chk_" + c.id);
+          div.innerHTML = `
+            <input type="checkbox" id="chk_${c.id}" onchange="toggleManualCheck('${c.id}', this.checked)">
+            <div class="checklist-label">
+              <strong>${c.label}${c.critical ? ' <span style="color:#ef4444">★ Critical</span>' : ''}</strong>
+              <span>How to verify: ${c.how}</span>
+            </div>
+            <div class="checklist-pts">+${c.pts} pts</div>`;
+          container.appendChild(div);
+        });
+        document.getElementById("manualChecklist").style.display = "block";
+      }
+
+      function toggleManualCheck(id, checked) {
+        manualCheckState[id] = checked;
+        const lbl = document.querySelector(`label[for="chk_${id}"]`);
+        if (lbl) lbl.classList.toggle("checked", checked);
+      }
+
+      function selectDevice(device) {
+        selectedDevice = device;
+        document
+          .querySelectorAll("#deviceTypeSelector .device-option")
+          .forEach((el) => el.classList.remove("selected"));
+        event.target.closest(".device-option").classList.add("selected");
+        renderManualChecklist(device);
+        document.getElementById("startBtn").disabled = false;
+      }
+
+      function addLog(msg, type = "info") {
+        const log = document.getElementById("testLog");
+        const line = document.createElement("div");
+        line.className = `log-line ${type}`;
+        line.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+        log.appendChild(line);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      async function startTest() {
+        schoolName = document.getElementById("schoolName").value.trim().replace(/[<>&"']/g, (c) => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+        if (!schoolName) {
+          alert("Please enter school name");
+          return;
+        }
+        if (!selectedDevice) {
+          alert("Please select testing mode and device type");
+          return;
+        }
+
+        document.getElementById("startBtn").style.display = "none";
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("results").style.display = "none";
+        document.getElementById("testLog").innerHTML = "";
+        testResults = [];
+        totalScore = 0;
+
+        const modeName =
+          testingMode === "principal"
+            ? "Quick Test (Network Only)"
+            : selectedDevice === "ipad"
+            ? "Full Test (iPad)"
+            : selectedDevice === "chromebook"
+            ? "Full Test (Chromebook)"
+            : "Full Test (Phone)";
+        addLog(`Starting ${modeName}...`, "info");
+
+        // Step 1: calibrate adaptive timeout
+        await calibrateBaseline();
+
+        // Step 2: inject manual checklist results as scored items
+        const manualDefs = manualChecks[selectedDevice] || [];
+        for (const mc of manualDefs) {
+          const passed = !!manualCheckState[mc.id];
+          const result = {
+            name: mc.label,
+            url: "manual",
+            pts: mc.pts,
+            critical: mc.critical,
+            category: "🔧 Device Management",
+            blocked: passed, // "blocked" means the control IS in place = good
+            earned: passed ? mc.pts : 0,
+            confidence: "manual",
+          };
+          testResults.push(result);
+          totalScore += result.earned;
+          addLog(`[Manual] ${mc.label}: ${passed ? "VERIFIED ✓" : "NOT VERIFIED ✗"}`, passed ? "success" : "error");
+        }
+
+        // Step 3: run automated network tests
+        const suite = testSuites[selectedDevice];
+        // filter out old url:"test" entries — replaced by manual checklist above
+        const networkSuite = suite.map(cat => ({
+          ...cat,
+          tests: cat.tests.filter(t => t.url !== "test" && !t.note)
+        })).filter(cat => cat.tests.length > 0);
+
+        // also handle info notes
+        const infoTests = suite.flatMap(cat => cat.tests.filter(t => t.note));
+        for (const t of infoTests) {
+          addLog(`ℹ️ ${t.name}: ${t.note}`, "info");
+        }
+
+        const totalAuto = networkSuite.reduce((sum, cat) => sum + cat.tests.length, 0);
+        const totalAll = totalAuto + manualDefs.length;
+        let count = manualDefs.length;
+
+        for (const category of networkSuite) {
+          addLog(`Testing ${category.cat}...`, "info");
+          for (const test of category.tests) {
+            count++;
+            document.getElementById("progress").textContent = `${count}/${totalAll}`;
+
+            const urlCount = (test.urls || [test.url]).filter(u => u !== "test").length;
+            addLog(`  Probing ${test.name} (${urlCount} URL${urlCount > 1 ? "s" : ""}, ${test.attempts || 1}× each)...`, "info");
+
+            const { status, blockedCount, totalCount, confidence, detail } = await probeTest(test, baselineMs);
+
+            // Partial scoring: full pts if all blocked, half pts if some blocked, 0 if none
+            let earned = 0;
+            if (status === "pass")    earned = test.pts;
+            else if (status === "partial") earned = Math.floor(test.pts / 2);
+
+            const result = {
+              ...test,
+              category: category.cat,
+              blocked: status === "pass",
+              status,   // "pass" | "partial" | "fail"
+              earned,
+              confidence,
+              detail,
+              blockedCount,
+              totalCount,
+            };
+
+            testResults.push(result);
+            totalScore += earned;
+
+            const confTag = confidence === "low" ? " ⚠ low confidence" : "";
+            const statusTag = status === "pass" ? "ALL BLOCKED" : status === "partial" ? `PARTIAL (${blockedCount}/${totalCount})` : "ACCESSIBLE";
+            addLog(`  ${test.name}: ${statusTag}${confTag}`, status === "pass" ? "success" : status === "partial" ? "info" : "error");
+            if (detail) addLog(`    ${detail}`, "info");
+
+            await new Promise(r => setTimeout(r, 100));
+          }
+        }
+
+        addLog("\n✓ Assessment complete. Generating report...", "success");
+        await new Promise((r) => setTimeout(r, 500));
+        displayResults();
+      }
+
+      function displayResults() {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("results").style.display = "block";
+
+        const passed  = testResults.filter((r) => r.status === "pass").length;
+        const partial = testResults.filter((r) => r.status === "partial").length;
+        const failed  = testResults.filter((r) => r.status === "fail").length;
+        const percent = Math.round((passed / testResults.length) * 100);
+
+        document.getElementById("scoreNum").textContent = totalScore;
+        document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}⚡)` : "");
+        document.getElementById("failCount").textContent = failed;
+        document.getElementById("percent").textContent = percent + "%";
+
+        const grade = document.getElementById("grade");
+        let gradeText, gradeClass;
+        if (totalScore >= 85) {
+          gradeText = "🌟 EXCELLENT";
+          gradeClass = "excellent";
+        } else if (totalScore >= 70) {
+          gradeText = "✅ GOOD";
+          gradeClass = "good";
+        } else if (totalScore >= 50) {
+          gradeText = "⚠️ FAIR";
+          gradeClass = "fair";
+        } else {
+          gradeText = "❌ NEEDS URGENT ACTION";
+          gradeClass = "poor";
+        }
+
+        grade.textContent = gradeText;
+        grade.className = "grade " + gradeClass;
+
+        generateRecommendations();
+        displayTestDetails();
+        buildMethodology();
+      }
+
+      function generateRecommendations() {
+        const critical = testResults.filter((r) => (r.status === "fail" || r.status === "partial") && r.critical);
+        const recDiv = document.getElementById("recommendations");
+
+        let html = "<h3>⚡ Action Required</h3>";
+
+        if (testingMode === "principal") {
+          html +=
+            '<p style="color:#92400e;margin-bottom:15px;font-size:13px;font-weight:600;">Note: You tested from your laptop. For complete assessment, please test from a student device.</p>';
+        }
+
+        if (critical.length === 0) {
+          html +=
+            '<div class="action-steps"><p style="color:#065f46;font-weight:600;">✅ All critical security controls are in place. Your network meets PP 17/2025 compliance standards.</p>';
+          if (testingMode === "principal") {
+            html +=
+              '<p style="color:#1e40af;margin-top:10px;font-size:12px;">💡 Consider running a Full Test from a student device to verify device management policies.</p>';
+          }
+          html += "</div>";
+        } else {
+          html +=
+            '<p style="color:#92400e;margin-bottom:15px;font-weight:600;">Critical security gaps detected. Follow these steps:</p>';
+          html += '<div class="action-steps">';
+
+          if (testingMode === "principal") {
+            // Network-level recommendations
+            if (
+              critical.some(
+                (c) => c.name.includes("Adult") || c.name.includes("Gambling")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🛡️ Step 1: Upgrade Content Filter</h4>
+                            <p><strong>Action:</strong> Deploy Fortinet FortiGate or Lightspeed Relay<br>
+                            <strong>Why:</strong> Block adult content and gambling sites with SSL inspection<br>
+                            <strong>Timeline:</strong> 2-4 weeks</p>
+                            <span class="cost">~$15-20 per student/year</span>
+                        </div>`;
+            }
+            if (
+              critical.some(
+                (c) => c.name.includes("Proxy") || c.name.includes("VPN")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🚫 Step 2: Block VPN Protocols</h4>
+                            <p><strong>Action:</strong> Configure firewall to block ports 1194, 1723, 4500, 500<br>
+                            <strong>Why:</strong> Prevent VPN protocol usage at network level<br>
+                            <strong>Timeline:</strong> Same day</p>
+                            <span class="cost">FREE (firewall config)</span>
+                        </div>`;
+            }
+            if (critical.some((c) => c.name.includes("DNS"))) {
+              html += `<div class="action-step">
+                            <h4>🌐 Step 3: Force DNS Settings</h4>
+                            <p><strong>Action:</strong> Set DHCP to force DNS 208.67.222.123, block outbound port 53<br>
+                            <strong>Why:</strong> Enable DNS-level filtering, prevent 8.8.8.8 bypass<br>
+                            <strong>Timeline:</strong> Same day</p>
+                            <span class="cost">FREE</span>
+                        </div>`;
+            }
+            html += `<div class="action-step" style="border-left-color:#f59e0b;background:#fffbeb;">
+                        <h4>⚠️ Important: Device Management</h4>
+                        <p style="color:#78350f;">Your test only covered network filtering. Student devices also need MDM (iPad) or Chrome Education Upgrade (Chromebook) for complete protection. <strong>Run a Full Test from a student device</strong> to assess device security.</p>
+                    </div>`;
+          } else if (selectedDevice === "ipad") {
+            // iPad-specific recommendations
+            if (critical.some((c) => c.name.includes("MDM"))) {
+              html += `<div class="action-step">
+                            <h4>🔧 Step 1: Deploy MDM System</h4>
+                            <p><strong>Action:</strong> Install Jamf School or Mosyle on all iPads<br>
+                            <strong>Why:</strong> Block VPN apps, lock DNS, enable supervision<br>
+                            <strong>Timeline:</strong> 1-2 weeks</p>
+                            <span class="cost">~$3-5 per device/year</span>
+                        </div>`;
+            }
+            if (
+              critical.some(
+                (c) => c.name.includes("VPN") || c.name.includes("DNS")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🔒 Step 2: Lock Device Settings</h4>
+                            <p><strong>Action:</strong> Deploy MDM profile to force DNS and block VPN apps<br>
+                            <strong>Why:</strong> Prevent students from bypassing filters<br>
+                            <strong>Timeline:</strong> Same day (via MDM)</p>
+                            <span class="cost">Included in MDM</span>
+                        </div>`;
+            }
+            if (
+              critical.some(
+                (c) => c.name.includes("Adult") || c.name.includes("Gambling")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🛡️ Step 3: Upgrade Network Filter</h4>
+                            <p><strong>Action:</strong> Deploy Fortinet or Lightspeed Relay<br>
+                            <strong>Why:</strong> SSL inspection for HTTPS filtering<br>
+                            <strong>Timeline:</strong> 2-4 weeks</p>
+                            <span class="cost">~$15-20 per student/year</span>
+                        </div>`;
+            }
+          } else {
+            // Chromebook-specific recommendations
+            if (
+              critical.some(
+                (c) =>
+                  c.name.includes("Enrollment") || c.name.includes("Policy")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🔧 Step 1: Chrome Education Upgrade</h4>
+                            <p><strong>Action:</strong> Purchase license via Google Admin Console<br>
+                            <strong>Why:</strong> Enable forced enrollment and advanced policies<br>
+                            <strong>Timeline:</strong> Same day</p>
+                            <span class="cost">$30 per device (ONE-TIME)</span>
+                        </div>`;
+            }
+            if (critical.some((c) => c.name.includes("VPN"))) {
+              html += `<div class="action-step">
+                            <h4>🚫 Step 2: Block VPN Extensions</h4>
+                            <p><strong>Action:</strong> Add VPN extension IDs to blocklist (Admin Console > Apps)<br>
+                            <strong>Why:</strong> Prevent NordVPN, ExpressVPN installation<br>
+                            <strong>Timeline:</strong> 15 minutes</p>
+                            <span class="cost">FREE</span>
+                        </div>`;
+            }
+            if (critical.some((c) => c.name.includes("DNS"))) {
+              html += `<div class="action-step">
+                            <h4>🌐 Step 3: Force DNS Policy</h4>
+                            <p><strong>Action:</strong> Set DNS to 208.67.222.123 in Chrome device policy<br>
+                            <strong>Why:</strong> DNS-level filtering, block malware domains<br>
+                            <strong>Timeline:</strong> 10 minutes</p>
+                            <span class="cost">FREE</span>
+                        </div>`;
+            }
+            if (
+              critical.some(
+                (c) => c.name.includes("Adult") || c.name.includes("Gambling")
+              )
+            ) {
+              html += `<div class="action-step">
+                            <h4>🛡️ Step 4: Deploy Content Filter</h4>
+                            <p><strong>Action:</strong> Install Lightspeed Relay or Securly extension<br>
+                            <strong>Why:</strong> Advanced filtering on/off campus<br>
+                            <strong>Timeline:</strong> 1-2 weeks</p>
+                            <span class="cost">~$10-15 per student/year</span>
+                        </div>`;
+            }
+          }
+
+          html += "</div>";
+        }
+
+        recDiv.innerHTML = html;
+      }
+
+      function displayTestDetails() {
+        const detailsDiv = document.getElementById("testDetails");
+        let html = "";
+
+        const suite = testSuites[selectedDevice];
+        suite.forEach((category) => {
+          const catResults = testResults.filter(
+            (r) => r.category === category.cat
+          );
+          const catScore = catResults.reduce((sum, r) => sum + r.earned, 0);
+          const catMax = catResults.reduce((sum, r) => sum + r.pts, 0);
+
+          html += `<div class="category">
+                    <div class="category-header">
+                        <span>${category.cat}</span>
+                        <span>${catScore}/${catMax}</span>
+                    </div>`;
+
+          catResults.forEach((result) => {
+            const confBadge = result.confidence === "low"
+              ? `<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin-left:6px;" title="Only one probe confirmed block">⚠ low confidence</span>`
+              : result.confidence === "manual"
+              ? `<span style="font-size:10px;background:#ede9fe;color:#5b21b6;padding:2px 6px;border-radius:4px;margin-left:6px;">manual</span>`
+              : "";
+            const statusClass = result.status === "pass" ? "pass" : result.status === "partial" ? "partial" : "fail";
+            const statusLabel = result.status === "pass"
+              ? "✓ PROTECTED"
+              : result.status === "partial"
+              ? `⚡ PARTIAL (${result.blockedCount}/${result.totalCount})`
+              : "✗ VULNERABLE";
+            const ptsLabel = `<span style="font-size:11px;color:#6b7280;margin-left:6px;">${result.earned}/${result.pts}pts</span>`;
+            const detailHtml = result.detail
+              ? `<div style="font-size:11px;color:#6b7280;margin-top:4px;padding-left:4px;font-family:monospace;">${result.detail}</div>`
+              : "";
+            html += `<div class="test-item ${statusClass}" style="flex-direction:column;align-items:flex-start;">
+                      <div style="display:flex;justify-content:space-between;width:100%;align-items:center;">
+                        <span class="test-name">${result.name}${confBadge}${ptsLabel}</span>
+                        <span class="test-status ${statusClass}">${statusLabel}</span>
+                      </div>
+                      ${detailHtml}
+                    </div>`;
+          });
+
+          html += "</div>";
+        });
+
+        detailsDiv.innerHTML = html;
+      }
+
+      function getReportText() {
+        const passed  = testResults.filter((r) => r.status === "pass").length;
+        const partial = testResults.filter((r) => r.status === "partial").length;
+        const total   = testResults.length;
+        const critical = testResults.filter((r) => (r.status === "fail" || r.status === "partial") && r.critical);
+
+        let grade =
+          totalScore >= 85
+            ? "EXCELLENT 🌟"
+            : totalScore >= 70
+            ? "GOOD ✅"
+            : totalScore >= 50
+            ? "FAIR ⚠️"
+            : "URGENT ACTION NEEDED ❌";
+
+        const testMode =
+          testingMode === "principal"
+            ? "Quick Test (Principal Laptop)"
+            : selectedDevice === "ipad"
+            ? "Full Test (Student iPad)"
+            : selectedDevice === "chromebook"
+            ? "Full Test (Student Chromebook)"
+            : "Full Test (Student Phone)";
+
+        let msg = `🔒 EDUVERSAL SECURITY ASSESSMENT\n`;
+        msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
+        msg += `🏫 School: ${schoolName}\n`;
+        msg += `👤 Tester: ${window.currentUser ? window.currentUser.email : "—"}\n`;
+        msg += `🔍 Test Mode: ${testMode}\n\n`;
+        msg += `📊 SCORE: ${totalScore}/100\n`;
+        msg += `🎯 Grade: ${grade}\n`;
+        msg += `✅ Protected: ${passed}/${total}\n`;
+        msg += `⚡ Partial: ${partial}/${total}\n`;
+        msg += `❌ Vulnerable: ${total - passed - partial}/${total}\n\n`;
+
+        if (testingMode === "principal") {
+          msg += `ℹ️ Note: Network-level test only\n`;
+          msg += `💡 Recommend: Full test from student device\n\n`;
+        }
+
+        if (critical.length > 0) {
+          msg += `⚠️ CRITICAL ISSUES:\n`;
+          critical.forEach((c, i) => {
+            const tag = c.confidence === "low" ? " ⚠ (low confidence)" : c.confidence === "manual" ? " (manual — unverified)" : "";
+            msg += `${i + 1}. ${c.name}${tag}\n`;
+          });
+          msg += `\n🚨 Immediate action required!\n\n`;
+        } else {
+          msg += `✅ All critical controls active\n`;
+          msg += `PP 17/2025 compliant\n\n`;
+        }
+
+        const lowConf = testResults.filter(r => r.confidence === "low");
+        if (lowConf.length > 0) {
+          msg += `⚠️ LOW CONFIDENCE RESULTS (verify manually):\n`;
+          lowConf.forEach(r => msg += `- ${r.name}\n`);
+          msg += `\n`;
+        }
+
+        msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
+        msg += `📅 ${new Date().toLocaleDateString("en-GB")}\n`;
+        msg += `_Eduversal Indonesia - Cambridge Schools_`;
+
+        return msg;
+      }
+
+      function buildMethodology() {
+        const testMode = testingMode === "principal"
+          ? "Quick Test (network only)"
+          : selectedDevice === "ipad" ? "Full Test — iPad"
+          : selectedDevice === "chromebook" ? "Full Test — Chromebook"
+          : "Full Test — Phone";
+
+        const totalNetworkTests = testResults.filter(r => r.confidence !== "manual").length;
+        const manualItems = testResults.filter(r => r.confidence === "manual").length;
+        const lowConf = testResults.filter(r => r.confidence === "low").length;
+
+        const body = document.getElementById("methodologyBody");
+        body.innerHTML = `
+          <table style="width:100%;border-collapse:collapse;font-size:12px;">
+            <tr><td style="padding:4px 8px;width:180px;color:#94a3b8;font-weight:600;">School</td><td style="padding:4px 8px;">${schoolName}</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Tester</td><td style="padding:4px 8px;">${window.currentUser ? window.currentUser.email : "—"}</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Test Mode</td><td style="padding:4px 8px;">${testMode}</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Date & Time</td><td style="padding:4px 8px;">${new Date().toLocaleString("en-GB")}</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Network Tests</td><td style="padding:4px 8px;">${totalNetworkTests} automated probes</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Manual Checks</td><td style="padding:4px 8px;">${manualItems} self-reported items</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Probe Method</td><td style="padding:4px 8px;">Dual-probe: fetch HEAD + Image favicon, adaptive timeout (${baselineMs}ms)</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Scoring</td><td style="padding:4px 8px;">Full pts = all URLs blocked; half pts = partial block; 0 = fully accessible</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Low Confidence Items</td><td style="padding:4px 8px;">${lowConf} (only one probe returned blocked — manual verification recommended)</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Special Probes</td><td style="padding:4px 8px;">DoH: fetch to cloudflare-dns.com/dns-query with Accept: application/dns-json · Tor: HTTP probe to 4 of 6 directory authority IPs</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Limitations</td><td style="padding:4px 8px;">Cannot detect transparent proxy redirect, SSL inspection activity, or QUIC/UDP-level filtering. Device management items are self-reported.</td></tr>
+          </table>`;
+      }
+
+      function exportPdf() {
+        buildMethodology();
+        setTimeout(() => window.print(), 200);
+      }
+
+      function shareWhatsApp() {
+        const msg = getReportText();
+        const phone = "6281234567890";
+        window.open(
+          `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`,
+          "_blank"
+        );
+      }
+
+      function copyResults() {
+        navigator.clipboard.writeText(getReportText()).then(() => {
+          alert("✅ Report copied to clipboard!");
+        });
+      }
+    </script>
+  </body>
+</html>
