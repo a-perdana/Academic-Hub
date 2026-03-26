@@ -1515,15 +1515,16 @@
             // Network-level recommendations
             if (
               critical.some(
-                (c) => c.name.includes("Adult") || c.name.includes("Gambling")
+                (c) => c.name.includes("Adult") || c.name.includes("Gambling") || c.name.includes("Social")
               )
             ) {
-              html += `<div class="action-step">
-                            <h4>🛡️ Step 1: Upgrade Content Filter</h4>
-                            <p><strong>Action:</strong> Deploy Fortinet FortiGate or Lightspeed Relay<br>
-                            <strong>Why:</strong> Block adult content and gambling sites with SSL inspection<br>
-                            <strong>Timeline:</strong> 2-4 weeks</p>
-                            <span class="cost">~$15-20 per student/year</span>
+              html += `<div class="action-step" style="border-left-color:#10b981;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);">
+                            <h4 style="color:#065f46;font-size:17px;">🛡️ Step 1: Change Router DNS Right Now — FREE</h4>
+                            <p style="font-size:13px;"><strong>Why urgent:</strong> X.com (Twitter), Reddit, and other social platforms host adult videos that cannot be blocked by URL — only DNS filtering stops them.<br><br>
+                            <strong>Action:</strong> Router admin → DNS settings → set to <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.1.1.3</span> and <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.0.0.3</span> (Cloudflare Family)<br>
+                            <strong>Alternative:</strong> <span style="font-family:monospace;font-weight:800;color:#92400e;">208.67.222.123</span> / <span style="font-family:monospace;font-weight:800;color:#92400e;">208.67.220.123</span> (OpenDNS FamilyShield)<br>
+                            <strong>Timeline:</strong> 2 minutes</p>
+                            <span class="cost">100% FREE — Blocks adult content, gambling & malware</span>
                         </div>`;
             }
             if (
@@ -1640,6 +1641,49 @@
 
           html += "</div>";
         }
+
+        // ── DNS Quick Fix Banner — always shown, prominent ──────────────────
+        html += `
+          <div style="margin-top:28px;border:3px solid #10b981;border-radius:16px;overflow:hidden;">
+            <div style="background:#10b981;padding:16px 24px;">
+              <div style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;">🛡️ FREE INSTANT FIX: Change Your DNS</div>
+              <div style="color:#d1fae5;font-size:13px;margin-top:4px;">Takes 2 minutes · Zero cost · Blocks adult content network-wide</div>
+            </div>
+            <div style="background:#f0fdf4;padding:20px 24px;">
+
+              <div style="background:#fff;border:2px solid #10b981;border-radius:12px;padding:16px 20px;margin-bottom:16px;">
+                <div style="font-size:15px;font-weight:800;color:#065f46;margin-bottom:8px;">⚠️ Problem: X.com (Twitter) & Social Media Adult Content</div>
+                <div style="font-size:13px;color:#374151;line-height:1.7;">
+                  X.com hosts adult videos directly on its servers. Blocking <strong>individual URLs is impossible</strong> — the content comes from the same domain as regular posts.
+                  The same applies to Reddit, Tumblr, and other platforms that allow adult content.
+                  <strong>The only effective solution is DNS-level filtering.</strong>
+                </div>
+              </div>
+
+              <div style="font-size:15px;font-weight:800;color:#1a1a2e;margin-bottom:12px;">Set your router's DNS to one of these — done:</div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+                <div style="background:#fff;border:2px solid #3b82f6;border-radius:10px;padding:14px 16px;">
+                  <div style="font-size:13px;font-weight:800;color:#1e40af;margin-bottom:6px;">🔵 Cloudflare Family DNS</div>
+                  <div style="font-family:monospace;font-size:18px;font-weight:900;color:#1e40af;letter-spacing:1px;">1.1.1.3</div>
+                  <div style="font-family:monospace;font-size:14px;color:#3b82f6;">1.0.0.3</div>
+                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + malware · Fastest DNS globally</div>
+                </div>
+                <div style="background:#fff;border:2px solid #f59e0b;border-radius:10px;padding:14px 16px;">
+                  <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:6px;">🟡 OpenDNS FamilyShield</div>
+                  <div style="font-family:monospace;font-size:18px;font-weight:900;color:#92400e;letter-spacing:1px;">208.67.222.123</div>
+                  <div style="font-family:monospace;font-size:14px;color:#f59e0b;">208.67.220.123</div>
+                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + gambling · Battle-tested in schools</div>
+                </div>
+              </div>
+
+              <div style="background:#fefce8;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;font-size:12px;color:#78350f;line-height:1.6;">
+                <strong>How to apply:</strong> Router admin panel → WAN/LAN Settings → DNS Server → enter the numbers above → Save → Restart router.
+                All devices on the WiFi are protected instantly — no software installation needed on student devices.
+                <br><strong>This also blocks:</strong> pornography sites, gambling, drug sites, and reduces malware risk significantly.
+              </div>
+            </div>
+          </div>`;
 
         recDiv.innerHTML = html;
       }
