@@ -156,7 +156,7 @@
         }
       }
 
-      /* Header â€” offset for fixed nav bar (62px) */
+      /* Header — offset for fixed nav bar (62px) */
       header {
         padding: 5.5rem 2rem 3rem;
         text-align: center;
@@ -1785,7 +1785,7 @@
       }
 
       /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-         LOGIN SCREEN â€” Premium Immersive Experience
+         LOGIN SCREEN — Premium Immersive Experience
          â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 
       #loginScreen {
@@ -3047,7 +3047,7 @@
           performance, quality assurance, and assessment data.
         </p>
         <div class="semester-badge">
-          <span>2025/2026 Academic Year â€¢ July-December 2025</span>
+          <span>2025/2026 Academic Year • July-December 2025</span>
         </div>
       </header>
 
@@ -3296,7 +3296,7 @@
                   <span class="stat-label">Data Feed</span>
                 </div>
                 <div class="stat">
-                  <span class="stat-value">EASE Iâ€“III</span>
+                  <span class=”stat-value”>EASE I–III</span>
                   <span class="stat-label">All Groups</span>
                 </div>
               </div>
@@ -3319,7 +3319,7 @@
                 </svg>
               </div>
               <h3 class="card-title">Event Calendar</h3>
-              <p class="card-description">Interactive Gantt-style yearly activity timeline for all partner schools â€” July 2025 to May 2026</p>
+              <p class=”card-description”>Interactive Gantt-style yearly activity timeline for all partner schools — July 2025 to May 2026</p>
               <div class="card-stats">
                 <div class="stat">
                   <span class="stat-value">20</span>
@@ -4524,7 +4524,7 @@
         <div class="feedback-field">
           <label class="feedback-label" for="feedbackSubject">Subject</label>
           <select class="feedback-select" id="feedbackSubject">
-            <option value="">Select a categoryâ€¦</option>
+            <option value="">Select a category…</option>
             <option value="bug">Bug Report</option>
             <option value="feature">Feature Request</option>
             <option value="content">Content / Data Issue</option>
@@ -4534,7 +4534,7 @@
         </div>
         <div class="feedback-field">
           <label class="feedback-label" for="feedbackMessage">Message</label>
-          <textarea class="feedback-textarea" id="feedbackMessage" placeholder="Describe your feedbackâ€¦"></textarea>
+          <textarea class="feedback-textarea" id="feedbackMessage" placeholder="Describe your feedback…"></textarea>
         </div>
         <button class="feedback-submit-btn" id="feedbackSubmitBtn">Send Feedback</button>
         <div class="feedback-status" id="feedbackStatus"></div>
@@ -4852,7 +4852,7 @@
           return;
         }
         btn.disabled = true;
-        btn.textContent = 'Sendingâ€¦';
+        btn.textContent = 'Sending…';
         try {
           await addDoc(collection(db, 'feedbacks'), {
             subject,
@@ -4861,7 +4861,7 @@
             userEmail: currentUser?.email || null,
             timestamp: serverTimestamp(),
           });
-          statusEl.textContent = 'Feedback sent â€” thank you!';
+          statusEl.textContent = 'Feedback sent — thank you!';
           statusEl.className = 'feedback-status ok';
           setTimeout(closeFeedback, 2000);
         } catch {
