@@ -64,6 +64,15 @@ const ComprehensiveDashboard = () => {
         dataUsage: "low",
       },
       {
+        name: "Kharisma Bangsa",
+        observations: 33,
+        subjects: 8,
+        classrooms: 21,
+        safeguarding: "incomplete",
+        englishLevel: "B1",
+        dataUsage: "medium",
+      },
+      {
         name: "Kesatuan Bangsa School",
         observations: 34,
         subjects: 10,
@@ -118,6 +127,15 @@ const ComprehensiveDashboard = () => {
         dataUsage: "high",
       },
       {
+        name: "Semesta School",
+        observations: 21,
+        subjects: 8,
+        classrooms: 15,
+        safeguarding: "incomplete",
+        englishLevel: "B1",
+        dataUsage: "medium",
+      },
+      {
         name: "Semesta 2 School",
         observations: 15,
         subjects: 8,
@@ -128,14 +146,14 @@ const ComprehensiveDashboard = () => {
       },
     ],
     subjects: [
-      { name: "English", observations: 42, cambridgeAlignment: 75 },
-      { name: "Mathematics", observations: 38, cambridgeAlignment: 80 },
-      { name: "Religion", observations: 24, cambridgeAlignment: 60 },
-      { name: "Science", observations: 18, cambridgeAlignment: 70 },
-      { name: "Chemistry", observations: 15, cambridgeAlignment: 75 },
-      { name: "Biology", observations: 14, cambridgeAlignment: 75 },
-      { name: "Physics", observations: 11, cambridgeAlignment: 70 },
-      { name: "EduSTEAM", observations: 10, cambridgeAlignment: 65 },
+      { name: "English", observations: 55, cambridgeAlignment: 75 },
+      { name: "Mathematics", observations: 48, cambridgeAlignment: 80 },
+      { name: "Religion", observations: 32, cambridgeAlignment: 60 },
+      { name: "Biology", observations: 21, cambridgeAlignment: 75 },
+      { name: "Chemistry", observations: 21, cambridgeAlignment: 75 },
+      { name: "Science", observations: 20, cambridgeAlignment: 70 },
+      { name: "Physics", observations: 15, cambridgeAlignment: 70 },
+      { name: "EduSTEAM", observations: 14, cambridgeAlignment: 65 },
       { name: "Early Years", observations: 9, cambridgeAlignment: 60 },
       { name: "Arabic", observations: 8, cambridgeAlignment: 50 },
       { name: "Bahasa Indonesia", observations: 4, cambridgeAlignment: 65 },
@@ -146,40 +164,40 @@ const ComprehensiveDashboard = () => {
       { name: "Social Studies", observations: 1, cambridgeAlignment: 55 },
     ],
     appraisers: [
-      { name: "Alif Perdana", observations: 42, schools_covered: 9 },
-      { name: "Jaini Mukhlis", observations: 39, schools_covered: 9 },
+      { name: "Alif Perdana", observations: 56, schools_covered: 11 },
+      { name: "Jaini Mukhlis", observations: 47, schools_covered: 11 },
       { name: "Ridwan Sumitro", observations: 39, schools_covered: 5 },
-      { name: "Mukhtor Adashev", observations: 25, schools_covered: 6 },
-      { name: "Muhammad Ali", observations: 21, schools_covered: 8 },
-      { name: "Rizqan Maulana", observations: 19, schools_covered: 8 },
-      { name: "Ari Yanuar Hakim", observations: 13, schools_covered: 7 },
+      { name: "Mukhtor Adashev", observations: 38, schools_covered: 8 },
+      { name: "Muhammad Ali", observations: 27, schools_covered: 10 },
+      { name: "Rizqan Maulana", observations: 25, schools_covered: 10 },
+      { name: "Ari Yanuar Hakim", observations: 20, schools_covered: 9 },
       { name: "Vani Miyanti Putri", observations: 3, schools_covered: 1 },
     ],
     meetings: [
-      { type: "Domain Meetings", count: 45 },
-      { type: "Student Interviews", count: 9 },
-      { type: "Teacher Interviews", count: 9 },
-      { type: "Marketing Appraisal", count: 9 },
-      { type: "All Teachers Meeting", count: 9 },
-      { type: "Club Coordinator", count: 9 },
-      { type: "College Counselor", count: 9 },
-      { type: "Olympiad Coordinator", count: 9 },
-      { type: "Science Project Coordinator", count: 9 },
-      { type: "Post Appraisal Meeting", count: 9 },
+      { type: "Domain Meetings", count: 55 },
+      { type: "Student Interviews", count: 11 },
+      { type: "Teacher Interviews", count: 11 },
+      { type: "Marketing Appraisal", count: 11 },
+      { type: "All Teachers Meeting", count: 11 },
+      { type: "Club Coordinator", count: 11 },
+      { type: "College Counselor", count: 11 },
+      { type: "Olympiad Coordinator", count: 11 },
+      { type: "Science Project Coordinator", count: 11 },
+      { type: "Post Appraisal Meeting", count: 11 },
       { type: "Early Years/Primary Programs", count: 6 },
       { type: "Islamic Programs", count: 4 },
-      { type: "Secondary Programs", count: 9 },
+      { type: "Secondary Programs", count: 11 },
     ],
     key_stats: {
-      total_schools: 9,
-      total_observations: 201,
+      total_schools: 11,
+      total_observations: 255,
       total_subjects: 16,
-      total_meetings: 145,
+      total_meetings: 175,
       total_appraisers: 8,
-      total_activities: 346,
-      avg_obs_per_school: 22.3,
-      avg_meetings_per_school: 16.1,
-      avg_obs_per_appraiser: 25.1,
+      total_activities: 430,
+      avg_obs_per_school: 23.2,
+      avg_meetings_per_school: 15.9,
+      avg_obs_per_appraiser: 31.9,
     },
   };
 
@@ -188,7 +206,7 @@ const ComprehensiveDashboard = () => {
       {
         area: "Safeguarding",
         status: "CRITICAL",
-        affected: "8/9 schools",
+        affected: "10/11 schools",
         impact: "Legal & moral risk",
         priority: "IMMEDIATE",
         action: "30-day implementation plan",
@@ -254,7 +272,7 @@ const ComprehensiveDashboard = () => {
       {
         area: "Data-Informed Decisions",
         status: "MEDIUM",
-        affected: "7/9 schools",
+        affected: "9/11 schools",
         impact: "Strategic planning",
         priority: "Q1-Q2",
         action: "KPI dashboards & data rhythm",
@@ -639,27 +657,27 @@ const ComprehensiveDashboard = () => {
       policyGaps: [
         {
           issue: "Incomplete Safeguarding Policy",
-          schools: "8/9",
+          schools: "10/11",
           impact: "High - Critical for student safety",
         },
         {
           issue: "Missing/Incomplete Staff Handbook",
-          schools: "7/9",
+          schools: "9/11",
           impact: "Medium - Affects consistency",
         },
         {
           issue: "No systematic KPI framework",
-          schools: "7/9",
+          schools: "9/11",
           impact: "Medium - Limits data-driven decisions",
         },
         {
           issue: "Annual reports not systematic",
-          schools: "6/9",
+          schools: "8/11",
           impact: "Low-Medium - Reduces transparency",
         },
         {
           issue: "Evidence links not uploaded",
-          schools: "6/9",
+          schools: "8/11",
           impact: "Medium - Hinders verification",
         },
       ],
@@ -821,22 +839,22 @@ const ComprehensiveDashboard = () => {
       observedPatterns: [
         {
           pattern: "Document exists but not implemented",
-          schools: "7/9",
+          schools: "9/11",
           implication: "Policy-practice gap",
         },
         {
           pattern: "Verbally explained but not linked/uploaded",
-          schools: "6/9",
+          schools: "8/11",
           implication: "Documentation theater",
         },
         {
           pattern: "Program in place but not monitored",
-          schools: "8/9",
+          schools: "10/11",
           implication: "Activity without accountability",
         },
         {
           pattern: "Training conducted but impact not measured",
-          schools: "9/9",
+          schools: "11/11",
           implication: "Input focus not outcome focus",
         },
       ],
@@ -1230,7 +1248,7 @@ const ComprehensiveDashboard = () => {
       display: "flex",
       justifyContent: "center",
       gap: "10px",
-      marginBottom: "40px",
+      marginBottom: "0px",
       flexWrap: "wrap",
     },
     tab: (isActive) => ({
@@ -1561,36 +1579,53 @@ const ComprehensiveDashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div style={styles.tabContainer}>
+      <div style={{ marginBottom: "40px" }}>
         {[
-          { id: "overview", label: "Overview" },
-          { id: "schools", label: "Schools" },
-          { id: "subjects", label: "Subjects" },
-          { id: "appraisers", label: "Appraisers" },
-          { id: "meetings", label: "Meetings" },
-          { id: "findings", label: "🔍 Findings" },
-          { id: "compliance", label: "📝 Compliance" },
-          { id: "expectations", label: "📋 Expectations" },
-          { id: "teaching", label: "👨‍🏫 Teaching" },
-          { id: "pdframework", label: "🎓 PD System" },
-          { id: "network", label: "🤝 Network" },
-          { id: "cambridge", label: "🎯 Cambridge" },
-          { id: "islamic", label: "🕌 Islamic" },
-          { id: "data", label: "📊 Data" },
-          { id: "strategic", label: "⚡ Strategic" },
-          { id: "priorities", label: "🔥 Priorities" },
-          { id: "gaps", label: "📈 Gaps" },
-          { id: "kpis", label: "🎯 KPIs" },
-          { id: "roadmap", label: "🗺️ Roadmap" },
-          { id: "discussion", label: "💬 Discussion" },
-        ].map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            style={styles.tab(activeTab === tab.id)}
-          >
-            {tab.label}
-          </button>
+          { group: "📊 Data", tabs: [
+            { id: "overview", label: "Overview" },
+            { id: "schools", label: "Schools" },
+            { id: "subjects", label: "Subjects" },
+            { id: "appraisers", label: "Appraisers" },
+            { id: "meetings", label: "Meetings" },
+          ]},
+          { group: "🔍 Findings", tabs: [
+            { id: "findings", label: "Findings" },
+            { id: "compliance", label: "Compliance" },
+            { id: "teaching", label: "Teaching" },
+            { id: "expectations", label: "Expectations" },
+          ]},
+          { group: "⚡ Strategic", tabs: [
+            { id: "strategic", label: "Strategic" },
+            { id: "priorities", label: "Priorities" },
+            { id: "gaps", label: "Gaps" },
+            { id: "kpis", label: "KPIs" },
+            { id: "roadmap", label: "Roadmap" },
+            { id: "discussion", label: "Discussion" },
+          ]},
+          { group: "🎓 Framework", tabs: [
+            { id: "pdframework", label: "PD System" },
+            { id: "network", label: "Network" },
+            { id: "cambridge", label: "Cambridge" },
+            { id: "islamic", label: "Islamic" },
+            { id: "data", label: "Data Rhythm" },
+          ]},
+        ].map((section) => (
+          <div key={section.group} style={{ marginBottom: "12px" }}>
+            <div style={{ fontSize: "11px", fontWeight: "700", color: "#9ca3af", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "8px", paddingLeft: "4px" }}>
+              {section.group}
+            </div>
+            <div style={styles.tabContainer}>
+              {section.tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={styles.tab(activeTab === tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
 
@@ -1751,9 +1786,10 @@ const ComprehensiveDashboard = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={dashboardData.subjects.filter(
-                      (s) => s.observations > 5
-                    )}
+                    data={[
+                      ...dashboardData.subjects.filter((s) => s.observations > 8),
+                      { name: "Other", observations: dashboardData.subjects.filter((s) => s.observations <= 8).reduce((sum, s) => sum + s.observations, 0) }
+                    ]}
                     dataKey="observations"
                     nameKey="name"
                     cx="50%"
@@ -1761,9 +1797,10 @@ const ComprehensiveDashboard = () => {
                     outerRadius={100}
                     label={(entry) => `${entry.name}: ${entry.observations}`}
                   >
-                    {dashboardData.subjects
-                      .filter((s) => s.observations > 5)
-                      .map((entry, index) => (
+                    {[
+                      ...dashboardData.subjects.filter((s) => s.observations > 8),
+                      { name: "Other", observations: 0 }
+                    ].map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={COLORS[index % COLORS.length]}
@@ -1864,8 +1901,50 @@ const ComprehensiveDashboard = () => {
                     }}
                   >
                     <span style={{ color: "#6b7280" }}>Obs per Classroom:</span>
-                    <span style={{ fontWeight: "700", color: "#3b82f6" }}>
+                    <span style={{
+                      fontWeight: "700",
+                      color: (() => { const r = school.observations / school.classrooms; return r >= 3 ? "#10b981" : r >= 2 ? "#3b82f6" : "#f59e0b"; })(),
+                    }}>
                       {(school.observations / school.classrooms).toFixed(1)}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                    <span style={{ color: "#6b7280" }}>Safeguarding:</span>
+                    <span style={{
+                      fontWeight: "700",
+                      color: school.safeguarding === "complete" ? "#10b981" : school.safeguarding === "partial" ? "#f59e0b" : "#dc2626",
+                      background: school.safeguarding === "complete" ? "#d1fae5" : school.safeguarding === "partial" ? "#fef3c7" : "#fee2e2",
+                      padding: "2px 8px",
+                      borderRadius: "10px",
+                      fontSize: "12px",
+                    }}>
+                      {school.safeguarding === "complete" ? "✓ Complete" : school.safeguarding === "partial" ? "◑ Partial" : "✗ Incomplete"}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                    <span style={{ color: "#6b7280" }}>English Level:</span>
+                    <span style={{
+                      fontWeight: "700",
+                      color: school.englishLevel === "B2" || school.englishLevel === "C1" ? "#10b981" : school.englishLevel === "B1" ? "#3b82f6" : "#f59e0b",
+                      background: school.englishLevel === "B2" || school.englishLevel === "C1" ? "#d1fae5" : school.englishLevel === "B1" ? "#dbeafe" : "#fef3c7",
+                      padding: "2px 8px",
+                      borderRadius: "10px",
+                      fontSize: "12px",
+                    }}>
+                      {school.englishLevel}
+                    </span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
+                    <span style={{ color: "#6b7280" }}>Data Usage:</span>
+                    <span style={{
+                      fontWeight: "700",
+                      color: school.dataUsage === "high" ? "#10b981" : school.dataUsage === "medium" ? "#3b82f6" : "#f59e0b",
+                      background: school.dataUsage === "high" ? "#d1fae5" : school.dataUsage === "medium" ? "#dbeafe" : "#fef3c7",
+                      padding: "2px 8px",
+                      borderRadius: "10px",
+                      fontSize: "12px",
+                    }}>
+                      {school.dataUsage.charAt(0).toUpperCase() + school.dataUsage.slice(1)}
                     </span>
                   </div>
                 </div>
@@ -2120,27 +2199,15 @@ const ComprehensiveDashboard = () => {
           <div style={styles.chartContainer}>
             <h3 style={styles.chartTitle}>👥 Appraiser Performance</h3>
             <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={dashboardData.appraisers}>
-                <PolarGrid stroke="#e5e7eb" />
-                <PolarAngleAxis dataKey="name" tick={{ fontSize: 11 }} />
-                <PolarRadiusAxis angle={90} domain={[0, 50]} />
-                <Radar
-                  name="Observations"
-                  dataKey="observations"
-                  stroke="#667eea"
-                  fill="#667eea"
-                  fillOpacity={0.6}
-                />
-                <Radar
-                  name="Schools"
-                  dataKey="schools_covered"
-                  stroke="#f093fb"
-                  fill="#f093fb"
-                  fillOpacity={0.6}
-                />
+              <BarChart data={dashboardData.appraisers.sort((a, b) => b.observations - a.observations)}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="name" angle={-20} textAnchor="end" height={80} tick={{ fontSize: 11 }} />
+                <YAxis />
+                <Tooltip contentStyle={{ background: "#fff", border: "2px solid #667eea", borderRadius: "10px" }} />
                 <Legend />
-                <Tooltip />
-              </RadarChart>
+                <Bar dataKey="observations" fill="#667eea" name="Observations" radius={[6, 6, 0, 0]} />
+                <Bar dataKey="schools_covered" fill="#f093fb" name="Schools Covered" radius={[6, 6, 0, 0]} />
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
@@ -2213,6 +2280,38 @@ const ComprehensiveDashboard = () => {
                 )}
               </div>
               <div style={styles.statTitle}>Avg per Type</div>
+            </div>
+          </div>
+
+          <div style={{ ...styles.chartContainer, marginTop: "30px" }}>
+            <h3 style={styles.chartTitle}>📅 National Department / Subject Leader Meetings</h3>
+            <p style={{ color: "#6b7280", marginBottom: "20px", fontSize: "14px" }}>
+              42 cross-school department meetings held across 3 dates (August, September, November)
+            </p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "15px", marginBottom: "20px" }}>
+              {[
+                { label: "Primary Departments", count: 21, subjects: "Early Years, English, Science, Math, Religion, PPKN, Bahasa Indonesia", color: "#667eea" },
+                { label: "Secondary Departments", count: 21, subjects: "English, Math, Religion, Physics, Chemistry, Biology, Science", color: "#f093fb" },
+              ].map((group) => (
+                <div key={group.label} style={{ background: `linear-gradient(135deg, ${group.color}22, ${group.color}11)`, border: `2px solid ${group.color}44`, borderRadius: "15px", padding: "20px" }}>
+                  <div style={{ fontSize: "36px", fontWeight: "900", color: group.color, marginBottom: "5px" }}>{group.count}</div>
+                  <div style={{ fontSize: "14px", fontWeight: "700", color: "#1f2937", marginBottom: "8px" }}>{group.label}</div>
+                  <div style={{ fontSize: "11px", color: "#6b7280" }}>{group.subjects}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "10px" }}>
+              {[
+                { date: "23 August", primary: 7, secondary: 7 },
+                { date: "20 September", primary: 7, secondary: 7 },
+                { date: "22 November", primary: 7, secondary: 7 },
+              ].map((session) => (
+                <div key={session.date} style={{ background: "#f9fafb", borderRadius: "10px", padding: "15px", textAlign: "center", border: "1px solid #e5e7eb" }}>
+                  <div style={{ fontSize: "13px", fontWeight: "700", color: "#1f2937", marginBottom: "8px" }}>{session.date}</div>
+                  <div style={{ fontSize: "11px", color: "#6b7280" }}>Primary: <strong>{session.primary}</strong></div>
+                  <div style={{ fontSize: "11px", color: "#6b7280" }}>Secondary: <strong>{session.secondary}</strong></div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -4082,7 +4181,7 @@ const ComprehensiveDashboard = () => {
               marginBottom: "30px",
             }}
           >
-            12 strategic initiatives mapped by impact and implementation effort
+            {strategicData.priorityMatrix.length} strategic initiatives mapped by impact and implementation effort
           </p>
 
           <div style={{ textAlign: "center", marginBottom: "30px" }}>
