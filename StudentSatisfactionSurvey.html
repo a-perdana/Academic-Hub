@@ -1247,24 +1247,25 @@
 
           <div id="tab-likes" class="feedback-panel active">
             <div class="voice-grid" id="likes-grid">${buildVoiceCards(allLikes, 30)}</div>
-            ${allLikes.length > 30 ? `<button class="show-more-btn" onclick="expandCards('likes-grid', ${JSON.stringify(allLikes).replace(/</g,'\\u003c')})">Show All ${allLikes.length} Responses</button>` : ''}
+            ${allLikes.length > 30 ? `<button class="show-more-btn" onclick="expandCards('likes-grid')">Show All ${allLikes.length} Responses</button>` : ''}
           </div>
 
           <div id="tab-impr" class="feedback-panel">
             <div class="voice-grid" id="impr-grid">${buildVoiceCards(allImprovements, 30)}</div>
-            ${allImprovements.length > 30 ? `<button class="show-more-btn" onclick="expandCards('impr-grid', ${JSON.stringify(allImprovements).replace(/</g,'\\u003c')})">Show All ${allImprovements.length} Responses</button>` : ''}
+            ${allImprovements.length > 30 ? `<button class="show-more-btn" onclick="expandCards('impr-grid')">Show All ${allImprovements.length} Responses</button>` : ''}
           </div>
 
           <div id="tab-sugg" class="feedback-panel">
             <div class="voice-grid" id="sugg-grid">${buildVoiceCards(allSuggestions, 30)}</div>
-            ${allSuggestions.length > 30 ? `<button class="show-more-btn" onclick="expandCards('sugg-grid', ${JSON.stringify(allSuggestions).replace(/</g,'\\u003c')})">Show All ${allSuggestions.length} Responses</button>` : ''}
+            ${allSuggestions.length > 30 ? `<button class="show-more-btn" onclick="expandCards('sugg-grid')">Show All ${allSuggestions.length} Responses</button>` : ''}
           </div>
 
           <div id="tab-other" class="feedback-panel">
             <div class="voice-grid" id="other-grid">${buildVoiceCards(allOther, 30)}</div>
-            ${allOther.length > 30 ? `<button class="show-more-btn" onclick="expandCards('other-grid', ${JSON.stringify(allOther).replace(/</g,'\\u003c')})">Show All ${allOther.length} Responses</button>` : ''}
+            ${allOther.length > 30 ? `<button class="show-more-btn" onclick="expandCards('other-grid')">Show All ${allOther.length} Responses</button>` : ''}
           </div>`;
 
+        window._feedbackData = { 'likes-grid': allLikes, 'impr-grid': allImprovements, 'sugg-grid': allSuggestions, 'other-grid': allOther };
         container.innerHTML = html;
       }
 
@@ -1275,7 +1276,8 @@
         document.getElementById(panelId).classList.add('active');
       }
 
-      function expandCards(gridId, items) {
+      function expandCards(gridId) {
+        const items = (window._feedbackData || {})[gridId] || [];
         const schoolColors = {
           "TNA Fatih Bilingual School": "#667eea",
           "Kharisma Bangsa School": "#11998e",
@@ -1296,7 +1298,6 @@
           </div>`;
         });
         document.getElementById(gridId).innerHTML = html;
-        // Remove the show more button
         const btn = document.getElementById(gridId).parentElement.querySelector('.show-more-btn');
         if (btn) btn.remove();
       }
