@@ -449,6 +449,24 @@
           flex-direction: column;
         }
       }
+
+      /* Feedback section */
+      .feedback-overview { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:14px; margin-bottom:22px; }
+      .fo-card { background:white; border-radius:12px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+      .fo-num { font-size:2.2em; font-weight:800; color:#667eea; line-height:1.1; }
+      .fo-label { font-size:0.82em; color:#666; margin-top:6px; }
+      .feedback-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
+      .feedback-tab { padding:10px 22px; border-radius:25px; border:2px solid #667eea; background:white; color:#667eea; cursor:pointer; font-weight:600; font-size:0.95em; transition:all 0.2s; }
+      .feedback-tab.active, .feedback-tab:hover { background:#667eea; color:white; }
+      .feedback-panel { display:none; }
+      .feedback-panel.active { display:block; }
+      .voice-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; margin-top:16px; }
+      .voice-card { background:white; border-radius:10px; padding:16px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s; }
+      .voice-card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+      .voice-school { font-size:0.78em; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
+      .voice-text { color:#333; font-size:0.93em; line-height:1.6; font-style:italic; }
+      .show-more-btn { display:block; margin:18px auto 0; padding:10px 28px; background:#667eea; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:600; font-size:0.95em; transition:background 0.2s; }
+      .show-more-btn:hover { background:#764ba2; }
     </style>
   </head>
   <body>
