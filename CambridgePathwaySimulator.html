@@ -17,7 +17,28 @@
         FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
       };
     </script>
-    <script type="module" src="auth-guard.js"></script>
+    <!-- Public page: no auth-guard. Firebase initialised inline below for Firestore writes. -->
+    <script type="module">
+      import { initializeApp, getApps }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getFirestore, collection, addDoc, serverTimestamp }
+        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      const cfg = {
+        apiKey:            window.ENV.FIREBASE_API_KEY,
+        authDomain:        window.ENV.FIREBASE_AUTH_DOMAIN,
+        projectId:         window.ENV.FIREBASE_PROJECT_ID,
+        storageBucket:     window.ENV.FIREBASE_STORAGE_BUCKET,
+        messagingSenderId: window.ENV.FIREBASE_MESSAGING_SENDER_ID,
+        appId:             window.ENV.FIREBASE_APP_ID,
+      };
+      const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+      const db  = getFirestore(app);
+
+      window.db = db;
+      window.fsOps = { collection, addDoc, serverTimestamp };
+      document.dispatchEvent(new Event('firebaseReady'));
+    </script>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -100,9 +121,11 @@
       function CambridgePathwaySelector() {
         const [stage, setStage] = useState("checkpoint");
         const [studentName, setStudentName] = useState("");
+        const [schoolName, setSchoolName] = useState("");
         const [classSection, setClassSection] = useState("");
         const [academicYear, setAcademicYear] = useState("");
         const [formsMenuOpen, setFormsMenuOpen] = useState(false);
+        const [submitState, setSubmitState] = useState("idle"); // idle | submitting | success | error
         const [checkpointSubjects, setCheckpointSubjects] = useState({
           english: true,
           mathematics: true,
@@ -664,6 +687,62 @@
           Object.values(checkpointSubjects).filter(Boolean).length;
         const totalIgcse = 4 + igcseElectives.length;
 
+        const handleSubmit = async () => {
+          if (!studentName.trim()) {
+            alert("Please enter the student name before submitting.");
+            return;
+          }
+
+          // Build payload based on current stage
+          const baseInfo = {
+            studentName: studentName.trim(),
+            schoolName:  schoolName.trim(),
+            classSection: classSection.trim(),
+            academicYear: academicYear.trim(),
+            stage,
+            submittedAt: window.fsOps.serverTimestamp(),
+          };
+
+          let selections;
+          if (stage === "checkpoint") {
+            const selected = Object.entries(checkpointSubjects)
+              .filter(([, v]) => v)
+              .map(([k]) => k);
+            selections = { checkpointSubjects: selected, totalSubjects: totalCheckpoint };
+          } else if (stage === "igcse") {
+            const pathwaySubjects = igcseElectives.map((code) => {
+              const s = Object.values(igcsePathways).flatMap(p => p.subjects).find(s => s.code === code);
+              return s ? `${s.name} (${s.code})` : code;
+            });
+            selections = {
+              igcsePathway,
+              pathwaySubjects,
+              totalSubjects: totalIgcse,
+            };
+          } else {
+            const chosenSubjects = asSubjects.map((code) => {
+              const s = Object.values(asPathways).flatMap(p => p.subjects).find(s => s.code === code)
+                     || asOptionalSubjects.subjects.find(s => s.code === code);
+              return s ? `${s.name} (${s.code})` : code;
+            });
+            selections = {
+              asPathway,
+              pathwaySubjects: chosenSubjects,
+              totalSubjects: asSubjects.length + 3,
+            };
+          }
+
+          setSubmitState("submitting");
+          try {
+            const { collection, addDoc } = window.fsOps;
+            await addDoc(collection(window.db, "pathwaySubmissions"), { ...baseInfo, ...selections });
+            setSubmitState("success");
+          } catch (e) {
+            console.error("Submit failed:", e);
+            setSubmitState("error");
+          }
+        };
+
         return (
           <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
             <div className="max-w-4xl mx-auto">
@@ -817,7 +896,7 @@
                     {["checkpoint", "igcse", "aslevel"].map((s) => (
                       <button
                         key={s}
-                        onClick={() => setStage(s)}
+                        onClick={() => { setStage(s); setSubmitState("idle"); }}
                         className={`px-6 py-3 rounded-lg font-semibold transition-all ${
                           stage === s
                             ? "bg-blue-600 text-white shadow-lg"
@@ -840,14 +919,23 @@
                     <h3 className="font-semibold text-lg mb-4 text-gray-800">
                       Student Information
                     </h3>
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-2 gap-4 mb-3">
                       <input
                         type="text"
-                        placeholder="Student Name"
+                        placeholder="Student Name *"
                         value={studentName}
-                        onChange={(e) => setStudentName(e.target.value)}
+                        onChange={(e) => { setStudentName(e.target.value); setSubmitState("idle"); }}
                         className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
+                      <input
+                        type="text"
+                        placeholder="School Name"
+                        value={schoolName}
+                        onChange={(e) => setSchoolName(e.target.value)}
+                        className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div className="grid md:grid-cols-2 gap-4">
                       <input
                         type="text"
                         placeholder="Class / Section"
@@ -1044,6 +1132,30 @@
                             </div>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Submit */}
+                      <div className="mt-6">
+                        {submitState === "success" ? (
+                          <div className="flex items-center gap-3 p-4 bg-green-50 border-2 border-green-300 rounded-xl">
+                            <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
+                            <div>
+                              <p className="font-semibold text-green-800">Submission saved successfully!</p>
+                              <p className="text-sm text-green-700">Your Checkpoint selections have been recorded.</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={handleSubmit}
+                            disabled={submitState === "submitting"}
+                            className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold rounded-xl transition-all shadow-md text-lg"
+                          >
+                            {submitState === "submitting" ? "Saving..." : "Submit Checkpoint Selections"}
+                          </button>
+                        )}
+                        {submitState === "error" && (
+                          <p className="mt-2 text-sm text-red-600 text-center">Failed to save. Please check your connection and try again.</p>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1423,6 +1535,30 @@
                             </div>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Submit */}
+                      <div className="mt-6">
+                        {submitState === "success" ? (
+                          <div className="flex items-center gap-3 p-4 bg-green-50 border-2 border-green-300 rounded-xl">
+                            <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
+                            <div>
+                              <p className="font-semibold text-green-800">Submission saved successfully!</p>
+                              <p className="text-sm text-green-700">Your IGCSE pathway selections have been recorded.</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={handleSubmit}
+                            disabled={submitState === "submitting" || igcseElectives.length === 0}
+                            className="w-full py-3 px-6 bg-green-600 hover:bg-green-700 disabled:bg-green-300 text-white font-bold rounded-xl transition-all shadow-md text-lg"
+                          >
+                            {submitState === "submitting" ? "Saving..." : "Submit IGCSE Pathway Selections"}
+                          </button>
+                        )}
+                        {submitState === "error" && (
+                          <p className="mt-2 text-sm text-red-600 text-center">Failed to save. Please check your connection and try again.</p>
+                        )}
                       </div>
                     </div>
                   )}
@@ -1841,6 +1977,30 @@
                             </div>
                           </div>
                         </div>
+                      </div>
+
+                      {/* Submit */}
+                      <div className="mt-6">
+                        {submitState === "success" ? (
+                          <div className="flex items-center gap-3 p-4 bg-green-50 border-2 border-green-300 rounded-xl">
+                            <CheckCircle2 className="text-green-600 flex-shrink-0" size={24} />
+                            <div>
+                              <p className="font-semibold text-green-800">Submission saved successfully!</p>
+                              <p className="text-sm text-green-700">Your AS Level pathway selections have been recorded.</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={handleSubmit}
+                            disabled={submitState === "submitting" || asSubjects.length < 2}
+                            className="w-full py-3 px-6 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-300 text-white font-bold rounded-xl transition-all shadow-md text-lg"
+                          >
+                            {submitState === "submitting" ? "Saving..." : "Submit AS Level Pathway Selections"}
+                          </button>
+                        )}
+                        {submitState === "error" && (
+                          <p className="mt-2 text-sm text-red-600 text-center">Failed to save. Please check your connection and try again.</p>
+                        )}
                       </div>
                     </div>
                   )}
