@@ -102,18 +102,13 @@
         const [studentName, setStudentName] = useState("");
         const [classSection, setClassSection] = useState("");
         const [academicYear, setAcademicYear] = useState("");
-        const [showInfo, setShowInfo] = useState({});
+        const [formsMenuOpen, setFormsMenuOpen] = useState(false);
         const [checkpointSubjects, setCheckpointSubjects] = useState({
           english: true,
           mathematics: true,
           science: true,
           computing: false,
           globalPerspectives: false,
-        });
-        const [igcseCore, setIgcseCore] = useState({
-          english: true,
-          bahasa: true,
-          mathematics: true,
         });
         const [igcsePathway, setIgcsePathway] = useState("");
         const [igcseElectives, setIgcseElectives] = useState([]);
@@ -147,7 +142,7 @@
             description:
               "Cambridge International AS & A Levels are internationally recognized qualifications that open doors to top universities worldwide. They provide in-depth subject knowledge and develop independent thinking and application skills.",
             recommendation:
-              "Students typically take 3-4 subjects at AS Level (Grade 11) and continue with 3 subjects to A Level (Grade 12). This focused approach allows for deep specialization and excellent preparation for university study.",
+              "AS Level (Grade 11) is compulsory: all students sit 5 subjects — 3 mandatory (English General Paper, Mathematics, Global Perspectives & Research) + 2 pathway electives. A Level (Grade 12) is optional: students who continue take 3 pathway subjects to complete their A Level qualification.",
           },
         };
 
@@ -660,7 +655,7 @@
         const handleAsSubjectToggle = (subjectCode) => {
           if (asSubjects.includes(subjectCode)) {
             setAsSubjects(asSubjects.filter((s) => s !== subjectCode));
-          } else if (asSubjects.length < 3) {
+          } else if (asSubjects.length < 2) {
             setAsSubjects([...asSubjects, subjectCode]);
           }
         };
@@ -691,10 +686,7 @@
                       <div className="relative">
                         <button
                           onClick={() =>
-                            setShowInfo({
-                              ...showInfo,
-                              formsMenu: !showInfo.formsMenu,
-                            })
+                            setFormsMenuOpen(!formsMenuOpen)
                           }
                           className="flex items-center gap-2 px-4 py-2 bg-white/20 hover:bg-white/30 rounded-lg transition-all backdrop-blur-sm border border-white/30"
                         >
@@ -704,7 +696,7 @@
                           </span>
                         </button>
 
-                        {showInfo.formsMenu && (
+                        {formsMenuOpen && (
                           <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl overflow-hidden z-50 border-2 border-indigo-200">
                             <div className="bg-indigo-600 px-4 py-3 border-b border-indigo-500">
                               <h3 className="font-bold text-white">
@@ -1013,10 +1005,18 @@
                             className="text-blue-600 mt-1 flex-shrink-0"
                             size={28}
                           />
-                          <div>
-                            <h4 className="font-bold text-xl text-gray-800 mb-2">
-                              Your Selection Summary
-                            </h4>
+                          <div className="w-full">
+                            <div className="flex items-center justify-between mb-2">
+                              <h4 className="font-bold text-xl text-gray-800">
+                                Your Selection Summary
+                              </h4>
+                              <button
+                                onClick={() => setCheckpointSubjects({ english: true, mathematics: true, science: true, computing: false, globalPerspectives: false })}
+                                className="text-xs px-3 py-1 bg-white border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition-all"
+                              >
+                                Reset
+                              </button>
+                            </div>
                             <div className="bg-white p-4 rounded-lg mb-3">
                               <p className="text-2xl font-bold text-blue-600 mb-1">
                                 {totalCheckpoint} Subjects Selected
@@ -1190,10 +1190,6 @@
                                   onClick={() => {
                                     setIgcsePathway(key);
                                     setIgcseElectives([]);
-                                    setShowInfo({
-                                      ...showInfo,
-                                      [key]: !showInfo[key],
-                                    });
                                   }}
                                   className={`p-6 rounded-xl border-2 transition-all text-left ${
                                     isSelected
@@ -1248,11 +1244,22 @@
                           <h3 className="font-bold text-2xl mb-2 text-gray-800">
                             Select 3 Subjects from Your Pathway
                           </h3>
-                          <p className="text-gray-600 mb-6">
+                          <p className="text-gray-600 mb-4">
                             Choose exactly 3 subjects that interest you most and
                             align with your future plans. Click on each subject
                             to see detailed information.
                           </p>
+                          {/* Legend */}
+                          <div className="flex flex-wrap gap-3 mb-5 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
+                            <span className="font-semibold text-gray-600 self-center">Legend:</span>
+                            <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded font-mono">G-I … G-V</span>
+                            <span className="text-gray-500 self-center">= Institutional grade group (I = highest level)</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.engineering.bg} ${pathwayColors.engineering.text} ${pathwayColors.engineering.border}`}>Engineering</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.business.bg} ${pathwayColors.business.text} ${pathwayColors.business.border}`}>Business</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.medical.bg} ${pathwayColors.medical.text} ${pathwayColors.medical.border}`}>Medical</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.social.bg} ${pathwayColors.social.text} ${pathwayColors.social.border}`}>Social</span>
+                            <span className="text-gray-500 self-center">= Recommended by that pathway</span>
+                          </div>
 
                           <div className="space-y-4">
                             {igcsePathways[igcsePathway].subjects.map(
@@ -1268,11 +1275,6 @@
                                     <button
                                       onClick={() => {
                                         handleIgcseElectiveToggle(subject.code);
-                                        setShowInfo({
-                                          ...showInfo,
-                                          [subject.code]:
-                                            !showInfo[subject.code],
-                                        });
                                       }}
                                       disabled={isDisabled}
                                       className={`w-full flex items-start gap-4 p-5 rounded-xl border-2 transition-all text-left ${
@@ -1339,10 +1341,18 @@
                             className="text-green-600 mt-1 flex-shrink-0"
                             size={28}
                           />
-                          <div>
-                            <h4 className="font-bold text-xl text-gray-800 mb-3">
-                              Your IGCSE Subject Summary
-                            </h4>
+                          <div className="w-full">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-bold text-xl text-gray-800">
+                                Your IGCSE Subject Summary
+                              </h4>
+                              <button
+                                onClick={() => { setIgcsePathway(""); setIgcseElectives([]); }}
+                                className="text-xs px-3 py-1 bg-white border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition-all"
+                              >
+                                Reset
+                              </button>
+                            </div>
                             <div className="bg-white p-4 rounded-lg mb-3">
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-gray-700 font-semibold">
@@ -1430,32 +1440,19 @@
                             <h4 className="font-bold text-xl text-gray-800 mb-3">
                               Understanding AS & A Levels
                             </h4>
-                            <div className="space-y-2 text-sm text-gray-700">
+                            <div className="space-y-3 text-sm text-gray-700">
+                              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                                <p>
+                                  <strong className="text-red-700">AS Level (Grade 11) — REQUIRED by Institution:</strong> All students must sit AS Level exams in <strong>5 subjects</strong>: 3 mandatory subjects (English General Paper, Mathematics, Global Perspectives &amp; Research) + 2 pathway subjects. AS Level is a standalone Cambridge qualification.
+                                </p>
+                              </div>
+                              <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-3">
+                                <p>
+                                  <strong className="text-indigo-700">A Level (Grade 12) — OPTIONAL:</strong> Students who wish to continue may proceed to full A Level with 3 subjects from their pathway. A Levels are the gold standard for university admission worldwide, accepted by universities in 160+ countries.
+                                </p>
+                              </div>
                               <p>
-                                <strong>AS Level (Grade 11):</strong> Students
-                                typically take 3-4 subjects including
-                                Mathematics. This is a standalone qualification
-                                and also the first half of the full A Level.
-                              </p>
-                              <p>
-                                <strong>A Level (Grade 12):</strong> Students
-                                continue with 3 subjects to complete their A
-                                Levels. These are the gold standard for
-                                university admission worldwide.
-                              </p>
-                              <p>
-                                <strong>Subject Structure:</strong> Mathematics
-                                is mandatory for all pathways. Students then
-                                choose 2-3 additional subjects from their chosen
-                                pathway.
-                              </p>
-                              <p>
-                                <strong>University Recognition:</strong> A
-                                Levels are accepted by universities in 160+
-                                countries. Top universities typically require
-                                AAA to AAB grades. Universities value subject
-                                relevance, academic depth, and high grades over
-                                the number of subjects taken.
+                                <strong>University Recognition:</strong> Top universities typically require AAA to AAB grades. Universities value subject relevance, academic depth, and high grades over the number of subjects taken.
                               </p>
                             </div>
                           </div>
@@ -1608,15 +1605,23 @@
                       {asPathway && (
                         <div className="mb-6">
                           <h3 className="font-bold text-2xl mb-2 text-gray-800">
-                            Select 2-3 Subjects from{" "}
+                            Select 2 Subjects from{" "}
                             {asPathways[asPathway].name}
                           </h3>
-                          <p className="text-gray-600 mb-6">
-                            You will take Mathematics (mandatory) + 2-3 subjects
-                            from your chosen pathway = Total of 3-4 AS Level
-                            subjects. Choose subjects that complement each other
-                            and align with your university goals.
+                          <p className="text-gray-600 mb-4">
+                            You will take 3 mandatory subjects + 2 pathway subjects = <strong>5 AS Level subjects total</strong>. Choose the 2 pathway subjects that best align with your university goals.
                           </p>
+                          {/* Legend */}
+                          <div className="flex flex-wrap gap-3 mb-5 p-3 bg-gray-50 rounded-lg border border-gray-200 text-xs">
+                            <span className="font-semibold text-gray-600 self-center">Legend:</span>
+                            <span className="px-2 py-1 bg-gray-200 text-gray-600 rounded font-mono">G-I … G-V</span>
+                            <span className="text-gray-500 self-center">= Institutional grade group (I = highest level)</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.engineering.bg} ${pathwayColors.engineering.text} ${pathwayColors.engineering.border}`}>Engineering</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.business.bg} ${pathwayColors.business.text} ${pathwayColors.business.border}`}>Business</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.medical.bg} ${pathwayColors.medical.text} ${pathwayColors.medical.border}`}>Medical</span>
+                            <span className={`px-2 py-1 rounded font-semibold border ${pathwayColors.social.bg} ${pathwayColors.social.text} ${pathwayColors.social.border}`}>Social</span>
+                            <span className="text-gray-500 self-center">= Recommended by that pathway</span>
+                          </div>
 
                           <div className="space-y-4">
                             {asPathways[asPathway].subjects.map((subject) => {
@@ -1624,7 +1629,7 @@
                                 subject.code,
                               );
                               const isDisabled =
-                                !isSelected && asSubjects.length >= 3;
+                                !isSelected && asSubjects.length >= 2;
 
                               return (
                                 <button
@@ -1708,12 +1713,12 @@
                                       handleAsSubjectToggle(subject.code)
                                     }
                                     disabled={
-                                      !isSelected && asSubjects.length >= 3
+                                      !isSelected && asSubjects.length >= 2
                                     }
                                     className={`w-full flex items-start gap-3 p-4 rounded-lg border transition-all text-left ${
                                       isSelected
                                         ? "border-amber-500 bg-white shadow-sm"
-                                        : asSubjects.length >= 3
+                                        : asSubjects.length >= 2
                                           ? "border-amber-200 bg-amber-50/50 opacity-50 cursor-not-allowed"
                                           : "border-amber-200 bg-white hover:border-amber-400"
                                     }`}
@@ -1756,18 +1761,26 @@
                             className="text-indigo-600 mt-1 flex-shrink-0"
                             size={28}
                           />
-                          <div>
-                            <h4 className="font-bold text-xl text-gray-800 mb-3">
-                              Your AS/A Level Plan
-                            </h4>
+                          <div className="w-full">
+                            <div className="flex items-center justify-between mb-3">
+                              <h4 className="font-bold text-xl text-gray-800">
+                                Your AS Level Plan
+                              </h4>
+                              <button
+                                onClick={() => { setAsPathway(""); setAsSubjects([]); }}
+                                className="text-xs px-3 py-1 bg-white border border-gray-300 text-gray-600 rounded-lg hover:bg-gray-50 transition-all"
+                              >
+                                Reset
+                              </button>
+                            </div>
                             <div className="bg-white p-5 rounded-lg mb-3">
                               <div className="grid md:grid-cols-2 gap-4 mb-3">
                                 <div>
                                   <p className="text-sm text-gray-600 mb-1">
-                                    Mandatory Subject
+                                    Mandatory Subjects
                                   </p>
                                   <p className="text-lg font-bold text-red-600">
-                                    ✓ Mathematics (9709)
+                                    ✓ 3 subjects (fixed)
                                   </p>
                                 </div>
                                 <div>
@@ -1775,66 +1788,55 @@
                                     Pathway Subjects
                                   </p>
                                   <p className="text-lg font-bold text-indigo-600">
-                                    {asSubjects.length}/3 Selected
+                                    {asSubjects.length}/2 Selected
                                   </p>
                                 </div>
                               </div>
                               <div className="bg-gradient-to-r from-red-100 to-indigo-100 p-3 rounded">
                                 <p className="text-center font-bold text-gray-800">
-                                  Total AS Level Load: {asSubjects.length + 1}{" "}
-                                  Subjects (Math + {asSubjects.length} pathway)
+                                  Total AS Level Load: {asSubjects.length + 3}{" "}
+                                  Subjects (3 mandatory + {asSubjects.length} pathway)
                                 </p>
                               </div>
                               <p className="text-sm text-gray-600 mt-3">
                                 {asSubjects.length < 2
-                                  ? `Select at least ${
-                                      2 - asSubjects.length
-                                    } more pathway subject${
-                                      2 - asSubjects.length > 1 ? "s" : ""
-                                    }`
-                                  : asSubjects.length === 2
-                                    ? "✓ Minimum requirement met! You can add 1 more subject (optional)"
-                                    : asSubjects.length === 3
-                                      ? "✓ Perfect! You have selected the recommended number of subjects"
-                                      : "✓ Maximum subjects selected"}
+                                  ? `Select ${2 - asSubjects.length} more pathway subject${2 - asSubjects.length > 1 ? "s" : ""} to reach the required load`
+                                  : "✓ Complete! You have the required AS Level subject load"}
                               </p>
                             </div>
 
-                            {asSubjects.length > 0 && (
-                              <div className="bg-white p-4 rounded-lg text-sm space-y-2 mb-4">
-                                <p className="font-semibold text-gray-800">
-                                  Your Complete Subject List:
-                                </p>
-                                <p className="text-red-700">
-                                  • <strong>Mathematics (9709)</strong> -
-                                  Mandatory
-                                </p>
-                                {asSubjects.map((code) => {
-                                  const subject =
-                                    Object.values(asPathways)
-                                      .flatMap((p) => p.subjects)
-                                      .find((s) => s.code === code) ||
-                                    asOptionalSubjects.subjects.find(
-                                      (s) => s.code === code,
-                                    );
-                                  return subject ? (
-                                    <p key={code} className="text-gray-700">
-                                      • {subject.name} ({subject.code})
-                                    </p>
-                                  ) : null;
-                                })}
-                              </div>
-                            )}
+                            <div className="bg-white p-4 rounded-lg text-sm space-y-1 mb-4">
+                              <p className="font-semibold text-gray-800 mb-2">
+                                Your Complete Subject List:
+                              </p>
+                              <p className="text-red-700">• <strong>English General Paper (8021)</strong> — Mandatory</p>
+                              <p className="text-red-700">• <strong>Mathematics (9709)</strong> — Mandatory</p>
+                              <p className="text-red-700">• <strong>Global Perspectives &amp; Research (9239)</strong> — Mandatory</p>
+                              {asSubjects.map((code) => {
+                                const subject =
+                                  Object.values(asPathways)
+                                    .flatMap((p) => p.subjects)
+                                    .find((s) => s.code === code) ||
+                                  asOptionalSubjects.subjects.find(
+                                    (s) => s.code === code,
+                                  );
+                                return subject ? (
+                                  <p key={code} className="text-indigo-700">
+                                    • {subject.name} ({subject.code}) — Pathway
+                                  </p>
+                                ) : null;
+                              })}
+                            </div>
 
                             <div className="bg-indigo-100 p-4 rounded-lg text-sm text-gray-700">
                               <strong className="text-indigo-800">
-                                Recommended Structure:
+                                Programme Structure:
                               </strong>
                               <p className="mt-1">
-                                Take 3-4 subjects at AS Level (Grade 11), then
-                                continue with 3 subjects to A Level (Grade 12).
-                                Universities value subject relevance, academic
-                                depth, and high grades over quantity.
+                                <strong>AS Level (Grade 11) — Required:</strong> All students sit exams in the 3 mandatory subjects + 2 pathway subjects (5 total). AS Level is a standalone qualification.
+                              </p>
+                              <p className="mt-2">
+                                <strong>A Level (Grade 12) — Optional:</strong> Students who wish to continue may proceed to A Level with 3 subjects from their pathway. A Levels are recognised by universities in 160+ countries.
                               </p>
                             </div>
                           </div>
