@@ -460,12 +460,9 @@
         <p style="margin-top: 15px"> </p>
       </div>
 
-      <div class="participation-banner">
+      <div class="participation-banner" id="participationBanner">
         📊 Survey Participation Overview
-        <span
-          >249 Students Responded | 9 out of 14 Schools |(64.3%
-          Participation)</span
-        >
+        <span id="participationStats">Loading...</span>
       </div>
 
       <div class="content">
@@ -487,10 +484,11 @@
             </select>
           </div>
           <div class="filter-group">
-            <label>Filter by Grade:</label>
-            <select id="gradeFilter">
-              <option value="all">All Grades</option>
-            </select>
+            <label>Search Feedback:</label>
+            <input type="text" id="feedbackSearch" placeholder="e.g. bullying, toilet, wifi..." style="padding:10px 15px;border:2px solid #ddd;border-radius:8px;font-size:1em;background:white;transition:all 0.3s;min-width:200px;" oninput="renderFeedbackFiltered()">
+          </div>
+          <div class="filter-group" style="justify-content:flex-end;align-self:flex-end;">
+            <button onclick="resetFilters()" style="padding:10px 20px;background:#667eea;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;font-size:0.95em;">Reset Filters</button>
           </div>
         </div>
 
@@ -842,16 +840,42 @@
         },
       };
 
+      // School colour palette — single source of truth
+      const SCHOOL_COLORS = {
+        "TNA Fatih Bilingual School": "#667eea",
+        "Kharisma Bangsa School": "#11998e",
+        "Fatih Bilingual School": "#f093fb",
+        "Cahaya Rancamaya": "#f5576c",
+        "Mega Islamic Boarding School": "#4facfe",
+        "Pribadi Depok": "#43e97b",
+        "Pribadi Bandung School": "#fa709a",
+        "Kesatuan Bangsa School": "#f6d365",
+        "Prestige Bilingual School": "#a18cd1",
+      };
+
+      const _charts = {};
+      function destroyChart(id) {
+        if (_charts[id]) { _charts[id].destroy(); delete _charts[id]; }
+      }
+
       // Initialize the dashboard
       function initDashboard() {
+        if (!Object.keys(surveyData.schools).length) return;
         populateFilters();
-        renderExecutiveSummary();
-        renderHeatmap();
-        renderDomainChart();
+        applyFilters();
         renderRadarChart();
         renderLevelComparison();
         renderFeedback();
         renderActionItems();
+      }
+
+      function resetFilters() {
+        document.getElementById('schoolFilter').value = 'all';
+        document.getElementById('levelFilter').value = 'all';
+        const search = document.getElementById('feedbackSearch');
+        if (search) search.value = '';
+        applyFilters();
+        renderFeedback();
       }
 
       function toggleAccordion(header) {
@@ -878,25 +902,140 @@
 
       function populateFilters() {
         const schoolFilter = document.getElementById("schoolFilter");
-        const gradeFilter = document.getElementById("gradeFilter");
+        Object.keys(surveyData.schools).sort().forEach((school) => {
+          const opt = document.createElement("option");
+          opt.value = school; opt.textContent = school;
+          schoolFilter.appendChild(opt);
+        });
+        // Attach filter listeners — re-render charts on change
+        ['schoolFilter','levelFilter'].forEach(id => {
+          document.getElementById(id).addEventListener('change', applyFilters);
+        });
+      }
 
-        // Add schools
-        Object.keys(surveyData.schools)
-          .sort()
-          .forEach((school) => {
-            const option = document.createElement("option");
-            option.value = school;
-            option.textContent = school;
-            schoolFilter.appendChild(option);
-          });
+      function getFilteredSchools() {
+        const school = document.getElementById('schoolFilter').value;
+        const level = document.getElementById('levelFilter').value;
+        let schools = Object.entries(surveyData.schools);
+        if (school !== 'all') schools = schools.filter(([k]) => k === school);
+        // level filter: keep schools that have responses in that level
+        // (approximate: use levelStats data for charts, school filter for heatmap)
+        return Object.fromEntries(schools);
+      }
 
-        // Add grades
-        for (let i = 1; i <= 12; i++) {
-          const option = document.createElement("option");
-          option.value = i;
-          option.textContent = `Grade ${i}`;
-          gradeFilter.appendChild(option);
+      function applyFilters() {
+        const filtered = getFilteredSchools();
+        const level = document.getElementById('levelFilter').value;
+        renderHeatmapFiltered(filtered);
+        renderDomainChartFiltered(filtered, level);
+        renderExecutiveSummaryFiltered(filtered);
+        renderFeedbackFiltered();
+      }
+
+      function renderExecutiveSummaryFiltered(schools) {
+        const container = document.getElementById("executiveSummary");
+        const vals = Object.values(schools);
+        if (!vals.length) { container.innerHTML = '<p>No data for selected filter.</p>'; return; }
+        const totalResponses = vals.reduce((s,v) => s+v.total_responses, 0);
+        const numSchools = vals.length;
+        const avgRating = (vals.reduce((s,v) => s+v.overall_rating*v.total_responses,0)/totalResponses).toFixed(2);
+        const avgRec = (vals.reduce((s,v) => s+v.recommendation_yes*v.total_responses,0)/totalResponses).toFixed(1);
+        container.innerHTML = `
+          <div class="stat-card"><h3>Total Responses</h3><div class="value">${totalResponses}</div><div class="subtext">from ${numSchools} school${numSchools>1?'s':''}</div></div>
+          <div class="stat-card"><h3>Average Satisfaction</h3><div class="value">${avgRating}/5.0</div><div class="subtext">${getPerformanceLabel(avgRating)}</div></div>
+          <div class="stat-card"><h3>Would Recommend</h3><div class="value">${avgRec}%</div><div class="subtext">Yes, definitely or probably</div></div>
+          <div class="stat-card"><h3>Schools Shown</h3><div class="value">${numSchools}</div><div class="subtext">of ${Object.keys(surveyData.schools).length} total</div></div>`;
+      }
+
+      function renderHeatmapFiltered(schools) {
+        const table = document.getElementById("heatmapTable");
+        if (!Object.keys(schools).length) { table.innerHTML = '<tr><td>No data for selected filter.</td></tr>'; return; }
+        const domains = Object.keys(Object.values(schools)[0].domains);
+        let html = "<thead><tr><th>School</th><th>Responses</th>";
+        domains.forEach(d => html += `<th>${d}</th>`);
+        html += "<th>Overall</th><th>Recommend %</th></tr></thead><tbody>";
+        Object.entries(schools).sort((a,b) => b[1].overall_rating-a[1].overall_rating).forEach(([school, data]) => {
+          html += `<tr><td class="school-name">${school}</td><td>${data.total_responses}</td>`;
+          domains.forEach(d => html += `<td class="score-cell ${getScoreClass(data.domains[d])}">${data.domains[d].toFixed(2)}</td>`);
+          html += `<td class="score-cell ${getScoreClass(data.overall_rating)}">${data.overall_rating.toFixed(2)}</td>`;
+          const recClass = data.recommendation_yes >= 80 ? 'score-high' : data.recommendation_yes >= 60 ? 'score-medium' : 'score-low';
+          html += `<td class="score-cell ${recClass}">${data.recommendation_yes.toFixed(1)}%</td></tr>`;
+        });
+        html += "</tbody>";
+        table.innerHTML = html;
+      }
+
+      function renderDomainChartFiltered(schools, level) {
+        const ctx = document.getElementById("domainChart").getContext("2d");
+        const vals = Object.values(schools);
+        if (!vals.length) return;
+        const domains = Object.keys(vals[0].domains);
+        const totalResp = vals.reduce((s,v) => s+v.total_responses, 0);
+        const avgScores = domains.map(d => (vals.reduce((s,v) => s+v.domains[d]*v.total_responses,0)/totalResp).toFixed(2));
+        destroyChart('domainChart');
+        _charts['domainChart'] = new Chart(ctx, {
+          type: "bar",
+          data: { labels: domains, datasets: [{ label: "Average Score", data: avgScores, backgroundColor: "rgba(102,126,234,0.8)", borderColor: "rgba(102,126,234,1)", borderWidth: 2 }] },
+          options: { indexAxis: "y", responsive: true, maintainAspectRatio: true, scales: { x: { beginAtZero: true, max: 5 } }, plugins: { legend: { display: false } } }
+        });
+      }
+
+      function renderFeedbackFiltered() {
+        const school = document.getElementById('schoolFilter').value;
+        const level = document.getElementById('levelFilter').value;
+        const keyword = (document.getElementById('feedbackSearch') ? document.getElementById('feedbackSearch').value : '').toLowerCase();
+        const allLikes = [], allImprovements = [], allSuggestions = [], allOther = [];
+        for (const [sName, data] of Object.entries(surveyData.schools)) {
+          if (school !== 'all' && sName !== school) continue;
+          (data.likes||[]).forEach(t => allLikes.push({text:t,school:sName}));
+          (data.improvements||[]).forEach(t => allImprovements.push({text:t,school:sName}));
+          (data.suggestions||[]).forEach(t => allSuggestions.push({text:t,school:sName}));
+          (data.other||[]).forEach(t => allOther.push({text:t,school:sName}));
         }
+        const filterKw = items => keyword ? items.filter(i => i.text.toLowerCase().includes(keyword)) : items;
+        const fLikes = filterKw(allLikes), fImpr = filterKw(allImprovements), fSugg = filterKw(allSuggestions), fOther = filterKw(allOther);
+        window._feedbackData = { 'likes-grid': fLikes, 'impr-grid': fImpr, 'sugg-grid': fSugg, 'other-grid': fOther };
+
+        function buildCards(items, limit) {
+          const shown = limit ? items.slice(0, limit) : items;
+          return shown.map(({text, school}) => {
+            const color = SCHOOL_COLORS[school] || '#667eea';
+            return `<div class="voice-card" style="border-left:4px solid ${color};"><div class="voice-school" style="color:${color}">${school}</div><div class="voice-text">"${text}"</div></div>`;
+          }).join('');
+        }
+
+        const container = document.getElementById("feedbackSection");
+        // Preserve tab state if already rendered
+        const activeTab = container.querySelector('.feedback-tab.active');
+        const activePanel = activeTab ? activeTab.getAttribute('onclick').match(/'([^']+)'/)?.[1] : 'tab-likes';
+
+        const overview = `
+          <div class="feedback-overview">
+            <div class="fo-card"><div class="fo-num">${fLikes.length}</div><div class="fo-label">👍 Positive Comments</div></div>
+            <div class="fo-card"><div class="fo-num">${fImpr.length}</div><div class="fo-label">🔧 Areas for Improvement</div></div>
+            <div class="fo-card"><div class="fo-num">${fSugg.length}</div><div class="fo-label">💡 Student Suggestions</div></div>
+            <div class="fo-card"><div class="fo-num">${fOther.length}</div><div class="fo-label">💬 Other Comments</div></div>
+            <div class="fo-card"><div class="fo-num">${fLikes.length+fImpr.length+fSugg.length+fOther.length}</div><div class="fo-label">📝 Total Items</div></div>
+          </div>`;
+
+        const tabs = `
+          <div class="feedback-tabs">
+            <button class="feedback-tab${activePanel==='tab-likes'?' active':''}" onclick="switchFeedbackTab(this,'tab-likes')">👍 What Students Like (${fLikes.length})</button>
+            <button class="feedback-tab${activePanel==='tab-impr'?' active':''}" onclick="switchFeedbackTab(this,'tab-impr')">🔧 Needs Improvement (${fImpr.length})</button>
+            <button class="feedback-tab${activePanel==='tab-sugg'?' active':''}" onclick="switchFeedbackTab(this,'tab-sugg')">💡 Suggestions (${fSugg.length})</button>
+            <button class="feedback-tab${activePanel==='tab-other'?' active':''}" onclick="switchFeedbackTab(this,'tab-other')">💬 Other Comments (${fOther.length})</button>
+          </div>`;
+
+        function panel(id, items) {
+          const active = activePanel === id ? ' active' : '';
+          return `<div id="${id}" class="feedback-panel${active}">
+            <div class="voice-grid" id="${id.replace('tab-','')}-grid">${buildCards(items, 30)}</div>
+            ${items.length > 30 ? `<button class="show-more-btn" onclick="expandCards('${id.replace('tab-','')}-grid')">Show All ${items.length} Responses</button>` : ''}
+          </div>`;
+        }
+
+        container.innerHTML = overview + tabs +
+          panel('tab-likes', fLikes) + panel('tab-impr', fImpr) + panel('tab-sugg', fSugg) + panel('tab-other', fOther);
       }
 
       function renderExecutiveSummary() {
@@ -905,6 +1044,7 @@
           (sum, s) => sum + s.total_responses,
           0
         );
+        const numSchools = Object.keys(surveyData.schools).length;
         const avgRating = (
           Object.values(surveyData.schools).reduce(
             (sum, s) => sum + s.overall_rating * s.total_responses,
@@ -922,7 +1062,7 @@
                 <div class="stat-card">
                     <h3>Total Responses</h3>
                     <div class="value">${totalResponses}</div>
-                    <div class="subtext">from 9 out of 14 schools</div>
+                    <div class="subtext">from ${numSchools} out of 14 schools</div>
                 </div>
                 <div class="stat-card">
                     <h3>Average Satisfaction</h3>
@@ -936,10 +1076,13 @@
                 </div>
                 <div class="stat-card">
                     <h3>School Participation</h3>
-                    <div class="value">64.3%</div>
-                    <div class="subtext">9 out of 14 schools responded</div>
+                    <div class="value">${((numSchools/14)*100).toFixed(1)}%</div>
+                    <div class="subtext">${numSchools} out of 14 schools responded</div>
                 </div>
             `;
+        // Update participation banner dynamically
+        document.getElementById('participationStats').textContent =
+          `${totalResponses} Students Responded | ${numSchools} out of 14 Schools (${((numSchools/14)*100).toFixed(1)}% Participation)`;
       }
 
       function getPerformanceLabel(score) {
@@ -958,6 +1101,7 @@
 
       function renderHeatmap() {
         const table = document.getElementById("heatmapTable");
+        if (!Object.keys(surveyData.schools).length) { table.innerHTML = '<tr><td>No data available</td></tr>'; return; }
         const domains = Object.keys(
           surveyData.schools[Object.keys(surveyData.schools)[0]].domains
         );
@@ -984,9 +1128,8 @@
           html += `<td class="score-cell ${getScoreClass(
             data.overall_rating
           )}">${data.overall_rating.toFixed(2)}</td>`;
-          html += `<td class="score-cell ${getScoreClass(
-            data.recommendation_yes / 25
-          )}">${data.recommendation_yes.toFixed(1)}%</td>`;
+          const recClass = data.recommendation_yes >= 80 ? 'score-high' : data.recommendation_yes >= 60 ? 'score-medium' : 'score-low';
+          html += `<td class="score-cell ${recClass}">${data.recommendation_yes.toFixed(1)}%</td>`;
           html += "</tr>";
         });
 
@@ -1013,7 +1156,8 @@
           return (sum / totalResponses).toFixed(2);
         });
 
-        new Chart(ctx, {
+        destroyChart('domainChart');
+        _charts['domainChart'] = new Chart(ctx, {
           type: "bar",
           data: {
             labels: domains,
@@ -1085,7 +1229,8 @@
           borderWidth: 2,
         }));
 
-        new Chart(ctx, {
+        destroyChart('radarChart');
+        _charts['radarChart'] = new Chart(ctx, {
           type: "radar",
           data: {
             labels: domains.map((d) =>
@@ -1173,100 +1318,7 @@
       }
 
       function renderFeedback() {
-        const container = document.getElementById("feedbackSection");
-
-        // Collect all feedback from surveyData
-        const allLikes = [], allImprovements = [], allSuggestions = [], allOther = [];
-        for (const [school, data] of Object.entries(surveyData.schools)) {
-          (data.likes || []).forEach(t => allLikes.push({text: t, school}));
-          (data.improvements || []).forEach(t => allImprovements.push({text: t, school}));
-          (data.suggestions || []).forEach(t => allSuggestions.push({text: t, school}));
-          (data.other || []).forEach(t => allOther.push({text: t, school}));
-        }
-
-        const schoolColors = {
-          "TNA Fatih Bilingual School": "#667eea",
-          "Kharisma Bangsa School": "#11998e",
-          "Fatih Bilingual School": "#f093fb",
-          "Cahaya Rancamaya": "#f5576c",
-          "Mega Islamic Boarding School": "#4facfe",
-          "Pribadi Depok": "#43e97b",
-          "Pribadi Bandung School": "#fa709a",
-          "Kesatuan Bangsa School": "#f6d365",
-          "Prestige Bilingual School": "#a18cd1",
-        };
-
-        function buildVoiceCards(items, limit) {
-          let html = '';
-          const shown = limit ? items.slice(0, limit) : items;
-          shown.forEach(({text, school}) => {
-            const color = schoolColors[school] || '#667eea';
-            html += `
-              <div class="voice-card" style="border-left: 4px solid ${color};">
-                <div class="voice-school" style="color:${color}">${school}</div>
-                <div class="voice-text">"${text}"</div>
-              </div>`;
-          });
-          return html;
-        }
-
-        let html = `
-          <style>
-            .feedback-tabs { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-            .feedback-tab { padding:10px 22px; border-radius:25px; border:2px solid #667eea; background:white; color:#667eea; cursor:pointer; font-weight:600; font-size:0.95em; transition:all 0.2s; }
-            .feedback-tab.active, .feedback-tab:hover { background:#667eea; color:white; }
-            .feedback-panel { display:none; }
-            .feedback-panel.active { display:block; }
-            .voice-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr)); gap:16px; margin-top:16px; }
-            .voice-card { background:white; border-radius:10px; padding:16px 18px; box-shadow:0 2px 8px rgba(0,0,0,0.08); transition:transform 0.2s; }
-            .voice-card:hover { transform:translateY(-3px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
-            .voice-school { font-size:0.78em; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px; }
-            .voice-text { color:#333; font-size:0.93em; line-height:1.6; font-style:italic; }
-            .feedback-overview { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:14px; margin-bottom:22px; }
-            .fo-card { background:white; border-radius:12px; padding:18px; text-align:center; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
-            .fo-num { font-size:2.2em; font-weight:800; color:#667eea; }
-            .fo-label { font-size:0.82em; color:#666; margin-top:4px; }
-            .show-more-btn { display:block; margin:18px auto 0; padding:10px 28px; background:#667eea; color:white; border:none; border-radius:25px; cursor:pointer; font-weight:600; font-size:0.95em; transition:background 0.2s; }
-            .show-more-btn:hover { background:#764ba2; }
-          </style>
-
-          <div class="feedback-overview">
-            <div class="fo-card"><div class="fo-num">${allLikes.length}</div><div class="fo-label">👍 Positive Comments</div></div>
-            <div class="fo-card"><div class="fo-num">${allImprovements.length}</div><div class="fo-label">🔧 Areas for Improvement</div></div>
-            <div class="fo-card"><div class="fo-num">${allSuggestions.length}</div><div class="fo-label">💡 Student Suggestions</div></div>
-            <div class="fo-card"><div class="fo-num">${allOther.length}</div><div class="fo-label">💬 Other Comments</div></div>
-            <div class="fo-card"><div class="fo-num">${allLikes.length + allImprovements.length + allSuggestions.length + allOther.length}</div><div class="fo-label">📝 Total Feedback Items</div></div>
-          </div>
-
-          <div class="feedback-tabs">
-            <button class="feedback-tab active" onclick="switchFeedbackTab(this,'tab-likes')">👍 What Students Like (${allLikes.length})</button>
-            <button class="feedback-tab" onclick="switchFeedbackTab(this,'tab-impr')">🔧 Needs Improvement (${allImprovements.length})</button>
-            <button class="feedback-tab" onclick="switchFeedbackTab(this,'tab-sugg')">💡 Suggestions (${allSuggestions.length})</button>
-            <button class="feedback-tab" onclick="switchFeedbackTab(this,'tab-other')">💬 Other Comments (${allOther.length})</button>
-          </div>
-
-          <div id="tab-likes" class="feedback-panel active">
-            <div class="voice-grid" id="likes-grid">${buildVoiceCards(allLikes, 30)}</div>
-            ${allLikes.length > 30 ? `<button class="show-more-btn" onclick="expandCards('likes-grid')">Show All ${allLikes.length} Responses</button>` : ''}
-          </div>
-
-          <div id="tab-impr" class="feedback-panel">
-            <div class="voice-grid" id="impr-grid">${buildVoiceCards(allImprovements, 30)}</div>
-            ${allImprovements.length > 30 ? `<button class="show-more-btn" onclick="expandCards('impr-grid')">Show All ${allImprovements.length} Responses</button>` : ''}
-          </div>
-
-          <div id="tab-sugg" class="feedback-panel">
-            <div class="voice-grid" id="sugg-grid">${buildVoiceCards(allSuggestions, 30)}</div>
-            ${allSuggestions.length > 30 ? `<button class="show-more-btn" onclick="expandCards('sugg-grid')">Show All ${allSuggestions.length} Responses</button>` : ''}
-          </div>
-
-          <div id="tab-other" class="feedback-panel">
-            <div class="voice-grid" id="other-grid">${buildVoiceCards(allOther, 30)}</div>
-            ${allOther.length > 30 ? `<button class="show-more-btn" onclick="expandCards('other-grid')">Show All ${allOther.length} Responses</button>` : ''}
-          </div>`;
-
-        window._feedbackData = { 'likes-grid': allLikes, 'impr-grid': allImprovements, 'sugg-grid': allSuggestions, 'other-grid': allOther };
-        container.innerHTML = html;
+        renderFeedbackFiltered();
       }
 
       function switchFeedbackTab(btn, panelId) {
@@ -1278,17 +1330,7 @@
 
       function expandCards(gridId) {
         const items = (window._feedbackData || {})[gridId] || [];
-        const schoolColors = {
-          "TNA Fatih Bilingual School": "#667eea",
-          "Kharisma Bangsa School": "#11998e",
-          "Fatih Bilingual School": "#f093fb",
-          "Cahaya Rancamaya": "#f5576c",
-          "Mega Islamic Boarding School": "#4facfe",
-          "Pribadi Depok": "#43e97b",
-          "Pribadi Bandung School": "#fa709a",
-          "Kesatuan Bangsa School": "#f6d365",
-          "Prestige Bilingual School": "#a18cd1",
-        };
+        const schoolColors = SCHOOL_COLORS;
         let html = '';
         items.forEach(({text, school}) => {
           const color = schoolColors[school] || '#667eea';
