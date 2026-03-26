@@ -41,7 +41,7 @@ const ComprehensiveDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedPriority, setSelectedPriority] = useState("all");
   const [expandedCards, setExpandedCards] = useState({});
-  const [openGroups, setOpenGroups] = useState({ "📊 Data": true });
+  const [openGroups, setOpenGroups] = useState({});
 
   // Data structures (same as before)
   const dashboardData = {
@@ -1666,7 +1666,7 @@ const ComprehensiveDashboard = () => {
                 maxHeight: isOpen ? "400px" : "0px",
                 overflow: "hidden",
                 transition: "max-height 0.3s ease",
-                padding: isOpen ? "10px 12px 12px" : "0 12px",
+                padding: isOpen ? "10px 12px 12px" : "0",
               }}>
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
                   {section.tabs.map((tab) => {
