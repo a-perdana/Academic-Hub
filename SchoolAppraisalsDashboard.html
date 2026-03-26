@@ -41,7 +41,7 @@ const ComprehensiveDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const [selectedPriority, setSelectedPriority] = useState("all");
   const [expandedCards, setExpandedCards] = useState({});
-  const [openGroups, setOpenGroups] = useState({});
+  const [openGroups, setOpenGroups] = useState({}); // unused, kept for compatibility
 
   // Data structures (same as before)
   const dashboardData = {
@@ -1580,7 +1580,17 @@ const ComprehensiveDashboard = () => {
       </div>
 
       {/* Navigation Tabs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", marginBottom: "40px" }}>
+      <div style={{
+        background: "#fff",
+        borderRadius: "20px",
+        padding: "8px",
+        marginBottom: "40px",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "4px",
+        alignItems: "center",
+      }}>
         {[
           { group: "📊 Data", color: "#667eea", tabs: [
             { id: "overview", label: "Overview" },
@@ -1589,7 +1599,7 @@ const ComprehensiveDashboard = () => {
             { id: "appraisers", label: "Appraisers" },
             { id: "meetings", label: "Meetings" },
           ]},
-          { group: "🔍 Findings", color: "#f093fb", tabs: [
+          { group: "🔍 Findings", color: "#d946a8", tabs: [
             { id: "findings", label: "Findings" },
             { id: "compliance", label: "Compliance" },
             { id: "teaching", label: "Teaching" },
@@ -1603,104 +1613,60 @@ const ComprehensiveDashboard = () => {
             { id: "roadmap", label: "Roadmap" },
             { id: "discussion", label: "Discussion" },
           ]},
-          { group: "🎓 Framework", color: "#43e97b", tabs: [
+          { group: "🎓 Framework", color: "#10b981", tabs: [
             { id: "pdframework", label: "PD System" },
             { id: "network", label: "Network" },
             { id: "cambridge", label: "Cambridge" },
             { id: "islamic", label: "Islamic" },
             { id: "data", label: "Data Rhythm" },
           ]},
-        ].map((section) => {
-          const isGroupActive = section.tabs.some(t => t.id === activeTab);
-          const isOpen = openGroups[section.group] || isGroupActive;
-          const toggleGroup = () => setOpenGroups(prev => ({ ...prev, [section.group]: !isOpen }));
-          return (
-            <div key={section.group} style={{
-              background: "#fff",
-              borderRadius: "16px",
-              overflow: "hidden",
-              boxShadow: isGroupActive
-                ? `0 4px 20px ${section.color}44`
-                : "0 2px 10px rgba(0,0,0,0.08)",
-              border: isGroupActive ? `2px solid ${section.color}66` : "2px solid transparent",
-              transition: "all 0.3s",
+        ].map((section, si, arr) => (
+          <React.Fragment key={section.group}>
+            {/* Grup etiketi */}
+            <span style={{
+              fontSize: "10px",
+              fontWeight: "800",
+              color: section.color,
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              padding: "0 6px",
+              whiteSpace: "nowrap",
             }}>
-              {/* Grup başlığı — tıklanabilir */}
-              <div
-                onClick={toggleGroup}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "14px 16px",
-                  cursor: "pointer",
-                  background: isOpen ? `${section.color}11` : "transparent",
-                  borderBottom: isOpen ? `2px solid ${section.color}22` : "2px solid transparent",
-                  transition: "all 0.25s",
-                  userSelect: "none",
-                }}
-              >
-                <span style={{
-                  fontSize: "11px",
-                  fontWeight: "800",
-                  color: section.color,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                }}>
-                  {section.group}
-                </span>
-                <span style={{
-                  fontSize: "12px",
-                  color: section.color,
-                  fontWeight: "700",
-                  transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                  transition: "transform 0.25s",
-                  display: "inline-block",
-                }}>
-                  ▾
-                </span>
-              </div>
-
-              {/* Tab listesi — açılır/kapanır */}
-              <div style={{
-                maxHeight: isOpen ? "400px" : "0px",
-                overflow: "hidden",
-                transition: "max-height 0.3s ease",
-                padding: isOpen ? "10px 12px 12px" : "0",
-              }}>
-                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                  {section.tabs.map((tab) => {
-                    const isActive = activeTab === tab.id;
-                    return (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id)}
-                        style={{
-                          width: "100%",
-                          padding: "8px 14px",
-                          borderRadius: "10px",
-                          fontWeight: isActive ? "700" : "500",
-                          fontSize: "13px",
-                          cursor: "pointer",
-                          border: "none",
-                          textAlign: "left",
-                          transition: "all 0.2s",
-                          background: isActive
-                            ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
-                            : "transparent",
-                          color: isActive ? "#fff" : "#6b7280",
-                          boxShadow: isActive ? `0 4px 12px ${section.color}55` : "none",
-                        }}
-                      >
-                        {tab.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          );
-        })}
+              {section.group}
+            </span>
+            {/* Tablar */}
+            {section.tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    padding: "8px 16px",
+                    borderRadius: "12px",
+                    fontWeight: isActive ? "700" : "500",
+                    fontSize: "13px",
+                    cursor: "pointer",
+                    border: "none",
+                    whiteSpace: "nowrap",
+                    transition: "all 0.2s",
+                    background: isActive
+                      ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
+                      : "transparent",
+                    color: isActive ? "#fff" : "#6b7280",
+                    boxShadow: isActive ? `0 4px 12px ${section.color}44` : "none",
+                  }}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+            {/* Grup ayırıcı */}
+            {si < arr.length - 1 && (
+              <div style={{ width: "1px", height: "28px", background: "#e5e7eb", margin: "0 4px" }} />
+            )}
+          </React.Fragment>
+        ))}
       </div>
 
       {/* ORIGINAL OVERVIEW TAB */}
