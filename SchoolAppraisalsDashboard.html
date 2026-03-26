@@ -108,33 +108,41 @@
         <!-- SIDEBAR -->
         <nav id="app-sidebar">
           <span class="nav-group-label" style="color:#667eea">📊 Data</span>
-          <button class="nav-btn" onclick="window.__setTab('overview')">Overview</button>
-          <button class="nav-btn" onclick="window.__setTab('schools')">Schools</button>
-          <button class="nav-btn" onclick="window.__setTab('subjects')">Subjects</button>
-          <button class="nav-btn" onclick="window.__setTab('appraisers')">Appraisers</button>
-          <button class="nav-btn" onclick="window.__setTab('meetings')">Meetings</button>
+          <button class="nav-btn" data-tab="overview">Overview</button>
+          <button class="nav-btn" data-tab="schools">Schools</button>
+          <button class="nav-btn" data-tab="subjects">Subjects</button>
+          <button class="nav-btn" data-tab="appraisers">Appraisers</button>
+          <button class="nav-btn" data-tab="meetings">Meetings</button>
           <div class="nav-divider"></div>
           <span class="nav-group-label" style="color:#d946a8">🔍 Findings</span>
-          <button class="nav-btn" onclick="window.__setTab('findings')">Findings</button>
-          <button class="nav-btn" onclick="window.__setTab('compliance')">Compliance</button>
-          <button class="nav-btn" onclick="window.__setTab('teaching')">Teaching</button>
-          <button class="nav-btn" onclick="window.__setTab('expectations')">Expectations</button>
+          <button class="nav-btn" data-tab="findings">Findings</button>
+          <button class="nav-btn" data-tab="compliance">Compliance</button>
+          <button class="nav-btn" data-tab="teaching">Teaching</button>
+          <button class="nav-btn" data-tab="expectations">Expectations</button>
           <div class="nav-divider"></div>
           <span class="nav-group-label" style="color:#f5576c">⚡ Strategic</span>
-          <button class="nav-btn" onclick="window.__setTab('strategic')">Strategic</button>
-          <button class="nav-btn" onclick="window.__setTab('priorities')">Priorities</button>
-          <button class="nav-btn" onclick="window.__setTab('gaps')">Gaps</button>
-          <button class="nav-btn" onclick="window.__setTab('kpis')">KPIs</button>
-          <button class="nav-btn" onclick="window.__setTab('roadmap')">Roadmap</button>
-          <button class="nav-btn" onclick="window.__setTab('discussion')">Discussion</button>
+          <button class="nav-btn" data-tab="strategic">Strategic</button>
+          <button class="nav-btn" data-tab="priorities">Priorities</button>
+          <button class="nav-btn" data-tab="gaps">Gaps</button>
+          <button class="nav-btn" data-tab="kpis">KPIs</button>
+          <button class="nav-btn" data-tab="roadmap">Roadmap</button>
+          <button class="nav-btn" data-tab="discussion">Discussion</button>
           <div class="nav-divider"></div>
           <span class="nav-group-label" style="color:#10b981">🎓 Framework</span>
-          <button class="nav-btn" onclick="window.__setTab('pdframework')">PD System</button>
-          <button class="nav-btn" onclick="window.__setTab('network')">Network</button>
-          <button class="nav-btn" onclick="window.__setTab('cambridge')">Cambridge</button>
-          <button class="nav-btn" onclick="window.__setTab('islamic')">Islamic</button>
-          <button class="nav-btn" onclick="window.__setTab('data')">Data Rhythm</button>
+          <button class="nav-btn" data-tab="pdframework">PD System</button>
+          <button class="nav-btn" data-tab="network">Network</button>
+          <button class="nav-btn" data-tab="cambridge">Cambridge</button>
+          <button class="nav-btn" data-tab="islamic">Islamic</button>
+          <button class="nav-btn" data-tab="data">Data Rhythm</button>
         </nav>
+        <script>
+          document.getElementById('app-sidebar').addEventListener('click', function(e) {
+            var btn = e.target.closest('.nav-btn');
+            if (!btn) return;
+            var tab = btn.getAttribute('data-tab');
+            if (window.__setTab) window.__setTab(tab);
+          });
+        </script>
 
         <!-- MAIN -->
         <main id="app-main">
@@ -165,9 +173,8 @@ const ComprehensiveDashboard = () => {
 
   useEffect(() => {
     document.querySelectorAll('.nav-btn').forEach(function(btn) {
-      var match = btn.getAttribute('onclick').match(/'([^']+)'/);
-      if (!match) return;
-      var tabId = match[1];
+      var tabId = btn.getAttribute('data-tab');
+      if (!tabId) return;
       var isActive = tabId === activeTab;
       var label = btn.previousElementSibling;
       while (label && !label.classList.contains('nav-group-label')) {
@@ -1710,98 +1717,6 @@ const ComprehensiveDashboard = () => {
             Strategic Recommendations
           </a>
         </div>
-      </div>
-
-      {/* Navigation Tabs — hidden, sidebar handles navigation */}
-      <div style={{ display: "none" }}>
-      <div style={{
-        background: "#fff",
-        borderRadius: "20px",
-        padding: "8px",
-        marginBottom: "40px",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "4px",
-        alignItems: "center",
-      }}>
-        {[
-          { group: "📊 Data", color: "#667eea", tabs: [
-            { id: "overview", label: "Overview" },
-            { id: "schools", label: "Schools" },
-            { id: "subjects", label: "Subjects" },
-            { id: "appraisers", label: "Appraisers" },
-            { id: "meetings", label: "Meetings" },
-          ]},
-          { group: "🔍 Findings", color: "#d946a8", tabs: [
-            { id: "findings", label: "Findings" },
-            { id: "compliance", label: "Compliance" },
-            { id: "teaching", label: "Teaching" },
-            { id: "expectations", label: "Expectations" },
-          ]},
-          { group: "⚡ Strategic", color: "#f5576c", tabs: [
-            { id: "strategic", label: "Strategic" },
-            { id: "priorities", label: "Priorities" },
-            { id: "gaps", label: "Gaps" },
-            { id: "kpis", label: "KPIs" },
-            { id: "roadmap", label: "Roadmap" },
-            { id: "discussion", label: "Discussion" },
-          ]},
-          { group: "🎓 Framework", color: "#10b981", tabs: [
-            { id: "pdframework", label: "PD System" },
-            { id: "network", label: "Network" },
-            { id: "cambridge", label: "Cambridge" },
-            { id: "islamic", label: "Islamic" },
-            { id: "data", label: "Data Rhythm" },
-          ]},
-        ].map((section, si, arr) => (
-          <React.Fragment key={section.group}>
-            {/* Grup etiketi */}
-            <span style={{
-              fontSize: "10px",
-              fontWeight: "800",
-              color: section.color,
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              padding: "0 6px",
-              whiteSpace: "nowrap",
-            }}>
-              {section.group}
-            </span>
-            {/* Tablar */}
-            {section.tabs.map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: "12px",
-                    fontWeight: isActive ? "700" : "500",
-                    fontSize: "13px",
-                    cursor: "pointer",
-                    border: "none",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s",
-                    background: isActive
-                      ? `linear-gradient(135deg, ${section.color}, ${section.color}cc)`
-                      : "transparent",
-                    color: isActive ? "#fff" : "#6b7280",
-                    boxShadow: isActive ? `0 4px 12px ${section.color}44` : "none",
-                  }}
-                >
-                  {tab.label}
-                </button>
-              );
-            })}
-            {/* Grup ayırıcı */}
-            {si < arr.length - 1 && (
-              <div style={{ width: "1px", height: "28px", background: "#e5e7eb", margin: "0 4px" }} />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
       </div>
 
       {/* ORIGINAL OVERVIEW TAB */}
@@ -5611,7 +5526,6 @@ const ComprehensiveDashboard = () => {
           {dashboardData.key_stats.total_observations} Observations +{" "}
           {dashboardData.key_stats.total_meetings} Meetings
         </div>
-      </div>
       </div>
     </div>
   );
