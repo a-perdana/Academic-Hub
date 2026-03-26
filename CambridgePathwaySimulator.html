@@ -140,7 +140,7 @@
             description:
               "Cambridge IGCSE is the world's most popular international qualification for 14-16 year olds. It develops knowledge, understanding and skills in subject content, creative thinking, and problem-solving.",
             recommendation:
-              "Students are advised to take a total of 6 IGCSE subjects, consisting of 3 core subjects and 3 pathway subjects. This structure ensures strong academic results while maintaining a healthy balance between Cambridge studies and the national curriculum. Taking 6 subjects allows students to focus on depth of understanding, leading to better examination performance, stronger transcripts, and more effective preparation for AS and A Level programmes.",
+              "Students are advised to take a total of 7 IGCSE subjects, consisting of 4 mandatory core subjects (English, Bahasa Indonesia, Mathematics, Global Perspectives) and 3 pathway subjects. This structure ensures strong academic results while maintaining a healthy balance between Cambridge studies and the national curriculum. Taking 7 subjects allows students to focus on depth of understanding, leading to better examination performance, stronger transcripts, and more effective preparation for AS and A Level programmes.",
           },
           aslevel: {
             title: "AS & A Level (Grades 11-12)",
@@ -149,6 +149,13 @@
             recommendation:
               "Students typically take 3-4 subjects at AS Level (Grade 11) and continue with 3 subjects to A Level (Grade 12). This focused approach allows for deep specialization and excellent preparation for university study.",
           },
+        };
+
+        // Path color config
+        const pathwayColors = {
+          engineering: { bg: "bg-cyan-100", text: "text-cyan-700", border: "border-cyan-300", label: "Engineering" },
+          business:    { bg: "bg-orange-100", text: "text-orange-700", border: "border-orange-300", label: "Business" },
+          medical:     { bg: "bg-rose-100", text: "text-rose-700", border: "border-rose-300", label: "Medical" },
         };
 
         const igcsePathways = {
@@ -165,42 +172,53 @@
               {
                 code: "0625",
                 name: "Physics",
+                gradeGroup: "G-III",
+                pathTags: ["engineering", "medical"],
                 description:
                   "Study matter, energy, and forces. Essential for all engineering disciplines.",
               },
               {
                 code: "0620",
                 name: "Chemistry",
+                gradeGroup: "G-III",
+                pathTags: ["engineering", "medical"],
                 description:
                   "Understand materials, reactions, and processes crucial for engineering applications.",
               },
               {
                 code: "0610",
                 name: "Biology",
+                pathTags: ["medical"],
                 description:
                   "Recommended for Biomedical or Environmental Engineering fields.",
               },
               {
                 code: "0606",
                 name: "Additional Mathematics",
+                pathTags: [],
                 description:
                   "Highly recommended for Engineering/STEM programmes.",
               },
               {
                 code: "0478",
                 name: "Computer Science",
+                gradeGroup: "G-V",
+                pathTags: ["engineering"],
                 description:
                   "Learn programming, algorithms, and computational thinking for the digital age.",
               },
               {
                 code: "0417",
                 name: "ICT",
+                gradeGroup: "G-V",
+                pathTags: ["medical"],
                 description:
                   "Develop practical technology skills in software applications and digital systems.",
               },
               {
                 code: "0445",
                 name: "Design & Technology",
+                pathTags: [],
                 description:
                   "Apply creativity and technical skills to design and make products.",
               },
@@ -219,30 +237,45 @@
               {
                 code: "0450",
                 name: "Business Studies",
+                gradeGroup: "G-V",
+                pathTags: ["business"],
                 description:
                   "Learn about organizations, management, marketing, and finance in the business world.",
               },
               {
                 code: "0455",
                 name: "Economics",
+                gradeGroup: "G-II",
+                pathTags: ["business"],
                 description:
                   "Understand how economies work, from individual choices to global markets.",
               },
               {
                 code: "0452",
                 name: "Accounting",
+                pathTags: [],
                 description:
                   "Master financial record-keeping, analysis, and business decision-making.",
               },
               {
+                code: "0653",
+                name: "Combined Science",
+                gradeGroup: "G-III",
+                pathTags: ["business"],
+                description:
+                  "Covers core Biology, Chemistry, and Physics concepts. Provides scientific literacy for business and sustainability contexts.",
+              },
+              {
                 code: "0417",
                 name: "ICT",
+                pathTags: [],
                 description:
                   "Apply technology skills to modern business operations and digital transformation.",
               },
               {
                 code: "0478",
                 name: "Computer Science",
+                pathTags: [],
                 description:
                   "Understand technology systems essential for digital business innovation.",
               },
@@ -261,30 +294,39 @@
               {
                 code: "0610",
                 name: "Biology",
+                gradeGroup: "G-III",
+                pathTags: ["medical"],
                 description:
                   "Study living organisms, life processes, and the foundation for all medical sciences.",
               },
               {
                 code: "0620",
                 name: "Chemistry",
+                gradeGroup: "G-III",
+                pathTags: ["engineering", "medical"],
                 description:
                   "Essential for understanding biochemistry, pharmacology, and medical treatments.",
               },
               {
                 code: "0625",
                 name: "Physics",
+                gradeGroup: "G-III",
+                pathTags: ["engineering", "medical"],
                 description:
                   "Recommended for Medicine, Dentistry, and Biomedical Science.",
               },
               {
                 code: "0266",
                 name: "Psychology",
+                pathTags: [],
                 description:
                   "Explore human behavior, mental processes, and psychological wellbeing.",
               },
               {
                 code: "0417",
                 name: "ICT",
+                gradeGroup: "G-V",
+                pathTags: ["medical"],
                 description:
                   "Learn technology applications in modern healthcare and medical research.",
               },
@@ -645,7 +687,7 @@
 
         const totalCheckpoint =
           Object.values(checkpointSubjects).filter(Boolean).length;
-        const totalIgcse = 3 + igcseElectives.length;
+        const totalIgcse = 4 + igcseElectives.length;
 
         return (
           <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
@@ -1060,6 +1102,12 @@
                               description:
                                 "Core quantitative skills needed for most university programs",
                             },
+                            {
+                              name: "Global Perspectives",
+                              code: "0457",
+                              description:
+                                "Develops critical thinking, research, and communication skills through exploration of global issues.",
+                            },
                           ].map((subject) => (
                             <div
                               key={subject.code}
@@ -1098,7 +1146,7 @@
                           />
                           <div>
                             <h4 className="font-bold text-lg text-gray-800 mb-2">
-                              Why 6 IGCSE Subjects?
+                              Why 7 IGCSE Subjects?
                             </h4>
                             <div className="space-y-2 text-sm text-gray-700">
                               <p>
@@ -1269,13 +1317,23 @@
                                         )}
                                       </div>
                                       <div className="flex-1">
-                                        <div className="flex items-center gap-2 mb-2">
+                                        <div className="flex flex-wrap items-center gap-2 mb-2">
                                           <span className="font-bold text-lg text-gray-800">
                                             {subject.name}
                                           </span>
                                           <span className="text-sm px-2 py-1 bg-gray-100 text-gray-700 rounded">
                                             {subject.code}
                                           </span>
+                                          {subject.gradeGroup && (
+                                            <span className="text-xs px-2 py-1 bg-gray-200 text-gray-600 rounded font-mono">
+                                              {subject.gradeGroup}
+                                            </span>
+                                          )}
+                                          {subject.pathTags && subject.pathTags.map((tag) => (
+                                            <span key={tag} className={`text-xs px-2 py-1 rounded font-semibold border ${pathwayColors[tag].bg} ${pathwayColors[tag].text} ${pathwayColors[tag].border}`}>
+                                              {pathwayColors[tag].label}
+                                            </span>
+                                          ))}
                                           {isSelected && (
                                             <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded font-semibold">
                                               SELECTED
@@ -1311,31 +1369,31 @@
                                   Total Subjects:
                                 </span>
                                 <span className="text-3xl font-bold text-green-600">
-                                  {totalIgcse}/6
+                                  {totalIgcse}/7
                                 </span>
                               </div>
                               <div className="flex items-center gap-2 mb-1">
                                 <div className="flex-1 bg-gray-200 rounded-full h-3">
                                   <div
                                     className={`h-3 rounded-full transition-all ${
-                                      totalIgcse === 6
+                                      totalIgcse === 7
                                         ? "bg-green-600"
-                                        : totalIgcse > 6
+                                        : totalIgcse > 7
                                           ? "bg-amber-600"
                                           : "bg-blue-600"
                                     }`}
                                     style={{
-                                      width: `${(totalIgcse / 6) * 100}%`,
+                                      width: `${(totalIgcse / 7) * 100}%`,
                                     }}
                                   />
                                 </div>
                               </div>
                               <p className="text-sm text-gray-600 mt-2">
-                                {totalIgcse < 6
-                                  ? `Select ${6 - totalIgcse} more subject${
-                                      6 - totalIgcse > 1 ? "s" : ""
+                                {totalIgcse < 7
+                                  ? `Select ${7 - totalIgcse} more subject${
+                                      7 - totalIgcse > 1 ? "s" : ""
                                     } to reach the recommended load`
-                                  : totalIgcse === 6
+                                  : totalIgcse === 7
                                     ? "✓ Perfect! You have the optimal subject load for success"
                                     : "You have selected more than recommended - consider reducing for better results"}
                               </p>
@@ -1346,7 +1404,7 @@
                               </p>
                               <p>
                                 • Core: English (0510), Bahasa Indonesia (0538),
-                                Mathematics (0580)
+                                Mathematics (0580), Global Perspectives (0457)
                               </p>
                               {igcseElectives.length > 0 && (
                                 <p>
@@ -1368,8 +1426,8 @@
                             </div>
                             <div className="bg-amber-50 p-3 rounded-lg text-xs text-gray-700 mt-3">
                               <strong>Reduced Load Option:</strong> Students may
-                              take 5 subjects (3 core + 2 pathway) or 4 subjects
-                              (3 core + 1 pathway) with Academic Counselor
+                              take 6 subjects (4 core + 2 pathway) or 5 subjects
+                              (4 core + 1 pathway) with Academic Counselor
                               approval. Suitable for students needing additional
                               support or planning AS Level only.
                             </div>
