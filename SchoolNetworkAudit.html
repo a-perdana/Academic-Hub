@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Eduversal Network Security Assessment</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/><path d='M9 12l2 2 4-4'/></svg>">
     <style>
       * {
         margin: 0;
@@ -873,10 +874,10 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",     urls: ["tiktok.com","vm.tiktok.com"],          pts: 4, critical: true,  attempts: 2 },
-              { name: "Instagram",  urls: ["instagram.com","cdninstagram.com"],    pts: 4, critical: true,  attempts: 2 },
-              { name: "Snapchat",   urls: ["snapchat.com","sc-cdn.net"],           pts: 4, critical: true,  attempts: 2 },
-              { name: "Facebook",   urls: ["facebook.com","fbcdn.net"],            pts: 2, critical: false, attempts: 1 },
+              { name: "TikTok",     urls: ["tiktok.com","www.tiktok.com"],          pts: 4, critical: true,  attempts: 2 },
+              { name: "Instagram",  urls: ["instagram.com","www.instagram.com"],    pts: 4, critical: true,  attempts: 2 },
+              { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],           pts: 4, critical: true,  attempts: 2 },
+              { name: "Facebook",   urls: ["facebook.com","www.facebook.com"],            pts: 2, critical: false, attempts: 1 },
             ],
           },
           {
@@ -935,10 +936,10 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 3, critical: true,  attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 3, critical: true,  attempts: 2 },
-              { name: "Facebook",  urls: ["facebook.com","fbcdn.net"],         pts: 2, critical: false, attempts: 1 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
             ],
           },
           {
@@ -997,10 +998,10 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 3, critical: true,  attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 3, critical: true,  attempts: 2 },
-              { name: "Facebook",  urls: ["facebook.com","fbcdn.net"],         pts: 2, critical: false, attempts: 1 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 3, critical: true,  attempts: 2 },
+              { name: "Facebook",  urls: ["facebook.com","www.facebook.com"],         pts: 2, critical: false, attempts: 1 },
             ],
           },
           {
@@ -1052,9 +1053,9 @@
           {
             cat: "📱 Social Media Control",
             tests: [
-              { name: "TikTok",    urls: ["tiktok.com","vm.tiktok.com"],       pts: 4, critical: true, attempts: 2 },
-              { name: "Instagram", urls: ["instagram.com","cdninstagram.com"], pts: 4, critical: true, attempts: 2 },
-              { name: "Snapchat",  urls: ["snapchat.com","sc-cdn.net"],        pts: 4, critical: true, attempts: 2 },
+              { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 4, critical: true, attempts: 2 },
+              { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 4, critical: true, attempts: 2 },
+              { name: "Snapchat",  urls: ["snapchat.com","www.snapchat.com"],        pts: 4, critical: true, attempts: 2 },
             ],
           },
           {
@@ -1272,6 +1273,61 @@
         addLog("\n✓ Assessment complete. Generating report...", "success");
         await new Promise((r) => setTimeout(r, 500));
         displayResults();
+        await saveAuditToFirestore();
+      }
+
+      async function saveAuditToFirestore() {
+        if (!window.db || !window.currentUser) return;
+        try {
+          const { collection, addDoc, serverTimestamp } = await import(
+            "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js"
+          );
+
+          const testMode = testingMode === "principal"
+            ? "Quick Test (Principal Laptop)"
+            : selectedDevice === "ipad"    ? "Full Test (iPad)"
+            : selectedDevice === "chromebook" ? "Full Test (Chromebook)"
+            : "Full Test (Phone)";
+
+          const passed   = testResults.filter(r => r.status === "pass").length;
+          const partial  = testResults.filter(r => r.status === "partial").length;
+          const failed   = testResults.filter(r => r.status === "fail").length;
+          const critical = testResults.filter(r => (r.status === "fail" || r.status === "partial") && r.critical);
+
+          const payload = {
+            school:       schoolName,
+            tester:       window.currentUser.email,
+            testerUid:    window.currentUser.uid,
+            testMode,
+            device:       selectedDevice,
+            score:        totalScore,
+            grade:        totalScore >= 85 ? "EXCELLENT" : totalScore >= 70 ? "GOOD" : totalScore >= 50 ? "FAIR" : "POOR",
+            protected:    passed,
+            partial,
+            vulnerable:   failed,
+            total:        testResults.length,
+            baselineMs,
+            criticalIssues: critical.map(r => r.name),
+            results: testResults.map(r => ({
+              category:    r.category,
+              name:        r.name,
+              status:      r.status,
+              earned:      r.earned,
+              pts:         r.pts,
+              critical:    r.critical,
+              confidence:  r.confidence,
+              blockedCount: r.blockedCount ?? null,
+              totalCount:  r.totalCount ?? null,
+              detail:      r.detail ?? "",
+            })),
+            createdAt: serverTimestamp(),
+          };
+
+          await addDoc(collection(window.db, "networkAudits"), payload);
+          addLog("✓ Audit saved to Firestore.", "success");
+        } catch (err) {
+          console.warn("Firestore save failed:", err);
+        }
       }
 
       function displayResults() {
