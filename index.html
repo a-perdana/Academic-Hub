@@ -441,6 +441,56 @@
         z-index: 2;
       }
 
+      /* Updated Banner */
+      .card-updated-banner {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0.45rem 1rem;
+        background: linear-gradient(90deg, #f7971e 0%, #ffd200 40%, #f7971e 100%);
+        background-size: 200% 100%;
+        animation: shimmer-banner 2.4s ease-in-out infinite;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: #1a1200;
+        z-index: 3;
+        overflow: hidden;
+      }
+      .card-updated-banner::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.35) 50%, transparent 100%);
+        background-size: 200% 100%;
+        animation: sweep-banner 2.4s ease-in-out infinite;
+      }
+      .card-updated-banner svg {
+        flex-shrink: 0;
+        width: 13px;
+        height: 13px;
+        fill: #1a1200;
+        position: relative;
+        z-index: 1;
+      }
+      .card-updated-banner span {
+        position: relative;
+        z-index: 1;
+      }
+      @keyframes shimmer-banner {
+        0%   { background-position: 100% 0; }
+        100% { background-position: -100% 0; }
+      }
+      @keyframes sweep-banner {
+        0%   { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+
       /* Card Content */
       .card-content {
         padding: 1.5rem;
@@ -3576,6 +3626,10 @@
                 alt="Staff Satisfaction Dashboard"
               />
               <span class="card-badge">Survey</span>
+              <div class="card-updated-banner">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                <span>Updated — 2025/2026</span>
+              </div>
             </div>
             <div class="card-content">
               <div class="card-arrow">
@@ -3625,6 +3679,10 @@
                 alt="Student Satisfaction Survey Dashboard"
               />
               <span class="card-badge">Survey</span>
+              <div class="card-updated-banner">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                <span>Updated — 2025/2026</span>
+              </div>
             </div>
             <div class="card-content">
               <div class="card-arrow">
@@ -3674,6 +3732,10 @@
                 alt="Parent Satisfaction Survey Dashboard"
               />
               <span class="card-badge">Survey</span>
+              <div class="card-updated-banner">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+                <span>Updated — 2025/2026</span>
+              </div>
             </div>
             <div class="card-content">
               <div class="card-arrow">
