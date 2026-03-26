@@ -623,11 +623,11 @@
 
         <div style="background:#f0f9ff; border-left:4px solid #3b82f6; border-radius:10px; padding:16px 20px; margin-bottom:20px; font-size:12px; color:#1e3a8a; line-height:1.6;">
           <strong>📋 About this assessment</strong><br>
-          Network tests use dual HTTP probes (fetch + image) with adaptive timeout calibrated to your connection speed.
-          Results indicate whether sites are <em>reachable from this browser</em> — a blocked result is strong evidence of filtering, but not a guarantee.
+          Network tests use a server-side probe (Railway backend) for real HTTP status codes, with browser fetch as fallback.
+          Results indicate whether sites are reachable — blocked results are strong evidence of filtering.
+          VPN port tests (OpenVPN 1194, WireGuard 51820) are performed server-side for accuracy.
           Items marked <strong>⚠ low confidence</strong> should be verified manually.
           Device management items are self-reported — verify against your MDM/Admin Console.
-          This tool does not perform DNS resolution bypass testing or SSL inspection.
         </div>
 
         <div class="recommendations" id="recommendations"></div>
@@ -687,6 +687,92 @@
       let totalScore = 0;
       let baselineMs = 1500; // adaptive: calibrated before tests start
 
+      // ── Railway backend config ─────────────────────────────────────────────
+      // Set RAILWAY_API_URL + RAILWAY_API_TOKEN in Vercel env vars.
+      // If not configured, all Railway probes are skipped gracefully.
+      const RAILWAY_URL   = "__RAILWAY_API_URL__";   // e.g. https://network-audit-api-production.up.railway.app
+      const RAILWAY_TOKEN = "__RAILWAY_API_TOKEN__";
+      const railwayEnabled = RAILWAY_URL && RAILWAY_URL !== "__RAILWAY_API_URL__" && RAILWAY_URL.startsWith("http");
+
+      /** Railway HTTP probe — real status codes from server side */
+      async function railwayProbe(domain, timeoutMs = 6000) {
+        if (!railwayEnabled) return null;
+        try {
+          const url = `${RAILWAY_URL}/probe?url=https://${domain}&timeout=${timeoutMs}`;
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${RAILWAY_TOKEN}` },
+            signal: AbortSignal.timeout(timeoutMs + 2000),
+          });
+          if (!res.ok) return null;
+          return await res.json(); // { blocked, reachable, statusCode, redirectUrl, latencyMs }
+        } catch {
+          return null; // railway unreachable — fall back to browser probe
+        }
+      }
+
+      /** Railway DNS resolve — real DNS from public resolver (8.8.8.8 / 1.1.1.1) */
+      async function railwayDns(domain, timeoutMs = 5000) {
+        if (!railwayEnabled) return null;
+        try {
+          const url = `${RAILWAY_URL}/dns?domain=${domain}&timeout=${timeoutMs}`;
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${RAILWAY_TOKEN}` },
+            signal: AbortSignal.timeout(timeoutMs + 2000),
+          });
+          if (!res.ok) return null;
+          return await res.json(); // { resolved, addresses, error }
+        } catch {
+          return null;
+        }
+      }
+
+      /** Railway TCP port probe — real port reachability from server */
+      async function railwayPort(host, port, timeoutMs = 5000) {
+        if (!railwayEnabled) return null;
+        try {
+          const url = `${RAILWAY_URL}/port?host=${encodeURIComponent(host)}&port=${port}&timeout=${timeoutMs}`;
+          const res = await fetch(url, {
+            headers: { Authorization: `Bearer ${RAILWAY_TOKEN}` },
+            signal: AbortSignal.timeout(timeoutMs + 2000),
+          });
+          if (!res.ok) return null;
+          return await res.json(); // { open, latencyMs, error }
+        } catch {
+          return null;
+        }
+      }
+
+      // ── Special probe: VPN ports (OpenVPN / WireGuard) ───────────────────
+      // Tests whether common VPN protocol ports are reachable FROM THE SCHOOL NETWORK.
+      // Uses Railway TCP probe (accurate). Falls back to "untested" if Railway unavailable.
+      async function probeVpnPorts(timeoutMs) {
+        if (!railwayEnabled) {
+          return { status: "untested", detail: "Requires Railway backend (not configured)" };
+        }
+        // OpenVPN: 1194/UDP (test TCP too as many run dual-stack), 443/TCP (common fallback)
+        // WireGuard: 51820/UDP (test server-side TCP connect will timeout — still informative)
+        const VPN_PORT_TESTS = [
+          { host: "vpn.mullvad.net",   port: 1194 },
+          { host: "vpn.mullvad.net",   port: 51820 },
+          { host: "vpn.nordvpn.com",   port: 1194 },
+        ];
+        let openCount = 0;
+        const details = [];
+        for (const { host, port } of VPN_PORT_TESTS) {
+          const r = await railwayPort(host, port, timeoutMs);
+          if (r && r.open) {
+            openCount++;
+            details.push(`${host}:${port} OPEN`);
+          } else {
+            details.push(`${host}:${port} blocked`);
+          }
+        }
+        // "pass" = all ports blocked (good — VPN harder to use)
+        const allBlocked = openCount === 0;
+        const status = allBlocked ? "pass" : openCount < VPN_PORT_TESTS.length ? "partial" : "fail";
+        return { status, detail: details.join(" | "), openCount, total: VPN_PORT_TESTS.length };
+      }
+
       // Known Tor directory authority IPs (stable, maintained by Tor Project)
       const TOR_IPS = ["128.31.0.39","86.59.21.38","194.109.206.212","131.188.40.189","199.58.81.140","204.13.164.118"];
       // DoH endpoint for DNS-over-HTTPS bypass test
@@ -719,14 +805,23 @@
         return { blocked, confidence: blocked ? "high" : "low", detail: `${blockedCount}/4 Tor directory IPs blocked` };
       }
 
-      // Single fetch probe with AbortController.
-      // Interpretation:
+      // Single probe with AbortController.
+      // Primary: Railway backend (real HTTP status, no no-cors ambiguity).
+      // Fallback: browser fetch HEAD no-cors (used if Railway not configured).
+      // Interpretation of browser fallback:
       //   - fetch throws (network error / DNS fail) quickly  → blocked, high confidence
       //   - fetch aborts via timeout                         → blocked, high confidence
       //   - fetch resolves (opaque no-cors response)         → accessible, high confidence
       // NOTE: Image probe was removed — sites like Instagram reject script/img requests
       // while still being accessible in a browser, causing false "blocked" results.
       async function probeUrl(hostname, timeoutMs) {
+        // 1. Try Railway backend first (real HTTP — authoritative)
+        const rw = await railwayProbe(hostname, timeoutMs);
+        if (rw !== null) {
+          return { blocked: rw.blocked, confidence: "high", source: "railway", statusCode: rw.statusCode };
+        }
+
+        // 2. Fallback: browser fetch no-cors
         try {
           const ctrl = new AbortController();
           const t = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -740,12 +835,11 @@
           clearTimeout(t);
           // Resolved before timeout = accessible
           if (Date.now() - t0 >= timeoutMs - 50) {
-            return { blocked: true, confidence: "high" };
+            return { blocked: true, confidence: "high", source: "browser" };
           }
-          return { blocked: false, confidence: "high" };
+          return { blocked: false, confidence: "high", source: "browser" };
         } catch (err) {
-          // AbortError = timeout = blocked; TypeError = network error = blocked
-          return { blocked: true, confidence: err.name === "AbortError" ? "high" : "high" };
+          return { blocked: true, confidence: err.name === "AbortError" ? "high" : "high", source: "browser" };
         }
       }
 
@@ -764,6 +858,29 @@
         if (urls[0] === "tor") {
           const r = await probeTor(timeoutMs);
           return { status: r.blocked ? "pass" : "fail", blockedCount: r.blocked ? 1 : 0, totalCount: 1, confidence: r.confidence, detail: r.detail };
+        }
+        if (urls[0] === "vpn-ports") {
+          const r = await probeVpnPorts(timeoutMs);
+          return { status: r.status, blockedCount: r.status === "pass" ? 1 : 0, totalCount: 1, confidence: railwayEnabled ? "high" : "low", detail: r.detail };
+        }
+        if (urls[0] === "dns-filter") {
+          // Real DNS filter test: compare Railway DNS resolve (public) vs inaccessibility from browser
+          const testDomains = ["instagram.com", "tiktok.com", "pornhub.com"];
+          const results = [];
+          let filteredCount = 0;
+          for (const domain of testDomains) {
+            const r = await railwayDns(domain, timeoutMs);
+            if (r && r.resolved) {
+              results.push(`${domain}: resolved (${r.addresses[0]})`);
+            } else if (r) {
+              results.push(`${domain}: DNS BLOCKED`);
+              filteredCount++;
+            } else {
+              results.push(`${domain}: untested (no backend)`);
+            }
+          }
+          const status = filteredCount === testDomains.length ? "pass" : filteredCount > 0 ? "partial" : "fail";
+          return { status, blockedCount: filteredCount, totalCount: testDomains.length, confidence: railwayEnabled ? "high" : "low", detail: results.join(" | ") };
         }
 
         let blockedCount = 0;
@@ -846,6 +963,7 @@
               { name: "Web Proxy Sites",  urls: ["proxysite.com","hide.me","croxyproxy.com","kproxy.com"],   pts: 7, critical: true, attempts: 1 },
               { name: "VPN Services",     urls: ["nordvpn.com","expressvpn.com","mullvad.net"],              pts: 6, critical: true, attempts: 1 },
               { name: "Tor Project",      urls: ["tor"],                                                      pts: 5, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked suggests Tor exit nodes are filtered" },
+              { name: "VPN Protocol Ports (OpenVPN/WireGuard)", urls: ["vpn-ports"],                         pts: 6, critical: true, attempts: 1, info: "TCP probe to VPN ports 1194 (OpenVPN) and 51820 (WireGuard) via server-side test — blocked = VPN harder to use" },
             ],
           },
           {
@@ -908,6 +1026,7 @@
               { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
               { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
               { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
             ],
           },
           {
@@ -970,6 +1089,7 @@
               { name: "Web Proxy Sites",    urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
               { name: "VPN Services",       urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
               { name: "Tor Project",        urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                                  pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
             ],
           },
           {
@@ -1032,6 +1152,7 @@
               { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 8, critical: true,  attempts: 1 },
               { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true,  attempts: 1 },
               { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: false, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 5, critical: true,  attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
             ],
           },
           {
@@ -1658,7 +1779,8 @@
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Date & Time</td><td style="padding:4px 8px;">${new Date().toLocaleString("en-GB")}</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Network Tests</td><td style="padding:4px 8px;">${totalNetworkTests} automated probes</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Manual Checks</td><td style="padding:4px 8px;">${manualItems} self-reported items</td></tr>
-            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Probe Method</td><td style="padding:4px 8px;">Dual-probe: fetch HEAD + Image favicon, adaptive timeout (${baselineMs}ms)</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Probe Method</td><td style="padding:4px 8px;">${railwayEnabled ? "Server-side HTTP (Railway) + browser fallback" : "Browser fetch HEAD no-cors"}, adaptive timeout (${baselineMs}ms)</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Backend</td><td style="padding:4px 8px;">${railwayEnabled ? "Railway API active — real HTTP status codes, DNS resolve, port probes" : "Railway API not configured — browser-only probes"}</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Scoring</td><td style="padding:4px 8px;">Full pts = all URLs blocked; half pts = partial block; 0 = fully accessible</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Low Confidence Items</td><td style="padding:4px 8px;">${lowConf} (only one probe returned blocked — manual verification recommended)</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Special Probes</td><td style="padding:4px 8px;">DoH: fetch to cloudflare-dns.com/dns-query with Accept: application/dns-json · Tor: HTTP probe to 4 of 6 directory authority IPs</td></tr>

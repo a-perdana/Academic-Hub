@@ -26,6 +26,8 @@ const replacements = {
   __FIREBASE_MESSAGING_SENDER_ID__:process.env.FIREBASE_MESSAGING_SENDER_ID|| "",
   __FIREBASE_APP_ID__:             process.env.FIREBASE_APP_ID             || "",
   __CLAUDE_API_KEY__:              process.env.CLAUDE_API_KEY              || "",
+  __RAILWAY_API_URL__:             process.env.RAILWAY_API_URL             || "",
+  __RAILWAY_API_TOKEN__:           process.env.RAILWAY_API_TOKEN           || "",
 };
 
 // â”€â”€ Clean URL mapping: filename â†’ slug â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
