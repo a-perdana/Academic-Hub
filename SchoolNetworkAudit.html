@@ -719,37 +719,34 @@
         return { blocked, confidence: blocked ? "high" : "low", detail: `${blockedCount}/4 Tor directory IPs blocked` };
       }
 
-      // Dual-probe: fetch HEAD + Image load. Both failing = blocked (high confidence).
-      // Only one failing = likely blocked (low confidence). Both succeed = accessible.
+      // Single fetch probe with AbortController.
+      // Interpretation:
+      //   - fetch throws (network error / DNS fail) quickly  → blocked, high confidence
+      //   - fetch aborts via timeout                         → blocked, high confidence
+      //   - fetch resolves (opaque no-cors response)         → accessible, high confidence
+      // NOTE: Image probe was removed — sites like Instagram reject script/img requests
+      // while still being accessible in a browser, causing false "blocked" results.
       async function probeUrl(hostname, timeoutMs) {
-        const url = `https://${hostname}`;
-        let fetchBlocked = false;
-        let imgBlocked = false;
-
-        // Probe 1: fetch HEAD
         try {
           const ctrl = new AbortController();
           const t = setTimeout(() => ctrl.abort(), timeoutMs);
           const t0 = Date.now();
-          await fetch(url, { method: "HEAD", mode: "no-cors", cache: "no-cache", signal: ctrl.signal });
+          await fetch(`https://${hostname}`, {
+            method: "HEAD",
+            mode: "no-cors",
+            cache: "no-cache",
+            signal: ctrl.signal,
+          });
           clearTimeout(t);
-          if (Date.now() - t0 >= timeoutMs - 50) fetchBlocked = true;
-        } catch {
-          fetchBlocked = true;
+          // Resolved before timeout = accessible
+          if (Date.now() - t0 >= timeoutMs - 50) {
+            return { blocked: true, confidence: "high" };
+          }
+          return { blocked: false, confidence: "high" };
+        } catch (err) {
+          // AbortError = timeout = blocked; TypeError = network error = blocked
+          return { blocked: true, confidence: err.name === "AbortError" ? "high" : "high" };
         }
-
-        // Probe 2: Image (favicon) load — different TCP path, helps confirm
-        await new Promise((resolve) => {
-          const img = new Image();
-          const t = setTimeout(() => { imgBlocked = true; resolve(); }, timeoutMs);
-          img.onload  = () => { clearTimeout(t); resolve(); };
-          img.onerror = () => { clearTimeout(t); imgBlocked = true; resolve(); };
-          img.src = `${url}/favicon.ico?_=${Date.now()}`;
-        });
-
-        if (fetchBlocked && imgBlocked) return { blocked: true, confidence: "high" };
-        if (fetchBlocked || imgBlocked)  return { blocked: true, confidence: "low" };
-        return { blocked: false, confidence: "high" };
       }
 
       // Multi-URL probe: returns { status: "pass"|"partial"|"fail", blockedCount, totalCount, confidence, detail }
@@ -770,35 +767,29 @@
         }
 
         let blockedCount = 0;
-        let lowConfCount = 0;
         const details = [];
 
         for (const hostname of urls) {
           let votes = 0;
-          let thisLowConf = 0;
           for (let i = 0; i < attempts; i++) {
-            const { blocked: b, confidence: c } = await probeUrl(hostname, timeoutMs);
+            const { blocked: b } = await probeUrl(hostname, timeoutMs);
             if (b) votes++;
-            if (c === "low") thisLowConf++;
             if (i < attempts - 1) await new Promise(r => setTimeout(r, 250));
           }
           const isBlocked = votes >= Math.ceil(attempts / 2);
           if (isBlocked) blockedCount++;
-          if (thisLowConf > 0) lowConfCount++;
-          details.push(`${hostname}: ${isBlocked ? "blocked" : "accessible"}${thisLowConf > 0 ? " ⚠" : ""}`);
+          details.push(`${hostname}: ${isBlocked ? "blocked" : "accessible"}`);
         }
 
         const totalCount = urls.length;
         let status;
         if (test.invertLogic) {
-          // For YouTube: "pass" = accessible (blockedCount === 0)
           status = blockedCount === 0 ? "pass" : blockedCount === totalCount ? "fail" : "partial";
         } else {
           status = blockedCount === totalCount ? "pass" : blockedCount > 0 ? "partial" : "fail";
         }
 
-        const confidence = lowConfCount > 0 ? "low" : "high";
-        return { status, blockedCount, totalCount, confidence, detail: details.join(" | ") };
+        return { status, blockedCount, totalCount, confidence: "high", detail: details.join(" | ") };
       }
 
       // Calibrate baseline latency using a known-reachable endpoint (google.com)
