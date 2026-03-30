@@ -222,99 +222,66 @@ const ComprehensiveDashboard = () => {
         observations: 27,
         subjects: 10,
         classrooms: 6,
-        safeguarding: "incomplete",
-        englishLevel: "B1",
-        dataUsage: "low",
       },
       {
         name: "EMER Islamic School",
         observations: 13,
         subjects: 8,
         classrooms: 4,
-        safeguarding: "incomplete",
-        englishLevel: "A2",
-        dataUsage: "low",
       },
       {
         name: "Kharisma Bangsa",
         observations: 33,
         subjects: 8,
         classrooms: 21,
-        safeguarding: "incomplete",
-        englishLevel: "B1",
-        dataUsage: "medium",
       },
       {
         name: "Kesatuan Bangsa School",
         observations: 34,
         subjects: 10,
         classrooms: 8,
-        safeguarding: "incomplete",
-        englishLevel: "B1",
-        dataUsage: "medium",
       },
       {
         name: "Mega Islamic School",
         observations: 16,
         subjects: 13,
         classrooms: 6,
-        safeguarding: "incomplete",
-        englishLevel: "A2",
-        dataUsage: "low",
       },
       {
         name: "Pakar Belia Islamic School",
         observations: 11,
         subjects: 8,
         classrooms: 2,
-        safeguarding: "incomplete",
-        englishLevel: "A2",
-        dataUsage: "low",
       },
       {
         name: "Pribadi Bandung School",
         observations: 37,
         subjects: 10,
         classrooms: 14,
-        safeguarding: "partial",
-        englishLevel: "B1",
-        dataUsage: "medium",
       },
       {
         name: "Pribadi Depok School",
         observations: 24,
         subjects: 9,
         classrooms: 11,
-        safeguarding: "partial",
-        englishLevel: "B1",
-        dataUsage: "medium",
       },
       {
         name: "Pribadi Premiere School",
         observations: 24,
         subjects: 11,
         classrooms: 11,
-        safeguarding: "partial",
-        englishLevel: "B2",
-        dataUsage: "high",
       },
       {
         name: "Semesta School",
         observations: 21,
         subjects: 8,
         classrooms: 15,
-        safeguarding: "incomplete",
-        englishLevel: "B1",
-        dataUsage: "medium",
       },
       {
         name: "Semesta 2 School",
         observations: 15,
         subjects: 8,
         classrooms: 4,
-        safeguarding: "incomplete",
-        englishLevel: "A2",
-        dataUsage: "low",
       },
     ],
     subjects: [
@@ -336,7 +303,7 @@ const ComprehensiveDashboard = () => {
       { name: "Social Studies", observations: 1, cambridgeAlignment: 55 },
     ],
     appraisers: [
-      { name: "Alif Perdana", observations: 56, schools_covered: 11 },
+      { name: "Alif Perdana", observations: 58, schools_covered: 11 },
       { name: "Jaini Mukhlis", observations: 47, schools_covered: 11 },
       { name: "Ridwan Sumitro", observations: 39, schools_covered: 5 },
       { name: "Mukhtor Adashev", observations: 38, schools_covered: 8 },
@@ -2022,45 +1989,6 @@ const ComprehensiveDashboard = () => {
                       color: (() => { const r = school.observations / school.classrooms; return r >= 3 ? "#10b981" : r >= 2 ? "#3b82f6" : "#f59e0b"; })(),
                     }}>
                       {(school.observations / school.classrooms).toFixed(1)}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ color: "#6b7280" }}>Safeguarding:</span>
-                    <span style={{
-                      fontWeight: "700",
-                      color: school.safeguarding === "complete" ? "#10b981" : school.safeguarding === "partial" ? "#f59e0b" : "#dc2626",
-                      background: school.safeguarding === "complete" ? "#d1fae5" : school.safeguarding === "partial" ? "#fef3c7" : "#fee2e2",
-                      padding: "2px 8px",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}>
-                      {school.safeguarding === "complete" ? "✓ Complete" : school.safeguarding === "partial" ? "◑ Partial" : "✗ Incomplete"}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ color: "#6b7280" }}>English Level:</span>
-                    <span style={{
-                      fontWeight: "700",
-                      color: school.englishLevel === "B2" || school.englishLevel === "C1" ? "#10b981" : school.englishLevel === "B1" ? "#3b82f6" : "#f59e0b",
-                      background: school.englishLevel === "B2" || school.englishLevel === "C1" ? "#d1fae5" : school.englishLevel === "B1" ? "#dbeafe" : "#fef3c7",
-                      padding: "2px 8px",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}>
-                      {school.englishLevel}
-                    </span>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", fontSize: "14px" }}>
-                    <span style={{ color: "#6b7280" }}>Data Usage:</span>
-                    <span style={{
-                      fontWeight: "700",
-                      color: school.dataUsage === "high" ? "#10b981" : school.dataUsage === "medium" ? "#3b82f6" : "#f59e0b",
-                      background: school.dataUsage === "high" ? "#d1fae5" : school.dataUsage === "medium" ? "#dbeafe" : "#fef3c7",
-                      padding: "2px 8px",
-                      borderRadius: "10px",
-                      fontSize: "12px",
-                    }}>
-                      {school.dataUsage.charAt(0).toUpperCase() + school.dataUsage.slice(1)}
                     </span>
                   </div>
                 </div>
