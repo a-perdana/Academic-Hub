@@ -80,18 +80,25 @@ Every protected page loads `auth-guard.js` as a module:
 1. Hides `document.body` immediately (prevents flash of content).
 2. Initialises Firebase (guards against double-init with `getApps()`).
 3. Listens on `onAuthStateChanged`. If no user → redirects to `index.html`.
-4. Fetches `users/{uid}` from Firestore. If missing, creates a profile stub with no role.
-5. Role-checks against `ALLOWED_ROLES`. If not allowed → signs out and redirects to `index.html?error=access`.
-6. Exposes globals and dispatches `authReady`.
+4. Fetches (or creates) Firestore profile. If missing, creates it and assigns `role_academichub: 'academic_user'` automatically.
+5. **Domain check** — Google SSO users must have an email from `window.ACADEMIC_ALLOWED_DOMAINS` (15 school domains). Email/password accounts bypass this check. Fails → `index.html?error=domain`.
+6. Role check — `role_academichub` must be in `['academic_admin', 'academic_user']`. Fails → `index.html?error=access`.
+7. Name prompt if `displayName` is missing.
+8. Exposes globals and dispatches `authReady`.
+
+**Allowed domains** are defined centrally in `auth-guard.js` as `window.ACADEMIC_ALLOWED_DOMAINS` (15 entries: 14 partner school `.sch.id` domains + `eduversal.org`). Individual pages reference this via `const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS` — do NOT redefine the list inline.
+
+**`index.html`** (login page) handles auth inline and does NOT use `auth-guard.js`. It has its own copy of the domain list for the login-time check.
 
 **Globals exposed after `authReady`:**
-| Global              | Value                                |
-|---------------------|--------------------------------------|
-| `window.firebaseApp` | FirebaseApp instance                |
-| `window.auth`        | Auth instance                       |
-| `window.db`          | Firestore instance                  |
-| `window.currentUser` | firebase.User object                |
-| `window.userProfile` | Firestore `users/{uid}` document    |
+| Global               | Value                                |
+|----------------------|--------------------------------------|
+| `window.firebaseApp` | FirebaseApp instance                 |
+| `window.auth`        | Auth instance                        |
+| `window.db`          | Firestore instance                   |
+| `window.storage`     | Storage instance                     |
+| `window.currentUser` | firebase.User object                 |
+| `window.userProfile` | Firestore `users/{uid}` document     |
 
 **Listening for auth in page scripts:**
 ```js
@@ -100,25 +107,26 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 });
 ```
 
-**Standalone pages** (e.g. `index.html`) do NOT use `auth-guard.js` — they handle login inline.
-
 ---
 
 ## Role System
 
-Roles are stored in Firestore at `users/{uid}.role` (string field).
+Each platform has its own Firestore role field. Academic Hub uses `role_academichub`.
 
-| Role                  | Description                          | CentralHub | Academic Hub | Teachers Hub |
-|-----------------------|--------------------------------------|:----------:|:------------:|:------------:|
-| `central_admin`       | Super-admin, created manually only   | ✓          | ✓            | ✓            |
-| `academic_coordinator`| Academic management staff            | ✗          | ✓            | ✓            |
-| `teacher`             | Classroom teacher                    | ✗          | ✗            | ✓            |
+| Field             | Values                                        |
+|-------------------|-----------------------------------------------|
+| `role_academichub`| `'academic_user'` (default) \| `'academic_admin'` |
 
-**Academic Hub allowed roles:** `['central_admin', 'academic_coordinator']`
+**Academic Hub allowed roles:** `['academic_user', 'academic_admin']`
 
-New users who sign in for the first time get a Firestore profile with **no role**. A `central_admin` must assign a role via CentralHub before the user can access any protected page.
+First login automatically assigns `academic_user` via `setDoc` with `{ merge: true }`. No manual intervention needed for basic access. `academic_admin` must be set manually via CentralHub's `console.html`.
 
-`central_admin` accounts are created **manually** in the Firebase Console (email/password), never via self-registration.
+**isAdmin check pattern:**
+```js
+const isAdmin = profile?.role_academichub === 'academic_admin';
+```
+
+Legacy migration: if `role_academichub` is absent on an existing user doc, `auth-guard.js` derives the role from the old `role` field and writes the new field.
 
 ---
 
