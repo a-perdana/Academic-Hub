@@ -117,6 +117,7 @@ const htmlFiles = [
   "EASE-Analytics.html",
   "SchoolNetworkAudit.html",
   "CambridgeSchoolQuality.html",
+  "RaporPendidikan2025.html",
 ];
 
 htmlFiles.forEach((file) => {
