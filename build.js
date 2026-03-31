@@ -60,6 +60,7 @@ const cleanUrls = {
   "EASE-Analytics.html":             "ease-analytics",
   "SchoolNetworkAudit.html":         "network-audit",
   "CambridgeSchoolQuality.html":     "cambridge-school-quality",
+  "RaporPendidikan2025.html":        "rapor-pendidikan-2025",
 };
 
 // Rewrite all internal .html links to clean URLs inside a built file
