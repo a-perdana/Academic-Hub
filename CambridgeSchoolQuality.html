@@ -1,0 +1,1186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cambridge School Quality — SRV Insights</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+
+    <script>
+      window.ENV = {
+        FIREBASE_API_KEY: "",
+        FIREBASE_AUTH_DOMAIN: "",
+        FIREBASE_PROJECT_ID: "",
+        FIREBASE_STORAGE_BUCKET: "",
+        FIREBASE_MESSAGING_SENDER_ID: "",
+        FIREBASE_APP_ID: "",
+      };
+    </script>
+    <script type="module" src="auth-guard.js"></script>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
+    <script src="https://unpkg.com/recharts@1.8.6/umd/Recharts.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+const { useState } = React;
+const {
+  ResponsiveContainer, BarChart, RadarChart, PieChart,
+  CartesianGrid, XAxis, YAxis, Tooltip, Legend,
+  Bar, Radar, Pie, Cell,
+  PolarGrid, PolarAngleAxis, PolarRadiusAxis
+} = Recharts;
+
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+
+const schools = [
+  {
+    id: 1, label: "School 1", name: "TNA Fatih",
+    type: "Mid-sized bilingual day school", visitDate: "29 Oct 2025",
+    visitor: "Anbarasu Balrasan", reapprovalStatus: "Approved",
+    strengths: [
+      "Max 20 students per class — excellent teacher attention",
+      "Well-equipped science labs with portable Bunsen burners stored safely",
+      "Highly secure exam storage: double doors, bolted metal cabinets",
+      "All legal documents fully in place (fire, health & safety, copyright)",
+      "Cambridge learner attributes embedded in school values",
+      "Global Perspectives qualification offered",
+      "Girls-only secondary with strong reformative discipline system"
+    ],
+    developments: [
+      "Document internal transition and data-use processes in more detail",
+      "Extend action research culture beyond current departments"
+    ],
+    color: "#667eea"
+  },
+  {
+    id: 2, label: "School 2", name: "Fatih Putra",
+    type: "Larger bilingual school with boarding", visitDate: "28 Oct 2025",
+    visitor: "Anbarasu Balrasan", reapprovalStatus: "Approved",
+    strengths: [
+      "Long Cambridge experience from Primary to higher secondary",
+      "Strong governing body with strategic planning and budgeting",
+      "Multi-layer exam storage security — most sophisticated in the group",
+      "Annual whole-school PD days plus mentor–mentee programme",
+      "Parents from professional backgrounds contribute to life-skills sessions",
+      "Teachers encouraged to visit sister schools (networked learning)"
+    ],
+    developments: [
+      "Continue refining safeguarding procedures for boarding students",
+      "Include digital safety in staff training on boundaries",
+      "Periodically review exam-storage arrangements for ongoing efficiency"
+    ],
+    color: "#f093fb"
+  },
+  {
+    id: 3, label: "School 3", name: "Kharisma Bangsa",
+    type: "Full Cambridge Pathway — global education ethos", visitDate: "2025",
+    visitor: "Cambridge Representative", reapprovalStatus: "Approved with commendations",
+    strengths: [
+      "Complete Cambridge Pathway: Primary through A Level",
+      "Core values (Honesty, Respect, Independence, Collaboration, Excellence) visible in daily practice",
+      "Advanced multilingual policy — mother tongues viewed as assets",
+      "Cambridge PDQ involvement; mature Professional Learning Communities",
+      "Model UN, literacy festivals, international day, debates",
+      "Coherent written curriculum framework aligned to Cambridge Pathway",
+      "Community engagement — active parent participation in events"
+    ],
+    developments: [
+      "Formalise Behaviour and Positive Conduct Policy (written document)",
+      "Create standalone Academic Honesty Policy with defined terms and procedures",
+      "Develop distributed leadership and succession framework",
+      "Create structured Parent Partnership Framework",
+      "Introduce annual facility audit for labs and ICT"
+    ],
+    color: "#4facfe"
+  },
+  {
+    id: 4, label: "School 4", name: "Semesta Gunung Pati",
+    type: "Bilingual school — incomplete documentation", visitDate: "12 Sep 2025",
+    visitor: "Satyajeet Gurung", reapprovalStatus: "Pending — documentation incomplete",
+    strengths: [
+      "Clear, purposeful mission anchored in educational values",
+      "Learner-centred culture — students encouraged to be confident, reflective, innovative",
+      "Strong commitment to intercultural understanding and diversity",
+      "Positive staff–student relationships built on mutual respect"
+    ],
+    developments: [
+      "Complete all blank sections of Cambridge reapproval form urgently",
+      "Document management & leadership, teaching & learning, physical environment",
+      "Provide evidence for exam security and legal compliance",
+      "Once documentation complete — well-positioned for full reapproval"
+    ],
+    color: "#fa709a"
+  },
+  {
+    id: 5, label: "School 5", name: "Pribadi Depok",
+    type: "Established bilingual day school on older campus", visitDate: "20 Aug 2025",
+    visitor: "Anbarasu Balrasan", reapprovalStatus: "Approved",
+    strengths: [
+      "Special STEAM programme for innovation",
+      "Two libraries (primary & secondary) staffed by trained librarian",
+      "On-site doctor throughout the school day — exceptional first aid provision",
+      "Two science labs, computer lab (~26 desktops), mid-sized auditorium",
+      "Basketball courts, futsal court, small pool for younger students",
+      "Strong formal parent engagement structure — events and career guidance",
+      "All legal and regulatory requirements fully documented"
+    ],
+    developments: [
+      "Continue phased renovation of older campus (prioritise high-traffic areas)",
+      "Leverage full-time doctor to expand health-education programmes for families"
+    ],
+    color: "#43e97b"
+  },
+  {
+    id: 6, label: "School 6", name: "Pribadi Bandung",
+    type: "SPK school — narrative visit report with classroom observations", visitDate: "12 Sep 2025",
+    visitor: "Cambridge Representative", reapprovalStatus: "Compliant — development actions noted",
+    strengths: [
+      "Cambridge curriculum integrated Primary to A Level (since 2018)",
+      "Three science laboratories, ICT lab, music room with angklung",
+      "Primary 5 maths: strong teacher rapport, effective differentiation, Smartboard use",
+      "Grade 11 Physics: clear subject expertise, effective bilingual instruction",
+      "Weekly Monday academic meetings — diagnostic approach to differentiation",
+      "Parents describe teachers as responsive and open to feedback",
+      "Wide recreational facilities: sports hall, basketball court, primary playground"
+    ],
+    developments: [
+      "Improve maths and science Checkpoint outcomes (Primary & Lower Secondary)",
+      "Expand IGCSE subject range beyond current 5 subjects",
+      "Complete library renovation — improve access, comfort, study environments",
+      "Formalise written SOPs for exam storage and laboratory safety",
+      "Promote active and collaborative learning in upper-secondary (flexible seating)",
+      "Manage campus relocation planning — ensure quality continuity during transition"
+    ],
+    color: "#fee140"
+  }
+];
+
+const standardsRadarData = [
+  { standard: "Mission & Values", s1:95, s2:90, s3:98, s4:85, s5:92, s6:88 },
+  { standard: "Leadership", s1:88, s2:92, s3:90, s4:60, s5:85, s6:80 },
+  { standard: "Teaching & Learning", s1:82, s2:85, s3:90, s4:60, s5:80, s6:78 },
+  { standard: "Curriculum", s1:85, s2:88, s3:95, s4:60, s5:82, s6:72 },
+  { standard: "Prof. Development", s1:80, s2:88, s3:95, s4:60, s5:80, s6:75 },
+  { standard: "Community Engage.", s1:82, s2:85, s3:90, s4:60, s5:88, s6:83 },
+  { standard: "Physical Environment", s1:88, s2:90, s3:85, s4:60, s5:85, s6:70 },
+  { standard: "Exam Security", s1:95, s2:98, s3:88, s4:60, s5:85, s6:82 },
+  { standard: "Legal Compliance", s1:98, s2:95, s3:92, s4:40, s5:98, s6:90 },
+  { standard: "Student Outcomes", s1:80, s2:85, s3:92, s4:60, s5:82, s6:68 },
+];
+
+const crossSchoolStrengths = [
+  { area: "Values-Driven Culture", score: 95, icon: "🌟", description: "All 6 schools show strong character, service, and excellence emphasis. Students describe teachers as caring but firm." },
+  { area: "Experienced Leadership", score: 90, icon: "👨‍💼", description: "Principals and senior teams have 10–25 years of experience. Governing bodies are supportive and invest strategically." },
+  { area: "Professional Development", score: 85, icon: "📚", description: "Annual PD days, mentor–mentee programmes, PLCs, Cambridge training. Staff are open to continuous improvement." },
+  { area: "Exam Security", score: 92, icon: "🔒", description: "Physical storage and procedural arrangements consistently meet Cambridge requirements across all documented schools." },
+  { area: "Legal Compliance", score: 90, icon: "⚖️", description: "All 5 fully documented schools hold government approval, fire certificates, health & safety, and child protection policies." },
+  { area: "Community Engagement", score: 87, icon: "🤝", description: "Parents are active partners. Schools respond to feedback and involve families in meaningful, varied ways." },
+];
+
+const developmentThemes = [
+  {
+    theme: "Formalise Informal Good Practice",
+    priority: "HIGH",
+    color: "#dc2626",
+    schools: "Schools 3, 6",
+    icon: "📋",
+    actions: [
+      "Write a standalone Behaviour and Positive Conduct Policy",
+      "Create a Cambridge-aligned Academic Honesty Policy (define plagiarism, collusion, sanctions)",
+      "Develop written SOPs for exam storage (receipt, chain-of-custody, contingency)",
+      "Write science-lab safety SOPs (equipment, roles, emergency procedures, maintenance schedule)"
+    ],
+    note: "Standards are already MET in practice — this is about documenting what good schools already do."
+  },
+  {
+    theme: "Distributed Leadership & Succession",
+    priority: "HIGH",
+    color: "#f59e0b",
+    schools: "School 3 specifically; all schools",
+    icon: "🏗️",
+    actions: [
+      "Identify high-potential middle leaders formally",
+      "Offer leadership mentoring, shadowing, and structured training",
+      "Delegate specific strategic projects to emerging leaders",
+      "Create written succession frameworks to reduce dependence on key individuals"
+    ],
+    note: "Strong individual leaders exist — the risk is what happens when they leave."
+  },
+  {
+    theme: "STEM Achievement & Checkpoint Performance",
+    priority: "MEDIUM-HIGH",
+    color: "#3b82f6",
+    schools: "School 6 specifically; relevant for all",
+    icon: "📐",
+    actions: [
+      "Conduct diagnostic analysis of maths and science results at Checkpoint and IGCSE",
+      "Set up small-group intervention sessions for students who need support",
+      "Create enrichment pathways for high attainers",
+      "Use Cambridge webinars, exemplars, and training to align with international expectations",
+      "Focus lessons on conceptual understanding and problem-solving (not just recall)"
+    ],
+    note: "English as a Second Language results are strong across all schools — STEM needs the same focus."
+  },
+  {
+    theme: "Curriculum Breadth at IGCSE",
+    priority: "MEDIUM",
+    color: "#8b5cf6",
+    schools: "School 6; relevant for narrow-offering schools",
+    icon: "🌐",
+    actions: [
+      "Review IGCSE offerings — ensure balance between STEM, languages, humanities, applied subjects",
+      "Consider adding Global Perspectives, ICT, Business, or History where demand exists",
+      "Align subject offerings with student interests and higher-education pathways",
+      "Expand gradually where staffing allows — not sudden large-scale change"
+    ],
+    note: "Five subjects (ESL + Maths + 3 sciences) is a solid baseline but can limit learner profiles for university applications."
+  },
+  {
+    theme: "Facility Modernisation",
+    priority: "MEDIUM",
+    color: "#10b981",
+    schools: "School 6 (library); all schools (lab audits)",
+    icon: "🏫",
+    actions: [
+      "Complete School 6 library renovation — prioritise access, comfort, and richer collections",
+      "Introduce regular, documented annual audits of all science labs and ICT rooms",
+      "Confirm gas installations in chemistry labs comply with safety regulations",
+      "Ensure emergency showers are installed and clearly signposted in all labs",
+      "Align all facility upgrades with school strategic plans and budgets"
+    ],
+    note: "Move from reactive maintenance to preventive, documented audit cycles."
+  },
+  {
+    theme: "Parent Partnership Frameworks",
+    priority: "MEDIUM",
+    color: "#06b6d4",
+    schools: "School 3 specifically; all schools",
+    icon: "👨‍👩‍👧",
+    actions: [
+      "Create a written Parent Partnership Charter or Framework",
+      "Define parent council or advisory group structures",
+      "Set clear communication expectations: frequency, channels, response times",
+      "Define volunteering roles and classroom support protocols",
+      "Establish mechanisms for systematic parent feedback and joint planning"
+    ],
+    note: "Parent engagement is already strong in most schools — formalising it makes it sustainable and consistent."
+  },
+];
+
+const recommendations = [
+  {
+    id: "r1", category: "Policy & SOPs", icon: "📄", urgency: "Immediate",
+    title: "Behaviour and Positive Conduct Policy",
+    what: "A formal written policy with clear expectations, rewards, and graduated sanctions.",
+    why: "Practice is good but unwritten — staff changes and leadership transitions create risk of inconsistency.",
+    who: "School 3 priority; beneficial for all schools",
+    how: ["Convene a working group of teachers, HoD, and leadership", "Draft policy aligned to Cambridge learner attributes", "Pilot in one section, gather feedback, then roll out", "Review annually"]
+  },
+  {
+    id: "r2", category: "Policy & SOPs", icon: "📄", urgency: "Immediate",
+    title: "Cambridge-Aligned Academic Honesty Policy",
+    what: "Standalone policy defining plagiarism, collusion, malpractice. Includes investigation steps and sanctions for both internal and Cambridge assessments.",
+    why: "Schools 3 and 6 practice academic integrity well — but the absence of a written policy is a risk and a Cambridge recommendation.",
+    who: "Schools 3 and 6 priority; recommended for all",
+    how: ["Review Cambridge's Academic Integrity Policy guidelines", "Define key terms in plain English (non-native speaker friendly)", "Set out clear investigation procedures and escalation steps", "Communicate annually to students, parents, and staff"]
+  },
+  {
+    id: "r3", category: "Policy & SOPs", icon: "🔒", urgency: "Immediate",
+    title: "Written Exam Security SOPs",
+    what: "Document procedures for receipt, storage, distribution, and return of Cambridge scripts. Include contingency plans for emergencies.",
+    why: "Current compliance is good — SOPs protect against staff turnover and ensure consistent implementation.",
+    who: "School 6 priority; recommended for all",
+    how: ["Map current practice into written steps", "Include chain-of-custody log templates", "Assign named roles for each stage", "Integrate into staff induction and annual refresher training"]
+  },
+  {
+    id: "r4", category: "Policy & SOPs", icon: "🔬", urgency: "Near-term",
+    title: "Science Lab Safety SOPs",
+    what: "Written SOPs covering equipment checks, chemical storage, emergency procedures, fume cupboard maintenance schedule, and staff roles.",
+    why: "Labs meet Cambridge standards — written SOPs prevent safety gaps when staff change and support formal annual audits.",
+    who: "School 6 priority; preventive measure for all",
+    how: ["Audit each lab against Cambridge requirements", "Document findings and assign remediation tasks", "Write SOP per lab type (biology, chemistry, physics)", "Schedule and log annual maintenance checks"]
+  },
+  {
+    id: "r5", category: "Leadership", icon: "🏗️", urgency: "Near-term",
+    title: "Distributed Leadership & Succession Planning",
+    what: "Structured programmes to develop middle leaders, with succession plans that reduce key-person dependency.",
+    why: "Leadership is a clear strength — the risk is long-term institutional resilience when experienced leaders move on.",
+    who: "School 3 specifically; all schools benefit",
+    how: ["Map current leadership roles and identify gaps", "Identify high-potential middle leaders formally", "Offer coaching, shadowing, and delegated strategic projects", "Create a simple written succession framework for each key role"]
+  },
+  {
+    id: "r6", category: "Teaching & Learning", icon: "📐", urgency: "Near-term",
+    title: "STEM Diagnostic & Targeted Intervention",
+    what: "Systematic analysis of maths and science performance at Checkpoint and IGCSE, followed by targeted interventions.",
+    why: "English language outcomes are strong across all schools — STEM outcomes, especially at School 6, need the same strategic focus.",
+    who: "School 6 priority; relevant for all",
+    how: ["Analyse past 2 years of Checkpoint and IGCSE results by topic", "Identify specific gaps in conceptual understanding", "Design small-group intervention sessions for struggling students", "Create enrichment for high attainers to build a performance culture"]
+  },
+  {
+    id: "r7", category: "Curriculum", icon: "🌐", urgency: "Medium-term",
+    title: "Expand IGCSE Subject Offerings",
+    what: "Gradually introduce subjects beyond ESL, Maths, and sciences — e.g. Global Perspectives, ICT, Business, Humanities.",
+    why: "A broader profile better prepares students for international university applications and develops critical thinking and global citizenship.",
+    who: "School 6 priority; relevant for other narrow-offer schools",
+    how: ["Survey student interests and post-school destinations", "Identify subjects with highest demand and available staffing", "Begin with one new subject per academic year", "Align with Cambridge subject-approval requirements"]
+  },
+  {
+    id: "r8", category: "Facilities", icon: "🏫", urgency: "Medium-term",
+    title: "Annual Facility Audit Programme",
+    what: "Scheduled, documented annual audits of science labs, ICT rooms, and library facilities.",
+    why: "Current facilities are adequate — systematic audits shift practice from reactive to preventive and provide evidence for Cambridge reviews.",
+    who: "All schools; School 6 library is immediate priority",
+    how: ["Create an audit checklist per facility type aligned to Cambridge standards", "Assign a named facilities officer at each school", "Schedule audits at the start of each academic year", "Report findings to principal and governing body; track remediation"]
+  },
+  {
+    id: "r9", category: "Community", icon: "👨‍👩‍👧", urgency: "Medium-term",
+    title: "Parent Partnership Framework",
+    what: "Codify existing parent engagement into a written framework with clear structures, roles, communication expectations, and feedback mechanisms.",
+    why: "Parent engagement is a genuine strength — a written framework protects it from leadership transitions and makes it consistently applied.",
+    who: "School 3 priority; beneficial for all",
+    how: ["Review current parent engagement activities and channels", "Draft a Parent Partnership Charter (1–2 pages, plain language)", "Establish a parent council or advisory group with clear terms", "Communicate framework to all families at start of academic year"]
+  },
+];
+
+const schoolStatusData = [
+  { name: "School 1\nTNA Fatih", strengths: 7, developments: 2, status: "Approved" },
+  { name: "School 2\nFatih Putra", strengths: 6, developments: 3, status: "Approved" },
+  { name: "School 3\nKharisma Bangsa", strengths: 7, developments: 5, status: "Approved +" },
+  { name: "School 4\nSemesta", strengths: 4, developments: 4, status: "Pending" },
+  { name: "School 5\nPribadi Depok", strengths: 7, developments: 2, status: "Approved" },
+  { name: "School 6\nPribadi Bandung", strengths: 7, developments: 6, status: "Compliant" },
+];
+
+const policyGapData = [
+  { name: "Behaviour Policy", schools: 2, fill: "#dc2626" },
+  { name: "Academic Honesty Policy", schools: 2, fill: "#f59e0b" },
+  { name: "Exam Security SOP", schools: 3, fill: "#3b82f6" },
+  { name: "Lab Safety SOP", schools: 3, fill: "#8b5cf6" },
+  { name: "Parent Partnership Framework", schools: 3, fill: "#10b981" },
+  { name: "Succession Plan", schools: 5, fill: "#06b6d4" },
+];
+
+const COLORS = ["#667eea","#f093fb","#4facfe","#fa709a","#43e97b","#fee140"];
+
+// ─────────────────────────────────────────────
+// COMPONENT
+// ─────────────────────────────────────────────
+
+const CambridgeQualityDashboard = () => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [selectedSchool, setSelectedSchool] = useState(null);
+  const [expandedRec, setExpandedRec] = useState(null);
+  const [expandedTheme, setExpandedTheme] = useState(null);
+
+  const styles = {
+    container: {
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #f0f4ff 0%, #fce7f3 50%, #ecfdf5 100%)",
+      padding: "40px 20px",
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    },
+    header: { textAlign: "center", marginBottom: "48px" },
+    badge: {
+      display: "inline-block",
+      background: "linear-gradient(135deg, #1e3a5f, #2563eb)",
+      color: "#fff",
+      borderRadius: "40px",
+      padding: "8px 22px",
+      fontSize: "13px",
+      fontWeight: "700",
+      letterSpacing: "0.05em",
+      marginBottom: "18px",
+      textTransform: "uppercase",
+    },
+    title: {
+      fontSize: "clamp(28px, 5vw, 52px)",
+      fontWeight: "900",
+      background: "linear-gradient(135deg, #1e3a5f 0%, #2563eb 40%, #7c3aed 100%)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      lineHeight: 1.15,
+      marginBottom: "14px",
+    },
+    subtitle: { fontSize: "17px", color: "#4b5563", fontWeight: "500", maxWidth: "660px", margin: "0 auto", lineHeight: 1.7 },
+    metaRow: { display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap", marginTop: "20px" },
+    metaPill: (color) => ({
+      background: color,
+      color: "#fff",
+      borderRadius: "30px",
+      padding: "7px 18px",
+      fontSize: "13px",
+      fontWeight: "700",
+    }),
+    tabContainer: {
+      display: "flex",
+      justifyContent: "center",
+      gap: "10px",
+      marginBottom: "40px",
+      flexWrap: "wrap",
+    },
+    tab: (active) => ({
+      padding: "11px 22px",
+      borderRadius: "30px",
+      fontWeight: "700",
+      fontSize: "13px",
+      cursor: "pointer",
+      border: "none",
+      transition: "all 0.25s",
+      background: active ? "linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%)" : "#fff",
+      color: active ? "#fff" : "#4b5563",
+      boxShadow: active ? "0 8px 20px rgba(37,99,235,0.35)" : "0 2px 8px rgba(0,0,0,0.08)",
+      transform: active ? "scale(1.05)" : "scale(1)",
+    }),
+    card: {
+      background: "#fff",
+      borderRadius: "20px",
+      padding: "28px",
+      boxShadow: "0 6px 24px rgba(0,0,0,0.08)",
+      marginBottom: "24px",
+    },
+    cardTitle: { fontSize: "20px", fontWeight: "800", color: "#1e293b", marginBottom: "16px" },
+    statCard: (g1, g2) => ({
+      borderRadius: "18px",
+      padding: "28px",
+      background: `linear-gradient(135deg, ${g1} 0%, ${g2} 100%)`,
+      boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+      color: "#fff",
+    }),
+    statValue: { fontSize: "44px", fontWeight: "900", lineHeight: 1 },
+    statLabel: { fontSize: "15px", fontWeight: "700", marginTop: "8px", opacity: 0.95 },
+    statSub: { fontSize: "13px", marginTop: "4px", opacity: 0.8 },
+    schoolCard: (color, selected) => ({
+      background: "#fff",
+      borderRadius: "16px",
+      padding: "22px",
+      borderLeft: `7px solid ${color}`,
+      boxShadow: selected ? `0 8px 32px ${color}55` : "0 4px 14px rgba(0,0,0,0.08)",
+      cursor: "pointer",
+      transition: "all 0.25s",
+      transform: selected ? "scale(1.02)" : "scale(1)",
+    }),
+    strengthBullet: {
+      display: "flex", alignItems: "flex-start", gap: "10px",
+      padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontSize: "14px", color: "#374151", lineHeight: 1.6,
+    },
+    devBullet: {
+      display: "flex", alignItems: "flex-start", gap: "10px",
+      padding: "8px 0", borderBottom: "1px solid #fef9c3", fontSize: "14px", color: "#374151", lineHeight: 1.6,
+    },
+    themeCard: (color, expanded) => ({
+      borderRadius: "18px",
+      overflow: "hidden",
+      boxShadow: expanded ? `0 12px 40px ${color}44` : "0 4px 16px rgba(0,0,0,0.08)",
+      marginBottom: "18px",
+      cursor: "pointer",
+      transition: "all 0.25s",
+    }),
+    themeHeader: (color) => ({
+      background: `linear-gradient(135deg, ${color}dd 0%, ${color} 100%)`,
+      padding: "22px 28px",
+      color: "#fff",
+    }),
+    themeBody: {
+      background: "#fff",
+      padding: "24px 28px",
+    },
+    recCard: (expanded) => ({
+      background: "#fff",
+      borderRadius: "16px",
+      boxShadow: expanded ? "0 10px 36px rgba(0,0,0,0.12)" : "0 3px 12px rgba(0,0,0,0.07)",
+      marginBottom: "16px",
+      overflow: "hidden",
+      cursor: "pointer",
+      transition: "all 0.25s",
+    }),
+    urgencyBadge: (u) => {
+      const map = { "Immediate": "#dc2626", "Near-term": "#f59e0b", "Medium-term": "#10b981" };
+      return {
+        display: "inline-block",
+        background: map[u] || "#6b7280",
+        color: "#fff",
+        borderRadius: "20px",
+        padding: "4px 14px",
+        fontSize: "12px",
+        fontWeight: "700",
+        marginLeft: "10px",
+      };
+    },
+    categoryBadge: {
+      display: "inline-block",
+      background: "#e0e7ff",
+      color: "#3730a3",
+      borderRadius: "20px",
+      padding: "4px 14px",
+      fontSize: "12px",
+      fontWeight: "700",
+    },
+    grid2: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" },
+    grid3: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "20px" },
+    grid4: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "18px" },
+    sectionLabel: { fontSize: "12px", fontWeight: "800", textTransform: "uppercase", letterSpacing: "0.08em", color: "#6b7280", marginBottom: "10px" },
+    divider: { borderTop: "2px solid #f1f5f9", margin: "20px 0" },
+    infoBox: (color) => ({
+      background: `${color}12`,
+      border: `1px solid ${color}44`,
+      borderRadius: "12px",
+      padding: "16px 20px",
+      fontSize: "14px",
+      color: "#374151",
+      lineHeight: 1.7,
+      marginTop: "16px",
+    }),
+  };
+
+  const Tab = ({ id, label }) => (
+    <button style={styles.tab(activeTab === id)} onClick={() => setActiveTab(id)}>{label}</button>
+  );
+
+  const StatCard = ({ value, label, sub, g1, g2 }) => (
+    <div style={styles.statCard(g1, g2)}>
+      <div style={styles.statValue}>{value}</div>
+      <div style={styles.statLabel}>{label}</div>
+      {sub && <div style={styles.statSub}>{sub}</div>}
+    </div>
+  );
+
+  // ── OVERVIEW TAB ──────────────────────────────
+  const OverviewTab = () => (
+    <div>
+      {/* Key Numbers */}
+      <div style={styles.grid4}>
+        <StatCard value="6" label="Schools Visited" sub="Aug–Oct 2025" g1="#1e3a5f" g2="#2563eb" />
+        <StatCard value="5" label="Fully Approved" sub="1 pending documentation" g1="#059669" g2="#10b981" />
+        <StatCard value="10" label="Quality Standards" sub="Cambridge framework" g1="#7c3aed" g2="#a855f7" />
+        <StatCard value="9" label="Priority Recommendations" sub="Cross-school action items" g1="#dc2626" g2="#f43f5e" />
+      </div>
+
+      <div style={{ height: "24px" }} />
+
+      {/* Cross-school strengths bar chart */}
+      <div style={styles.card}>
+        <div style={styles.cardTitle}>📊 Cross-School Strength Areas — How Schools Perform Overall</div>
+        <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>
+          Scores represent qualitative judgement (0–100) based on SRV evidence across 6 schools. Higher = consistently stronger evidence.
+        </p>
+        <ResponsiveContainer width="100%" height={320}>
+          <BarChart data={crossSchoolStrengths} layout="vertical" margin={{ left: 20, right: 40 }}>
+            <CartesianGrid strokeDasharray="3 3" horizontal={false} />
+            <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12 }} />
+            <YAxis type="category" dataKey="area" width={180} tick={{ fontSize: 13, fontWeight: "600" }} />
+            <Tooltip formatter={(v) => [`${v}/100`, "Strength Score"]} />
+            <Bar dataKey="score" radius={[0, 8, 8, 0]}>
+              {crossSchoolStrengths.map((_, idx) => (
+                <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+              ))}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Strengths detail cards */}
+      <div style={styles.grid2}>
+        {crossSchoolStrengths.map((s, i) => (
+          <div key={i} style={{ ...styles.card, borderTop: `5px solid ${COLORS[i % COLORS.length]}`, padding: "22px" }}>
+            <div style={{ fontSize: "28px", marginBottom: "8px" }}>{s.icon}</div>
+            <div style={{ fontSize: "17px", fontWeight: "800", color: "#1e293b", marginBottom: "6px" }}>{s.area}</div>
+            <div style={{ fontSize: "13px", color: "#6b7280", lineHeight: 1.7 }}>{s.description}</div>
+            <div style={{
+              display: "inline-block", marginTop: "12px",
+              background: `${COLORS[i % COLORS.length]}22`,
+              color: COLORS[i % COLORS.length],
+              borderRadius: "20px", padding: "4px 14px",
+              fontSize: "13px", fontWeight: "800"
+            }}>
+              Evidence strength: {s.score}/100
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* School reapproval status comparison */}
+      <div style={styles.card}>
+        <div style={styles.cardTitle}>🏫 School Reapproval Status Overview</div>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={schoolStatusData} margin={{ top: 10, right: 20, bottom: 50 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: "600" }} interval={0} angle={-20} textAnchor="end" />
+            <YAxis tick={{ fontSize: 12 }} label={{ value: "Count", angle: -90, position: "insideLeft", fontSize: 12 }} />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="strengths" name="Documented Strengths" fill="#10b981" radius={[4,4,0,0]} />
+            <Bar dataKey="developments" name="Development Actions" fill="#f59e0b" radius={[4,4,0,0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Policy gaps summary */}
+      <div style={styles.card}>
+        <div style={styles.cardTitle}>📋 Policy & Documentation Gaps — Number of Schools Affected</div>
+        <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>
+          Note: In most cases, Cambridge standards are <strong>already met in practice</strong>. These gaps are about documenting existing good practice — not about non-compliance.
+        </p>
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={policyGapData} margin={{ top: 10, right: 20, bottom: 60 }}>
+            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+            <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: "600" }} interval={0} angle={-25} textAnchor="end" height={70} />
+            <YAxis tick={{ fontSize: 12 }} domain={[0, 6]} ticks={[0,1,2,3,4,5,6]} label={{ value: "Schools", angle: -90, position: "insideLeft", fontSize: 12 }} />
+            <Tooltip formatter={(v) => [`${v} of 6 schools`, "Needs this document"]} />
+            <Bar dataKey="schools" radius={[6,6,0,0]}>
+              {policyGapData.map((entry, i) => <Cell key={i} fill={entry.fill} />)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+
+  // ── SCHOOLS TAB ───────────────────────────────
+  const SchoolsTab = () => (
+    <div>
+      <div style={{ marginBottom: "28px", textAlign: "center" }}>
+        <p style={{ fontSize: "15px", color: "#4b5563", maxWidth: "620px", margin: "0 auto", lineHeight: 1.7 }}>
+          Click any school card to see its full strengths and development priorities. School names are included for context — the purpose is developmental, to help all schools learn from shared experiences.
+        </p>
+      </div>
+      {/* School selector grid */}
+      <div style={styles.grid2}>
+        {schools.map((s) => (
+          <div
+            key={s.id}
+            style={styles.schoolCard(s.color, selectedSchool === s.id)}
+            onClick={() => setSelectedSchool(selectedSchool === s.id ? null : s.id)}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "10px" }}>
+              <div>
+                <div style={{ fontSize: "13px", fontWeight: "700", color: s.color, marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.06em" }}>{s.label}</div>
+                <div style={{ fontSize: "19px", fontWeight: "900", color: "#1e293b" }}>{s.name}</div>
+              </div>
+              <div style={{
+                background: s.reapprovalStatus.startsWith("Approved") ? "#dcfce7" : s.reapprovalStatus.startsWith("Pending") ? "#fef9c3" : "#dbeafe",
+                color: s.reapprovalStatus.startsWith("Approved") ? "#166534" : s.reapprovalStatus.startsWith("Pending") ? "#92400e" : "#1e40af",
+                borderRadius: "20px", padding: "5px 14px", fontSize: "12px", fontWeight: "700", whiteSpace: "nowrap"
+              }}>
+                {s.reapprovalStatus.startsWith("Approved") ? "✓ " : s.reapprovalStatus.startsWith("Pending") ? "⏳ " : "● "}{s.reapprovalStatus}
+              </div>
+            </div>
+            <div style={{ fontSize: "13px", color: "#6b7280", marginBottom: "10px", lineHeight: 1.5 }}>{s.type}</div>
+            <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+              <span style={{ background: "#f0fdf4", color: "#166534", borderRadius: "20px", padding: "3px 12px", fontSize: "12px", fontWeight: "700" }}>
+                ✅ {s.strengths.length} strengths
+              </span>
+              <span style={{ background: "#fffbeb", color: "#92400e", borderRadius: "20px", padding: "3px 12px", fontSize: "12px", fontWeight: "700" }}>
+                📌 {s.developments.length} actions
+              </span>
+              <span style={{ background: "#f0f4ff", color: "#3730a3", borderRadius: "20px", padding: "3px 12px", fontSize: "12px", fontWeight: "700" }}>
+                🗓 {s.visitDate}
+              </span>
+            </div>
+            {selectedSchool === s.id && (
+              <div style={{ marginTop: "4px", fontSize: "12px", color: s.color, fontWeight: "700" }}>▲ Click to collapse</div>
+            )}
+            {selectedSchool !== s.id && (
+              <div style={{ marginTop: "4px", fontSize: "12px", color: "#9ca3af" }}>▼ Click to expand</div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Detail panel */}
+      {selectedSchool && (() => {
+        const s = schools.find(x => x.id === selectedSchool);
+        return (
+          <div style={{ ...styles.card, borderTop: `6px solid ${s.color}`, marginTop: "8px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px", marginBottom: "24px" }}>
+              <div>
+                <div style={{ fontSize: "13px", fontWeight: "700", color: s.color, textTransform: "uppercase", letterSpacing: "0.07em" }}>{s.label}</div>
+                <div style={{ fontSize: "26px", fontWeight: "900", color: "#1e293b" }}>{s.name}</div>
+                <div style={{ fontSize: "14px", color: "#6b7280", marginTop: "4px" }}>{s.type}</div>
+              </div>
+              <div style={{ textAlign: "right", fontSize: "13px", color: "#6b7280" }}>
+                <div>Visited: <strong>{s.visitDate}</strong></div>
+                <div>Visitor: <strong>{s.visitor}</strong></div>
+              </div>
+            </div>
+
+            <div style={styles.grid2}>
+              <div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#059669", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.06em" }}>✅ Documented Strengths</div>
+                {s.strengths.map((item, i) => (
+                  <div key={i} style={styles.strengthBullet}>
+                    <span style={{ color: "#10b981", fontSize: "16px", marginTop: "1px", flexShrink: 0 }}>✓</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ fontSize: "14px", fontWeight: "800", color: "#d97706", marginBottom: "12px", textTransform: "uppercase", letterSpacing: "0.06em" }}>📌 Development Priorities</div>
+                {s.developments.map((item, i) => (
+                  <div key={i} style={styles.devBullet}>
+                    <span style={{ color: "#f59e0b", fontSize: "16px", marginTop: "1px", flexShrink: 0 }}>→</span>
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+  );
+
+  // ── STANDARDS TAB ─────────────────────────────
+  const StandardsTab = () => {
+    const standardDetails = [
+      { num: 1, name: "Mission and Educational Values", icon: "🎯", color: "#667eea",
+        what: "The school has a clearly stated mission and set of values that are visible in everyday school life.",
+        look: ["Mission and vision displayed in school and on website", "Values linked to Cambridge learner attributes (Confident, Responsible, Reflective, Innovative, Engaged)", "Students and staff can describe the school's values in their own words"],
+        finding: "A clear cross-school strength. All 6 schools show strong, values-driven cultures. School 4 has a particularly strong Mission & Values section — the only section fully evidenced in their form." },
+      { num: 2, name: "School Management and Leadership", icon: "👨‍💼", color: "#f093fb",
+        what: "The school is managed effectively with experienced, strategic leadership and good governance.",
+        look: ["Experienced principal with Cambridge background", "Supportive governing body with budgeting transparency", "Formal succession planning and middle leader development"],
+        finding: "Leadership is experienced and strategic in all fully documented schools. The key development area is succession planning — ensuring leadership resilience when individuals leave." },
+      { num: 3, name: "Quality of Teaching, Learning and Assessment", icon: "📖", color: "#4facfe",
+        what: "Teachers are well qualified, use a range of strategies, and use assessment data to improve learning.",
+        look: ["Lesson objectives clearly communicated to students", "Mix of teaching strategies (group work, questioning, project work, not just lecture)", "Formative and summative assessment used — results analysed by leadership", "Students actively engaged, not passive recipients"],
+        finding: "Teachers are appropriately qualified and trained. Primary lessons (School 6, Grade 5) show strong differentiation and rapport. Secondary lessons can be more teacher-centred — collaborative seating and student-led activity is an opportunity." },
+      { num: 4, name: "Curriculum, Language Policy and Academic Honesty", icon: "🌐", color: "#fa709a",
+        what: "A clear, coherent curriculum integrating Cambridge and national requirements. Explicit language and academic honesty policies.",
+        look: ["Timetable integrates Cambridge and national subjects", "Language of instruction policy is written and followed", "Academic Honesty Policy defines plagiarism, collusion, investigation steps, and sanctions", "Subject offering covers STEM, languages, humanities, and applied subjects"],
+        finding: "Language policy is a strength — bilingual instruction is effective. Academic Honesty is well practised but not always written up formally. School 6 has only 5 IGCSE subjects — expanding the range is recommended." },
+      { num: 5, name: "Professional Development and Staff Culture", icon: "🌱", color: "#43e97b",
+        what: "Systematic, ongoing professional development for all staff. A culture of collaborative learning.",
+        look: ["Annual or termly whole-school PD days", "Mentor–mentee programme for new teachers", "PLCs that analyse student work and data", "Cambridge training (face-to-face or online)", "Peer observation and action research culture"],
+        finding: "A consistent strength. School 3 leads with Cambridge PDQ involvement and structured PLCs. School 2 runs teacher visits to sister schools. All schools show genuine openness to learning." },
+      { num: 6, name: "Community and Parental Engagement", icon: "🤝", color: "#fee140",
+        what: "Parents are active partners. Regular, structured communication. Parents contribute meaningfully beyond attending events.",
+        look: ["Termly progress reports", "Parent–teacher conferences (more frequent in primary)", "Parents with professional expertise contribute to life-skills sessions", "Parent council or advisory group with formal roles", "Systematic parent feedback mechanisms"],
+        finding: "A strong area. Parents across all schools are engaged and describe teachers positively. The development opportunity is to formalise this into a written Parent Partnership Framework, especially for Schools 3 and 6." },
+      { num: 7, name: "Physical Environment, Laboratories and Learning Resources", icon: "🏫", color: "#667eea",
+        what: "Safe, well-maintained buildings. Well-equipped labs meeting Cambridge safety standards. Accessible library resources.",
+        look: ["Circuit breakers, fire extinguishers, first aid kits in every lab", "Eye protection and goggles available for all students", "Chemicals in locked storage; fume cupboards installed and maintained", "Library accessible to all students with a relevant, up-to-date collection"],
+        finding: "Labs in most schools meet Cambridge standards well. School 6 needs attention on circuit breaker visibility, gas installation compliance, and emergency showers. School 6's library renovation is ongoing — access is a current challenge for upper-floor secondary students." },
+      { num: 8, name: "Examination Security and Administration", icon: "🔒", color: "#f093fb",
+        what: "Cambridge exam materials are stored and administered securely, following the Cambridge Handbook at every stage.",
+        look: ["Windowless secure room with double doors", "Metal cabinets bolted to wall and floor; keys with exam officer and principal only", "Written SOP for receipt, storage, distribution, and return of scripts", "Staff trained and briefed before each examination session", "Contingency plan for emergencies"],
+        finding: "A consistent strength — all fully documented schools comply with Cambridge requirements. The recommendation is to move from good practice to written SOPs, protecting against staff turnover and ensuring consistency over time." },
+      { num: 9, name: "Legal Compliance, Safeguarding and Child Protection", icon: "⚖️", color: "#4facfe",
+        what: "All legal documents in place. Robust child protection and safeguarding policies, particularly important for boarding schools.",
+        look: ["Government licence to operate and offer Cambridge", "Fire certificate and health & safety documentation", "Staff background checks (employer verification + police clearance)", "Clear staff–student boundary guidelines (essential for boarding)", "Copyright guidance for staff and students"],
+        finding: "All 5 fully documented schools are compliant. School 4's legal section is blank — this must be completed before reapproval can proceed. Boarding schools (School 2) show particularly robust safeguarding arrangements." },
+      { num: 10, name: "Student Outcomes, Progression and Programme Breadth", icon: "📈", color: "#fa709a",
+        what: "Students achieve good outcomes relative to their starting points. Clear progression pathways. Breadth of subjects supporting diverse learner aspirations.",
+        look: ["English as a Second Language results are strong", "Maths and science Checkpoint results reach international benchmarks", "Students can access a range of subjects beyond core sciences", "Clear promotion criteria reviewed by principal and homeroom teachers"],
+        finding: "ESL outcomes are strong across all schools — a genuine network-wide achievement. Maths and science Checkpoint performance, especially at School 6, needs more strategic focus. Five IGCSE subjects is a solid baseline but limits learner profiles for international university applications." },
+    ];
+
+    return (
+      <div>
+        <div style={{ marginBottom: "28px", textAlign: "center" }}>
+          <p style={{ fontSize: "15px", color: "#4b5563", maxWidth: "660px", margin: "0 auto", lineHeight: 1.7 }}>
+            Cambridge uses 10 Quality Standards for school re-approval visits. Here is what each standard means, what reviewers look for, and what these six school visits revealed.
+          </p>
+        </div>
+
+        {/* Radar chart — group performance */}
+        <div style={styles.card}>
+          <div style={styles.cardTitle}>🕸 Performance Across 10 Cambridge Quality Standards</div>
+          <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>Comparative radar for all 6 schools. School 4 scores reflect incomplete documentation, not necessarily poor practice.</p>
+          <ResponsiveContainer width="100%" height={420}>
+            <RadarChart data={standardsRadarData}>
+              <PolarGrid />
+              <PolarAngleAxis dataKey="standard" tick={{ fontSize: 11, fontWeight: "600" }} />
+              <PolarRadiusAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
+              {schools.map((s, i) => (
+                <Radar key={s.id} name={s.name} dataKey={`s${s.id}`} stroke={s.color} fill={s.color} fillOpacity={0.08} strokeWidth={2} />
+              ))}
+              <Legend />
+              <Tooltip />
+            </RadarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Standard detail cards */}
+        {standardDetails.map((std, i) => (
+          <div key={i} style={{ ...styles.card, borderLeft: `7px solid ${std.color}` }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "16px", flexWrap: "wrap" }}>
+              <div style={{ fontSize: "36px" }}>{std.icon}</div>
+              <div style={{ flex: 1, minWidth: "200px" }}>
+                <div style={{ fontSize: "13px", fontWeight: "700", color: std.color, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "4px" }}>
+                  Standard {std.num}
+                </div>
+                <div style={{ fontSize: "19px", fontWeight: "900", color: "#1e293b", marginBottom: "10px" }}>{std.name}</div>
+                <div style={{ fontSize: "14px", color: "#374151", lineHeight: 1.7, marginBottom: "14px" }}>{std.what}</div>
+
+                <div style={styles.grid2}>
+                  <div>
+                    <div style={styles.sectionLabel}>What reviewers look for</div>
+                    {std.look.map((item, j) => (
+                      <div key={j} style={{ display: "flex", gap: "8px", fontSize: "13px", color: "#374151", lineHeight: 1.6, marginBottom: "6px" }}>
+                        <span style={{ color: std.color, flexShrink: 0, marginTop: "2px" }}>▸</span>
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div>
+                    <div style={styles.sectionLabel}>What the 6-school visits found</div>
+                    <div style={styles.infoBox(std.color)}>{std.finding}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // ── DEVELOPMENT THEMES TAB ────────────────────
+  const ThemesTab = () => (
+    <div>
+      <div style={{ marginBottom: "28px", textAlign: "center" }}>
+        <p style={{ fontSize: "15px", color: "#4b5563", maxWidth: "660px", margin: "0 auto", lineHeight: 1.7 }}>
+          Seven recurring development themes emerged across the six school visits. These are not compliance failures — they are the next steps to move from good practice to excellent, sustainable practice.
+        </p>
+      </div>
+
+      {developmentThemes.map((theme, i) => (
+        <div
+          key={i}
+          style={styles.themeCard(theme.color, expandedTheme === i)}
+          onClick={() => setExpandedTheme(expandedTheme === i ? null : i)}
+        >
+          <div style={styles.themeHeader(theme.color)}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "12px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <div style={{ fontSize: "36px" }}>{theme.icon}</div>
+                <div>
+                  <div style={{ fontSize: "11px", fontWeight: "700", opacity: 0.85, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: "4px" }}>
+                    Priority: {theme.priority} · {theme.schools}
+                  </div>
+                  <div style={{ fontSize: "20px", fontWeight: "900" }}>{theme.theme}</div>
+                </div>
+              </div>
+              <div style={{ fontSize: "22px" }}>{expandedTheme === i ? "▲" : "▼"}</div>
+            </div>
+          </div>
+
+          {expandedTheme === i && (
+            <div style={styles.themeBody}>
+              <div style={styles.sectionLabel}>Recommended Actions</div>
+              {theme.actions.map((action, j) => (
+                <div key={j} style={{ display: "flex", gap: "12px", padding: "10px 0", borderBottom: "1px solid #f1f5f9", fontSize: "14px", color: "#374151", lineHeight: 1.6 }}>
+                  <span style={{ color: theme.color, fontWeight: "800", flexShrink: 0, fontSize: "16px" }}>{j + 1}.</span>
+                  <span>{action}</span>
+                </div>
+              ))}
+              <div style={styles.infoBox(theme.color)}>
+                <strong>Important context:</strong> {theme.note}
+              </div>
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+
+  // ── RECOMMENDATIONS TAB ───────────────────────
+  const RecommendationsTab = () => {
+    const categories = [...new Set(recommendations.map(r => r.category))];
+    const urgencyOrder = { "Immediate": 0, "Near-term": 1, "Medium-term": 2 };
+    const sorted = [...recommendations].sort((a, b) => urgencyOrder[a.urgency] - urgencyOrder[b.urgency]);
+
+    return (
+      <div>
+        <div style={{ marginBottom: "28px", textAlign: "center" }}>
+          <p style={{ fontSize: "15px", color: "#4b5563", maxWidth: "660px", margin: "0 auto", lineHeight: 1.7 }}>
+            Nine priority recommendations for school leadership teams. Click each recommendation to see the full action guide. Ordered by urgency.
+          </p>
+        </div>
+
+        {/* Urgency summary */}
+        <div style={styles.grid3}>
+          {[["Immediate", "#dc2626", recommendations.filter(r=>r.urgency==="Immediate").length, "Act now — don't wait for next review"],
+            ["Near-term", "#f59e0b", recommendations.filter(r=>r.urgency==="Near-term").length, "Complete within this academic year"],
+            ["Medium-term", "#10b981", recommendations.filter(r=>r.urgency==="Medium-term").length, "Plan and phase over 1–2 years"]
+          ].map(([label, color, count, desc], i) => (
+            <div key={i} style={{ ...styles.card, borderTop: `5px solid ${color}`, padding: "22px", textAlign: "center" }}>
+              <div style={{ fontSize: "40px", fontWeight: "900", color }}>{count}</div>
+              <div style={{ fontSize: "15px", fontWeight: "800", color: "#1e293b", marginTop: "6px" }}>{label}</div>
+              <div style={{ fontSize: "13px", color: "#6b7280", marginTop: "4px", lineHeight: 1.5 }}>{desc}</div>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ height: "20px" }} />
+
+        {sorted.map((rec, i) => (
+          <div
+            key={rec.id}
+            style={styles.recCard(expandedRec === rec.id)}
+            onClick={() => setExpandedRec(expandedRec === rec.id ? null : rec.id)}
+          >
+            {/* Rec header */}
+            <div style={{ padding: "22px 28px", display: "flex", justifyContent: "space-between", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                <div style={{ fontSize: "32px" }}>{rec.icon}</div>
+                <div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "8px", alignItems: "center" }}>
+                    <span style={styles.categoryBadge}>{rec.category}</span>
+                    <span style={styles.urgencyBadge(rec.urgency)}>{rec.urgency}</span>
+                  </div>
+                  <div style={{ fontSize: "18px", fontWeight: "800", color: "#1e293b" }}>{rec.title}</div>
+                  <div style={{ fontSize: "13px", color: "#6b7280", marginTop: "4px" }}>For: {rec.who}</div>
+                </div>
+              </div>
+              <div style={{ fontSize: "20px", color: "#9ca3af" }}>{expandedRec === rec.id ? "▲" : "▼"}</div>
+            </div>
+
+            {expandedRec === rec.id && (
+              <div style={{ padding: "0 28px 28px", borderTop: "1px solid #f1f5f9" }}>
+                <div style={{ paddingTop: "20px" }} />
+                <div style={styles.grid2}>
+                  <div>
+                    <div style={styles.sectionLabel}>What this means</div>
+                    <p style={{ fontSize: "14px", color: "#374151", lineHeight: 1.7 }}>{rec.what}</p>
+                    <div style={{ height: "16px" }} />
+                    <div style={styles.sectionLabel}>Why it matters</div>
+                    <p style={{ fontSize: "14px", color: "#374151", lineHeight: 1.7 }}>{rec.why}</p>
+                  </div>
+                  <div>
+                    <div style={styles.sectionLabel}>How to do it — step by step</div>
+                    {rec.how.map((step, j) => (
+                      <div key={j} style={{ display: "flex", gap: "12px", padding: "10px 0", borderBottom: "1px solid #f8fafc", fontSize: "14px", color: "#374151", lineHeight: 1.6 }}>
+                        <div style={{
+                          minWidth: "28px", height: "28px",
+                          background: "linear-gradient(135deg, #1e3a5f, #2563eb)",
+                          borderRadius: "50%",
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          color: "#fff", fontSize: "12px", fontWeight: "800", flexShrink: 0
+                        }}>{j + 1}</div>
+                        <span>{step}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  // ── PREPARATION GUIDE TAB ─────────────────────
+  const PrepGuideTab = () => {
+    const sections = [
+      {
+        title: "Before the Visit — 3 Months Ahead",
+        icon: "🗓",
+        color: "#1e3a5f",
+        items: [
+          { label: "Organise your document folder", detail: "Create one folder (physical or digital) for each Cambridge Quality Standard. Each folder should contain evidence of how your school meets that standard." },
+          { label: "Check all legal documents are current", detail: "Government licence to operate, fire certificates, health & safety documentation, staff background check records, copyright policy." },
+          { label: "Update your policies", detail: "Review and, if needed, create: Academic Honesty Policy, Behaviour Policy, Safeguarding Policy, Child Protection Policy. These should be written, not just practised." },
+          { label: "Walk through your facilities", detail: "Visit every science lab with a safety checklist. Check circuit breakers, fire extinguishers, first aid kits, eye protection, chemical storage, fume cupboards, emergency showers." },
+          { label: "Review your exam storage room", detail: "Is it windowless? Double doors? Metal cabinets bolted to wall/floor? Are key holders limited to exam officer and principal only? Document this." },
+        ]
+      },
+      {
+        title: "Document Your Strengths",
+        icon: "✅",
+        color: "#059669",
+        items: [
+          { label: "Collect evidence of teaching quality", detail: "Lesson observation records, PLC meeting minutes, teacher CPD certificates, lesson plans showing varied strategies." },
+          { label: "Show your assessment system", detail: "Internal exam schedules, sample marked work, data on formative and summative results, evidence of how results inform teaching changes." },
+          { label: "Evidence community engagement", detail: "Parent communication records, photos from events, parent council meeting minutes, parent feedback forms." },
+          { label: "Show professional development", detail: "CPD records for all staff, attendance at Cambridge training, mentor–mentee records, PLC focus topics and outcomes." },
+          { label: "Document student outcomes", detail: "Most recent Checkpoint and IGCSE results. Analysis by subject and topic. Evidence of what you did with the data." },
+        ]
+      },
+      {
+        title: "During the Visit — What Reviewers Do",
+        icon: "👁",
+        color: "#7c3aed",
+        items: [
+          { label: "Classroom observations", detail: "Reviewers observe 2–3 lessons. They look for: clear lesson objectives, student engagement, mix of teaching strategies, questioning, evidence of formative assessment." },
+          { label: "Interviews with stakeholders", detail: "Reviewers may interview teachers, students, and parents. They want to hear consistent messages about values, expectations, and quality." },
+          { label: "Document review", detail: "They will ask to see policies, plans, and evidence for each Quality Standard. Having organised folders saves time and shows preparedness." },
+          { label: "Facility walkthrough", detail: "Labs, library, exam room, classrooms, outdoor spaces. They check safety equipment is present and functional — not just that it exists somewhere." },
+          { label: "Leadership meeting", detail: "The principal and senior team discuss the school's strategic plans, development areas, and how the school uses data to improve." },
+        ]
+      },
+      {
+        title: "What Makes the Difference — Top 5 Tips",
+        icon: "🌟",
+        color: "#f59e0b",
+        items: [
+          { label: "Write down what you already do well", detail: "Many schools pass in practice but struggle to demonstrate it. If your teachers do excellent work, make sure there is written evidence — lesson observation records, CPD logs, meeting minutes." },
+          { label: "Brief your staff and students", detail: "Before the visit, remind teachers what the school values, what CPD they have done, and what good practice looks like. Students should be able to explain what they are learning and why." },
+          { label: "Don't create policies just for the visit", detail: "Reviewers can tell when a policy was written last week. Develop policies over time and make sure staff actually use them." },
+          { label: "Show your improvement journey", detail: "Cambridge wants to see that you identify development areas and work on them. Showing that you have acted on previous recommendations is powerful evidence." },
+          { label: "Prepare your exam room", detail: "Check every detail: keys, cabinet bolts, door condition, written record of who can access. This is a standard where the difference between pass and fail is in specific, checkable details." },
+        ]
+      },
+    ];
+
+    const labChecklist = [
+      "Circuit breaker(s) clearly visible and labelled", "Electric sockets not positioned near water sources",
+      "First aid kit present, in-date, and accessible", "Fire extinguisher present and within service date",
+      "Eye-wash station or shower installed and signposted", "Goggles/eye protection available for all students",
+      "Chemicals stored in locked cupboard or separate storage room", "Fume cupboard installed (chemistry labs) — last service date recorded",
+      "Portable Bunsen burners (if used) stored securely", "Gas installation checked and compliant (chemistry)",
+      "Emergency shower installed and clearly signposted", "Lab safety rules displayed on wall",
+      "Lab technician (or named responsible staff) identifiable", "Regular maintenance log maintained and up to date",
+    ];
+
+    const examChecklist = [
+      "Storage room is windowless", "Double-door entry (e.g. metal grille + solid door)",
+      "Metal cabinets bolted to wall AND floor", "Keys held ONLY by exam officer and principal",
+      "Access log maintained for every entry", "Written SOP exists for receipt of exam materials",
+      "Written SOP exists for exam day procedures", "Written SOP exists for return/dispatch of scripts",
+      "Contingency plan documented for emergencies", "Staff trained and briefed before each examination session",
+      "Exam room(s) configured to Cambridge spacing requirements", "Invigilators trained and have received briefing this session",
+    ];
+
+    return (
+      <div>
+        <div style={{ marginBottom: "28px", textAlign: "center" }}>
+          <p style={{ fontSize: "15px", color: "#4b5563", maxWidth: "660px", margin: "0 auto", lineHeight: 1.7 }}>
+            A practical guide for school leadership teams preparing for Cambridge re-approval and quality assurance visits. Based on evidence from 6 recent school visits.
+          </p>
+        </div>
+
+        {sections.map((section, si) => (
+          <div key={si} style={{ ...styles.card, borderTop: `6px solid ${section.color}`, marginBottom: "24px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px", marginBottom: "22px" }}>
+              <div style={{ fontSize: "36px" }}>{section.icon}</div>
+              <div style={{ fontSize: "20px", fontWeight: "900", color: "#1e293b" }}>{section.title}</div>
+            </div>
+            {section.items.map((item, ii) => (
+              <div key={ii} style={{ marginBottom: "18px", paddingBottom: "18px", borderBottom: ii < section.items.length - 1 ? "1px solid #f1f5f9" : "none" }}>
+                <div style={{ fontSize: "15px", fontWeight: "800", color: section.color, marginBottom: "6px" }}>{item.label}</div>
+                <div style={{ fontSize: "14px", color: "#374151", lineHeight: 1.7 }}>{item.detail}</div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        {/* Checklists */}
+        <div style={styles.grid2}>
+          <div style={{ ...styles.card, borderTop: "6px solid #7c3aed" }}>
+            <div style={styles.cardTitle}>🔬 Science Lab Safety Checklist</div>
+            <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "18px" }}>Check each item before the visit. All should be confirmed as present and functional.</p>
+            {labChecklist.map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontSize: "13px", color: "#374151", lineHeight: 1.5 }}>
+                <div style={{ width: "20px", height: "20px", border: "2px solid #7c3aed", borderRadius: "4px", flexShrink: 0, marginTop: "1px" }} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+          <div style={{ ...styles.card, borderTop: "6px solid #1e3a5f" }}>
+            <div style={styles.cardTitle}>🔒 Exam Security Checklist</div>
+            <p style={{ fontSize: "13px", color: "#6b7280", marginBottom: "18px" }}>Cambridge-level exam security requires every item to be in place — not most of them.</p>
+            {examChecklist.map((item, i) => (
+              <div key={i} style={{ display: "flex", gap: "12px", padding: "8px 0", borderBottom: "1px solid #f1f5f9", fontSize: "13px", color: "#374151", lineHeight: 1.5 }}>
+                <div style={{ width: "20px", height: "20px", border: "2px solid #1e3a5f", borderRadius: "4px", flexShrink: 0, marginTop: "1px" }} />
+                <span>{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  // ── RENDER ────────────────────────────────────
+  return (
+    <div style={styles.container}>
+      {/* Header */}
+      <div style={styles.header}>
+        <div style={styles.badge}>Cambridge Quality Standards · SRV Synthesis · 6 Schools · Indonesia</div>
+        <h1 style={styles.title}>Cambridge School Quality Dashboard</h1>
+        <p style={styles.subtitle}>
+          Insights and recommendations from six recent Cambridge re-approval and quality assurance visits at Eduversal partner schools. For school leadership teams — plain language, actionable guidance.
+        </p>
+        <div style={styles.metaRow}>
+          <span style={styles.metaPill("#1e3a5f")}>🗓 Aug–Oct 2025</span>
+          <span style={styles.metaPill("#059669")}>5 of 6 Approved</span>
+          <span style={styles.metaPill("#7c3aed")}>10 Quality Standards</span>
+          <span style={styles.metaPill("#dc2626")}>9 Priority Recommendations</span>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={styles.tabContainer}>
+        <Tab id="overview" label="📊 Overview" />
+        <Tab id="schools" label="🏫 6 Schools" />
+        <Tab id="standards" label="📋 10 Standards" />
+        <Tab id="themes" label="⚡ Development Themes" />
+        <Tab id="recommendations" label="✅ Recommendations" />
+        <Tab id="prep" label="🎯 Preparation Guide" />
+      </div>
+
+      {/* Tab content */}
+      {activeTab === "overview" && <OverviewTab />}
+      {activeTab === "schools" && <SchoolsTab />}
+      {activeTab === "standards" && <StandardsTab />}
+      {activeTab === "themes" && <ThemesTab />}
+      {activeTab === "recommendations" && <RecommendationsTab />}
+      {activeTab === "prep" && <PrepGuideTab />}
+
+      {/* Footer */}
+      <div style={{ marginTop: "60px", textAlign: "center" }}>
+        <div style={{
+          display: "inline-block",
+          background: "linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #7c3aed 100%)",
+          color: "#fff",
+          padding: "18px 36px",
+          borderRadius: "50px",
+          boxShadow: "0 10px 30px rgba(37,99,235,0.3)",
+          fontSize: "14px",
+          fontWeight: "700",
+          lineHeight: 1.6,
+        }}>
+          Cambridge School Quality · 6 Schools · 10 Standards · 9 Priority Recommendations<br />
+          <span style={{ fontSize: "12px", opacity: 0.85 }}>Synthesis based on SRV documents from August–October 2025 visits in Indonesia</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ReactDOM.render(<CambridgeQualityDashboard />, document.getElementById("root"));
+    </script>
+
+    <!-- Floating Home Button -->
+    <a
+      href="index.html"
+      style="
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 56px;
+        height: 56px;
+        background: linear-gradient(135deg, #1e3a5f, #2563eb);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+        z-index: 9999;
+        font-size: 22px;
+      "
+      title="Back to Academic Hub"
+    >🏠</a>
+  </body>
+</html>
