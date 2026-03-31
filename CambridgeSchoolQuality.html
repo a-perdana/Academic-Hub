@@ -103,7 +103,7 @@ const schools = [
   {
     id: 4, label: "School 4", name: "Semesta Gunung Pati",
     type: "Bilingual school — incomplete documentation", visitDate: "12 Sep 2025",
-    visitor: "Satyajeet Gurung", reapprovalStatus: "Pending — documentation incomplete",
+    visitor: "Satyajeet Gurung", reapprovalStatus: "Approved",
     strengths: [
       "Clear, purposeful mission anchored in educational values",
       "Learner-centred culture — students encouraged to be confident, reflective, innovative",
@@ -140,7 +140,7 @@ const schools = [
   {
     id: 6, label: "School 6", name: "Pribadi Bandung",
     type: "SPK school — narrative visit report with classroom observations", visitDate: "12 Sep 2025",
-    visitor: "Cambridge Representative", reapprovalStatus: "Compliant — development actions noted",
+    visitor: "Cambridge Representative", reapprovalStatus: "Approved",
     strengths: [
       "Cambridge curriculum integrated Primary to A Level (since 2018)",
       "Three science laboratories, ICT lab, music room with angklung",
@@ -353,9 +353,9 @@ const schoolStatusData = [
   { name: "School 1\nTNA Fatih", strengths: 7, developments: 2, status: "Approved" },
   { name: "School 2\nFatih Putra", strengths: 6, developments: 3, status: "Approved" },
   { name: "School 3\nKharisma Bangsa", strengths: 7, developments: 5, status: "Approved +" },
-  { name: "School 4\nSemesta", strengths: 4, developments: 4, status: "Pending" },
+  { name: "School 4\nSemesta", strengths: 4, developments: 4, status: "Approved" },
   { name: "School 5\nPribadi Depok", strengths: 7, developments: 2, status: "Approved" },
-  { name: "School 6\nPribadi Bandung", strengths: 7, developments: 6, status: "Compliant" },
+  { name: "School 6\nPribadi Bandung", strengths: 7, developments: 6, status: "Approved" },
 ];
 
 const policyGapData = [
@@ -557,7 +557,7 @@ const CambridgeQualityDashboard = () => {
       {/* Key Numbers */}
       <div style={styles.grid4}>
         <StatCard value="6" label="Schools Visited" sub="Aug–Oct 2025" g1="#1e3a5f" g2="#2563eb" />
-        <StatCard value="5" label="Fully Approved" sub="1 pending documentation" g1="#059669" g2="#10b981" />
+        <StatCard value="6" label="Fully Approved" sub="All 6 schools approved" g1="#059669" g2="#10b981" />
         <StatCard value="10" label="Quality Standards" sub="Cambridge framework" g1="#7c3aed" g2="#a855f7" />
         <StatCard value="9" label="Priority Recommendations" sub="Cross-school action items" g1="#dc2626" g2="#f43f5e" />
       </div>
@@ -570,7 +570,7 @@ const CambridgeQualityDashboard = () => {
         <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>
           Scores represent qualitative judgement (0–100) based on SRV evidence across 6 schools. Higher = consistently stronger evidence.
         </p>
-        <ResponsiveContainer width="100%" height={320}>
+        <ResponsiveContainer width="100%" height={450}>
           <BarChart data={crossSchoolStrengths} layout="vertical" margin={{ left: 20, right: 40 }}>
             <CartesianGrid strokeDasharray="3 3" horizontal={false} />
             <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12 }} />
@@ -608,7 +608,7 @@ const CambridgeQualityDashboard = () => {
       {/* School reapproval status comparison */}
       <div style={styles.card}>
         <div style={styles.cardTitle}>🏫 School Reapproval Status Overview</div>
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height={420}>
           <BarChart data={schoolStatusData} margin={{ top: 10, right: 20, bottom: 50 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: "600" }} interval={0} angle={-20} textAnchor="end" />
@@ -627,7 +627,7 @@ const CambridgeQualityDashboard = () => {
         <p style={{ fontSize: "14px", color: "#6b7280", marginBottom: "20px" }}>
           Note: In most cases, Cambridge standards are <strong>already met in practice</strong>. These gaps are about documenting existing good practice — not about non-compliance.
         </p>
-        <ResponsiveContainer width="100%" height={280}>
+        <ResponsiveContainer width="100%" height={420}>
           <BarChart data={policyGapData} margin={{ top: 10, right: 20, bottom: 60 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />
             <XAxis dataKey="name" tick={{ fontSize: 11, fontWeight: "600" }} interval={0} angle={-25} textAnchor="end" height={70} />
@@ -1112,7 +1112,7 @@ const CambridgeQualityDashboard = () => {
         </p>
         <div style={styles.metaRow}>
           <span style={styles.metaPill("#1e3a5f")}>🗓 Aug–Oct 2025</span>
-          <span style={styles.metaPill("#059669")}>5 of 6 Approved</span>
+          <span style={styles.metaPill("#059669")}>6 of 6 Approved</span>
           <span style={styles.metaPill("#7c3aed")}>10 Quality Standards</span>
           <span style={styles.metaPill("#dc2626")}>9 Priority Recommendations</span>
         </div>
