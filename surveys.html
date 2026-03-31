@@ -478,7 +478,7 @@
   <script type="module" src="auth-guard.js"></script>
   <script type="module">
     import {
-      collection, getDocs, query, where,
+      collection, getDocs,
       doc, getDoc, setDoc, serverTimestamp,
     } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -592,15 +592,15 @@
     async function loadSurveys() {
       const listEl = document.getElementById("surveyList");
       try {
-        const snap = await getDocs(query(
-          collection(db, "surveys"),
-          where("platforms", "array-contains", PLATFORM_KEY),
-        ));
+        const snap = await getDocs(collection(db, "surveys"));
         allSurveys = snap.docs
           .map((d) => ({ id: d.id, ...d.data() }))
           .filter((s) => {
             const status = normalizeStatus(s.status);
-            return status !== "draft";
+            if (status === "draft") return false;
+            const plats = s.platforms;
+            if (!plats) return true; // no platforms field = visible to all
+            return Array.isArray(plats) && plats.includes(PLATFORM_KEY);
           })
           .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
         await loadMyResponses();
