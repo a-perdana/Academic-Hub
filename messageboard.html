@@ -1206,7 +1206,7 @@ body {
     if (user) {
       const domain = user.email.split("@")[1];
       const isPasswordUser = user.providerData.some(p => p.providerId === "password");
-      if (!window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPasswordUser) {
+      if (window.ACADEMIC_ALLOWED_DOMAINS && !window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPasswordUser) {
         await signOut(auth);
         showError("Access denied. Only authorized school emails are allowed.");
         return;
@@ -1253,7 +1253,7 @@ body {
     signInWithPopup(auth, provider)
       .then(result => {
         const domain = result.user.email.split("@")[1];
-        if (!window.ACADEMIC_ALLOWED_DOMAINS.includes(domain)) {
+        if (window.ACADEMIC_ALLOWED_DOMAINS && !window.ACADEMIC_ALLOWED_DOMAINS.includes(domain)) {
           signOut(auth);
           showError("Access denied. Only authorized school emails are allowed.");
         }

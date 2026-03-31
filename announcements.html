@@ -1322,7 +1322,7 @@ body {
     if (user) {
       const domain = user.email.split('@')[1];
       const isPwUser = user.providerData.some(p => p.providerId === 'password');
-      if (!window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPwUser) {
+      if (window.ACADEMIC_ALLOWED_DOMAINS && !window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPwUser) {
         await signOut(auth);
         showError('Access denied. Only authorized school emails are allowed.');
         return;
