@@ -785,7 +785,7 @@ let sortMode = 'newest';
 let unsubPrompts = null;
 let editingId = null, deleteId = null;
 
-const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS;
+
 
 // ── Category config ───────────────────────────────
 const CATEGORIES = {
@@ -858,7 +858,7 @@ onAuthStateChanged(auth, async (user) => {
   if (user) {
     const domain = user.email.split('@')[1];
     const isPwUser = user.providerData.some(p => p.providerId === 'password');
-    if (!allowedDomains.includes(domain) && !isPwUser) {
+    if (!window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPwUser) {
       await signOut(auth);
       showError('Access denied. Only authorized school emails are allowed.');
       return;

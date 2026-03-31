@@ -782,7 +782,7 @@ body {
   let activeSubject = 'All';
   let unsubLib = null;
 
-  const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS;
+  
 
   // ── Helpers ─────────────────────────────────────────────────
   const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
@@ -849,7 +849,7 @@ body {
     if (user) {
       const domain = user.email.split('@')[1];
       const isPwUser = user.providerData.some(p => p.providerId === 'password');
-      if (!allowedDomains.includes(domain) && !isPwUser) {
+      if (!window.ACADEMIC_ALLOWED_DOMAINS.includes(domain) && !isPwUser) {
         await signOut(auth);
         showError('Access denied. Only authorized school emails are allowed.');
         return;
