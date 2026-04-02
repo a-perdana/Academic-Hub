@@ -102,7 +102,7 @@ window.__loadAcademicNavbar = async function(activeKey) {
   const mount = document.getElementById('navbarMount');
   if (!mount) return;
 
-  const res = await fetch('partials/navbar.html', { cache: 'no-cache' });
+  const res = await fetch('partials/navbar.html', { cache: 'default' });
   if (!res.ok) throw new Error('Failed to load navbar partial');
 
   mount.innerHTML = await res.text();
@@ -149,47 +149,25 @@ window.__initNavbarCounters = async function({ db, user }) {
   };
 
   const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-  const { collection, onSnapshot, query, where } = fs;
+  const { collection, getCountFromServer, query, where } = fs;
 
-  const annBadge = document.getElementById('annBadge');
-  if (annBadge) {
-    state.unsubs.push(
-      onSnapshot(collection(db, 'announcements'), (snap) => setBadge('annBadge', snap.size, 999), () => {}),
-    );
-  }
+  // Use one-shot aggregation counts instead of full-collection real-time listeners.
+  // This avoids downloading all documents just to read snap.size.
+  const countJobs = [
+    { id: 'annBadge',    ref: collection(db, 'announcements') },
+    { id: 'msgBadge',    ref: collection(db, 'topics') },
+    { id: 'libBadge',    ref: collection(db, 'library') },
+    { id: 'docBadge',    ref: collection(db, 'documents') },
+    { id: 'aiBadge',     ref: collection(db, 'prompts') },
+    { id: 'surveyBadge', ref: query(collection(db, 'surveys'), where('platforms', 'array-contains', 'academichub')) },
+  ];
 
-  const msgBadge = document.getElementById('msgBadge');
-  if (msgBadge) {
-    state.unsubs.push(
-      onSnapshot(collection(db, 'topics'), (snap) => setBadge('msgBadge', snap.size, 999), () => {}),
-    );
-  }
-
-  if (document.getElementById('libBadge')) {
-    state.unsubs.push(
-      onSnapshot(collection(db, 'library'), (snap) => setBadge('libBadge', snap.size, 999), () => {}),
-    );
-  }
-
-  if (document.getElementById('docBadge')) {
-    state.unsubs.push(
-      onSnapshot(collection(db, 'documents'), (snap) => setBadge('docBadge', snap.size, 999), () => {}),
-    );
-  }
-
-  if (document.getElementById('aiBadge')) {
-    state.unsubs.push(
-      onSnapshot(collection(db, 'prompts'), (snap) => setBadge('aiBadge', snap.size, 999), () => {}),
-    );
-  }
-
-  if (document.getElementById('surveyBadge')) {
-    state.unsubs.push(
-      onSnapshot(
-        query(collection(db, 'surveys'), where('platforms', 'array-contains', 'academichub')),
-        (snap) => setBadge('surveyBadge', snap.size, 999),
-        () => {},
-      ),
-    );
-  }
+  await Promise.allSettled(
+    countJobs
+      .filter(j => document.getElementById(j.id))
+      .map(async j => {
+        const snap = await getCountFromServer(j.ref);
+        setBadge(j.id, snap.data().count, 999);
+      })
+  );
 };

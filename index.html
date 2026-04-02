@@ -4585,17 +4585,25 @@
         if (e.target.matches?.(".card:not(.card-coming-soon)")) e.target.style.zIndex = "1";
       }, true);
 
-      // Parallax effect on orbs
-      document.addEventListener("mousemove", (e) => {
+      // Parallax effect on orbs — throttled via requestAnimationFrame
+      (function () {
         const orbs = document.querySelectorAll(".orb");
-        const x = e.clientX / window.innerWidth;
-        const y = e.clientY / window.innerHeight;
-
-        orbs.forEach((orb, i) => {
-          const speed = (i + 1) * 20;
-          orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+        let rafPending = false;
+        let mx = 0, my = 0;
+        document.addEventListener("mousemove", (e) => {
+          mx = e.clientX / window.innerWidth;
+          my = e.clientY / window.innerHeight;
+          if (rafPending) return;
+          rafPending = true;
+          requestAnimationFrame(() => {
+            orbs.forEach((orb, i) => {
+              const speed = (i + 1) * 20;
+              orb.style.transform = `translate(${mx * speed}px, ${my * speed}px)`;
+            });
+            rafPending = false;
+          });
         });
-      });
+      }());
     </script>
 
     <script src="partials/navbar-loader.js"></script>
@@ -4682,17 +4690,20 @@
       }
 
       // â”€â”€ Navbar: scroll shrink â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      window.addEventListener('scroll', () => {
+      (function () {
         const topNav = document.getElementById('topNav');
-        if (topNav) topNav.classList.toggle('scrolled', window.scrollY > 10);
-      }, { passive: true });
+        let scrollRaf = false;
+        window.addEventListener('scroll', () => {
+          if (scrollRaf) return;
+          scrollRaf = true;
+          requestAnimationFrame(() => {
+            if (topNav) topNav.classList.toggle('scrolled', window.scrollY > 10);
+            scrollRaf = false;
+          });
+        }, { passive: true });
+      }());
 
       // â”€â”€ Navbar: profile dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      let annUnsubscribe = null;
-      let msgUnsubscribe = null;
-      let libUnsubscribe = null;
-      let docUnsubscribe = null;
-
       function applyDisplayName(user, firestoreName) {
         const name = firestoreName || user.displayName || user.email.split('@')[0];
         const firstName = name.split(' ')[0];
@@ -4731,10 +4742,6 @@
       function clearNav() {
         const profileWrap = document.getElementById('profileWrap');
         if (profileWrap) profileWrap.style.display = 'none';
-        if (annUnsubscribe) { annUnsubscribe(); annUnsubscribe = null; }
-        if (msgUnsubscribe) { msgUnsubscribe(); msgUnsubscribe = null; }
-        if (libUnsubscribe) { libUnsubscribe(); libUnsubscribe = null; }
-        if (docUnsubscribe) { docUnsubscribe(); docUnsubscribe = null; }
         window.__clearNavbarCounters?.();
       }
 
@@ -4762,94 +4769,103 @@
 
       // Save phone number
       const ddSavePhone = document.getElementById('ddSavePhone');
+      const ddPhoneEl   = document.getElementById('ddPhone');
+      const ddPhoneStatus = document.getElementById('ddPhoneStatus');
+      let _phoneStatusTimer = null;
       if (ddSavePhone) ddSavePhone.addEventListener('click', async () => {
         const user = auth.currentUser;
         if (!user) return;
-        const phone = document.getElementById('ddPhone').value.trim();
-        const statusEl = document.getElementById('ddPhoneStatus');
-        const btn = document.getElementById('ddSavePhone');
-        btn.disabled = true;
+        const phone = ddPhoneEl.value.trim();
+        ddSavePhone.disabled = true;
         try {
           await setDoc(doc(db, 'users', user.uid), { phone }, { merge: true });
-          statusEl.textContent = 'Saved!';
-          statusEl.className = 'dd-status ok';
+          ddPhoneStatus.textContent = 'Saved!';
+          ddPhoneStatus.className = 'dd-status ok';
         } catch {
-          statusEl.textContent = 'Failed to save.';
-          statusEl.className = 'dd-status err';
+          ddPhoneStatus.textContent = 'Failed to save.';
+          ddPhoneStatus.className = 'dd-status err';
         } finally {
-          btn.disabled = false;
-          setTimeout(() => { statusEl.className = 'dd-status'; }, 3000);
+          ddSavePhone.disabled = false;
+          clearTimeout(_phoneStatusTimer);
+          _phoneStatusTimer = setTimeout(() => { ddPhoneStatus.className = 'dd-status'; }, 3000);
         }
       });
 
       // Save display name
       const ddSaveDisplayName = document.getElementById('ddSaveDisplayName');
+      const ddDisplayNameEl   = document.getElementById('ddDisplayName');
+      const ddDisplayNameStatus = document.getElementById('ddDisplayNameStatus');
+      let _nameStatusTimer = null;
       if (ddSaveDisplayName) ddSaveDisplayName.addEventListener('click', async () => {
         const user = auth.currentUser;
         if (!user) return;
-        const newName = document.getElementById('ddDisplayName').value.trim();
-        const statusEl = document.getElementById('ddDisplayNameStatus');
-        const btn = document.getElementById('ddSaveDisplayName');
+        const newName = ddDisplayNameEl.value.trim();
         if (!newName) {
-          statusEl.textContent = 'Please enter a name.';
-          statusEl.className = 'dd-status err';
-          setTimeout(() => { statusEl.className = 'dd-status'; }, 3000);
+          ddDisplayNameStatus.textContent = 'Please enter a name.';
+          ddDisplayNameStatus.className = 'dd-status err';
+          clearTimeout(_nameStatusTimer);
+          _nameStatusTimer = setTimeout(() => { ddDisplayNameStatus.className = 'dd-status'; }, 3000);
           return;
         }
-        btn.disabled = true;
+        ddSaveDisplayName.disabled = true;
         try {
           await updateProfile(user, { displayName: newName });
           await setDoc(doc(db, 'users', user.uid), { displayName: newName }, { merge: true });
           applyDisplayName(user, newName);
-          statusEl.textContent = 'Saved!';
-          statusEl.className = 'dd-status ok';
+          ddDisplayNameStatus.textContent = 'Saved!';
+          ddDisplayNameStatus.className = 'dd-status ok';
         } catch {
-          statusEl.textContent = 'Failed to save.';
-          statusEl.className = 'dd-status err';
+          ddDisplayNameStatus.textContent = 'Failed to save.';
+          ddDisplayNameStatus.className = 'dd-status err';
         } finally {
-          btn.disabled = false;
-          setTimeout(() => { statusEl.className = 'dd-status'; }, 3000);
+          ddSaveDisplayName.disabled = false;
+          clearTimeout(_nameStatusTimer);
+          _nameStatusTimer = setTimeout(() => { ddDisplayNameStatus.className = 'dd-status'; }, 3000);
         }
       });
 
       // Update password
       const ddUpdatePwBtn = document.getElementById('ddUpdatePwBtn');
+      const ddCurrentPwEl = document.getElementById('ddCurrentPw');
+      const ddNewPwEl     = document.getElementById('ddNewPw');
+      const ddConfirmPwEl = document.getElementById('ddConfirmPw');
+      const ddPwStatus    = document.getElementById('ddPwStatus');
+      let _pwStatusTimer  = null;
       if (ddUpdatePwBtn) ddUpdatePwBtn.addEventListener('click', async () => {
         const user = auth.currentUser;
         if (!user) return;
-        const current = document.getElementById('ddCurrentPw').value;
-        const newPw   = document.getElementById('ddNewPw').value;
-        const confirm = document.getElementById('ddConfirmPw').value;
-        const statusEl = document.getElementById('ddPwStatus');
-        const btn = document.getElementById('ddUpdatePwBtn');
+        const current = ddCurrentPwEl.value;
+        const newPw   = ddNewPwEl.value;
+        const confirm = ddConfirmPwEl.value;
 
         if (newPw !== confirm) {
-          statusEl.textContent = 'Passwords do not match.';
-          statusEl.className = 'dd-status err';
+          ddPwStatus.textContent = 'Passwords do not match.';
+          ddPwStatus.className = 'dd-status err';
           return;
         }
         if (newPw.length < 6) {
-          statusEl.textContent = 'Password must be at least 6 characters.';
-          statusEl.className = 'dd-status err';
+          ddPwStatus.textContent = 'Password must be at least 6 characters.';
+          ddPwStatus.className = 'dd-status err';
           return;
         }
-        btn.disabled = true;
+        ddUpdatePwBtn.disabled = true;
         try {
           const credential = EmailAuthProvider.credential(user.email, current);
           await reauthenticateWithCredential(user, credential);
           await updatePassword(user, newPw);
-          statusEl.textContent = 'Password updated!';
-          statusEl.className = 'dd-status ok';
-          document.getElementById('ddCurrentPw').value = '';
-          document.getElementById('ddNewPw').value = '';
-          document.getElementById('ddConfirmPw').value = '';
+          ddPwStatus.textContent = 'Password updated!';
+          ddPwStatus.className = 'dd-status ok';
+          ddCurrentPwEl.value = '';
+          ddNewPwEl.value = '';
+          ddConfirmPwEl.value = '';
         } catch (err) {
           const msg = err.code === 'auth/wrong-password' ? 'Current password is incorrect.' : 'Update failed. Try again.';
-          statusEl.textContent = msg;
-          statusEl.className = 'dd-status err';
+          ddPwStatus.textContent = msg;
+          ddPwStatus.className = 'dd-status err';
         } finally {
-          btn.disabled = false;
-          setTimeout(() => { statusEl.className = 'dd-status'; }, 4000);
+          ddUpdatePwBtn.disabled = false;
+          clearTimeout(_pwStatusTimer);
+          _pwStatusTimer = setTimeout(() => { ddPwStatus.className = 'dd-status'; }, 4000);
         }
       });
 
@@ -4948,11 +4964,9 @@
           populateNav(user);
           await window.__initNavbarCounters?.({ db, user });
 
-          // ── Category system ─────────────────────────────────────
+          // ── Category system — reuse snap from profile check above ─
           try {
-            const userRef2 = doc(db, 'users', user.uid);
-            const snap2 = await getDoc(userRef2);
-            const role = snap2.exists() ? snap2.data().role_academichub : 'academic_user';
+            const role = snap.exists() ? snap.data().role_academichub : 'academic_user';
             if (role === 'academic_admin') {
               document.body.classList.add('is-admin');
             }
@@ -5050,6 +5064,38 @@
       function initCategorySystem(db) {
         const isAdmin = document.body.classList.contains('is-admin');
 
+        // ── Delegated admin action handler (registered once) ─────
+        if (isAdmin) {
+          document.getElementById('categorySections').addEventListener('click', async e => {
+            e.stopPropagation();
+            const btn = e.target.closest('.cat-action-btn');
+            if (!btn) return;
+            const catId = btn.dataset.catId;
+            // We need the live cats list — read it from the rendered DOM state
+            const allSecs = Array.from(document.querySelectorAll('.category-section[data-cat-id]'));
+            const catsSnapshot = window.__ahCatsSnapshot || [];
+            const cats = catsSnapshot;
+            const cat = cats.find(c => c.id === catId);
+            if (!cat) return;
+
+            if (btn.classList.contains('move-up-btn')) {
+              const idx = cats.indexOf(cat);
+              if (idx > 0) await swapCatOrder(db, cats[idx], cats[idx - 1]);
+            } else if (btn.classList.contains('move-down-btn')) {
+              const idx = cats.indexOf(cat);
+              if (idx < cats.length - 1) await swapCatOrder(db, cats[idx], cats[idx + 1]);
+            } else if (btn.classList.contains('manage-btn')) {
+              openManageModal(cat, cats, db);
+            } else if (btn.classList.contains('rename-btn')) {
+              const sec = btn.closest('.category-section');
+              if (sec) startRename(sec, cat, db);
+            } else if (btn.classList.contains('delete-btn')) {
+              if (!confirm(`Delete category "${cat.name}"? Cards will move to Uncategorized.`)) return;
+              await deleteDoc(doc(db, 'ah_categories', cat.id));
+            }
+          });
+        }
+
         // ── Build color swatches in admin panel ─────────────────
         if (isAdmin) {
           const swatchContainer = document.getElementById('colorSwatches');
@@ -5120,6 +5166,7 @@
         onSnapshot(catQuery, snap => {
           const cats = [];
           snap.forEach(d => cats.push({ id: d.id, ...d.data() }));
+          window.__ahCatsSnapshot = cats; // used by delegated event handler
           renderCategories(cats, db, isAdmin);
         });
       }
@@ -5203,39 +5250,6 @@
           });
 
           container.appendChild(sec);
-
-          if (isAdmin) {
-            // Move up
-            sec.querySelector('.move-up-btn')?.addEventListener('click', async e => {
-              e.stopPropagation();
-              const idx = cats.indexOf(cat);
-              if (idx <= 0) return;
-              await swapCatOrder(db, cats[idx], cats[idx - 1]);
-            });
-            // Move down
-            sec.querySelector('.move-down-btn')?.addEventListener('click', async e => {
-              e.stopPropagation();
-              const idx = cats.indexOf(cat);
-              if (idx >= cats.length - 1) return;
-              await swapCatOrder(db, cats[idx], cats[idx + 1]);
-            });
-            // Manage cards
-            sec.querySelector('.manage-btn')?.addEventListener('click', e => {
-              e.stopPropagation();
-              openManageModal(cat, cats, db);
-            });
-            // Rename
-            sec.querySelector('.rename-btn')?.addEventListener('click', e => {
-              e.stopPropagation();
-              startRename(sec, cat, db);
-            });
-            // Delete
-            sec.querySelector('.delete-btn')?.addEventListener('click', async e => {
-              e.stopPropagation();
-              if (!confirm(`Delete category "${cat.name}"? Cards will move to Uncategorized.`)) return;
-              await deleteDoc(doc(db, 'ah_categories', cat.id));
-            });
-          }
         });
 
         // Update uncategorized grid
@@ -5464,7 +5478,11 @@
         }
 
         renderList('');
-        searchEl.addEventListener('input', () => renderList(searchEl.value), { signal: abortCtrl.signal });
+        let searchDebounce = null;
+        searchEl.addEventListener('input', () => {
+          clearTimeout(searchDebounce);
+          searchDebounce = setTimeout(() => renderList(searchEl.value), 300);
+        }, { signal: abortCtrl.signal });
 
         saveBtn.disabled = false;
         saveBtn.addEventListener('click', save, { signal: abortCtrl.signal });
