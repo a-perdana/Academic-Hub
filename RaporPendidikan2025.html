@@ -1570,9 +1570,11 @@ function initTableControls() {
     });
   });
 
+  let _raporSearchTimer = null;
   document.getElementById('school-search').addEventListener('input', e => {
     searchQ = e.target.value;
-    buildTable();
+    clearTimeout(_raporSearchTimer);
+    _raporSearchTimer = setTimeout(() => buildTable(), 300);
   });
 
   document.querySelectorAll('#schools-table thead th[data-col]').forEach(th => {

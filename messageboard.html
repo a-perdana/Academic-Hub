@@ -1274,9 +1274,11 @@ body {
   // ── Forum Init ────────────────────────────────────────────────
   function initForum() {
     // Wire up search and sort
+    let _mbSearchTimer = null;
     document.getElementById('searchInput').addEventListener('input', e => {
       searchQuery = e.target.value.trim();
-      filterAndRender();
+      clearTimeout(_mbSearchTimer);
+      _mbSearchTimer = setTimeout(() => filterAndRender(), 300);
     });
     document.getElementById('sortSelect').addEventListener('change', () => {
       filterAndRender();

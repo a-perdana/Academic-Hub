@@ -2269,10 +2269,12 @@ body {
   document.getElementById('annBody').addEventListener('mouseup', updateRteState);
 
   // ── Sidebar filter event listeners ───────────────────────────
+  let _annSearchTimer = null;
   document.getElementById('annSearch').addEventListener('input', e => {
     searchText = e.target.value;
     currentPage = 1;
-    applyFiltersAndSort();
+    clearTimeout(_annSearchTimer);
+    _annSearchTimer = setTimeout(() => applyFiltersAndSort(), 300);
   });
   document.getElementById('annShowFilter').addEventListener('change', e => {
     showFilter = e.target.value;

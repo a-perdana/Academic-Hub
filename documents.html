@@ -1357,10 +1357,12 @@ body {
   }
 
   // ── Search & Filter ──────────────────────────────────────────
+  let _docSearchTimer = null;
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQuery = e.target.value.trim();
     currentPage = 1;
-    renderList();
+    clearTimeout(_docSearchTimer);
+    _docSearchTimer = setTimeout(() => renderList(), 300);
   });
   document.getElementById('categoryFilters').addEventListener('click', e => {
     const pill = e.target.closest('.pill');

@@ -1178,14 +1178,21 @@
             </button>`;
           list.appendChild(row);
         });
-        list.querySelectorAll('input,select').forEach(el => el.addEventListener('change', e => {
-          docFormItems[+e.target.dataset.fi][e.target.dataset.field] = e.target.value;
-        }));
-        list.querySelectorAll('.doc-remove-btn').forEach(btn => btn.addEventListener('click', e => {
-          docFormItems.splice(+e.currentTarget.dataset.ri, 1);
-          renderDocForm(docFormItems);
-        }));
       }
+
+      // Delegated doc-form handlers (registered once, work across re-renders)
+      document.getElementById('docListForm').addEventListener('change', e => {
+        const el = e.target;
+        if (el.dataset.fi !== undefined && el.dataset.field !== undefined) {
+          docFormItems[+el.dataset.fi][el.dataset.field] = el.value;
+        }
+      });
+      document.getElementById('docListForm').addEventListener('click', e => {
+        const btn = e.target.closest('.doc-remove-btn');
+        if (!btn) return;
+        docFormItems.splice(+btn.dataset.ri, 1);
+        renderDocForm(docFormItems);
+      });
 
       document.getElementById('addDocBtn').addEventListener('click', () => {
         docFormItems.push({title:'',url:'#',type:'pdf'});
@@ -1399,8 +1406,11 @@
         adminSortMode = e.target.value; adminCurrentPage = 1; renderAdminList();
       });
 
+      let _adminSearchTimer = null;
       document.getElementById('adminSearchInput').addEventListener('input', e => {
-        adminSearchTerm = e.target.value.trim(); adminCurrentPage = 1; renderAdminList();
+        adminSearchTerm = e.target.value.trim(); adminCurrentPage = 1;
+        clearTimeout(_adminSearchTimer);
+        _adminSearchTimer = setTimeout(() => renderAdminList(), 300);
       });
 
       document.getElementById('addActBtnList').addEventListener('click', () => openEditModal(null));
@@ -1442,9 +1452,11 @@
         renderTimeline();
       });
 
+      let _timelineSearchTimer = null;
       document.getElementById('searchInput').addEventListener('input', e => {
         searchTerm = e.target.value;
-        renderTimeline();
+        clearTimeout(_timelineSearchTimer);
+        _timelineSearchTimer = setTimeout(() => renderTimeline(), 300);
       });
 
       // ── Scroll to today ────────────────────────────────────────────
@@ -1455,9 +1467,18 @@
       });
 
       // ── Nav scroll effect ──────────────────────────────────────────
-      window.addEventListener('scroll', () => {
-        document.getElementById('topNav').classList.toggle('scrolled', window.scrollY>10);
-      });
+      (function () {
+        const topNav = document.getElementById('topNav');
+        let scrollRaf = false;
+        window.addEventListener('scroll', () => {
+          if (scrollRaf) return;
+          scrollRaf = true;
+          requestAnimationFrame(() => {
+            if (topNav) topNav.classList.toggle('scrolled', window.scrollY > 10);
+            scrollRaf = false;
+          });
+        }, { passive: true });
+      }());
 
       // ── Profile dropdown ───────────────────────────────────────────
       function setupNav() {

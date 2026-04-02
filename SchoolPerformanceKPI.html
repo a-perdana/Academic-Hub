@@ -2097,8 +2097,6 @@ function renderKpiConfig() {
     `;
     tbody.appendChild(tr);
   }
-  tbody.querySelectorAll('[data-edit-kpi]').forEach(btn => btn.addEventListener('click', () => openKpiModal(btn.dataset.editKpi)));
-  tbody.querySelectorAll('[data-del-kpi]').forEach(btn => btn.addEventListener('click', () => deleteKpi(btn.dataset.delKpi)));
   updateWeightTotal();
 }
 
@@ -2108,6 +2106,30 @@ function updateWeightTotal() {
   el.textContent = total.toFixed(2);
   el.className = 'weight-val ' + (Math.abs(total - 1) < 0.01 ? 'ok' : 'warn');
 }
+
+// ─── Delegated action handlers (registered once) ─────────────
+document.getElementById('kpiConfigTableBody').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.dataset.editKpi !== undefined) openKpiModal(btn.dataset.editKpi);
+  else if (btn.dataset.delKpi !== undefined) deleteKpi(btn.dataset.delKpi);
+});
+
+document.getElementById('schoolsTableBody').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.dataset.editSchool !== undefined) openSchoolModal(btn.dataset.editSchool);
+  else if (btn.dataset.delSchool !== undefined) deleteSchool(btn.dataset.delSchool);
+});
+
+document.getElementById('semesterListWrap').addEventListener('click', e => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  if (btn.dataset.setActive !== undefined) setActiveSemester(btn.dataset.setActive);
+  else if (btn.dataset.togglePublish !== undefined) togglePublish(btn.dataset.togglePublish);
+  else if (btn.dataset.editSem !== undefined) openSemesterModal(btn.dataset.editSem);
+  else if (btn.dataset.delSem !== undefined) deleteSemester(btn.dataset.delSem);
+});
 
 document.getElementById('addKpiBtn').addEventListener('click', () => openKpiModal(null));
 document.getElementById('loadDefaultsBtn').addEventListener('click', async () => {
@@ -2222,8 +2244,6 @@ function renderSchools() {
     `;
     tbody.appendChild(tr);
   }
-  tbody.querySelectorAll('[data-edit-school]').forEach(btn => btn.addEventListener('click', () => openSchoolModal(btn.dataset.editSchool)));
-  tbody.querySelectorAll('[data-del-school]').forEach(btn => btn.addEventListener('click', () => deleteSchool(btn.dataset.delSchool)));
 }
 
 document.getElementById('addSchoolBtn').addEventListener('click', () => openSchoolModal(null));
@@ -2369,10 +2389,6 @@ function renderSettings() {
     wrap.appendChild(row);
   }
 
-  wrap.querySelectorAll('[data-set-active]').forEach(btn => btn.addEventListener('click', () => setActiveSemester(btn.dataset.setActive)));
-  wrap.querySelectorAll('[data-toggle-publish]').forEach(btn => btn.addEventListener('click', () => togglePublish(btn.dataset.togglePublish)));
-  wrap.querySelectorAll('[data-edit-sem]').forEach(btn => btn.addEventListener('click', () => openSemesterModal(btn.dataset.editSem)));
-  wrap.querySelectorAll('[data-del-sem]').forEach(btn => btn.addEventListener('click', () => deleteSemester(btn.dataset.delSem)));
 }
 
 document.getElementById('addSemesterBtn').addEventListener('click', () => openSemesterModal(null));

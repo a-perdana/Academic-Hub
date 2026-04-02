@@ -1145,9 +1145,11 @@ document.getElementById('drawerTestBtn').addEventListener('click', async () => {
 });
 
 // ── Search & Sort ──────────────────────────────────
+let _aiSearchTimer = null;
 document.getElementById('searchInput').addEventListener('input', e => {
   searchTerm = e.target.value.trim();
-  applyFilters();
+  clearTimeout(_aiSearchTimer);
+  _aiSearchTimer = setTimeout(() => applyFilters(), 300);
 });
 document.getElementById('sortSelect').addEventListener('change', e => {
   sortMode = e.target.value;

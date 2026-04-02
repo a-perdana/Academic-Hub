@@ -1270,8 +1270,11 @@ document.querySelectorAll('.group-btn').forEach(btn => {
     S.filters.group = this.dataset.group; loadExams();
   });
 });
+let _archiveSearchTimer = null;
 document.getElementById('searchInput').addEventListener('input', function() {
-  S.filters.search = this.value; applyFilters();
+  S.filters.search = this.value;
+  clearTimeout(_archiveSearchTimer);
+  _archiveSearchTimer = setTimeout(() => applyFilters(), 300);
 });
 
 /* ── FAB ─────────────────────────────────────────── */
