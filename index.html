@@ -4935,11 +4935,11 @@
           }
           currentUser = user;
 
-          // Ensure Firestore profile exists with role_academichub
+          // Ensure Firestore profile exists with role_academichub + approval check
           let snap;
           try {
             const userRef = doc(db, 'users', user.uid);
-            snap    = await getDoc(userRef);
+            snap = await getDoc(userRef);
             if (!snap.exists()) {
               await setDoc(userRef, {
                 uid:              user.uid,
@@ -4950,32 +4950,39 @@
                 approval_status_academichub: 'pending',
                 createdAt:        serverTimestamp(),
               });
-              // New user — send to waiting room
               window.location.replace('waiting.html');
               return;
-            } else {
-              const data = snap.data();
-              if (data.role_academichub == null) {
-                // Legacy migration from old `role` field
-                const legacy     = data.role;
-                const assignRole = ['academic_admin', 'academic_user'].includes(legacy)
-                  ? legacy : 'academic_user';
-                await setDoc(userRef, { role_academichub: assignRole }, { merge: true });
-              }
-              // Approval check — admin bypasses, existing users without field are treated as approved
-              const isAdmin        = (data.role_academichub === 'academic_admin');
-              const approvalStatus = data.approval_status_academichub;
-              if (!isAdmin) {
-                if (approvalStatus == null) {
-                  // Existing user before feature launch — mark approved silently
-                  await setDoc(userRef, { approval_status_academichub: 'approved' }, { merge: true });
-                } else if (approvalStatus !== 'approved') {
-                  window.location.replace('waiting.html');
-                  return;
-                }
+            }
+
+            const data = snap.data();
+
+            // Legacy role migration
+            if (data.role_academichub == null) {
+              const legacy     = data.role;
+              const assignRole = ['academic_admin', 'academic_user'].includes(legacy)
+                ? legacy : 'academic_user';
+              await setDoc(userRef, { role_academichub: assignRole }, { merge: true });
+            }
+
+            // Approval gate — academic_admin always bypasses
+            const isAdmin        = (data.role_academichub === 'academic_admin');
+            const approvalStatus = data.approval_status_academichub;
+            if (!isAdmin) {
+              if (approvalStatus == null) {
+                // Pre-feature user — mark approved once
+                await setDoc(userRef, { approval_status_academichub: 'approved' }, { merge: true });
+              } else if (approvalStatus !== 'approved') {
+                window.location.replace('waiting.html');
+                return;
               }
             }
-          } catch (_) {}
+          } catch (e) {
+            // Firestore unreachable — deny access rather than fail open
+            console.error('index: profile check failed', e);
+            await signOut(auth);
+            showError('Could not verify your account. Please try again.');
+            return;
+          }
 
           document.getElementById("loadingScreen").style.display = "none";
           document.getElementById("loginScreen").style.display = "none";
