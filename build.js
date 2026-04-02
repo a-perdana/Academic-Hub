@@ -34,6 +34,7 @@ const replacements = {
 // slug "" means root (/), all others become /slug
 const cleanUrls = {
   "index.html":                      "",
+  "login.html":                      "login",
   "waiting.html":                    "waiting",
   "announcements.html":              "announcements",
   "surveys.html":                    "surveys",
@@ -75,15 +76,15 @@ function rewriteLinks(content) {
       new RegExp(`(href=")(\\./)?(${escaped})(")`, "g"),
       `$1${target}$4`
     );
-    // window.location.href = "filename.html" or '...'
+    // window.location.href = "filename.html" or '...' (with optional ?query)
     result = result.replace(
-      new RegExp(`(window\\.location\\.href\\s*=\\s*['"])(\\./)?(${escaped})(['"])`, "g"),
-      `$1${target}$4`
+      new RegExp(`(window\\.location\\.href\\s*=\\s*['"])(\\./)?(${escaped})(\\?[^'"]*)?(['"])`, "g"),
+      `$1${target}$4$5`
     );
-    // window.location.replace("filename.html") or ('...')
+    // window.location.replace("filename.html") or ('...') (with optional ?query)
     result = result.replace(
-      new RegExp(`(window\\.location\\.replace\\s*\\(\\s*['"])(\\./)?(${escaped})(['"])`, "g"),
-      `$1${target}$4`
+      new RegExp(`(window\\.location\\.replace\\s*\\(\\s*['"])(\\./)?(${escaped})(\\?[^'"]*)?(['"])`, "g"),
+      `$1${target}$4$5`
     );
   }
   return result;
@@ -97,6 +98,7 @@ if (!fs.existsSync("dist")) {
 // â”€â”€ HTML files to process â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const htmlFiles = [
   "index.html",
+  "login.html",
   "waiting.html",
   "announcements.html",
   "surveys.html",

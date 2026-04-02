@@ -111,7 +111,7 @@ onAuthStateChanged(auth, async (user) => {
 
   // 1. Not signed in → redirect to login
   if (!user) {
-    window.location.replace('index.html');
+    window.location.replace('login.html');
     return;
   }
 
@@ -152,7 +152,7 @@ onAuthStateChanged(auth, async (user) => {
   } catch (err) {
     console.error('auth-guard: could not fetch user profile', err);
     await signOut(auth);
-    window.location.replace('index.html?error=profile');
+    window.location.replace('login.html?error=profile');
     return;
   }
 
@@ -161,7 +161,7 @@ onAuthStateChanged(auth, async (user) => {
   const emailDomain    = user.email.split('@')[1];
   if (!isPasswordUser && !window.ACADEMIC_ALLOWED_DOMAINS.includes(emailDomain)) {
     await signOut(auth);
-    window.location.replace('index.html?error=domain');
+    window.location.replace('login.html?error=domain');
     return;
   }
 
@@ -183,7 +183,7 @@ onAuthStateChanged(auth, async (user) => {
   const platformRole = profile[PLATFORM_KEY];
   if (!ALLOWED_ROLES.includes(platformRole)) {
     await signOut(auth);
-    window.location.replace('index.html?error=access');
+    window.location.replace('login.html?error=access');
     return;
   }
   // Set profile.role for backward compat with page-level checks
@@ -222,7 +222,7 @@ onAuthStateChanged(auth, async (user) => {
   if (logoutBtn) {
     logoutBtn.addEventListener('click', async () => {
       await signOut(auth);
-      window.location.href = 'index.html';
+      window.location.href = 'login.html';
     });
   }
 

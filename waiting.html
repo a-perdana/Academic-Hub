@@ -330,7 +330,7 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.replace('index.html');
+        window.location.replace('login.html');
         return;
       }
 
@@ -346,7 +346,7 @@
       const doLogout = async () => {
         clearInterval(pollingTimer);
         await signOut(auth);
-        window.location.replace('index.html');
+        window.location.replace('login.html');
       };
       document.getElementById('logoutBtnPending').addEventListener('click', doLogout);
       document.getElementById('logoutBtnRejected').addEventListener('click', doLogout);
