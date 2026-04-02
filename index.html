@@ -3869,16 +3869,20 @@
     <script src="partials/navbar-loader.js"></script>
     <script type="module">
       // auth-guard.js exposes window.db, window.auth, window.currentUser, window.userProfile
-      import { updateProfile }
-        from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
       import {
-        collection, doc, addDoc, getDoc, setDoc,
+        updateProfile, signOut, updatePassword,
+        EmailAuthProvider, reauthenticateWithCredential,
+      } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+      import {
+        collection, doc, addDoc, getDoc, setDoc, deleteDoc,
         query, where, orderBy, onSnapshot, serverTimestamp, Timestamp,
       } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
       await window.__loadAcademicNavbar();
 
       let currentUser = null;
+      let db = null;   // assigned from window.db once authReady fires
+      let auth = null; // assigned from window.auth once authReady fires
 
 
       // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
@@ -4084,10 +4088,10 @@
 
       // Dropdown sign out
       const ddSignOut = document.getElementById('ddSignOut');
-      if (ddSignOut) ddSignOut.addEventListener('click', () => signOut(auth));
+      if (ddSignOut) ddSignOut.addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
 
       // â”€â”€ Feedback modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-      let currentUser = null;
+
 
       document.getElementById('fabFeedbackOpen').addEventListener('click', () => {
         document.getElementById('feedbackOverlay').classList.add('open');
@@ -4139,6 +4143,8 @@
       // ── Auth state (via auth-guard.js) ─────────────────────────────
       document.addEventListener('authReady', ({ detail: { user, profile } }) => {
         currentUser = user;
+        db = window.db;
+        auth = window.auth;
         populateNav(user);
         window.__initNavbarCounters?.({ db: window.db, user });
         if (profile.role_academichub === 'academic_admin') {
