@@ -28,8 +28,9 @@ import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 // ── Platform identity ─────────────────────────────────────────────
-const PLATFORM_KEY  = 'role_academichub';  // per-user Firestore field
-const DEFAULT_ROLE  = 'academic_user';
+const PLATFORM_KEY    = 'role_academichub';        // per-user Firestore field
+const APPROVAL_KEY    = 'approval_status_academichub'; // 'pending' | 'approved'
+const DEFAULT_ROLE    = 'academic_user';
 
 // ── Allowed email domains (centralised — used by all pages) ───────
 window.ACADEMIC_ALLOWED_DOMAINS = [
@@ -121,13 +122,14 @@ onAuthStateChanged(auth, async (user) => {
     const userSnap = await getDoc(userRef);
 
     if (!userSnap.exists()) {
-      // First sign-in: assign default Academic Hub role.
+      // First sign-in: assign default Academic Hub role + pending approval.
       const newProfile = {
         uid:            user.uid,
         email:          user.email,
         displayName:    user.displayName || '',
         photoURL:       user.photoURL    || '',
         [PLATFORM_KEY]: DEFAULT_ROLE,
+        [APPROVAL_KEY]: 'pending',
         createdAt:      serverTimestamp(),
       };
       await setDoc(userRef, newProfile);
@@ -140,6 +142,12 @@ onAuthStateChanged(auth, async (user) => {
         const assignRole = ALLOWED_ROLES.includes(legacy) ? legacy : DEFAULT_ROLE;
         await setDoc(userRef, { [PLATFORM_KEY]: assignRole }, { merge: true });
         profile = { ...profile, [PLATFORM_KEY]: assignRole };
+      }
+      // Legacy migration: if approval field is absent on existing users, treat as approved
+      // (existing users were already vetted before this feature was added)
+      if (profile[APPROVAL_KEY] == null) {
+        await setDoc(userRef, { [APPROVAL_KEY]: 'approved' }, { merge: true });
+        profile = { ...profile, [APPROVAL_KEY]: 'approved' };
       }
     }
   } catch (err) {
@@ -158,7 +166,20 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 4. Role check
+  // 4. Approval check (academic_admin bypasses — they are always approved)
+  const approvalStatus = profile[APPROVAL_KEY];
+  const isAdminRole    = profile[PLATFORM_KEY] === 'academic_admin';
+  if (!isAdminRole && approvalStatus !== 'approved') {
+    // Not yet approved — send to waiting room (do NOT sign out)
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    if (currentPage !== 'waiting.html') {
+      window.location.replace('waiting.html');
+    }
+    document.body.style.visibility = 'visible';
+    return;
+  }
+
+  // 5. Role check
   const platformRole = profile[PLATFORM_KEY];
   if (!ALLOWED_ROLES.includes(platformRole)) {
     await signOut(auth);
@@ -168,14 +189,14 @@ onAuthStateChanged(auth, async (user) => {
   // Set profile.role for backward compat with page-level checks
   profile.role = platformRole;
 
-  // 5. Name prompt if missing
+  // 6. Name prompt if missing
   if (!profile.displayName) {
     const name = await promptForName();
     await setDoc(userRef, { displayName: name }, { merge: true });
     profile.displayName = name;
   }
 
-  // 6. All checks passed — expose globals
+  // 7. All checks passed — expose globals
   window.currentUser = user;
   window.userProfile = profile;
 
@@ -205,7 +226,7 @@ onAuthStateChanged(auth, async (user) => {
     });
   }
 
-  // 7. Show page and notify
+  // 8. Show page and notify
   document.body.style.visibility = 'visible';
   document.dispatchEvent(new CustomEvent('authReady', {
     detail: { user, profile },

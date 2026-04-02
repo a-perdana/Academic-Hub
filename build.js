@@ -34,6 +34,7 @@ const replacements = {
 // slug "" means root (/), all others become /slug
 const cleanUrls = {
   "index.html":                      "",
+  "waiting.html":                    "waiting",
   "announcements.html":              "announcements",
   "surveys.html":                    "surveys",
   "library.html":                    "library",
@@ -91,6 +92,7 @@ if (!fs.existsSync("dist")) {
 // â”€â”€ HTML files to process â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const htmlFiles = [
   "index.html",
+  "waiting.html",
   "announcements.html",
   "surveys.html",
   "library.html",
