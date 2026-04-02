@@ -7,7 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --ink: #1c1c2e;
@@ -21,6 +21,7 @@
       --accent-2: #ece8ff;
       --shadow-sm: 0 1px 4px rgba(28, 28, 46, 0.07);
       --shadow: 0 3px 14px rgba(28, 28, 46, 0.10);
+      --shadow-lg: 0 10px 40px rgba(28,28,46,.16);
       --radius: 10px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,9 +32,9 @@
       min-height: 100vh;
     }
     .page-wrap {
-      max-width: 980px;
+      max-width: 1200px;
       margin: 0 auto;
-      padding: 26px 16px 48px;
+      padding: 90px 20px 80px;
     }
     .hero {
       background: linear-gradient(145deg, #ffffff 0%, #f6f3ff 100%);
@@ -75,8 +76,8 @@
     .select {
       width: 100%;
       border: 1px solid var(--border);
-      background: #fff;
-      border-radius: 9px;
+      background: var(--paper);
+      border-radius: 8px;
       padding: 9px 11px;
       font-size: 0.88rem;
       color: var(--ink);
@@ -95,7 +96,7 @@
       gap: 12px;
     }
     .survey-card {
-      background: #fff;
+      background: var(--white);
       border: 1px solid var(--border);
       border-radius: 12px;
       box-shadow: var(--shadow-sm);
@@ -223,7 +224,7 @@
       min-height: 66px;
       resize: vertical;
       border: 1px solid var(--border);
-      background: #fff;
+      background: var(--paper);
       border-radius: 8px;
       padding: 8px 10px;
       font-size: 0.84rem;
@@ -268,7 +269,7 @@
     .response-note.ok { color: #166534; }
     .response-note.err { color: #b91c1c; }
     .empty {
-      background: #fff;
+      background: var(--white);
       border: 1px dashed var(--border);
       border-radius: 11px;
       padding: 34px 16px;
@@ -325,7 +326,7 @@
 
     /* ── Shared navbar styles ── */
     .top-nav {
-      position: sticky; top: 0; left: 0; right: 0; z-index: 200;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 28px; height: 62px;
       background: rgba(5, 5, 16, 0.95);

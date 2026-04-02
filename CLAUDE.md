@@ -210,7 +210,7 @@ CLAUDE_API_KEY           ← for AIPrompts.html
 
 ## Important Conventions
 
-- **No React, no npm bundler.** All JS runs directly in the browser via CDN ESM imports.
+- **No npm bundler.** All JS runs directly in the browser via CDN imports (React via CDN is allowed for dashboard pages).
 - **Always use modular SDK v10.** Never use the compat namespace (`firebase.firestore()` etc.).
 - **`createdAt` not `timestamp`** for all Firestore timestamp fields.
 - **Never commit `firebase-config.js`.** It is in `.gitignore`.

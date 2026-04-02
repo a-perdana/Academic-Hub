@@ -34,7 +34,7 @@ body {
 
 /* ─── TOP NAV ─────────────────────────────────── */
 .top-nav {
-  position: sticky; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 28px; height: 62px;
   background: rgba(5, 5, 16, 0.95);
@@ -200,13 +200,13 @@ body {
 .login-error { color: #fc8181; font-size: 12px; margin-top: 8px; display: none; }
 
 /* ─── MAIN CONTENT ────────────────────────────── */
-#mainContent { display: none; }
+#mainContent { display: none; padding-top: 62px; }
 
 /* ─── FORUM LAYOUT ────────────────────────────── */
 .forum-wrap {
-  max-width: 1120px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 28px 20px 100px;
+  padding: 28px 20px 80px;
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 24px;
