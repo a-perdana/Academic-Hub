@@ -2436,10 +2436,11 @@ document.getElementById('semesterSaveBtn').addEventListener('click', async () =>
 
 async function setActiveSemester(semId) {
   try {
-    // Deactivate all
-    for (const sem of semesters) {
-      if (sem.active) await updateDoc(doc(db, 'kpi_settings', sem.id), { active: false });
-    }
+    // Deactivate all currently active semesters in parallel, then activate the selected one
+    const deactivations = semesters
+      .filter(sem => sem.active)
+      .map(sem => updateDoc(doc(db, 'kpi_settings', sem.id), { active: false }));
+    await Promise.all(deactivations);
     await updateDoc(doc(db, 'kpi_settings', semId), { active: true });
     await loadSemesters();
     renderSettings();
