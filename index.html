@@ -4936,9 +4936,10 @@
           currentUser = user;
 
           // Ensure Firestore profile exists with role_academichub
+          let snap;
           try {
             const userRef = doc(db, 'users', user.uid);
-            const snap    = await getDoc(userRef);
+            snap    = await getDoc(userRef);
             if (!snap.exists()) {
               await setDoc(userRef, {
                 uid:              user.uid,
@@ -4946,14 +4947,33 @@
                 displayName:      user.displayName || '',
                 photoURL:         user.photoURL    || '',
                 role_academichub: 'academic_user',
+                approval_status_academichub: 'pending',
                 createdAt:        serverTimestamp(),
               });
-            } else if (snap.data().role_academichub == null) {
-              // Legacy migration from old `role` field
-              const legacy     = snap.data().role;
-              const assignRole = ['academic_admin', 'academic_user'].includes(legacy)
-                ? legacy : 'academic_user';
-              await setDoc(userRef, { role_academichub: assignRole }, { merge: true });
+              // New user — send to waiting room
+              window.location.replace('waiting.html');
+              return;
+            } else {
+              const data = snap.data();
+              if (data.role_academichub == null) {
+                // Legacy migration from old `role` field
+                const legacy     = data.role;
+                const assignRole = ['academic_admin', 'academic_user'].includes(legacy)
+                  ? legacy : 'academic_user';
+                await setDoc(userRef, { role_academichub: assignRole }, { merge: true });
+              }
+              // Approval check — admin bypasses, existing users without field are treated as approved
+              const isAdmin        = (data.role_academichub === 'academic_admin');
+              const approvalStatus = data.approval_status_academichub;
+              if (!isAdmin) {
+                if (approvalStatus == null) {
+                  // Existing user before feature launch — mark approved silently
+                  await setDoc(userRef, { approval_status_academichub: 'approved' }, { merge: true });
+                } else if (approvalStatus !== 'approved') {
+                  window.location.replace('waiting.html');
+                  return;
+                }
+              }
             }
           } catch (_) {}
 
