@@ -75,14 +75,14 @@ function rewriteLinks(content) {
       new RegExp(`(href=")(\\./)?(${escaped})(")`, "g"),
       `$1${target}$4`
     );
-    // window.location.href = "filename.html"
+    // window.location.href = "filename.html" or '...'
     result = result.replace(
-      new RegExp(`(window\\.location\\.href\\s*=\\s*")(\\./)?(${escaped})(")`, "g"),
+      new RegExp(`(window\\.location\\.href\\s*=\\s*['"])(\\./)?(${escaped})(['"])`, "g"),
       `$1${target}$4`
     );
-    // window.location.replace("filename.html")
+    // window.location.replace("filename.html") or ('...')
     result = result.replace(
-      new RegExp(`(window\\.location\\.replace\\s*\\(\\s*")(\\./)?(${escaped})(")`, "g"),
+      new RegExp(`(window\\.location\\.replace\\s*\\(\\s*['"])(\\./)?(${escaped})(['"])`, "g"),
       `$1${target}$4`
     );
   }
