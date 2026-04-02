@@ -4969,8 +4969,10 @@
             const approvalStatus = data.approval_status_academichub;
             if (!isAdmin) {
               if (approvalStatus == null) {
-                // Pre-feature user — mark approved once
-                await setDoc(userRef, { approval_status_academichub: 'approved' }, { merge: true });
+                // No approval field yet — treat as pending (requires admin approval)
+                await setDoc(userRef, { approval_status_academichub: 'pending' }, { merge: true });
+                window.location.replace('waiting.html');
+                return;
               } else if (approvalStatus !== 'approved') {
                 window.location.replace('waiting.html');
                 return;

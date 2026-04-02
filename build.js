@@ -75,9 +75,14 @@ function rewriteLinks(content) {
       new RegExp(`(href=")(\\./)?(${escaped})(")`, "g"),
       `$1${target}$4`
     );
-    // window.location.href = "filename.html"  (auth-guard.js)
+    // window.location.href = "filename.html"
     result = result.replace(
       new RegExp(`(window\\.location\\.href\\s*=\\s*")(\\./)?(${escaped})(")`, "g"),
+      `$1${target}$4`
+    );
+    // window.location.replace("filename.html")
+    result = result.replace(
+      new RegExp(`(window\\.location\\.replace\\s*\\(\\s*")(\\./)?(${escaped})(")`, "g"),
       `$1${target}$4`
     );
   }

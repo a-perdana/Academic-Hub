@@ -143,11 +143,10 @@ onAuthStateChanged(auth, async (user) => {
         await setDoc(userRef, { [PLATFORM_KEY]: assignRole }, { merge: true });
         profile = { ...profile, [PLATFORM_KEY]: assignRole };
       }
-      // Legacy migration: if approval field is absent on existing users, treat as approved
-      // (existing users were already vetted before this feature was added)
+      // If approval field is absent, treat as pending — requires admin approval
       if (profile[APPROVAL_KEY] == null) {
-        await setDoc(userRef, { [APPROVAL_KEY]: 'approved' }, { merge: true });
-        profile = { ...profile, [APPROVAL_KEY]: 'approved' };
+        await setDoc(userRef, { [APPROVAL_KEY]: 'pending' }, { merge: true });
+        profile = { ...profile, [APPROVAL_KEY]: 'pending' };
       }
     }
   } catch (err) {
@@ -171,8 +170,9 @@ onAuthStateChanged(auth, async (user) => {
   const isAdminRole    = profile[PLATFORM_KEY] === 'academic_admin';
   if (!isAdminRole && approvalStatus !== 'approved') {
     // Not yet approved — send to waiting room (do NOT sign out)
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    if (currentPage !== 'waiting.html') {
+    const pathname = window.location.pathname;
+    const isWaiting = pathname === '/waiting' || pathname.endsWith('/waiting.html');
+    if (!isWaiting) {
       window.location.replace('waiting.html');
     }
     document.body.style.visibility = 'visible';
