@@ -72,6 +72,7 @@
         ChevronRight: "chevron-right",
         PlayCircle: "play-circle",
         Download: "download",
+        Globe: "globe",
       };
 
       // Icon wrapper component for feather icons
@@ -113,6 +114,7 @@
       const Menu = (props) => <FeatherIcon name="Menu" {...props} />;
       const Sun = (props) => <FeatherIcon name="Sun" {...props} />;
       const Moon = (props) => <FeatherIcon name="Moon" {...props} />;
+      const Globe = (props) => <FeatherIcon name="Globe" {...props} />;
       const Search = (props) => <FeatherIcon name="Search" {...props} />;
       const Home = (props) => <FeatherIcon name="Home" {...props} />;
       const Clock = (props) => <FeatherIcon name="Clock" {...props} />;
@@ -1414,6 +1416,20 @@
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
+                  <a
+                    href="/academic-standards-public"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Public version"
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                      dark
+                        ? "bg-emerald-900/40 text-emerald-400 hover:bg-emerald-900/70"
+                        : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                    }`}
+                  >
+                    <Globe size={14} />
+                    <span>Public</span>
+                  </a>
                   <div className="relative">
                     {(searchPending || (search && !allLoaded)) ? (
                       <div className={`absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 border-2 border-blue-300 border-t-blue-500 rounded-full`}
