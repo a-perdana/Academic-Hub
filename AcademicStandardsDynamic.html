@@ -1,614 +1,924 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Eduversal Academic Standards</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy: #0f1f3d;
-    --navy-mid: #1a3260;
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --cream: #f8f5ef;
-    --cream-dark: #ede8df;
-    --text: #1a1a2e;
-    --text-muted: #6b7280;
-    --white: #ffffff;
-    --sidebar-w: 300px;
-    --header-h: 64px;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* ── HEADER ── */
-  header {
-    height: var(--header-h);
-    background: var(--navy);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    gap: 16px;
-    flex-shrink: 0;
-    border-bottom: 2px solid var(--gold);
-    z-index: 100;
-  }
-
-  .header-logo {
-    width: 36px;
-    height: 36px;
-    background: var(--gold);
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    color: var(--navy);
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .header-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--white);
-    font-weight: 600;
-    letter-spacing: 0.02em;
-  }
-
-  .header-subtitle {
-    font-size: 12px;
-    color: var(--gold-light);
-    font-weight: 300;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  .header-info {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-  }
-
-  .version-badge {
-    background: rgba(201,168,76,0.15);
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold-light);
-    font-size: 11px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-
-  /* ── LAYOUT ── */
-  .layout {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* ── SIDEBAR ── */
-  aside {
-    width: var(--sidebar-w);
-    background: var(--navy);
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    overflow: hidden;
-    border-right: 1px solid rgba(201,168,76,0.2);
-  }
-
-  .search-wrap {
-    padding: 16px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    flex-shrink: 0;
-  }
-
-  .search-wrap input {
-    width: 100%;
-    background: rgba(255,255,255,0.07);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 8px;
-    padding: 8px 12px 8px 36px;
-    color: var(--white);
-    font-size: 13px;
-    font-family: 'DM Sans', sans-serif;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-
-  .search-wrap input::placeholder { color: rgba(255,255,255,0.35); }
-  .search-wrap input:focus { border-color: var(--gold); }
-
-  .search-icon {
-    position: absolute;
-    left: 28px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255,255,255,0.35);
-    font-size: 14px;
-    pointer-events: none;
-  }
-
-  .search-wrap { position: relative; }
-
-  .nav-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 0;
-  }
-
-  .nav-list::-webkit-scrollbar { width: 4px; }
-  .nav-list::-webkit-scrollbar-track { background: transparent; }
-  .nav-list::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.3); border-radius: 2px; }
-
-  .nav-group-label {
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: rgba(201,168,76,0.6);
-    padding: 12px 16px 4px;
-    font-weight: 500;
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 9px 16px;
-    cursor: pointer;
-    transition: background 0.15s;
-    border-left: 3px solid transparent;
-  }
-
-  .nav-item:hover {
-    background: rgba(255,255,255,0.05);
-  }
-
-  .nav-item.active {
-    background: rgba(201,168,76,0.12);
-    border-left-color: var(--gold);
-  }
-
-  .nav-num {
-    font-size: 11px;
-    color: var(--gold);
-    font-weight: 500;
-    min-width: 22px;
-    padding-top: 1px;
-    opacity: 0.8;
-  }
-
-  .nav-item.active .nav-num { opacity: 1; }
-
-  .nav-label {
-    font-size: 12.5px;
-    color: rgba(255,255,255,0.65);
-    line-height: 1.4;
-    transition: color 0.15s;
-  }
-
-  .nav-item:hover .nav-label,
-  .nav-item.active .nav-label {
-    color: var(--white);
-  }
-
-  .nav-item.hidden { display: none; }
-
-  /* ── MAIN ── */
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background: var(--cream);
-  }
-
-  .doc-toolbar {
-    height: 48px;
-    background: var(--white);
-    border-bottom: 1px solid var(--cream-dark);
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    gap: 12px;
-    flex-shrink: 0;
-  }
-
-  .doc-title-bar {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .doc-title-bar span {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  .btn-open {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    background: var(--navy);
-    color: var(--white);
-    border: none;
-    border-radius: 6px;
-    font-size: 12px;
-    font-family: 'DM Sans', sans-serif;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-
-  .btn-open:hover { background: var(--navy-mid); }
-
-  .iframe-wrap {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .iframe-wrap iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    display: block;
-  }
-
-  /* Loading state */
-  .loading-overlay {
-    position: absolute;
-    inset: 0;
-    background: var(--cream);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    z-index: 10;
-    transition: opacity 0.3s;
-  }
-
-  .loading-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .spinner {
-    width: 36px;
-    height: 36px;
-    border: 3px solid var(--cream-dark);
-    border-top-color: var(--navy);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .loading-text {
-    font-size: 13px;
-    color: var(--text-muted);
-  }
-
-  /* Welcome screen */
-  .welcome {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 40px;
-    text-align: center;
-  }
-
-  .welcome-icon {
-    width: 64px;
-    height: 64px;
-    background: var(--navy);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 8px;
-  }
-
-  .welcome-icon svg { width: 32px; height: 32px; fill: var(--gold); }
-
-  .welcome h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    color: var(--navy);
-  }
-
-  .welcome p {
-    font-size: 14px;
-    color: var(--text-muted);
-    max-width: 360px;
-    line-height: 1.6;
-  }
-
-  .stats-row {
-    display: flex;
-    gap: 24px;
-    margin-top: 8px;
-  }
-
-  .stat {
-    text-align: center;
-  }
-
-  .stat-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--navy);
-    font-weight: 700;
-  }
-
-  .stat-label {
-    font-size: 11px;
-    color: var(--text-muted);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-
-  /* Sidebar footer */
-  .sidebar-footer {
-    padding: 12px 16px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    flex-shrink: 0;
-  }
-
-  .sidebar-footer p {
-    font-size: 11px;
-    color: rgba(255,255,255,0.3);
-    line-height: 1.5;
-  }
-</style>
-</head>
-<body>
-
-<header>
-  <div class="header-logo">E</div>
-  <div>
-    <div class="header-title">Eduversal Academic Standards</div>
-    <div class="header-subtitle">Partner School Network · Indonesia</div>
-  </div>
-  <div class="header-info">
-    <div class="version-badge">23 Sections</div>
-  </div>
-</header>
-
-<div class="layout">
-
-  <aside>
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Search sections..." oninput="filterSections(this.value)">
-    </div>
-
-    <div class="nav-list" id="navList">
-      <!-- Governance -->
-      <div class="nav-group-label">Governance & Compliance</div>
-      <div class="nav-item" onclick="loadSection(this, '1aQWYzmyjAAr46KcMogGaAjPlQr_hFiFWqNyPPxSgBXc', 'Section 1 - Front Matter and Governance Charter')">
-        <span class="nav-num">01</span><span class="nav-label">Front Matter and Governance Charter</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1Cb5JvnlAs8326mMFrQc4eF9fP1smI1d5bySb-QypGCE', 'Section 2 - Legal and Regulatory Compliance')">
-        <span class="nav-num">02</span><span class="nav-label">Legal and Regulatory Compliance</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1lcVBxsUSqiUZe2SP5STpmA8Ase3mQ9Sb58mRLdvWHtk', 'Section 3 - Cambridge Centre Compliance')">
-        <span class="nav-num">03</span><span class="nav-label">Cambridge Centre Compliance</span>
-      </div>
-
-      <!-- Academic -->
-      <div class="nav-group-label">Academic Framework</div>
-      <div class="nav-item" onclick="loadSection(this, '1glDSDMx5JjSvtxbnFBtwXLQSiheR_2z50DRlXINeips', 'Section 4 - Strategic Planning and School Improvement')">
-        <span class="nav-num">04</span><span class="nav-label">Strategic Planning and School Improvement</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1jnDROQfV1WIjlqW7UhyAIvZ2Yg9oonvg0QZcamCf2oA', 'Section 5 - Curriculum Architecture')">
-        <span class="nav-num">05</span><span class="nav-label">Curriculum Architecture</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1BvvA9yxybevPYm07oWmVuLyU-Y7r69Yf8VtWjMPehrc', 'Section 6 - Assessment and Reporting')">
-        <span class="nav-num">06</span><span class="nav-label">Assessment and Reporting</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1kTV9nwjm5feYOikH0BTswIoBu0yZgpiZi1bwnFxpkEU', 'Section 7 - Teaching Quality and Practice')">
-        <span class="nav-num">07</span><span class="nav-label">Teaching Quality and Practice</span>
-      </div>
-
-      <!-- Student Support -->
-      <div class="nav-group-label">Student Support</div>
-      <div class="nav-item" onclick="loadSection(this, '1fOnzb2DKYPQPjD37SzkTuReNWE224Ff5smJGKmDwnQM', 'Section 8 - Inclusion, EAL, and Learning Support')">
-        <span class="nav-num">08</span><span class="nav-label">Inclusion, EAL, and Learning Support</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '19Bg_4EiJMGLPJcpR8EouWwzMRBC9tENue6r_66z2e5Q', 'Section 9 - Safeguarding, Child Protection, and Wellbeing')">
-        <span class="nav-num">09</span><span class="nav-label">Safeguarding, Child Protection & Wellbeing</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '11gzVImHonsdmS4jCFVsaBCek2vs2qnBHAxLfqpJ9Eb0', 'Section 22 - Student Conduct, Discipline, and Restorative Practices')">
-        <span class="nav-num">22</span><span class="nav-label">Student Conduct, Discipline & Restorative Practices</span>
-      </div>
-
-      <!-- Operations -->
-      <div class="nav-group-label">Examinations & Operations</div>
-      <div class="nav-item" onclick="loadSection(this, '1c-UbwBhLOqToXqebCjAKORW9DcXvI5v8xVeq-J5n1j4', 'Section 10 - Cambridge Examinations Management')">
-        <span class="nav-num">10</span><span class="nav-label">Cambridge Examinations Management</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1ibSOeRkw00rqeYDwBE2JO9Y2dA6cA5XTdWeZSMbscZY', 'Section 13 - Operations, Finance, and Resources')">
-        <span class="nav-num">13</span><span class="nav-label">Operations, Finance, and Resources</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1pKUfHe9aE4g8VfNuMqMRK3dy9KMarcq9CjF6u-QrL0s', 'Section 14 - Data Protection, Records, and Information Systems')">
-        <span class="nav-num">14</span><span class="nav-label">Data Protection, Records & Information Systems</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1HkiDrnqy7rY3bKYCjj8P-_Y2PqNl7VqiUHr5BG5bC-I', 'Section 15 - Risk Management and Business Continuity')">
-        <span class="nav-num">15</span><span class="nav-label">Risk Management & Business Continuity</span>
-      </div>
-
-      <!-- External -->
-      <div class="nav-group-label">External Relations</div>
-      <div class="nav-item" onclick="loadSection(this, '13JSTngw3PUhpnVYd7miYuuCGERJqj0R0VlfY8-ftZKc', 'Section 11 - Admissions, Enrollment, and Marketing Ethics')">
-        <span class="nav-num">11</span><span class="nav-label">Admissions, Enrollment & Marketing Ethics</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1AHmTk2PTsuQp8YQK3yZdu8KfFChGZyhMlE8vKh7ZYoA', 'Section 16 - Parent, Student, and Community Engagement')">
-        <span class="nav-num">16</span><span class="nav-label">Parent, Student & Community Engagement</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1RAm-c4UO2FRW3XghF111Za-Oy1Kuj62VkWL8-jszcKk', 'Section 17 - Quality Assurance and Internal Review')">
-        <span class="nav-num">17</span><span class="nav-label">Quality Assurance and Internal Review</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1WQRPMLkSGSfWMDD9yI1AADKvwlz3-gWJXh0M3DGDBxQ', 'Section 18 - Accreditation Toolkit (CIS/WASC)')">
-        <span class="nav-num">18</span><span class="nav-label">Accreditation Toolkit (CIS/WASC)</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1Kgilip1jXRphibINwSuQeSpc31pj_yqriCefnrVNk8Y', 'Section 23 - External Partnerships and Student Pathways')">
-        <span class="nav-num">23</span><span class="nav-label">External Partnerships & Student Pathways</span>
-      </div>
-
-      <!-- Resources -->
-      <div class="nav-group-label">Resources & Tools</div>
-      <div class="nav-item" onclick="loadSection(this, '1To9QgFfIh_nJXi3uv_v6Hsoqr2oNIGUzuGjHtDNTRc0', 'Section 12 - Staff Lifecycle')">
-        <span class="nav-num">12</span><span class="nav-label">Staff Lifecycle: Recruitment, Induction, Appraisal</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1ToKNoxKH9WafL6Nv38NCrCEscjKWOBbWNsECpWFKrBM', 'Section 19 - Templates and Operational Tools')">
-        <span class="nav-num">19</span><span class="nav-label">Templates and Operational Tools</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1g1l8QWFb75B0zgDWLq-wY3Mga7ZKzSwiMhbtOAvX46M', 'Section 20 - References and Compliance Library')">
-        <span class="nav-num">20</span><span class="nav-label">References and Compliance Library</span>
-      </div>
-      <div class="nav-item" onclick="loadSection(this, '1hDIdZfS7LYM4kNAlqhat_fSx247OMzPgWaaTIghmynY', 'Section 21 - Digital Learning and Technology Infrastructure')">
-        <span class="nav-num">21</span><span class="nav-label">Digital Learning & Technology Infrastructure</span>
-      </div>
-    </div>
-
-    <div class="sidebar-footer">
-      <p>Eduversal Indonesia · Cambridge Partner Network<br>Documents update automatically from source.</p>
-    </div>
-  </aside>
-
-  <main id="mainArea">
-    <!-- Welcome screen -->
-    <div class="welcome" id="welcomeScreen">
-      <div class="welcome-icon">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
-        </svg>
-      </div>
-      <h2>Eduversal Academic Standards</h2>
-      <p>Select any section from the left panel to view the full policy document. All documents reflect the latest version from Google Drive.</p>
-      <div class="stats-row">
-        <div class="stat">
-          <div class="stat-num">23</div>
-          <div class="stat-label">Sections</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">15+</div>
-          <div class="stat-label">Partner Schools</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num">2,600+</div>
-          <div class="stat-label">Students</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Doc viewer (hidden until section selected) -->
-    <div id="docViewer" style="display:none; flex:1; flex-direction:column; overflow:hidden;">
-      <div class="doc-toolbar">
-        <div class="doc-title-bar" id="docTitleBar">Select a section</div>
-        <a class="btn-open" id="openInDriveBtn" href="#" target="_blank">
-          ↗ Open in Drive
-        </a>
-      </div>
-      <div class="iframe-wrap">
-        <div class="loading-overlay" id="loadingOverlay">
-          <div class="spinner"></div>
-          <div class="loading-text">Loading document...</div>
-        </div>
-        <iframe id="docFrame" src=""></iframe>
-      </div>
-    </div>
-  </main>
-
-</div>
-
-<script>
-  let activeItem = null;
-
-  function loadSection(el, docId, title) {
-    // Update active state
-    if (activeItem) activeItem.classList.remove('active');
-    el.classList.add('active');
-    activeItem = el;
-
-    // Show doc viewer
-    document.getElementById('welcomeScreen').style.display = 'none';
-    const viewer = document.getElementById('docViewer');
-    viewer.style.display = 'flex';
-
-    // Update toolbar
-    document.getElementById('docTitleBar').innerHTML = `<span>${title}</span>`;
-    document.getElementById('openInDriveBtn').href =
-      `https://docs.google.com/document/d/${docId}/edit`;
-
-    // Show loading
-    document.getElementById('loadingOverlay').classList.remove('hidden');
-
-    // Load iframe
-    const frame = document.getElementById('docFrame');
-    frame.src = `https://docs.google.com/document/d/${docId}/preview`;
-
-    frame.onload = () => {
-      setTimeout(() => {
-        document.getElementById('loadingOverlay').classList.add('hidden');
-      }, 300);
-    };
-    // Force-hide after 8s if onload doesn't fire
-    setTimeout(() => {
-      document.getElementById('loadingOverlay').classList.add('hidden');
-    }, 8000);
-  }
-
-  function filterSections(query) {
-    const q = query.toLowerCase().trim();
-    const items = document.querySelectorAll('.nav-item');
-    const groups = document.querySelectorAll('.nav-group-label');
-
-    items.forEach(item => {
-      const text = item.querySelector('.nav-label').textContent.toLowerCase();
-      const num = item.querySelector('.nav-num').textContent;
-      item.classList.toggle('hidden', q && !text.includes(q) && !num.includes(q));
-    });
-
-    // Hide group labels if all children hidden
-    groups.forEach(group => {
-      let next = group.nextElementSibling;
-      let allHidden = true;
-      while (next && !next.classList.contains('nav-group-label')) {
-        if (!next.classList.contains('hidden')) allHidden = false;
-        next = next.nextElementSibling;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eduversal Academic Standards</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #0f1f3d;
+        --navy-mid: #1a3260;
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --cream: #f8f5ef;
+        --cream-dark: #ede8df;
+        --text: #1a1a2e;
+        --text-muted: #6b7280;
+        --white: #ffffff;
+        --sidebar-w: 300px;
+        --header-h: 64px;
       }
-      group.style.display = allHidden && q ? 'none' : '';
-    });
-  }
-</script>
 
-</body>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* ── HEADER ── */
+      header {
+        height: var(--header-h);
+        background: var(--navy);
+        display: flex;
+        align-items: center;
+        padding: 0 24px;
+        gap: 16px;
+        flex-shrink: 0;
+        border-bottom: 2px solid var(--gold);
+        z-index: 100;
+      }
+
+      .header-logo {
+        width: 36px;
+        height: 36px;
+        background: var(--gold);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Playfair Display", serif;
+        font-weight: 700;
+        color: var(--navy);
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .header-title {
+        font-family: "Playfair Display", serif;
+        font-size: 18px;
+        color: var(--white);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+      }
+
+      .header-subtitle {
+        font-size: 12px;
+        color: var(--gold-light);
+        font-weight: 300;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .header-info {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .version-badge {
+        background: rgba(201, 168, 76, 0.15);
+        border: 1px solid rgba(201, 168, 76, 0.4);
+        color: var(--gold-light);
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      /* ── LAYOUT ── */
+      .layout {
+        display: flex;
+        flex: 1;
+        overflow: hidden;
+      }
+
+      /* ── SIDEBAR ── */
+      aside {
+        width: var(--sidebar-w);
+        background: var(--navy);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        overflow: hidden;
+        border-right: 1px solid rgba(201, 168, 76, 0.2);
+      }
+
+      .search-wrap {
+        padding: 16px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+
+      .search-wrap input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 8px;
+        padding: 8px 12px 8px 36px;
+        color: var(--white);
+        font-size: 13px;
+        font-family: "DM Sans", sans-serif;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      .search-wrap input::placeholder {
+        color: rgba(255, 255, 255, 0.35);
+      }
+      .search-wrap input:focus {
+        border-color: var(--gold);
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 28px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(255, 255, 255, 0.35);
+        font-size: 14px;
+        pointer-events: none;
+      }
+
+      .search-wrap {
+        position: relative;
+      }
+
+      .nav-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 0;
+      }
+
+      .nav-list::-webkit-scrollbar {
+        width: 4px;
+      }
+      .nav-list::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .nav-list::-webkit-scrollbar-thumb {
+        background: rgba(201, 168, 76, 0.3);
+        border-radius: 2px;
+      }
+
+      .nav-group-label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(201, 168, 76, 0.6);
+        padding: 12px 16px 4px;
+        font-weight: 500;
+      }
+
+      .nav-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 9px 16px;
+        cursor: pointer;
+        transition: background 0.15s;
+        border-left: 3px solid transparent;
+      }
+
+      .nav-item:hover {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .nav-item.active {
+        background: rgba(201, 168, 76, 0.12);
+        border-left-color: var(--gold);
+      }
+
+      .nav-num {
+        font-size: 11px;
+        color: var(--gold);
+        font-weight: 500;
+        min-width: 22px;
+        padding-top: 1px;
+        opacity: 0.8;
+      }
+
+      .nav-item.active .nav-num {
+        opacity: 1;
+      }
+
+      .nav-label {
+        font-size: 12.5px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.4;
+        transition: color 0.15s;
+      }
+
+      .nav-item:hover .nav-label,
+      .nav-item.active .nav-label {
+        color: var(--white);
+      }
+
+      .nav-item.hidden {
+        display: none;
+      }
+
+      /* ── MAIN ── */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        background: var(--cream);
+      }
+
+      .doc-toolbar {
+        height: 48px;
+        background: var(--white);
+        border-bottom: 1px solid var(--cream-dark);
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        gap: 12px;
+        flex-shrink: 0;
+      }
+
+      .doc-title-bar {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-muted);
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .doc-title-bar span {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .btn-open {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        background: var(--navy);
+        color: var(--white);
+        border: none;
+        border-radius: 6px;
+        font-size: 12px;
+        font-family: "DM Sans", sans-serif;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background 0.2s;
+        flex-shrink: 0;
+      }
+
+      .btn-open:hover {
+        background: var(--navy-mid);
+      }
+
+      .iframe-wrap {
+        flex: 1;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .iframe-wrap iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        display: block;
+      }
+
+      /* Loading state */
+      .loading-overlay {
+        position: absolute;
+        inset: 0;
+        background: var(--cream);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        z-index: 10;
+        transition: opacity 0.3s;
+      }
+
+      .loading-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .spinner {
+        width: 36px;
+        height: 36px;
+        border: 3px solid var(--cream-dark);
+        border-top-color: var(--navy);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .loading-text {
+        font-size: 13px;
+        color: var(--text-muted);
+      }
+
+      /* Welcome screen */
+      .welcome {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .welcome-icon {
+        width: 64px;
+        height: 64px;
+        background: var(--navy);
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+      }
+
+      .welcome-icon svg {
+        width: 32px;
+        height: 32px;
+        fill: var(--gold);
+      }
+
+      .welcome h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 22px;
+        color: var(--navy);
+      }
+
+      .welcome p {
+        font-size: 14px;
+        color: var(--text-muted);
+        max-width: 360px;
+        line-height: 1.6;
+      }
+
+      .stats-row {
+        display: flex;
+        gap: 24px;
+        margin-top: 8px;
+      }
+
+      .stat {
+        text-align: center;
+      }
+
+      .stat-num {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        color: var(--navy);
+        font-weight: 700;
+      }
+
+      .stat-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* Sidebar footer */
+      .sidebar-footer {
+        padding: 12px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        flex-shrink: 0;
+      }
+
+      .sidebar-footer p {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.3);
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="header-logo">E</div>
+      <div>
+        <div class="header-title">Eduversal Academic Standards</div>
+        <div class="header-subtitle">Partner School Network · Indonesia</div>
+      </div>
+      <div class="header-info">
+        <div class="version-badge">23 Sections</div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside>
+        <div class="search-wrap">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search sections..."
+            oninput="filterSections(this.value)"
+          />
+        </div>
+
+        <div class="nav-list" id="navList">
+          <!-- Governance -->
+          <div class="nav-group-label">Governance & Compliance</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1aQWYzmyjAAr46KcMogGaAjPlQr_hFiFWqNyPPxSgBXc',
+                'Section 1 - Front Matter and Governance Charter',
+              )
+            "
+          >
+            <span class="nav-num">01</span
+            ><span class="nav-label">Front Matter and Governance Charter</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1Cb5JvnlAs8326mMFrQc4eF9fP1smI1d5bySb-QypGCE',
+                'Section 2 - Legal and Regulatory Compliance',
+              )
+            "
+          >
+            <span class="nav-num">02</span
+            ><span class="nav-label">Legal and Regulatory Compliance</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1lcVBxsUSqiUZe2SP5STpmA8Ase3mQ9Sb58mRLdvWHtk',
+                'Section 3 - Cambridge Centre Compliance',
+              )
+            "
+          >
+            <span class="nav-num">03</span
+            ><span class="nav-label">Cambridge Centre Compliance</span>
+          </div>
+
+          <!-- Academic -->
+          <div class="nav-group-label">Academic Framework</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1glDSDMx5JjSvtxbnFBtwXLQSiheR_2z50DRlXINeips',
+                'Section 4 - Strategic Planning and School Improvement',
+              )
+            "
+          >
+            <span class="nav-num">04</span
+            ><span class="nav-label"
+              >Strategic Planning and School Improvement</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1jnDROQfV1WIjlqW7UhyAIvZ2Yg9oonvg0QZcamCf2oA',
+                'Section 5 - Curriculum Architecture',
+              )
+            "
+          >
+            <span class="nav-num">05</span
+            ><span class="nav-label">Curriculum Architecture</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1BvvA9yxybevPYm07oWmVuLyU-Y7r69Yf8VtWjMPehrc',
+                'Section 6 - Assessment and Reporting',
+              )
+            "
+          >
+            <span class="nav-num">06</span
+            ><span class="nav-label">Assessment and Reporting</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1kTV9nwjm5feYOikH0BTswIoBu0yZgpiZi1bwnFxpkEU',
+                'Section 7 - Teaching Quality and Practice',
+              )
+            "
+          >
+            <span class="nav-num">07</span
+            ><span class="nav-label">Teaching Quality and Practice</span>
+          </div>
+
+          <!-- Student Support -->
+          <div class="nav-group-label">Student Support</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1fOnzb2DKYPQPjD37SzkTuReNWE224Ff5smJGKmDwnQM',
+                'Section 8 - Inclusion, EAL, and Learning Support',
+              )
+            "
+          >
+            <span class="nav-num">08</span
+            ><span class="nav-label">Inclusion, EAL, and Learning Support</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '19Bg_4EiJMGLPJcpR8EouWwzMRBC9tENue6r_66z2e5Q',
+                'Section 9 - Safeguarding, Child Protection, and Wellbeing',
+              )
+            "
+          >
+            <span class="nav-num">09</span
+            ><span class="nav-label"
+              >Safeguarding, Child Protection & Wellbeing</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '11gzVImHonsdmS4jCFVsaBCek2vs2qnBHAxLfqpJ9Eb0',
+                'Section 22 - Student Conduct, Discipline, and Restorative Practices',
+              )
+            "
+          >
+            <span class="nav-num">22</span
+            ><span class="nav-label"
+              >Student Conduct, Discipline & Restorative Practices</span
+            >
+          </div>
+
+          <!-- Operations -->
+          <div class="nav-group-label">Examinations & Operations</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1c-UbwBhLOqToXqebCjAKORW9DcXvI5v8xVeq-J5n1j4',
+                'Section 10 - Cambridge Examinations Management',
+              )
+            "
+          >
+            <span class="nav-num">10</span
+            ><span class="nav-label">Cambridge Examinations Management</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1ibSOeRkw00rqeYDwBE2JO9Y2dA6cA5XTdWeZSMbscZY',
+                'Section 13 - Operations, Finance, and Resources',
+              )
+            "
+          >
+            <span class="nav-num">13</span
+            ><span class="nav-label">Operations, Finance, and Resources</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1pKUfHe9aE4g8VfNuMqMRK3dy9KMarcq9CjF6u-QrL0s',
+                'Section 14 - Data Protection, Records, and Information Systems',
+              )
+            "
+          >
+            <span class="nav-num">14</span
+            ><span class="nav-label"
+              >Data Protection, Records & Information Systems</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1HkiDrnqy7rY3bKYCjj8P-_Y2PqNl7VqiUHr5BG5bC-I',
+                'Section 15 - Risk Management and Business Continuity',
+              )
+            "
+          >
+            <span class="nav-num">15</span
+            ><span class="nav-label"
+              >Risk Management & Business Continuity</span
+            >
+          </div>
+
+          <!-- External -->
+          <div class="nav-group-label">External Relations</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '13JSTngw3PUhpnVYd7miYuuCGERJqj0R0VlfY8-ftZKc',
+                'Section 11 - Admissions, Enrollment, and Marketing Ethics',
+              )
+            "
+          >
+            <span class="nav-num">11</span
+            ><span class="nav-label"
+              >Admissions, Enrollment & Marketing Ethics</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1AHmTk2PTsuQp8YQK3yZdu8KfFChGZyhMlE8vKh7ZYoA',
+                'Section 16 - Parent, Student, and Community Engagement',
+              )
+            "
+          >
+            <span class="nav-num">16</span
+            ><span class="nav-label"
+              >Parent, Student & Community Engagement</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1RAm-c4UO2FRW3XghF111Za-Oy1Kuj62VkWL8-jszcKk',
+                'Section 17 - Quality Assurance and Internal Review',
+              )
+            "
+          >
+            <span class="nav-num">17</span
+            ><span class="nav-label"
+              >Quality Assurance and Internal Review</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1WQRPMLkSGSfWMDD9yI1AADKvwlz3-gWJXh0M3DGDBxQ',
+                'Section 18 - Accreditation Toolkit (CIS/WASC)',
+              )
+            "
+          >
+            <span class="nav-num">18</span
+            ><span class="nav-label">Accreditation Toolkit (CIS/WASC)</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1Kgilip1jXRphibINwSuQeSpc31pj_yqriCefnrVNk8Y',
+                'Section 23 - External Partnerships and Student Pathways',
+              )
+            "
+          >
+            <span class="nav-num">23</span
+            ><span class="nav-label"
+              >External Partnerships & Student Pathways</span
+            >
+          </div>
+
+          <!-- Resources -->
+          <div class="nav-group-label">Resources & Tools</div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1To9QgFfIh_nJXi3uv_v6Hsoqr2oNIGUzuGjHtDNTRc0',
+                'Section 12 - Staff Lifecycle',
+              )
+            "
+          >
+            <span class="nav-num">12</span
+            ><span class="nav-label"
+              >Staff Lifecycle: Recruitment, Induction, Appraisal</span
+            >
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1ToKNoxKH9WafL6Nv38NCrCEscjKWOBbWNsECpWFKrBM',
+                'Section 19 - Templates and Operational Tools',
+              )
+            "
+          >
+            <span class="nav-num">19</span
+            ><span class="nav-label">Templates and Operational Tools</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1g1l8QWFb75B0zgDWLq-wY3Mga7ZKzSwiMhbtOAvX46M',
+                'Section 20 - References and Compliance Library',
+              )
+            "
+          >
+            <span class="nav-num">20</span
+            ><span class="nav-label">References and Compliance Library</span>
+          </div>
+          <div
+            class="nav-item"
+            onclick="
+              loadSection(
+                this,
+                '1hDIdZfS7LYM4kNAlqhat_fSx247OMzPgWaaTIghmynY',
+                'Section 21 - Digital Learning and Technology Infrastructure',
+              )
+            "
+          >
+            <span class="nav-num">21</span
+            ><span class="nav-label"
+              >Digital Learning & Technology Infrastructure</span
+            >
+          </div>
+        </div>
+
+        <div class="sidebar-footer">
+          <p>
+            Eduversal Indonesia · Cambridge Partner Network<br />Documents
+            update automatically from source.
+          </p>
+        </div>
+      </aside>
+
+      <main id="mainArea">
+        <!-- Welcome screen -->
+        <div class="welcome" id="welcomeScreen">
+          <div class="welcome-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
+              />
+            </svg>
+          </div>
+          <h2>Eduversal Academic Standards</h2>
+          <p>
+            Select any section from the left panel to view the full policy
+            document. All documents reflect the latest version from Google
+            Drive.
+          </p>
+          <div class="stats-row">
+            <div class="stat">
+              <div class="stat-num">23</div>
+              <div class="stat-label">Sections</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">15+</div>
+              <div class="stat-label">Partner Schools</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">4,000+</div>
+              <div class="stat-label">Students</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Doc viewer (hidden until section selected) -->
+        <div
+          id="docViewer"
+          style="
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            overflow: hidden;
+          "
+        >
+          <div class="doc-toolbar">
+            <div class="doc-title-bar" id="docTitleBar">Select a section</div>
+            <a class="btn-open" id="openInDriveBtn" href="#" target="_blank">
+              ↗ Open in Drive
+            </a>
+          </div>
+          <div class="iframe-wrap">
+            <div class="loading-overlay" id="loadingOverlay">
+              <div class="spinner"></div>
+              <div class="loading-text">Loading document...</div>
+            </div>
+            <iframe id="docFrame" src=""></iframe>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      let activeItem = null;
+
+      function loadSection(el, docId, title) {
+        // Update active state
+        if (activeItem) activeItem.classList.remove("active");
+        el.classList.add("active");
+        activeItem = el;
+
+        // Show doc viewer
+        document.getElementById("welcomeScreen").style.display = "none";
+        const viewer = document.getElementById("docViewer");
+        viewer.style.display = "flex";
+
+        // Update toolbar
+        document.getElementById("docTitleBar").innerHTML =
+          `<span>${title}</span>`;
+        document.getElementById("openInDriveBtn").href =
+          `https://docs.google.com/document/d/${docId}/edit`;
+
+        // Show loading
+        document.getElementById("loadingOverlay").classList.remove("hidden");
+
+        // Load iframe
+        const frame = document.getElementById("docFrame");
+        frame.src = `https://docs.google.com/document/d/${docId}/preview`;
+
+        frame.onload = () => {
+          setTimeout(() => {
+            document.getElementById("loadingOverlay").classList.add("hidden");
+          }, 300);
+        };
+        // Force-hide after 8s if onload doesn't fire
+        setTimeout(() => {
+          document.getElementById("loadingOverlay").classList.add("hidden");
+        }, 8000);
+      }
+
+      function filterSections(query) {
+        const q = query.toLowerCase().trim();
+        const items = document.querySelectorAll(".nav-item");
+        const groups = document.querySelectorAll(".nav-group-label");
+
+        items.forEach((item) => {
+          const text = item
+            .querySelector(".nav-label")
+            .textContent.toLowerCase();
+          const num = item.querySelector(".nav-num").textContent;
+          item.classList.toggle(
+            "hidden",
+            q && !text.includes(q) && !num.includes(q),
+          );
+        });
+
+        // Hide group labels if all children hidden
+        groups.forEach((group) => {
+          let next = group.nextElementSibling;
+          let allHidden = true;
+          while (next && !next.classList.contains("nav-group-label")) {
+            if (!next.classList.contains("hidden")) allHidden = false;
+            next = next.nextElementSibling;
+          }
+          group.style.display = allHidden && q ? "none" : "";
+        });
+      }
+    </script>
+  </body>
 </html>
