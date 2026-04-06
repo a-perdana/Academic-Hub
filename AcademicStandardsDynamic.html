@@ -427,22 +427,90 @@
         color: rgba(255, 255, 255, 0.3);
         line-height: 1.5;
       }
+
+      /* ── HAMBURGER (mobile only) ── */
+      .hamburger {
+        display: none;
+        flex-shrink: 0;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 6px;
+        color: var(--gold-light);
+        margin-right: 4px;
+      }
+
+      .hamburger svg {
+        display: block;
+        width: 22px;
+        height: 22px;
+        stroke: currentColor;
+        fill: none;
+        stroke-width: 2;
+        stroke-linecap: round;
+      }
+
+      /* ── SIDEBAR BACKDROP (mobile only) ── */
+      .sidebar-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.55);
+        z-index: 199;
+      }
+
+      .sidebar-backdrop.open {
+        display: block;
+      }
+
+      /* ── MOBILE BREAKPOINT ── */
+      @media (max-width: 768px) {
+        .hamburger {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        aside {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100%;
+          z-index: 200;
+          transform: translateX(-100%);
+          transition: transform 0.28s ease;
+          width: min(var(--sidebar-w), 85vw);
+        }
+
+        aside.open {
+          transform: translateX(0);
+        }
+      }
     </style>
   </head>
   <body>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
     <header>
+      <button class="hamburger" id="hamburgerBtn" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <line x1="3" y1="6"  x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
       <div class="header-logo">E</div>
       <div>
         <div class="header-title">Eduversal Academic Standards</div>
         <div class="header-subtitle">Partner School Network · Indonesia</div>
       </div>
       <div class="header-info">
-        <div class="version-badge">23 Sections</div>
+        <div class="version-badge">April 2026 &middot; 23 Sections</div>
       </div>
     </header>
 
     <div class="layout">
-      <aside>
+      <aside id="sidebar">
         <div class="search-wrap">
           <span class="search-icon">🔍</span>
           <input
@@ -870,16 +938,30 @@
         el.classList.add("active");
         activeItem = el;
 
+        // Close sidebar on mobile after selection
+        const sidebar = document.getElementById("sidebar");
+        const backdrop = document.getElementById("sidebarBackdrop");
+        const btn = document.getElementById("hamburgerBtn");
+        if (sidebar && sidebar.classList.contains("open")) {
+          sidebar.classList.remove("open");
+          backdrop.classList.remove("open");
+          if (btn) btn.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+        }
+
         // Show doc viewer
         document.getElementById("welcomeScreen").style.display = "none";
         const viewer = document.getElementById("docViewer");
         viewer.style.display = "flex";
 
         // Update toolbar
-        document.getElementById("docTitleBar").innerHTML =
-          `<span>${title}</span>`;
+        const cleanTitle = title.replace(/^Section\s+\d+\s+-\s+/i, "");
+        const titleBar = document.getElementById("docTitleBar");
+        const titleSpan = document.createElement("span");
+        titleSpan.textContent = cleanTitle;
+        titleBar.replaceChildren(titleSpan);
         document.getElementById("openInDriveBtn").href =
-          `https://docs.google.com/document/d/${docId}/edit`;
+          `https://docs.google.com/document/d/${docId}/view`;
 
         // Show loading
         document.getElementById("loadingOverlay").classList.remove("hidden");
@@ -898,6 +980,39 @@
           document.getElementById("loadingOverlay").classList.add("hidden");
         }, 8000);
       }
+
+      // ── MOBILE SIDEBAR ──
+      (function () {
+        const btn = document.getElementById("hamburgerBtn");
+        const sidebar = document.getElementById("sidebar");
+        const backdrop = document.getElementById("sidebarBackdrop");
+
+        function openSidebar() {
+          sidebar.classList.add("open");
+          backdrop.classList.add("open");
+          btn.setAttribute("aria-expanded", "true");
+          document.body.style.overflow = "hidden";
+        }
+
+        function closeSidebar() {
+          sidebar.classList.remove("open");
+          backdrop.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+          document.body.style.overflow = "";
+        }
+
+        btn.addEventListener("click", function () {
+          sidebar.classList.contains("open") ? closeSidebar() : openSidebar();
+        });
+
+        backdrop.addEventListener("click", closeSidebar);
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape" && sidebar.classList.contains("open")) {
+            closeSidebar();
+          }
+        });
+      })();
 
       function filterSections(query) {
         const q = query.toLowerCase().trim();
