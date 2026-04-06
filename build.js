@@ -169,6 +169,10 @@ if (fs.existsSync("schools_compact.js")) {
   fs.copyFileSync("schools_compact.js", "dist/schools_compact.js");
   console.log("Copied: schools_compact.js");
 }
+if (fs.existsSync("favicon.svg")) {
+  fs.copyFileSync("favicon.svg", "dist/favicon.svg");
+  console.log("Copied: favicon.svg");
+}
 
 // â”€â”€ Copy static assets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 if (fs.existsSync("images")) {
