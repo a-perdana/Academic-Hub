@@ -9,14 +9,13 @@ function ensureNavbarSharedStyles() {
       z-index: 1000;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 28px;
+      padding: 0 24px;
       height: 62px;
       background: rgba(5, 5, 16, 0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      gap: 16px;
+      gap: 12px;
       overflow: visible;
       transition: background 0.3s ease;
     }
@@ -27,16 +26,16 @@ function ensureNavbarSharedStyles() {
       display: flex; align-items: center; gap: 10px;
       text-decoration: none; flex-shrink: 0;
     }
-    #topNav .nav-brand-icon { width: 32px; height: 32px; flex-shrink: 0; }
-    #topNav .nav-brand-icon svg { width: 32px; height: 32px; fill: #6c5ce7; }
+    #topNav .nav-brand-icon { width: 30px; height: 30px; flex-shrink: 0; }
+    #topNav .nav-brand-icon svg { width: 30px; height: 30px; fill: #6c5ce7; }
     #topNav .nav-brand-name {
       font-family: "Playfair Display", serif;
       font-size: 15px; font-weight: 700;
       color: #fff; white-space: nowrap;
     }
     #topNav .nav-actions {
-      display: flex; align-items: center; gap: 8px;
-      flex-shrink: 0; min-width: 0; margin-left: auto;
+      display: flex; align-items: center; gap: 6px;
+      flex: 1; min-width: 0; justify-content: flex-end;
     }
     #topNav .nav-btn {
       display: flex; align-items: center; gap: 7px;
@@ -172,6 +171,7 @@ function ensureNavbarSharedStyles() {
       cursor: pointer;
       flex-shrink: 0;
       padding: 0;
+      margin-left: auto;
       transition: background .2s, border-color .2s;
     }
     #topNav .hamburger-btn:hover {
@@ -267,40 +267,26 @@ function ensureNavbarSharedStyles() {
     .ah-mobile-badge.visible { display: flex; }
     .ah-mobile-badge--count { background: #6c5ce7; }
 
-    @media (max-width: 1080px) {
-      #topNav .nav-brand-name {
-        display: none;
-      }
-      #topNav .nav-actions {
-        gap: 6px;
-      }
-      #topNav .nav-btn {
-        padding-left: 12px;
-        padding-right: 12px;
-      }
+    /* Stage 1 — 1100px: hide brand name */
+    @media (max-width: 1100px) {
+      #topNav { padding: 0 18px; }
+      #topNav .nav-brand-name { display: none; }
     }
 
-    @media (max-width: 760px) {
-      #topNav .hamburger-btn {
-        display: flex;
-      }
-      #topNav .nav-actions .nav-btn,
-      #topNav .nav-actions .profile-wrap {
-        display: none !important;
-      }
-      #topNav .nav-actions {
-        margin-left: auto;
-      }
+    /* Stage 2 — 900px: hide button labels, icon-only buttons */
+    @media (max-width: 900px) {
+      #topNav .nav-btn span:not(.nav-badge) { display: none; }
+      #topNav .nav-btn { padding: 9px 10px; gap: 0; }
+      #topNav .profile-first-name { display: none; }
+      #topNav .profile-btn { padding: 5px 8px 5px 5px; }
     }
 
+    /* Stage 3 — 640px: hamburger only, hide all nav-actions items */
     @media (max-width: 640px) {
-      #topNav .nav-badge {
-        min-width: 19px;
-        height: 19px;
-        font-size: 10px;
-        top: -7px;
-        right: -7px;
-      }
+      #topNav { padding: 0 14px; gap: 8px; }
+      #topNav .hamburger-btn { display: flex; }
+      #topNav .nav-actions .nav-btn,
+      #topNav .nav-actions .profile-wrap { display: none !important; }
     }
   `;
   document.head.appendChild(style);
