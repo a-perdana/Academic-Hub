@@ -43,54 +43,6 @@
       .bg-animation { display:none; }
       .orb { display:none; }
 
-      /* ── TOP NAV (dark — same as all pages) ── */
-      .top-nav { position:fixed; top:0; left:0; right:0; z-index:1000; display:flex; align-items:center; justify-content:space-between; padding:0 28px; height:62px; background:rgba(5,5,16,.95); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,255,255,.08); gap:16px; }
-      .nav-brand { display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0; }
-      .nav-brand-icon { width:32px; height:32px; flex-shrink:0; }
-      .nav-brand-icon svg { width:32px; height:32px; fill:#6c5ce7; }
-      .nav-brand-name { font-size:15px; font-weight:700; color:#fff; white-space:nowrap; }
-      .nav-stats { display:flex; align-items:center; gap:28px; flex-shrink:0; }
-      .nav-stat { display:flex; flex-direction:column; align-items:center; line-height:1; }
-      .nav-stat-value { font-size:16px; font-weight:700; color:#fff; }
-      .nav-stat-label { font-size:10px; font-weight:500; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.04em; margin-top:2px; }
-      .nav-stat-divider { width:1px; height:28px; background:rgba(255,255,255,.1); }
-      .nav-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
-      .nav-btn { display:flex; align-items:center; gap:7px; padding:9px 18px; border-radius:10px; background:linear-gradient(135deg,rgba(108,92,231,.20),rgba(0,217,255,.10)); border:1px solid rgba(108,92,231,.45); color:rgba(255,255,255,.85); font-family:"DM Sans",sans-serif; font-size:13px; font-weight:500; cursor:pointer; text-decoration:none; transition:all .22s ease; position:relative; white-space:nowrap; }
-      .nav-btn svg { width:15px; height:15px; flex-shrink:0; }
-      .nav-btn:hover,.nav-btn.active { background:linear-gradient(135deg,rgba(108,92,231,.45),rgba(0,217,255,.25)); border-color:rgba(108,92,231,.7); color:#fff; box-shadow:0 0 16px rgba(108,92,231,.40); transform:translateY(-1px); }
-      .nav-badge { position:absolute; top:5px; right:5px; min-width:17px; height:17px; padding:0 4px; background:#e74c3c; border-radius:50%; font-size:10px; font-weight:700; color:#fff; line-height:17px; text-align:center; display:none; }
-      .nav-badge.visible { display:flex; align-items:center; justify-content:center; }
-      .profile-wrap { position:relative; }
-      .profile-btn { display:flex; align-items:center; gap:8px; padding:6px 12px 6px 6px; border-radius:100px; background:linear-gradient(135deg,rgba(108,92,231,.20),rgba(0,217,255,.10)); border:1px solid rgba(108,92,231,.45); color:rgba(255,255,255,.85); font-family:"DM Sans",sans-serif; font-size:13px; font-weight:500; cursor:pointer; transition:all .22s ease; }
-      .profile-btn:hover { background:linear-gradient(135deg,rgba(108,92,231,.45),rgba(0,217,255,.25)); border-color:rgba(108,92,231,.7); color:#fff; box-shadow:0 0 16px rgba(108,92,231,.40); }
-      .profile-avatar { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,#6c5ce7,#764ba2); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; overflow:hidden; }
-      .profile-avatar img { width:100%; height:100%; object-fit:cover; border-radius:50%; }
-      .profile-first-name { font-size:13px; font-weight:500; color:#fff; }
-      .profile-chevron { width:14px; height:14px; color:rgba(255,255,255,.6); transition:transform .2s; }
-      .profile-wrap.open .profile-chevron { transform:rotate(180deg); }
-      .profile-dropdown { position:absolute; top:calc(100% + 8px); right:0; width:280px; background:rgba(15,15,35,.98); border:1px solid rgba(255,255,255,.12); border-radius:16px; padding:8px; box-shadow:0 20px 60px rgba(0,0,0,.6); display:none; z-index:100; }
-      .profile-wrap.open .profile-dropdown { display:block; animation:dropIn .2s ease; }
-      @keyframes dropIn { from{opacity:0;transform:translateY(-8px);} to{opacity:1;transform:translateY(0);} }
-      .dd-header { display:flex; align-items:center; gap:12px; padding:12px; border-radius:10px; background:rgba(255,255,255,.05); margin-bottom:8px; }
-      .dd-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,#6c5ce7,#764ba2); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; color:#fff; flex-shrink:0; }
-      .dd-name { font-size:14px; font-weight:600; color:#fff; }
-      .dd-email { font-size:12px; color:rgba(255,255,255,.5); margin-top:2px; }
-      .dd-section { padding:8px 4px; }
-      .dd-section-label { font-size:11px; color:rgba(255,255,255,.4); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
-      .dd-input { width:100%; padding:8px 12px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12); border-radius:8px; color:#fff; font-family:"DM Sans",sans-serif; font-size:13px; outline:none; }
-      .dd-input:focus { border-color:rgba(108,92,231,.6); }
-      .dd-phone-row { display:flex; gap:8px; }
-      .dd-save-btn { padding:8px 16px; border-radius:8px; background:linear-gradient(135deg,#6c5ce7,#764ba2); border:none; color:#fff; font-size:13px; font-weight:600; cursor:pointer; white-space:nowrap; }
-      .dd-status { font-size:12px; color:#10b981; margin-top:4px; min-height:16px; }
-      .dd-pw-toggle { width:100%; display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); border-radius:8px; color:rgba(255,255,255,.8); font-size:13px; cursor:pointer; }
-      .dd-pw-toggle svg { width:14px; height:14px; transition:transform .2s; }
-      .dd-pw-fields { display:none; flex-direction:column; gap:6px; margin-top:8px; }
-      .dd-pw-btn { padding:8px; border-radius:8px; background:linear-gradient(135deg,#6c5ce7,#764ba2); border:none; color:#fff; font-size:13px; font-weight:600; cursor:pointer; }
-      .dd-signout-btn { width:100%; display:flex; align-items:center; gap:8px; padding:10px 12px; background:rgba(239,68,68,.12); border:1px solid rgba(239,68,68,.25); border-radius:8px; color:#ef4444; font-size:13px; cursor:pointer; transition:all .2s; }
-      .dd-signout-btn svg { width:15px; height:15px; }
-      .dd-signout-btn:hover { background:rgba(239,68,68,.22); }
-      @media(max-width:768px){ .top-nav{padding:0 16px;} .nav-btn span{display:none;} .nav-btn{padding:9px; border-radius:10px;} .nav-stats{display:none;} .nav-brand-name{display:none;} }
-
       /* ── Page Header ── */
       .page-header { padding:5.5rem 2rem 1.5rem; }
       .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--ink-3); font-size:13px; text-decoration:none; margin-bottom:1rem; transition:color .2s; }
