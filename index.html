@@ -1269,6 +1269,17 @@
         margin-top: 1px;
       }
 
+      .manage-modal-vt {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        padding: 10px 1.5rem 8px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        flex-shrink: 0;
+      }
+      .manage-modal-vt-label {
+        font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 0.08em; color: rgba(255,255,255,0.4); white-space: nowrap;
+      }
+
       .manage-modal-footer {
         padding: 1rem 1.5rem;
         border-top: 1px solid rgba(255,255,255,0.08);
@@ -1420,6 +1431,24 @@
       .color-swatch.selected {
         transform: scale(1.2);
         border-color: white;
+      }
+
+      .cat-visible-to {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        width: 100%; padding: 8px 0 2px; border-top: 1px solid rgba(102,126,234,0.2);
+      }
+      .cat-visible-label {
+        font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+        letter-spacing: 0.08em; color: rgba(255,255,255,0.45); white-space: nowrap;
+      }
+      .cat-vt-check {
+        display: flex; align-items: center; gap: 5px; cursor: pointer;
+        font-size: 0.8rem; color: rgba(255,255,255,0.75); white-space: nowrap;
+      }
+      .cat-vt-check input { accent-color: #a29bfe; cursor: pointer; width: 14px; height: 14px; }
+      .cat-vt-hint {
+        font-size: 0.72rem; color: rgba(255,255,255,0.3); width: 100%;
+        margin-top: 2px;
       }
 
       .admin-cat-btn {
@@ -2109,6 +2138,13 @@
             <span class="label">New Category</span>
             <input id="newCatName" class="admin-cat-input" type="text" placeholder="Category name…" maxlength="40">
             <div class="color-swatches" id="colorSwatches"></div>
+            <div class="cat-visible-to" id="catVisibleTo">
+              <span class="cat-visible-label">Visible to</span>
+              <label class="cat-vt-check"><input type="checkbox" value="foundation_representative"> Foundation Rep</label>
+              <label class="cat-vt-check"><input type="checkbox" value="school_principal"> School Principal</label>
+              <label class="cat-vt-check"><input type="checkbox" value="academic_coordinator"> Academic Coordinator</label>
+              <span class="cat-vt-hint">Leave all unchecked = visible to everyone</span>
+            </div>
             <button id="addCatBtn" class="admin-cat-btn">+ Add</button>
             <span class="admin-cat-status" id="catStatus"></span>
           </div>
@@ -3534,6 +3570,13 @@
           </div>
           <input class="manage-modal-search" id="manageCatSearch" type="search" placeholder="Search cards…">
           <div class="manage-modal-list" id="manageCatList"></div>
+          <div class="manage-modal-vt" id="manageCatVt">
+            <span class="manage-modal-vt-label">Visible to</span>
+            <label class="cat-vt-check"><input type="checkbox" id="mmVtFoundation" value="foundation_representative"> Foundation Rep</label>
+            <label class="cat-vt-check"><input type="checkbox" id="mmVtPrincipal" value="school_principal"> School Principal</label>
+            <label class="cat-vt-check"><input type="checkbox" id="mmVtCoordinator" value="academic_coordinator"> Academic Coordinator</label>
+            <span class="cat-vt-hint">Leave all unchecked = visible to everyone</span>
+          </div>
           <div class="manage-modal-footer">
             <span class="manage-modal-status" id="manageCatStatus"></span>
             <button class="manage-modal-cancel" id="manageCatCancel">Cancel</button>
@@ -4006,13 +4049,16 @@
             }
             document.getElementById('addCatBtn').disabled = true;
             try {
+              const visibleTo = [...document.querySelectorAll('#catVisibleTo input:checked')].map(el => el.value);
               await addDoc(collection(db, 'ah_categories'), {
                 name,
                 color: selectedColor,
                 cardIds: [],
+                visible_to: visibleTo,
                 order: Date.now(),
                 createdAt: serverTimestamp(),
               });
+              document.querySelectorAll('#catVisibleTo input').forEach(el => el.checked = false);
               nameInput.value = '';
               statusEl.textContent = 'Added!';
               statusEl.className = 'admin-cat-status ok';
@@ -4056,15 +4102,22 @@
         const container = document.getElementById('categorySections');
         const allCards = getAllCards(); // uses cached list — cards may be anywhere in DOM
 
+        // Filter categories by visible_to — admins always see all
+        const userSubRoles = window.userProfile?.ah_sub_roles || [];
+        const visibleCats = isAdmin ? cats : cats.filter(cat => {
+          const vt = cat.visible_to || [];
+          return vt.length === 0 || userSubRoles.some(r => vt.includes(r));
+        });
+
         // Build map: cardId → card element (from cache, works regardless of current DOM position)
         const cardMap = new Map();
         allCards.forEach(card => {
           cardMap.set(card.getAttribute('data-card-id'), card);
         });
 
-        // Which card IDs are already in a category?
+        // Which card IDs are already in a (visible) category?
         const assignedIds = new Set();
-        cats.forEach(cat => (cat.cardIds || []).forEach(id => assignedIds.add(id)));
+        visibleCats.forEach(cat => (cat.cardIds || []).forEach(id => assignedIds.add(id)));
 
         // Preserve user-toggled collapsed state; on first render default all-but-first to collapsed
         const isFirstRender = container.children.length === 0;
@@ -4075,7 +4128,7 @@
 
         container.innerHTML = '';
 
-        cats.forEach((cat, idx) => {
+        visibleCats.forEach((cat, idx) => {
           const catCards = (cat.cardIds || [])
             .map(id => cardMap.get(id))
             .filter(Boolean);
@@ -4088,8 +4141,8 @@
           const defaultCollapsed = isFirstRender ? idx > 0 : (collapsedState[cat.id] ?? idx > 0);
           if (defaultCollapsed) sec.classList.add('collapsed');
 
-          const isFirst = cats.indexOf(cat) === 0;
-          const isLast  = cats.indexOf(cat) === cats.length - 1;
+          const isFirst = idx === 0;
+          const isLast  = idx === visibleCats.length - 1;
 
           // Admin action buttons HTML
           const adminHtml = isAdmin ? `
@@ -4240,6 +4293,12 @@
         statusEl.textContent = '';
         statusEl.className = 'manage-modal-status';
 
+        // Populate visible_to checkboxes
+        const currentVt = cat.visible_to || [];
+        document.getElementById('mmVtFoundation').checked   = currentVt.includes('foundation_representative');
+        document.getElementById('mmVtPrincipal').checked    = currentVt.includes('school_principal');
+        document.getElementById('mmVtCoordinator').checked  = currentVt.includes('academic_coordinator');
+
         // Ordered list of selected card IDs (preserves custom order)
         let selectedOrder = [...(cat.cardIds || [])];
 
@@ -4346,7 +4405,12 @@
           statusEl.textContent = 'Saving…';
           statusEl.className = 'manage-modal-status';
           try {
-            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selectedOrder] }, { merge: true });
+            const visibleTo = [
+              document.getElementById('mmVtFoundation').checked   ? 'foundation_representative' : null,
+              document.getElementById('mmVtPrincipal').checked    ? 'school_principal'          : null,
+              document.getElementById('mmVtCoordinator').checked  ? 'academic_coordinator'      : null,
+            ].filter(Boolean);
+            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selectedOrder], visible_to: visibleTo }, { merge: true });
             statusEl.textContent = 'Saved!';
             statusEl.className = 'manage-modal-status ok';
             setTimeout(closeModal, 700);
