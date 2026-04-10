@@ -4025,9 +4025,9 @@
         // ── Delegated admin action handler (registered once) ─────
         if (isAdmin) {
           document.getElementById('categorySections').addEventListener('click', async e => {
-            e.stopPropagation();
             const btn = e.target.closest('.cat-action-btn');
             if (!btn) return;
+            e.stopPropagation();
             const catId = btn.dataset.catId;
             // We need the live cats list — read it from the rendered DOM state
             const allSecs = Array.from(document.querySelectorAll('.category-section[data-cat-id]'));
