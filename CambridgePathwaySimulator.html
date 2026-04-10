@@ -17,7 +17,9 @@
         FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
       };
     </script>
-    <!-- Public page: no auth-guard. Firebase initialised inline below for Firestore writes. -->
+    <script type="module" src="auth-guard.js"></script>
+    <script src="partials/navbar-loader.js"></script>
+    <!-- Public page: Firebase initialised inline below for Firestore writes. -->
     <script type="module">
       import { initializeApp, getApps }
         from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -47,7 +49,14 @@
     <script src="https://unpkg.com/recharts@1.8.5/umd/Recharts.min.js"></script>
   </head>
   <body>
+    <style>body { padding-top: 62px; }</style>
+    <div id="navbarMount"></div>
     <div id="root"></div>
+    <script>
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+    </script>
     <script type="text/babel">
       const { useState } = React;
 

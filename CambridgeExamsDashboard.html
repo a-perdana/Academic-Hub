@@ -18,6 +18,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
+    <script src="partials/navbar-loader.js"></script>
     <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -27,7 +28,14 @@
     <script src="https://unpkg.com/recharts@1.8.5/umd/Recharts.min.js"></script>
   </head>
   <body>
+    <style>body { padding-top: 62px; }</style>
+    <div id="navbarMount"></div>
     <div id="root"></div>
+    <script>
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+    </script>
     <script type="text/babel">
       const { useState } = React;
       const { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, Cell, Line } = Recharts;

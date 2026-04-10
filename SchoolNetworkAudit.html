@@ -16,6 +16,7 @@
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         min-height: 100vh;
         padding: 20px;
+        padding-top: 62px;
       }
       .container {
         max-width: 800px;
@@ -494,8 +495,10 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
+  <script src="partials/navbar-loader.js"></script>
   </head>
   <body>
+    <div id="navbarMount"></div>
     <div class="container">
       <div class="header">
         <div class="logo">🔒</div>
@@ -662,6 +665,11 @@
     </div>
 
     <script>
+      // Shared navbar
+      document.addEventListener("authReady", ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+
       // Auth integration — show user badge once auth-guard.js fires authReady
       document.addEventListener("authReady", ({ detail: { user } }) => {
         const badge = document.getElementById("userBadge");

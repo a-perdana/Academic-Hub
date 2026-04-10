@@ -386,45 +386,8 @@
     let statusFilter = "all";
     let controlsBound = false;
 
-    // Start loading the navbar immediately (before auth resolves) so it's
-    // ready by the time authReady fires. Capture the promise for await below.
-    const navbarReady = window.__loadAcademicNavbar?.("surveys");
-
     document.addEventListener("authReady", async ({ detail: { user, profile } }) => {
-      // Wait for the navbar (started above); ignore errors so surveys still load
-      try { await navbarReady; } catch (e) { console.warn("Navbar load failed:", e); }
-
-      const displayName = profile?.displayName || user.displayName || user.email;
-      const firstName = displayName.split(" ")[0];
-      const initials = displayName.split(" ").filter(Boolean).map((w) => w[0]).join("").toUpperCase().slice(0, 2) || "?";
-      const navFirstName = document.getElementById("navFirstName");
-      const profileWrap = document.getElementById("profileWrap");
-      const ddFullName = document.getElementById("ddFullName");
-      const ddEmail = document.getElementById("ddEmail");
-      const navAvEl = document.getElementById("navAvatar");
-      const ddAvEl = document.getElementById("ddAvatar");
-      if (navFirstName) navFirstName.textContent = firstName;
-      if (ddFullName) ddFullName.textContent = displayName;
-      if (ddEmail) ddEmail.textContent = user.email;
-      if (profileWrap) profileWrap.style.display = "flex";
-      if (navAvEl) navAvEl.textContent = initials;
-      if (ddAvEl) ddAvEl.textContent = initials;
-
-      document.getElementById("profileBtn")?.addEventListener("click", (e) => {
-        e.stopPropagation();
-        document.getElementById("profileWrap")?.classList.toggle("open");
-      });
-      document.addEventListener("click", () => {
-        document.getElementById("profileWrap")?.classList.remove("open");
-      });
-      document.getElementById("ddSignOut")?.addEventListener("click", async () => {
-        const { signOut } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js");
-        await signOut(window.auth);
-        window.location.href = "index.html";
-      });
-
-      window.__initNavbarCounters?.({ db: window.db, user });
-
+      window.__loadAcademicNavbar("surveys", { user, profile });
       db = window.db;
       currentUser = user;
       bindControls();

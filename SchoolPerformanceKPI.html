@@ -21,6 +21,7 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
+  <script src="partials/navbar-loader.js"></script>
 
   <style>
     :root {
@@ -47,6 +48,7 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       color: #1a2332;
+      padding-top: 62px;
     }
 
     /* ── HEADER ── */
@@ -711,6 +713,7 @@
   </style>
 </head>
 <body>
+<div id="navbarMount"></div>
 
 <!-- ─────────── HEADER ─────────── -->
 <header class="site-header">
@@ -1255,6 +1258,7 @@ function scoreColor(s) {
 
 // ─── Auth Ready ───────────────────────────────────────────────
 document.addEventListener('authReady', async (e) => {
+  window.__loadAcademicNavbar('', { user: e.detail.user, profile: e.detail.profile });
   db = window.db;
   currentUser = window.currentUser;
   userProfile = window.userProfile;

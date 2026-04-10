@@ -18,6 +18,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
+    <script src="partials/navbar-loader.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -56,6 +57,7 @@
         line-height: 1.6;
         min-height: 100vh;
         padding: 0;
+        padding-top: 62px;
         margin: 0;
         overflow-x: hidden;
       }
@@ -734,6 +736,12 @@
     </style>
   </head>
   <body>
+    <div id="navbarMount"></div>
+    <script>
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+    </script>
     <div class="dashboard-header">
       <div class="header-content">
         <h1 class="header-title">Partner Schools Performance Dashboard</h1>

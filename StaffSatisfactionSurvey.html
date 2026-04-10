@@ -23,6 +23,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
+    <script src="partials/navbar-loader.js"></script>
    <style>
       :root {
         --bg-primary: #f8fafc;
@@ -56,6 +57,7 @@
         color: var(--text-primary);
         min-height: 100vh;
         font-size: 13px;
+        padding-top: 62px;
       }
 
       .dashboard {
@@ -897,6 +899,12 @@
     </style>
   </head>
   <body>
+    <div id="navbarMount"></div>
+    <script>
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+    </script>
     <div class="dashboard">
       <!-- Header -->
       <header class="header">

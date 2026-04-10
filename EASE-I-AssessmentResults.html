@@ -18,6 +18,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
+    <script src="partials/navbar-loader.js"></script>
     <style>
       * {
         margin: 0;
@@ -29,6 +30,7 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         padding: 20px;
+        padding-top: 62px;
         color: #333;
       }
 
@@ -230,6 +232,12 @@
     </style>
   </head>
   <body>
+    <div id="navbarMount"></div>
+    <script>
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        window.__loadAcademicNavbar('', { user, profile });
+      });
+    </script>
     <div class="container">
       <div class="header">
         <h1>🎓 EASE I - Assessment Dashboard</h1>

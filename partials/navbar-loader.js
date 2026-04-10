@@ -412,8 +412,8 @@ function _ahBuildAvatar(el, user) {
     el.textContent = _ahGetInitials(n);
   }
 }
-function _ahPopulateProfile(user, profile) {
-  const name      = profile?.displayName || user.displayName || user.email.split('@')[0];
+function _ahPopulateProfile(user, displayName, authInstance) {
+  const name      = displayName || user.displayName || user.email.split('@')[0];
   const firstName = name.split(' ')[0];
   _ahBuildAvatar(document.getElementById('navAvatar'), { ...user, displayName: name });
   const navFirst = document.getElementById('navFirstName');
@@ -434,12 +434,20 @@ function _ahPopulateProfile(user, profile) {
   }
   if (ddSignOut) {
     import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js').then(({ signOut }) => {
-      ddSignOut.addEventListener('click', () =>
-        signOut(window.auth).then(() => { window.location.href = 'login.html'; })
-      );
+      ddSignOut.addEventListener('click', () => {
+        const a = authInstance || window.auth;
+        signOut(a).then(() => { window.location.href = 'login.html'; });
+      });
     });
   }
 }
+
+// Public API: call after __loadAcademicNavbar resolves
+// displayName: Firestore displayName string (or null to use user.displayName)
+// authInstance: the app's auth instance (optional, falls back to window.auth)
+window.__ahPopulateNav = function(user, displayName, authInstance) {
+  _ahPopulateProfile(user, displayName, authInstance);
+};
 
 window.__loadAcademicNavbar = async function(activeKey, authCtx) {
   const mount = document.getElementById('navbarMount');
@@ -463,7 +471,7 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
 
   // Populate profile section and init counters if auth context provided
   if (authCtx?.user) {
-    _ahPopulateProfile(authCtx.user, authCtx.profile);
+    _ahPopulateProfile(authCtx.user, authCtx.profile?.displayName || null, null);
     window.__initNavbarCounters?.({ db: window.db, user: authCtx.user });
   }
 };

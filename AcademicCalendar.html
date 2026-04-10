@@ -600,20 +600,13 @@
     </script>
 
     <script src="partials/navbar-loader.js"></script>
+    <script type="module" src="auth-guard.js"></script>
 <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getAuth, onAuthStateChanged, signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword }
-        from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-      import { getFirestore, collection, query, orderBy, onSnapshot, addDoc, updateDoc,
+      import { collection, query, orderBy, onSnapshot, addDoc, updateDoc,
         deleteDoc, doc, getDoc, setDoc, getDocs, where, serverTimestamp, limit }
         from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      await window.__loadAcademicNavbar("calendar");
-
-      // ── Firebase init ────────────────────────────────────────────
-      const app  = initializeApp({ apiKey:window.ENV.FIREBASE_API_KEY, authDomain:window.ENV.FIREBASE_AUTH_DOMAIN, projectId:window.ENV.FIREBASE_PROJECT_ID, storageBucket:window.ENV.FIREBASE_STORAGE_BUCKET, messagingSenderId:window.ENV.FIREBASE_MESSAGING_SENDER_ID, appId:window.ENV.FIREBASE_APP_ID });
-      const auth = getAuth(app);
-      const db   = getFirestore(app);
+      let db;
 
       // ── Constants ─────────────────────────────────────────────────
       const WEEK_W = 130; // px per week column
@@ -721,31 +714,15 @@
       }
 
       // ── Auth ──────────────────────────────────────────────────────
-      onAuthStateChanged(auth, async user => {
-        if (!user) { window.location.href = 'index.html'; return; }
+      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+        db = window.db;
         currentUser = user;
-        try {
-          const ud = await getDoc(doc(db,'users',user.uid));
-          if (ud.exists()) {
-            const d = ud.data();
-            isAdmin     = d.role === 'academic_admin';
-            isModerator = d.role === 'academic_user' || isAdmin;
-            userSchool  = d.schoolName || null;
-            const name  = (d.displayName || user.displayName || user.email).split(' ')[0];
-            document.getElementById('navFirstName').textContent = name;
-            document.getElementById('navAvatar').textContent    = name[0].toUpperCase();
-            document.getElementById('ddFullName').textContent   = d.displayName || user.displayName || '';
-            document.getElementById('ddEmail').textContent      = user.email;
-            document.getElementById('ddAvatar').textContent     = name[0].toUpperCase();
-            if (d.role === 'academic_admin' || d.role === 'academic_user') {
-              document.getElementById('addActBtn').style.display = 'flex';
-            }
-          }
-        } catch(e){ console.warn(e); }
-        document.getElementById('profileWrap').style.display='flex';
-        setupNav();
+        isAdmin     = profile.role_academichub === 'academic_admin';
+        isModerator = true; // all authenticated users can moderate their own posts
+        userSchool  = profile.schoolName || null;
+        window.__loadAcademicNavbar('calendar', { user, profile });
+        document.getElementById('addActBtn').style.display = 'flex';
         loadActivities();
-        await window.__initNavbarCounters?.({ db, user });
         loadMyCompletions();
       });
 
@@ -1432,28 +1409,6 @@
         }, { passive: true });
       }());
 
-      // ── Profile dropdown ───────────────────────────────────────────
-      function setupNav() {
-        const wrap = document.getElementById('profileWrap');
-        const btn  = document.getElementById('profileBtn');
-        if (!wrap || !btn) return;
-
-        btn.addEventListener('click', e => {
-          e.stopPropagation();
-          wrap.classList.toggle('open');
-        });
-        document.addEventListener('click', e => {
-          if (!wrap.contains(e.target)) wrap.classList.remove('open');
-        });
-
-        const signOutBtn = document.getElementById('ddSignOut');
-        if (signOutBtn) {
-          signOutBtn.addEventListener('click', async () => {
-            await signOut(auth);
-            window.location.href = 'index.html';
-          });
-        }
-      }
     </script>
   </body>
 </html>
