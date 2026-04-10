@@ -2006,53 +2006,6 @@
       @media (max-width: 768px) {
         .nav-stats { display: none; }
       }
-      /* -- Page Overlay (iframe panel) -- */
-      #pageOverlay {
-        display: none; position: fixed; inset: 0; z-index: 900;
-        background: rgba(10,10,26,0.55);
-        backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
-        align-items: stretch; justify-content: flex-end;
-      }
-      #pageOverlay.open { display: flex; }
-      #pagePanel {
-        position: relative; width: calc(100vw - 220px); height: 100%;
-        background: #fff; display: flex; flex-direction: column;
-        box-shadow: -8px 0 40px rgba(0,0,0,0.25);
-        animation: panelIn .22s cubic-bezier(.32,1,.32,1);
-      }
-      @keyframes panelIn  { from { transform: translateX(60px); opacity:0; } to { transform:none; opacity:1; } }
-      @keyframes panelOut { to   { transform: translateX(80px); opacity:0; } }
-      #pageOverlay.closing #pagePanel { animation: panelOut .18s cubic-bezier(.32,1,.32,1) forwards; }
-      #panelBar {
-        display: flex; align-items: center; gap: 10px;
-        padding: 0 14px; height: 44px; flex-shrink: 0;
-        background: rgba(5,5,16,0.96);
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-      }
-      #panelCloseBtn {
-        width: 28px; height: 28px; border-radius: 7px; border: none;
-        background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.75);
-        cursor: pointer; font-size: 15px; display: flex;
-        align-items: center; justify-content: center; flex-shrink: 0;
-        transition: background .15s;
-      }
-      #panelCloseBtn:hover { background: rgba(255,255,255,0.2); color:#fff; }
-      #panelTitle {
-        flex: 1; font-size: 13px; font-weight: 500; font-family:'DM Sans',sans-serif;
-        color: rgba(255,255,255,0.75); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-      }
-      #panelOpenBtn {
-        display: flex; align-items: center; gap: 5px;
-        padding: 5px 11px; border-radius: 7px; border: none;
-        background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
-        font-size: 12px; font-family:'DM Sans',sans-serif;
-        cursor: pointer; text-decoration: none; flex-shrink: 0; transition: background .15s;
-      }
-      #panelOpenBtn:hover { background: rgba(255,255,255,0.2); color:#fff; }
-      #panelOpenBtn svg { width:12px; height:12px; }
-      #panelIframe { flex:1; border:none; width:100%; background:#f7f6f3; }
-      #panelBackdrop { flex: 0 0 220px; cursor: pointer; }
-      @media (max-width: 900px) { #pagePanel { width:100vw; } #panelBackdrop { display:none; } }
     </style>
     <script src="firebase-config.js"></script>
     <script>
@@ -2751,7 +2704,6 @@
           <!-- Staff Satisfaction Survey -->
           <a
             href="StaffSatisfactionSurvey.html"
-            target="_blank"
             class="card"
             data-theme="satisfaction"
           >
@@ -2804,7 +2756,6 @@
           <!-- Student Satisfaction Survey -->
           <a
             href="StudentSatisfactionSurvey.html"
-            target="_blank"
             class="card"
             data-theme="student"
           >
@@ -2857,7 +2808,6 @@
           <!-- Parent Satisfaction Survey -->
           <a
             href="ParentSatisfactionSurvey.html"
-            target="_blank"
             class="card"
             data-theme="parent"
           >
@@ -3057,7 +3007,6 @@
           <!-- A-EASE Dashboard -->
           <a
             href="A-EASE-I-AssessmentResults.html"
-            target="_blank"
             class="card"
             data-theme="aease"
           >
@@ -3103,7 +3052,6 @@
           <!-- EASE I Dashboard -->
           <a
             href="EASE-I-AssessmentResults.html"
-            target="_blank"
             class="card"
             data-theme="ease"
           >
@@ -3152,7 +3100,6 @@
           <!-- EASE II Dashboard -->
           <a
             href="EASE-II-AssessmentResults.html"
-            target="_blank"
             class="card"
             data-theme="ease2"
           >
@@ -3201,7 +3148,6 @@
           <!-- EASE III Dashboard -->
           <a
             href="EASE-III-AssessmentResults.html"
-            target="_blank"
             class="card"
             data-theme="ease3"
           >
@@ -3641,22 +3587,6 @@
           </div><!-- /category-section#uncategorizedAccordion -->
         </div><!-- /uncategorized-section -->
       </main>
-
-      <!-- Page Overlay -->
-      <div id="pageOverlay">
-        <div id="panelBackdrop"></div>
-        <div id="pagePanel">
-          <div id="panelBar">
-            <button id="panelCloseBtn" aria-label="Close">&#x2715;</button>
-            <span id="panelTitle"></span>
-            <a id="panelOpenBtn" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Open in new tab
-            </a>
-          </div>
-          <iframe id="panelIframe" src="about:blank" allow="same-origin" loading="lazy"></iframe>
-        </div>
-      </div>
 
       <!-- == Manage Cards Modal == -->
       <div id="manageCatModal" role="dialog" aria-modal="true" aria-labelledby="manageCatModalTitle">
@@ -4569,49 +4499,6 @@
         return THEME_COLORS[theme] || '#667eea';
       }
 
-      // -- Page Overlay (iframe panel) ---------------------------
-      (function () {
-        const overlay  = document.getElementById('pageOverlay');
-        const panel    = document.getElementById('pagePanel');
-        const iframe   = document.getElementById('panelIframe');
-        const titleEl  = document.getElementById('panelTitle');
-        const openBtn  = document.getElementById('panelOpenBtn');
-        const closeBtn = document.getElementById('panelCloseBtn');
-        const backdrop = document.getElementById('panelBackdrop');
-
-        function openPanel(href, title) {
-          iframe.src = href;
-          titleEl.textContent = title || href;
-          openBtn.href = href;
-          overlay.classList.remove('closing');
-          overlay.classList.add('open');
-          document.body.style.overflow = 'hidden';
-        }
-
-        function closePanel() {
-          overlay.classList.add('closing');
-          panel.addEventListener('animationend', () => {
-            overlay.classList.remove('open', 'closing');
-            iframe.src = 'about:blank';
-            document.body.style.overflow = '';
-          }, { once: true });
-        }
-
-        closeBtn.addEventListener('click', closePanel);
-        backdrop.addEventListener('click', closePanel);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
-
-        // Intercept all card clicks
-        document.addEventListener('click', e => {
-          const card = e.target.closest('a.card');
-          if (!card) return;
-          const href = card.getAttribute('href');
-          if (!href || href === '#') return;
-          e.preventDefault();
-          const title = card.querySelector('.card-title')?.textContent?.trim() || '';
-          openPanel(href, title);
-        });
-      }());
     </script>
 
   </body>
