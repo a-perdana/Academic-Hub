@@ -21,7 +21,7 @@ import { initializeApp, getApps }
 import { getAuth, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, serverTimestamp,
+  getFirestore, doc, getDoc, setDoc, addDoc, serverTimestamp,
   collection, collectionGroup, onSnapshot, updateDoc, arrayUnion, arrayRemove,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
@@ -274,6 +274,14 @@ onAuthStateChanged(auth, async (user) => {
   // 7. All checks passed — expose globals
   window.currentUser = user;
   window.userProfile = profile;
+
+  // Log platform usage event (fire-and-forget, non-blocking)
+  addDoc(collection(db, 'platform_usage'), {
+    uid:      user.uid,
+    platform: 'academichub',
+    role:     profile[PLATFORM_KEY] || '',
+    ts:       serverTimestamp(),
+  }).catch(() => {});
 
   // ── Populate shared nav elements ─────────────────────────────────
   const displayName = profile.displayName || user.displayName;
