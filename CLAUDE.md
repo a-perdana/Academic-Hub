@@ -79,12 +79,14 @@ Every protected page loads `auth-guard.js` as a module:
 `auth-guard.js` (modular SDK v10):
 1. Hides `document.body` immediately (prevents flash of content).
 2. Initialises Firebase (guards against double-init with `getApps()`).
-3. Listens on `onAuthStateChanged`. If no user → redirects to `index.html`.
-4. Fetches (or creates) Firestore profile. If missing, creates it and assigns `role_academichub: 'academic_user'` automatically.
-5. **Domain check** — Google SSO users must have an email from `window.ACADEMIC_ALLOWED_DOMAINS` (15 school domains). Email/password accounts bypass this check. Fails → `index.html?error=domain`.
-6. Role check — `role_academichub` must be in `['academic_admin', 'academic_user']`. Fails → `index.html?error=access`.
+3. Listens on `onAuthStateChanged`. If no user → redirects to `login.html`.
+4. Fetches (or creates) Firestore profile. If missing, creates it and assigns `role_academichub: 'academic_user'` + `approval_status_academichub: 'pending'` automatically.
+5. **Domain check** — Google SSO users must have an email from `window.ACADEMIC_ALLOWED_DOMAINS` (15 school domains). Email/password accounts bypass this check. Fails → `login.html?error=domain`.
+6. Role check — `role_academichub` must be in `['academic_admin', 'academic_user']`. Fails → `login.html?error=access`.
 7. Name prompt if `displayName` is missing.
-8. Exposes globals and dispatches `authReady`.
+8. **AH sub-role prompt** — shown until `ah_sub_roles` has at least one value. Checkbox cards for Foundation Representative, School Principal, Academic Coordinator. Runs BEFORE the approval check so admin sees role declarations when reviewing.
+9. **Approval check** — if `approval_status_academichub !== 'approved'` (and not `academic_admin`) → redirect to `waiting.html`. `waiting.html` polls every 30s and redirects on approval.
+10. Exposes globals and dispatches `authReady`.
 
 **Allowed domains** are defined centrally in `auth-guard.js` as `window.ACADEMIC_ALLOWED_DOMAINS` (15 entries: 14 partner school `.sch.id` domains + `eduversal.org`). Individual pages reference this via `const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS` — do NOT redefine the list inline.
 
