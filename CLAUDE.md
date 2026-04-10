@@ -111,22 +111,28 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 
 ## Role System
 
-Each platform has its own Firestore role field. Academic Hub uses `role_academichub`.
+Academic Hub uses `role_academichub` as the primary access field. **The legacy `role` field is no longer read** — `auth-guard.js` uses only `role_academichub`.
 
-| Field             | Values                                        |
-|-------------------|-----------------------------------------------|
+| Field             | Values                                            |
+|-------------------|---------------------------------------------------|
 | `role_academichub`| `'academic_user'` (default) \| `'academic_admin'` |
+| `ah_sub_roles[]`  | `'foundation_representative'`, `'school_principal'`, `'academic_coordinator'` |
+| `approval_status_academichub` | `'pending'` (default) \| `'approved'` |
 
 **Academic Hub allowed roles:** `['academic_user', 'academic_admin']`
 
-First login automatically assigns `academic_user` via `setDoc` with `{ merge: true }`. No manual intervention needed for basic access. `academic_admin` must be set manually via CentralHub's `console.html`.
+First login automatically assigns `academic_user` + `approval_status_academichub: 'pending'` via `setDoc` with `{ merge: true }`. Users stay on `waiting.html` until a `central_admin` sets `approval_status_academichub: 'approved'` in `console.html`. `academic_admin` bypasses the approval check entirely.
+
+**Sub-roles (`ah_sub_roles[]`)** are set in `console.html` and control:
+- `weekly-checklist.html` — tab visibility: each sub-role maps to its own tab (Foundation Representative / School Principal / Academic Coordinator). Users with multiple sub-roles see multiple tabs; single sub-role users see no tab bar. Admins see all tabs.
+- `index.html` dashboard — categories with a `visible_to[]` field are filtered to matching sub-roles. Categories with empty `visible_to` are shown to everyone.
 
 **isAdmin check pattern:**
 ```js
 const isAdmin = profile?.role_academichub === 'academic_admin';
 ```
 
-Legacy migration: if `role_academichub` is absent on an existing user doc, `auth-guard.js` derives the role from the old `role` field and writes the new field.
+**weekly-checklist.html Firestore IDs** follow the pattern `${ACADEMIC_YEAR}_w${week}_${currentPlatform}` where `currentPlatform` is one of `foundation_representative`, `school_principal`, `academic_coordinator`.
 
 ---
 
