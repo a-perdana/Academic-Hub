@@ -392,7 +392,56 @@ function syncMobileBadges() {
   });
 }
 
-window.__loadAcademicNavbar = async function(activeKey) {
+// ── Profile helpers ──────────────────────────────────────────────
+const _AH_AVATAR_PALETTE = ['#6c5ce7','#0984e3','#00b894','#e17055','#d63031','#6d28d9','#0891b2'];
+function _ahAvatarColor(name) {
+  let h = 0; for (const c of name) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
+  return _AH_AVATAR_PALETTE[Math.abs(h) % _AH_AVATAR_PALETTE.length];
+}
+function _ahGetInitials(name) {
+  return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0,2) || '?';
+}
+function _ahBuildAvatar(el, user) {
+  if (!el) return;
+  if (user.photoURL) {
+    el.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer" alt="">`;
+    el.style.background = 'transparent';
+  } else {
+    const n = user.displayName || user.email.split('@')[0];
+    el.style.background = _ahAvatarColor(n);
+    el.textContent = _ahGetInitials(n);
+  }
+}
+function _ahPopulateProfile(user, profile) {
+  const name      = profile?.displayName || user.displayName || user.email.split('@')[0];
+  const firstName = name.split(' ')[0];
+  _ahBuildAvatar(document.getElementById('navAvatar'), { ...user, displayName: name });
+  const navFirst = document.getElementById('navFirstName');
+  if (navFirst) navFirst.textContent = firstName;
+  _ahBuildAvatar(document.getElementById('ddAvatar'), { ...user, displayName: name });
+  const ddFull  = document.getElementById('ddFullName');
+  if (ddFull)  ddFull.textContent  = name;
+  const ddEmail = document.getElementById('ddEmail');
+  if (ddEmail) ddEmail.textContent = user.email;
+  const profileWrap = document.getElementById('profileWrap');
+  if (profileWrap) profileWrap.style.display = 'flex';
+
+  const profileBtn = document.getElementById('profileBtn');
+  const ddSignOut  = document.getElementById('ddSignOut');
+  if (profileBtn && profileWrap) {
+    profileBtn.addEventListener('click', e => { e.stopPropagation(); profileWrap.classList.toggle('open'); });
+    document.addEventListener('click', () => profileWrap.classList.remove('open'));
+  }
+  if (ddSignOut) {
+    import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js').then(({ signOut }) => {
+      ddSignOut.addEventListener('click', () =>
+        signOut(window.auth).then(() => { window.location.href = 'login.html'; })
+      );
+    });
+  }
+}
+
+window.__loadAcademicNavbar = async function(activeKey, authCtx) {
   const mount = document.getElementById('navbarMount');
   if (!mount) return;
 
@@ -411,6 +460,11 @@ window.__loadAcademicNavbar = async function(activeKey) {
   buildMobileMenu(activeKey);
   initHamburger();
   syncMobileBadges();
+
+  // Populate profile section if auth context provided
+  if (authCtx?.user) {
+    _ahPopulateProfile(authCtx.user, authCtx.profile);
+  }
 };
 
 window.__clearNavbarCounters = function() {

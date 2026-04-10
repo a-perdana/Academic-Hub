@@ -519,7 +519,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   currentUid = user.uid;
   isAdmin = profile?.role_academichub === 'academic_admin';
 
-  window.__loadAcademicNavbar?.('');
+  window.__loadAcademicNavbar?.('', { user, profile });
   window.__initNavbarCounters?.({ db: window.db, user });
 
   // ── Determine visible tabs from ah_sub_roles ───────────────────

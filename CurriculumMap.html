@@ -745,7 +745,7 @@
     document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
       db = window.db;
 
-      window.__loadAcademicNavbar?.('');
+      window.__loadAcademicNavbar?.('', { user, profile });
       window.__initNavbarCounters?.({ db: window.db, user });
 
       bindControls();
