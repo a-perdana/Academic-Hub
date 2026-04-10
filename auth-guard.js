@@ -106,6 +106,78 @@ function promptForName() {
   });
 }
 
+// ── AH sub-role options ───────────────────────────────────────────
+const AH_ROLE_OPTIONS = [
+  { value: 'foundation_representative', label: 'Foundation Representative', desc: 'I represent the school foundation and oversee strategic direction.' },
+  { value: 'school_principal',          label: 'School Principal',          desc: 'I lead the school and am responsible for overall management.' },
+  { value: 'academic_coordinator',      label: 'Academic Coordinator',      desc: 'I coordinate academic programmes, curriculum, and assessment.' },
+];
+
+function ahProfileComplete(profile) {
+  return Array.isArray(profile.ah_sub_roles) && profile.ah_sub_roles.length > 0;
+}
+
+function promptForAhProfile(profile) {
+  return new Promise(resolve => {
+    const existing = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+
+    const roleCards = AH_ROLE_OPTIONS.map(o => `
+      <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;border:1.5px solid #e0ddd6;border-radius:10px;transition:border-color .15s" id="_roleCard_${o.value}">
+        <input type="checkbox" id="_chk_${o.value}" value="${o.value}"
+          style="margin-top:2px;accent-color:#d97706;width:16px;height:16px;flex-shrink:0" ${existing.includes(o.value) ? 'checked' : ''}>
+        <div>
+          <div style="font-size:0.875rem;font-weight:600;color:#1c1c2e">${o.label}</div>
+          <div style="font-size:0.78rem;color:#8888a8;margin-top:2px">${o.desc}</div>
+        </div>
+      </label>`).join('');
+
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(28,28,46,0.82);display:flex;align-items:center;justify-content:center;padding:24px;font-family:"DM Sans",sans-serif';
+    overlay.innerHTML = `
+      <div style="background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:480px;box-shadow:0 24px 64px rgba(0,0,0,0.40);max-height:90vh;overflow-y:auto">
+        <div style="margin-bottom:24px">
+          <h2 style="font-size:1.35rem;font-weight:700;color:#1c1c2e;margin-bottom:6px">Set up your profile</h2>
+          <p style="font-size:0.875rem;color:#8888a8;line-height:1.5">Select your role(s) so we can show you the right dashboards and checklists.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+          ${roleCards}
+        </div>
+        <p id="_ahProfileErr" style="font-size:0.82rem;color:#dc2626;min-height:18px;margin-bottom:12px"></p>
+        <button id="_ahProfileBtn" style="width:100%;padding:12px;background:linear-gradient(135deg,#d97706,#b45309);color:#fff;border:none;border-radius:10px;font-size:0.95rem;font-weight:600;cursor:pointer">Save & Continue →</button>
+      </div>`;
+
+    document.body.appendChild(overlay);
+    document.body.style.visibility = 'visible';
+
+    // Border highlight on check
+    AH_ROLE_OPTIONS.forEach(o => {
+      const chk   = overlay.querySelector(`#_chk_${o.value}`);
+      const label = overlay.querySelector(`#_roleCard_${o.value}`);
+      const update = () => { label.style.borderColor = chk.checked ? '#d97706' : '#e0ddd6'; };
+      chk.addEventListener('change', update);
+      update();
+    });
+
+    const btn = overlay.querySelector('#_ahProfileBtn');
+    const err = overlay.querySelector('#_ahProfileErr');
+
+    btn.addEventListener('click', () => {
+      const ah_sub_roles = AH_ROLE_OPTIONS
+        .map(o => overlay.querySelector(`#_chk_${o.value}`).checked ? o.value : null)
+        .filter(Boolean);
+
+      if (!ah_sub_roles.length) {
+        err.textContent = 'Please select at least one role.';
+        return;
+      }
+
+      overlay.remove();
+      document.body.style.visibility = 'hidden';
+      resolve({ ah_sub_roles });
+    });
+  });
+}
+
 // ── Auth state listener ──────────────────────────────────────────
 onAuthStateChanged(auth, async (user) => {
 
@@ -189,6 +261,13 @@ onAuthStateChanged(auth, async (user) => {
     const name = await promptForName();
     await setDoc(userRef, { displayName: name }, { merge: true });
     profile.displayName = name;
+  }
+
+  // 6b. AH sub-role prompt if ah_sub_roles not yet set
+  if (!ahProfileComplete(profile)) {
+    const { ah_sub_roles } = await promptForAhProfile(profile);
+    await setDoc(userRef, { ah_sub_roles }, { merge: true });
+    profile.ah_sub_roles = ah_sub_roles;
   }
 
   // 7. All checks passed — expose globals
