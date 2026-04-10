@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Curriculum Map — Academic Hub</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -27,36 +28,8 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; }
 
-    /* ── NAV ── */
-    .nav {
-      background: #fff;
-      border-bottom: 1px solid var(--border);
-      padding: 0 32px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .nav-back {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 0.83rem;
-      color: var(--ink-3);
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-back:hover { color: var(--accent); }
-    .nav-title {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--ink);
-    }
-    .nav-sep { flex: 1; }
-    .nav-user { font-size: 0.83rem; color: var(--ink-3); }
+    /* ── NAVBAR OFFSET ── */
+    body { padding-top: 62px; }
 
     /* ── HERO ── */
     .hero {
@@ -613,18 +586,7 @@
 </head>
 <body>
 
-  <!-- ── NAV ── -->
-  <nav class="nav">
-    <a href="index.html" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
-      </svg>
-      Dashboard
-    </a>
-    <span class="nav-title">Curriculum Map</span>
-    <span class="nav-sep"></span>
-    <span class="nav-user" id="navUserName"></span>
-  </nav>
+  <div id="navbarMount"></div>
 
   <!-- ── HERO ── -->
   <section class="hero">
@@ -743,6 +705,7 @@
       FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
     };
   </script>
+  <script src="partials/navbar-loader.js"></script>
   <script type="module" src="auth-guard.js"></script>
   <script type="module">
     import {
@@ -782,10 +745,8 @@
     document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
       db = window.db;
 
-      // Populate nav user name
-      const displayName = profile.displayName || user.displayName || user.email;
-      const navUserEl = document.getElementById('navUserName');
-      if (navUserEl) navUserEl.textContent = displayName.split(' ')[0];
+      window.__loadAcademicNavbar?.('');
+      window.__initNavbarCounters?.({ db: window.db, user });
 
       bindControls();
       await loadAndRender();

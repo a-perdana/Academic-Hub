@@ -35,49 +35,8 @@ body {
   font-size: 14px;
 }
 
-/* ─── TOPBAR ─────────────────────────────────── */
-.topbar {
-  background: var(--ink);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 28px;
-  height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  border-bottom: 3px solid var(--accent);
-  gap: 16px;
-}
-.topbar-left { display: flex; align-items: center; gap: 14px; }
-.back-btn {
-  display: flex; align-items: center; gap: 6px;
-  padding: 6px 14px; border-radius: 8px;
-  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
-  color: rgba(255,255,255,.75); font-size: 12.5px; font-weight: 500;
-  cursor: pointer; text-decoration: none; transition: all .18s ease;
-}
-.back-btn:hover { background: rgba(255,255,255,.14); color: #fff; }
-.topbar-title {
-  font-family: 'Lora', serif;
-  font-size: 1rem; font-weight: 600; color: #fff;
-}
-.topbar-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.role-badge {
-  font-size: 11px; font-weight: 700; padding: 3px 10px;
-  border-radius: 20px; background: rgba(217,119,6,.25);
-  color: #fcd34d; border: 1px solid rgba(217,119,6,.4);
-  text-transform: uppercase; letter-spacing: 0.05em;
-}
-.role-badge.admin { background: rgba(245,158,11,.3); color: #fde68a; border-color: rgba(245,158,11,.5); }
-.btn-logout-top {
-  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-  color: rgba(255,255,255,.5); background: none;
-  border: 1px solid rgba(255,255,255,.14); border-radius: 6px; padding: 5px 12px;
-  cursor: pointer; transition: all .18s;
-}
-.btn-logout-top:hover { color: #fff; border-color: rgba(255,255,255,.3); }
+/* ─── NAVBAR OFFSET ──────────────────────────── */
+body { padding-top: 62px; }
 
 /* ─── HERO ───────────────────────────────────── */
 .hero {
@@ -336,8 +295,7 @@ body {
   .hero { padding: 28px 20px; }
   .hero-inner { flex-direction: column; align-items: flex-start; }
   .page-wrap { padding: 20px 16px 56px; }
-  .topbar { padding: 0 16px; }
-  .week-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+.week-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
 }
 
 /* ─── WEEKLY ESSENTIALS ───────────────────────── */
@@ -382,20 +340,7 @@ body {
 </head>
 <body>
 
-<!-- ─── TOPBAR ──────────────────────────────────────────────────── -->
-<header class="topbar">
-  <div class="topbar-left">
-    <a href="index.html" class="back-btn">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-      Home
-    </a>
-    <span class="topbar-title">Weekly Checklist</span>
-  </div>
-  <div class="topbar-right">
-    <span class="role-badge" id="roleBadge"></span>
-    <button class="btn-logout-top" id="logoutBtn">Sign out</button>
-  </div>
-</header>
+<div id="navbarMount"></div>
 
 <!-- ─── HERO ─────────────────────────────────────────────────────── -->
 <section class="hero">
@@ -523,12 +468,12 @@ body {
     FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
   };
 </script>
+<script src="partials/navbar-loader.js"></script>
 <script type="module" src="auth-guard.js"></script>
 <script type="module">
 import {
   doc, getDoc, setDoc, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 // ── Constants ─────────────────────────────────────────────────────
 const ACADEMIC_YEAR = '2025-26';
@@ -574,13 +519,8 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   currentUid = user.uid;
   isAdmin = profile?.role_academichub === 'academic_admin';
 
-  const roleBadge = document.getElementById('roleBadge');
-  roleBadge.textContent = isAdmin ? 'Admin' : 'Leadership';
-  if (isAdmin) roleBadge.classList.add('admin');
-
-  document.getElementById('logoutBtn').addEventListener('click', () => {
-    signOut(window.auth).then(() => { window.location.href = 'login.html'; });
-  });
+  window.__loadAcademicNavbar?.('');
+  window.__initNavbarCounters?.({ db: window.db, user });
 
   // ── Determine visible tabs from ah_sub_roles ───────────────────
   const ahSubRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
@@ -643,8 +583,6 @@ function updateHeroLabels() {
   const label = PLATFORM_LABELS[currentPlatform] || currentPlatform;
   document.getElementById('heroEyebrow').textContent = `Academic Hub · ${label} · 2025–2026`;
   document.getElementById('heroTitle').textContent   = `Week ${currentWeek} — ${label} Checklist`;
-  const roleBadge = document.getElementById('roleBadge');
-  if (!isAdmin) roleBadge.textContent = label;
 }
 
 // ── Week helpers ──────────────────────────────────────────────────
