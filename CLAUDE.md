@@ -118,7 +118,7 @@ Academic Hub uses `role_academichub` as the primary access field. **The legacy `
 | Field             | Values                                            |
 |-------------------|---------------------------------------------------|
 | `role_academichub`| `'academic_user'` (default) \| `'academic_admin'` |
-| `ah_sub_roles[]`  | `'foundation_representative'`, `'school_principal'`, `'academic_coordinator'` |
+| `ah_sub_roles[]`  | `'foundation_representative'`, `'school_principal'`, `'academic_coordinator'`, `'cambridge_coordinator'` |
 | `approval_status_academichub` | `'pending'` (default) \| `'approved'` |
 
 **Academic Hub allowed roles:** `['academic_user', 'academic_admin']`
