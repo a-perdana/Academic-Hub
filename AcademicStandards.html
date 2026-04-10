@@ -29,7 +29,7 @@
     <script src="https://unpkg.com/recharts@1.8.5/umd/Recharts.min.js"></script>
   </head>
   <body>
-    <style>body { padding-top: 62px; }</style>
+    <style>body { padding-top: 0; }</style>
     <div id="navbarMount"></div>
     <div id="root"></div>
     <script>
@@ -1395,7 +1395,7 @@
         return (
           <div className={`min-h-screen ${bg} ${text}`}>
             <header
-              className={`fixed top-0 left-0 right-0 z-50 ${
+              className={`fixed top-[62px] left-0 right-0 z-50 ${
                 dark
                   ? "bg-gradient-to-r from-gray-800 to-gray-900"
                   : "bg-gradient-to-r from-white to-blue-50"
@@ -1469,10 +1469,10 @@
               </div>
             </header>
 
-            <div className="flex pt-16">
+            <div className="flex pt-[116px]">
               {sidebar && (
                 <aside
-                  className={`fixed left-0 top-16 bottom-0 w-56 ${
+                  className={`fixed left-0 top-[116px] bottom-0 w-56 ${
                     dark
                       ? "bg-gradient-to-b from-gray-800 to-gray-900"
                       : "bg-gradient-to-b from-blue-50 to-indigo-100"
