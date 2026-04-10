@@ -317,6 +317,20 @@ body {
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.error { background: #dc2626; }
 
+/* ─── CHECKLIST TABS ─────────────────────────── */
+.checklist-tabs {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.checklist-tab {
+  padding: 7px 18px; border-radius: 20px;
+  border: 1.5px solid var(--border); background: var(--white);
+  font-size: 12.5px; font-weight: 600; color: var(--ink-3);
+  cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+}
+.checklist-tab:hover { border-color: var(--accent); color: var(--accent); }
+.checklist-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
 /* ─── RESPONSIVE ─────────────────────────────── */
 @media (max-width: 640px) {
   .hero { padding: 28px 20px; }
@@ -378,7 +392,7 @@ body {
     <span class="topbar-title">Weekly Checklist</span>
   </div>
   <div class="topbar-right">
-    <span class="role-badge" id="roleBadge">Leadership</span>
+    <span class="role-badge" id="roleBadge"></span>
     <button class="btn-logout-top" id="logoutBtn">Sign out</button>
   </div>
 </header>
@@ -387,8 +401,8 @@ body {
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-text">
-      <p class="eyebrow">Academic Hub · Leadership · 2025–2026</p>
-      <h1 id="heroTitle">Week — Leadership Checklist</h1>
+      <p class="eyebrow" id="heroEyebrow">Academic Hub · 2025–2026</p>
+      <h1 id="heroTitle">Week — Checklist</h1>
       <p class="sub" id="heroSub">Track weekly leadership tasks, meetings, and observations.</p>
     </div>
     <div class="progress-ring-wrap">
@@ -406,6 +420,13 @@ body {
 
 <!-- ─── MAIN ──────────────────────────────────────────────────────── -->
 <div class="page-wrap">
+
+  <!-- Checklist Tabs (hidden until auth; tabs shown based on ah_sub_roles) -->
+  <div class="checklist-tabs" id="checklistTabs" style="display:none">
+    <button class="checklist-tab active" data-tab="foundation_representative" id="tabFoundation">Foundation Representative</button>
+    <button class="checklist-tab" data-tab="school_principal" id="tabPrincipal" style="display:none">School Principal</button>
+    <button class="checklist-tab" data-tab="academic_coordinator" id="tabCoordinator" style="display:none">Academic Coordinator</button>
+  </div>
 
   <!-- Week Navigator -->
   <div class="week-nav" style="gap:12px">
@@ -446,7 +467,7 @@ body {
   <!-- Empty state -->
   <div class="empty-state" id="emptyState" style="display:none">
     <h3 id="emptyTitle">No tasks for this week</h3>
-    <p id="emptyMsg">Check back later, or add tasks for the leadership team.</p>
+    <p id="emptyMsg">Check back later.</p>
     <button class="btn btn-primary" id="emptyAddBtn" style="display:none" onclick="openTaskModal(null)">
       Add First Task
     </button>
@@ -511,9 +532,14 @@ import { signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth
 
 // ── Constants ─────────────────────────────────────────────────────
 const ACADEMIC_YEAR = '2025-26';
-const PLATFORM      = 'leadership';
 const TOTAL_WEEKS   = 40;
 const WEEK1_START   = new Date(2025, 6, 21); // July 21 2025
+
+const PLATFORM_LABELS = {
+  foundation_representative: 'Foundation Representative',
+  school_principal:          'School Principal',
+  academic_coordinator:      'Academic Coordinator',
+};
 
 const CAT_COLORS = {
   'Staff Meeting':            { color: '#2563eb', bg: '#eff6ff' },
@@ -527,16 +553,17 @@ const CAT_COLORS = {
 };
 
 // ── State ─────────────────────────────────────────────────────────
-let currentWeek   = 1;
-let isAdmin       = false;
-let currentUid    = null;
-let tasks         = [];
-let myProgress    = {};
-let openNoteId    = null;
-let editTaskId    = null;
-let unsubTasks    = null;
-let unsubProgress = null;
-let activeFilter  = 'All';
+let currentWeek     = 1;
+let isAdmin         = false;
+let currentUid      = null;
+let currentPlatform = 'foundation_representative';
+let tasks           = [];
+let myProgress      = {};
+let openNoteId      = null;
+let editTaskId      = null;
+let unsubTasks      = null;
+let unsubProgress   = null;
+let activeFilter    = 'All';
 
 let essentials      = [];      // [{id, title}]
 let unsubEssentials = null;
@@ -555,6 +582,48 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     signOut(window.auth).then(() => { window.location.href = 'login.html'; });
   });
 
+  // ── Determine visible tabs from ah_sub_roles ───────────────────
+  const ahSubRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
+  const PLATFORM_ORDER = ['foundation_representative', 'school_principal', 'academic_coordinator'];
+  const visiblePlatforms = isAdmin ? PLATFORM_ORDER : PLATFORM_ORDER.filter(p => ahSubRoles.includes(p));
+
+  // Fallback: if user has no sub_roles (and is not admin), show foundation tab as default
+  const activePlatforms = visiblePlatforms.length > 0 ? visiblePlatforms : ['foundation_representative'];
+
+  // Set initial platform to first visible tab
+  currentPlatform = activePlatforms[0];
+
+  // Show/hide tab buttons
+  const tabsEl = document.getElementById('checklistTabs');
+  if (activePlatforms.length > 1) {
+    // Show tab bar only when user has multiple roles (or is admin)
+    tabsEl.style.display = '';
+    document.getElementById('tabFoundation').style.display = activePlatforms.includes('foundation_representative') ? '' : 'none';
+    document.getElementById('tabPrincipal').style.display  = activePlatforms.includes('school_principal')          ? '' : 'none';
+    document.getElementById('tabCoordinator').style.display= activePlatforms.includes('academic_coordinator')      ? '' : 'none';
+    // Set initial active tab
+    document.querySelectorAll('.checklist-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === currentPlatform);
+    });
+    // Tab click handler
+    document.querySelectorAll('.checklist-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (tab.dataset.tab === currentPlatform) return;
+        document.querySelectorAll('.checklist-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPlatform = tab.dataset.tab;
+        activeFilter = 'All';
+        updateHeroLabels();
+        if (isAdmin) {
+          document.getElementById('adminBar').style.display = 'flex';
+          document.getElementById('emptyAddBtn').style.display = '';
+        }
+        loadWeek(currentWeek);
+        loadEssentials();
+      });
+    });
+  }
+
   if (isAdmin) {
     document.getElementById('adminBar').style.display = 'flex';
     document.getElementById('emptyAddBtn').style.display = '';
@@ -564,10 +633,19 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   if (currentWeek < 1) currentWeek = 1;
   if (currentWeek > TOTAL_WEEKS) currentWeek = TOTAL_WEEKS;
 
+  updateHeroLabels();
   setupWeekNav();
   loadWeek(currentWeek);
   loadEssentials();
 });
+
+function updateHeroLabels() {
+  const label = PLATFORM_LABELS[currentPlatform] || currentPlatform;
+  document.getElementById('heroEyebrow').textContent = `Academic Hub · ${label} · 2025–2026`;
+  document.getElementById('heroTitle').textContent   = `Week ${currentWeek} — ${label} Checklist`;
+  const roleBadge = document.getElementById('roleBadge');
+  if (!isAdmin) roleBadge.textContent = label;
+}
 
 // ── Week helpers ──────────────────────────────────────────────────
 function getWeekNumber(date) {
@@ -607,7 +685,7 @@ function setupWeekNav() {
 function updateWeekUI() {
   document.getElementById('weekLabel').textContent = `Week ${currentWeek}`;
   document.getElementById('weekDates').textContent  = getWeekDates(currentWeek);
-  document.getElementById('heroTitle').textContent  = `Week ${currentWeek} — Leadership Checklist`;
+  updateHeroLabels();
   document.getElementById('prevWeekBtn').disabled   = currentWeek <= 1;
   document.getElementById('nextWeekBtn').disabled   = currentWeek >= TOTAL_WEEKS;
   const ind = document.getElementById('weekThisIndicator');
@@ -633,8 +711,8 @@ function loadWeek(week) {
   document.getElementById('emptyState').style.display   = 'none';
   document.getElementById('taskArea').style.display     = 'none';
 
-  const templateId = `${ACADEMIC_YEAR}_w${String(week).padStart(2,'0')}_${PLATFORM}`;
-  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(week).padStart(2,'0')}_${PLATFORM}`;
+  const templateId = `${ACADEMIC_YEAR}_w${String(week).padStart(2,'0')}_${currentPlatform}`;
+  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(week).padStart(2,'0')}_${currentPlatform}`;
   const db = window.db;
 
   unsubTasks = onSnapshot(doc(db, 'weekly_templates', templateId), snap => {
@@ -665,10 +743,10 @@ function loadWeek(week) {
 // ── Save progress ─────────────────────────────────────────────────
 async function saveProgress() {
   const db = window.db;
-  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${PLATFORM}`;
+  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${currentPlatform}`;
   await setDoc(doc(db, 'weekly_progress', progressId), {
     uid: currentUid, weekNumber: currentWeek,
-    academicYear: ACADEMIC_YEAR, platform: PLATFORM,
+    academicYear: ACADEMIC_YEAR, platform: currentPlatform,
     items: myProgress, updatedAt: serverTimestamp(),
   }, { merge: true });
 }
@@ -701,7 +779,7 @@ function render() {
     document.getElementById('emptyTitle').textContent =
       isAdmin ? 'No tasks for this week' : 'No tasks set for this week';
     document.getElementById('emptyMsg').textContent =
-      isAdmin ? 'Add tasks for the leadership team to complete this week.' : 'Check back later.';
+      isAdmin ? `Add tasks for the ${PLATFORM_LABELS[currentPlatform] || currentPlatform} tab to complete this week.` : 'Check back later.';
     return;
   }
 
@@ -835,9 +913,9 @@ function updateProgressRing() {
 // ── Admin task management ─────────────────────────────────────────
 async function saveTaskTemplate() {
   const db = window.db;
-  const templateId = `${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${PLATFORM}`;
+  const templateId = `${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${currentPlatform}`;
   await setDoc(doc(db, 'weekly_templates', templateId), {
-    weekNumber: currentWeek, academicYear: ACADEMIC_YEAR, platform: PLATFORM,
+    weekNumber: currentWeek, academicYear: ACADEMIC_YEAR, platform: currentPlatform,
     tasks, updatedAt: serverTimestamp(),
   }, { merge: true });
 }
@@ -886,7 +964,7 @@ async function deleteTask(taskId) {
 function loadEssentials() {
   if (unsubEssentials) { unsubEssentials(); unsubEssentials = null; }
   const db = window.db;
-  unsubEssentials = onSnapshot(doc(db, 'weekly_essentials', 'leadership'), snap => {
+  unsubEssentials = onSnapshot(doc(db, 'weekly_essentials', currentPlatform), snap => {
     essentials = [];
     if (snap.exists()) {
       const data = snap.data();
@@ -931,10 +1009,10 @@ async function toggleEssential(id) {
   myEssProgress[id] = { checked: !prev.checked };
   renderEssentials();
   const db = window.db;
-  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${PLATFORM}`;
+  const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${currentPlatform}`;
   await setDoc(doc(db, 'weekly_progress', progressId), {
     uid: currentUid, weekNumber: currentWeek,
-    academicYear: ACADEMIC_YEAR, platform: PLATFORM,
+    academicYear: ACADEMIC_YEAR, platform: currentPlatform,
     essentials: myEssProgress, updatedAt: serverTimestamp(),
   }, { merge: true });
 }
