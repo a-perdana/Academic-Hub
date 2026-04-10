@@ -461,9 +461,10 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
   initHamburger();
   syncMobileBadges();
 
-  // Populate profile section if auth context provided
+  // Populate profile section and init counters if auth context provided
   if (authCtx?.user) {
     _ahPopulateProfile(authCtx.user, authCtx.profile);
+    window.__initNavbarCounters?.({ db: window.db, user: authCtx.user });
   }
 };
 

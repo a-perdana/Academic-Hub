@@ -520,7 +520,6 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   isAdmin = profile?.role_academichub === 'academic_admin';
 
   window.__loadAcademicNavbar?.('', { user, profile });
-  window.__initNavbarCounters?.({ db: window.db, user });
 
   // ── Determine visible tabs from ah_sub_roles ───────────────────
   const ahSubRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
