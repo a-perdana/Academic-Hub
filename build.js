@@ -65,6 +65,7 @@ const cleanUrls = {
   "CambridgeSchoolQuality.html":     "cambridge-school-quality",
   "RaporPendidikan2025.html":        "rapor-pendidikan-2025",
   "weekly-checklist.html":          "weekly-checklist",
+  "CurriculumMap.html":             "curriculum-map",
 };
 
 // Rewrite all internal .html links to clean URLs inside a built file
@@ -131,6 +132,7 @@ const htmlFiles = [
   "CambridgeSchoolQuality.html",
   "RaporPendidikan2025.html",
   "weekly-checklist.html",
+  "CurriculumMap.html",
 ];
 
 htmlFiles.forEach((file) => {
