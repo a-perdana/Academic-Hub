@@ -111,6 +111,7 @@ const AH_ROLE_OPTIONS = [
   { value: 'foundation_representative', label: 'Foundation Representative', desc: 'I represent the school foundation and oversee strategic direction.' },
   { value: 'school_principal',          label: 'School Principal',          desc: 'I lead the school and am responsible for overall management.' },
   { value: 'academic_coordinator',      label: 'Academic Coordinator',      desc: 'I coordinate academic programmes, curriculum, and assessment.' },
+  { value: 'cambridge_coordinator',     label: 'Cambridge Coordinator',     desc: 'I oversee Cambridge examinations, syllabus tracking, and student preparation.' },
 ];
 
 function ahProfileComplete(profile) {
