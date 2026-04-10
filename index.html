@@ -996,9 +996,9 @@
         }
       }
 
-      /* ══════════════════════════════════════════════════════════
+      /* ==========================================================
          CATEGORY ACCORDION SYSTEM
-         ══════════════════════════════════════════════════════════ */
+         ========================================================== */
 
       .category-section {
         margin-bottom: 1.5rem;
@@ -1120,7 +1120,7 @@
         padding: 0 1.5rem 1.5rem;
       }
 
-      /* ── Manage Cards Modal ─────────────────────────────────── */
+      /* -- Manage Cards Modal ----------------------------------- */
       #manageCatModal {
         display: none;
         position: fixed;
@@ -1359,9 +1359,9 @@
         margin-bottom: 1.5rem;
       }
 
-      /* ══════════════════════════════════════════════════════════
+      /* ==========================================================
          ADMIN PANEL — Category Manager
-         ══════════════════════════════════════════════════════════ */
+         ========================================================== */
 
       #adminCatPanel {
         display: none;
@@ -1910,7 +1910,7 @@
       .dd-signout-btn:hover { background: rgba(231,76,60,0.22); color: #e74c3c; }
       .dd-signout-btn svg { width: 15px; height: 15px; }
 
-      /* â”€â”€ Feedback Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+      /* -- Feedback Modal ------------------------------ */
       .feedback-overlay {
         position: fixed; inset: 0;
         background: rgba(0,0,0,0.65);
@@ -1980,7 +1980,7 @@
       .feedback-status.ok  { color: #00b894; display: block; }
       .feedback-status.err { color: #e74c3c; display: block; }
 
-      /* â”€â”€ FAB (Feedback) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+      /* -- FAB (Feedback) --------------------------- */
       .fab-single {
         position: fixed; bottom: 24px; right: 24px;
         width: 54px; height: 54px; border-radius: 50%;
@@ -2002,7 +2002,7 @@
         color: #fff;
       }
 
-      /* â”€â”€ Responsive â”€â”€ */
+      /* -- Responsive -- */
       @media (max-width: 768px) {
         .nav-stats { display: none; }
       }
@@ -2079,10 +2079,10 @@
     <!-- YENÄ°: Main Content Wrapper -->
     <div id="mainContent">
 
-      <!-- â•â• TOP NAVIGATION BAR â•â• -->
+      <!-- ++ TOP NAVIGATION BAR ++ -->
       <div id="navbarMount"></div>
 
-      <!-- â•â• /TOP NAVIGATION BAR â•â• -->
+      <!-- ++ /TOP NAVIGATION BAR ++ -->
 
       <div class="bg-animation"></div>
       <div class="orb orb-1"></div>
@@ -2179,7 +2179,7 @@
           </div>
         </div>
 
-        <!-- ══ Admin: Category Manager Panel (visible to academic_admin only) ══ -->
+        <!-- == Admin: Category Manager Panel (visible to academic_admin only) == -->
         <div id="adminCatPanel">
           <div class="admin-cat-card">
             <span class="label">New Category</span>
@@ -2199,10 +2199,10 @@
 
         <h2 class="section-title">Dashboard Collection</h2>
 
-        <!-- ══ Category sections rendered by JS ══ -->
+        <!-- == Category sections rendered by JS == -->
         <div id="categorySections"></div>
 
-        <!-- ══ Uncategorized cards (always visible at bottom) ══ -->
+        <!-- == Uncategorized cards (always visible at bottom) == -->
         <div class="uncategorized-section" id="uncategorizedSection">
           <div class="category-section collapsed" id="uncategorizedAccordion" data-cat-id="__uncategorized__">
             <div class="category-header" data-cat-id="__uncategorized__">
@@ -3658,7 +3658,7 @@
         </div>
       </div>
 
-      <!-- ══ Manage Cards Modal ══ -->
+      <!-- == Manage Cards Modal == -->
       <div id="manageCatModal" role="dialog" aria-modal="true" aria-labelledby="manageCatModalTitle">
         <div class="manage-modal-box">
           <div class="manage-modal-header">
@@ -3695,14 +3695,14 @@
       </footer>
     </div>
 
-    <!-- â•â• FAB (Feedback) â•â• -->
+    <!-- ++ FAB (Feedback) ++ -->
     <button class="fab-single" id="fabFeedbackOpen" title="Send Feedback" aria-label="Send Feedback">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
       </svg>
     </button>
 
-    <!-- â•â• FEEDBACK MODAL â•â• -->
+    <!-- ++ FEEDBACK MODAL ++ -->
     <div class="feedback-overlay" id="feedbackOverlay">
       <div class="feedback-modal" id="feedbackModal">
         <div class="feedback-modal-header">
@@ -3728,7 +3728,7 @@
         <div class="feedback-status" id="feedbackStatus"></div>
       </div>
     </div>
-    <!-- â•â• /FEEDBACK MODAL â•â• -->
+    <!-- ++ /FEEDBACK MODAL ++ -->
 
     <script>
       // Card hover z-index (event delegation — works after dynamic moves)
@@ -3780,7 +3780,7 @@
       let auth = null; // assigned from window.auth once authReady fires
 
 
-      // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Helpers ------------------------------------------------
       const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
       function avatarColor(str) {
         let h = 0;
@@ -3801,7 +3801,7 @@
         }
       }
 
-      // â”€â”€ Navbar: scroll shrink â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Navbar: scroll shrink -----------------------------------
       (function () {
         const topNav = document.getElementById('topNav');
         let scrollRaf = false;
@@ -3815,7 +3815,7 @@
         }, { passive: true });
       }());
 
-      // â”€â”€ Navbar: profile dropdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Navbar: profile dropdown --------------------------------
       function applyDisplayName(user, firestoreName) {
         const name = firestoreName || user.displayName || user.email.split('@')[0];
         const firstName = name.split(' ')[0];
@@ -3985,7 +3985,7 @@
       const ddSignOut = document.getElementById('ddSignOut');
       if (ddSignOut) ddSignOut.addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
 
-      // â”€â”€ Feedback modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+      // -- Feedback modal ------------------------------------------
 
 
       document.getElementById('fabFeedbackOpen').addEventListener('click', () => {
@@ -4035,7 +4035,7 @@
         }
       });
 
-      // ── Auth state (via auth-guard.js) ─────────────────────────────
+      // -- Auth state (via auth-guard.js) -----------------------------
       document.addEventListener('authReady', ({ detail: { user, profile } }) => {
         currentUser = user;
         db = window.db;
@@ -4048,9 +4048,9 @@
         initCategorySystem(window.db);
       });
 
-      // ════════════════════════════════════════════════════════════
+      // ============================================================
       // CATEGORY SYSTEM
-      // ════════════════════════════════════════════════════════════
+      // ============================================================
 
       const CAT_COLORS = [
         '#6c5ce7','#0984e3','#00b894','#e17055',
@@ -4085,7 +4085,7 @@
       function initCategorySystem(db) {
         const isAdmin = document.body.classList.contains('is-admin');
 
-        // ── Delegated admin action handler (registered once) ─────
+        // -- Delegated admin action handler (registered once) -----
         if (isAdmin) {
           document.getElementById('categorySections').addEventListener('click', async e => {
             const btn = e.target.closest('.cat-action-btn');
@@ -4117,7 +4117,7 @@
           });
         }
 
-        // ── Build color swatches in admin panel ─────────────────
+        // -- Build color swatches in admin panel -----------------
         if (isAdmin) {
           const swatchContainer = document.getElementById('colorSwatches');
           let selectedColor = CAT_COLORS[0];
@@ -4134,7 +4134,7 @@
             swatchContainer.appendChild(sw);
           });
 
-          // ── Add category ──────────────────────────────────────
+          // -- Add category --------------------------------------
           document.getElementById('addCatBtn').addEventListener('click', async () => {
             const nameInput = document.getElementById('newCatName');
             const statusEl = document.getElementById('catStatus');
@@ -4175,7 +4175,7 @@
           });
         }
 
-        // ── Accordion toggle ──────────────────────────────────────
+        // -- Accordion toggle --------------------------------------
         document.addEventListener('click', e => {
           const header = e.target.closest('.category-header');
           if (!header) return;
@@ -4185,7 +4185,7 @@
           if (section) section.classList.toggle('collapsed');
         });
 
-        // ── Firestore: listen to categories ──────────────────────
+        // -- Firestore: listen to categories ----------------------
         const catQuery = query(collection(db, 'ah_categories'), orderBy('order', 'asc'));
         onSnapshot(catQuery, snap => {
           const cats = [];
@@ -4195,7 +4195,7 @@
         });
       }
 
-      // ── Render category accordion sections ────────────────────
+      // -- Render category accordion sections --------------------
       function renderCategories(cats, db, isAdmin) {
         const container = document.getElementById('categorySections');
         const allCards = getAllCards(); // uses cached list — cards may be anywhere in DOM
@@ -4310,7 +4310,7 @@
 
       }
 
-      // ── Swap category order ───────────────────────────────────
+      // -- Swap category order -----------------------------------
       async function swapCatOrder(db, catA, catB) {
         const [orderA, orderB] = [catA.order ?? 0, catB.order ?? 0];
         await Promise.all([
@@ -4319,7 +4319,7 @@
         ]);
       }
 
-      // ── Inline rename ─────────────────────────────────────────
+      // -- Inline rename -----------------------------------------
       function startRename(sec, cat, db) {
         const nameEl = sec.querySelector('.category-name');
         const input = document.createElement('input');
@@ -4350,7 +4350,7 @@
         });
       }
 
-      // ── Manage Cards Modal ────────────────────────────────────
+      // -- Manage Cards Modal ------------------------------------
       // Collects all static card metadata once from the DOM
       function buildCardMeta() {
         const meta = [];
@@ -4569,7 +4569,7 @@
         return THEME_COLORS[theme] || '#667eea';
       }
 
-      // ── Page Overlay (iframe panel) ───────────────────────────
+      // -- Page Overlay (iframe panel) ---------------------------
       (function () {
         const overlay  = document.getElementById('pageOverlay');
         const panel    = document.getElementById('pagePanel');
