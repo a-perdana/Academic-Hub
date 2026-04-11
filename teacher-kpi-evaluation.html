@@ -575,6 +575,21 @@
     }
     .btn-finalize:hover { background: #1f7a6f; }
 
+    .btn-propose-meeting {
+      padding: 11px 22px;
+      background: #f59e0b;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: .88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-propose-meeting:hover { background: #d97706; }
+
     .save-status {
       font-size: .82rem;
       color: #6b7280;
@@ -582,6 +597,40 @@
     }
     .save-status.saved { color: var(--success); font-weight: 600; }
     .save-status.error { color: #dc2626; font-weight: 600; }
+
+    /* ── Meeting modal ── */
+    .meeting-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 2000;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+    }
+    .meeting-modal {
+      background: #fff; border-radius: 16px; width: 100%; max-width: 480px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25); overflow: hidden;
+    }
+    .meeting-modal-head {
+      background: #f59e0b; color: #fff; padding: 18px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .meeting-modal-head h3 { font-size: 1rem; font-weight: 700; }
+    .meeting-modal-close { background: none; border: none; color: #fff; font-size: 1.2rem; cursor: pointer; opacity: .8; }
+    .meeting-modal-close:hover { opacity: 1; }
+    .meeting-modal-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 14px; }
+    .meeting-modal-body label { font-size: .8rem; font-weight: 600; color: #374151; display: block; margin-bottom: 4px; }
+    .meeting-modal-body input,
+    .meeting-modal-body textarea {
+      width: 100%; border: 1.5px solid #e5e7eb; border-radius: 8px;
+      padding: 8px 12px; font-size: .85rem; font-family: inherit;
+    }
+    .meeting-modal-body textarea { resize: vertical; min-height: 70px; }
+    .meeting-modal-foot {
+      padding: 14px 22px; border-top: 1px solid #f1f5f9;
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+    .meeting-existing-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fef3c7; color: #92400e; border: 1px solid #fcd34d;
+      border-radius: 8px; padding: 6px 14px; font-size: .78rem; font-weight: 600;
+    }
 
     /* ── Empty/Loading states ───────────────────────────────── */
     .state-card {
@@ -961,6 +1010,7 @@
         <div class="eval-footer">
           <button class="btn-save-eval" id="btn-save">Save Draft</button>
           <button class="btn-finalize" id="btn-finalize">Finalise Evaluation</button>
+          <button class="btn-propose-meeting" id="btn-propose-meeting" style="display:none;">📅 Propose Meeting</button>
           <span class="save-status" id="save-status"></span>
         </div>
       </div>
@@ -968,8 +1018,43 @@
     </div><!-- /main-content -->
   </div><!-- /page-wrap -->
 
+  <!-- Meeting Proposal Modal -->
+  <div class="meeting-modal-overlay" id="meetingModalOverlay" style="display:none;">
+    <div class="meeting-modal">
+      <div class="meeting-modal-head">
+        <h3>📅 Propose Evaluation Meeting</h3>
+        <button class="meeting-modal-close" id="meetingModalClose">✕</button>
+      </div>
+      <div class="meeting-modal-body">
+        <div id="meetingExistingWrap" style="display:none;">
+          <span class="meeting-existing-pill" id="meetingExistingPill"></span>
+        </div>
+        <div>
+          <label>Proposed Date *</label>
+          <input type="date" id="meetingDate" />
+        </div>
+        <div>
+          <label>Time (optional)</label>
+          <input type="time" id="meetingTime" />
+        </div>
+        <div>
+          <label>Location (optional)</label>
+          <input type="text" id="meetingLocation" placeholder="e.g. Principal's Office / Google Meet" />
+        </div>
+        <div>
+          <label>Note to teacher (optional)</label>
+          <textarea id="meetingNote" placeholder="e.g. Please bring your lesson observation records…"></textarea>
+        </div>
+      </div>
+      <div class="meeting-modal-foot">
+        <button class="btn-cancel" id="meetingModalCancel" style="background:#f1f5f9;color:#374151;border:none;border-radius:8px;padding:9px 20px;font-weight:600;cursor:pointer;font-family:inherit;font-size:.88rem;">Cancel</button>
+        <button id="meetingModalSend" style="background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:9px 22px;font-weight:700;cursor:pointer;font-family:inherit;font-size:.88rem;">Send Proposal</button>
+      </div>
+    </div>
+  </div>
+
   <script type="module">
-    import { getFirestore, collection, doc, getDocs, getDoc, setDoc, query, where, orderBy, serverTimestamp }
+    import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp }
       from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
     // ── State ──────────────────────────────────────────────────
@@ -982,6 +1067,7 @@
     let evalData     = null;      // current evaluation being edited
     let overallRecommendation = null;
     let isEvaluator  = false;     // school_principal or academic_coordinator
+    let existingMeetingProposalId = null; // for update vs create
 
     // ── Auth guard ─────────────────────────────────────────────
     document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
@@ -1038,7 +1124,8 @@
       for (const p of allPeriods) {
         const opt = document.createElement('option');
         opt.value = p.id;
-        opt.textContent = p.name || p.id;
+        const typeLabel = p.type === 'mid-year' ? ' (Mid-Year)' : p.type === 'full-year' ? ' (Full-Year)' : '';
+        opt.textContent = (p.name || p.id) + typeLabel;
         sel.appendChild(opt);
         if (p.status === 'active' && !defaultPeriod) defaultPeriod = p.id;
       }
@@ -1153,7 +1240,9 @@
       document.getElementById('eval-teacher-name').textContent = info.displayName || sub.email || 'Unknown Teacher';
       document.getElementById('eval-teacher-meta').textContent =
         [info.school, info.subjects, info.classes].filter(Boolean).join(' · ');
-      document.getElementById('eval-period-name').textContent = selectedPeriod?.name || sub.periodName || '';
+      const periodTypeLabel = selectedPeriod?.type === 'mid-year' ? ' · Mid-Year'
+        : selectedPeriod?.type === 'full-year' ? ' · Full-Year' : '';
+      document.getElementById('eval-period-name').textContent = (selectedPeriod?.name || sub.periodName || '') + periodTypeLabel;
 
       // Restore evaluator fields from saved data
       if (evalData?.evaluatorInfo) {
@@ -1185,6 +1274,9 @@
 
       document.getElementById('eval-panel').style.display = 'block';
       document.getElementById('eval-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Load meeting proposal for this submission
+      loadMeetingProposal();
     }
 
     // ── Render KPI accordion ───────────────────────────────────
@@ -1588,6 +1680,98 @@
       el.className = 'save-status' + (cls ? ' ' + cls : '');
       if (cls === 'saved') setTimeout(() => { el.textContent = ''; el.className = 'save-status'; }, 3000);
     }
+
+    // ── Meeting Scheduler ─────────────────────────────────────
+    // Called after a submission is selected in the eval panel
+    async function loadMeetingProposal() {
+      if (!activeSubmission?.id) return;
+      existingMeetingProposalId = null;
+      try {
+        const snap = await getDocs(query(
+          collection(db, 'kpi_meeting_proposals'),
+          where('submissionId', '==', activeSubmission.id)
+        ));
+        if (!snap.empty) {
+          const p = snap.docs[0].data();
+          existingMeetingProposalId = snap.docs[0].id;
+          // Pre-fill form
+          if (p.proposedDate) document.getElementById('meetingDate').value = p.proposedDate;
+          if (p.time)         document.getElementById('meetingTime').value = p.time;
+          if (p.location)     document.getElementById('meetingLocation').value = p.location || '';
+          if (p.note)         document.getElementById('meetingNote').value = p.note || '';
+          // Show existing status
+          const statusText = p.status === 'confirmed' ? '✅ Teacher confirmed this meeting'
+            : p.status === 'declined' ? '❌ Teacher declined — update and resend'
+            : '⏳ Awaiting teacher response';
+          const pill = document.getElementById('meetingExistingPill');
+          pill.textContent = statusText;
+          document.getElementById('meetingExistingWrap').style.display = 'block';
+        } else {
+          document.getElementById('meetingExistingWrap').style.display = 'none';
+        }
+      } catch (err) { console.warn('Meeting load:', err); }
+
+      // Show "Propose Meeting" button once a submission is loaded
+      document.getElementById('btn-propose-meeting').style.display = 'inline-flex';
+    }
+
+    document.getElementById('btn-propose-meeting').addEventListener('click', () => {
+      document.getElementById('meetingModalOverlay').style.display = 'flex';
+    });
+    document.getElementById('meetingModalClose').addEventListener('click', () => {
+      document.getElementById('meetingModalOverlay').style.display = 'none';
+    });
+    document.getElementById('meetingModalCancel').addEventListener('click', () => {
+      document.getElementById('meetingModalOverlay').style.display = 'none';
+    });
+
+    document.getElementById('meetingModalSend').addEventListener('click', async () => {
+      if (!activeSubmission?.id) return;
+      const dateVal = document.getElementById('meetingDate').value;
+      if (!dateVal) { alert('Please select a proposed date.'); return; }
+
+      const btn = document.getElementById('meetingModalSend');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const proposalData = {
+          submissionId:  activeSubmission.id,
+          teacherUid:    activeSubmission.uid,
+          teacherEmail:  activeSubmission.email,
+          evaluatorUid:  currentUser.uid,
+          evaluatorEmail: currentUser.email,
+          periodId:      activeSubmission.periodId,
+          proposedDate:  dateVal,
+          time:          document.getElementById('meetingTime').value || '',
+          location:      document.getElementById('meetingLocation').value.trim(),
+          note:          document.getElementById('meetingNote').value.trim(),
+          status:        'pending',
+          updatedAt:     serverTimestamp(),
+        };
+
+        if (existingMeetingProposalId) {
+          await updateDoc(doc(db, 'kpi_meeting_proposals', existingMeetingProposalId), proposalData);
+        } else {
+          proposalData.createdAt = serverTimestamp();
+          const ref = await addDoc(collection(db, 'kpi_meeting_proposals'), proposalData);
+          existingMeetingProposalId = ref.id;
+        }
+
+        document.getElementById('meetingModalOverlay').style.display = 'none';
+        setStatus('Meeting proposal sent to teacher!', 'saved');
+        // Refresh existing pill
+        const pill = document.getElementById('meetingExistingPill');
+        pill.textContent = '⏳ Awaiting teacher response';
+        document.getElementById('meetingExistingWrap').style.display = 'block';
+      } catch (err) {
+        console.error(err);
+        setStatus('Error sending proposal: ' + err.message, 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Send Proposal';
+      }
+    });
 
     // ── Helpers ────────────────────────────────────────────────
     function escHtml(str) {

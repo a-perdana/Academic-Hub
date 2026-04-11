@@ -355,6 +355,47 @@
     .own-school-row td { background: #fff8f6 !important; }
     .own-school-badge { font-size: 0.68rem; background: var(--accent); color: #fff; padding: 1px 8px; border-radius: 20px; margin-left: 6px; }
 
+    /* ── COHORT ANALYTICS ── */
+    .cohort-controls { display: flex; align-items: center; gap: 12px; padding: 1.25rem 1.75rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+    .cohort-controls label { font-size: .8rem; font-weight: 600; color: var(--text-muted); }
+    .cohort-section-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--text-muted); padding: 1rem 1.75rem .5rem; }
+    .cohort-school-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; padding: 0 1.75rem 1.75rem; }
+    .cohort-school-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.04);
+    }
+    .cohort-school-name { font-size: .88rem; font-weight: 700; color: var(--text); }
+    .cohort-school-meta { font-size: .72rem; color: var(--text-muted); }
+    .cohort-score-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .cohort-score-box {
+      flex: 1; min-width: 70px; background: #f8fafc; border-radius: 8px;
+      padding: 8px 10px; text-align: center;
+    }
+    .cohort-score-box .csb-val { font-size: 1.1rem; font-weight: 800; color: var(--text); }
+    .cohort-score-box .csb-val.good { color: #15803d; }
+    .cohort-score-box .csb-val.ok   { color: #b45309; }
+    .cohort-score-box .csb-val.low  { color: #dc2626; }
+    .cohort-score-box .csb-label { font-size: .63rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; margin-top: 2px; }
+    .cohort-bar-wrap { background: #f1f5f9; border-radius: 6px; height: 6px; overflow: hidden; }
+    .cohort-bar { height: 100%; border-radius: 6px; background: var(--accent); transition: width .4s ease; }
+    .cohort-weakness-list { list-style: none; padding: 0; margin: 0; }
+    .cohort-weakness-list li {
+      display: flex; align-items: center; gap: 8px; padding: 5px 0;
+      font-size: .75rem; color: var(--text); border-bottom: 1px solid #f1f5f9;
+    }
+    .cohort-weakness-list li:last-child { border-bottom: none; }
+    .cohort-kpi-score { font-weight: 700; color: #dc2626; min-width: 34px; text-align: right; }
+    .cohort-trend-row { display: flex; gap: 12px; padding: 0 1.75rem 1.75rem; flex-wrap: wrap; }
+    .cohort-trend-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; flex: 1; min-width: 200px; }
+    .cohort-trend-card h4 { font-size: .82rem; font-weight: 700; margin-bottom: 10px; color: var(--text); }
+    .cohort-trend-period { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #f8fafc; font-size: .8rem; }
+    .cohort-trend-period:last-child { border-bottom: none; }
+    .cohort-trend-score { font-weight: 700; }
+    .cohort-trend-score.up   { color: #15803d; }
+    .cohort-trend-score.down { color: #dc2626; }
+    .cohort-trend-score.flat { color: #6b7280; }
+
     /* ── SECTION PILLS ── */
     .section-pills { display: flex; gap: 4px; }
 
@@ -392,6 +433,7 @@
     <div class="tab-bar" id="tabBar">
       <button class="tab-btn active" data-view="view-entry">KPI Data</button>
       <button class="tab-btn" data-view="view-overview">Overview</button>
+      <button class="tab-btn" data-view="view-cohort" id="cohortTabBtn" style="display:none;">📊 Cohort Analytics</button>
     </div>
 
     <!-- ═══ VIEW: KPI DATA ENTRY ═══ -->
@@ -563,6 +605,33 @@
 
     </div><!-- /view-overview -->
 
+    <!-- ═══ VIEW: COHORT ANALYTICS ═══ -->
+    <div class="view card" id="view-cohort" style="border-top-left-radius:0;border-top-right-radius:0;">
+      <div class="cohort-controls">
+        <label>Period:</label>
+        <select class="form-input form-select" id="cohortPeriodSelect" style="min-width:200px;"></select>
+        <span id="cohortLoadingSpinner" style="display:none;color:var(--text-muted);font-size:.82rem;">⏳ Loading…</span>
+      </div>
+
+      <!-- Per-school score cards -->
+      <div class="cohort-section-title">📊 School-Wide KPI Scores</div>
+      <div class="cohort-school-grid" id="cohortSchoolGrid">
+        <div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">Select a period to load cohort analytics.</div>
+      </div>
+
+      <!-- School-wide weak KPIs -->
+      <div class="cohort-section-title" id="cohortWeaknessTitle" style="display:none;">⚠️ School-Wide Weak KPI Aspects</div>
+      <div style="padding: 0 1.75rem 1.75rem;" id="cohortWeaknessWrap" style="display:none;">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px;">
+          <ul class="cohort-weakness-list" id="cohortWeaknessList"></ul>
+        </div>
+      </div>
+
+      <!-- Year-over-year trend -->
+      <div class="cohort-section-title" id="cohortTrendTitle" style="display:none;">📈 Year-Over-Year Trend</div>
+      <div class="cohort-trend-row" id="cohortTrendRow"></div>
+    </div><!-- /view-cohort -->
+
   </div><!-- /pageContent -->
 </div><!-- /page-wrap -->
 
@@ -639,6 +708,9 @@ document.addEventListener('authReady', async (e) => {
     btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
 
+  // Show cohort tab for admins
+  if (isAdmin) document.getElementById('cohortTabBtn').style.display = '';
+
   // Load base data
   await Promise.all([loadSchools(), loadKPIs(), loadSemesters()]);
 
@@ -655,6 +727,7 @@ function switchView(viewId) {
   });
   if (viewId === 'view-entry')    initEntryView();
   if (viewId === 'view-overview') { initOverview(); if (isAdmin) initTeacherKpiSummary(); }
+  if (viewId === 'view-cohort' && isAdmin)  initCohortTab();
 }
 
 // ─── Load Base Data ───────────────────────────────────────────
@@ -1564,6 +1637,225 @@ async function loadTkData(periodId) {
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#dc2626;">Error loading data.</td></tr>';
   }
 }
+
+// ─── COHORT ANALYTICS ─────────────────────────────────────────
+let cohortPeriods = [];
+let cohortKpiConfig = [];
+
+async function initCohortTab() {
+  // Load periods
+  const snap = await getDocs(query(collection(db, 'teacher_kpi_settings'), orderBy('createdAt', 'desc')));
+  cohortPeriods = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  // Load KPI config
+  const kpiSnap = await getDocs(query(collection(db, 'teacher_kpi_config'), where('active', '==', true)));
+  cohortKpiConfig = kpiSnap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+  // Populate selector
+  const sel = document.getElementById('cohortPeriodSelect');
+  sel.innerHTML = '<option value="">— Select Period —</option>' + cohortPeriods.map(p => {
+    const typeLabel = p.type === 'mid-year' ? ' (Mid-Year)' : p.type === 'full-year' ? ' (Full-Year)' : '';
+    return `<option value="${p.id}">${(p.name || p.id).replace(/</g,'&lt;')}${typeLabel}</option>`;
+  }).join('');
+
+  sel.onchange = () => { if (sel.value) loadCohortData(sel.value); };
+
+  // Auto-select active period
+  const active = cohortPeriods.find(p => p.active);
+  if (active) { sel.value = active.id; loadCohortData(active.id); }
+}
+
+async function loadCohortData(periodId) {
+  const spinner = document.getElementById('cohortLoadingSpinner');
+  spinner.style.display = 'inline';
+  document.getElementById('cohortSchoolGrid').innerHTML =
+    '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">⏳ Loading…</div>';
+
+  try {
+    // Load all submissions for this period
+    const submSnap = await getDocs(query(collection(db, 'teacher_kpi_submissions'), where('periodId', '==', periodId)));
+    const subs = submSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => ['submitted','evaluated','finalized'].includes(s.status));
+
+    // Load all evaluations
+    const evalMap = {};
+    await Promise.all(subs.map(async sub => {
+      try {
+        const ev = await getDoc(doc(db, 'teacher_kpi_evaluations', sub.id));
+        if (ev.exists()) evalMap[sub.id] = ev.data();
+      } catch (_) {}
+    }));
+
+    // Group by school
+    const schoolMap = {};
+    for (const sub of subs) {
+      const school = sub.teacherInfo?.school || sub.school || 'Unknown School';
+      if (!schoolMap[school]) schoolMap[school] = { subs: [], adminRatings: [], selfRatings: [], kpiSums: {} };
+      schoolMap[school].subs.push(sub);
+
+      const ev = evalMap[sub.id];
+      for (const kpi of cohortKpiConfig) {
+        const adminR = Number(ev?.kpiEvaluations?.[kpi.id]?.administratorRating || 0);
+        const selfR  = Number(sub.assessments?.[kpi.id]?.selfRating || 0);
+        if (adminR) {
+          schoolMap[school].adminRatings.push(adminR);
+          if (!schoolMap[school].kpiSums[kpi.id]) schoolMap[school].kpiSums[kpi.id] = { sum: 0, count: 0, aspect: kpi.aspect };
+          schoolMap[school].kpiSums[kpi.id].sum   += adminR;
+          schoolMap[school].kpiSums[kpi.id].count += 1;
+        }
+        if (selfR) schoolMap[school].selfRatings.push(selfR);
+      }
+    }
+
+    // Compute school-wide weak KPIs (across all schools, all teachers)
+    const allKpiSums = {};
+    for (const [, sd] of Object.entries(schoolMap)) {
+      for (const [kpiId, { sum, count, aspect }] of Object.entries(sd.kpiSums)) {
+        if (!allKpiSums[kpiId]) allKpiSums[kpiId] = { sum: 0, count: 0, aspect };
+        allKpiSums[kpiId].sum   += sum;
+        allKpiSums[kpiId].count += count;
+      }
+    }
+    const kpiAvgs = Object.entries(allKpiSums)
+      .map(([id, { sum, count, aspect }]) => ({ id, aspect, avg: sum / count }))
+      .sort((a, b) => a.avg - b.avg);
+
+    // Render school cards
+    const schoolEntries = Object.entries(schoolMap).sort((a, b) => {
+      const aa = a[1].adminRatings.length ? a[1].adminRatings.reduce((x,y)=>x+y,0)/a[1].adminRatings.length : 0;
+      const bb = b[1].adminRatings.length ? b[1].adminRatings.reduce((x,y)=>x+y,0)/b[1].adminRatings.length : 0;
+      return bb - aa;
+    });
+    const maxScore = 5;
+
+    const gridEl = document.getElementById('cohortSchoolGrid');
+    if (!schoolEntries.length) {
+      gridEl.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--text-muted);">No finalized submissions found for this period.</div>';
+      spinner.style.display = 'none';
+      return;
+    }
+
+    gridEl.innerHTML = schoolEntries.map(([school, sd], rank) => {
+      const adminAvg = sd.adminRatings.length ? (sd.adminRatings.reduce((a,b)=>a+b,0)/sd.adminRatings.length) : null;
+      const selfAvg  = sd.selfRatings.length  ? (sd.selfRatings.reduce((a,b)=>a+b,0)/sd.selfRatings.length)  : null;
+      const pct = adminAvg ? Math.round((adminAvg / maxScore) * 100) : 0;
+      const scoreClass = adminAvg >= 4 ? 'good' : adminAvg >= 3 ? 'ok' : 'low';
+
+      // Weak KPI for this school
+      const schoolKpiAvgs = Object.entries(sd.kpiSums)
+        .map(([id, { sum, count, aspect }]) => ({ id, aspect, avg: sum / count }))
+        .sort((a, b) => a.avg - b.avg);
+      const weakKpi = schoolKpiAvgs[0];
+
+      return `
+        <div class="cohort-school-card">
+          <div>
+            <div class="cohort-school-name">${escHtml(school)}</div>
+            <div class="cohort-school-meta">${sd.subs.length} teacher${sd.subs.length !== 1 ? 's' : ''} · #${rank + 1} ranking</div>
+          </div>
+          <div class="cohort-score-row">
+            <div class="cohort-score-box">
+              <div class="csb-val ${adminAvg ? scoreClass : ''}">${adminAvg ? adminAvg.toFixed(2) : '—'}</div>
+              <div class="csb-label">Admin Avg</div>
+            </div>
+            <div class="cohort-score-box">
+              <div class="csb-val">${selfAvg ? selfAvg.toFixed(2) : '—'}</div>
+              <div class="csb-label">Self Avg</div>
+            </div>
+            <div class="cohort-score-box">
+              <div class="csb-val">${sd.subs.length}</div>
+              <div class="csb-label">Teachers</div>
+            </div>
+          </div>
+          <div>
+            <div class="cohort-bar-wrap">
+              <div class="cohort-bar" style="width:${pct}%;"></div>
+            </div>
+            <div style="font-size:.65rem;color:var(--text-muted);margin-top:3px;">${pct}% of max score</div>
+          </div>
+          ${weakKpi ? `<div style="font-size:.72rem;color:#dc2626;font-weight:600;">⚠ Weakest KPI: ${escHtml(weakKpi.aspect)} (${weakKpi.avg.toFixed(1)}/5)</div>` : ''}
+        </div>`;
+    }).join('');
+
+    // Weak KPIs section
+    const weakTop5 = kpiAvgs.slice(0, 5);
+    if (weakTop5.length) {
+      document.getElementById('cohortWeaknessTitle').style.display = 'block';
+      const wrapEl = document.getElementById('cohortWeaknessWrap');
+      wrapEl.style.display = 'block';
+      document.getElementById('cohortWeaknessList').innerHTML = weakTop5.map((k, i) =>
+        `<li>
+          <span style="font-size:.85rem;color:var(--text-muted);font-weight:700;min-width:20px;">${i + 1}.</span>
+          <span style="flex:1;">${escHtml(k.aspect)}</span>
+          <span class="cohort-kpi-score">${k.avg.toFixed(2)}/5</span>
+        </li>`
+      ).join('');
+    }
+
+    // Year-over-year trend (compare all periods sorted by date)
+    const allPeriodsForTrend = cohortPeriods.filter(p => p.id !== periodId).slice(0, 3);
+    if (allPeriodsForTrend.length) {
+      document.getElementById('cohortTrendTitle').style.display = 'block';
+      const trendRow = document.getElementById('cohortTrendRow');
+      trendRow.innerHTML = '';
+
+      const currentAvg = (() => {
+        let all = [];
+        for (const [, sd] of Object.entries(schoolMap)) all = all.concat(sd.adminRatings);
+        return all.length ? all.reduce((a,b)=>a+b,0)/all.length : null;
+      })();
+
+      // Load previous periods (limited to 3)
+      const trendData = [{ id: periodId, name: cohortPeriods.find(p=>p.id===periodId)?.name || periodId, avg: currentAvg }];
+
+      for (const p of allPeriodsForTrend) {
+        try {
+          const ps = await getDocs(query(collection(db, 'teacher_kpi_submissions'), where('periodId', '==', p.id)));
+          const psubs = ps.docs.map(d => ({ id: d.id, ...d.data() })).filter(s => s.status === 'finalized');
+          let pAdminRatings = [];
+          for (const sub of psubs) {
+            try {
+              const ev = await getDoc(doc(db, 'teacher_kpi_evaluations', sub.id));
+              if (ev.exists()) {
+                Object.values(ev.data().kpiEvaluations || {}).forEach(k => {
+                  if (k.administratorRating) pAdminRatings.push(Number(k.administratorRating));
+                });
+              }
+            } catch (_) {}
+          }
+          const pAvg = pAdminRatings.length ? pAdminRatings.reduce((a,b)=>a+b,0)/pAdminRatings.length : null;
+          trendData.unshift({ id: p.id, name: p.name || p.id, avg: pAvg });
+        } catch (_) {}
+      }
+
+      const trendCard = document.createElement('div');
+      trendCard.className = 'cohort-trend-card';
+      trendCard.innerHTML = `<h4>Average Admin Rating — All Periods</h4>` +
+        trendData.map((t, i) => {
+          const isCurrent = t.id === periodId;
+          const prev = i > 0 ? trendData[i-1].avg : null;
+          let scoreClass = 'flat';
+          if (t.avg && prev) scoreClass = t.avg > prev ? 'up' : t.avg < prev ? 'down' : 'flat';
+          const arrow = scoreClass === 'up' ? '↑' : scoreClass === 'down' ? '↓' : '→';
+          return `<div class="cohort-trend-period">
+            <span style="font-size:.78rem;${isCurrent ? 'font-weight:700;' : ''}">${escHtml(t.name)}${isCurrent ? ' (current)' : ''}</span>
+            <span class="cohort-trend-score ${scoreClass}">${t.avg ? arrow + ' ' + t.avg.toFixed(2) + '/5' : '—'}</span>
+          </div>`;
+        }).join('');
+
+      trendRow.appendChild(trendCard);
+    }
+
+  } catch (err) {
+    console.error(err);
+    document.getElementById('cohortSchoolGrid').innerHTML =
+      `<div style="grid-column:1/-1;text-align:center;padding:2rem;color:#dc2626;">Error: ${escHtml(err.message)}</div>`;
+  } finally {
+    spinner.style.display = 'none';
+  }
+}
+
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 </script>
 </body>
