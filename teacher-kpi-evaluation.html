@@ -1235,9 +1235,10 @@
                 <div class="box-label">Your Evaluation</div>
                 <div class="rating-stars" id="admin-stars-${kpi.id}"></div>
                 <div style="margin-top:6px;">
-                  <label style="font-size:.75rem;color:#6b7280;">Actual Value (admin)</label>
-                  <input type="text" id="admin-actual-${kpi.id}" placeholder="e.g. 87%" style="width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.82rem;font-family:inherit;margin-top:4px;"
+                  <label style="font-size:.75rem;color:#6b7280;">Actual Value (admin) ${kpi.target ? `— target: ${escHtml(String(kpi.target))} ${escHtml(kpi.unit||'')}` : ''}</label>
+                  <input type="number" step="0.01" id="admin-actual-${kpi.id}" placeholder="${kpi.unit ? 'Value in ' + escAttr(kpi.unit) : 'Observed value'}" style="width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.82rem;font-family:inherit;margin-top:4px;"
                     value="${escAttr(String(savedAdmin.administratorActualValue || ''))}" />
+                  ${kpi.target ? `<div id="eval-sg-${kpi.id}" style="display:none;margin-top:5px;padding:6px 10px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px dashed;"></div>` : ''}
                 </div>
               </div>
             </div>
@@ -1281,6 +1282,46 @@
 
         // Build admin rating stars (interactive)
         buildAdminStars(kpi.id, adminRating);
+
+        // Auto-suggest rating from admin actual value
+        if (kpi.target) {
+          const adminActualInput = document.getElementById(`admin-actual-${kpi.id}`);
+          const evalSg = document.getElementById(`eval-sg-${kpi.id}`);
+          const SUGGEST_LABELS = ['','Below Expectations','Needs Improvement','Meets Expectations','Exceeds Expectations','Outstanding'];
+          const SUGGEST_STYLES = {
+            5: 'background:#f0fdf4;color:#15803d;border-color:#86efac;',
+            4: 'background:#eff6ff;color:#1d4ed8;border-color:#93c5fd;',
+            3: 'background:#fefce8;color:#a16207;border-color:#fde047;',
+            2: 'background:#fff7ed;color:#c2410c;border-color:#fdba74;',
+            1: 'background:#fef2f2;color:#dc2626;border-color:#fca5a5;',
+          };
+          if (adminActualInput && evalSg) {
+            // Show suggest on load if value already filled
+            function refreshEvalSuggest() {
+              const actual = parseFloat(adminActualInput.value);
+              const target = parseFloat(kpi.target);
+              if (isNaN(actual) || isNaN(target) || target <= 0) { evalSg.style.display='none'; return; }
+              const pct  = Math.round((actual/target)*100);
+              const sugg = pct>=105?5:pct>=95?4:pct>=85?3:pct>=70?2:1;
+              evalSg.style.cssText = SUGGEST_STYLES[sugg] + 'display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px dashed;';
+              evalSg.textContent = `💡 Suggested: ${sugg}/5 (${SUGGEST_LABELS[sugg]}) — ${pct}% of target. Click to apply.`;
+              evalSg.onclick = () => {
+                buildAdminStars(kpi.id, sugg); // rebuild with new rating
+                // re-run buildAdminStars replaces container content — need direct update instead:
+                const c = document.getElementById(`admin-stars-${kpi.id}`);
+                if (c) c.querySelectorAll('.star-btn').forEach(b => {
+                  b.classList.toggle('active', Number(b.dataset.val) <= sugg);
+                });
+                const adminChipEl = item.querySelector('.kpi-ratings .rating-chip:nth-child(2)');
+                if (adminChipEl) { adminChipEl.textContent = sugg+'/5'; adminChipEl.className='rating-chip admin'; }
+                evalSg.style.display='none';
+                updateSummary();
+              };
+            }
+            adminActualInput.addEventListener('input', refreshEvalSuggest);
+            if (adminActualInput.value) refreshEvalSuggest();
+          }
+        }
 
         // Toggle open/close
         item.querySelector('.kpi-trigger').addEventListener('click', () => {
