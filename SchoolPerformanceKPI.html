@@ -533,6 +533,34 @@
         </div>
       </div>
 
+      <!-- Teacher KPI Summary (admin only) -->
+      <div id="teacherKpiSection" class="card" style="margin-top:1.25rem;display:none;">
+        <div class="card-header">
+          <span class="card-title">Teacher KPI Summary</span>
+          <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+            <select class="form-input form-select" id="tkPeriodSelect" style="min-width:200px;"></select>
+            <a id="goToEvalLink" href="teacher-kpi-evaluation.html" class="btn btn-outline btn-sm">Open Evaluation Page →</a>
+          </div>
+        </div>
+        <div id="tkStatsRow" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:1rem;padding:1.25rem 1.75rem;border-bottom:1px solid var(--border);"></div>
+        <div style="overflow-x:auto;">
+          <table class="ranking-table" id="tkTable">
+            <thead>
+              <tr>
+                <th>Teacher</th>
+                <th>School</th>
+                <th>Self Avg</th>
+                <th>Admin Avg</th>
+                <th>Δ Diff</th>
+                <th>Overall</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="tkTableBody"><tr><td colspan="7" style="text-align:center;padding:2rem;color:#9ca3af;">Select a period above</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
     </div><!-- /view-overview -->
 
   </div><!-- /pageContent -->
@@ -540,7 +568,7 @@
 
 <script type="module">
 import {
-  collection, doc, getDocs, getDoc, setDoc, serverTimestamp, query, orderBy
+  collection, doc, getDocs, getDoc, setDoc, serverTimestamp, query, orderBy, where
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ─── State ────────────────────────────────────────────────────
@@ -626,7 +654,7 @@ function switchView(viewId) {
     b.classList.toggle('active', b.dataset.view === viewId);
   });
   if (viewId === 'view-entry')    initEntryView();
-  if (viewId === 'view-overview') initOverview();
+  if (viewId === 'view-overview') { initOverview(); if (isAdmin) initTeacherKpiSummary(); }
 }
 
 // ─── Load Base Data ───────────────────────────────────────────
@@ -1436,6 +1464,105 @@ function renderComparisonChart(rows) {
       scales: { x: { beginAtZero: true, max: 100 } }
     }
   });
+}
+
+// ─── TEACHER KPI SUMMARY ──────────────────────────────────────
+let tkPeriods = [];
+let tkInitialized = false;
+
+async function initTeacherKpiSummary() {
+  document.getElementById('teacherKpiSection').style.display = 'block';
+  if (tkInitialized) return;
+  tkInitialized = true;
+
+  // Load teacher periods
+  const snap = await getDocs(query(collection(db, 'teacher_kpi_settings'), orderBy('createdAt', 'desc')));
+  tkPeriods = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  const sel = document.getElementById('tkPeriodSelect');
+  sel.innerHTML = '<option value="">— Select Period —</option>' + tkPeriods.map(p =>
+    `<option value="${p.id}" ${p.active ? 'selected' : ''}>${p.name || p.id}</option>`
+  ).join('');
+
+  sel.onchange = () => { if (sel.value) loadTkData(sel.value); };
+  if (sel.value) loadTkData(sel.value);
+}
+
+async function loadTkData(periodId) {
+  const tbody   = document.getElementById('tkTableBody');
+  const statsEl = document.getElementById('tkStatsRow');
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:1.5rem;color:#9ca3af;">Loading…</td></tr>';
+
+  try {
+    const submSnap = await getDocs(query(collection(db, 'teacher_kpi_submissions'), where('periodId', '==', periodId)));
+    const subs = submSnap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.status === 'submitted' || s.status === 'evaluated' || s.status === 'finalized');
+
+    // Load evaluations
+    const evalMap = {};
+    await Promise.all(subs.map(async sub => {
+      try {
+        const ev = await getDoc(doc(db, 'teacher_kpi_evaluations', sub.id));
+        if (ev.exists()) evalMap[sub.id] = ev.data();
+      } catch (_) {}
+    }));
+
+    if (!subs.length) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#9ca3af;">No submissions for this period.</td></tr>';
+      statsEl.innerHTML = '';
+      return;
+    }
+
+    // Compute stats
+    let allSelf = [], allAdmin = [];
+    subs.forEach(s => {
+      Object.values(s.assessments || {}).forEach(a => { if (a.selfRating) allSelf.push(Number(a.selfRating)); });
+      const ev = evalMap[s.id];
+      if (ev) Object.values(ev.kpiEvaluations || {}).forEach(k => { if (k.administratorRating) allAdmin.push(Number(k.administratorRating)); });
+    });
+    const avgSelf  = allSelf.length  ? (allSelf.reduce((a,b)=>a+b,0)/allSelf.length).toFixed(2) : '—';
+    const avgAdmin = allAdmin.length ? (allAdmin.reduce((a,b)=>a+b,0)/allAdmin.length).toFixed(2) : '—';
+    const evaluated = subs.filter(s => s.status === 'evaluated' || s.status === 'finalized').length;
+    const finalized = subs.filter(s => s.status === 'finalized').length;
+
+    statsEl.innerHTML = `
+      <div class="stat-card"><div class="stat-card-val">${subs.length}</div><div class="stat-card-label">Total Submissions</div></div>
+      <div class="stat-card success"><div class="stat-card-val">${evaluated}</div><div class="stat-card-label">Evaluated</div></div>
+      <div class="stat-card info"><div class="stat-card-val">${finalized}</div><div class="stat-card-label">Finalized</div></div>
+      <div class="stat-card"><div class="stat-card-val">${avgSelf !== '—' ? avgSelf + '/5' : '—'}</div><div class="stat-card-label">Avg Self-Rating</div></div>
+      <div class="stat-card success"><div class="stat-card-val">${avgAdmin !== '—' ? avgAdmin + '/5' : '—'}</div><div class="stat-card-label">Avg Admin Rating</div></div>
+    `;
+
+    const recColor = r => r === 'Excellent' ? '#15803d' : r === 'Good' ? '#1d4ed8' : r === 'Satisfactory' ? '#b45309' : r === 'Needs Improvement' ? '#dc2626' : '#9ca3af';
+
+    tbody.innerHTML = subs.map(sub => {
+      const info = sub.teacherInfo || {};
+      const ev   = evalMap[sub.id];
+      const selfVals  = Object.values(sub.assessments || {}).map(a => Number(a.selfRating)).filter(Boolean);
+      const adminVals = ev ? Object.values(ev.kpiEvaluations || {}).map(k => Number(k.administratorRating)).filter(Boolean) : [];
+      const sa = selfVals.length  ? (selfVals.reduce((a,b)=>a+b,0)/selfVals.length).toFixed(1) : '—';
+      const aa = adminVals.length ? (adminVals.reduce((a,b)=>a+b,0)/adminVals.length).toFixed(1) : '—';
+      const diff = (sa !== '—' && aa !== '—') ? (Number(aa) - Number(sa)).toFixed(1) : '—';
+      const diffColor = diff === '—' ? '#9ca3af' : Number(diff) > 0 ? '#15803d' : Number(diff) < 0 ? '#dc2626' : '#6b7280';
+      const rec = ev?.overallRecommendation || '—';
+      const statusLabel = sub.status === 'finalized' ? 'Finalized' : sub.status === 'evaluated' ? 'Evaluated' : 'Submitted';
+      const statusBg    = sub.status === 'finalized' ? '#dcfce7' : sub.status === 'evaluated' ? '#dbeafe' : '#fef3c7';
+      const statusFg    = sub.status === 'finalized' ? '#15803d' : sub.status === 'evaluated' ? '#1d4ed8' : '#92400e';
+
+      return `<tr>
+        <td style="font-weight:600;">${(info.displayName || sub.email || '—').replace(/</g,'&lt;')}</td>
+        <td style="font-size:.82rem;color:#6b7280;">${(info.school || '—').replace(/</g,'&lt;')}</td>
+        <td style="font-weight:700;color:#457b9d;">${sa !== '—' ? sa + '/5' : '—'}</td>
+        <td style="font-weight:700;color:#2a9d8f;">${aa !== '—' ? aa + '/5' : '—'}</td>
+        <td style="font-weight:700;color:${diffColor};">${diff !== '—' ? (Number(diff) > 0 ? '+' : '') + diff : '—'}</td>
+        <td style="font-weight:700;color:${recColor(rec)};">${rec}</td>
+        <td><span style="background:${statusBg};color:${statusFg};padding:3px 10px;border-radius:99px;font-size:.75rem;font-weight:700;">${statusLabel}</span></td>
+      </tr>`;
+    }).join('');
+  } catch (err) {
+    toast('Failed to load teacher KPI data: ' + err.message, 'error');
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#dc2626;">Error loading data.</td></tr>';
+  }
 }
 
 </script>
