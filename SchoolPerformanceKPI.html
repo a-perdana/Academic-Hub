@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a2332'/><rect x='20' y='35' width='60' height='8' rx='4' fill='%23c84b31'/><rect x='20' y='50' width='45' height='6' rx='3' fill='%23fff' opacity='.7'/><rect x='20' y='63' width='35' height='6' rx='3' fill='%23fff' opacity='.5'/></svg>">
-
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="firebase-config.js"></script>
   <script>
     if (!window.ENV) window.ENV = {
@@ -29,14 +29,21 @@
       --secondary: #2d4263;
       --accent: #c84b31;
       --success: #2a9d8f;
+      --success-light: #e8f7f5;
       --warning: #e76f51;
+      --warning-light: #fff3ed;
       --info: #457b9d;
+      --info-light: #eaf2f8;
       --border: #dee2e6;
-      --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
-      --shadow-lg: 0 8px 32px rgba(0,0,0,0.16);
-      --sd-color: #7c3aed;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.07);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.11);
+      --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
       --smp-color: #1d6fa0;
+      --smp-bg: #e8f4fb;
       --sma-color: #c05621;
+      --sma-bg: #fef3ec;
+      --sd-color: #7c3aed;
+      --sd-bg: #f3eeff;
       --radius: 16px;
       --transition: 0.22s ease;
     }
@@ -47,7 +54,7 @@
       font-family: 'DM Sans', sans-serif;
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
-      color: #1a2332;
+      color: var(--primary);
       padding-top: 62px;
     }
 
@@ -65,651 +72,334 @@
       top: 0;
       z-index: 100;
     }
-    .header-brand h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: 0.01em;
-    }
-    .header-brand p {
-      font-size: 0.75rem;
-      opacity: 0.72;
-      margin-top: 1px;
-      font-weight: 300;
-    }
-    .header-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
+    .header-brand h1 { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; }
+    .header-brand p { font-size: 0.75rem; opacity: 0.72; margin-top: 1px; font-weight: 300; }
+    .header-actions { display: flex; align-items: center; gap: 0.75rem; }
     .nav-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.9rem;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.2);
       display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0;
+      font-size: 0.85rem; font-weight: 700; letter-spacing: 0.03em; cursor: default;
     }
-    .nav-user-name {
-      font-size: 0.85rem;
-      font-weight: 500;
-      opacity: 0.9;
-    }
+    .nav-user-name { font-size: 0.82rem; opacity: 0.85; }
     .btn-logout {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.22);
-      color: #fff;
-      padding: 6px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.8rem;
-      font-family: 'DM Sans', sans-serif;
-      transition: background var(--transition);
+      background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+      color: #fff; padding: 6px 14px; border-radius: 8px; font-size: 0.8rem;
+      cursor: pointer; font-family: inherit; font-weight: 500; transition: var(--transition);
     }
-    .btn-logout:hover { background: rgba(255,255,255,0.22); }
+    .btn-logout:hover { background: rgba(255,255,255,0.25); }
 
-    /* ── MAIN LAYOUT ── */
-    .page-wrap {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 2rem 2rem 4rem;
+    /* ── TOAST ── */
+    #toastContainer { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
+    .toast {
+      padding: 0.75rem 1.2rem; border-radius: 10px; font-size: 0.85rem;
+      font-weight: 500; box-shadow: var(--shadow-md); animation: slideInRight 0.3s ease;
+      max-width: 320px;
     }
+    .toast.success { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+    .toast.error   { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+    .toast.info    { background: #dbeafe; color: #1e40af; border-left: 4px solid #3b82f6; }
+    @keyframes slideInRight { from { opacity:0; transform:translateX(20px); } to { opacity:1; transform:translateX(0); } }
 
-    /* ── ADMIN TABS ── */
-    .admin-tabs {
-      display: flex;
-      gap: 0;
-      background: #fff;
-      border-radius: var(--radius) var(--radius) 0 0;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-      margin-bottom: 0;
+    /* ── TABS ── */
+    .tab-bar {
+      display: flex; gap: 0; background: var(--primary);
+      padding: 0 1.5rem; overflow-x: auto;
     }
     .tab-btn {
-      flex: 1;
-      padding: 0.9rem 0.5rem;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: #6c757d;
-      cursor: pointer;
-      transition: color var(--transition), border-color var(--transition), background var(--transition);
-      position: relative;
-      white-space: nowrap;
+      background: none; border: none; color: rgba(255,255,255,0.65);
+      padding: 0.85rem 1.25rem; font-size: 0.85rem; font-weight: 600;
+      font-family: inherit; cursor: pointer; border-bottom: 3px solid transparent;
+      transition: var(--transition); white-space: nowrap;
     }
-    .tab-btn:hover { background: #f8f9fa; color: var(--secondary); }
-    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); background: #fff5f3; font-weight: 600; }
+    .tab-btn:hover { color: #fff; }
+    .tab-btn.active { color: #fff; border-bottom-color: var(--accent); }
+
+    /* ── PAGE WRAP ── */
+    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 1.5rem; }
+
+    /* ── CARD ── */
+    .card {
+      background: #fff; border-radius: var(--radius);
+      box-shadow: var(--shadow-md); overflow: hidden;
+    }
+    .card-header {
+      padding: 1.25rem 1.75rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .card-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); }
+    .card-body { padding: 1.5rem 1.75rem; }
 
     /* ── VIEWS ── */
     .view { display: none; }
     .view.active { display: block; }
 
-    .view-card {
-      background: #fff;
-      border-radius: 0 0 var(--radius) var(--radius);
-      box-shadow: var(--shadow-md);
-      padding: 2rem;
-    }
-    .view-card-standalone {
-      background: #fff;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-md);
-      padding: 2rem;
-      margin-top: 1.5rem;
-    }
-
-    /* ── SECTION CARDS ── */
-    .sections-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-      gap: 1.75rem;
-      margin-top: 1.5rem;
-    }
-    .section-card {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: var(--shadow-md);
-      overflow: hidden;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-    .section-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
-    .section-card-header {
-      padding: 1.25rem 1.5rem 1.1rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .section-card.sd   .section-card-header { background: linear-gradient(135deg, #ede9fe 0%, #f5f3ff 100%); border-bottom: 1px solid #ddd6fe; }
-    .section-card.smp  .section-card-header { background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%); border-bottom: 1px solid #bfdbfe; }
-    .section-card.sma  .section-card-header { background: linear-gradient(135deg, #ffedd5 0%, #fff7ed 100%); border-bottom: 1px solid #fed7aa; }
-    .section-card.all  .section-card-header { background: linear-gradient(135deg, #d1fae5 0%, #f0fdf4 100%); border-bottom: 1px solid #a7f3d0; }
-
-    .section-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 20px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.03em;
-    }
-    .section-badge.sd  { background: #ede9fe; color: var(--sd-color); }
-    .section-badge.smp { background: #dbeafe; color: var(--smp-color); }
-    .section-badge.sma { background: #ffedd5; color: var(--sma-color); }
-    .section-badge.all { background: #d1fae5; color: #065f46; }
-
-    .cambridge-badge {
-      font-size: 0.72rem;
-      font-weight: 600;
-      padding: 3px 10px;
-      border-radius: 12px;
-    }
-    .cambridge-badge.cambridge { background: #d1fae5; color: #065f46; }
-    .cambridge-badge.non-cambridge { background: #fee2e2; color: #991b1b; }
-
-    .section-card-body { padding: 1.25rem 1.5rem 1.5rem; }
-
-    .metadata-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.9rem;
-      margin-bottom: 1.25rem;
-      padding-bottom: 1.25rem;
-      border-bottom: 1px dashed var(--border);
-    }
-
-    /* ── KPI FIELDS ── */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    .kpi-field { display: flex; flex-direction: column; gap: 6px; }
-    .kpi-field.full-width { grid-column: 1 / -1; }
-    .kpi-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #374151;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .kpi-desc { font-size: 0.71rem; color: #6b7280; margin-top: 2px; line-height: 1.4; }
-
-    .form-input {
-      padding: 9px 13px;
-      border: 1.5px solid #e5e7eb;
-      border-radius: 10px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.88rem;
-      color: #1a2332;
-      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
-      background: #fafafa;
-      width: 100%;
-    }
-    .form-input:focus {
-      outline: none;
-      border-color: var(--info);
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(69,123,157,0.15);
-    }
-    .form-input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
-    .form-select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
-
-    .sub-fields-wrap { display: flex; flex-direction: column; gap: 6px; }
-    .sub-field-row { display: flex; align-items: center; gap: 8px; }
-    .sub-field-label { font-size: 0.74rem; color: #6b7280; min-width: 88px; }
-
-    /* Toggle switch */
-    .toggle-wrap { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-    .toggle {
-      position: relative; width: 44px; height: 24px; flex-shrink: 0;
-    }
-    .toggle input { opacity: 0; width: 0; height: 0; }
-    .toggle-slider {
-      position: absolute; inset: 0;
-      background: #d1d5db; border-radius: 24px;
-      cursor: pointer; transition: background var(--transition);
-    }
-    .toggle-slider::before {
-      content: ''; position: absolute;
-      width: 18px; height: 18px; left: 3px; top: 3px;
-      background: #fff; border-radius: 50%;
-      transition: transform var(--transition);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-    .toggle input:checked + .toggle-slider { background: var(--success); }
-    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); }
-    .toggle input:disabled + .toggle-slider { cursor: not-allowed; opacity: 0.6; }
-    .toggle-text { font-size: 0.82rem; color: #6b7280; font-weight: 500; }
-
-    /* multi-bool checkboxes */
-    .multi-bool-grid { display: flex; flex-direction: column; gap: 8px; }
-    .multi-bool-row { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; color: #374151; font-weight: 500; padding: 6px 10px; border-radius: 8px; border: 1.5px solid #e5e7eb; background: #fafafa; transition: border-color var(--transition), background var(--transition); }
-    .multi-bool-row:has(input:checked) { border-color: var(--success); background: #f0fdf4; }
-    .multi-bool-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--success); cursor: pointer; flex-shrink: 0; }
-
-    /* ease / cambridge compound */
-    .compound-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-    .compound-label { font-size: 0.71rem; color: #6b7280; margin-bottom: 2px; font-weight: 600; }
-
-    /* ── TOP BAR (selectors) ── */
-    .top-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: flex-end;
-      margin-bottom: 1.25rem;
-    }
-    .top-bar-item { display: flex; flex-direction: column; gap: 4px; }
-    .top-bar-label { font-size: 0.75rem; font-weight: 600; color: #495057; text-transform: uppercase; letter-spacing: 0.04em; }
-
-    /* ── SAVE ROW ── */
-    .save-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 2rem;
-      padding-top: 1.5rem;
-      border-top: 2px solid #e5e7eb;
-    }
-    .save-meta { font-size: 0.8rem; color: #6b7280; }
-    .save-meta strong { color: #374151; }
-    .btn-primary { background: linear-gradient(135deg, var(--accent) 0%, #e05a3a 100%); color: #fff; box-shadow: 0 2px 8px rgba(200,75,49,0.3); }
-    .btn-primary:hover { box-shadow: 0 4px 16px rgba(200,75,49,0.4); }
-
-    /* ── DEADLINE BANNER ── */
-    .deadline-banner {
-      background: #fff3cd;
-      border: 1px solid #ffc107;
-      border-radius: 10px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.83rem;
-      color: #856404;
-      margin-bottom: 1rem;
-    }
-
-    /* ── SCORE BADGE ── */
-    .score-badge-wrap {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.25rem;
-    }
-    .score-circle {
-      width: 80px; height: 80px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      font-weight: 700;
-      font-size: 1.35rem;
-      flex-shrink: 0;
-      border: 4px solid;
-    }
-    .score-circle.green { border-color: var(--success); color: var(--success); background: #d1fae5; }
-    .score-circle.yellow { border-color: #f59e0b; color: #b45309; background: #fef3c7; }
-    .score-circle.red { border-color: var(--accent); color: var(--accent); background: #fee2e2; }
-    .score-label { font-size: 0.78rem; color: #6c757d; margin-top: 2px; }
-
     /* ── BUTTONS ── */
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 8px 18px;
-      border-radius: 9px;
-      border: none;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.83rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: opacity var(--transition), transform var(--transition), box-shadow var(--transition);
+      padding: 8px 18px; border-radius: 10px; font-size: 0.85rem;
+      font-weight: 600; font-family: inherit; cursor: pointer;
+      border: 1px solid transparent; transition: var(--transition); white-space: nowrap;
     }
-    .btn:hover { opacity: 0.88; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-    .btn:active { transform: translateY(0); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
     .btn-primary { background: var(--accent); color: #fff; }
-    .btn-secondary { background: var(--secondary); color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #b03a23; }
+    .btn-outline { background: #fff; color: var(--primary); border-color: var(--border); }
+    .btn-outline:hover:not(:disabled) { background: #f8f9fa; }
+    .btn-sm { padding: 5px 12px; font-size: 0.78rem; border-radius: 8px; }
     .btn-success { background: var(--success); color: #fff; }
-    .btn-info { background: var(--info); color: #fff; }
-    .btn-warning { background: var(--warning); color: #fff; }
-    .btn-danger { background: #dc3545; color: #fff; }
-    .btn-outline { background: transparent; border: 1.5px solid var(--border); color: #495057; }
-    .btn-sm { padding: 5px 12px; font-size: 0.75rem; border-radius: 7px; }
+    .btn-success:hover:not(:disabled) { background: #1e8277; }
 
-    /* ── TABLES ── */
-    .table-wrap { overflow-x: auto; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.83rem;
+    /* ── FORM ── */
+    .form-group { display: flex; flex-direction: column; gap: 5px; }
+    .form-label { font-size: 0.78rem; font-weight: 600; color: #495057; text-transform: uppercase; letter-spacing: 0.04em; }
+    .form-input, .form-select {
+      padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+      font-size: 0.88rem; font-family: inherit; color: var(--primary);
+      background: #fff; transition: var(--transition); width: 100%;
     }
-    th {
-      background: var(--primary);
-      color: #fff;
-      padding: 10px 14px;
-      text-align: left;
-      font-weight: 600;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    td {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--border);
-      vertical-align: middle;
-    }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f8f9fa; }
-    .score-cell { font-weight: 700; font-size: 0.9rem; }
-    .score-cell.green { color: var(--success); }
-    .score-cell.yellow { color: #b45309; }
-    .score-cell.red { color: var(--accent); }
+    .form-input:focus, .form-select:focus { outline: none; border-color: var(--info); box-shadow: 0 0 0 3px rgba(69,123,157,0.15); }
+    .form-input:disabled, .form-select:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+    .form-hint { font-size: 0.75rem; color: #6b7280; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-    .status-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-      font-weight: 600;
+    /* ── TOGGLE ── */
+    .toggle-wrap { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+    .toggle { position: relative; display: inline-block; width: 40px; height: 22px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0; background: #d1d5db; border-radius: 22px; cursor: pointer; transition: var(--transition);
     }
-    .status-badge.submitted { background: #d1fae5; color: #065f46; }
-    .status-badge.pending { background: #fee2e2; color: #991b1b; }
-    .status-badge.active { background: #d1fae5; color: #065f46; }
-    .status-badge.inactive { background: #f1f3f5; color: #6c757d; }
-    .status-badge.published { background: #dbeafe; color: #1e40af; }
+    .toggle-slider::before {
+      content: ''; position: absolute; height: 16px; width: 16px; left: 3px; bottom: 3px;
+      background: #fff; border-radius: 50%; transition: var(--transition);
+    }
+    .toggle input:checked + .toggle-slider { background: var(--success); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+    .toggle-text { font-size: 0.85rem; color: #374151; }
 
-    /* ── SECTION PILLS ── */
-    .section-pills { display: flex; gap: 4px; flex-wrap: wrap; }
-    .spill {
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.68rem;
-      font-weight: 700;
+    /* ── BADGES ── */
+    .badge {
+      display: inline-flex; align-items: center; padding: 3px 10px;
+      border-radius: 20px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.03em;
     }
-    .spill.sd { background: #f3f0ff; color: var(--sd-color); }
-    .spill.smp { background: #e8f4fb; color: var(--smp-color); }
-    .spill.sma { background: #fff3ed; color: var(--sma-color); }
+    .badge-smp { background: var(--smp-bg); color: var(--smp-color); }
+    .badge-sma { background: var(--sma-bg); color: var(--sma-color); }
+    .badge-sd  { background: var(--sd-bg);  color: var(--sd-color);  }
+    .badge-cambridge     { background: #e0f2fe; color: #0369a1; }
+    .badge-non-cambridge { background: #f3f4f6; color: #6b7280; }
+    .badge-submitted { background: #d1fae5; color: #065f46; }
+    .badge-pending   { background: #fef3c7; color: #92400e; }
 
-    /* ── TABLE ACTIONS ── */
-    .action-btns { display: flex; gap: 6px; }
-
-    /* ── OVERVIEW TABLE header ── */
-    .view-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1.25rem;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-    }
-    .view-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-
-    /* ── MODALS ── */
-    .modal-backdrop {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.2s;
-    }
-    .modal-backdrop.open { opacity: 1; pointer-events: all; }
-    .modal {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: var(--shadow-lg);
-      width: 100%;
-      max-width: 560px;
-      max-height: 90vh;
-      overflow-y: auto;
-      transform: translateY(20px);
-      transition: transform 0.22s ease;
-    }
-    .modal-backdrop.open .modal { transform: translateY(0); }
-    .modal-header {
-      padding: 1.25rem 1.5rem 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .modal-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.25rem;
-      cursor: pointer;
-      color: #6c757d;
-      line-height: 1;
-      padding: 2px 6px;
-      border-radius: 6px;
-      transition: background var(--transition);
-    }
-    .modal-close:hover { background: #f1f3f5; }
-    .modal-body { padding: 1.25rem 1.5rem; }
-    .modal-footer {
-      padding: 1rem 1.5rem 1.25rem;
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.75rem;
-      border-top: 1px solid var(--border);
-    }
-
-    /* School-select modal (non-dismissable) */
-    #schoolSelectModal .modal { max-width: 420px; }
-
-    /* ── FORM GROUPS (modal) ── */
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      margin-bottom: 0.9rem;
-    }
-    .form-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: #495057;
-    }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-    .form-hint { font-size: 0.7rem; color: #6c757d; }
-
-    /* ── LOADING SPINNER ── */
-    .spinner-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      padding: 3rem;
-      font-size: 0.9rem;
-      color: #6c757d;
-    }
-    .spinner {
-      width: 28px; height: 28px;
-      border: 3px solid var(--border);
-      border-top-color: var(--info);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      flex-shrink: 0;
-    }
+    /* ── SPINNER ── */
+    .spinner-wrap { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 3rem; color: #6b7280; font-size: 0.9rem; }
+    .spinner { width: 28px; height: 28px; border: 3px solid #e5e7eb; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── TOAST ── */
-    #toastContainer {
-      position: fixed;
-      bottom: 1.5rem; right: 1.5rem;
-      z-index: 9999;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .toast {
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-size: 0.83rem;
-      font-weight: 500;
-      color: #fff;
-      box-shadow: var(--shadow-lg);
-      animation: slideIn 0.25s ease, fadeOut 0.4s ease 3.1s forwards;
-      max-width: 320px;
-    }
-    .toast.success { background: var(--success); }
-    .toast.error { background: #dc3545; }
-    .toast.info { background: var(--info); }
-    @keyframes slideIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: none; } }
-    @keyframes fadeOut { to { opacity: 0; transform: translateX(40px); } }
-
-    /* ── WEIGHT TOTAL ── */
-    .weight-total-bar {
-      background: #f8f9fa;
-      border-radius: 10px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.83rem;
-      margin-bottom: 1rem;
-      border: 1px solid var(--border);
-    }
-    .weight-val { font-weight: 700; font-size: 1rem; }
-    .weight-val.ok { color: var(--success); }
-    .weight-val.warn { color: var(--accent); }
-
-    /* ── SETTINGS LIST ── */
-    .semester-list { display: flex; flex-direction: column; gap: 0.75rem; }
-    .semester-row {
-      background: #f8f9fa;
-      border-radius: 12px;
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      border: 1px solid var(--border);
-      transition: box-shadow var(--transition);
-    }
-    .semester-row:hover { box-shadow: var(--shadow-md); }
-    .semester-info { display: flex; flex-direction: column; gap: 3px; }
-    .semester-name { font-weight: 600; font-size: 0.93rem; }
-    .semester-meta { font-size: 0.75rem; color: #6c757d; }
-    .semester-actions { display: flex; gap: 6px; flex-wrap: wrap; }
-
     /* ── EMPTY STATE ── */
-    .empty-state {
-      text-align: center;
-      padding: 3rem 1rem;
-      color: #adb5bd;
-    }
-    .empty-state-icon { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    .empty-state-text { font-size: 0.88rem; }
+    .empty-state { text-align: center; padding: 3.5rem 2rem; }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+    .empty-state-text { font-size: 0.88rem; color: #6b7280; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .kpi-grid { grid-template-columns: 1fr; }
-      .sections-grid { grid-template-columns: 1fr; }
-      .form-row { grid-template-columns: 1fr; }
-      .tab-btn { font-size: 0.72rem; padding: 0.75rem 0.3rem; }
-      .compound-fields { grid-template-columns: 1fr; }
-      .page-wrap { padding: 1rem 1rem 3rem; }
-      .section-card-body { padding: 1rem 1.1rem 1.25rem; }
+    /* ── DEADLINE BANNER ── */
+    .deadline-banner {
+      background: #fef3c7; border: 1px solid #fde68a; border-radius: 12px;
+      padding: 0.85rem 1.25rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.88rem; font-weight: 500; color: #92400e;
     }
 
-    /* ── MISC ── */
-    .text-muted { color: #6b7280; font-size: 0.8rem; }
-    .text-bold { font-weight: 700; }
-    hr.divider { border: none; border-top: 1px solid var(--border); margin: 1rem 0; }
-    .kpi-section-divider {
-      grid-column: 1 / -1;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: #9ca3af;
-      padding: 8px 0 6px;
-      border-bottom: 2px dashed #e5e7eb;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* ── GATE BANNER ── */
+    .gate-banner {
+      background: #fee2e2; border: 1px solid #fca5a5; border-radius: 12px;
+      padding: 1.25rem 1.5rem; text-align: center;
     }
-    .kpi-section-divider::before {
-      content: '';
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: #d1d5db;
-      flex-shrink: 0;
-    }
+    .gate-banner-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .gate-banner-title { font-size: 1rem; font-weight: 700; color: #991b1b; margin-bottom: 0.4rem; }
+    .gate-banner-text  { font-size: 0.85rem; color: #7f1d1d; }
 
-    /* ── FORM INTRO BANNER ── */
-    .form-intro-banner {
-      background: linear-gradient(135deg, #eff6ff 0%, #f0fdf4 100%);
-      border: 1px solid #bfdbfe;
-      border-radius: 14px;
-      padding: 1rem 1.25rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-bottom: 1.5rem;
-      font-size: 0.84rem;
-      color: #1e3a5f;
-      line-height: 1.55;
+    /* ── STEP WIZARD ── */
+    .wizard-steps {
+      display: flex; gap: 0; margin-bottom: 1.5rem;
+      border-radius: 12px; overflow: hidden; border: 1px solid var(--border);
     }
-    .form-intro-banner-icon {
-      font-size: 1.4rem;
-      flex-shrink: 0;
-      margin-top: 1px;
+    .wizard-step {
+      flex: 1; padding: 0.9rem 1rem; text-align: center; cursor: pointer;
+      font-size: 0.82rem; font-weight: 600; transition: var(--transition);
+      background: #f8f9fa; color: #6b7280; border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
     }
-    .form-intro-banner strong { font-weight: 700; color: #1d4ed8; }
+    .wizard-step:last-child { border-right: none; }
+    .wizard-step.active { background: var(--primary); color: #fff; }
+    .wizard-step.done   { background: var(--success-light); color: var(--success); }
+    .wizard-step-label  { font-size: 0.72rem; font-weight: 500; opacity: 0.8; }
+    .wizard-step-num {
+      width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.25);
+      display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .wizard-step.done .wizard-step-num { background: var(--success); color: #fff; }
+    .wizard-step.active .wizard-step-num { background: var(--accent); }
 
-    /* ── PROGRESS STRIP ── */
+    .wizard-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 0.75rem; }
+    .wizard-nav-left  { display: flex; align-items: center; gap: 0.75rem; }
+    .wizard-nav-right { display: flex; align-items: center; gap: 0.75rem; }
+
+    /* ── SECTION STEP PANEL ── */
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+
+    .section-header {
+      display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+      padding: 1rem 1.25rem; border-radius: 12px;
+    }
+    .section-header.smp { background: var(--smp-bg); border-left: 4px solid var(--smp-color); }
+    .section-header.sma { background: var(--sma-bg); border-left: 4px solid var(--sma-color); }
+    .section-header.sd  { background: var(--sd-bg);  border-left: 4px solid var(--sd-color);  }
+    .section-header-icon { font-size: 2rem; }
+    .section-header-label { font-size: 1rem; font-weight: 700; }
+    .section-header-sub   { font-size: 0.8rem; color: #6b7280; margin-top: 2px; }
+
+    /* ── METADATA ROW ── */
+    .metadata-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      margin-bottom: 1.5rem; padding: 1.25rem;
+      background: #f9fafb; border-radius: 12px; border: 1px solid #e5e7eb;
+    }
+    .metadata-row .form-label { color: var(--primary); }
+
+    /* ── KPI GROUPS ── */
+    .kpi-group { margin-bottom: 1.5rem; }
+    .kpi-group-title {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: #9ca3af;
+      padding: 0 0 0.5rem 0; margin-bottom: 0.75rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem; }
+
+    .kpi-field-card {
+      background: #fff; border: 1px solid var(--border); border-radius: 12px;
+      padding: 1rem 1.1rem; transition: var(--transition);
+    }
+    .kpi-field-card:hover { border-color: var(--info); box-shadow: var(--shadow-sm); }
+    .kpi-field-card.full-width { grid-column: 1 / -1; }
+    .kpi-field-card .kpi-label { font-size: 0.82rem; font-weight: 700; color: var(--primary); margin-bottom: 3px; display: flex; align-items: center; gap: 6px; }
+    .kpi-field-card .kpi-weight { font-size: 0.7rem; font-weight: 700; color: #fff; background: var(--accent); padding: 1px 7px; border-radius: 20px; }
+    .kpi-field-card .kpi-desc { font-size: 0.75rem; color: #6b7280; display: block; margin-bottom: 0.6rem; line-height: 1.4; }
+
+    .sub-fields-wrap { display: flex; flex-direction: column; gap: 0.5rem; }
+    .sub-field-row { display: flex; align-items: center; gap: 0.6rem; }
+    .sub-field-label { font-size: 0.78rem; color: #374151; width: 160px; flex-shrink: 0; }
+
+    .multi-bool-grid { display: flex; flex-direction: column; gap: 0.45rem; }
+    .multi-bool-row { display: flex; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: #374151; cursor: pointer; }
+    .multi-bool-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--success); cursor: pointer; }
+
+    .compound-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .compound-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 4px; }
+
+    /* ── PROGRESS ── */
     .progress-strip {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 0.75rem;
       margin-bottom: 1.25rem;
     }
-    .progress-bar-wrap {
-      flex: 1;
-      height: 8px;
-      background: #e5e7eb;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--success), #34d399);
-      border-radius: 8px;
-      transition: width 0.4s ease;
-    }
-    .progress-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; white-space: nowrap; }
+    .progress-bar-wrap { flex: 1; height: 8px; background: #e5e7eb; border-radius: 8px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--success), #34d399); border-radius: 8px; transition: width 0.4s ease; }
+    .progress-label { font-size: 0.75rem; font-weight: 700; color: #6b7280; white-space: nowrap; min-width: 70px; text-align: right; }
 
+    /* ── SCORE CIRCLE ── */
+    .score-reveal {
+      display: flex; align-items: center; gap: 1.25rem;
+      padding: 1.25rem; background: linear-gradient(135deg, var(--primary), var(--secondary));
+      border-radius: 14px; color: #fff; margin-bottom: 1.5rem;
+    }
+    .score-circle {
+      width: 70px; height: 70px; border-radius: 50%; border: 4px solid rgba(255,255,255,0.3);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      font-size: 1.4rem; font-weight: 800; line-height: 1;
+    }
+    .score-circle.green  { border-color: #10b981; }
+    .score-circle.yellow { border-color: #f59e0b; }
+    .score-circle.red    { border-color: #ef4444; }
+    .score-reveal-info { flex: 1; }
+    .score-reveal-label { font-size: 0.75rem; opacity: 0.72; font-weight: 500; margin-bottom: 2px; }
+    .score-reveal-title { font-size: 1rem; font-weight: 700; }
+    .score-reveal-sub   { font-size: 0.78rem; opacity: 0.7; margin-top: 2px; }
+
+    /* ── SAVE ROW ── */
+    .save-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 0; border-top: 1px solid var(--border); margin-top: 0.5rem; flex-wrap: wrap; gap: 0.75rem;
+    }
+    .save-meta { font-size: 0.8rem; color: #6b7280; }
+
+    /* ── TOP BAR ── */
+    .top-bar { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+    .top-bar-item { display: flex; align-items: center; gap: 0.6rem; }
+    .top-bar-label { font-size: 0.78rem; font-weight: 700; color: var(--primary); white-space: nowrap; }
+
+    /* ── OVERVIEW ── */
+    .overview-stats {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;
+    }
+    .stat-card {
+      background: #fff; border-radius: 14px; padding: 1.25rem;
+      box-shadow: var(--shadow-sm); border: 1px solid var(--border); text-align: center;
+    }
+    .stat-card-val { font-size: 2rem; font-weight: 800; color: var(--primary); line-height: 1; }
+    .stat-card-label { font-size: 0.75rem; color: #6b7280; margin-top: 4px; font-weight: 500; }
+    .stat-card.accent .stat-card-val { color: var(--accent); }
+    .stat-card.success .stat-card-val { color: var(--success); }
+    .stat-card.info .stat-card-val { color: var(--info); }
+
+    .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1.5rem; }
+    @media (max-width: 768px) { .overview-grid { grid-template-columns: 1fr; } }
+
+    .chart-card { background: #fff; border-radius: 14px; padding: 1.25rem; box-shadow: var(--shadow-sm); border: 1px solid var(--border); }
+    .chart-card-title { font-size: 0.85rem; font-weight: 700; color: var(--primary); margin-bottom: 1rem; }
+
+    /* ── RANKING TABLE ── */
+    .ranking-table { width: 100%; border-collapse: collapse; }
+    .ranking-table th {
+      padding: 0.65rem 1rem; text-align: left; font-size: 0.72rem;
+      font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+      color: #6b7280; background: #f9fafb; border-bottom: 1px solid var(--border);
+    }
+    .ranking-table td { padding: 0.75rem 1rem; font-size: 0.85rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    .ranking-table tr:hover td { background: #f9fafb; }
+    .rank-num { font-weight: 800; font-size: 1.1rem; color: var(--accent); min-width: 32px; }
+    .rank-1 { color: #f59e0b; }
+    .rank-2 { color: #6b7280; }
+    .rank-3 { color: #92400e; }
+    .score-pill {
+      display: inline-flex; align-items: center; padding: 4px 12px;
+      border-radius: 20px; font-weight: 700; font-size: 0.82rem;
+    }
+    .score-pill.green  { background: #d1fae5; color: #065f46; }
+    .score-pill.yellow { background: #fef3c7; color: #92400e; }
+    .score-pill.red    { background: #fee2e2; color: #991b1b; }
+
+    /* ── SCHOOL NAME BADGE (own school highlight) ── */
+    .own-school-row td { background: #fff8f6 !important; }
+    .own-school-badge { font-size: 0.68rem; background: var(--accent); color: #fff; padding: 1px 8px; border-radius: 20px; margin-left: 6px; }
+
+    /* ── SECTION PILLS ── */
+    .section-pills { display: flex; gap: 4px; }
+
+    /* ── HIDDEN ── */
     .hidden { display: none !important; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .form-row { grid-template-columns: 1fr; }
+      .compound-fields { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .metadata-row { grid-template-columns: 1fr; }
+      .overview-stats { grid-template-columns: 1fr 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -719,7 +409,7 @@
 <header class="site-header">
   <div class="header-brand">
     <h1>School Performance KPI</h1>
-    <p>Partner Schools Evaluation System</p>
+    <p>Partner Schools Evaluation System · Semester II</p>
   </div>
   <div class="header-actions">
     <div class="nav-avatar" id="navAvatar">?</div>
@@ -731,319 +421,147 @@
 <!-- ─────────── TOAST ─────────── -->
 <div id="toastContainer"></div>
 
-<!-- ─────────── SCHOOL SELECT MODAL (academic_user, no school) ─────────── -->
-<div class="modal-backdrop" id="schoolSelectModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title">Select Your School</span>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:0.85rem;color:#495057;margin-bottom:1rem;">Please select the school you represent. This cannot be changed without contacting an administrator.</p>
-      <div class="form-group">
-        <label class="form-label">School</label>
-        <select class="form-input form-select" id="schoolSelectDropdown">
-          <option value="">— Choose a school —</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" id="schoolSelectConfirm">Confirm</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─────────── KPI CONFIG MODAL ─────────── -->
-<div class="modal-backdrop" id="kpiModal">
-  <div class="modal" style="max-width:640px;">
-    <div class="modal-header">
-      <span class="modal-title" id="kpiModalTitle">Add KPI</span>
-      <button class="modal-close" data-close="kpiModal">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-row">
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">KPI Name *</label>
-          <input type="text" class="form-input" id="kpiName" placeholder="e.g. Department Meetings" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Section</label>
-          <select class="form-input form-select" id="kpiSection">
-            <option value="All">All</option>
-            <option value="SD">SD</option>
-            <option value="SMP">SMP</option>
-            <option value="SMA">SMA</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Input Type</label>
-          <select class="form-input form-select" id="kpiInputType">
-            <option value="percentage">Percentage</option>
-            <option value="number">Number</option>
-            <option value="boolean">Boolean (Yes/No)</option>
-            <option value="select_boolean">Select Boolean</option>
-            <option value="multi_number">Multi Number</option>
-            <option value="multi_average">Multi Average</option>
-            <option value="multi_boolean">Multi Boolean</option>
-            <option value="ratio">Ratio</option>
-            <option value="threshold_boolean">Threshold Boolean</option>
-            <option value="capped_ratio">Capped Ratio</option>
-            <option value="boolean_threshold">Boolean Threshold</option>
-            <option value="ease">EASE Performance</option>
-            <option value="cambridge_lower">Cambridge Lower Secondary</option>
-            <option value="cambridge_igcse">Cambridge IGCSE</option>
-            <option value="cambridge_aslevel">Cambridge AS/A Level</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Weight (0.00–1.00)</label>
-          <input type="number" class="form-input" id="kpiWeight" step="0.01" min="0" max="1" placeholder="0.05" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Max Value</label>
-          <input type="number" class="form-input" id="kpiMaxValue" placeholder="100" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Threshold</label>
-          <input type="number" class="form-input" id="kpiThreshold" placeholder="75" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Denominator Type</label>
-          <select class="form-input form-select" id="kpiDenominatorType">
-            <option value="none">None</option>
-            <option value="total_students">Total Students</option>
-            <option value="total_staff">Total Staff</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Target Per Teacher</label>
-          <input type="number" class="form-input" id="kpiTargetPerTeacher" placeholder="3" />
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Sub-Fields (comma-separated)</label>
-          <input type="text" class="form-input" id="kpiSubFields" placeholder="Math, English, Science" />
-          <span class="form-hint">For multi_number, multi_average, multi_boolean types</span>
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Options (comma-separated)</label>
-          <input type="text" class="form-input" id="kpiOptions" placeholder="GoGuardian, Securly, Other" />
-          <span class="form-hint">For select_boolean type</span>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Null Option</label>
-          <input type="text" class="form-input" id="kpiNullOption" placeholder="No Filter" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Order</label>
-          <input type="number" class="form-input" id="kpiOrder" placeholder="1" />
-        </div>
-        <div class="form-group" style="grid-column:1/-1">
-          <label class="form-label">Description</label>
-          <input type="text" class="form-input" id="kpiDescription" placeholder="Brief description…" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Cambridge Only</label>
-          <div class="toggle-wrap">
-            <label class="toggle"><input type="checkbox" id="kpiCambridgeOnly" /><span class="toggle-slider"></span></label>
-            <span class="toggle-text">Cambridge schools only</span>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Active</label>
-          <div class="toggle-wrap">
-            <label class="toggle"><input type="checkbox" id="kpiActive" checked /><span class="toggle-slider"></span></label>
-            <span class="toggle-text">Active</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" data-close="kpiModal">Cancel</button>
-      <button class="btn btn-primary" id="kpiSaveBtn">Save KPI</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─────────── SCHOOL MODAL ─────────── -->
-<div class="modal-backdrop" id="schoolModal">
-  <div class="modal" style="max-width:480px;">
-    <div class="modal-header">
-      <span class="modal-title" id="schoolModalTitle">Add School</span>
-      <button class="modal-close" data-close="schoolModal">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">School Name *</label>
-        <input type="text" class="form-input" id="schoolName" placeholder="School name" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Sections</label>
-        <div style="display:flex;gap:1rem;margin-top:4px;">
-          <label style="font-size:0.82rem;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="schoolSD" value="SD"> SD</label>
-          <label style="font-size:0.82rem;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="schoolSMP" value="SMP"> SMP</label>
-          <label style="font-size:0.82rem;display:flex;align-items:center;gap:6px;"><input type="checkbox" id="schoolSMA" value="SMA"> SMA</label>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Cambridge SMP</label>
-          <select class="form-input form-select" id="schoolCambridgeSMP">
-            <option value="Cambridge">Cambridge</option>
-            <option value="Non-Cambridge">Non-Cambridge</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Cambridge SMA</label>
-          <select class="form-input form-select" id="schoolCambridgeSMA">
-            <option value="Cambridge">Cambridge</option>
-            <option value="Non-Cambridge">Non-Cambridge</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" data-close="schoolModal">Cancel</button>
-      <button class="btn btn-primary" id="schoolSaveBtn">Save School</button>
-    </div>
-  </div>
-</div>
-
-<!-- ─────────── SEMESTER MODAL ─────────── -->
-<div class="modal-backdrop" id="semesterModal">
-  <div class="modal" style="max-width:480px;">
-    <div class="modal-header">
-      <span class="modal-title" id="semesterModalTitle">Add Semester</span>
-      <button class="modal-close" data-close="semesterModal">×</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label class="form-label">Semester Name *</label>
-        <input type="text" class="form-input" id="semesterName" placeholder="e.g. Semester 1 2025/2026" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Submission Deadline</label>
-        <input type="datetime-local" class="form-input" id="semesterDeadline" />
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label class="form-label">Network Avg EASE I</label>
-          <input type="number" class="form-input" id="semesterEaseI" step="0.01" placeholder="0.00" />
-        </div>
-        <div class="form-group">
-          <label class="form-label">Network Avg EASE II</label>
-          <input type="number" class="form-input" id="semesterEaseII" step="0.01" placeholder="0.00" />
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" data-close="semesterModal">Cancel</button>
-      <button class="btn btn-primary" id="semesterSaveBtn">Save Semester</button>
-    </div>
-  </div>
-</div>
-
 <!-- ─────────── PAGE WRAP ─────────── -->
 <div class="page-wrap">
 
-  <!-- Loading state -->
+  <!-- Loading -->
   <div id="pageLoading" class="spinner-wrap" style="margin-top:2rem;">
-    <div class="spinner"></div> Loading data…
+    <div class="spinner"></div> Loading…
   </div>
 
-  <!-- Content (hidden until auth ready) -->
+  <!-- Content -->
   <div id="pageContent" class="hidden">
 
-    <!-- ADMIN TABS -->
-    <div class="admin-tabs hidden" id="adminTabs">
-      <button class="tab-btn" data-view="view-form">KPI Data</button>
+    <!-- TABS (shown for all) -->
+    <div class="tab-bar" id="tabBar">
+      <button class="tab-btn active" data-view="view-entry">KPI Data</button>
       <button class="tab-btn" data-view="view-overview">Overview</button>
-      <button class="tab-btn" data-view="view-kpi-config">KPI Config</button>
-      <button class="tab-btn" data-view="view-schools">Schools</button>
-      <button class="tab-btn" data-view="view-users">Users</button>
-      <button class="tab-btn" data-view="view-settings">Settings</button>
     </div>
 
-    <!-- ═══ VIEW: FORM (KPI Data) ═══ -->
-    <div class="view active" id="view-form">
-      <div class="view-card" id="formCard">
-        <div id="formLoading" class="spinner-wrap"><div class="spinner"></div> Loading form…</div>
-        <div id="formContent" class="hidden">
-          <div class="top-bar">
-            <div class="top-bar-item" id="schoolSelectorWrap" style="display:none;">
-              <span class="top-bar-label">School</span>
-              <select class="form-input form-select" id="adminSchoolSelect" style="min-width:220px;"></select>
-            </div>
-            <div class="top-bar-item">
-              <span class="top-bar-label">Semester</span>
-              <select class="form-input form-select" id="semesterSelect" style="min-width:220px;"></select>
-            </div>
+    <!-- ═══ VIEW: KPI DATA ENTRY ═══ -->
+    <div class="view active card" id="view-entry" style="border-top-left-radius:0;border-top-right-radius:0;">
+      <div id="entryLoading" class="spinner-wrap"><div class="spinner"></div> Loading form…</div>
+      <div id="entryContent" class="hidden">
+        <div class="card-body">
+
+          <!-- Gate: not school principal -->
+          <div id="gatePrincipal" class="gate-banner hidden">
+            <div class="gate-banner-icon">🔒</div>
+            <div class="gate-banner-title">Access Restricted</div>
+            <div class="gate-banner-text">This form is for School Principals only. If you believe this is an error, contact your Academic Hub administrator.</div>
           </div>
 
-          <div id="deadlineBanner" class="deadline-banner hidden">
-            🔒 <span id="deadlineBannerText">Submission deadline has passed. Form is read-only.</span>
+          <!-- Gate: no schoolId assigned -->
+          <div id="gateNoSchool" class="gate-banner hidden">
+            <div class="gate-banner-icon">🏫</div>
+            <div class="gate-banner-title">No School Assigned</div>
+            <div class="gate-banner-text">Your account has not been linked to a partner school yet. Please contact your Academic Hub administrator to get assigned.</div>
           </div>
 
-          <div id="scoreBadgeWrap" class="score-badge-wrap hidden">
-            <div class="score-circle" id="scoreCircle">
-              <span id="scoreCircleVal">–</span>
+          <!-- Gate: no active semester -->
+          <div id="gateNoSemester" class="gate-banner hidden">
+            <div class="gate-banner-icon">📅</div>
+            <div class="gate-banner-title">No Active Semester</div>
+            <div class="gate-banner-text">There is no active submission period right now. Please check back later or contact your administrator.</div>
+          </div>
+
+          <!-- Actual form (shown only when gates pass) -->
+          <div id="formMain" class="hidden">
+
+            <!-- Top bar: admin school selector + semester selector -->
+            <div class="top-bar">
+              <div class="top-bar-item" id="adminSchoolWrap" style="display:none;">
+                <span class="top-bar-label">School</span>
+                <select class="form-input form-select" id="adminSchoolSelect" style="min-width:220px;"></select>
+              </div>
+              <div class="top-bar-item">
+                <span class="top-bar-label">Semester</span>
+                <select class="form-input form-select" id="semesterSelect" style="min-width:220px;"></select>
+              </div>
+              <div id="schoolNameDisplay" style="font-weight:600;font-size:0.9rem;color:var(--primary);"></div>
             </div>
-            <div>
-              <div style="font-weight:700;font-size:0.93rem;color:var(--primary);">Published Score</div>
-              <div class="score-label" id="scoreCircleLabel">Semester score</div>
+
+            <!-- Deadline banner -->
+            <div id="deadlineBanner" class="deadline-banner hidden">
+              🔒 Submission deadline has passed. This form is now read-only.
             </div>
-          </div>
 
-          <div id="noSchoolMsg" class="empty-state hidden">
-            <div class="empty-state-icon">🏫</div>
-            <div class="empty-state-text">No school assigned. Please contact an administrator.</div>
-          </div>
-          <div id="noSemesterMsg" class="empty-state hidden">
-            <div class="empty-state-icon">📅</div>
-            <div class="empty-state-text">No active semester found. Please contact an administrator.</div>
-          </div>
-
-          <div id="formIntroBanner" class="form-intro-banner">
-            <div class="form-intro-banner-icon">📋</div>
-            <div>
-              <strong>School Performance KPI Form</strong><br>
-              Fill in the data for each section below. Your progress is saved automatically when you click <strong>Save Data</strong>. You can save partially and return later to complete the form before the deadline.
+            <!-- Published score -->
+            <div id="scoreReveal" class="score-reveal hidden">
+              <div class="score-circle" id="scoreCircle">–</div>
+              <div class="score-reveal-info">
+                <div class="score-reveal-label">Published Score</div>
+                <div class="score-reveal-title" id="scoreRevealSemName">Semester</div>
+                <div class="score-reveal-sub">Based on submitted data</div>
+              </div>
             </div>
-          </div>
 
-          <div id="progressStrip" class="progress-strip hidden">
-            <span class="progress-label" id="progressLabelText">0% filled</span>
-            <div class="progress-bar-wrap">
-              <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
+            <!-- Progress bar -->
+            <div id="progressStrip" class="progress-strip hidden">
+              <span class="progress-label" id="progressLabelText">0% filled</span>
+              <div class="progress-bar-wrap">
+                <div class="progress-bar-fill" id="progressBarFill" style="width:0%"></div>
+              </div>
             </div>
-          </div>
 
-          <div id="sectionsGrid" class="sections-grid"></div>
+            <!-- Step wizard (one step per section) -->
+            <div class="wizard-steps" id="wizardSteps"></div>
 
-          <div class="save-row" id="saveRow">
-            <div class="save-meta">
-              <span id="lastSavedText">Not yet saved</span>
+            <!-- Step panels (one per section, rendered dynamically) -->
+            <div id="stepPanels"></div>
+
+            <!-- Wizard nav -->
+            <div class="wizard-nav" id="wizardNav">
+              <div class="wizard-nav-left">
+                <button class="btn btn-outline" id="prevStepBtn" style="display:none;">← Previous</button>
+              </div>
+              <div class="wizard-nav-right">
+                <span class="save-meta" id="lastSavedText">Not yet saved</span>
+                <button class="btn btn-outline btn-sm" id="saveDraftBtn">Save Draft</button>
+                <button class="btn btn-success" id="nextStepBtn">Next Section →</button>
+                <button class="btn btn-primary hidden" id="submitBtn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                  Save All Data
+                </button>
+              </div>
             </div>
-            <button class="btn btn-primary" id="saveBtn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-              Save Data
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+
+          </div><!-- /formMain -->
+
+        </div><!-- /card-body -->
+      </div><!-- /entryContent -->
+    </div><!-- /view-entry -->
 
     <!-- ═══ VIEW: OVERVIEW ═══ -->
     <div class="view" id="view-overview">
-      <div class="view-card">
-        <div class="view-header">
-          <span class="view-title">School Performance Overview</span>
-          <div style="display:flex;gap:0.75rem;align-items:center;">
+
+      <!-- Stats bar -->
+      <div id="overviewStats" class="overview-stats" style="margin-top:1.25rem;"></div>
+
+      <!-- Charts row -->
+      <div class="overview-grid" id="overviewChartGrid" style="display:none;">
+        <div class="chart-card">
+          <div class="chart-card-title">Score Distribution</div>
+          <canvas id="distributionChart" height="220"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-card-title">School Comparison</div>
+          <canvas id="comparisonChart" height="220"></canvas>
+        </div>
+      </div>
+
+      <!-- Semester selector + ranking table -->
+      <div class="card" style="margin-top:0;">
+        <div class="card-header">
+          <span class="card-title">School Rankings</span>
+          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
             <select class="form-input form-select" id="overviewSemesterSelect" style="min-width:200px;"></select>
             <button class="btn btn-outline btn-sm" id="refreshOverviewBtn">↻ Refresh</button>
           </div>
         </div>
         <div id="overviewLoading" class="spinner-wrap hidden"><div class="spinner"></div></div>
-        <div class="table-wrap" id="overviewTableWrap">
-          <table id="overviewTable">
+        <div style="overflow-x:auto;">
+          <table class="ranking-table" id="rankingTable">
             <thead>
               <tr>
                 <th>#</th>
@@ -1054,238 +572,90 @@
                 <th>Status</th>
               </tr>
             </thead>
-            <tbody id="overviewTableBody"></tbody>
+            <tbody id="rankingTableBody"></tbody>
           </table>
         </div>
       </div>
-    </div>
 
-    <!-- ═══ VIEW: KPI CONFIG ═══ -->
-    <div class="view" id="view-kpi-config">
-      <div class="view-card">
-        <div class="view-header">
-          <span class="view-title">KPI Configuration</span>
-          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-            <button class="btn btn-outline btn-sm" id="loadDefaultsBtn">Load Defaults</button>
-            <button class="btn btn-primary btn-sm" id="addKpiBtn">+ Add KPI</button>
-          </div>
-        </div>
-        <div class="weight-total-bar">
-          <span>Total Weight (Active KPIs)</span>
-          <span class="weight-val" id="weightTotal">0.00</span>
-        </div>
-        <div id="kpiConfigLoading" class="spinner-wrap hidden"><div class="spinner"></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Name</th>
-                <th>Section</th>
-                <th>Input Type</th>
-                <th>Weight</th>
-                <th>Camb. Only</th>
-                <th>Active</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="kpiConfigTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ VIEW: SCHOOLS ═══ -->
-    <div class="view" id="view-schools">
-      <div class="view-card">
-        <div class="view-header">
-          <span class="view-title">Partner Schools</span>
-          <div style="display:flex;gap:0.75rem;flex-wrap:wrap;">
-            <button class="btn btn-outline btn-sm" id="loadDefaultSchoolsBtn">Load Default Schools</button>
-            <button class="btn btn-primary btn-sm" id="addSchoolBtn">+ Add School</button>
-          </div>
-        </div>
-        <div id="schoolsLoading" class="spinner-wrap hidden"><div class="spinner"></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>School Name</th>
-                <th>Sections</th>
-                <th>Cambridge SMP</th>
-                <th>Cambridge SMA</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="schoolsTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ VIEW: USERS ═══ -->
-    <div class="view" id="view-users">
-      <div class="view-card">
-        <div class="view-header">
-          <span class="view-title">User Management</span>
-          <button class="btn btn-outline btn-sm" id="refreshUsersBtn">↻ Refresh</button>
-        </div>
-        <div id="usersLoading" class="spinner-wrap hidden"><div class="spinner"></div></div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Assigned School</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="usersTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <!-- ═══ VIEW: SETTINGS ═══ -->
-    <div class="view" id="view-settings">
-      <div class="view-card">
-        <div class="view-header">
-          <span class="view-title">Semester Settings</span>
-          <button class="btn btn-primary btn-sm" id="addSemesterBtn">+ Add Semester</button>
-        </div>
-        <div id="settingsLoading" class="spinner-wrap hidden"><div class="spinner"></div></div>
-        <div id="semesterListWrap" class="semester-list"></div>
-      </div>
-    </div>
+    </div><!-- /view-overview -->
 
   </div><!-- /pageContent -->
 </div><!-- /page-wrap -->
 
 <script type="module">
 import {
-  collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
-  serverTimestamp, query, orderBy, where
+  collection, doc, getDocs, getDoc, setDoc, serverTimestamp, query, orderBy
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// ─── State ───────────────────────────────────────────────────
+// ─── State ────────────────────────────────────────────────────
 let db, currentUser, userProfile;
-let isAdmin = false;
-let schools = [];      // [{id, name, sections, cambridge_smp, cambridge_sma}]
-let kpis = [];         // sorted by order
-let semesters = [];    // [{id, name, active, deadline, published, ...}]
+let isAdmin        = false;
+let isPrincipal    = false;
+let schools        = [];
+let kpis           = [];
+let semesters      = [];
 let activeSemester = null;
-let currentSchoolId = null;
+let currentSchoolId   = null;
 let currentSchoolConfig = null;
 let currentSemesterId = null;
-let formReadOnly = false;
-let savedData = {};    // existing Firestore data for current school+semester
-let editingKpiId = null;
-let editingSchoolId = null;
-let editingSemesterId = null;
+let formReadOnly   = false;
+let savedData      = {};
+let currentStepIdx = 0;
+let sectionSteps   = []; // ['SMP','SMA'] based on school config
 
-// ─── DEFAULT DATA ──────────────────────────────────────────
-const DEFAULT_KPIS = [
-  { id:'dept_meetings', name:'Department Meetings', section:'All', inputType:'multi_average', subFields:['Meeting 1 (%)','Meeting 2 (%)','Meeting 3 (%)'], maxValue:100, weight:0.06, description:'Attendance % for 3 meeting dates', order:1, active:true, cambridgeOnly:false },
-  { id:'subject_depts', name:'Subject Departments', section:'All', inputType:'multi_average', subFields:['Mathematics','English','Religion','Physics','Biology','Chemistry'], maxValue:100, weight:0.06, description:'Performance score for 6 core subjects (avg)', order:2, active:true, cambridgeOnly:false },
-  { id:'content_filtering', name:'Content Filtering', section:'All', inputType:'select_boolean', options:['GoGuardian','Securly','Jamf Safe Internet','Other'], nullOption:'No Filter', weight:0.04, description:'Content filtering solution implemented', order:3, active:true, cambridgeOnly:false },
-  { id:'domains_completion', name:'Domains Completion', section:'All', inputType:'threshold_boolean', threshold:75, weight:0.03, description:'Domains completed count (full points if > 75)', order:4, active:true, cambridgeOnly:false },
-  { id:'website_score', name:'Website Score', section:'All', inputType:'percentage', maxValue:100, weight:0.04, description:'School website quality rating (0-100)', order:5, active:true, cambridgeOnly:false },
-  { id:'aease_participation', name:'A-EASE Participation', section:'All', inputType:'percentage', maxValue:100, weight:0.05, description:'Student participation rate in A-EASE (%)', order:6, active:true, cambridgeOnly:false },
-  { id:'club_activities', name:'Club Activities', section:'All', inputType:'multi_boolean', subFields:['Makerspace & STEAM Lab','AI & Robotics Club','Leadership Club','Business Club','STEAM Expo'], weight:0.05, description:'Active extracurricular clubs (5 possible)', order:7, active:true, cambridgeOnly:false },
-  { id:'parent_survey', name:'Parent Survey', section:'All', inputType:'ratio', denominatorType:'total_students', weight:0.06, description:'Parent survey respondents / total students', order:8, active:true, cambridgeOnly:false },
-  { id:'student_survey', name:'Student Survey', section:'All', inputType:'ratio', denominatorType:'total_students', weight:0.06, description:'Student survey respondents / total students', order:9, active:true, cambridgeOnly:false },
-  { id:'portfolio_system', name:'Portfolio System', section:'All', inputType:'boolean', weight:0.03, description:'Student portfolio system implemented', order:10, active:true, cambridgeOnly:false },
-  { id:'emc_competition', name:'EMC Competition', section:'All', inputType:'ratio', denominatorType:'total_students', weight:0.04, description:'EMC participants / total students', order:11, active:true, cambridgeOnly:false },
-  { id:'komodo_competition', name:'KOMODO Competition', section:'All', inputType:'ratio', denominatorType:'total_students', weight:0.02, description:'KOMODO participants / total students', order:12, active:true, cambridgeOnly:false },
-  { id:'staff_survey', name:'Staff Survey', section:'All', inputType:'ratio', denominatorType:'total_staff', weight:0.05, description:'Staff survey respondents / total staff', order:13, active:true, cambridgeOnly:false },
-  { id:'observations', name:'Observations & Walkthroughs', section:'All', inputType:'capped_ratio', denominatorType:'total_staff', targetPerTeacher:3, weight:0.06, description:'Total obs+walkthroughs / staff / 3 (capped at 100%)', order:14, active:true, cambridgeOnly:false },
-  { id:'mentor_mentee', name:'Mentor-Mentee Program', section:'All', inputType:'boolean_threshold', threshold:0, weight:0.02, description:'Active mentoring pairs count (any > 0 = full points)', order:15, active:true, cambridgeOnly:false },
-  { id:'device_management', name:'Device Management', section:'All', inputType:'select_boolean', options:['Google Workspace','Jamf School','Other'], nullOption:'No Management', weight:0.03, description:'Device management solution implemented', order:16, active:true, cambridgeOnly:false },
-  { id:'wifi_safety', name:'WiFi Safety Tests', section:'All', inputType:'multi_average', subFields:['Quick Test Score (0-100)','Full Test Score (0-100)'], maxValue:100, weight:0.04, description:'Quick Test + Full Test scores (avg)', order:17, active:true, cambridgeOnly:false },
-  { id:'ease_performance', name:'EASE Performance', section:'All', inputType:'ease', weight:0.05, description:'School avg vs network avg for EASE I & II', order:18, active:true, cambridgeOnly:false },
-  { id:'lower_secondary', name:'Lower Secondary Exams', section:'SMP', inputType:'cambridge_lower', weight:0.05, description:'Cambridge Lower Secondary: subjects (max 3) + avg score', order:19, active:true, cambridgeOnly:true },
-  { id:'igcse_exams', name:'IGCSE Examinations', section:'SMA', inputType:'cambridge_igcse', weight:0.06, description:'IGCSE: exams count (max 10) + avg score', order:20, active:true, cambridgeOnly:true },
-  { id:'aslevel_exams', name:'AS/A Level Examinations', section:'SMA', inputType:'cambridge_aslevel', weight:0.05, description:'AS/A: subjects (max 4, 60%) + enrollment rate (40%)', order:21, active:true, cambridgeOnly:true },
-];
-
-const DEFAULT_SCHOOLS = [
-  { name:'Cahaya Rancamaya Islamic School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Emer Islamic Boarding School', sections:['SMP','SMA'], cambridge_smp:'Non-Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Fatih Bilingual School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Global Cahaya Bangsa', sections:['SMP','SMA'], cambridge_smp:'Non-Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Kesatuan Bangsa School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Kharisma Bangsa School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Mega Islamic School', sections:['SMP','SMA'], cambridge_smp:'Non-Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Pakar Belia Islamic Boarding School', sections:['SMP','SMA'], cambridge_smp:'Non-Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Prestige Bilingual School', sections:['SMP'], cambridge_smp:'Non-Cambridge', cambridge_sma:'' },
-  { name:'Pribadi Bandung School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Pribadi Depok School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Pribadi Premiere School', sections:['SMP','SMA'], cambridge_smp:'Non-Cambridge', cambridge_sma:'Non-Cambridge' },
-  { name:'Semesta Gunung Pati', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-  { name:'Semesta Jangli', sections:['SMP'], cambridge_smp:'Non-Cambridge', cambridge_sma:'' },
-  { name:'TNA Fatih Bilingual School', sections:['SMP','SMA'], cambridge_smp:'Cambridge', cambridge_sma:'Cambridge' },
-];
+// ─── Charts ──────────────────────────────────────────────────
+let distributionChartInst = null;
+let comparisonChartInst   = null;
 
 // ─── Helpers ─────────────────────────────────────────────────
-function toast(msg, type='info') {
+function toast(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
   el.textContent = msg;
   document.getElementById('toastContainer').appendChild(el);
   setTimeout(() => el.remove(), 3600);
 }
-
-function openModal(id) {
-  document.getElementById(id).classList.add('open');
-}
-function closeModal(id) {
-  document.getElementById(id).classList.remove('open');
-}
-
-function fmtDate(ts) {
-  if (!ts) return '—';
-  const d = ts.toDate ? ts.toDate() : new Date(ts);
-  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
-}
-
 function scoreColor(s) {
   if (s >= 70) return 'green';
   if (s >= 50) return 'yellow';
   return 'red';
 }
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+function sectionLabel(sec) {
+  return sec === 'SD' ? 'Elementary School' : sec === 'SMP' ? 'Middle School (SMP)' : 'Senior High School (SMA)';
+}
+function sectionIcon(sec) {
+  return sec === 'SD' ? '🏫' : sec === 'SMP' ? '📚' : '🎓';
+}
 
 // ─── Auth Ready ───────────────────────────────────────────────
 document.addEventListener('authReady', async (e) => {
   window.__loadAcademicNavbar('', { user: e.detail.user, profile: e.detail.profile });
-  db = window.db;
+  db          = window.db;
   currentUser = window.currentUser;
   userProfile = window.userProfile;
 
   if (!currentUser || !userProfile) {
-    document.getElementById('pageLoading').innerHTML = '<p style="color:#dc3545;">Authentication failed. Please refresh.</p>';
+    document.getElementById('pageLoading').innerHTML = '<p style="color:#dc3545;text-align:center;">Authentication failed. Please refresh.</p>';
     return;
   }
 
-  isAdmin = userProfile.role_academichub === 'academic_admin';
+  isAdmin     = userProfile.role_academichub === 'academic_admin';
+  isPrincipal = Array.isArray(userProfile.ah_sub_roles) && userProfile.ah_sub_roles.includes('school_principal');
 
   // Header
   const initials = (userProfile.displayName || currentUser.email || '?').slice(0,2).toUpperCase();
-  document.getElementById('navAvatar').textContent = initials;
+  document.getElementById('navAvatar').textContent  = initials;
   document.getElementById('navUserName').textContent = userProfile.displayName || currentUser.email;
   document.getElementById('logoutBtn').addEventListener('click', () => {
     import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js').then(({ getAuth, signOut }) => {
       signOut(getAuth()).then(() => { window.location.href = 'login.html'; });
     });
   });
-
-  // Show admin tabs
-  if (isAdmin) {
-    document.getElementById('adminTabs').classList.remove('hidden');
-    // Show admin tab-bar on form card
-    document.querySelector('[data-view="view-form"]').classList.add('active');
-  }
 
   document.getElementById('pageLoading').classList.add('hidden');
   document.getElementById('pageContent').classList.remove('hidden');
@@ -1294,26 +664,12 @@ document.addEventListener('authReady', async (e) => {
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => switchView(btn.dataset.view));
   });
-  // Wire modal close buttons
-  document.querySelectorAll('[data-close]').forEach(btn => {
-    btn.addEventListener('click', () => closeModal(btn.dataset.close));
-  });
 
   // Load base data
   await Promise.all([loadSchools(), loadKPIs(), loadSemesters()]);
 
-  // Determine school for user
-  if (!isAdmin) {
-    currentSchoolId = userProfile.schoolId || null;
-    if (!currentSchoolId) {
-      await populateSchoolSelectModal();
-      openModal('schoolSelectModal');
-      return; // wait for modal confirm
-    }
-  }
-
-  switchView('view-form');
-  await initFormView();
+  // Start on KPI Data
+  switchView('view-entry');
 });
 
 // ─── Tab Switching ────────────────────────────────────────────
@@ -1323,17 +679,8 @@ function switchView(viewId) {
   document.querySelectorAll('.tab-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.view === viewId);
   });
-  // Round corners on view-card depending on tab presence
-  const card = document.querySelector(`#${viewId} .view-card`);
-  if (card && isAdmin) {
-    card.style.borderTopLeftRadius = '0';
-    card.style.borderTopRightRadius = '0';
-  }
-  if (viewId === 'view-overview') renderOverview();
-  if (viewId === 'view-kpi-config') renderKpiConfig();
-  if (viewId === 'view-schools') renderSchools();
-  if (viewId === 'view-users') loadAndRenderUsers();
-  if (viewId === 'view-settings') renderSettings();
+  if (viewId === 'view-entry')    initEntryView();
+  if (viewId === 'view-overview') initOverview();
 }
 
 // ─── Load Base Data ───────────────────────────────────────────
@@ -1342,12 +689,10 @@ async function loadSchools() {
   schools = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   schools.sort((a,b) => a.name.localeCompare(b.name));
 }
-
 async function loadKPIs() {
   const snap = await getDocs(query(collection(db, 'kpi_config'), orderBy('order')));
   kpis = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
-
 async function loadSemesters() {
   const snap = await getDocs(collection(db, 'kpi_settings'));
   semesters = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1359,75 +704,93 @@ async function loadSemesters() {
   activeSemester = semesters.find(s => s.active) || semesters[0] || null;
 }
 
-// ─── FORM VIEW ────────────────────────────────────────────────
-async function initFormView() {
-  const formLoading = document.getElementById('formLoading');
-  const formContent = document.getElementById('formContent');
-  formLoading.classList.remove('hidden');
-  formContent.classList.add('hidden');
+// ─── ENTRY VIEW INIT ─────────────────────────────────────────
+async function initEntryView() {
+  const entryLoading = document.getElementById('entryLoading');
+  const entryContent = document.getElementById('entryContent');
+  entryLoading.classList.remove('hidden');
+  entryContent.classList.add('hidden');
 
-  // Admin school selector
-  const schoolSelectorWrap = document.getElementById('schoolSelectorWrap');
+  // Gate 1: must be admin or school_principal
+  if (!isAdmin && !isPrincipal) {
+    entryLoading.classList.add('hidden');
+    entryContent.classList.remove('hidden');
+    document.getElementById('gatePrincipal').classList.remove('hidden');
+    document.getElementById('formMain').classList.add('hidden');
+    return;
+  }
+
+  // Admin: show school selector
+  const adminSchoolWrap = document.getElementById('adminSchoolWrap');
   const adminSchoolSelect = document.getElementById('adminSchoolSelect');
   if (isAdmin) {
-    schoolSelectorWrap.style.display = '';
+    adminSchoolWrap.style.display = '';
     adminSchoolSelect.innerHTML = schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-    currentSchoolId = adminSchoolSelect.value || (schools[0]?.id);
-    adminSchoolSelect.addEventListener('change', () => {
+    currentSchoolId = adminSchoolSelect.value || schools[0]?.id;
+    adminSchoolSelect.onchange = () => {
       currentSchoolId = adminSchoolSelect.value;
       loadFormData();
-    });
+    };
+  } else {
+    // Gate 2: must have schoolId assigned
+    currentSchoolId = userProfile.schoolId || null;
+    if (!currentSchoolId) {
+      entryLoading.classList.add('hidden');
+      entryContent.classList.remove('hidden');
+      document.getElementById('gateNoSchool').classList.remove('hidden');
+      document.getElementById('formMain').classList.add('hidden');
+      return;
+    }
+  }
+
+  // Gate 3: must have active semester
+  if (!activeSemester) {
+    entryLoading.classList.add('hidden');
+    entryContent.classList.remove('hidden');
+    document.getElementById('gateNoSemester').classList.remove('hidden');
+    document.getElementById('formMain').classList.add('hidden');
+    return;
   }
 
   // Semester selector
   const semesterSelect = document.getElementById('semesterSelect');
   semesterSelect.innerHTML = semesters.map(s =>
-    `<option value="${s.id}" ${s.active ? 'selected' : ''}>${s.name}</option>`
+    `<option value="${s.id}" ${s.active ? 'selected':''}>${s.name}</option>`
   ).join('');
-  currentSemesterId = activeSemester?.id || semesters[0]?.id || null;
-  semesterSelect.addEventListener('change', () => {
+  currentSemesterId = activeSemester.id;
+  semesterSelect.onchange = () => {
     currentSemesterId = semesterSelect.value;
     loadFormData();
-  });
+  };
 
-  formLoading.classList.add('hidden');
-  formContent.classList.remove('hidden');
-
-  if (!currentSchoolId) {
-    document.getElementById('noSchoolMsg').classList.remove('hidden');
-    document.getElementById('sectionsGrid').classList.add('hidden');
-    document.getElementById('saveRow').classList.add('hidden');
-    return;
-  }
-  if (!currentSemesterId) {
-    document.getElementById('noSemesterMsg').classList.remove('hidden');
-    document.getElementById('sectionsGrid').classList.add('hidden');
-    document.getElementById('saveRow').classList.add('hidden');
-    return;
-  }
+  entryLoading.classList.add('hidden');
+  entryContent.classList.remove('hidden');
+  showGate(null); // clear all gates
+  document.getElementById('formMain').classList.remove('hidden');
 
   await loadFormData();
 }
 
+function showGate(gateId) {
+  ['gatePrincipal','gateNoSchool','gateNoSemester'].forEach(id => {
+    document.getElementById(id).classList.toggle('hidden', id !== gateId);
+  });
+}
+
+// ─── LOAD FORM DATA ───────────────────────────────────────────
 async function loadFormData() {
   if (!currentSchoolId || !currentSemesterId) return;
 
-  // Ensure sections grid is visible
-  document.getElementById('sectionsGrid').classList.remove('hidden');
-  document.getElementById('saveRow').classList.remove('hidden');
-  document.getElementById('noSchoolMsg').classList.add('hidden');
-  document.getElementById('noSemesterMsg').classList.add('hidden');
-
-  // Get school config
   currentSchoolConfig = schools.find(s => s.id === currentSchoolId);
   if (!currentSchoolConfig) {
-    // Reload
     const snap = await getDoc(doc(db, 'partner_schools', currentSchoolId));
     if (snap.exists()) currentSchoolConfig = { id: snap.id, ...snap.data() };
   }
+  if (!currentSchoolConfig) { toast('School not found.', 'error'); return; }
 
-  if (!currentSchoolConfig) {
-    toast('School not found.', 'error'); return;
+  // Show school name for non-admin
+  if (!isAdmin) {
+    document.getElementById('schoolNameDisplay').textContent = currentSchoolConfig.name;
   }
 
   // Deadline check
@@ -1438,41 +801,27 @@ async function loadFormData() {
   } else {
     formReadOnly = false;
   }
-  const banner = document.getElementById('deadlineBanner');
-  if (formReadOnly) {
-    banner.classList.remove('hidden');
-  } else {
-    banner.classList.add('hidden');
-  }
-  document.getElementById('saveBtn').disabled = formReadOnly;
+  document.getElementById('deadlineBanner').classList.toggle('hidden', !formReadOnly);
+  document.getElementById('saveDraftBtn').disabled = formReadOnly;
+  document.getElementById('submitBtn').disabled    = formReadOnly;
 
-  // Load existing data
-  const dataRef = doc(db, 'school_performance_kpi', currentSemesterId, 'schools', currentSchoolId);
+  // Fetch existing data
+  const dataRef  = doc(db, 'school_performance_kpi', currentSemesterId, 'schools', currentSchoolId);
   const dataSnap = await getDoc(dataRef);
   savedData = dataSnap.exists() ? dataSnap.data() : {};
 
-  // Score badge
-  const semData = semesters.find(s => s.id === currentSemesterId);
-  const showScore = isAdmin || semData?.published;
-  const scoreWrap = document.getElementById('scoreBadgeWrap');
+  // Published score
+  const showScore = isAdmin || sem?.published;
   if (showScore && savedData.score != null) {
     const sc = Math.round(savedData.score);
     const cl = scoreColor(sc);
     const circle = document.getElementById('scoreCircle');
-    circle.textContent = '';
-    const val = document.createElement('span');
-    val.id = 'scoreCircleVal';
-    val.textContent = sc;
-    const lbl = document.createElement('span');
-    lbl.style.cssText = 'font-size:0.55rem;font-weight:500;';
-    lbl.textContent = '/100';
-    circle.appendChild(val);
-    circle.appendChild(lbl);
+    circle.textContent = sc;
     circle.className = `score-circle ${cl}`;
-    document.getElementById('scoreCircleLabel').textContent = semData?.name || '';
-    scoreWrap.classList.remove('hidden');
+    document.getElementById('scoreRevealSemName').textContent = sem?.name || '';
+    document.getElementById('scoreReveal').classList.remove('hidden');
   } else {
-    scoreWrap.classList.add('hidden');
+    document.getElementById('scoreReveal').classList.add('hidden');
   }
 
   // Last saved
@@ -1482,95 +831,124 @@ async function loadFormData() {
     document.getElementById('lastSavedText').textContent = 'Not yet saved this semester.';
   }
 
-  renderSections();
+  // Build wizard
+  sectionSteps = currentSchoolConfig.sections || [];
+  currentStepIdx = 0;
+  buildWizard();
   updateProgressBar();
 }
 
-function renderSections() {
-  const grid = document.getElementById('sectionsGrid');
-  grid.innerHTML = '';
-  const sections = currentSchoolConfig.sections || [];
-  if (!sections.length) {
-    grid.innerHTML = '<p class="text-muted">No sections configured for this school.</p>';
+// ─── WIZARD ──────────────────────────────────────────────────
+function buildWizard() {
+  const stepsEl  = document.getElementById('wizardSteps');
+  const panelsEl = document.getElementById('stepPanels');
+  stepsEl.innerHTML  = '';
+  panelsEl.innerHTML = '';
+
+  if (!sectionSteps.length) {
+    panelsEl.innerHTML = '<p style="color:#6b7280;text-align:center;padding:2rem;">No sections configured for this school.</p>';
+    document.getElementById('wizardNav').classList.add('hidden');
     return;
   }
-  for (const sec of sections) {
-    grid.appendChild(buildSectionCard(sec));
-  }
-  // Wire progress bar update on any input change
-  grid.addEventListener('input', updateProgressBar);
-  grid.addEventListener('change', updateProgressBar);
-}
 
-function updateProgressBar() {
-  const strip = document.getElementById('progressStrip');
-  const fill = document.getElementById('progressBarFill');
-  const label = document.getElementById('progressLabelText');
-  if (!strip || !fill) return;
+  document.getElementById('wizardNav').classList.remove('hidden');
 
-  const allInputs = document.querySelectorAll('#sectionsGrid .form-input:not([disabled]), #sectionsGrid input[type=checkbox]:not([disabled])');
-  if (!allInputs.length) { strip.classList.add('hidden'); return; }
+  sectionSteps.forEach((sec, idx) => {
+    // Step indicator
+    const stepBtn = document.createElement('div');
+    stepBtn.className = `wizard-step${idx === 0 ? ' active' : ''}`;
+    stepBtn.dataset.idx = idx;
+    stepBtn.innerHTML = `
+      <div class="wizard-step-num">${idx + 1}</div>
+      <span>${sec}</span>
+      <span class="wizard-step-label">${sectionLabel(sec)}</span>
+    `;
+    stepBtn.addEventListener('click', () => goToStep(idx));
+    stepsEl.appendChild(stepBtn);
 
-  let filled = 0;
-  allInputs.forEach(inp => {
-    if (inp.type === 'checkbox') { if (inp.checked) filled++; }
-    else if (inp.value && inp.value.trim() !== '' && inp.value !== inp.getAttribute('placeholder')) filled++;
+    // Panel
+    const panel = document.createElement('div');
+    panel.className = `step-panel${idx === 0 ? ' active' : ''}`;
+    panel.id = `step-panel-${idx}`;
+    panel.appendChild(buildSectionPanel(sec));
+    panelsEl.appendChild(panel);
   });
 
-  const pct = Math.round((filled / allInputs.length) * 100);
-  fill.style.width = pct + '%';
-  label.textContent = pct + '% filled';
-  strip.classList.remove('hidden');
+  updateWizardNav();
 }
 
-function buildSectionCard(sec) {
-  const secLower = sec.toLowerCase();
+function goToStep(idx) {
+  currentStepIdx = idx;
+  document.querySelectorAll('.wizard-step').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.step-panel').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
+  });
+  updateWizardNav();
+  window.scrollTo({ top: document.getElementById('view-entry').offsetTop - 80, behavior: 'smooth' });
+}
+
+function updateWizardNav() {
+  const isFirst = currentStepIdx === 0;
+  const isLast  = currentStepIdx === sectionSteps.length - 1;
+  document.getElementById('prevStepBtn').style.display = isFirst ? 'none' : '';
+  document.getElementById('nextStepBtn').classList.toggle('hidden', isLast);
+  document.getElementById('submitBtn').classList.toggle('hidden', !isLast);
+}
+
+document.getElementById('nextStepBtn').addEventListener('click', () => {
+  if (currentStepIdx < sectionSteps.length - 1) goToStep(currentStepIdx + 1);
+});
+document.getElementById('prevStepBtn').addEventListener('click', () => {
+  if (currentStepIdx > 0) goToStep(currentStepIdx - 1);
+});
+
+// ─── BUILD SECTION PANEL ─────────────────────────────────────
+function buildSectionPanel(sec) {
   const isCambridge = sec === 'SMP'
     ? currentSchoolConfig.cambridge_smp === 'Cambridge'
     : sec === 'SMA'
       ? currentSchoolConfig.cambridge_sma === 'Cambridge'
       : false;
 
-  const card = document.createElement('div');
-  card.className = `section-card ${secLower}`;
+  const wrap = document.createElement('div');
 
-  // Header
+  // Section header
   const hdr = document.createElement('div');
-  hdr.className = 'section-card-header';
-  const sectionLabel = sec === 'SD' ? 'Elementary School' : sec === 'SMP' ? 'Middle School' : 'Senior High School';
-  const sectionIcon  = sec === 'SD' ? '🏫' : sec === 'SMP' ? '📚' : '🎓';
+  hdr.className = `section-header ${sec.toLowerCase()}`;
   hdr.innerHTML = `
-    <div style="display:flex;flex-direction:column;gap:4px;">
-      <span class="section-badge ${secLower}">${sectionIcon} ${sec}</span>
-      <span style="font-size:0.72rem;color:#6b7280;font-weight:500;padding-left:2px;">${sectionLabel}</span>
+    <span class="section-header-icon">${sectionIcon(sec)}</span>
+    <div>
+      <div class="section-header-label">${sectionLabel(sec)}</div>
+      <div class="section-header-sub">
+        ${isCambridge ? '✓ Cambridge School' : 'Non-Cambridge School'}
+        &nbsp;·&nbsp; Fill in all fields below and click <strong>Save Draft</strong> or <strong>Save All Data</strong>.
+      </div>
     </div>
-    ${sec !== 'SD' ? `<span class="cambridge-badge ${isCambridge ? 'cambridge' : 'non-cambridge'}">${isCambridge ? '✓ Cambridge' : 'Non-Cambridge'}</span>` : ''}
+    <span class="badge badge-${sec.toLowerCase()}" style="margin-left:auto;">${sec}</span>
   `;
-
-  // Body
-  const body = document.createElement('div');
-  body.className = 'section-card-body';
+  wrap.appendChild(hdr);
 
   // Metadata
+  const metaData = savedData[sec]?.metadata || {};
   const metaRow = document.createElement('div');
   metaRow.className = 'metadata-row';
-  const metaData = savedData[sec]?.metadata || {};
   metaRow.innerHTML = `
-    <div class="kpi-field">
-      <label class="kpi-label">Total Staff</label>
-      <input type="number" class="form-input" data-sec="${sec}" data-meta="totalStaff" value="${metaData.totalStaff || ''}" placeholder="0" min="0" ${formReadOnly ? 'disabled' : ''} />
+    <div class="form-group">
+      <label class="form-label">Total Staff in ${sec}</label>
+      <input type="number" class="form-input" data-sec="${sec}" data-meta="totalStaff"
+        value="${metaData.totalStaff ?? ''}" placeholder="0" min="0" ${formReadOnly ? 'disabled' : ''} />
     </div>
-    <div class="kpi-field">
-      <label class="kpi-label">Total Students</label>
-      <input type="number" class="form-input" data-sec="${sec}" data-meta="totalStudents" value="${metaData.totalStudents || ''}" placeholder="0" min="0" ${formReadOnly ? 'disabled' : ''} />
+    <div class="form-group">
+      <label class="form-label">Total Students in ${sec}</label>
+      <input type="number" class="form-input" data-sec="${sec}" data-meta="totalStudents"
+        value="${metaData.totalStudents ?? ''}" placeholder="0" min="0" ${formReadOnly ? 'disabled' : ''} />
     </div>
   `;
+  wrap.appendChild(metaRow);
 
-  // KPI fields
-  const kpiGrid = document.createElement('div');
-  kpiGrid.className = 'kpi-grid';
-
-  // Filter KPIs for this section
+  // KPIs grouped
   const relevantKPIs = kpis.filter(k => {
     if (!k.active) return false;
     const applies = k.section === 'All' || k.section === sec;
@@ -1579,54 +957,65 @@ function buildSectionCard(sec) {
     return true;
   });
 
-  for (const kpi of relevantKPIs) {
-    const val = savedData[sec]?.kpis?.[kpi.id];
-    const fieldEl = buildKpiField(kpi, val, sec, formReadOnly);
-    kpiGrid.appendChild(fieldEl);
+  if (!relevantKPIs.length) {
+    const empty = document.createElement('p');
+    empty.style.cssText = 'color:#6b7280;font-size:0.88rem;padding:1rem 0;';
+    empty.textContent = 'No KPIs configured for this section.';
+    wrap.appendChild(empty);
+    return wrap;
   }
 
-  body.appendChild(metaRow);
-  body.appendChild(kpiGrid);
-  card.appendChild(hdr);
-  card.appendChild(body);
-  return card;
+  const grid = document.createElement('div');
+  grid.className = 'kpi-grid';
+
+  for (const kpi of relevantKPIs) {
+    const val = savedData[sec]?.kpis?.[kpi.id];
+    grid.appendChild(buildKpiFieldCard(kpi, val, sec));
+  }
+  wrap.appendChild(grid);
+
+  // Wire progress update
+  wrap.addEventListener('input', updateProgressBar);
+  wrap.addEventListener('change', updateProgressBar);
+
+  return wrap;
 }
 
-function buildKpiField(kpi, val, sec, readOnly) {
-  const wrap = document.createElement('div');
-  const isComplex = ['multi_number','multi_average','multi_boolean','ease','cambridge_lower','cambridge_igcse','cambridge_aslevel'].includes(kpi.inputType);
-  wrap.className = `kpi-field${isComplex ? ' full-width' : ''}`;
+// ─── BUILD KPI FIELD CARD ─────────────────────────────────────
+function buildKpiFieldCard(kpi, val, sec) {
+  const isComplex = ['multi_number','multi_average','multi_boolean','ease',
+    'cambridge_lower','cambridge_igcse','cambridge_aslevel'].includes(kpi.inputType);
 
-  const lbl = document.createElement('label');
+  const card = document.createElement('div');
+  card.className = `kpi-field-card${isComplex ? ' full-width' : ''}`;
+
+  const lbl = document.createElement('div');
   lbl.className = 'kpi-label';
-  lbl.textContent = kpi.name;
-  wrap.appendChild(lbl);
+  lbl.innerHTML = `${kpi.name} <span class="kpi-weight">${Math.round((kpi.weight||0)*100)}%</span>`;
+  card.appendChild(lbl);
 
   if (kpi.description) {
     const desc = document.createElement('span');
     desc.className = 'kpi-desc';
     desc.textContent = kpi.description;
-    wrap.appendChild(desc);
+    card.appendChild(desc);
   }
 
-  const dn = `data-sec="${sec}" data-kpi="${kpi.id}"`;
-  const dis = readOnly ? 'disabled' : '';
-  const v = val;
+  const dis = formReadOnly ? 'disabled' : '';
+  const v   = val;
 
-  switch(kpi.inputType) {
+  switch (kpi.inputType) {
     case 'percentage':
     case 'number': {
       const inp = document.createElement('input');
-      inp.type = 'number';
+      inp.type  = 'number';
       inp.className = 'form-input';
-      inp.setAttribute('data-sec', sec);
-      inp.setAttribute('data-kpi', kpi.id);
+      inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id);
       inp.value = v != null ? v : '';
       inp.placeholder = kpi.inputType === 'percentage' ? '0–100' : '0';
       if (kpi.inputType === 'percentage') { inp.min = 0; inp.max = 100; }
-      if (readOnly) inp.disabled = true;
-      wrap.appendChild(inp);
-      break;
+      if (formReadOnly) inp.disabled = true;
+      card.appendChild(inp); break;
     }
     case 'boolean': {
       const tw = document.createElement('div');
@@ -1634,219 +1023,175 @@ function buildKpiField(kpi, val, sec, readOnly) {
       tw.innerHTML = `<label class="toggle"><input type="checkbox" data-sec="${sec}" data-kpi="${kpi.id}" ${(v === true || v === 'true') ? 'checked' : ''} ${dis}><span class="toggle-slider"></span></label><span class="toggle-text">${(v === true || v === 'true') ? 'Yes' : 'No'}</span>`;
       const cb = tw.querySelector('input');
       cb.addEventListener('change', () => { tw.querySelector('.toggle-text').textContent = cb.checked ? 'Yes' : 'No'; });
-      wrap.appendChild(tw);
-      break;
+      card.appendChild(tw); break;
     }
     case 'select_boolean': {
       const sel = document.createElement('select');
       sel.className = 'form-input form-select';
-      sel.setAttribute('data-sec', sec);
-      sel.setAttribute('data-kpi', kpi.id);
-      if (readOnly) sel.disabled = true;
+      sel.setAttribute('data-sec', sec); sel.setAttribute('data-kpi', kpi.id);
+      if (formReadOnly) sel.disabled = true;
       const opts = [kpi.nullOption || 'None', ...(kpi.options || [])];
-      sel.innerHTML = opts.map(o => `<option value="${o}" ${v === o ? 'selected' : ''}>${o}</option>`).join('');
-      wrap.appendChild(sel);
-      break;
+      sel.innerHTML = opts.map(o => `<option value="${o}" ${v === o ? 'selected':''}>${o}</option>`).join('');
+      card.appendChild(sel); break;
     }
     case 'ratio':
     case 'threshold_boolean':
     case 'capped_ratio':
     case 'boolean_threshold': {
       const inp = document.createElement('input');
-      inp.type = 'number';
-      inp.className = 'form-input';
-      inp.setAttribute('data-sec', sec);
-      inp.setAttribute('data-kpi', kpi.id);
-      inp.value = v != null ? v : '';
-      inp.min = 0;
-      if (readOnly) inp.disabled = true;
-      wrap.appendChild(inp);
-      break;
+      inp.type  = 'number'; inp.className = 'form-input';
+      inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id);
+      inp.value = v != null ? v : ''; inp.min = 0;
+      if (formReadOnly) inp.disabled = true;
+      card.appendChild(inp); break;
     }
     case 'multi_number':
     case 'multi_average': {
-      const sf = document.createElement('div');
-      sf.className = 'sub-fields-wrap';
+      const sf = document.createElement('div'); sf.className = 'sub-fields-wrap';
       for (const field of (kpi.subFields || [])) {
-        const row = document.createElement('div');
-        row.className = 'sub-field-row';
-        const safeKey = field.replace(/[^a-zA-Z0-9]/g, '_');
+        const safeKey = field.replace(/[^a-zA-Z0-9]/g,'_');
+        const row = document.createElement('div'); row.className = 'sub-field-row';
         const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.className = 'form-input';
-        inp.style.flex = '1';
-        inp.setAttribute('data-sec', sec);
-        inp.setAttribute('data-kpi', kpi.id);
-        inp.setAttribute('data-subkey', safeKey);
+        inp.type = 'number'; inp.className = 'form-input'; inp.style.flex = '1';
+        inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id); inp.setAttribute('data-subkey', safeKey);
         inp.value = v?.[safeKey] != null ? v[safeKey] : '';
-        inp.placeholder = '0';
-        inp.min = 0;
-        inp.max = kpi.maxValue || 100;
-        if (readOnly) inp.disabled = true;
+        inp.placeholder = '0'; inp.min = 0; inp.max = kpi.maxValue || 100;
+        if (formReadOnly) inp.disabled = true;
         row.innerHTML = `<span class="sub-field-label">${field}</span>`;
-        row.appendChild(inp);
-        sf.appendChild(row);
+        row.appendChild(inp); sf.appendChild(row);
       }
-      wrap.appendChild(sf);
-      break;
+      card.appendChild(sf); break;
     }
     case 'multi_boolean': {
-      const mb = document.createElement('div');
-      mb.className = 'multi-bool-grid';
+      const mb = document.createElement('div'); mb.className = 'multi-bool-grid';
       for (const field of (kpi.subFields || [])) {
-        const safeKey = field.replace(/[^a-zA-Z0-9]/g, '_');
-        const row = document.createElement('label');
-        row.className = 'multi-bool-row';
+        const safeKey = field.replace(/[^a-zA-Z0-9]/g,'_');
+        const row = document.createElement('label'); row.className = 'multi-bool-row';
         const cb = document.createElement('input');
         cb.type = 'checkbox';
-        cb.setAttribute('data-sec', sec);
-        cb.setAttribute('data-kpi', kpi.id);
-        cb.setAttribute('data-subkey', safeKey);
+        cb.setAttribute('data-sec', sec); cb.setAttribute('data-kpi', kpi.id); cb.setAttribute('data-subkey', safeKey);
         cb.checked = v?.[safeKey] === true || v?.[safeKey] === 'true';
-        if (readOnly) cb.disabled = true;
-        row.appendChild(cb);
-        row.appendChild(document.createTextNode(field));
+        if (formReadOnly) cb.disabled = true;
+        row.appendChild(cb); row.appendChild(document.createTextNode(' ' + field));
         mb.appendChild(row);
       }
-      wrap.appendChild(mb);
-      break;
+      card.appendChild(mb); break;
     }
     case 'ease': {
-      const cw = document.createElement('div');
-      cw.className = 'compound-fields';
+      const cw = document.createElement('div'); cw.className = 'compound-fields';
       ['ease_i','ease_ii'].forEach((key, i) => {
         const inner = document.createElement('div');
-        inner.innerHTML = `<div class="compound-label">EASE ${i === 0 ? 'I' : 'II'} Avg</div>`;
+        inner.innerHTML = `<div class="compound-label">EASE ${i === 0 ? 'I' : 'II'} — School Average</div>`;
         const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.className = 'form-input';
-        inp.setAttribute('data-sec', sec);
-        inp.setAttribute('data-kpi', kpi.id);
-        inp.setAttribute('data-subkey', key);
-        inp.value = v?.[key] != null ? v[key] : '';
-        inp.placeholder = '0.00';
-        inp.step = '0.01';
-        if (readOnly) inp.disabled = true;
-        inner.appendChild(inp);
-        cw.appendChild(inner);
+        inp.type = 'number'; inp.className = 'form-input';
+        inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id); inp.setAttribute('data-subkey', key);
+        inp.value = v?.[key] != null ? v[key] : ''; inp.placeholder = '0.00'; inp.step = '0.01';
+        if (formReadOnly) inp.disabled = true;
+        inner.appendChild(inp); cw.appendChild(inner);
       });
-      wrap.appendChild(cw);
-      break;
+      card.appendChild(cw); break;
     }
     case 'cambridge_lower': {
-      const cw = document.createElement('div');
-      cw.className = 'compound-fields';
-      [['subjects','Subjects (0–3)','0','3'], ['average','Average Score (0–100)','0','100']].forEach(([key,label,mn,mx]) => {
+      const cw = document.createElement('div'); cw.className = 'compound-fields';
+      [['subjects','Number of Subjects (0–3)','0','3'],['average','Average Score (0–100)','0','100']].forEach(([key,label,mn,mx]) => {
         const inner = document.createElement('div');
         inner.innerHTML = `<div class="compound-label">${label}</div>`;
         const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.className = 'form-input';
-        inp.setAttribute('data-sec', sec);
-        inp.setAttribute('data-kpi', kpi.id);
-        inp.setAttribute('data-subkey', key);
-        inp.value = v?.[key] != null ? v[key] : '';
-        inp.min = mn; inp.max = mx; inp.placeholder = mn;
-        if (readOnly) inp.disabled = true;
-        inner.appendChild(inp);
-        cw.appendChild(inner);
+        inp.type = 'number'; inp.className = 'form-input';
+        inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id); inp.setAttribute('data-subkey', key);
+        inp.value = v?.[key] != null ? v[key] : ''; inp.min = mn; inp.max = mx; inp.placeholder = mn;
+        if (formReadOnly) inp.disabled = true;
+        inner.appendChild(inp); cw.appendChild(inner);
       });
-      wrap.appendChild(cw);
-      break;
+      card.appendChild(cw); break;
     }
     case 'cambridge_igcse': {
-      const cw = document.createElement('div');
-      cw.className = 'compound-fields';
-      [['exams','Exams Count','0',''], ['average','Average Score (0–100)','0','100']].forEach(([key,label,mn,mx]) => {
+      const cw = document.createElement('div'); cw.className = 'compound-fields';
+      [['exams','Number of Exams','0',''],['average','Average Score (0–100)','0','100']].forEach(([key,label,mn,mx]) => {
         const inner = document.createElement('div');
         inner.innerHTML = `<div class="compound-label">${label}</div>`;
         const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.className = 'form-input';
-        inp.setAttribute('data-sec', sec);
-        inp.setAttribute('data-kpi', kpi.id);
-        inp.setAttribute('data-subkey', key);
-        inp.value = v?.[key] != null ? v[key] : '';
-        inp.min = mn; if(mx) inp.max = mx; inp.placeholder = mn;
-        if (readOnly) inp.disabled = true;
-        inner.appendChild(inp);
-        cw.appendChild(inner);
+        inp.type = 'number'; inp.className = 'form-input';
+        inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id); inp.setAttribute('data-subkey', key);
+        inp.value = v?.[key] != null ? v[key] : ''; inp.min = mn; if (mx) inp.max = mx; inp.placeholder = mn;
+        if (formReadOnly) inp.disabled = true;
+        inner.appendChild(inp); cw.appendChild(inner);
       });
-      wrap.appendChild(cw);
-      break;
+      card.appendChild(cw); break;
     }
     case 'cambridge_aslevel': {
-      const cw = document.createElement('div');
-      cw.className = 'compound-fields';
-      [['subjects','Subjects (0–4)','0','4'], ['students','Students Enrolled','0','']].forEach(([key,label,mn,mx]) => {
+      const cw = document.createElement('div'); cw.className = 'compound-fields';
+      [['subjects','Subjects Offered (0–4)','0','4'],['students','Students Enrolled','0','']].forEach(([key,label,mn,mx]) => {
         const inner = document.createElement('div');
         inner.innerHTML = `<div class="compound-label">${label}</div>`;
         const inp = document.createElement('input');
-        inp.type = 'number';
-        inp.className = 'form-input';
-        inp.setAttribute('data-sec', sec);
-        inp.setAttribute('data-kpi', kpi.id);
-        inp.setAttribute('data-subkey', key);
-        inp.value = v?.[key] != null ? v[key] : '';
-        inp.min = mn; if(mx) inp.max = mx; inp.placeholder = mn;
-        if (readOnly) inp.disabled = true;
-        inner.appendChild(inp);
-        cw.appendChild(inner);
+        inp.type = 'number'; inp.className = 'form-input';
+        inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id); inp.setAttribute('data-subkey', key);
+        inp.value = v?.[key] != null ? v[key] : ''; inp.min = mn; if (mx) inp.max = mx; inp.placeholder = mn;
+        if (formReadOnly) inp.disabled = true;
+        inner.appendChild(inp); cw.appendChild(inner);
       });
-      wrap.appendChild(cw);
-      break;
+      card.appendChild(cw); break;
     }
     default: {
       const inp = document.createElement('input');
-      inp.type = 'number';
-      inp.className = 'form-input';
-      inp.setAttribute('data-sec', sec);
-      inp.setAttribute('data-kpi', kpi.id);
+      inp.type = 'number'; inp.className = 'form-input';
+      inp.setAttribute('data-sec', sec); inp.setAttribute('data-kpi', kpi.id);
       inp.value = v != null ? v : '';
-      if (readOnly) inp.disabled = true;
-      wrap.appendChild(inp);
+      if (formReadOnly) inp.disabled = true;
+      card.appendChild(inp);
     }
   }
-
-  return wrap;
+  return card;
 }
 
-// ─── Collect Form Data ────────────────────────────────────────
+// ─── PROGRESS BAR ────────────────────────────────────────────
+function updateProgressBar() {
+  const strip = document.getElementById('progressStrip');
+  const fill  = document.getElementById('progressBarFill');
+  const label = document.getElementById('progressLabelText');
+  if (!strip || !fill) return;
+
+  const allInputs = document.querySelectorAll('#stepPanels .form-input:not([disabled]), #stepPanels input[type=checkbox]:not([disabled])');
+  if (!allInputs.length) { strip.classList.add('hidden'); return; }
+
+  let filled = 0;
+  allInputs.forEach(inp => {
+    if (inp.type === 'checkbox') { if (inp.checked) filled++; }
+    else if (inp.value && inp.value.trim() !== '') filled++;
+  });
+
+  const pct = Math.round((filled / allInputs.length) * 100);
+  fill.style.width = pct + '%';
+  label.textContent = pct + '% filled';
+  strip.classList.remove('hidden');
+}
+
+// ─── COLLECT FORM DATA ────────────────────────────────────────
 function collectFormData() {
   const result = {};
   const sections = currentSchoolConfig.sections || [];
-  for (const sec of sections) {
-    result[sec] = { metadata: {}, kpis: {} };
-  }
+  for (const sec of sections) result[sec] = { metadata: {}, kpis: {} };
 
-  // Metadata
   document.querySelectorAll('[data-meta]').forEach(el => {
     const sec = el.getAttribute('data-sec');
     const key = el.getAttribute('data-meta');
     if (result[sec]) result[sec].metadata[key] = el.value !== '' ? Number(el.value) : 0;
   });
 
-  // KPI values
-  // First pass: collect all inputs/selects
-  const kpiMap = {}; // key: `${sec}__${kpiId}`, value: raw input, or sub-object
+  const kpiMap = {};
   document.querySelectorAll('[data-kpi]').forEach(el => {
-    const sec = el.getAttribute('data-sec');
+    const sec   = el.getAttribute('data-sec');
     const kpiId = el.getAttribute('data-kpi');
     const subkey = el.getAttribute('data-subkey');
-    const key = `${sec}__${kpiId}`;
-
+    const key   = `${sec}__${kpiId}`;
     if (!result[sec]) return;
-
     const kpi = kpis.find(k => k.id === kpiId);
     if (!kpi) return;
 
     if (['multi_number','multi_average','multi_boolean','ease','cambridge_lower','cambridge_igcse','cambridge_aslevel'].includes(kpi.inputType)) {
       if (!kpiMap[key]) kpiMap[key] = {};
-      if (el.type === 'checkbox') {
-        kpiMap[key][subkey] = el.checked;
-      } else {
-        kpiMap[key][subkey] = el.value !== '' ? Number(el.value) : null;
-      }
+      kpiMap[key][subkey] = el.type === 'checkbox' ? el.checked : (el.value !== '' ? Number(el.value) : null);
     } else if (kpi.inputType === 'boolean') {
       if (el.type === 'checkbox') kpiMap[key] = el.checked;
     } else {
@@ -1854,28 +1199,25 @@ function collectFormData() {
     }
   });
 
-  // Apply to result
   for (const [key, val] of Object.entries(kpiMap)) {
     const [sec, kpiId] = key.split('__');
     if (result[sec]) result[sec].kpis[kpiId] = val;
   }
-
   return result;
 }
 
-// ─── Save Handler ─────────────────────────────────────────────
-document.getElementById('saveBtn').addEventListener('click', async () => {
+// ─── SAVE ────────────────────────────────────────────────────
+async function saveData() {
   if (formReadOnly || !currentSchoolId || !currentSemesterId) return;
-  const btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.textContent = 'Saving…';
+  const saveDraftBtn = document.getElementById('saveDraftBtn');
+  const submitBtn    = document.getElementById('submitBtn');
+  saveDraftBtn.disabled = true; submitBtn.disabled = true;
   try {
-    const data = collectFormData();
-    const sem = semesters.find(s => s.id === currentSemesterId);
+    const data  = collectFormData();
+    const sem   = semesters.find(s => s.id === currentSemesterId);
     const score = calculateScore(data, kpis, sem, currentSchoolConfig);
 
-    const ref = doc(db, 'school_performance_kpi', currentSemesterId, 'schools', currentSchoolId);
-    await setDoc(ref, {
+    await setDoc(doc(db, 'school_performance_kpi', currentSemesterId, 'schools', currentSchoolId), {
       ...data,
       lastUpdated: serverTimestamp(),
       updatedBy: userProfile.displayName || currentUser.email,
@@ -1883,33 +1225,35 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
     }, { merge: true });
 
     savedData = { ...data, score };
-    document.getElementById('lastSavedText').innerHTML = `Last saved: <strong>just now</strong> by ${userProfile.displayName || currentUser.email}`;
+    document.getElementById('lastSavedText').innerHTML =
+      `Last saved: <strong>just now</strong> by ${userProfile.displayName || currentUser.email}`;
     toast('Data saved successfully.', 'success');
 
-    // Refresh score badge
-    const showScore = isAdmin || sem?.published;
-    if (showScore) {
+    // Mark steps done
+    sectionSteps.forEach((_, idx) => {
+      const el = document.querySelectorAll('.wizard-step')[idx];
+      if (el) el.classList.add('done');
+    });
+
+    // Show score if admin
+    if (isAdmin && score != null) {
       const sc = Math.round(score);
-      const cl = scoreColor(sc);
       const circle = document.getElementById('scoreCircle');
-      circle.textContent = '';
-      const val = document.createElement('span');
-      val.textContent = sc;
-      const lbl = document.createElement('span');
-      lbl.style.cssText = 'font-size:0.55rem;font-weight:500;';
-      lbl.textContent = '/100';
-      circle.appendChild(val); circle.appendChild(lbl);
-      circle.className = `score-circle ${cl}`;
-      document.getElementById('scoreBadgeWrap').classList.remove('hidden');
+      circle.textContent = sc;
+      circle.className = `score-circle ${scoreColor(sc)}`;
+      document.getElementById('scoreReveal').classList.remove('hidden');
     }
-  } catch(err) {
+  } catch (err) {
     console.error(err);
     toast('Save failed: ' + err.message, 'error');
   } finally {
-    btn.disabled = false;
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Data`;
+    saveDraftBtn.disabled = formReadOnly;
+    submitBtn.disabled    = formReadOnly;
   }
-});
+}
+
+document.getElementById('saveDraftBtn').addEventListener('click', saveData);
+document.getElementById('submitBtn').addEventListener('click', saveData);
 
 // ─── SCORING ─────────────────────────────────────────────────
 function calculateScore(schoolData, allKpis, settings, schoolConfig) {
@@ -1917,12 +1261,11 @@ function calculateScore(schoolData, allKpis, settings, schoolConfig) {
   let totalStaff = 0, totalStudents = 0;
   for (const sec of ['SD','SMP','SMA']) {
     if (schoolData[sec]?.metadata) {
-      totalStaff += Number(schoolData[sec].metadata.totalStaff) || 0;
+      totalStaff    += Number(schoolData[sec].metadata.totalStaff)    || 0;
       totalStudents += Number(schoolData[sec].metadata.totalStudents) || 0;
     }
   }
   const meta = { totalStaff, totalStudents };
-
   let totalScore = 0;
 
   for (const kpi of allKpis.filter(k => k.active)) {
@@ -1936,56 +1279,48 @@ function calculateScore(schoolData, allKpis, settings, schoolConfig) {
         const camb = sec === 'SMP' ? schoolConfig.cambridge_smp : schoolConfig.cambridge_sma;
         if (camb !== 'Cambridge') continue;
       }
-      const val = schoolData[sec]?.kpis?.[kpi.id];
+      const val  = schoolData[sec]?.kpis?.[kpi.id];
       const norm = calcKPINorm(kpi, val, meta, settings);
       sectionVals.push(norm);
     }
-
     if (!sectionVals.length) continue;
     const avg = sectionVals.reduce((a,b) => a+b, 0) / sectionVals.length;
     totalScore += avg * kpi.weight;
   }
-
   return Math.min(totalScore * 100, 100);
 }
 
 function calcKPINorm(kpi, val, meta, settings) {
   if (val === null || val === undefined || val === '') return 0;
-  switch(kpi.inputType) {
-    case 'percentage':
-      return Math.min(Number(val)/100, 1);
-    case 'boolean':
-      return (val === true || val === 'true') ? 1 : 0;
+  switch (kpi.inputType) {
+    case 'percentage':  return Math.min(Number(val)/100, 1);
+    case 'boolean':     return (val === true || val === 'true') ? 1 : 0;
     case 'select_boolean':
       return (val && val !== kpi.nullOption && val !== 'No Filter' && val !== 'No Management') ? 1 : 0;
     case 'multi_average':
     case 'multi_number': {
       const vals = Object.values(val||{}).map(v => Number(v)||0);
       if (!vals.length) return 0;
-      const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
-      return Math.min(avg / (kpi.maxValue||100), 1);
+      return Math.min(vals.reduce((a,b)=>a+b,0)/vals.length/(kpi.maxValue||100), 1);
     }
     case 'multi_boolean': {
       const active = Object.values(val||{}).filter(v=>v===true||v==='true').length;
-      const total = (kpi.subFields||[]).length || 1;
-      return active/total;
+      return active / ((kpi.subFields||[]).length || 1);
     }
     case 'ratio': {
       const denom = kpi.denominatorType === 'total_staff' ? meta.totalStaff : meta.totalStudents;
       if (!denom) return 0;
       return Math.min(Number(val)/denom, 1);
     }
-    case 'threshold_boolean':
-      return Number(val) > (kpi.threshold||75) ? 1 : 0;
+    case 'threshold_boolean': return Number(val) > (kpi.threshold||75) ? 1 : 0;
     case 'capped_ratio': {
       const staff = meta.totalStaff || 1;
       return Math.min(Number(val)/staff/(kpi.targetPerTeacher||3), 1);
     }
-    case 'boolean_threshold':
-      return Number(val) > (kpi.threshold||0) ? 1 : 0;
+    case 'boolean_threshold': return Number(val) > (kpi.threshold||0) ? 1 : 0;
     case 'ease': {
       let s = 0;
-      const i1 = Number(val?.ease_i), n1 = Number(settings?.network_avg_ease_i);
+      const i1 = Number(val?.ease_i),  n1 = Number(settings?.network_avg_ease_i);
       const i2 = Number(val?.ease_ii), n2 = Number(settings?.network_avg_ease_ii);
       if (!isNaN(i1) && !isNaN(n1) && i1 > 0) s += i1 >= n1 ? 0.5 : 0;
       if (!isNaN(i2) && !isNaN(n2) && i2 > 0) s += i2 >= n2 ? 0.5 : 0;
@@ -1993,513 +1328,159 @@ function calcKPINorm(kpi, val, meta, settings) {
     }
     case 'cambridge_lower': {
       const subj = Math.min(Number(val?.subjects)||0, 3);
-      const avg = Number(val?.average)||0;
+      const avg  = Number(val?.average)||0;
       return (subj/3)*0.5 + (avg/100)*0.5;
     }
     case 'cambridge_igcse': {
       const exams = Math.min(Number(val?.exams)||0, 10);
-      const avg = Number(val?.average)||0;
+      const avg   = Number(val?.average)||0;
       return (exams/10)*0.5 + (avg/100)*0.5;
     }
     case 'cambridge_aslevel': {
-      const subj = Math.min(Number(val?.subjects)||0, 4);
-      const enroll = Math.min((Number(val?.students)||0) / (meta.totalStudents||1) * 2, 1);
+      const subj   = Math.min(Number(val?.subjects)||0, 4);
+      const enroll = Math.min((Number(val?.students)||0)/(meta.totalStudents||1)*2, 1);
       return (subj/4)*0.6 + enroll*0.4;
     }
-    default:
-      return Math.min(Number(val)/(kpi.maxValue||100), 1);
+    default: return Math.min(Number(val)/(kpi.maxValue||100), 1);
   }
 }
 
 // ─── OVERVIEW ────────────────────────────────────────────────
-async function renderOverview() {
-  const overviewSemesterSelect = document.getElementById('overviewSemesterSelect');
-  overviewSemesterSelect.innerHTML = semesters.map(s =>
-    `<option value="${s.id}" ${s.id === (activeSemester?.id || '') ? 'selected' : ''}>${s.name}</option>`
+async function initOverview() {
+  const semSel = document.getElementById('overviewSemesterSelect');
+  semSel.innerHTML = semesters.map(s =>
+    `<option value="${s.id}" ${s.id === (activeSemester?.id||'') ? 'selected':''}>${s.name}</option>`
   ).join('');
+  semSel.onchange = () => loadOverviewData(semSel.value);
+  document.getElementById('refreshOverviewBtn').onclick = () => loadOverviewData(semSel.value);
 
-  document.getElementById('refreshOverviewBtn').onclick = () => loadOverviewData(overviewSemesterSelect.value);
-  overviewSemesterSelect.onchange = () => loadOverviewData(overviewSemesterSelect.value);
-
-  const semId = overviewSemesterSelect.value;
-  if (semId) loadOverviewData(semId);
+  if (semSel.value) await loadOverviewData(semSel.value);
 }
 
 async function loadOverviewData(semId) {
   const loading = document.getElementById('overviewLoading');
-  const tbody = document.getElementById('overviewTableBody');
+  const tbody   = document.getElementById('rankingTableBody');
   loading.classList.remove('hidden');
   tbody.innerHTML = '';
+
   try {
     const snap = await getDocs(collection(db, 'school_performance_kpi', semId, 'schools'));
     const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-    // Build map of schoolId → submission
-    const submittedIds = new Set(rows.map(r => r.id));
+    const allRows = schools.map(school => ({
+      school,
+      sub: rows.find(r => r.id === school.id) || null,
+    }));
+    allRows.sort((a,b) => (b.sub?.score ?? -1) - (a.sub?.score ?? -1));
 
-    // Combine with all schools
-    const allRows = schools.map(school => {
-      const sub = rows.find(r => r.id === school.id);
-      return { school, sub };
-    });
-    allRows.sort((a,b) => {
-      const sa = a.sub?.score ?? -1;
-      const sb = b.sub?.score ?? -1;
-      return sb - sa;
-    });
+    const sem          = semesters.find(s => s.id === semId);
+    const submitted    = allRows.filter(r => r.sub).length;
+    const pending      = allRows.filter(r => !r.sub).length;
+    const scores       = allRows.filter(r => r.sub?.score != null).map(r => r.sub.score);
+    const avgScore     = scores.length ? (scores.reduce((a,b)=>a+b,0)/scores.length).toFixed(1) : '—';
+    const topSchool    = allRows[0]?.sub ? allRows[0].school.name : '—';
 
-    const sem = semesters.find(s => s.id === semId);
+    // Stats
+    document.getElementById('overviewStats').innerHTML = `
+      <div class="stat-card"><div class="stat-card-val">${schools.length}</div><div class="stat-card-label">Partner Schools</div></div>
+      <div class="stat-card success"><div class="stat-card-val">${submitted}</div><div class="stat-card-label">Submitted</div></div>
+      <div class="stat-card accent"><div class="stat-card-val">${pending}</div><div class="stat-card-label">Pending</div></div>
+      <div class="stat-card info"><div class="stat-card-val">${avgScore}</div><div class="stat-card-label">Network Average</div></div>
+    `;
+
+    // Charts
+    if (scores.length >= 2) {
+      document.getElementById('overviewChartGrid').style.display = '';
+      renderDistributionChart(scores);
+      renderComparisonChart(allRows.filter(r => r.sub?.score != null).slice(0, 12));
+    } else {
+      document.getElementById('overviewChartGrid').style.display = 'none';
+    }
+
+    // Ranking table
     tbody.innerHTML = allRows.map((row, i) => {
-      const sc = row.sub?.score;
+      const sc      = row.sub?.score;
       const scRound = sc != null ? Math.round(sc) : null;
-      const cl = scRound != null ? scoreColor(scRound) : '';
-      const submitted = !!row.sub;
+      const cl      = scRound != null ? scoreColor(scRound) : '';
+      const isOwn   = !isAdmin && row.school.id === currentSchoolId;
       const sectionPills = (row.school.sections || []).map(s =>
-        `<span class="spill ${s.toLowerCase()}">${s}</span>`).join('');
+        `<span class="badge badge-${s.toLowerCase()}">${s}</span>`).join(' ');
 
-      return `<tr>
-        <td>${i+1}</td>
-        <td style="font-weight:500;">${row.school.name}</td>
+      return `<tr class="${isOwn ? 'own-school-row' : ''}">
+        <td><span class="rank-num rank-${i+1}">${scRound != null ? i+1 : '—'}</span></td>
+        <td style="font-weight:600;">
+          ${row.school.name}
+          ${isOwn ? '<span class="own-school-badge">You</span>' : ''}
+        </td>
         <td><div class="section-pills">${sectionPills}</div></td>
-        <td class="score-cell ${cl}">${scRound != null ? scRound + '/100' : '—'}</td>
-        <td class="text-muted">${row.sub?.lastUpdated ? fmtDate(row.sub.lastUpdated) : '—'}</td>
-        <td><span class="status-badge ${submitted ? 'submitted' : 'pending'}">${submitted ? 'Submitted' : 'Pending'}</span></td>
+        <td>${scRound != null ? `<span class="score-pill ${cl}">${scRound}/100</span>` : '—'}</td>
+        <td style="color:#6b7280;font-size:0.8rem;">${row.sub?.lastUpdated ? fmtDate(row.sub.lastUpdated) : '—'}</td>
+        <td><span class="badge ${row.sub ? 'badge-submitted' : 'badge-pending'}">${row.sub ? 'Submitted' : 'Pending'}</span></td>
       </tr>`;
     }).join('');
-  } catch(err) {
+
+  } catch (err) {
     toast('Failed to load overview: ' + err.message, 'error');
   } finally {
     loading.classList.add('hidden');
   }
 }
 
-// ─── KPI CONFIG ───────────────────────────────────────────────
-function renderKpiConfig() {
-  const tbody = document.getElementById('kpiConfigTableBody');
-  tbody.innerHTML = '';
-  if (!kpis.length) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:#adb5bd;padding:2rem;">No KPIs configured. Click "Load Defaults" to start.</td></tr>';
-    updateWeightTotal();
-    return;
-  }
-  for (const kpi of kpis) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${kpi.order || '—'}</td>
-      <td style="font-weight:500;">${kpi.name}</td>
-      <td><span class="spill ${(kpi.section||'all').toLowerCase()}">${kpi.section}</span></td>
-      <td class="text-muted">${kpi.inputType}</td>
-      <td>${(kpi.weight||0).toFixed(2)}</td>
-      <td>${kpi.cambridgeOnly ? '<span class="status-badge submitted">Yes</span>' : '<span class="status-badge inactive">No</span>'}</td>
-      <td>${kpi.active ? '<span class="status-badge active">Active</span>' : '<span class="status-badge inactive">Inactive</span>'}</td>
-      <td>
-        <div class="action-btns">
-          <button class="btn btn-outline btn-sm" data-edit-kpi="${kpi.id}">Edit</button>
-          <button class="btn btn-danger btn-sm" data-del-kpi="${kpi.id}">Delete</button>
-        </div>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  }
-  updateWeightTotal();
-}
-
-function updateWeightTotal() {
-  const total = kpis.filter(k => k.active).reduce((s,k) => s + (k.weight||0), 0);
-  const el = document.getElementById('weightTotal');
-  el.textContent = total.toFixed(2);
-  el.className = 'weight-val ' + (Math.abs(total - 1) < 0.01 ? 'ok' : 'warn');
-}
-
-// ─── Delegated action handlers (registered once) ─────────────
-document.getElementById('kpiConfigTableBody').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  if (btn.dataset.editKpi !== undefined) openKpiModal(btn.dataset.editKpi);
-  else if (btn.dataset.delKpi !== undefined) deleteKpi(btn.dataset.delKpi);
-});
-
-document.getElementById('schoolsTableBody').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  if (btn.dataset.editSchool !== undefined) openSchoolModal(btn.dataset.editSchool);
-  else if (btn.dataset.delSchool !== undefined) deleteSchool(btn.dataset.delSchool);
-});
-
-document.getElementById('semesterListWrap').addEventListener('click', e => {
-  const btn = e.target.closest('button');
-  if (!btn) return;
-  if (btn.dataset.setActive !== undefined) setActiveSemester(btn.dataset.setActive);
-  else if (btn.dataset.togglePublish !== undefined) togglePublish(btn.dataset.togglePublish);
-  else if (btn.dataset.editSem !== undefined) openSemesterModal(btn.dataset.editSem);
-  else if (btn.dataset.delSem !== undefined) deleteSemester(btn.dataset.delSem);
-});
-
-document.getElementById('addKpiBtn').addEventListener('click', () => openKpiModal(null));
-document.getElementById('loadDefaultsBtn').addEventListener('click', async () => {
-  if (!confirm('Load 21 default KPIs? Existing KPIs with the same IDs will be overwritten.')) return;
-  try {
-    for (const kpi of DEFAULT_KPIS) {
-      const { id, ...data } = kpi;
-      await setDoc(doc(db, 'kpi_config', id), data);
+function renderDistributionChart(scores) {
+  const ctx = document.getElementById('distributionChart');
+  if (distributionChartInst) distributionChartInst.destroy();
+  const buckets = [0,0,0,0,0]; // <40, 40-50, 50-60, 60-70, 70+
+  scores.forEach(s => {
+    if (s < 40) buckets[0]++;
+    else if (s < 50) buckets[1]++;
+    else if (s < 60) buckets[2]++;
+    else if (s < 70) buckets[3]++;
+    else buckets[4]++;
+  });
+  distributionChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['< 40','40–50','50–60','60–70','70+'],
+      datasets: [{
+        label: 'Schools',
+        data: buckets,
+        backgroundColor: ['#fee2e2','#fef3c7','#fef9c3','#d1fae5','#a7f3d0'],
+        borderColor:     ['#ef4444','#f59e0b','#eab308','#10b981','#059669'],
+        borderWidth: 2, borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true, plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
     }
-    await loadKPIs();
-    renderKpiConfig();
-    toast('Default KPIs loaded successfully.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-});
-
-function openKpiModal(kpiId) {
-  editingKpiId = kpiId;
-  const kpi = kpiId ? kpis.find(k => k.id === kpiId) : null;
-  document.getElementById('kpiModalTitle').textContent = kpi ? 'Edit KPI' : 'Add KPI';
-  document.getElementById('kpiName').value = kpi?.name || '';
-  document.getElementById('kpiSection').value = kpi?.section || 'All';
-  document.getElementById('kpiInputType').value = kpi?.inputType || 'percentage';
-  document.getElementById('kpiWeight').value = kpi?.weight != null ? kpi.weight : '';
-  document.getElementById('kpiMaxValue').value = kpi?.maxValue || '';
-  document.getElementById('kpiThreshold').value = kpi?.threshold != null ? kpi.threshold : '';
-  document.getElementById('kpiDenominatorType').value = kpi?.denominatorType || 'none';
-  document.getElementById('kpiTargetPerTeacher').value = kpi?.targetPerTeacher || '';
-  document.getElementById('kpiSubFields').value = (kpi?.subFields || []).join(', ');
-  document.getElementById('kpiOptions').value = (kpi?.options || []).join(', ');
-  document.getElementById('kpiNullOption').value = kpi?.nullOption || '';
-  document.getElementById('kpiOrder').value = kpi?.order != null ? kpi.order : '';
-  document.getElementById('kpiDescription').value = kpi?.description || '';
-  document.getElementById('kpiCambridgeOnly').checked = kpi?.cambridgeOnly || false;
-  document.getElementById('kpiActive').checked = kpi?.active !== false;
-  openModal('kpiModal');
+  });
 }
 
-document.getElementById('kpiSaveBtn').addEventListener('click', async () => {
-  const name = document.getElementById('kpiName').value.trim();
-  if (!name) { toast('KPI name is required.', 'error'); return; }
-  const data = {
-    name,
-    section: document.getElementById('kpiSection').value,
-    inputType: document.getElementById('kpiInputType').value,
-    weight: parseFloat(document.getElementById('kpiWeight').value) || 0,
-    maxValue: parseFloat(document.getElementById('kpiMaxValue').value) || 100,
-    threshold: parseFloat(document.getElementById('kpiThreshold').value) || 0,
-    denominatorType: document.getElementById('kpiDenominatorType').value,
-    targetPerTeacher: parseFloat(document.getElementById('kpiTargetPerTeacher').value) || 3,
-    subFields: document.getElementById('kpiSubFields').value.split(',').map(s=>s.trim()).filter(Boolean),
-    options: document.getElementById('kpiOptions').value.split(',').map(s=>s.trim()).filter(Boolean),
-    nullOption: document.getElementById('kpiNullOption').value.trim(),
-    order: parseInt(document.getElementById('kpiOrder').value) || 99,
-    description: document.getElementById('kpiDescription').value.trim(),
-    cambridgeOnly: document.getElementById('kpiCambridgeOnly').checked,
-    active: document.getElementById('kpiActive').checked,
-  };
-  try {
-    if (editingKpiId) {
-      await setDoc(doc(db, 'kpi_config', editingKpiId), data);
-    } else {
-      // generate id from name
-      const genId = name.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/(^_|_$)/g,'');
-      await setDoc(doc(db, 'kpi_config', genId), data);
+function renderComparisonChart(rows) {
+  const ctx = document.getElementById('comparisonChart');
+  if (comparisonChartInst) comparisonChartInst.destroy();
+  const labels = rows.map(r => r.school.name.split(' ').slice(0,2).join(' '));
+  const data   = rows.map(r => Math.round(r.sub.score));
+  const colors = data.map(s => s >= 70 ? '#10b981' : s >= 50 ? '#f59e0b' : '#ef4444');
+  comparisonChartInst = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        label: 'Score',
+        data,
+        backgroundColor: colors,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true,
+      plugins: { legend: { display: false } },
+      scales: { x: { beginAtZero: true, max: 100 } }
     }
-    await loadKPIs();
-    renderKpiConfig();
-    closeModal('kpiModal');
-    toast('KPI saved.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-});
-
-async function deleteKpi(kpiId) {
-  if (!confirm('Delete this KPI?')) return;
-  try {
-    await deleteDoc(doc(db, 'kpi_config', kpiId));
-    await loadKPIs();
-    renderKpiConfig();
-    toast('KPI deleted.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
+  });
 }
 
-// ─── SCHOOLS ─────────────────────────────────────────────────
-function renderSchools() {
-  const tbody = document.getElementById('schoolsTableBody');
-  tbody.innerHTML = '';
-  if (!schools.length) {
-    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#adb5bd;padding:2rem;">No schools. Click "Load Default Schools" to start.</td></tr>';
-    return;
-  }
-  for (const school of schools) {
-    const pills = (school.sections||[]).map(s=>
-      `<span class="spill ${s.toLowerCase()}">${s}</span>`).join('');
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="font-weight:500;">${school.name}</td>
-      <td><div class="section-pills">${pills}</div></td>
-      <td><span class="cambridge-badge ${school.cambridge_smp === 'Cambridge' ? 'cambridge' : 'non-cambridge'}">${school.cambridge_smp || '—'}</span></td>
-      <td><span class="cambridge-badge ${school.cambridge_sma === 'Cambridge' ? 'cambridge' : 'non-cambridge'}">${school.cambridge_sma || '—'}</span></td>
-      <td>
-        <div class="action-btns">
-          <button class="btn btn-outline btn-sm" data-edit-school="${school.id}">Edit</button>
-          <button class="btn btn-danger btn-sm" data-del-school="${school.id}">Delete</button>
-        </div>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  }
-}
-
-document.getElementById('addSchoolBtn').addEventListener('click', () => openSchoolModal(null));
-document.getElementById('loadDefaultSchoolsBtn').addEventListener('click', async () => {
-  if (!confirm('Load 15 default partner schools?')) return;
-  try {
-    for (const school of DEFAULT_SCHOOLS) {
-      await addDoc(collection(db, 'partner_schools'), { ...school, createdAt: serverTimestamp() });
-    }
-    await loadSchools();
-    renderSchools();
-    toast('Default schools loaded.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-});
-
-function openSchoolModal(schoolId) {
-  editingSchoolId = schoolId;
-  const school = schoolId ? schools.find(s => s.id === schoolId) : null;
-  document.getElementById('schoolModalTitle').textContent = school ? 'Edit School' : 'Add School';
-  document.getElementById('schoolName').value = school?.name || '';
-  document.getElementById('schoolSD').checked = (school?.sections||[]).includes('SD');
-  document.getElementById('schoolSMP').checked = (school?.sections||[]).includes('SMP');
-  document.getElementById('schoolSMA').checked = (school?.sections||[]).includes('SMA');
-  document.getElementById('schoolCambridgeSMP').value = school?.cambridge_smp || 'Non-Cambridge';
-  document.getElementById('schoolCambridgeSMA').value = school?.cambridge_sma || 'Non-Cambridge';
-  openModal('schoolModal');
-}
-
-document.getElementById('schoolSaveBtn').addEventListener('click', async () => {
-  const name = document.getElementById('schoolName').value.trim();
-  if (!name) { toast('School name is required.', 'error'); return; }
-  const sections = ['SD','SMP','SMA'].filter(s => document.getElementById('school'+s).checked);
-  const data = {
-    name,
-    sections,
-    cambridge_smp: document.getElementById('schoolCambridgeSMP').value,
-    cambridge_sma: document.getElementById('schoolCambridgeSMA').value,
-  };
-  try {
-    if (editingSchoolId) {
-      await updateDoc(doc(db, 'partner_schools', editingSchoolId), data);
-    } else {
-      await addDoc(collection(db, 'partner_schools'), { ...data, createdAt: serverTimestamp() });
-    }
-    await loadSchools();
-    renderSchools();
-    closeModal('schoolModal');
-    toast('School saved.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-});
-
-async function deleteSchool(schoolId) {
-  if (!confirm('Delete this school?')) return;
-  try {
-    await deleteDoc(doc(db, 'partner_schools', schoolId));
-    await loadSchools();
-    renderSchools();
-    toast('School deleted.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-}
-
-// ─── USERS ───────────────────────────────────────────────────
-async function loadAndRenderUsers() {
-  const loading = document.getElementById('usersLoading');
-  const tbody = document.getElementById('usersTableBody');
-  loading.classList.remove('hidden');
-  tbody.innerHTML = '';
-  try {
-    const snap = await getDocs(collection(db, 'users'));
-    const users = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    for (const user of users) {
-      const assignedSchool = schools.find(s => s.id === user.schoolId);
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td style="font-weight:500;">${user.displayName || '—'}</td>
-        <td class="text-muted">${user.email || '—'}</td>
-        <td><span class="status-badge ${user.role_academichub === 'academic_admin' ? 'active' : 'inactive'}">${user.role_academichub || '—'}</span></td>
-        <td>
-          <select class="form-input form-select" style="font-size:0.78rem;padding:4px 28px 4px 8px;" data-user-school="${user.id}">
-            <option value="">Unassigned</option>
-            ${schools.map(s => `<option value="${s.id}" ${s.id === user.schoolId ? 'selected' : ''}>${s.name}</option>`).join('')}
-          </select>
-        </td>
-        <td><button class="btn btn-success btn-sm" data-save-user="${user.id}">Save</button></td>
-      `;
-      tbody.appendChild(tr);
-    }
-    tbody.querySelectorAll('[data-save-user]').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const uid = btn.dataset.saveUser;
-        const sel = tbody.querySelector(`[data-user-school="${uid}"]`);
-        const schoolId = sel.value || null;
-        try {
-          await setDoc(doc(db, 'users', uid), { schoolId }, { merge: true });
-          toast('School assignment updated.', 'success');
-        } catch(err) {
-          toast('Failed: ' + err.message, 'error');
-        }
-      });
-    });
-  } catch(err) {
-    toast('Failed to load users: ' + err.message, 'error');
-  } finally {
-    loading.classList.add('hidden');
-  }
-}
-
-document.getElementById('refreshUsersBtn').addEventListener('click', loadAndRenderUsers);
-
-// ─── SETTINGS ────────────────────────────────────────────────
-function renderSettings() {
-  const wrap = document.getElementById('semesterListWrap');
-  wrap.innerHTML = '';
-  if (!semesters.length) {
-    wrap.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📅</div><div class="empty-state-text">No semesters yet.</div></div>';
-    return;
-  }
-  for (const sem of semesters) {
-    const dl = sem.deadline ? fmtDate(sem.deadline) : 'No deadline';
-    const row = document.createElement('div');
-    row.className = 'semester-row';
-    row.innerHTML = `
-      <div class="semester-info">
-        <div class="semester-name">${sem.name}
-          ${sem.active ? '<span class="status-badge active" style="margin-left:8px;">Active</span>' : ''}
-          ${sem.published ? '<span class="status-badge published" style="margin-left:4px;">Published</span>' : ''}
-        </div>
-        <div class="semester-meta">Deadline: ${dl} &bull; EASE I avg: ${sem.network_avg_ease_i || '—'} &bull; EASE II avg: ${sem.network_avg_ease_ii || '—'}</div>
-      </div>
-      <div class="semester-actions">
-        ${!sem.active ? `<button class="btn btn-success btn-sm" data-set-active="${sem.id}">Set Active</button>` : ''}
-        <button class="btn btn-info btn-sm" data-toggle-publish="${sem.id}">${sem.published ? 'Unpublish' : 'Publish Scores'}</button>
-        <button class="btn btn-outline btn-sm" data-edit-sem="${sem.id}">Edit</button>
-        <button class="btn btn-danger btn-sm" data-del-sem="${sem.id}">Delete</button>
-      </div>
-    `;
-    wrap.appendChild(row);
-  }
-
-}
-
-document.getElementById('addSemesterBtn').addEventListener('click', () => openSemesterModal(null));
-
-function openSemesterModal(semId) {
-  editingSemesterId = semId;
-  const sem = semId ? semesters.find(s => s.id === semId) : null;
-  document.getElementById('semesterModalTitle').textContent = sem ? 'Edit Semester' : 'Add Semester';
-  document.getElementById('semesterName').value = sem?.name || '';
-  if (sem?.deadline) {
-    const d = sem.deadline.toDate ? sem.deadline.toDate() : new Date(sem.deadline);
-    document.getElementById('semesterDeadline').value = d.toISOString().slice(0,16);
-  } else {
-    document.getElementById('semesterDeadline').value = '';
-  }
-  document.getElementById('semesterEaseI').value = sem?.network_avg_ease_i || '';
-  document.getElementById('semesterEaseII').value = sem?.network_avg_ease_ii || '';
-  openModal('semesterModal');
-}
-
-document.getElementById('semesterSaveBtn').addEventListener('click', async () => {
-  const name = document.getElementById('semesterName').value.trim();
-  if (!name) { toast('Semester name is required.', 'error'); return; }
-  const dlStr = document.getElementById('semesterDeadline').value;
-  const data = {
-    name,
-    deadline: dlStr ? new Date(dlStr) : null,
-    network_avg_ease_i: parseFloat(document.getElementById('semesterEaseI').value) || 0,
-    network_avg_ease_ii: parseFloat(document.getElementById('semesterEaseII').value) || 0,
-  };
-  try {
-    if (editingSemesterId) {
-      await updateDoc(doc(db, 'kpi_settings', editingSemesterId), data);
-    } else {
-      await addDoc(collection(db, 'kpi_settings'), { ...data, active: false, published: false, createdAt: serverTimestamp() });
-    }
-    await loadSemesters();
-    renderSettings();
-    closeModal('semesterModal');
-    toast('Semester saved.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-});
-
-async function setActiveSemester(semId) {
-  try {
-    // Deactivate all currently active semesters in parallel, then activate the selected one
-    const deactivations = semesters
-      .filter(sem => sem.active)
-      .map(sem => updateDoc(doc(db, 'kpi_settings', sem.id), { active: false }));
-    await Promise.all(deactivations);
-    await updateDoc(doc(db, 'kpi_settings', semId), { active: true });
-    await loadSemesters();
-    renderSettings();
-    toast('Active semester updated.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-}
-
-async function togglePublish(semId) {
-  const sem = semesters.find(s => s.id === semId);
-  if (!sem) return;
-  try {
-    await updateDoc(doc(db, 'kpi_settings', semId), { published: !sem.published });
-    await loadSemesters();
-    renderSettings();
-    toast(sem.published ? 'Scores unpublished.' : 'Scores published.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-}
-
-async function deleteSemester(semId) {
-  if (!confirm('Delete this semester?')) return;
-  try {
-    await deleteDoc(doc(db, 'kpi_settings', semId));
-    await loadSemesters();
-    renderSettings();
-    toast('Semester deleted.', 'success');
-  } catch(err) {
-    toast('Failed: ' + err.message, 'error');
-  }
-}
-
-// ─── SCHOOL SELECT MODAL ──────────────────────────────────────
-async function populateSchoolSelectModal() {
-  const dropdown = document.getElementById('schoolSelectDropdown');
-  dropdown.innerHTML = '<option value="">— Choose a school —</option>' +
-    schools.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
-}
-
-document.getElementById('schoolSelectConfirm').addEventListener('click', async () => {
-  const schoolId = document.getElementById('schoolSelectDropdown').value;
-  if (!schoolId) { toast('Please select a school.', 'error'); return; }
-  try {
-    await setDoc(doc(db, 'users', currentUser.uid), { schoolId }, { merge: true });
-    userProfile.schoolId = schoolId;
-    currentSchoolId = schoolId;
-    closeModal('schoolSelectModal');
-    initFormView();
-    toast('School selected.', 'success');
-  } catch(err) {
-    toast('Failed to save school: ' + err.message, 'error');
-  }
-});
 </script>
 </body>
 </html>
