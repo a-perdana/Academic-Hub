@@ -23,15 +23,28 @@ function ensureNavbarSharedStyles() {
       background: rgba(5, 5, 16, 0.98);
     }
     #topNav .nav-brand {
-      display: flex; align-items: center; gap: 10px;
+      display: flex; align-items: center; gap: 11px;
       text-decoration: none; flex-shrink: 0;
     }
-    #topNav .nav-brand-icon { width: 30px; height: 30px; flex-shrink: 0; }
-    #topNav .nav-brand-icon svg { width: 30px; height: 30px; fill: #6c5ce7; }
+    #topNav .nav-brand-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: linear-gradient(135deg, #5b21b6, #7c3aed);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 2px 14px rgba(109, 40, 217, 0.55);
+    }
+    #topNav .nav-brand-icon svg { width: 22px; height: 22px; fill: none; }
     #topNav .nav-brand-name {
-      font-family: "Playfair Display", serif;
+      font-family: "DM Sans", sans-serif;
       font-size: 15px; font-weight: 700;
       color: #fff; white-space: nowrap;
+      letter-spacing: -0.01em;
+    }
+    #topNav .nav-brand-sub {
+      font-family: "DM Sans", sans-serif;
+      font-size: 10px; font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      display: block; letter-spacing: 0.02em;
     }
     #topNav .nav-actions {
       display: flex; align-items: center; gap: 6px;
