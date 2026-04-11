@@ -20,7 +20,6 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
-  <script src="partials/navbar-loader.js"></script>
 
   <style>
     :root {
@@ -1075,6 +1074,9 @@
       userProfile = profile;
       db = window.db;
 
+      // Load navbar
+      window.__loadAcademicNavbar?.('kpi-evaluation', { user, profile });
+
       // Check evaluator access: academic_admin OR school_principal / academic_coordinator sub-role
       const isAdmin = profile?.role_academichub === 'academic_admin';
       const subRoles = profile?.ah_sub_roles || [];
@@ -1781,8 +1783,7 @@
       return String(str).replace(/"/g,'&quot;');
     }
 
-    // ── Navbar ─────────────────────────────────────────────────
-    window.__loadAcademicNavbar?.('kpi-evaluation');
   </script>
+<script src="partials/navbar-loader.js"></script>
 </body>
 </html>
