@@ -606,6 +606,82 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* ── Guide boxes ─────────────────────────────────────────── */
+    .guide-card {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .guide-card-head {
+      padding: 13px 20px;
+      font-size: .72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none;
+    }
+    .guide-card-head.indigo { background: #eef2ff; color: #3730a3; border-bottom: 1px solid #e0e7ff; }
+    .guide-card-head.red    { background: #fff0f0; color: #991b1b; border-bottom: 1px solid #fecaca; }
+    .guide-card-head.green  { background: #f0fdf4; color: #14532d; border-bottom: 1px solid #bbf7d0; }
+    .guide-card-chevron { transition: transform .2s; font-size: .65rem; }
+    .guide-card.collapsed .guide-card-chevron { transform: rotate(-90deg); }
+    .guide-card-body { padding: 18px 20px; }
+    .guide-card.collapsed .guide-card-body { display: none; }
+
+    .guide-steps { display: flex; flex-direction: column; gap: 10px; }
+    .guide-step {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #f8fafc; border-radius: 10px;
+      padding: 12px 14px; border: 1px solid #f1f5f9;
+    }
+    .guide-step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #3730a3; color: #fff;
+      font-size: .78rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 1px;
+    }
+    .guide-step-text strong { display: block; font-size: .82rem; font-weight: 700; color: #1e293b; margin-bottom: 3px; }
+    .guide-step-text p      { font-size: .76rem; color: #64748b; line-height: 1.5; }
+    .guide-step-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .guide-tag {
+      font-size: .7rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 6px;
+    }
+    .guide-tag.blue   { background: #dbeafe; color: #1d4ed8; }
+    .guide-tag.green  { background: #dcfce7; color: #15803d; }
+    .guide-tag.purple { background: #ede9fe; color: #6d28d9; }
+    .guide-tag.amber  { background: #fef3c7; color: #92400e; }
+    .guide-tag.orange { background: #ffedd5; color: #c2410c; }
+
+    .reminder-list { display: flex; flex-direction: column; gap: 8px; }
+    .reminder-row {
+      display: flex; gap: 10px; align-items: flex-start;
+      font-size: .81rem; color: #7f1d1d; line-height: 1.5;
+    }
+    .reminder-icon { font-size: .9rem; flex-shrink: 0; margin-top: 1px; }
+
+    .meeting-timeline { display: flex; flex-direction: column; gap: 8px; }
+    .meeting-phase {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: #fff; border-radius: 10px; padding: 11px 14px;
+      border-left: 4px solid #e2e8f0;
+    }
+    .meeting-phase.p-open    { border-left-color: #3b82f6; }
+    .meeting-phase.p-teacher { border-left-color: #22c55e; }
+    .meeting-phase.p-admin   { border-left-color: #a855f7; }
+    .meeting-phase.p-goals   { border-left-color: #f97316; }
+    .meeting-phase.p-close   { border-left-color: #ef4444; }
+    .meeting-phase-time {
+      font-size: .7rem; font-weight: 700; color: #94a3b8;
+      white-space: nowrap; padding-top: 2px;
+      min-width: 58px;
+    }
+    .meeting-phase-info strong { display: block; font-size: .82rem; font-weight: 700; color: #1e293b; }
+    .meeting-phase-info p      { font-size: .75rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
+
     /* ── Responsive ──────────────────────────────────────────── */
     @media (max-width: 900px) {
       .hero { padding: 24px 20px 20px; }
@@ -651,6 +727,60 @@
 
     <!-- Main content (hidden until auth ready + access confirmed) -->
     <div id="main-content" style="display:none;">
+
+      <!-- Evaluator step-by-step guide -->
+      <div class="guide-card collapsed">
+        <div class="guide-card-head indigo" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+          <span>📋 How to Conduct a Teacher Evaluation</span>
+          <span class="guide-card-chevron">▼</span>
+        </div>
+        <div class="guide-card-body">
+          <div class="guide-steps">
+            <div class="guide-step">
+              <div class="guide-step-num">1</div>
+              <div class="guide-step-text">
+                <strong>Select the evaluation period</strong>
+                <p>Choose the relevant period from the dropdown. Only submitted self-assessments for that period will appear.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="guide-step-num">2</div>
+              <div class="guide-step-text">
+                <strong>Review the teacher's self-assessment before the meeting</strong>
+                <p>Click on a teacher card to open the evaluation panel. Read through their self-ratings, evidence, and reflections for each KPI. Note where your observations may differ.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="guide-step-num">3</div>
+              <div class="guide-step-text">
+                <strong>Complete your assessment for each KPI</strong>
+                <p>Expand each KPI card and provide your evaluation. For each one:</p>
+                <div class="guide-step-tags">
+                  <span class="guide-tag blue">Administrator Rating (1–5)</span>
+                  <span class="guide-tag green">Evidence Reviewed</span>
+                  <span class="guide-tag purple">Identified Strengths</span>
+                  <span class="guide-tag amber">Areas for Development</span>
+                  <span class="guide-tag orange">Recommendations &amp; Action Plan</span>
+                </div>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="guide-step-num">4</div>
+              <div class="guide-step-text">
+                <strong>Set professional development goals collaboratively</strong>
+                <p>Add 2–3 SMART goals with the teacher. For each goal specify: a clear description, timeline, support to be provided, and success criteria.</p>
+              </div>
+            </div>
+            <div class="guide-step">
+              <div class="guide-step-num">5</div>
+              <div class="guide-step-text">
+                <strong>Complete the overall assessment and finalise</strong>
+                <p>Select an overall recommendation (Excellent / Good / Satisfactory / Needs Improvement) and write a comprehensive summary. Click "Finalise Evaluation" — the teacher will be able to view the completed evaluation.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Period selector -->
       <div class="top-bar">
@@ -726,6 +856,79 @@
           <div class="summary-stat">
             <div class="val" id="kpi-completed">0/0</div>
             <div class="lbl">KPIs Evaluated</div>
+          </div>
+        </div>
+
+        <!-- Evaluator reminders -->
+        <div class="guide-card collapsed" style="border-radius:12px;margin-top:4px;">
+          <div class="guide-card-head red" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+            <span>⚠️ Important Reminders for Evaluators</span>
+            <span class="guide-card-chevron">▼</span>
+          </div>
+          <div class="guide-card-body">
+            <div class="reminder-list">
+              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Be specific and evidence-based</strong> — all feedback must be grounded in observed behaviours and documented evidence, not impressions.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Focus on behaviours, not personality</strong> — evaluate teaching practices and outcomes, never personal characteristics.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Maintain confidentiality</strong> — evaluation discussions and ratings are confidential between you and the teacher.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Document all observations</strong> — record classroom visits with dates, duration, and specific notes to support your ratings.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Address disagreements through dialogue</strong> — if your rating differs significantly from the teacher's self-rating, discuss it respectfully; do not simply override without explanation.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Meeting structure -->
+        <div class="guide-card collapsed" style="border-radius:12px;margin-top:8px;">
+          <div class="guide-card-head green" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+            <span>🗓️ Evaluation Meeting Structure (60–90 min)</span>
+            <span class="guide-card-chevron">▼</span>
+          </div>
+          <div class="guide-card-body">
+            <div class="meeting-timeline">
+              <div class="meeting-phase p-open">
+                <div class="meeting-phase-time">5–10 min</div>
+                <div class="meeting-phase-info">
+                  <strong>Opening</strong>
+                  <p>Set a positive tone, explain the agenda, and establish expectations for open dialogue.</p>
+                </div>
+              </div>
+              <div class="meeting-phase p-teacher">
+                <div class="meeting-phase-time">15–20 min</div>
+                <div class="meeting-phase-info">
+                  <strong>Teacher Presentation</strong>
+                  <p>Allow the teacher to present their self-assessment, highlight achievements, and discuss challenges without interruption.</p>
+                </div>
+              </div>
+              <div class="meeting-phase p-admin">
+                <div class="meeting-phase-time">20–30 min</div>
+                <div class="meeting-phase-info">
+                  <strong>Evaluator Feedback</strong>
+                  <p>Share your observations, provide specific feedback per KPI, and discuss areas where ratings differ. Use concrete examples.</p>
+                </div>
+              </div>
+              <div class="meeting-phase p-goals">
+                <div class="meeting-phase-time">15–20 min</div>
+                <div class="meeting-phase-info">
+                  <strong>Goal Setting</strong>
+                  <p>Collaboratively set 2–3 professional development goals with clear timelines and agreed support.</p>
+                </div>
+              </div>
+              <div class="meeting-phase p-close">
+                <div class="meeting-phase-time">5–10 min</div>
+                <div class="meeting-phase-info">
+                  <strong>Closing</strong>
+                  <p>Summarise key points, confirm next steps, and schedule any follow-up check-in.</p>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:14px;padding:12px 14px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;">
+              <div style="font-size:.72rem;font-weight:700;color:#14532d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Communication best practices</div>
+              <div style="display:flex;flex-direction:column;gap:5px;">
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Listen actively</strong> — allow the teacher to speak without interruption.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Balance feedback</strong> — acknowledge strengths before discussing areas for growth.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Ask questions</strong> — encourage reflection through open-ended questions.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Show empathy</strong> — acknowledge challenges and validate concerns.</span></div>
+              </div>
+            </div>
           </div>
         </div>
 
