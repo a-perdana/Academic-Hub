@@ -1310,8 +1310,19 @@ async function loadOverviewData(semId) {
   tbody.innerHTML = '';
 
   try {
-    const snap = await getDocs(collection(db, 'school_performance_kpi', semId, 'schools'));
-    const rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    let rows;
+    if (isAdmin) {
+      // Admin: fetch all school submissions for this semester
+      const snap = await getDocs(collection(db, 'school_performance_kpi', semId, 'schools'));
+      rows = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    } else {
+      // Principal: only allowed to read their own school's document
+      if (!currentSchoolId) { rows = []; }
+      else {
+        const singleSnap = await getDoc(doc(db, 'school_performance_kpi', semId, 'schools', currentSchoolId));
+        rows = singleSnap.exists() ? [{ id: singleSnap.id, ...singleSnap.data() }] : [];
+      }
+    }
 
     const allRows = schools.map(school => ({
       school,
