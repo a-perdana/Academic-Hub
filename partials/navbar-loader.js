@@ -296,12 +296,9 @@ function ensureNavbarSharedStyles() {
 const NAV_ITEMS = [
   { key: 'calendar',     href: '/academic-calendar',  label: 'Academic Calendar', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
   { key: 'announcements',href: '/announcements',       label: 'Announcements',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/></svg>', badgeId: 'annBadge' },
-  { key: 'surveys',      href: '/surveys',             label: 'Surveys',          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>', badgeId: 'surveyBadge', badgeCount: true },
   { key: 'messageboard', href: '/message-board',       label: 'Message Board',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', badgeId: 'msgBadge' },
   { divider: true },
-  { key: 'library',      href: '/library',             label: 'Library',          icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>', badgeId: 'libBadge', badgeCount: true },
   { key: 'documents',    href: '/documents',           label: 'Documents',        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', badgeId: 'docBadge', badgeCount: true },
-  { key: 'aiprompts',    href: '/ai-prompts',          label: 'AI Prompts',       icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>', badgeId: 'aiBadge', badgeCount: true },
 ];
 
 function buildMobileMenu(activeKey) {
@@ -477,7 +474,7 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
 };
 
 window.__clearNavbarCounters = function() {
-  const ids = ['annBadge', 'msgBadge', 'libBadge', 'docBadge', 'aiBadge', 'surveyBadge'];
+  const ids = ['annBadge', 'msgBadge', 'docBadge'];
   ids.forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -511,17 +508,14 @@ window.__initNavbarCounters = async function({ db, user }) {
   };
 
   const fs = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-  const { collection, getCountFromServer, query, where } = fs;
+  const { collection, getCountFromServer } = fs;
 
   // Use one-shot aggregation counts instead of full-collection real-time listeners.
   // This avoids downloading all documents just to read snap.size.
   const countJobs = [
-    { id: 'annBadge',    ref: collection(db, 'announcements') },
-    { id: 'msgBadge',    ref: collection(db, 'topics') },
-    { id: 'libBadge',    ref: collection(db, 'library') },
-    { id: 'docBadge',    ref: collection(db, 'documents') },
-    { id: 'aiBadge',     ref: collection(db, 'prompts') },
-    { id: 'surveyBadge', ref: query(collection(db, 'surveys'), where('platforms', 'array-contains', 'academichub')) },
+    { id: 'annBadge', ref: collection(db, 'announcements') },
+    { id: 'msgBadge', ref: collection(db, 'topics') },
+    { id: 'docBadge', ref: collection(db, 'documents') },
   ];
 
   await Promise.allSettled(
