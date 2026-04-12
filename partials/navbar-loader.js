@@ -1,3 +1,15 @@
+// Sub-role definitions for Academic Hub
+const AH_SUB_ROLES = [
+  { key: 'foundation_representative', label: 'Foundation Representative' },
+  { key: 'school_principal',          label: 'School Principal' },
+  { key: 'academic_coordinator',      label: 'Academic Coordinator' },
+  { key: 'cambridge_coordinator',     label: 'Cambridge Coordinator' },
+];
+
+function _ahSubRoleLabel(key) {
+  return AH_SUB_ROLES.find(r => r.key === key)?.label || key;
+}
+
 function ensureNavbarSharedStyles() {
   if (document.getElementById('navbar-shared-styles')) return;
   const style = document.createElement('style');
@@ -301,6 +313,208 @@ function ensureNavbarSharedStyles() {
       #topNav .nav-actions .nav-btn,
       #topNav .nav-actions .profile-wrap { display: none !important; }
     }
+
+    /* ── Profile dropdown extras ────────────────────────────────── */
+    #topNav .profile-dropdown {
+      width: 320px;
+    }
+    #topNav .dd-role-badge {
+      display: inline-block;
+      margin-top: 5px;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: rgba(108,92,231,0.25);
+      border: 1px solid rgba(108,92,231,0.5);
+      color: #a78bfa;
+    }
+    #topNav .dd-role-badge.admin {
+      background: rgba(16,185,129,0.18);
+      border-color: rgba(16,185,129,0.45);
+      color: #34d399;
+    }
+    #topNav .dd-info-section {
+      padding: 10px 16px 6px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    #topNav .dd-info-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    #topNav .dd-subroles-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    #topNav .dd-info-icon {
+      width: 13px;
+      height: 13px;
+      flex-shrink: 0;
+      color: rgba(255,255,255,0.35);
+      margin-top: 1px;
+    }
+    #topNav .dd-info-value {
+      font-size: 12px;
+      color: rgba(255,255,255,0.6);
+      font-family: "DM Sans", sans-serif;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #topNav .dd-subrole-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+    #topNav .dd-subrole-chip {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 10.5px;
+      font-weight: 500;
+      background: rgba(0,184,212,0.15);
+      border: 1px solid rgba(0,184,212,0.3);
+      color: rgba(0,212,255,0.85);
+      font-family: "DM Sans", sans-serif;
+    }
+    #topNav .dd-edit-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.55);
+      font-size: 12.5px;
+      font-weight: 500;
+      font-family: "DM Sans", sans-serif;
+      transition: color 0.15s, background 0.15s;
+      user-select: none;
+    }
+    #topNav .dd-edit-toggle:hover {
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.04);
+    }
+    #topNav .dd-edit-toggle svg:first-child {
+      width: 13px; height: 13px; flex-shrink: 0;
+    }
+    #topNav .dd-edit-toggle span {
+      flex: 1;
+    }
+    #topNav .dd-edit-chevron {
+      width: 13px; height: 13px; flex-shrink: 0;
+      transition: transform 0.22s ease;
+    }
+    #topNav .dd-edit-chevron.open {
+      transform: rotate(180deg);
+    }
+    #topNav .dd-edit-form {
+      padding: 12px 16px 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #topNav .dd-field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    #topNav .dd-field-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      font-family: "DM Sans", sans-serif;
+    }
+    #topNav .dd-field-input {
+      padding: 7px 11px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+      font-size: 12.5px;
+      font-family: "DM Sans", sans-serif;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    #topNav .dd-field-input:focus {
+      border-color: #6c5ce7;
+      background: rgba(108,92,231,0.08);
+    }
+    #topNav .dd-subrole-checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    #topNav .dd-subrole-checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      padding: 5px 8px;
+      border-radius: 7px;
+      transition: background 0.13s;
+      font-size: 12px;
+      font-family: "DM Sans", sans-serif;
+      color: rgba(255,255,255,0.7);
+      user-select: none;
+    }
+    #topNav .dd-subrole-checkbox-row:hover {
+      background: rgba(255,255,255,0.05);
+    }
+    #topNav .dd-subrole-checkbox-row input[type="checkbox"] {
+      width: 14px; height: 14px;
+      accent-color: #6c5ce7;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    #topNav .dd-save-btn {
+      width: 100%;
+      padding: 8px;
+      border-radius: 8px;
+      background: #6c5ce7;
+      border: none;
+      color: #fff;
+      font-size: 12.5px;
+      font-weight: 600;
+      font-family: "DM Sans", sans-serif;
+      cursor: pointer;
+      transition: filter 0.15s, box-shadow 0.15s;
+      margin-bottom: 4px;
+    }
+    #topNav .dd-save-btn:hover:not(:disabled) {
+      filter: brightness(1.1);
+      box-shadow: 0 4px 14px rgba(108,92,231,0.4);
+    }
+    #topNav .dd-save-btn:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+    #topNav .dd-save-msg {
+      padding: 5px 9px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      font-family: "DM Sans", sans-serif;
+      margin-bottom: 6px;
+    }
+    #topNav .dd-save-msg.ok {
+      background: rgba(5,150,105,0.15);
+      border: 1px solid rgba(5,150,105,0.25);
+      color: #34d399;
+    }
+    #topNav .dd-save-msg.err {
+      background: rgba(220,38,38,0.15);
+      border: 1px solid rgba(220,38,38,0.25);
+      color: #f87171;
+    }
   `;
   document.head.appendChild(style);
 }
@@ -422,7 +636,158 @@ function _ahBuildAvatar(el, user) {
     el.textContent = _ahGetInitials(n);
   }
 }
-function _ahPopulateProfile(user, displayName, authInstance) {
+function _ahRenderProfileInfo(profile) {
+  // Role badge
+  const roleBadge = document.getElementById('ddRoleBadge');
+  if (roleBadge && profile?.role_academichub) {
+    const isAdmin = profile.role_academichub === 'academic_admin';
+    roleBadge.textContent = isAdmin ? 'Admin' : 'User';
+    roleBadge.className   = 'dd-role-badge' + (isAdmin ? ' admin' : '');
+    roleBadge.style.display = '';
+  }
+
+  // School row
+  const schoolRow = document.getElementById('ddSchoolRow');
+  const schoolEl  = document.getElementById('ddSchool');
+  if (schoolEl && profile?.school) {
+    schoolEl.textContent  = profile.school;
+    if (schoolRow) schoolRow.style.display = 'flex';
+  } else if (schoolRow) {
+    schoolRow.style.display = 'none';
+  }
+
+  // Sub-roles chips
+  const subRolesRow   = document.getElementById('ddSubRolesRow');
+  const chipsContainer = document.getElementById('ddSubRoleChips');
+  const subRoles = profile?.ah_sub_roles || [];
+  if (chipsContainer) {
+    chipsContainer.innerHTML = '';
+    subRoles.forEach(key => {
+      const chip = document.createElement('span');
+      chip.className   = 'dd-subrole-chip';
+      chip.textContent = _ahSubRoleLabel(key);
+      chipsContainer.appendChild(chip);
+    });
+  }
+  if (subRolesRow) subRolesRow.style.display = subRoles.length ? 'flex' : 'none';
+}
+
+function _ahInitEditForm(user, profile) {
+  const editToggle  = document.getElementById('ddEditToggle');
+  const editForm    = document.getElementById('ddEditForm');
+  const editChevron = document.getElementById('ddEditChevron');
+  const nameInput   = document.getElementById('ddEditName');
+  const schoolInput = document.getElementById('ddEditSchool');
+  const checkboxesEl = document.getElementById('ddSubRoleCheckboxes');
+  const saveBtn     = document.getElementById('ddSaveProfile');
+  const saveMsg     = document.getElementById('ddSaveMsg');
+
+  if (!editToggle || !editForm) return;
+
+  // Populate initial values
+  if (nameInput)   nameInput.value   = profile?.displayName || user.displayName || '';
+  if (schoolInput) schoolInput.value = profile?.school || '';
+
+  // Build sub-role checkboxes
+  if (checkboxesEl) {
+    checkboxesEl.innerHTML = '';
+    const current = profile?.ah_sub_roles || [];
+    AH_SUB_ROLES.forEach(({ key, label }) => {
+      const row   = document.createElement('label');
+      row.className = 'dd-subrole-checkbox-row';
+      const cb    = document.createElement('input');
+      cb.type     = 'checkbox';
+      cb.value    = key;
+      cb.checked  = current.includes(key);
+      row.appendChild(cb);
+      row.appendChild(document.createTextNode(label));
+      checkboxesEl.appendChild(row);
+    });
+  }
+
+  // Toggle expand/collapse
+  editToggle.addEventListener('click', e => {
+    e.stopPropagation();
+    const open = editForm.style.display === 'none';
+    editForm.style.display = open ? '' : 'none';
+    if (editChevron) editChevron.classList.toggle('open', open);
+    const lbl = document.getElementById('ddEditToggleLabel');
+    if (lbl) lbl.textContent = open ? 'Cancel' : 'Edit Profile';
+    if (saveMsg) { saveMsg.style.display = 'none'; saveMsg.className = 'dd-save-msg'; }
+  });
+
+  // Save
+  if (saveBtn) {
+    saveBtn.addEventListener('click', async e => {
+      e.stopPropagation();
+      const newName   = nameInput?.value.trim()   || '';
+      const newSchool = schoolInput?.value.trim()  || '';
+      const newRoles  = Array.from(
+        checkboxesEl?.querySelectorAll('input[type="checkbox"]:checked') || []
+      ).map(cb => cb.value);
+
+      if (!newName) {
+        _ahShowSaveMsg(saveMsg, 'err', 'Display name cannot be empty.');
+        return;
+      }
+
+      saveBtn.disabled    = true;
+      saveBtn.textContent = 'Saving…';
+
+      try {
+        const db  = window.db;
+        const uid = user.uid;
+        if (!db || !uid) throw new Error('Not authenticated');
+
+        const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        await updateDoc(doc(db, 'users', uid), {
+          displayName: newName,
+          school:      newSchool,
+          ah_sub_roles: newRoles,
+        });
+
+        // Update in-memory profile
+        if (window.userProfile) {
+          window.userProfile.displayName  = newName;
+          window.userProfile.school       = newSchool;
+          window.userProfile.ah_sub_roles = newRoles;
+        }
+
+        // Refresh displayed info
+        const nameEl = document.getElementById('ddFullName');
+        if (nameEl) nameEl.textContent = newName;
+        const navFirst = document.getElementById('navFirstName');
+        if (navFirst) navFirst.textContent = newName.split(' ')[0];
+        _ahBuildAvatar(document.getElementById('navAvatar'), { ...user, displayName: newName });
+        _ahBuildAvatar(document.getElementById('ddAvatar'),  { ...user, displayName: newName });
+        _ahRenderProfileInfo(window.userProfile);
+
+        _ahShowSaveMsg(saveMsg, 'ok', 'Profile saved successfully.');
+        setTimeout(() => {
+          editForm.style.display = 'none';
+          if (editChevron) editChevron.classList.remove('open');
+          const lbl = document.getElementById('ddEditToggleLabel');
+          if (lbl) lbl.textContent = 'Edit Profile';
+          if (saveMsg) saveMsg.style.display = 'none';
+        }, 1600);
+      } catch (err) {
+        _ahShowSaveMsg(saveMsg, 'err', 'Save failed. Please try again.');
+      } finally {
+        saveBtn.disabled    = false;
+        saveBtn.textContent = 'Save Changes';
+      }
+    });
+  }
+}
+
+function _ahShowSaveMsg(el, type, text) {
+  if (!el) return;
+  el.textContent  = text;
+  el.className    = 'dd-save-msg ' + type;
+  el.style.display = '';
+}
+
+function _ahPopulateProfile(user, displayName, authInstance, profile) {
   const name      = displayName || user.displayName || user.email.split('@')[0];
   const firstName = name.split(' ')[0];
   _ahBuildAvatar(document.getElementById('navAvatar'), { ...user, displayName: name });
@@ -433,6 +798,10 @@ function _ahPopulateProfile(user, displayName, authInstance) {
   if (ddFull)  ddFull.textContent  = name;
   const ddEmail = document.getElementById('ddEmail');
   if (ddEmail) ddEmail.textContent = user.email;
+
+  // Render extra profile info
+  _ahRenderProfileInfo(profile);
+
   const profileWrap = document.getElementById('profileWrap');
   if (profileWrap) profileWrap.style.display = 'flex';
 
@@ -450,13 +819,17 @@ function _ahPopulateProfile(user, displayName, authInstance) {
       });
     });
   }
+
+  // Wire up edit form
+  _ahInitEditForm(user, profile);
 }
 
 // Public API: call after __loadAcademicNavbar resolves
 // displayName: Firestore displayName string (or null to use user.displayName)
 // authInstance: the app's auth instance (optional, falls back to window.auth)
-window.__ahPopulateNav = function(user, displayName, authInstance) {
-  _ahPopulateProfile(user, displayName, authInstance);
+// profile: Firestore userProfile object (optional)
+window.__ahPopulateNav = function(user, displayName, authInstance, profile) {
+  _ahPopulateProfile(user, displayName, authInstance, profile);
 };
 
 window.__loadAcademicNavbar = async function(activeKey, authCtx) {
@@ -481,7 +854,7 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
 
   // Populate profile section and init counters if auth context provided
   if (authCtx?.user) {
-    _ahPopulateProfile(authCtx.user, authCtx.profile?.displayName || null, null);
+    _ahPopulateProfile(authCtx.user, authCtx.profile?.displayName || null, null, authCtx.profile || null);
     window.__initNavbarCounters?.({ db: window.db, user: authCtx.user });
   }
 };
