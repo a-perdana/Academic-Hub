@@ -136,6 +136,7 @@ const htmlFiles = [
   "weekly-checklist.html",
   "CurriculumMap.html",
   "teacher-kpi-evaluation.html",
+  "cambridge-calendar.html",
 ];
 
 htmlFiles.forEach((file) => {
