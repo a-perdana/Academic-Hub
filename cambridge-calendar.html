@@ -336,110 +336,14 @@ import {
   doc, getDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ── Series definitions (read-only mirror of CentralHub cambridge-calendar.html) ──
-const SERIES = {
-  igcse_june: {
-    label: 'IGCSE — May/June Series',
-    months: {
-      1:  { you_send: [{ key: 'jan_modified_papers_deadline', label: 'Modified question papers application deadline (Form 3)' }], we_send: [{ key: 'jan_pre_release_available', label: 'Early question papers & pre-release materials available' }], notes: ['Review previous exam cycle performance', 'Confirm candidate data accuracy (names, IDs, subjects)', 'Final entries deadline is 21 Feb — begin preparation now', 'Review access arrangements (SEN requirements)'] },
-      2:  { you_send: [{ key: 'feb_final_entries_deadline', label: 'Final entries deadline (all qualifications)' }, { key: 'feb_access_arrangements_deadline', label: 'Access arrangements application deadline (Form 1)' }, { key: 'feb_ear_nov_deadline', label: 'EAR & results correction deadline (Nov series)' }], we_send: [{ key: 'feb_early_qp_instructions', label: 'Early question papers & instructions dispatched' }, { key: 'feb_entries_confirmation', label: 'Entries confirmation packs begin' }], notes: ['Late entry fees begin 22 Feb', 'Securely store early question papers on receipt', 'Begin invigilation training and room allocation planning'] },
-      3:  { you_send: [{ key: 'mar_speaking_test_start_fle', label: 'Speaking test window opens — FLE & languages' }, { key: 'mar_speaking_test_start_esl', label: 'Speaking test window opens — ESL / EAL' }, { key: 'mar_speaking_marks_deadline', label: 'Speaking test marks due — FLE & languages' }], we_send: [{ key: 'mar_pre_exam_despatch', label: 'Pre-exam despatch begins (stationery, registers, labels)' }, { key: 'mar_question_papers', label: 'Question papers dispatch based on final entries' }], notes: ['Check all pre-exam despatch contents on receipt', 'Confirm invigilators appointed and trained', 'Download statements of entry from Direct and verify accuracy'] },
-      4:  { you_send: [{ key: 'apr_late_entries_deadline', label: 'Late entries deadline' }, { key: 'apr_forecast_grades_deadline', label: 'Forecast grades deadline' }, { key: 'apr_coursework_marks_igcse', label: 'Internally assessed marks due — IGCSE speaking tests' }], we_send: [{ key: 'apr_barcoded_labels', label: 'Bar-coded labels for timetabled components' }, { key: 'apr_exam_period_start', label: 'Timetabled exam period begins' }], notes: ['Cambridge office closed 3–6 April', 'Check all question paper packets — report missing packets immediately', 'Ensure sufficient exam stationery for all venues'], exams: [{ date: '23 Apr', code: '0538', label: 'Bahasa Indonesia P1 — AM' }, { date: '28 Apr', code: '0620', label: 'Chemistry Core/Ext P3/P4 — AM' }, { date: '29 Apr', code: '0610', label: 'Biology Core/Ext P3/P4 — AM' }, { date: '29 Apr', code: '0580', label: 'Maths Core P1 / Ext P2 — PM' }, { date: '30 Apr', code: '0510/11', label: 'ESL Speaking Endorsement (Listening 0510/22: 21 May) — window closes 27 Apr' }] },
-      5:  { you_send: [{ key: 'may_coursework_global_perspectives', label: 'Examined coursework deadline — AS/A Level Global Perspectives' }, { key: 'may_scripts_despatch_note', label: 'Scripts dispatched to Cambridge (ongoing — weekly minimum)' }], we_send: [{ key: 'may_prov_timetable_2027', label: 'Provisional June 2027 timetable available' }], notes: ['Collect and securely store all unused question papers', 'Special consideration applications within 7 days of last affected exam'], exams: [{ date: '05 May', code: '0580', label: 'Maths Core P3 / Ext P4 — PM' }, { date: '06 May', code: '0472/0510/11', label: 'EAL/ESL Written Papers — AM' }, { date: '07 May', code: '0620', label: 'Chemistry Practical P5/Alt P6 — AM' }, { date: '08 May', code: '0625', label: 'Physics Core/Ext P3/P4 — AM' }, { date: '12 May', code: '0610', label: 'Biology Practical P5/Alt P6 — AM' }, { date: '14 May', code: '0500', label: 'First Language English P2 — AM' }, { date: '19 May', code: '0625', label: 'Physics Practical P5/Alt P6 — AM' }, { date: '21 May', code: '0472/0510/11', label: 'EAL/ESL Listening — AM' }] },
-      6:  { you_send: [{ key: 'jun_speaking_marks_alevel', label: 'AS/A Level language speaking marks & samples deadline' }, { key: 'jun_exam_period_end', label: 'Timetabled exam period ends' }], we_send: [], notes: ['Continue dispatching scripts weekly', 'Submit special consideration within 7 days of syllabus last exam'], exams: [{ date: '03 Jun', code: '0625', label: 'Physics Multiple Choice P1/P2 — AM' }, { date: '08 Jun', code: '0610', label: 'Biology Multiple Choice P1/P2 — AM' }, { date: '09 Jun', code: '0620', label: 'Chemistry Multiple Choice P1/P2 — AM' }] },
-      7:  { you_send: [{ key: 'jul_priority_results_deadline', label: 'Priority results application deadline (Form 9)' }], we_send: [], notes: ['Monitor inbox for Cambridge queries about candidate exams', 'Begin preparing Nov 2026 entry if applicable'] },
-      8:  { you_send: [], we_send: [{ key: 'aug_results_alevel', label: 'AS & A Level results available on Direct' }, { key: 'aug_results_igcse', label: 'IGCSE & O Level results available on Direct' }, { key: 'aug_results_despatch', label: 'Results despatch including statements' }], notes: ['Release results to candidates as soon as available', 'Ensure candidate details correct on results documentation', 'Guide students on EAR (Enquiries About Results) process'] },
-      9:  { you_send: [{ key: 'sep_ear_deadline', label: 'Enquiries About Results (EAR) deadline' }, { key: 'sep_results_correction_deadline', label: 'Results documentation correction deadline' }, { key: 'sep_coursework_return', label: 'Return of moderated coursework (Form 6) deadline' }], we_send: [{ key: 'sep_estimated_entries_jun27', label: 'Estimated Entry Forms for June 2027 available' }], notes: ['Submit all EAR requests before deadline — late requests not accepted', 'Analyse performance data with subject leaders', 'Conduct internal post-exam evaluation meeting'] },
-      10: { you_send: [{ key: 'oct_estimated_entries_deadline', label: 'Estimated Entry Forms for June 2027 due' }], we_send: [{ key: 'oct_certificates', label: 'June series certificates sent to centres' }, { key: 'oct_guide_jun27', label: 'Cambridge Guide to Making Entries — June 2027' }], notes: ['Check all certificates received and names spelled correctly', 'Distribute certificates to students'] },
-      11: { you_send: [], we_send: [], notes: ['Review full exam cycle performance', 'Update exam policies and procedures', 'Archive exam records securely'] },
-      12: { you_send: [], we_send: [], notes: ['Cambridge office closed 24 Dec–2 Jan', 'Plan entries for June 2027 — modified papers deadline is January', 'Prepare annual exam report for school leadership'] },
-    },
-  },
-  alevel_june: {
-    label: 'AS & A Level — May/June Series',
-    months: {
-      1:  { you_send: [{ key: 'al_jan_modified_papers_deadline', label: 'Modified question papers application deadline (Form 3)' }], we_send: [{ key: 'al_jan_pre_release', label: 'Early question papers & pre-release materials available' }], notes: ['Review November series AS/A Level results with subject leaders', 'Confirm June series subject entries with subject teachers'] },
-      2:  { you_send: [{ key: 'al_feb_final_entries', label: 'Final entries deadline' }, { key: 'al_feb_access_arrangements', label: 'Access arrangements deadline (Form 1)' }], we_send: [{ key: 'al_feb_early_qp', label: 'Early question papers & instructions dispatched' }, { key: 'al_feb_entries_confirmation', label: 'Entries confirmation packs' }], notes: ['Verify IT/Computer Science entries — practical tests have early despatch', 'Securely store early question papers on receipt'] },
-      3:  { you_send: [{ key: 'al_mar_speaking_start', label: 'Speaking test window opens — language syllabuses' }], we_send: [{ key: 'al_mar_pre_exam_despatch', label: 'Pre-exam despatch (stationery, labels, registers)' }, { key: 'al_mar_question_papers', label: 'Question papers based on final entries' }], notes: ['Forecast grades required — coordinate with subject teachers', 'Check statements of entry from Direct for accuracy'] },
-      4:  { you_send: [{ key: 'al_apr_speaking_start', label: 'AS/A Level language speaking test window opens' }, { key: 'al_apr_late_entries', label: 'Late entries deadline' }, { key: 'al_apr_forecast_grades', label: 'Forecast grades deadline' }], we_send: [{ key: 'al_apr_exam_start', label: 'Timetabled exam period begins' }], notes: ['AS/A Level Computer Science practical — one-day window, check timetable', 'Send scripts immediately after each exam — at least weekly'], exams: [{ date: '28 Apr', code: '9709', label: 'Mathematics P1 Pure 1 — AM' }, { date: '29 Apr', code: '9701', label: 'Chemistry P1/P2 Multiple Choice / Core — AM' }, { date: '30 Apr', code: '9700', label: 'Biology P1/P2 Multiple Choice / Core — AM' }] },
-      5:  { you_send: [{ key: 'al_may_global_perspectives', label: 'Global Perspectives examined coursework deadline (9239)' }], we_send: [], notes: ['Continue dispatching scripts weekly', 'Special consideration deadline: within 7 days of last affected exam'], exams: [{ date: '07 May', code: '9701', label: 'Chemistry P3 Advanced Practical — AM' }, { date: '08 May', code: '9702', label: 'Physics P1/P2 Multiple Choice / Core — AM' }, { date: '12 May', code: '9700', label: 'Biology P3 Advanced Practical — AM' }, { date: '13 May', code: '9709', label: 'Mathematics P3 Pure 3 — AM' }, { date: '14 May', code: '9093', label: 'English Language P1 — AM' }, { date: '19 May', code: '9702', label: 'Physics P3 Advanced Practical — AM' }, { date: '20 May', code: '9709', label: 'Mathematics P4 Mechanics 1 — AM' }, { date: '21 May', code: '9709', label: 'Mathematics P6 Probability & Statistics 2 — AM' }] },
-      6:  { you_send: [{ key: 'al_jun_speaking_marks', label: 'AS/A Level language speaking marks & samples deadline' }, { key: 'al_jun_exam_end', label: 'Timetabled exam period ends' }], we_send: [], notes: ['Check emails for Cambridge candidate queries until results', 'Begin preparing for next series'], exams: [{ date: '03 Jun', code: '9702', label: 'Physics P4/P5 Advanced Theory / Planning — AM' }, { date: '08 Jun', code: '9700', label: 'Biology P4/P5 Advanced Theory / Planning — AM' }, { date: '09 Jun', code: '9701', label: 'Chemistry P4/P5 Advanced Theory / Planning — AM' }] },
-      7:  { you_send: [{ key: 'al_jul_priority_results', label: 'Priority results application deadline (Form 9)' }], we_send: [], notes: ['Continue monitoring Cambridge communications'] },
-      8:  { you_send: [], we_send: [{ key: 'al_aug_results_available', label: 'AS & A Level results available on Direct' }, { key: 'al_aug_results_despatch', label: 'Results despatch including statements' }], notes: ['Release results immediately on availability', 'Guide students on EAR process', 'Analyse performance data with subject leaders'] },
-      9:  { you_send: [{ key: 'al_sep_ear_deadline', label: 'EAR (Enquiries About Results) deadline' }], we_send: [], notes: ['Submit all EAR requests before deadline', 'Prepare remark requests if required'] },
-      10: { you_send: [], we_send: [{ key: 'al_oct_certificates', label: 'June series certificates sent to centres' }], notes: ['Check all certificates and distribute to students', 'Conduct review meeting with school leadership'] },
-      11: { you_send: [], we_send: [], notes: ['Review full AS/A Level cycle', 'Archive all records'] },
-      12: { you_send: [], we_send: [], notes: ['Plan entries for June 2027', 'Cambridge office closed 24 Dec–2 Jan'] },
-    },
-  },
-  checkpoint_may: {
-    label: 'Cambridge Checkpoint — May Series',
-    months: {
-      1:  { you_send: [{ key: 'chk_jan_modified_papers', label: 'Modified question papers application deadline (Form 3)' }], we_send: [], notes: ['Review October series Checkpoint results with academic coordinator', 'Confirm May series candidate lists (Primary & Lower Secondary)'] },
-      2:  { you_send: [{ key: 'chk_feb_final_entries', label: 'Final entries deadline — May series' }, { key: 'chk_feb_access_arrangements', label: 'Access arrangements deadline (Form 1)' }], we_send: [{ key: 'chk_feb_statements_entry', label: 'Statements of entry & candidate entry lists' }], notes: ['Late entry fees begin 22 Feb', 'Verify all candidate names and details on entry confirmation'] },
-      3:  { you_send: [{ key: 'chk_mar_late_entries', label: 'Late entries deadline' }, { key: 'chk_mar_teaching_groups', label: 'Teaching group information submission deadline (Form 2)' }], we_send: [{ key: 'chk_mar_pre_exam_despatch', label: 'Pre-exam despatch begins (stationery, labels, registers)' }], notes: ['Confirm test venue rooms', 'Brief teachers on test administration procedures'] },
-      4:  { you_send: [{ key: 'chk_apr_global_perspectives', label: 'Global Perspectives work & marks submission (Primary 0838 / LS 1129)' }], we_send: [{ key: 'chk_apr_question_papers', label: 'Question papers sent to centre' }], notes: ['Store question papers securely — do not distribute until test day', 'Confirm invigilation arrangements'] },
-      5:  { you_send: [{ key: 'chk_may_test_start', label: 'Test period begins' }, { key: 'chk_may_test_end', label: 'Test period ends' }], we_send: [], notes: ['Collect and securely store unused papers after each test', 'Dispatch scripts to Cambridge promptly', 'Record attendance accurately on registers'] },
-      6:  { you_send: [], we_send: [], notes: ['All scripts dispatched — confirm receipt by Cambridge', 'Monitor Direct for diagnostic feedback availability (July)'] },
-      7:  { you_send: [], we_send: [{ key: 'chk_jul_diagnostic_feedback', label: 'Diagnostic feedback & Global Perspectives results available on Direct' }], notes: ['Download and distribute diagnostic feedback to teachers', 'Review moderator reports for Global Perspectives'] },
-      8:  { you_send: [], we_send: [{ key: 'chk_aug_statements', label: 'Printed statements of achievement dispatched' }, { key: 'chk_aug_reports', label: 'End-of-series reports available on support sites' }], notes: ['Distribute statements of achievement to students', 'Analyse cohort performance using end-of-series reports'] },
-      9:  { you_send: [], we_send: [], notes: ['Conduct internal evaluation meeting', 'Update candidate database for next cycle'] },
-      10: { you_send: [], we_send: [], notes: ['Plan candidate lists for next May series', 'Review Global Perspectives teacher preparation'] },
-      11: { you_send: [{ key: 'chk_nov_final_entries_next', label: 'Final entries deadline — May 2027 series' }, { key: 'chk_nov_access_arrangements_next', label: 'Access arrangements deadline — May 2027 (Form 1)' }], we_send: [], notes: ['Late entry fees begin 28 Nov', 'Confirm all candidate data for next series entries'] },
-      12: { you_send: [{ key: 'chk_dec_late_entries_next', label: 'Late entries deadline — May 2027 series' }, { key: 'chk_dec_teaching_groups_next', label: 'Teaching group information — May 2027 (Form 2)' }], we_send: [], notes: ['Cambridge office closed 24 Dec–2 Jan', 'Archive current year records securely'] },
-    },
-  },
-  igcse_november: {
-    label: 'IGCSE & O Level — Oct/Nov Series',
-    months: {
-      1:  { you_send: [], we_send: [{ key: 'nov_jan_results_igcse', label: 'IGCSE & O Level results available on Direct (Nov series)' }, { key: 'nov_jan_results_alevel', label: 'AS & A Level results available on Direct (Nov series)' }], notes: ['Release November series results to candidates immediately', 'Check all result documentation and report errors promptly', 'Guide candidates on EAR (Enquiries About Results) process'] },
-      2:  { you_send: [{ key: 'nov_feb_ear_deadline', label: 'EAR (Enquiries About Results) deadline — Nov series' }], we_send: [], notes: ['Submit all EAR requests before deadline — late requests not accepted', 'Certificates expected in March — plan distribution'] },
-      3:  { you_send: [], we_send: [{ key: 'nov_mar_certificates', label: 'November series certificates sent to centres' }], notes: ['Check all certificates on receipt and distribute promptly', 'Conduct post-exam evaluation meeting with subject leaders'] },
-      4:  { you_send: [], we_send: [], notes: ['Review November series performance with subject leaders', 'Update exam policies and procedures'] },
-      5:  { you_send: [{ key: 'nov_may_estimated_entries', label: 'Estimated Entry Forms for Nov series due' }], we_send: [], notes: ['Submit estimated entries accurately — basis for early question paper dispatch', 'Begin access arrangements planning for first-time Nov candidates'] },
-      6:  { you_send: [], we_send: [], notes: ['Begin collecting November series candidate lists', 'Check syllabus updates for Nov series subjects'] },
-      7:  { you_send: [{ key: 'nov_jul_modified_papers', label: 'Modified question papers application deadline — Nov series' }, { key: 'nov_jul_access_arrangements_new', label: 'Access arrangements deadline — new Nov candidates (Form 1)' }], we_send: [{ key: 'nov_jul_early_qp_despatch', label: 'Early question papers & confidential instructions dispatch begins' }], notes: ['Submit modified papers applications early — 1 Jul is firm deadline', 'Check August final entries deadline — 16 Aug'] },
-      8:  { you_send: [{ key: 'nov_aug_final_entries', label: 'Final entries deadline — Nov series (new candidates)' }], we_send: [{ key: 'aug_results_alevel', label: 'AS & A Level June series results available on Direct' }, { key: 'aug_results_igcse', label: 'IGCSE & O Level June series results available on Direct' }], notes: ['Submit final Nov entries before 16 Aug — late fees begin 17 Aug', 'Release June series results to candidates immediately', 'Begin access arrangements for retake candidates (Sep deadline)'] },
-      9:  { you_send: [{ key: 'nov_sep_access_arrangements_retake', label: 'Access arrangements deadline — retake candidates from Jun series (Form 1)' }, { key: 'nov_sep_retake_entries', label: 'Retake entries deadline (candidates from Jun 2026)' }, { key: 'nov_sep_late_entries', label: 'Late entries deadline — Nov series' }, { key: 'nov_sep_speaking_fle_start', label: 'Speaking test window opens — FLE & languages' }, { key: 'sep_ear_deadline', label: 'EAR deadline — June series' }], we_send: [{ key: 'nov_qp_despatch', label: 'Question papers dispatch based on final entries' }, { key: 'nov_sep_exam_stationery', label: 'Exam stationery dispatch begins' }], notes: ['Check all pre-exam materials received — report discrepancies immediately', 'Confirm invigilators and exam venues for Nov series', 'EAR deadline for June series is 20 Sep'] },
-      10: { you_send: [{ key: 'oct_estimated_entries_deadline', label: 'Estimated Entry Forms for June 2027 due' }, { key: 'nov_oct_forecast_grades', label: 'Forecast grades deadline — Nov series' }, { key: 'nov_oct_speaking_marks_fle', label: 'Speaking marks due — FLE/languages & A Level (Nov series)' }], we_send: [{ key: 'nov_exam_period_start', label: 'Timetabled exam period begins — Nov series' }, { key: 'oct_certificates', label: 'June series certificates sent to centres' }], notes: ['Check question paper packets — report missing packets immediately', 'Continue dispatching scripts weekly'] },
-      11: { you_send: [], we_send: [{ key: 'nov_exam_period_end', label: 'Timetabled exam period ends — Nov series' }], notes: ['Dispatch all remaining scripts to Cambridge', 'Submit special consideration within 7 days of last affected exam'] },
-      12: { you_send: [], we_send: [{ key: 'nov_dec_priority_results', label: 'Priority results available — Nov series (if requested)' }], notes: ['Cambridge office closed 24 Dec–2 Jan', 'Prepare for January results — results available mid-January 2027', 'Archive November series records'] },
-    },
-  },
-  alevel_november: {
-    label: 'AS & A Level — Oct/Nov Series',
-    months: {
-      1:  { you_send: [], we_send: [{ key: 'al_nov_results', label: 'AS & A Level results available on Direct (Nov series)' }], notes: ['Release November series results immediately', 'Analyse A Level Nov performance — identify resit needs', 'Guide candidates on EAR process'] },
-      2:  { you_send: [{ key: 'al_nov_ear_deadline', label: 'EAR deadline — AS & A Level Nov series' }], we_send: [], notes: ['Submit all EAR requests before deadline', 'Certificates expected in March'] },
-      3:  { you_send: [], we_send: [{ key: 'al_nov_certificates', label: 'November series certificates sent to centres' }], notes: ['Check certificates on receipt and distribute promptly', 'Review Nov AS/A Level performance with subject leaders'] },
-      4:  { you_send: [], we_send: [], notes: ['Review November series performance', 'Plan AS/A Level June 2026 entries', 'Update subject-specific exam procedures'] },
-      5:  { you_send: [{ key: 'al_nov_may_estimated_entries', label: 'Estimated Entry Forms for Nov series due' }], we_send: [], notes: ['Submit estimated entries accurately', 'Plan internally assessed component submissions for Nov series'] },
-      6:  { you_send: [], we_send: [], notes: ['Begin collecting November series candidate lists', 'Check syllabus updates for Nov series subjects'] },
-      7:  { you_send: [{ key: 'al_nov_jul_modified_papers', label: 'Modified question papers application deadline — Nov series' }, { key: 'al_nov_jul_access_new', label: 'Access arrangements deadline — new Nov candidates' }], we_send: [{ key: 'al_nov_qp_early_despatch', label: 'Early question papers & confidential instructions dispatch begins' }], notes: ['Modified papers deadline is firm — 1 Jul', 'Entries confirmation for new candidates expected end of July'] },
-      8:  { you_send: [{ key: 'al_nov_aug_final_entries', label: 'Final entries deadline — Nov series (new candidates)' }], we_send: [{ key: 'al_aug_results_available', label: 'AS & A Level June series results available on Direct' }], notes: ['Submit final Nov entries before 16 Aug', 'Release June series results to candidates immediately', 'Analyse June performance with subject teachers'] },
-      9:  { you_send: [{ key: 'al_nov_sep_access_retake', label: 'Access arrangements deadline — retake candidates from Jun series' }, { key: 'al_nov_sep_retake_entries', label: 'Retake entries deadline (candidates from Jun 2026)' }, { key: 'al_nov_sep_late_entries', label: 'Late entries deadline — Nov series' }, { key: 'al_sep_ear_deadline', label: 'EAR deadline — June series' }], we_send: [{ key: 'al_nov_qp_despatch', label: 'Question papers dispatch based on final entries' }, { key: 'al_nov_exam_stationery', label: 'Exam stationery dispatch begins' }], notes: ['Check all question papers received on arrival', 'Confirm invigilators, venues, and seating plans for Nov series', 'EAR for June series closes 20 Sep'] },
-      10: { you_send: [{ key: 'al_nov_forecast_grades', label: 'Forecast grades deadline — Nov series' }], we_send: [{ key: 'al_nov_exam_start', label: 'Timetabled exam period begins — Nov series' }, { key: 'al_oct_certificates', label: 'June series certificates sent to centres' }], notes: ['Dispatch scripts weekly throughout exam period', 'Collect unused question papers securely after each exam'] },
-      11: { you_send: [], we_send: [{ key: 'al_nov_exam_end', label: 'Timetabled exam period ends — Nov series' }], notes: ['Dispatch all remaining scripts to Cambridge', 'Submit special consideration within 7 days of last affected exam'] },
-      12: { you_send: [], we_send: [], notes: ['Cambridge office closed 24 Dec–2 Jan', 'Prepare for January results — AS & A Level Nov results available mid-January', 'Archive November series records'] },
-    },
-  },
-  checkpoint_oct: {
-    label: 'Cambridge Checkpoint — October Series',
-    months: {
-      1:  { you_send: [], we_send: [], notes: ['Download and distribute October series diagnostic feedback to teachers (available mid-Dec)', 'Review moderator reports for Global Perspectives', 'Analyse cohort performance using end-of-series reports'] },
-      2:  { you_send: [], we_send: [], notes: ['Share October series performance data with academic coordinator', 'Plan candidate lists for next May series'] },
-      3:  { you_send: [], we_send: [], notes: ['Review May Checkpoint series preparation in parallel', 'Brief teachers on test administration procedures for May series'] },
-      4:  { you_send: [], we_send: [], notes: ['May series exam period approaching — confirm invigilators and venues', 'Review teaching coverage for October series subjects'] },
-      5:  { you_send: [], we_send: [], notes: ['May series test period in progress', 'Begin planning October series candidate lists'] },
-      6:  { you_send: [], we_send: [], notes: ['May series complete — confirm all scripts dispatched', 'Begin October series planning with academic coordinator'] },
-      7:  { you_send: [{ key: 'chk_oct_jul_modified_papers', label: 'Modified question papers application deadline — Oct series' }, { key: 'chk_oct_jul_access_arrangements', label: 'Access arrangements deadline — Oct series (Form 1)' }], we_send: [{ key: 'chk_jul_diagnostic_feedback', label: 'May series diagnostic feedback & Global Perspectives results available' }], notes: ['Submit modified papers applications — 1 Jul deadline is firm', 'Download and share May series diagnostic feedback immediately', 'Check August final entries deadline — 16 Aug'] },
-      8:  { you_send: [{ key: 'chk_oct_aug_final_entries', label: 'Final entries deadline — Oct Checkpoint series' }], we_send: [{ key: 'chk_aug_statements', label: 'May series printed statements of achievement dispatched' }, { key: 'chk_aug_reports', label: 'May series end-of-series reports available' }], notes: ['Submit October series final entries before 16 Aug', 'Distribute May series statements of achievement to students', 'Analyse May cohort performance using end-of-series reports'] },
-      9:  { you_send: [{ key: 'chk_oct_sep_late_entries', label: 'Late entries deadline — Oct series' }], we_send: [{ key: 'chk_oct_sep_despatch', label: 'Pre-exam despatch (stationery, registers, labels)' }], notes: ['Check all pre-exam materials received on arrival', 'Confirm invigilators, venues, and seating plans', 'Brief teachers on test administration procedures'] },
-      10: { you_send: [{ key: 'chk_oct_oct_global_perspectives', label: 'Global Perspectives work & marks submission (Primary 0838 / LS 1129)' }, { key: 'chk_oct_exam_start', label: 'Test period begins — October series' }, { key: 'chk_oct_exam_end', label: 'Test period ends — October series' }], we_send: [{ key: 'chk_oct_question_papers', label: 'Question papers sent to centre' }], notes: ['Store question papers securely — do not distribute until test day', 'Record attendance accurately on registers', 'Dispatch scripts to Cambridge promptly after tests conclude'] },
-      11: { you_send: [{ key: 'chk_nov_mar27_access', label: 'Access arrangements deadline — May 2027 (Form 1)' }, { key: 'chk_nov_mar27_final_entries', label: 'Final entries deadline — May 2027 series' }], we_send: [], notes: ['All October scripts dispatched — confirm receipt by Cambridge', 'Monitor Direct for October series diagnostic feedback (December)', 'Late entry fees for May 2027 begin 28 Nov'] },
-      12: { you_send: [{ key: 'chk_dec_mar27_late_entries', label: 'Late entries deadline — May 2027 series' }], we_send: [{ key: 'chk_oct_dec_results', label: 'October series diagnostic feedback & results available on Direct' }, { key: 'chk_oct_dec_reports', label: 'October series end-of-series reports available' }, { key: 'chk_oct_dec_feedback', label: 'Diagnostic feedback for Oct series available' }], notes: ['Cambridge office closed 24 Dec–2 Jan', 'Download and distribute diagnostic feedback to teachers', 'Archive October series records securely'] },
-    },
-  },
+// All content loaded from Firestore meta field — single source of truth.
+const SERIES_LABELS = {
+  igcse_june:       'IGCSE — May/June Series',
+  alevel_june:      'AS & A Level — May/June Series',
+  checkpoint_may:   'Cambridge Checkpoint — May Series',
+  igcse_november:   'IGCSE & O Level — Oct/Nov Series',
+  alevel_november:  'AS & A Level — Oct/Nov Series',
+  checkpoint_oct:   'Cambridge Checkpoint — October Series',
 };
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -447,6 +351,7 @@ const MONTH_NAMES = ['January','February','March','April','May','June','July','A
 let currentSeries = 'igcse_june';
 let currentYear   = 2026;
 let firestoreDates = {};
+let currentMeta    = { months: {} };
 
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('cambridge-calendar', { user, profile });
@@ -474,7 +379,9 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 
 async function loadAndRender() {
   const snap = await getDoc(doc(window.db, 'cambridge_calendar', `${currentYear}_${currentSeries}`));
-  firestoreDates = snap.exists() ? (snap.data().dates || {}) : {};
+  const data = snap.exists() ? snap.data() : {};
+  firestoreDates = data.dates || {};
+  currentMeta    = data.meta  || { months: {} };
   renderPage();
 }
 
@@ -520,24 +427,24 @@ function urgencyClass(dateStr) {
 }
 
 function renderPage() {
-  const seriesDef = SERIES[currentSeries];
-  document.getElementById('seriesLabel').textContent = `${seriesDef.label} ${currentYear}`;
+  const label = SERIES_LABELS[currentSeries] || currentSeries;
+  document.getElementById('seriesLabel').textContent = `${label} ${currentYear}`;
 
-  buildUrgentBanner(seriesDef);
-  buildMonthGrid(seriesDef);
+  buildUrgentBanner();
+  buildMonthGrid();
 
   // Show/hide info banner based on whether any dates exist
   const hasAnyDate = Object.keys(firestoreDates).length > 0;
   document.getElementById('infoBanner').classList.toggle('hidden', hasAnyDate);
 }
 
-function buildUrgentBanner(seriesDef) {
+function buildUrgentBanner() {
   const banner = document.getElementById('urgentBanner');
   const list   = document.getElementById('urgentList');
   list.innerHTML = '';
 
   const urgents = [];
-  Object.values(seriesDef.months).forEach(def => {
+  Object.values(currentMeta.months || {}).forEach(def => {
     [...(def.you_send || []), ...(def.we_send || [])].forEach(item => {
       const d = getDate(item.key);
       if (!d) return;
@@ -560,14 +467,15 @@ function buildUrgentBanner(seriesDef) {
   banner.classList.remove('hidden');
 }
 
-function buildMonthGrid(seriesDef) {
+function buildMonthGrid() {
   const grid   = document.getElementById('monthsGrid');
+  const months = currentMeta.months || {};
   const todayM = new Date().getMonth() + 1;
   const todayY = new Date().getFullYear();
   grid.innerHTML = '';
 
   for (let m = 1; m <= 12; m++) {
-    const def    = seriesDef.months[m] || { you_send: [], we_send: [], notes: [] };
+    const def    = months[String(m)] || { you_send: [], we_send: [], notes: [] };
     const isPast = (currentYear < todayY) || (currentYear === todayY && m < todayM);
     const isCurr = (currentYear === todayY && m === todayM);
 
