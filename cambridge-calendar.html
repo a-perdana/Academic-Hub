@@ -232,8 +232,7 @@ body {
 </head>
 <body>
 
-<!-- NAVBAR injected at build time -->
-<div id="navbar-container"></div>
+<div id="navbarMount"></div>
 
 <!-- ── HERO ── -->
 <section class="hero">
@@ -580,11 +579,8 @@ function escHtml(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Load navbar partial
-fetch('partials/navbar.html').then(r => r.ok ? r.text() : '').then(html => {
-  if (html) document.getElementById('navbar-container').innerHTML = html;
-}).catch(() => {});
 
 </script>
+<script src="partials/navbar-loader.js"></script>
 </body>
 </html>
