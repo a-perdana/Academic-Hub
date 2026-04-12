@@ -144,9 +144,9 @@ body { padding-top: 62px; }
 .week-nav {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 14px 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  padding: 14px 20px; margin-bottom: 24px; box-shadow: var(--shadow-sm); gap: 12px;
 }
-.week-nav-center { text-align: center; }
+.week-nav-center { text-align: center; flex: 1; }
 .week-num  { font-size: 1.1rem; font-weight: 700; color: var(--ink); }
 .week-dates{ font-size: 0.78rem; color: var(--ink-3); margin-top: 2px; }
 .week-this { font-size: 11px; font-weight: 700; color: var(--green); margin-top: 2px; }
@@ -432,9 +432,9 @@ body { padding-top: 62px; }
 <div class="page-wrap">
 
   <!-- Week Navigator -->
-  <div class="week-nav" style="gap:12px">
+  <div class="week-nav">
     <button class="btn-nav" id="prevWeekBtn">← Prev</button>
-    <div class="week-nav-center" style="flex:1">
+    <div class="week-nav-center">
       <div class="week-num" id="weekLabel">Week —</div>
       <div class="week-dates" id="weekDates"></div>
       <div class="week-this" id="weekThisIndicator" style="display:none">This week</div>
