@@ -29,6 +29,7 @@
 body {
   font-family: 'DM Sans', sans-serif;
   background: var(--paper);
+  padding-top: 62px; /* fixed navbar height */
   color: var(--ink);
   min-height: 100vh;
   font-size: 14px;
@@ -371,7 +372,9 @@ let currentSeries = 'igcse_june';
 let currentYear   = 2026;
 let firestoreDates = {};
 
-document.addEventListener('authReady', () => {
+document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+  if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('cambridge-calendar', { user, profile });
+
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('mainContent').style.display  = '';
   document.getElementById('heroControls').style.display = '';
