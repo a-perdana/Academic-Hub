@@ -65,6 +65,7 @@ const cleanUrls = {
   "CambridgeSchoolQuality.html":     "cambridge-school-quality",
   "RaporPendidikan2025.html":        "rapor-pendidikan-2025",
   "weekly-checklist.html":           "weekly-checklist",
+  "cambridge-calendar.html":         "cambridge-calendar",
   "CurriculumMap.html":             "curriculum-map",
   "teacher-kpi-evaluation.html":    "teacher-kpi-evaluation",
 };
