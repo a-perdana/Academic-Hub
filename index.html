@@ -3790,41 +3790,16 @@
     <script type="module">
       // auth-guard.js exposes window.db, window.auth, window.currentUser, window.userProfile
       import {
-        updateProfile, signOut, updatePassword,
-        EmailAuthProvider, reauthenticateWithCredential,
-      } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-      import {
-        collection, doc, addDoc, getDoc, setDoc, deleteDoc,
+        collection, doc, addDoc, setDoc, deleteDoc,
         query, where, orderBy, onSnapshot, serverTimestamp, Timestamp,
       } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-      window.__loadAcademicNavbar(); // fire-and-forget — do NOT await; authReady listener must register first
+      const _navReady = window.__loadAcademicNavbar(); // start loading; await in authReady
 
       let currentUser = null;
       let db = null;   // assigned from window.db once authReady fires
       let auth = null; // assigned from window.auth once authReady fires
 
-
-      // -- Helpers ------------------------------------------------
-      const PALETTE = ['#6c5ce7','#00b894','#e17055','#0984e3','#a29bfe','#e84393','#00cec9','#f39c12'];
-      function avatarColor(str) {
-        let h = 0;
-        for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
-        return PALETTE[Math.abs(h) % PALETTE.length];
-      }
-      function getInitials(name) {
-        return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0,2) || '?';
-      }
-      function fillAvatar(el, user) {
-        if (user.photoURL) {
-          el.innerHTML = `<img src="${user.photoURL}" referrerpolicy="no-referrer" alt="">`;
-          el.style.background = 'transparent';
-        } else {
-          const n = user.displayName || user.email.split('@')[0];
-          el.style.background = avatarColor(n);
-          el.textContent = getInitials(n);
-        }
-      }
 
       // -- Navbar: scroll shrink -----------------------------------
       (function () {
@@ -3839,176 +3814,6 @@
           });
         }, { passive: true });
       }());
-
-      // -- Navbar: profile dropdown --------------------------------
-      function applyDisplayName(user, firestoreName) {
-        const name = firestoreName || user.displayName || user.email.split('@')[0];
-        const firstName = name.split(' ')[0];
-        fillAvatar(document.getElementById('navAvatar'), { ...user, displayName: name });
-        document.getElementById('navFirstName').textContent = firstName;
-        fillAvatar(document.getElementById('ddAvatar'), { ...user, displayName: name });
-        document.getElementById('ddFullName').textContent = name;
-        const ddDisplayName = document.getElementById('ddDisplayName');
-        if (ddDisplayName) ddDisplayName.value = name !== user.email.split('@')[0] ? name : '';
-      }
-
-      function populateNav(user) {
-        const profileWrap = document.getElementById('profileWrap');
-        if (!profileWrap) return;
-        profileWrap.style.display = 'flex';
-
-        const ddEmail = document.getElementById('ddEmail');
-        if (ddEmail) ddEmail.textContent = user.email;
-
-        // Show change-password section only for email/password users
-        const isPasswordUser = user.providerData.some(p => p.providerId === 'password');
-        const ddPwSection = document.getElementById('ddPwSection');
-        if (ddPwSection) ddPwSection.style.display = isPasswordUser ? 'block' : 'none';
-
-        // Load saved display name and phone from Firestore
-        getDoc(doc(db, 'users', user.uid)).then(snap => {
-          const data = snap.exists() ? snap.data() : {};
-          applyDisplayName(user, data.displayName || null);
-          const ddPhone = document.getElementById('ddPhone');
-          if (data.phone && ddPhone) ddPhone.value = data.phone;
-        }).catch(() => {
-          applyDisplayName(user, null);
-        });
-      }
-
-      function clearNav() {
-        const profileWrap = document.getElementById('profileWrap');
-        if (profileWrap) profileWrap.style.display = 'none';
-        window.__clearNavbarCounters?.();
-      }
-
-      // Dropdown toggle
-      const profileBtn = document.getElementById('profileBtn');
-      if (profileBtn) {
-        profileBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          const profileWrap = document.getElementById('profileWrap');
-          if (profileWrap) profileWrap.classList.toggle('open');
-        });
-      }
-      document.addEventListener('click', (e) => {
-        const wrap = document.getElementById('profileWrap');
-        if (wrap && !wrap.contains(e.target)) wrap.classList.remove('open');
-      });
-
-      // Password toggle
-      const ddPwToggle = document.getElementById('ddPwToggle');
-      if (ddPwToggle) {
-        ddPwToggle.addEventListener('click', () => {
-          ddPwToggle.closest('.dd-section')?.classList.toggle('dd-pw-open');
-        });
-      }
-
-      // Save phone number
-      const ddSavePhone = document.getElementById('ddSavePhone');
-      const ddPhoneEl   = document.getElementById('ddPhone');
-      const ddPhoneStatus = document.getElementById('ddPhoneStatus');
-      let _phoneStatusTimer = null;
-      if (ddSavePhone) ddSavePhone.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-        const phone = ddPhoneEl.value.trim();
-        ddSavePhone.disabled = true;
-        try {
-          await setDoc(doc(db, 'users', user.uid), { phone }, { merge: true });
-          ddPhoneStatus.textContent = 'Saved!';
-          ddPhoneStatus.className = 'dd-status ok';
-        } catch {
-          ddPhoneStatus.textContent = 'Failed to save.';
-          ddPhoneStatus.className = 'dd-status err';
-        } finally {
-          ddSavePhone.disabled = false;
-          clearTimeout(_phoneStatusTimer);
-          _phoneStatusTimer = setTimeout(() => { ddPhoneStatus.className = 'dd-status'; }, 3000);
-        }
-      });
-
-      // Save display name
-      const ddSaveDisplayName = document.getElementById('ddSaveDisplayName');
-      const ddDisplayNameEl   = document.getElementById('ddDisplayName');
-      const ddDisplayNameStatus = document.getElementById('ddDisplayNameStatus');
-      let _nameStatusTimer = null;
-      if (ddSaveDisplayName) ddSaveDisplayName.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-        const newName = ddDisplayNameEl.value.trim();
-        if (!newName) {
-          ddDisplayNameStatus.textContent = 'Please enter a name.';
-          ddDisplayNameStatus.className = 'dd-status err';
-          clearTimeout(_nameStatusTimer);
-          _nameStatusTimer = setTimeout(() => { ddDisplayNameStatus.className = 'dd-status'; }, 3000);
-          return;
-        }
-        ddSaveDisplayName.disabled = true;
-        try {
-          await updateProfile(user, { displayName: newName });
-          await setDoc(doc(db, 'users', user.uid), { displayName: newName }, { merge: true });
-          applyDisplayName(user, newName);
-          ddDisplayNameStatus.textContent = 'Saved!';
-          ddDisplayNameStatus.className = 'dd-status ok';
-        } catch {
-          ddDisplayNameStatus.textContent = 'Failed to save.';
-          ddDisplayNameStatus.className = 'dd-status err';
-        } finally {
-          ddSaveDisplayName.disabled = false;
-          clearTimeout(_nameStatusTimer);
-          _nameStatusTimer = setTimeout(() => { ddDisplayNameStatus.className = 'dd-status'; }, 3000);
-        }
-      });
-
-      // Update password
-      const ddUpdatePwBtn = document.getElementById('ddUpdatePwBtn');
-      const ddCurrentPwEl = document.getElementById('ddCurrentPw');
-      const ddNewPwEl     = document.getElementById('ddNewPw');
-      const ddConfirmPwEl = document.getElementById('ddConfirmPw');
-      const ddPwStatus    = document.getElementById('ddPwStatus');
-      let _pwStatusTimer  = null;
-      if (ddUpdatePwBtn) ddUpdatePwBtn.addEventListener('click', async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-        const current = ddCurrentPwEl.value;
-        const newPw   = ddNewPwEl.value;
-        const confirm = ddConfirmPwEl.value;
-
-        if (newPw !== confirm) {
-          ddPwStatus.textContent = 'Passwords do not match.';
-          ddPwStatus.className = 'dd-status err';
-          return;
-        }
-        if (newPw.length < 6) {
-          ddPwStatus.textContent = 'Password must be at least 6 characters.';
-          ddPwStatus.className = 'dd-status err';
-          return;
-        }
-        ddUpdatePwBtn.disabled = true;
-        try {
-          const credential = EmailAuthProvider.credential(user.email, current);
-          await reauthenticateWithCredential(user, credential);
-          await updatePassword(user, newPw);
-          ddPwStatus.textContent = 'Password updated!';
-          ddPwStatus.className = 'dd-status ok';
-          ddCurrentPwEl.value = '';
-          ddNewPwEl.value = '';
-          ddConfirmPwEl.value = '';
-        } catch (err) {
-          const msg = err.code === 'auth/wrong-password' ? 'Current password is incorrect.' : 'Update failed. Try again.';
-          ddPwStatus.textContent = msg;
-          ddPwStatus.className = 'dd-status err';
-        } finally {
-          ddUpdatePwBtn.disabled = false;
-          clearTimeout(_pwStatusTimer);
-          _pwStatusTimer = setTimeout(() => { ddPwStatus.className = 'dd-status'; }, 4000);
-        }
-      });
-
-      // Dropdown sign out
-      const ddSignOut = document.getElementById('ddSignOut');
-      if (ddSignOut) ddSignOut.addEventListener('click', async () => { await signOut(auth); window.location.href = 'login.html'; });
 
       // -- Feedback modal ------------------------------------------
 
@@ -4061,11 +3866,14 @@
       });
 
       // -- Auth state (via auth-guard.js) -----------------------------
-      document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+      document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
         currentUser = user;
         db = window.db;
         auth = window.auth;
-        populateNav(user);
+        // Ensure navbar HTML is injected before populating profile
+        await _navReady;
+        // Use navbar-loader's populate (handles toggle, sign-out, edit form)
+        window.__ahPopulateNav?.(user, profile?.displayName || null, auth, profile);
         window.__initNavbarCounters?.({ db: window.db, user });
         if (profile.role_academichub === 'academic_admin') {
           document.body.classList.add('is-admin');
