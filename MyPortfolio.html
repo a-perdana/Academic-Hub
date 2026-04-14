@@ -135,34 +135,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 <script type="module">
 import { collection, doc, addDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+// Grounded in: Cambridge School Leader Standards 2019, PSEL 2015, Permendiknas No.16/2007
 const COMP_META = {
-  'dl-1':{name:'Reading & Interpreting Academic Data',domain:'Data-Driven Leadership',levels:['awareness','practitioner','advanced','lead']},
-  'dl-2':{name:'Using Assessment Data for Improvement',domain:'Data-Driven Leadership',levels:['awareness','practitioner','advanced','lead']},
-  'dl-3':{name:'Cambridge Results Analysis',domain:'Data-Driven Leadership',levels:['practitioner','advanced','lead']},
-  'dl-4':{name:'Value-Added & Progress Measurement',domain:'Data-Driven Leadership',levels:['advanced','lead']},
-  'co-1':{name:'Curriculum Monitoring & Review',domain:'Curriculum Oversight & Quality',levels:['awareness','practitioner','advanced','lead']},
-  'co-2':{name:'Cambridge Curriculum Alignment',domain:'Curriculum Oversight & Quality',levels:['awareness','practitioner','advanced','lead']},
-  'co-3':{name:'Lesson Observation & Feedback',domain:'Curriculum Oversight & Quality',levels:['practitioner','advanced','lead']},
-  'co-4':{name:'Curriculum Gap Analysis',domain:'Curriculum Oversight & Quality',levels:['advanced','lead']},
-  'sd-1':{name:'Teacher Performance Management',domain:'Staff Development & Appraisal',levels:['awareness','practitioner','advanced','lead']},
-  'sd-2':{name:'CPD Planning & Facilitation',domain:'Staff Development & Appraisal',levels:['practitioner','advanced','lead']},
-  'sd-3':{name:'Coaching & Mentoring Teachers',domain:'Staff Development & Appraisal',levels:['advanced','lead']},
-  'sd-4':{name:'Building a Learning Culture',domain:'Staff Development & Appraisal',levels:['advanced','lead']},
-  'sp-1':{name:'School Development Planning',domain:'Strategic Planning & Improvement',levels:['awareness','practitioner','advanced','lead']},
-  'sp-2':{name:'Monitoring Implementation & Impact',domain:'Strategic Planning & Improvement',levels:['practitioner','advanced','lead']},
-  'sp-3':{name:'Stakeholder Engagement & Communication',domain:'Strategic Planning & Improvement',levels:['awareness','practitioner','advanced','lead']},
-  'sp-4':{name:'Change Management in Schools',domain:'Strategic Planning & Improvement',levels:['advanced','lead']},
-  'ac-1':{name:'Cambridge Centre Requirements',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced','lead']},
-  'ac-2':{name:'Inspection Readiness',domain:'Accreditation & Compliance',levels:['practitioner','advanced','lead']},
-  'ac-3':{name:'Policy Development & Review',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced']},
-  'ac-4':{name:'Safeguarding & Student Welfare Governance',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced','lead']},
-  'so-1':{name:'Academic Tracking & Intervention',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced','lead']},
-  'so-2':{name:'Inclusion & SEN Oversight',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced','lead']},
-  'so-3':{name:'Student Wellbeing Leadership',domain:'Student Outcomes & Wellbeing',levels:['practitioner','advanced','lead']},
-  'so-4':{name:'Parent & Community Partnerships',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced']},
+  'evsi-1':{name:'Articulating & Communicating School Vision',domain:'Educational Vision & School Improvement',levels:['awareness','practitioner','advanced','lead']},
+  'evsi-2':{name:'School Improvement Planning & Monitoring',domain:'Educational Vision & School Improvement',levels:['awareness','practitioner','advanced','lead']},
+  'evsi-3':{name:'Cambridge School Evaluation & Self-Review',domain:'Educational Vision & School Improvement',levels:['practitioner','advanced','lead']},
+  'evsi-4':{name:'Leading Change & Sustaining Improvement',domain:'Educational Vision & School Improvement',levels:['advanced','lead']},
+  'cial-1':{name:'Cambridge Curriculum Alignment & Monitoring',domain:'Curriculum, Instruction & Assessment Leadership',levels:['awareness','practitioner','advanced','lead']},
+  'cial-2':{name:'Lesson Observation & Instructional Coaching',domain:'Curriculum, Instruction & Assessment Leadership',levels:['practitioner','advanced','lead']},
+  'cial-3':{name:'Assessment Data Analysis & Use',domain:'Curriculum, Instruction & Assessment Leadership',levels:['awareness','practitioner','advanced','lead']},
+  'cial-4':{name:'Value-Added Measurement & Impact Evaluation',domain:'Curriculum, Instruction & Assessment Leadership',levels:['advanced','lead']},
+  'pdpc-1':{name:'Teacher Performance Management & Appraisal',domain:'People Development & Professional Capacity',levels:['awareness','practitioner','advanced','lead']},
+  'pdpc-2':{name:'CPD Planning & Facilitation',domain:'People Development & Professional Capacity',levels:['practitioner','advanced','lead']},
+  'pdpc-3':{name:'Coaching & Mentoring Teachers',domain:'People Development & Professional Capacity',levels:['advanced','lead']},
+  'pdpc-4':{name:'Building a Professional Learning Culture',domain:'People Development & Professional Capacity',levels:['advanced','lead']},
+  'ewsc-1':{name:'Inclusive Education & SEN Oversight',domain:'Equity, Wellbeing & School Culture',levels:['awareness','practitioner','advanced','lead']},
+  'ewsc-2':{name:'Student Wellbeing Leadership',domain:'Equity, Wellbeing & School Culture',levels:['awareness','practitioner','advanced','lead']},
+  'ewsc-3':{name:'Safeguarding & Student Safety Governance',domain:'Equity, Wellbeing & School Culture',levels:['awareness','practitioner','advanced','lead']},
+  'ewsc-4':{name:'Positive School Culture & Climate',domain:'Equity, Wellbeing & School Culture',levels:['practitioner','advanced','lead']},
+  'eao-1':{name:'School Policy Development & Governance',domain:'Ethics, Accountability & Operations',levels:['awareness','practitioner','advanced','lead']},
+  'eao-2':{name:'Inspection Readiness & Compliance',domain:'Ethics, Accountability & Operations',levels:['practitioner','advanced','lead']},
+  'eao-3':{name:'Financial & Resource Stewardship',domain:'Ethics, Accountability & Operations',levels:['awareness','practitioner','advanced']},
+  'eao-4':{name:'Ethical Leadership & Professional Integrity',domain:'Ethics, Accountability & Operations',levels:['awareness','practitioner','advanced','lead']},
+  'fcep-1':{name:'Parent Engagement & Communication',domain:'Family, Community & External Partnerships',levels:['awareness','practitioner','advanced','lead']},
+  'fcep-2':{name:'Community & Industry Partnerships',domain:'Family, Community & External Partnerships',levels:['practitioner','advanced','lead']},
+  'fcep-3':{name:'Cambridge Network & Inter-school Collaboration',domain:'Family, Community & External Partnerships',levels:['practitioner','advanced','lead']},
+  'fcep-4':{name:'Local Regulatory Relationships (Dinas Pendidikan)',domain:'Family, Community & External Partnerships',levels:['awareness','practitioner','advanced']},
 };
 const LEVEL_LABEL={awareness:'Awareness',practitioner:'Practitioner',advanced:'Advanced',lead:'Lead / Mentor'};
-const DOMAIN_ICON={'Data-Driven Leadership':'📊','Curriculum Oversight & Quality':'📚','Staff Development & Appraisal':'🌱','Strategic Planning & Improvement':'🎯','Accreditation & Compliance':'🏅','Student Outcomes & Wellbeing':'🎓'};
+const DOMAIN_ICON={'Educational Vision & School Improvement':'🎯','Curriculum, Instruction & Assessment Leadership':'📚','People Development & Professional Capacity':'🌱','Equity, Wellbeing & School Culture':'🤝','Ethics, Accountability & Operations':'⚖️','Family, Community & External Partnerships':'🌐'};
 let uid='', selectedFile=null;
 
 document.addEventListener('authReady',async({detail:{user,profile}})=>{
