@@ -85,7 +85,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 <body>
 <div id="navbarMount"></div>
 <div class="page-topbar">
-  <a href="CompetencyFramework.html" class="topbar-back">
+  <a href="/competency-framework" class="topbar-back">
     <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
     Framework
   </a>
@@ -168,7 +168,7 @@ function render(){
     <div class="stat-card"><div class="stat-num">${total-earnedCount}</div><div class="stat-label">Still to Earn</div></div>`;
   const grid=document.getElementById('certGrid');
   if(!myCerts.length){
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎓</div><div class="empty-title">No certificates yet</div><div class="empty-sub">Complete all competencies in a domain at Lead level to earn your certificate.</div><a href="LearningPath.html" class="empty-cta">Start My Learning Path</a></div>`;
+    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎓</div><div class="empty-title">No certificates yet</div><div class="empty-sub">Complete all competencies in a domain at Lead level to earn your certificate.</div><a href="/learning-path" class="empty-cta">Start My Learning Path</a></div>`;
   }else{
     grid.innerHTML=myCerts.map(cert=>{
       const d=FRAMEWORK.find(f=>f.id===cert.domainId)||{};
