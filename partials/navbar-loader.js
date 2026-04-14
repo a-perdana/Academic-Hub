@@ -836,7 +836,7 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
   const mount = document.getElementById('navbarMount');
   if (!mount) return;
 
-  const res = await fetch('partials/navbar.html', { cache: 'default' });
+  const res = await fetch('/partials/navbar.html', { cache: 'default' });
   if (!res.ok) throw new Error('Failed to load navbar partial');
 
   mount.innerHTML = await res.text();

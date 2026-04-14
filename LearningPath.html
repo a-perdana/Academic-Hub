@@ -302,7 +302,7 @@ function renderCard(comp, domain) {
     return `<div class="mat-item ${done?'done-mat':''}" onclick="toggleMat('${comp.id}','${m.id}')"><div class="mat-type-icon ${m.type}">${{reading:'📖',video:'▶️',activity:'✏️',reflection:'🪞'}[m.type]||'📄'}</div><div class="mat-info"><div class="mat-name">${m.name}</div><div class="mat-meta">${m.type} · ${m.duration}</div></div><div class="mat-check"></div></div>`;
   }).join('')}</div>` : '';
   const canAssess = allDone || !mats.length;
-  const assHtml = !isCompleted ? `<div class="assessment-cta ${canAssess?'':'locked'}" onclick="${canAssess?`goPortfolio('${comp.id}','${curLvl}')`:''}" ><div class="acta-left"><span class="acta-icon">📋</span><div><div class="acta-title">${canAssess?`Submit Evidence for ${LEVEL_LABEL[curLvl]}`:'Complete materials to unlock'}</div><div class="acta-sub">${canAssess?'Upload evidence to request level certification':`${mats.filter(m=>matDone[m.id]).length}/${mats.length} materials completed`}</div></div></div>${canAssess?'<span class="acta-right">→</span>':'<span class="acta-right">🔒</span>'}</div>` : `<div style="padding:12px 14px;border-radius:10px;background:#dcfce7;border:1px solid #bbf7d0;font-size:13px;font-weight:600;color:#15803d;">🏆 Completed! <a href="MyCertificates.html" style="color:#15803d;">View certificates →</a></div>`;
+  const assHtml = !isCompleted ? `<div class="assessment-cta ${canAssess?'':'locked'}" onclick="${canAssess?`goPortfolio('${comp.id}','${curLvl}')`:''}" ><div class="acta-left"><span class="acta-icon">📋</span><div><div class="acta-title">${canAssess?`Submit Evidence for ${LEVEL_LABEL[curLvl]}`:'Complete materials to unlock'}</div><div class="acta-sub">${canAssess?'Upload evidence to request level certification':`${mats.filter(m=>matDone[m.id]).length}/${mats.length} materials completed`}</div></div></div>${canAssess?'<span class="acta-right">→</span>':'<span class="acta-right">🔒</span>'}</div>` : `<div style="padding:12px 14px;border-radius:10px;background:#dcfce7;border:1px solid #bbf7d0;font-size:13px;font-weight:600;color:#15803d;">🏆 Completed! <a href="/my-certificates" style="color:#15803d;">View certificates →</a></div>`;
   return `<div class="comp-card ${statusClass} ${isExpanded?'expanded':''}" id="comp-${comp.id}">
     <div class="comp-card-header" onclick="toggleCard('${comp.id}')">
       <div class="comp-card-icon" style="background:${domain.bg}">${domain.icon}</div>
@@ -328,7 +328,7 @@ window.toggleMat = async (compId, matId) => {
   const el = document.getElementById(`comp-${compId}`);
   if (el) { el.outerHTML = renderCard(comp, domain); document.getElementById(`comp-${compId}`)?.classList.add('expanded'); }
 };
-window.goPortfolio = (compId, level) => { window.location.href = `MyPortfolio.html?comp=${compId}&level=${level}`; };
+window.goPortfolio = (compId, level) => { window.location.href = `/my-portfolio?comp=${compId}&level=${level}`; };
 
 const focusComp = new URLSearchParams(location.search).get('comp');
 if (focusComp) setTimeout(() => {
