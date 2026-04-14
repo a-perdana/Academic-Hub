@@ -165,7 +165,8 @@ const LEVEL_LABEL={awareness:'Awareness',practitioner:'Practitioner',advanced:'A
 const DOMAIN_ICON={'Data-Driven Leadership':'📊','Curriculum Oversight & Quality':'📚','Staff Development & Appraisal':'🌱','Strategic Planning & Improvement':'🎯','Accreditation & Compliance':'🏅','Student Outcomes & Wellbeing':'🎓'};
 let uid='', selectedFile=null;
 
-document.addEventListener('authReady',async({detail:{user}})=>{
+document.addEventListener('authReady',async({detail:{user,profile}})=>{
+  window.__loadAcademicNavbar('competency-framework',{user,profile});
   uid=user.uid;
   populateCompSelect();
   prefillFromUrl();

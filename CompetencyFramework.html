@@ -320,7 +320,8 @@ const LEVEL_LABEL = { awareness:'Awareness', practitioner:'Practitioner', advanc
 let earned = {};
 let currentFilter = 'all';
 
-document.addEventListener('authReady', async ({ detail: { user } }) => {
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('competency-framework', { user, profile });
   const ref = doc(window.db, 'user_competencies', user.uid);
   const snap = await getDoc(ref);
   if (snap.exists()) earned = snap.data().earned_academic || {};

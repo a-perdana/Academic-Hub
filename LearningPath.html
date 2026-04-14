@@ -238,7 +238,8 @@ const LEVEL_LABEL = { awareness:'Awareness', practitioner:'Practitioner', advanc
 const MAT_TYPE_ICON = { reading: '📖', video: '▶️', activity: '✏️', reflection: '🪞' };
 let uid = '', earned = {}, matDone = {}, expanded = {};
 
-document.addEventListener('authReady', async ({ detail: { user } }) => {
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('competency-framework', { user, profile });
   uid = user.uid;
   const snap = await getDoc(doc(window.db, 'user_competencies', uid));
   if (snap.exists()) { const d = snap.data(); earned = d.earned_academic || {}; matDone = d.matDone_academic || {}; }
