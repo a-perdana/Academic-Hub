@@ -149,6 +149,8 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 | `central_documents/{docId}` | CentralHub-managed documents            | central_admin        |
 | `topics/{topicId}`      | Message board topics                         | any authorised user  |
 | `topics/{topicId}/replies/{replyId}` | Message board replies           | any authorised user  |
+| `user_competencies/{uid}` | Academic coordinator competency progress. Fields: `earned_academic` (map of compId → `{level, date}`), `matDone_academic` (map of matId → bool). Written by the owner, read by `LearningPath.html` and `CompetencyFramework.html`. | owner |
+| `competency_evidence/{docId}` | Evidence submissions for competency level certification. Fields: `uid`, `platform` (`'academic'`), `compId`, `compName`, `domain`, `level`, `description`, `fileUrl`, `fileName`, `status` (`'pending'`\|`'approved'`\|`'rejected'`), `reviewerNote`, `createdAt`, `updatedAt`. Written by coordinator (create), reviewed by `academic_admin` via Central Hub. | owner (create), central_admin (review) |
 
 **Timestamp field:** always `createdAt` (serverTimestamp). Do not use `timestamp` — that was the legacy name.
 
@@ -190,14 +192,24 @@ CLAUDE_API_KEY           ← for AIPrompts.html
 ```
 
 ### Clean URL mapping (selected):
-| Source file                    | Deployed at              |
-|--------------------------------|--------------------------|
-| `index.html`                   | `/`                      |
-| `announcements.html`           | `/announcements`         |
-| `AcademicCalendar.html`        | `/academic-calendar`     |
-| `CambridgeExamsDashboard.html` | `/cambridge-exams`       |
-| `EASE-I-AssessmentResults.html`| `/ease-1`                |
-| *(see build.js for full list)* |                          |
+| Source file                      | Deployed at                    |
+|----------------------------------|--------------------------------|
+| `index.html`                     | `/`                            |
+| `announcements.html`             | `/announcements`               |
+| `AcademicCalendar.html`          | `/academic-calendar`           |
+| `CambridgeExamsDashboard.html`   | `/cambridge-exams`             |
+| `EASE-I-AssessmentResults.html`  | `/ease-1`                      |
+| `EASE-II-AssessmentResults.html` | `/ease-2`                      |
+| `EASE-III-AssessmentResults.html`| `/ease-3`                      |
+| `weekly-checklist.html`          | `/weekly-checklist`            |
+| `cambridge-calendar.html`        | `/cambridge-calendar`          |
+| `teacher-kpi-evaluation.html`    | `/teacher-kpi-evaluation`      |
+| `CurriculumMap.html`             | `/curriculum-map`              |
+| `CompetencyFramework.html`       | `/competency-framework`        |
+| `LearningPath.html`              | `/learning-path`               |
+| `MyPortfolio.html`               | `/my-portfolio`                |
+| `MyCertificates.html`            | `/my-certificates`             |
+| *(see build.js for full list)*   |                                |
 
 ---
 
@@ -206,13 +218,41 @@ CLAUDE_API_KEY           ← for AIPrompts.html
 | File                         | Purpose                                                    |
 |------------------------------|------------------------------------------------------------|
 | `auth-guard.js`              | Auth + role gate for protected pages (modular SDK v10)     |
-| `build.js`                   | Vercel build script — placeholder replacement + link rewriting |
+| `build.js`                   | Vercel build script — `cleanUrls` map, placeholder replacement, link rewriting, copies assets |
+| `partials/navbar.html`       | Shared navbar HTML partial (injected via `navbar-loader.js`) |
+| `partials/navbar-loader.js`  | Exposes `window.__loadAcademicNavbar(activeKey, {user, profile})` — fetches `/partials/navbar.html` (absolute path required for clean URL routes), injects into `#navbarMount`, calls `initNavbar()` |
+| `partials/navbar.js`         | Navbar init (`initNavbar()`), badge logic (`setupNavBadges()`), feedback button |
 | `firebase-config.js`         | Local dev config (gitignored)                              |
 | `firebase-config.example.js` | Template for firebase-config.js                            |
 | ~~`firestore.rules`~~        | DELETED — rules live in `CentralHub/firestore.rules` only   |
 | `vercel.json`                | Vercel deployment config (cleanUrls, build cmd)            |
 | `dist/`                      | Build output (not committed)                               |
 | `schools_compact.js`         | Minified school data used by school-picker components      |
+
+---
+
+## Navbar Loading Pattern
+
+Academic Hub uses a different navbar pattern from Teachers Hub — a dedicated loader script rather than an inline fetch:
+
+```html
+<!-- In <body>, after #navbarMount div: -->
+<script src="partials/navbar-loader.js"></script>
+```
+
+Then in `authReady`:
+```js
+document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('active-key', { user, profile });
+  // ... rest of page init
+});
+```
+
+`active-key` is the slug of the current page (e.g. `'competency-framework'`, `'learning-path'`) — used to highlight the active nav item.
+
+**Critical:** `navbar-loader.js` fetches `/partials/navbar.html` with an **absolute path** (not `partials/navbar.html`). The relative path fails from clean URL routes like `/competency-framework`. Never change this to a relative path.
+
+The navbar mounts into `<div id="navbarMount"></div>` — do NOT use `navbar-container` (that is the Teachers Hub ID).
 
 ---
 
@@ -225,3 +265,6 @@ CLAUDE_API_KEY           ← for AIPrompts.html
 - **Auth guard goes first.** On protected pages, `auth-guard.js` must be the first `<script type="module">` tag so it hides the body before any content renders.
 - **Use `authReady` event** to gate all Firestore reads in page scripts — never call `window.db` before the event fires.
 - **`central_documents` collection, not `documents`** — the `documents` name was used by CentralHub's old schema and was renamed to avoid conflicts.
+- **Navbar mount ID is `navbarMount`** (not `navbar-container` which is the TH pattern). Never mix them up.
+- **Template literals with `.html` extensions are NOT rewritten by `rewriteLinks()`** — only `href="..."` and `window.location.href = "..."` string literals are rewritten. Any link built with a template literal (e.g. `` `/learning-path?comp=${id}` ``) must use the absolute clean URL path directly, not the source filename.
+- **Competency framework IDs** — domain IDs: `evsi`, `cial`, `pdpc`, `ewsc`, `eao`, `fcep`. Competency IDs: `evsi-1..4`, `cial-1..4` etc. Grounded in Cambridge School Leader Standards 2019 + PSEL 2015 + Permendiknas No.13/2007. Do NOT revert to old IDs (`dl-1`, `co-1` etc.).
