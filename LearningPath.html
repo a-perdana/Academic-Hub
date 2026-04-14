@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Learning Path — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root {
+  --ink: #1c1c2e; --ink-2: #44445a; --ink-3: #8888a8;
+  --paper: #f7f6f3; --white: #ffffff; --border: #e0ddd6;
+  --accent: #0d9488; --accent-2: #ccfbf1;
+  --shadow-sm: 0 1px 4px rgba(28,28,46,.07);
+  --shadow: 0 3px 14px rgba(28,28,46,.10);
+  --radius: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; font-size: 14px; padding-top: 62px; }
+
+/* TOPBAR */
+.page-topbar { background: #0f1e1a; border-bottom: 2px solid var(--accent); position: sticky; top: 62px; z-index: 90; height: 54px; display: flex; align-items: center; padding: 0 24px; gap: 14px; }
+.topbar-back { display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,.5); text-decoration: none; transition: color .15s; }
+.topbar-back:hover { color: #fff; }
+.topbar-back svg { width: 14px; height: 14px; }
+.topbar-sep { color: rgba(255,255,255,.25); }
+.topbar-title { font-size: 14px; font-weight: 700; color: #fff; }
+
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 100px; }
+
+/* LAYOUT */
+.lp-layout { display: grid; grid-template-columns: 270px 1fr; gap: 24px; align-items: start; }
+@media (max-width: 768px) { .lp-layout { grid-template-columns: 1fr; } }
+
+/* SIDEBAR */
+.lp-sidebar { position: sticky; top: 124px; }
+.lp-overall-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 16px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+.lp-overall-label { font-size: 11px; color: var(--ink-3); font-weight: 600; margin-bottom: 6px; }
+.lp-overall-bar { height: 7px; background: var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 6px; }
+.lp-overall-fill { height: 100%; background: var(--accent); border-radius: 6px; transition: width .4s; }
+.lp-overall-stats { display: flex; justify-content: space-between; font-size: 12px; color: var(--ink-3); }
+.lp-domain-nav { background: var(--white); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.lp-domain-nav-title { padding: 12px 14px 10px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--border); }
+.lp-domain-item { display: flex; align-items: center; gap: 10px; padding: 11px 14px; cursor: pointer; transition: background .14s; border-bottom: 1px solid var(--border); text-decoration: none; }
+.lp-domain-item:last-child { border-bottom: none; }
+.lp-domain-item:hover { background: var(--paper); }
+.lp-domain-item.active { background: var(--accent-2); }
+.lp-domain-item .di-icon { font-size: 16px; }
+.lp-domain-item .di-name { font-size: 12.5px; font-weight: 600; color: var(--ink); flex: 1; }
+.lp-domain-item.active .di-name { color: var(--accent); }
+.lp-domain-item .di-pct { font-size: 11px; font-weight: 700; color: var(--ink-3); background: var(--paper); border-radius: 50px; padding: 2px 7px; }
+.lp-domain-item.active .di-pct { background: #fff; color: var(--accent); }
+
+/* COMP SECTION */
+.comp-section { margin-bottom: 32px; }
+.comp-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--border); }
+.comp-section-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+.comp-section-title { font-size: 16px; font-weight: 700; color: var(--ink); }
+.comp-section-sub { font-size: 12px; color: var(--ink-3); }
+
+/* COMP CARD */
+.comp-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow .2s; }
+.comp-card:hover { box-shadow: var(--shadow); }
+.comp-card.completed { border-left: 3px solid #22c55e; }
+.comp-card.in-progress { border-left: 3px solid var(--accent); }
+.comp-card-header { padding: 16px 18px; display: flex; align-items: flex-start; gap: 12px; cursor: pointer; user-select: none; }
+.comp-card-icon { width: 36px; height: 36px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.comp-card-body { flex: 1; }
+.comp-card-name { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 5px; }
+.comp-card-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.status-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 50px; font-size: 11px; font-weight: 700; }
+.status-badge.not-started { background: #f1f5f9; color: #64748b; }
+.status-badge.in-progress { background: #ccfbf1; color: #0f766e; }
+.status-badge.completed { background: #dcfce7; color: #15803d; }
+.comp-card-toggle { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: var(--paper); color: var(--ink-3); flex-shrink: 0; transition: transform .2s, background .15s; }
+.comp-card.expanded .comp-card-toggle { transform: rotate(180deg); background: var(--accent-2); color: var(--accent); }
+
+/* DETAIL */
+.comp-card-detail { display: none; padding: 0 18px 18px; }
+.comp-card.expanded .comp-card-detail { display: block; }
+.levels-track { display: flex; margin-bottom: 18px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.level-step { flex: 1; padding: 12px 10px; text-align: center; border-right: 1px solid var(--border); }
+.level-step:last-child { border-right: none; }
+.level-step.done { background: #f0fdf4; }
+.level-step.current { background: var(--accent-2); }
+.level-step.locked { background: var(--paper); opacity: .6; }
+.ls-num { width: 22px; height: 22px; border-radius: 50%; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; }
+.level-step.done .ls-num { background: #22c55e; color: #fff; }
+.level-step.current .ls-num { background: var(--accent); color: #fff; }
+.level-step.locked .ls-num { background: var(--border); color: var(--ink-3); }
+.ls-name { font-size: 11px; font-weight: 700; margin-bottom: 2px; }
+.level-step.done .ls-name { color: #15803d; }
+.level-step.current .ls-name { color: var(--accent); }
+.level-step.locked .ls-name { color: var(--ink-3); }
+.ls-sub { font-size: 10px; color: var(--ink-3); }
+
+/* MATERIALS */
+.mat-section-title { font-size: 12px; font-weight: 700; color: var(--ink-3); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 8px; }
+.mat-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.mat-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--paper); cursor: pointer; transition: all .14s; }
+.mat-item:hover { border-color: var(--accent); background: var(--accent-2); }
+.mat-item.done-mat { border-color: #bbf7d0; background: #f0fdf4; }
+.mat-type-icon { width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; }
+.mat-type-icon.reading { background: #dbeafe; }
+.mat-type-icon.video { background: #fce7f3; }
+.mat-type-icon.activity { background: #fef3c7; }
+.mat-type-icon.reflection { background: #ccfbf1; }
+.mat-info { flex: 1; }
+.mat-name { font-size: 13px; font-weight: 600; color: var(--ink); }
+.mat-meta { font-size: 11px; color: var(--ink-3); }
+.mat-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; transition: all .15s; flex-shrink: 0; }
+.mat-item.done-mat .mat-check { background: #22c55e; border-color: #22c55e; }
+.mat-item.done-mat .mat-check::after { content: '✓'; font-size: 10px; color: #fff; font-weight: 800; }
+
+.assessment-cta { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--white); cursor: pointer; transition: all .15s; margin-top: 12px; }
+.assessment-cta:hover { border-color: var(--accent); background: var(--accent-2); }
+.assessment-cta.locked { opacity: .5; cursor: not-allowed; }
+.assessment-cta.locked:hover { border-color: var(--border); background: var(--white); }
+.acta-left { display: flex; align-items: center; gap: 10px; }
+.acta-icon { font-size: 20px; }
+.acta-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.acta-sub { font-size: 11.5px; color: var(--ink-3); }
+.acta-right { font-size: 13px; font-weight: 700; color: var(--accent); }
+
+.skel { background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+</style>
+<script type="module" src="auth-guard.js"></script>
+</head>
+<body>
+
+<div id="navbar-container"></div>
+
+<div class="page-topbar">
+  <a href="CompetencyFramework.html" class="topbar-back">
+    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+    Framework
+  </a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">My Learning Path</span>
+</div>
+
+<div class="page-wrap">
+  <div class="lp-layout">
+    <aside class="lp-sidebar">
+      <div class="lp-overall-card">
+        <div class="lp-overall-label">Overall Progress</div>
+        <div class="lp-overall-bar"><div class="lp-overall-fill" id="overallBar" style="width:0%"></div></div>
+        <div class="lp-overall-stats"><span id="overallEarned">0 earned</span><span id="overallPct">0%</span></div>
+      </div>
+      <div class="lp-domain-nav">
+        <div class="lp-domain-nav-title">Domains</div>
+        <div id="domainNav"></div>
+      </div>
+    </aside>
+    <main id="lpMain">
+      <div class="skel" style="height:200px;border-radius:14px;margin-bottom:14px;"></div>
+      <div class="skel" style="height:200px;border-radius:14px;"></div>
+    </main>
+  </div>
+</div>
+
+<script type="module">
+import { doc, getDoc, setDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const FRAMEWORK = [
+  { id: 'data-leadership', name: 'Data-Driven Leadership', icon: '📊', color: '#0d9488', bg: '#ccfbf1',
+    competencies: [
+      { id: 'dl-1', name: 'Reading & Interpreting Academic Data', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'dl1-aw-1',type:'reading',name:'Introduction to School Data Analysis',duration:'25 min'}], practitioner:[{id:'dl1-pr-1',type:'activity',name:'Analyse your school\'s EASE results and write a 1-page summary',duration:'45 min'}], advanced:[{id:'dl1-ad-1',type:'activity',name:'Build a termly data review protocol for your team',duration:'60 min'}], lead:[{id:'dl1-ld-1',type:'activity',name:'Facilitate a whole-staff data review session',duration:'90 min'}] }},
+      { id: 'dl-2', name: 'Using Assessment Data for Improvement', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'dl2-aw-1',type:'reading',name:'Data-Informed School Improvement Guide',duration:'20 min'}], practitioner:[{id:'dl2-pr-1',type:'activity',name:'Identify 3 improvement priorities from this term\'s assessment data',duration:'40 min'}], advanced:[{id:'dl2-ad-1',type:'activity',name:'Develop a targeted improvement plan based on data',duration:'60 min'}], lead:[{id:'dl2-ld-1',type:'activity',name:'Coach a coordinator on data-informed planning',duration:'90 min'}] }},
+      { id: 'dl-3', name: 'Cambridge Results Analysis', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'dl3-pr-1',type:'reading',name:'Understanding Cambridge Grade Thresholds & Syllabus Reports',duration:'30 min'}], advanced:[{id:'dl3-ad-1',type:'activity',name:'Write a Cambridge results analysis report with recommendations',duration:'60 min'}], lead:[{id:'dl3-ld-1',type:'activity',name:'Present Cambridge results analysis to senior leadership',duration:'45 min'}] }},
+      { id: 'dl-4', name: 'Value-Added & Progress Measurement', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'dl4-ad-1',type:'reading',name:'Value-Added Measures in Education',duration:'30 min'}], lead:[{id:'dl4-ld-1',type:'activity',name:'Calculate and present value-added scores for your cohort',duration:'90 min'}] }},
+    ]},
+  { id: 'curriculum-oversight', name: 'Curriculum Oversight & Quality', icon: '📚', color: '#2563eb', bg: '#dbeafe',
+    competencies: [
+      { id: 'co-1', name: 'Curriculum Monitoring & Review', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'co1-aw-1',type:'reading',name:'Curriculum Quality Assurance Frameworks',duration:'20 min'}], practitioner:[{id:'co1-pr-1',type:'activity',name:'Conduct a curriculum monitoring walk and write up findings',duration:'45 min'}], advanced:[{id:'co1-ad-1',type:'activity',name:'Design a termly curriculum review cycle for your school',duration:'60 min'}], lead:[{id:'co1-ld-1',type:'activity',name:'Lead a whole-school curriculum review',duration:'2 days'}] }},
+      { id: 'co-2', name: 'Cambridge Curriculum Alignment', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'co2-aw-1',type:'reading',name:'Cambridge Curriculum Frameworks Overview',duration:'25 min'}], practitioner:[{id:'co2-pr-1',type:'activity',name:'Map one subject\'s scheme of work against Cambridge syllabus',duration:'60 min'}], advanced:[{id:'co2-ad-1',type:'activity',name:'Audit school-wide Cambridge alignment and report gaps',duration:'90 min'}], lead:[{id:'co2-ld-1',type:'activity',name:'Lead a department in full Cambridge syllabus alignment',duration:'4 hours'}] }},
+      { id: 'co-3', name: 'Lesson Observation & Feedback', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'co3-pr-1',type:'reading',name:'Effective Lesson Observation Frameworks',duration:'20 min'},{id:'co3-pr-2',type:'activity',name:'Conduct 3 structured lesson observations using an evidence tool',duration:'3 lessons'}], advanced:[{id:'co3-ad-1',type:'activity',name:'Deliver post-observation coaching feedback to 3 teachers',duration:'3 sessions'}], lead:[{id:'co3-ld-1',type:'activity',name:'Train coordinators on observation and feedback quality',duration:'90 min'}] }},
+      { id: 'co-4', name: 'Curriculum Gap Analysis', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'co4-ad-1',type:'activity',name:'Identify and document curriculum gaps using assessment and observation data',duration:'60 min'}], lead:[{id:'co4-ld-1',type:'activity',name:'Lead a cross-department curriculum gap analysis process',duration:'half day'}] }},
+    ]},
+  { id: 'staff-development', name: 'Staff Development & Appraisal', icon: '🌱', color: '#16a34a', bg: '#dcfce7',
+    competencies: [
+      { id: 'sd-1', name: 'Teacher Performance Management', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'sd1-aw-1',type:'reading',name:'Introduction to Teacher Appraisal Systems',duration:'20 min'}], practitioner:[{id:'sd1-pr-1',type:'activity',name:'Complete one formal teacher appraisal cycle',duration:'1 term'}], advanced:[{id:'sd1-ad-1',type:'activity',name:'Design an appraisal framework for your team',duration:'60 min'}], lead:[{id:'sd1-ld-1',type:'activity',name:'Train coordinators on conducting effective appraisals',duration:'90 min'}] }},
+      { id: 'sd-2', name: 'CPD Planning & Facilitation', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'sd2-pr-1',type:'activity',name:'Write a CPD plan for your team based on appraisal outcomes',duration:'45 min'}], advanced:[{id:'sd2-ad-1',type:'activity',name:'Deliver one CPD session for your team',duration:'60 min'}], lead:[{id:'sd2-ld-1',type:'activity',name:'Lead a school-wide CPD programme for a full term',duration:'1 term'}] }},
+      { id: 'sd-3', name: 'Coaching & Mentoring Teachers', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'sd3-ad-1',type:'reading',name:'Coaching Models for Instructional Leaders',duration:'30 min'},{id:'sd3-ad-2',type:'activity',name:'Conduct 4 coaching conversations with developing teachers',duration:'4 sessions'}], lead:[{id:'sd3-ld-1',type:'activity',name:'Formally mentor a new coordinator over one term',duration:'1 term'}] }},
+      { id: 'sd-4', name: 'Building a Learning Culture', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'sd4-ad-1',type:'reflection',name:'Evaluate your school\'s current learning culture and identify gaps',duration:'45 min'}], lead:[{id:'sd4-ld-1',type:'activity',name:'Lead a school-wide initiative to strengthen professional learning culture',duration:'1 term'}] }},
+    ]},
+  { id: 'strategic-planning', name: 'Strategic Planning & Improvement', icon: '🎯', color: '#d97706', bg: '#fef3c7',
+    competencies: [
+      { id: 'sp-1', name: 'School Development Planning', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'sp1-aw-1',type:'reading',name:'Introduction to School Development Plans',duration:'20 min'}], practitioner:[{id:'sp1-pr-1',type:'activity',name:'Contribute to writing one section of the School Development Plan',duration:'60 min'}], advanced:[{id:'sp1-ad-1',type:'activity',name:'Lead the drafting of a full School Development Plan',duration:'1 week'}], lead:[{id:'sp1-ld-1',type:'activity',name:'Present and gain board approval for the School Development Plan',duration:'2 hours'}] }},
+      { id: 'sp-2', name: 'Monitoring Implementation & Impact', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'sp2-pr-1',type:'activity',name:'Develop a monitoring schedule for one SDP priority',duration:'30 min'}], advanced:[{id:'sp2-ad-1',type:'activity',name:'Report on SDP progress to senior leadership',duration:'45 min'}], lead:[{id:'sp2-ld-1',type:'activity',name:'Oversee full SDP cycle monitoring and mid-year review',duration:'ongoing'}] }},
+      { id: 'sp-3', name: 'Stakeholder Engagement & Communication', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'sp3-aw-1',type:'reading',name:'Communication Strategies for School Leaders',duration:'20 min'}], practitioner:[{id:'sp3-pr-1',type:'activity',name:'Plan and deliver a parent information session',duration:'90 min'}], advanced:[{id:'sp3-ad-1',type:'activity',name:'Design a multi-channel stakeholder communication plan',duration:'45 min'}], lead:[{id:'sp3-ld-1',type:'activity',name:'Lead a school community consultation on a major initiative',duration:'2 sessions'}] }},
+      { id: 'sp-4', name: 'Change Management in Schools', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'sp4-ad-1',type:'reading',name:'Leading Change in Complex Organisations',duration:'35 min'}], lead:[{id:'sp4-ld-1',type:'activity',name:'Lead implementation of a significant school change initiative',duration:'1 term'}] }},
+    ]},
+  { id: 'accreditation', name: 'Accreditation & Compliance', icon: '🏅', color: '#7c3aed', bg: '#ede9fe',
+    competencies: [
+      { id: 'ac-1', name: 'Cambridge Centre Requirements', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'ac1-aw-1',type:'reading',name:'Cambridge Centre Requirements Overview',duration:'25 min'}], practitioner:[{id:'ac1-pr-1',type:'activity',name:'Audit your school against Cambridge Centre requirements',duration:'90 min'}], advanced:[{id:'ac1-ad-1',type:'activity',name:'Develop an action plan to address any compliance gaps',duration:'60 min'}], lead:[{id:'ac1-ld-1',type:'activity',name:'Lead the school through a Cambridge re-accreditation process',duration:'1 term'}] }},
+      { id: 'ac-2', name: 'Inspection Readiness', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'ac2-pr-1',type:'reading',name:'Preparing for External Inspections',duration:'30 min'}], advanced:[{id:'ac2-ad-1',type:'activity',name:'Conduct a mock inspection and produce a readiness report',duration:'half day'}], lead:[{id:'ac2-ld-1',type:'activity',name:'Lead school preparation for and through a formal inspection',duration:'1 term'}] }},
+      { id: 'ac-3', name: 'Policy Development & Review', levels: ['awareness','practitioner','advanced'],
+        materials: { awareness:[{id:'ac3-aw-1',type:'reading',name:'School Policy Frameworks Guide',duration:'20 min'}], practitioner:[{id:'ac3-pr-1',type:'activity',name:'Review and update one school policy',duration:'45 min'}], advanced:[{id:'ac3-ad-1',type:'activity',name:'Lead a full policy audit and update cycle',duration:'1 term'}] }},
+      { id: 'ac-4', name: 'Safeguarding & Student Welfare Governance', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'ac4-aw-1',type:'reading',name:'Safeguarding in Schools: Key Responsibilities',duration:'25 min'}], practitioner:[{id:'ac4-pr-1',type:'activity',name:'Complete designated safeguarding lead training',duration:'1 day'}], advanced:[{id:'ac4-ad-1',type:'activity',name:'Conduct a safeguarding audit and produce an action plan',duration:'2 hours'}], lead:[{id:'ac4-ld-1',type:'activity',name:'Lead school safeguarding review and governor reporting',duration:'ongoing'}] }},
+    ]},
+  { id: 'student-outcomes', name: 'Student Outcomes & Wellbeing', icon: '🎓', color: '#e11d48', bg: '#ffe4e6',
+    competencies: [
+      { id: 'so-1', name: 'Academic Tracking & Intervention', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'so1-aw-1',type:'reading',name:'Student Progress Tracking Systems',duration:'20 min'}], practitioner:[{id:'so1-pr-1',type:'activity',name:'Set up a tracking system for one year group',duration:'60 min'}], advanced:[{id:'so1-ad-1',type:'activity',name:'Design a whole-school academic intervention framework',duration:'90 min'}], lead:[{id:'so1-ld-1',type:'activity',name:'Lead termly academic tracking and intervention reviews',duration:'ongoing'}] }},
+      { id: 'so-2', name: 'Inclusion & SEN Oversight', levels: ['awareness','practitioner','advanced','lead'],
+        materials: { awareness:[{id:'so2-aw-1',type:'reading',name:'SEN and Inclusion in International Schools',duration:'25 min'}], practitioner:[{id:'so2-pr-1',type:'activity',name:'Review SEN provision and write a brief report',duration:'45 min'}], advanced:[{id:'so2-ad-1',type:'activity',name:'Develop an inclusion action plan',duration:'60 min'}], lead:[{id:'so2-ld-1',type:'activity',name:'Lead the review and improvement of school-wide inclusion practice',duration:'1 term'}] }},
+      { id: 'so-3', name: 'Student Wellbeing Leadership', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'so3-pr-1',type:'reading',name:'Student Wellbeing in Schools: Evidence Guide',duration:'25 min'}], advanced:[{id:'so3-ad-1',type:'activity',name:'Conduct a student wellbeing survey and report results',duration:'2 hours'}], lead:[{id:'so3-ld-1',type:'activity',name:'Lead development and review of the school\'s wellbeing strategy',duration:'1 term'}] }},
+      { id: 'so-4', name: 'Parent & Community Partnerships', levels: ['awareness','practitioner','advanced'],
+        materials: { awareness:[{id:'so4-aw-1',type:'reading',name:'Effective Home-School Partnership',duration:'20 min'}], practitioner:[{id:'so4-pr-1',type:'activity',name:'Organise and lead a parent engagement event',duration:'2 hours'}], advanced:[{id:'so4-ad-1',type:'activity',name:'Develop a parent partnership strategy for the school',duration:'60 min'}] }},
+    ]},
+];
+
+const LEVEL_LABEL = { awareness:'Awareness', practitioner:'Practitioner', advanced:'Advanced', lead:'Lead / Mentor' };
+const MAT_TYPE_ICON = { reading: '📖', video: '▶️', activity: '✏️', reflection: '🪞' };
+let uid = '', earned = {}, matDone = {}, expanded = {};
+
+document.addEventListener('authReady', async ({ detail: { user } }) => {
+  uid = user.uid;
+  const snap = await getDoc(doc(window.db, 'user_competencies', uid));
+  if (snap.exists()) { const d = snap.data(); earned = d.earned_academic || {}; matDone = d.matDone_academic || {}; }
+  renderAll();
+});
+
+async function save() {
+  await setDoc(doc(window.db, 'user_competencies', uid), { earned_academic: earned, matDone_academic: matDone }, { merge: true });
+}
+
+function getHighest(cid) { return earned[cid]?.level || null; }
+function getCurrentLevel(comp) {
+  const h = getHighest(comp.id);
+  if (!h) return comp.levels[0];
+  const idx = ['awareness','practitioner','advanced','lead'].indexOf(h);
+  const nextIdx = comp.levels.indexOf(['awareness','practitioner','advanced','lead'][idx + 1]);
+  return nextIdx >= 0 ? comp.levels[nextIdx] : h;
+}
+
+function renderAll() {
+  let total = 0, earnedCount = 0;
+  FRAMEWORK.forEach(d => d.competencies.forEach(c => { total++; if (getHighest(c.id)) earnedCount++; }));
+  const pct = total > 0 ? Math.round((earnedCount/total)*100) : 0;
+  document.getElementById('overallBar').style.width = pct + '%';
+  document.getElementById('overallEarned').textContent = earnedCount + ' earned';
+  document.getElementById('overallPct').textContent = pct + '%';
+  document.getElementById('domainNav').innerHTML = FRAMEWORK.map(d => {
+    const de = d.competencies.filter(c => getHighest(c.id)).length;
+    return `<a class="lp-domain-item" href="#dom-${d.id}"><span class="di-icon">${d.icon}</span><span class="di-name">${d.name}</span><span class="di-pct">${Math.round(de/d.competencies.length*100)}%</span></a>`;
+  }).join('');
+  document.getElementById('lpMain').innerHTML = FRAMEWORK.map(domain => {
+    return `<div class="comp-section" id="dom-${domain.id}">
+      <div class="comp-section-header">
+        <div class="comp-section-icon" style="background:${domain.bg}">${domain.icon}</div>
+        <div><div class="comp-section-title">${domain.name}</div><div class="comp-section-sub">${domain.competencies.length} competencies</div></div>
+      </div>
+      ${domain.competencies.map(comp => renderCard(comp, domain)).join('')}
+    </div>`;
+  }).join('');
+}
+
+function renderCard(comp, domain) {
+  const h = getHighest(comp.id);
+  const isCompleted = h === comp.levels[comp.levels.length-1];
+  const statusClass = isCompleted ? 'completed' : h ? 'in-progress' : '';
+  const statusLabel = isCompleted ? '✓ Completed' : h ? `In Progress — ${LEVEL_LABEL[h]}` : 'Not Started';
+  const statusBadge = isCompleted ? 'completed' : h ? 'in-progress' : 'not-started';
+  const isExpanded = expanded[comp.id];
+  const LEVEL_ORDER = ['awareness','practitioner','advanced','lead'];
+  const levelsTrack = comp.levels.map((lvl, i) => {
+    const li = LEVEL_ORDER.indexOf(lvl), hi = h ? LEVEL_ORDER.indexOf(h) : -1;
+    let sc = hi >= li ? 'done' : (hi === li-1 || (!h && i===0)) ? 'current' : 'locked';
+    return `<div class="level-step ${sc}"><div class="ls-num">${sc==='done'?'✓':i+1}</div><div class="ls-name">${LEVEL_LABEL[lvl]}</div><div class="ls-sub">${sc==='done'?'Earned':sc==='current'?'Current':'Locked'}</div></div>`;
+  }).join('');
+  const curLvl = isCompleted ? comp.levels[comp.levels.length-1] : getCurrentLevel(comp);
+  const mats = comp.materials?.[curLvl] || [];
+  const allDone = mats.length > 0 && mats.every(m => matDone[m.id]);
+  const matsHtml = mats.length ? `<div class="mat-section-title">Materials — ${LEVEL_LABEL[curLvl]}</div><div class="mat-list">${mats.map(m=>{
+    const done = !!matDone[m.id];
+    return `<div class="mat-item ${done?'done-mat':''}" onclick="toggleMat('${comp.id}','${m.id}')"><div class="mat-type-icon ${m.type}">${{reading:'📖',video:'▶️',activity:'✏️',reflection:'🪞'}[m.type]||'📄'}</div><div class="mat-info"><div class="mat-name">${m.name}</div><div class="mat-meta">${m.type} · ${m.duration}</div></div><div class="mat-check"></div></div>`;
+  }).join('')}</div>` : '';
+  const canAssess = allDone || !mats.length;
+  const assHtml = !isCompleted ? `<div class="assessment-cta ${canAssess?'':'locked'}" onclick="${canAssess?`goPortfolio('${comp.id}','${curLvl}')`:''}" ><div class="acta-left"><span class="acta-icon">📋</span><div><div class="acta-title">${canAssess?`Submit Evidence for ${LEVEL_LABEL[curLvl]}`:'Complete materials to unlock'}</div><div class="acta-sub">${canAssess?'Upload evidence to request level certification':`${mats.filter(m=>matDone[m.id]).length}/${mats.length} materials completed`}</div></div></div>${canAssess?'<span class="acta-right">→</span>':'<span class="acta-right">🔒</span>'}</div>` : `<div style="padding:12px 14px;border-radius:10px;background:#dcfce7;border:1px solid #bbf7d0;font-size:13px;font-weight:600;color:#15803d;">🏆 Completed! <a href="MyCertificates.html" style="color:#15803d;">View certificates →</a></div>`;
+  return `<div class="comp-card ${statusClass} ${isExpanded?'expanded':''}" id="comp-${comp.id}">
+    <div class="comp-card-header" onclick="toggleCard('${comp.id}')">
+      <div class="comp-card-icon" style="background:${domain.bg}">${domain.icon}</div>
+      <div class="comp-card-body"><div class="comp-card-name">${comp.name}</div><div class="comp-card-meta"><span class="status-badge ${statusBadge}">${statusLabel}</span></div></div>
+      <div class="comp-card-toggle"><svg viewBox="0 0 20 20" fill="currentColor" width="14" height="14"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg></div>
+    </div>
+    <div class="comp-card-detail"><div class="levels-track">${levelsTrack}</div>${matsHtml}${assHtml}</div>
+  </div>`;
+}
+
+window.toggleCard = (id) => {
+  expanded[id] = !expanded[id];
+  const c = document.getElementById(`comp-${id}`);
+  if (c) c.classList.toggle('expanded', expanded[id]);
+};
+window.toggleMat = async (compId, matId) => {
+  matDone[matId] = !matDone[matId];
+  await save();
+  const domain = FRAMEWORK.find(d => d.competencies.find(c => c.id === compId));
+  const comp = domain?.competencies.find(c => c.id === compId);
+  if (!comp || !domain) return;
+  expanded[compId] = true;
+  const el = document.getElementById(`comp-${compId}`);
+  if (el) { el.outerHTML = renderCard(comp, domain); document.getElementById(`comp-${compId}`)?.classList.add('expanded'); }
+};
+window.goPortfolio = (compId, level) => { window.location.href = `MyPortfolio.html?comp=${compId}&level=${level}`; };
+
+const focusComp = new URLSearchParams(location.search).get('comp');
+if (focusComp) setTimeout(() => {
+  expanded[focusComp] = true;
+  const el = document.getElementById(`comp-${focusComp}`);
+  if (el) { el.classList.add('expanded'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+}, 300);
+</script>
+</body>
+</html>

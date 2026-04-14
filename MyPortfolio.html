@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Portfolio — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root {
+  --ink:#1c1c2e;--ink-2:#44445a;--ink-3:#8888a8;
+  --paper:#f7f6f3;--white:#ffffff;--border:#e0ddd6;
+  --accent:#0d9488;--accent-2:#ccfbf1;
+  --shadow-sm:0 1px 4px rgba(28,28,46,.07);--shadow:0 3px 14px rgba(28,28,46,.10);--radius:10px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:14px;padding-top:62px;}
+.page-topbar{background:#0f1e1a;border-bottom:2px solid var(--accent);position:sticky;top:62px;z-index:90;height:54px;display:flex;align-items:center;padding:0 24px;gap:14px;}
+.topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s;}
+.topbar-back:hover{color:#fff;}
+.topbar-back svg{width:14px;height:14px;}
+.topbar-sep{color:rgba(255,255,255,.25);}
+.topbar-title{font-size:14px;font-weight:700;color:#fff;}
+.page-wrap{max-width:940px;margin:0 auto;padding:32px 20px 100px;}
+.submit-card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:28px;box-shadow:var(--shadow-sm);margin-bottom:28px;}
+.submit-card-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.submit-card-sub{font-size:13px;color:var(--ink-3);margin-bottom:22px;}
+.form-row{margin-bottom:18px;}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--ink-2);margin-bottom:6px;}
+.form-select,.form-input,.form-textarea{width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid var(--border);background:var(--paper);font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--ink);transition:border-color .15s;}
+.form-select:focus,.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--accent);background:#fff;}
+.form-textarea{resize:vertical;min-height:100px;}
+.form-hint{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+.drop-zone{border:2px dashed var(--border);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:all .18s;background:var(--paper);}
+.drop-zone:hover,.drop-zone.dragover{border-color:var(--accent);background:var(--accent-2);}
+.drop-zone-icon{font-size:28px;margin-bottom:8px;}
+.drop-zone-text{font-size:13px;color:var(--ink-3);}
+.drop-zone-text strong{color:var(--accent);}
+.drop-zone-sub{font-size:11.5px;color:var(--ink-3);margin-top:4px;}
+#fileInput{display:none;}
+.file-preview{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--accent-2);border:1.5px solid #99f6e4;margin-top:10px;}
+.file-preview-icon{font-size:18px;}
+.file-preview-name{font-size:13px;font-weight:600;color:var(--accent);flex:1;}
+.file-preview-size{font-size:11px;color:var(--ink-3);}
+.file-preview-remove{width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;color:var(--ink-3);flex-shrink:0;transition:all .14s;}
+.file-preview-remove:hover{background:#ffe4e6;border-color:#fca5a5;color:#dc2626;}
+.submit-btn{padding:11px 28px;border-radius:11px;border:none;background:var(--accent);color:#fff;font-size:14px;font-weight:700;cursor:pointer;transition:all .18s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:8px;}
+.submit-btn:hover{background:#0f766e;transform:translateY(-1px);box-shadow:0 4px 16px rgba(13,148,136,.4);}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+.form-error{font-size:12px;color:#dc2626;margin-top:6px;display:none;}
+.form-error.visible{display:block;}
+.form-success{padding:14px 18px;border-radius:12px;background:#ccfbf1;border:1.5px solid #99f6e4;font-size:13px;font-weight:600;color:#0f766e;margin-top:14px;display:none;}
+.form-success.visible{display:block;}
+.section-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+.section-title svg{width:18px;height:18px;color:var(--accent);}
+.evidence-list{display:flex;flex-direction:column;gap:12px;}
+.evidence-card{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow-sm);transition:box-shadow .2s;}
+.evidence-card:hover{box-shadow:var(--shadow);}
+.ev-header{padding:16px 18px;display:flex;align-items:flex-start;gap:12px;}
+.ev-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:var(--accent-2);}
+.ev-body{flex:1;min-width:0;}
+.ev-comp{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:2px;}
+.ev-desc{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:6px;line-height:1.4;}
+.ev-meta{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.ev-date{font-size:11px;color:var(--ink-3);}
+.ev-status{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:50px;font-size:11px;font-weight:700;}
+.ev-status.pending{background:#fef3c7;color:#92400e;}
+.ev-status.approved{background:#dcfce7;color:#15803d;}
+.ev-status.rejected{background:#ffe4e6;color:#be123c;}
+.ev-level-badge{display:inline-flex;padding:2px 8px;border-radius:50px;font-size:10px;font-weight:700;}
+.lvl-awareness{background:#e0f2fe;color:#0369a1;}
+.lvl-practitioner{background:#fef3c7;color:#92400e;}
+.lvl-advanced{background:#ccfbf1;color:#0f766e;}
+.lvl-lead{background:#dcfce7;color:#15803d;}
+.ev-reviewer-note{margin:0 18px 14px;padding:12px 14px;border-radius:10px;background:#f0fdf4;border:1px solid #bbf7d0;font-size:12.5px;color:#166534;}
+.ev-reviewer-note.rejected-note{background:#ffe4e6;border-color:#fca5a5;color:#9f1239;}
+.empty-state{text-align:center;padding:48px 20px;background:var(--white);border:1px dashed var(--border);border-radius:16px;}
+.empty-state-icon{font-size:36px;margin-bottom:12px;}
+.empty-state-title{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px;}
+.empty-state-sub{font-size:13px;color:var(--ink-3);}
+.skel{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+<script type="module" src="auth-guard.js"></script>
+</head>
+<body>
+<div id="navbar-container"></div>
+<div class="page-topbar">
+  <a href="LearningPath.html" class="topbar-back">
+    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
+    Learning Path
+  </a>
+  <span class="topbar-sep">/</span>
+  <span class="topbar-title">My Portfolio</span>
+</div>
+<div class="page-wrap">
+  <div class="submit-card">
+    <div class="submit-card-title">Submit Evidence</div>
+    <div class="submit-card-sub">Upload evidence to demonstrate a leadership competency level. Your submission will be reviewed by a central administrator.</div>
+    <div class="form-row"><label class="form-label">Competency *</label><select class="form-select" id="compSelect"></select></div>
+    <div class="form-row"><label class="form-label">Level Claiming *</label><select class="form-select" id="levelSelect"><option value="">— select competency first —</option></select></div>
+    <div class="form-row"><label class="form-label">Evidence Description *</label><textarea class="form-textarea" id="evidenceDesc" placeholder="Describe what initiative or action you undertook, what evidence you have, and what impact it had. Be specific."></textarea><div class="form-hint">Minimum 80 characters.</div></div>
+    <div class="form-row">
+      <label class="form-label">Attachment (optional)</label>
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <div class="drop-zone-icon">📎</div>
+        <div class="drop-zone-text"><strong>Click to upload</strong> or drag and drop</div>
+        <div class="drop-zone-sub">PDF, Word, Images — max 10 MB</div>
+      </div>
+      <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
+      <div id="filePreview" style="display:none;" class="file-preview">
+        <span class="file-preview-icon">📄</span>
+        <span class="file-preview-name" id="fileName"></span>
+        <span class="file-preview-size" id="fileSize"></span>
+        <span class="file-preview-remove" onclick="clearFile()">✕</span>
+      </div>
+    </div>
+    <div class="form-error" id="formError"></div>
+    <div class="form-success" id="formSuccess">Evidence submitted successfully! A central admin will review it shortly.</div>
+    <button class="submit-btn" id="submitBtn" onclick="submitEvidence()">📤 Submit Evidence</button>
+  </div>
+
+  <div class="section-title">
+    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/></svg>
+    My Submissions
+  </div>
+  <div class="evidence-list" id="evidenceList">
+    <div class="skel" style="height:80px;border-radius:14px;"></div>
+    <div class="skel" style="height:80px;border-radius:14px;"></div>
+  </div>
+</div>
+
+<script type="module">
+import { collection, doc, addDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const COMP_META = {
+  'dl-1':{name:'Reading & Interpreting Academic Data',domain:'Data-Driven Leadership',levels:['awareness','practitioner','advanced','lead']},
+  'dl-2':{name:'Using Assessment Data for Improvement',domain:'Data-Driven Leadership',levels:['awareness','practitioner','advanced','lead']},
+  'dl-3':{name:'Cambridge Results Analysis',domain:'Data-Driven Leadership',levels:['practitioner','advanced','lead']},
+  'dl-4':{name:'Value-Added & Progress Measurement',domain:'Data-Driven Leadership',levels:['advanced','lead']},
+  'co-1':{name:'Curriculum Monitoring & Review',domain:'Curriculum Oversight & Quality',levels:['awareness','practitioner','advanced','lead']},
+  'co-2':{name:'Cambridge Curriculum Alignment',domain:'Curriculum Oversight & Quality',levels:['awareness','practitioner','advanced','lead']},
+  'co-3':{name:'Lesson Observation & Feedback',domain:'Curriculum Oversight & Quality',levels:['practitioner','advanced','lead']},
+  'co-4':{name:'Curriculum Gap Analysis',domain:'Curriculum Oversight & Quality',levels:['advanced','lead']},
+  'sd-1':{name:'Teacher Performance Management',domain:'Staff Development & Appraisal',levels:['awareness','practitioner','advanced','lead']},
+  'sd-2':{name:'CPD Planning & Facilitation',domain:'Staff Development & Appraisal',levels:['practitioner','advanced','lead']},
+  'sd-3':{name:'Coaching & Mentoring Teachers',domain:'Staff Development & Appraisal',levels:['advanced','lead']},
+  'sd-4':{name:'Building a Learning Culture',domain:'Staff Development & Appraisal',levels:['advanced','lead']},
+  'sp-1':{name:'School Development Planning',domain:'Strategic Planning & Improvement',levels:['awareness','practitioner','advanced','lead']},
+  'sp-2':{name:'Monitoring Implementation & Impact',domain:'Strategic Planning & Improvement',levels:['practitioner','advanced','lead']},
+  'sp-3':{name:'Stakeholder Engagement & Communication',domain:'Strategic Planning & Improvement',levels:['awareness','practitioner','advanced','lead']},
+  'sp-4':{name:'Change Management in Schools',domain:'Strategic Planning & Improvement',levels:['advanced','lead']},
+  'ac-1':{name:'Cambridge Centre Requirements',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced','lead']},
+  'ac-2':{name:'Inspection Readiness',domain:'Accreditation & Compliance',levels:['practitioner','advanced','lead']},
+  'ac-3':{name:'Policy Development & Review',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced']},
+  'ac-4':{name:'Safeguarding & Student Welfare Governance',domain:'Accreditation & Compliance',levels:['awareness','practitioner','advanced','lead']},
+  'so-1':{name:'Academic Tracking & Intervention',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced','lead']},
+  'so-2':{name:'Inclusion & SEN Oversight',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced','lead']},
+  'so-3':{name:'Student Wellbeing Leadership',domain:'Student Outcomes & Wellbeing',levels:['practitioner','advanced','lead']},
+  'so-4':{name:'Parent & Community Partnerships',domain:'Student Outcomes & Wellbeing',levels:['awareness','practitioner','advanced']},
+};
+const LEVEL_LABEL={awareness:'Awareness',practitioner:'Practitioner',advanced:'Advanced',lead:'Lead / Mentor'};
+const DOMAIN_ICON={'Data-Driven Leadership':'📊','Curriculum Oversight & Quality':'📚','Staff Development & Appraisal':'🌱','Strategic Planning & Improvement':'🎯','Accreditation & Compliance':'🏅','Student Outcomes & Wellbeing':'🎓'};
+let uid='', selectedFile=null;
+
+document.addEventListener('authReady',async({detail:{user}})=>{
+  uid=user.uid;
+  populateCompSelect();
+  prefillFromUrl();
+  await loadSubmissions();
+});
+
+function populateCompSelect(){
+  const sel=document.getElementById('compSelect');
+  sel.innerHTML='<option value="">— select a competency —</option>';
+  const grouped={};
+  Object.entries(COMP_META).forEach(([id,meta])=>{if(!grouped[meta.domain])grouped[meta.domain]=[];grouped[meta.domain].push({id,...meta});});
+  Object.entries(grouped).forEach(([domain,comps])=>{
+    const grp=document.createElement('optgroup');grp.label=domain;
+    comps.forEach(c=>{const opt=document.createElement('option');opt.value=c.id;opt.textContent=c.name;grp.appendChild(opt);});
+    sel.appendChild(grp);
+  });
+  sel.addEventListener('change',()=>{
+    const meta=COMP_META[sel.value];
+    const lvlSel=document.getElementById('levelSelect');
+    if(!meta){lvlSel.innerHTML='<option value="">— select competency first —</option>';return;}
+    lvlSel.innerHTML='<option value="">— select level —</option>'+meta.levels.map(l=>`<option value="${l}">${LEVEL_LABEL[l]}</option>`).join('');
+  });
+}
+function prefillFromUrl(){
+  const p=new URLSearchParams(location.search);
+  const c=p.get('comp'),l=p.get('level');
+  if(c){document.getElementById('compSelect').value=c;document.getElementById('compSelect').dispatchEvent(new Event('change'));if(l)setTimeout(()=>{document.getElementById('levelSelect').value=l;},50);}
+}
+document.getElementById('fileInput').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  if(f.size>10*1024*1024){showError('File must be under 10 MB.');return;}
+  selectedFile=f;document.getElementById('fileName').textContent=f.name;document.getElementById('fileSize').textContent=formatBytes(f.size);document.getElementById('filePreview').style.display='flex';
+});
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('dragover');});
+dz.addEventListener('dragleave',()=>dz.classList.remove('dragover'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('dragover');const f=e.dataTransfer.files[0];if(!f)return;const inp=document.getElementById('fileInput');const dt=new DataTransfer();dt.items.add(f);inp.files=dt.files;inp.dispatchEvent(new Event('change'));});
+window.clearFile=function(){selectedFile=null;document.getElementById('fileInput').value='';document.getElementById('filePreview').style.display='none';};
+function formatBytes(b){if(b<1024)return b+' B';if(b<1024*1024)return(b/1024).toFixed(1)+' KB';return(b/(1024*1024)).toFixed(1)+' MB';}
+function showError(msg){const el=document.getElementById('formError');el.textContent=msg;el.classList.add('visible');document.getElementById('formSuccess').classList.remove('visible');}
+function clearError(){document.getElementById('formError').classList.remove('visible');}
+
+window.submitEvidence=async function(){
+  clearError();document.getElementById('formSuccess').classList.remove('visible');
+  const compId=document.getElementById('compSelect').value;
+  const level=document.getElementById('levelSelect').value;
+  const desc=document.getElementById('evidenceDesc').value.trim();
+  if(!compId){showError('Please select a competency.');return;}
+  if(!level){showError('Please select the level you are claiming.');return;}
+  if(desc.length<80){showError(`Description too short (${desc.length}/80 characters).`);return;}
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
+  try{
+    const meta=COMP_META[compId];
+    await addDoc(collection(window.db,'competency_evidence'),{uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl:null,fileName:selectedFile?.name||null,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    document.getElementById('formSuccess').classList.add('visible');
+    document.getElementById('compSelect').value='';document.getElementById('levelSelect').innerHTML='<option value="">— select competency first —</option>';document.getElementById('evidenceDesc').value='';clearFile();
+    await loadSubmissions();
+  }catch(err){showError('Submission failed. Please try again.');console.error(err);}
+  finally{btn.disabled=false;btn.innerHTML='📤 Submit Evidence';}
+};
+
+async function loadSubmissions(){
+  const list=document.getElementById('evidenceList');
+  list.innerHTML='<div class="skel" style="height:80px;border-radius:14px;"></div>';
+  const q=query(collection(window.db,'competency_evidence'),where('uid','==',uid),where('platform','==','academic'),orderBy('createdAt','desc'));
+  const snap=await getDocs(q);
+  if(snap.empty){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">📂</div><div class="empty-state-title">No submissions yet</div><div class="empty-state-sub">Submit your first evidence above.</div></div>`;return;}
+  const statusMap={pending:'Pending Review',approved:'Approved',rejected:'Revise & Resubmit','under-review':'Under Review'};
+  list.innerHTML=snap.docs.map(d=>{
+    const ev={id:d.id,...d.data()};
+    const icon=DOMAIN_ICON[ev.domain]||'📋';
+    const date=ev.createdAt?.toDate?.()?.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})||'';
+    return `<div class="evidence-card"><div class="ev-header"><div class="ev-icon">${icon}</div><div class="ev-body"><div class="ev-comp">${ev.domain}</div><div class="ev-desc">${ev.compName} — ${ev.description.substring(0,120)}${ev.description.length>120?'…':''}</div><div class="ev-meta"><span class="ev-status ${ev.status}">${statusMap[ev.status]||ev.status}</span><span class="ev-level-badge lvl-${ev.level}">${LEVEL_LABEL[ev.level]||ev.level}</span><span class="ev-date">${date}</span></div></div></div>${ev.reviewerNote?`<div class="ev-reviewer-note ${ev.status==='rejected'?'rejected-note':''}"><strong>Reviewer note:</strong> ${ev.reviewerNote}</div>`:''}</div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>

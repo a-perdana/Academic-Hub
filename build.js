@@ -68,6 +68,10 @@ const cleanUrls = {
   "cambridge-calendar.html":         "cambridge-calendar",
   "CurriculumMap.html":             "curriculum-map",
   "teacher-kpi-evaluation.html":    "teacher-kpi-evaluation",
+  "CompetencyFramework.html":       "competency-framework",
+  "LearningPath.html":              "learning-path",
+  "MyPortfolio.html":               "my-portfolio",
+  "MyCertificates.html":            "my-certificates",
 };
 
 // Rewrite all internal .html links to clean URLs inside a built file
@@ -137,6 +141,10 @@ const htmlFiles = [
   "CurriculumMap.html",
   "teacher-kpi-evaluation.html",
   "cambridge-calendar.html",
+  "CompetencyFramework.html",
+  "LearningPath.html",
+  "MyPortfolio.html",
+  "MyCertificates.html",
 ];
 
 htmlFiles.forEach((file) => {
