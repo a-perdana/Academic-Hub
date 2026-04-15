@@ -838,7 +838,7 @@ function renderDomain(domainId) {
         <div class="rsi-num">${v}</div>
         <div class="rsi-label">${s.label}</div>
         <div class="rsi-desc">${s.description}</div>
-        ${guide ? `<div class="rsi-guide">${guide}</div>` : ''}
+        ${guide ? `<div class="rsi-guide">${guide.description || guide}</div>` : ''}
       </div>`;
     }).join('');
 
