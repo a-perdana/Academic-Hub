@@ -379,6 +379,21 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
   width:6px; height:6px; border-radius:50%; border:2px solid var(--border);
 }
 
+/* Sample documents */
+.sample-docs { display:flex; flex-direction:column; gap:6px; }
+.sample-doc-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; background:var(--white);
+  border:1.5px solid var(--border); border-radius:9px;
+  text-decoration:none; transition:all .15s;
+  color:var(--ink);
+}
+.sample-doc-item:hover { border-color:var(--accent); box-shadow:var(--shadow-sm); transform:translateX(2px); }
+.sample-doc-icon { font-size:15px; flex-shrink:0; }
+.sample-doc-label { font-size:12.5px; font-weight:500; color:var(--ink-2); flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.sample-doc-item:hover .sample-doc-label { color:var(--accent-dk); }
+.sample-doc-arrow { font-size:11px; color:var(--ink-3); flex-shrink:0; }
+
 /* ===== FILE UPLOAD ===== */
 .file-upload-section { margin-top:10px; }
 .file-upload-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; display:block; }
@@ -901,6 +916,23 @@ function renderDomain(domainId) {
               <ul class="hints-inner">${hintItems}</ul>
             </div>
           </div>
+
+          <!-- Sample documents -->
+          ${aspect.sample_documents?.length ? `
+          <div class="ab-section">
+            <div class="ab-section-label">Sample Documents</div>
+            <div class="sample-docs">
+              ${aspect.sample_documents.map(doc => {
+                const isSheet = doc.url.includes('spreadsheets');
+                const icon = isSheet ? '📊' : '📄';
+                return `<a class="sample-doc-item" href="${doc.url}" target="_blank" rel="noopener">
+                  <span class="sample-doc-icon">${icon}</span>
+                  <span class="sample-doc-label">${doc.label}</span>
+                  <span class="sample-doc-arrow">↗</span>
+                </a>`;
+              }).join('')}
+            </div>
+          </div>` : ''}
 
           <!-- Evidence files + links -->
           <div class="ab-section">
