@@ -49,6 +49,7 @@ const cleanUrls = {
   "IslamicSchoolsPerformance.html":  "islamic-schools",
   "PartnerSchoolsPerformance.html":  "partner-schools",
   "SchoolAppraisalsDashboard.html":  "school-appraisals",
+  "SchoolSelfAppraisal.html":        "school-self-appraisal",
   "StaffSatisfactionSurvey.html":    "staff-survey",
   "StudentSatisfactionSurvey.html":  "student-survey",
   "ParentSatisfactionSurvey.html":   "parent-survey",
