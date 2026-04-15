@@ -396,13 +396,19 @@ async function findOrCreateAppraisal(profile) {
   // academic_admin or users without a school: no self-appraisal here
   if (!schoolId) return null;
 
-  // Get school record first — if school doesn't exist in 'schools' collection,
-  // don't create a phantom appraisal
+  // Get school record — check partner_schools first (used by console.html),
+  // then fall back to schools collection
   let schoolName = null;
   try {
-    const schoolSnap = await getDoc(doc(window.db, 'schools', schoolId));
-    if (schoolSnap.exists()) schoolName = schoolSnap.data().name || schoolId;
+    const psSnap = await getDoc(doc(window.db, 'partner_schools', schoolId));
+    if (psSnap.exists()) schoolName = psSnap.data().name || schoolId;
   } catch(_) {}
+  if (!schoolName) {
+    try {
+      const sSnap = await getDoc(doc(window.db, 'schools', schoolId));
+      if (sSnap.exists()) schoolName = sSnap.data().name || schoolId;
+    } catch(_) {}
+  }
 
   if (!schoolName) return null; // school not found — treat same as no schoolId
 
