@@ -122,6 +122,7 @@ const htmlFiles = [
   "IslamicSchoolsPerformance.html",
   "PartnerSchoolsPerformance.html",
   "SchoolAppraisalsDashboard.html",
+  "SchoolSelfAppraisal.html",
   "StaffSatisfactionSurvey.html",
   "StudentSatisfactionSurvey.html",
   "ParentSatisfactionSurvey.html",
@@ -201,6 +202,12 @@ if (fs.existsSync("Sections")) {
 if (fs.existsSync("partials")) {
   copyDirRecursive("partials", "dist/partials");
   console.log("Copied: partials/");
+}
+// Copy school appraisal framework JSON to dist/resources
+if (fs.existsSync("school-appraisal-framework.json")) {
+  if (!fs.existsSync("dist/resources")) fs.mkdirSync("dist/resources", { recursive: true });
+  fs.copyFileSync("school-appraisal-framework.json", "dist/resources/School Appraisal Framework.json");
+  console.log("Copied: school-appraisal-framework.json -> dist/resources/School Appraisal Framework.json");
 }
 
 // -- Generate Netlify _redirects
