@@ -832,17 +832,17 @@ const FRAMEWORK = [
 
 const LEVEL_LABEL = { awareness:'Awareness', practitioner:'Practitioner', advanced:'Advanced', lead:'Lead / Mentor' };
 const MAT_TYPE_ICON = { reading: '📖', video: '▶️', activity: '✏️', reflection: '🪞' };
-let uid = '', earned = {}, matDone = {}, saScores = {}, expanded = {};
+let uid = '', earned = {}, matDone = {}, saScores = {}, expanded = {}; window.saScores = saScores;
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('competency-framework', { user, profile });
   uid = user.uid;
   const snap = await getDoc(doc(window.db, 'user_competencies', uid));
-  if (snap.exists()) { const d = snap.data(); earned = d.earned_academic || {}; matDone = d.matDone_academic || {}; saScores = d.saScores_academic || {}; }
+  if (snap.exists()) { const d = snap.data(); earned = d.earned_academic || {}; matDone = d.matDone_academic || {}; saScores = d.saScores_academic || {}; window.saScores = saScores; }
   renderAll();
 });
 
-async function save() {
+window.save = async function save() {
   await setDoc(doc(window.db, 'user_competencies', uid), { earned_academic: earned, matDone_academic: matDone, saScores_academic: saScores }, { merge: true });
 }
 
@@ -959,7 +959,7 @@ window.openMat = function(compId, matId, lvl) {
         return '<div class="sa-item"><div class="sa-statement">' + s + '</div>' +
           '<div class="sa-scale">' + [1,2,3,4].map(function(n) {
             const active = saved === n ? ' active' : '';
-            return '<button class="sa-btn' + active + '" onclick="(function(btn,k,v){btn.parentElement.querySelectorAll(\'.sa-btn\').forEach(function(b){b.classList.remove(\'active\')});btn.classList.add(\'active\');saScores[k]=v;save();})(this,\'' + key + '\',' + n + ')">' + n + '</button>';
+            return '<button class="sa-btn' + active + '" onclick="(function(btn,k,v){btn.parentElement.querySelectorAll(\'.sa-btn\').forEach(function(b){b.classList.remove(\'active\')});btn.classList.add(\'active\');window.saScores[k]=v;window.save();})(this,\'' + key + '\',' + n + ')">' + n + '</button>';
           }).join('') + '</div></div>';
       }).join('')
     : '';
