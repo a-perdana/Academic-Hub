@@ -160,6 +160,23 @@ body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(
 .skel { background: linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; border-radius: 6px; }
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 .skel-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; height: 240px; box-shadow: var(--shadow-sm); }
+
+/* ─── DOMAIN TAKEAWAYS ────────────── */
+.domain-takeaways { padding: 0 20px 16px; border-top: 1px solid var(--border); margin-top: 4px; }
+.domain-takeaways-toggle { display: flex; align-items: center; justify-content: space-between; padding: 10px 0 0; cursor: pointer; user-select: none; }
+.domain-takeaways-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+.domain-takeaways-chevron { width: 16px; height: 16px; color: var(--ink-3); transition: transform .2s; flex-shrink: 0; }
+.domain-card.tk-open .domain-takeaways-chevron { transform: rotate(180deg); }
+.domain-takeaways-list { display: none; padding-top: 10px; flex-direction: column; gap: 6px; }
+.domain-card:not(.tk-open) .domain-takeaways-list { display: none; }
+.domain-card.tk-open .domain-takeaways-list { display: flex; }
+.domain-tk-item { font-size: 12px; color: var(--ink-2); line-height: 1.5; padding: 7px 10px; border-radius: 8px; background: var(--paper); border-left: 3px solid var(--border); display: flex; gap: 8px; align-items: flex-start; }
+.domain-tk-item::before { content: '→'; font-weight: 700; color: var(--ink-3); flex-shrink: 0; margin-top: 1px; }
+
+/* ─── SA SCORE STAT ────────────────── */
+.progress-stat-sa { font-size: 11px; color: var(--ink-3); margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+.sa-score-bar { flex: 1; height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.sa-score-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width .4s; }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
@@ -284,6 +301,11 @@ const FRAMEWORK = [
     name: 'Educational Vision & School Improvement',
     desc: 'Developing and enacting a shared vision for the Cambridge programme, and leading evidence-informed improvement cycles.',
     icon: '🎯', color: 'dom-teal',
+    keyTakeaways: [
+      'Communicate the school vision consistently so that every teacher connects their daily work to the school\'s strategic direction.',
+      'Lead evidence-informed improvement planning with clear goals, measurable indicators, and regular monitoring cycles.',
+      'Use Cambridge self-evaluation tools and inspection frameworks to drive school-wide improvement.',
+    ],
     // Cambridge School Leader Domain 4 + PSEL Standard 1 & 10
     competencies: [
       { id: 'evsi-1', name: 'Articulating & Communicating School Vision', levels: ['awareness','practitioner','advanced','lead'] },
@@ -297,6 +319,11 @@ const FRAMEWORK = [
     name: 'Curriculum, Instruction & Assessment Leadership',
     desc: 'Ensuring rigorous, coherent Cambridge curriculum systems and high-quality instructional practice across the school.',
     icon: '📚', color: 'dom-blue',
+    keyTakeaways: [
+      'Ensure curriculum coherence across year groups by reviewing vertical alignment and closing gaps in scope and sequence.',
+      'Use lesson observation and structured instructional feedback to improve teaching quality across departments.',
+      'Analyse Cambridge results data against benchmarks and lead assessment moderation to ensure consistency.',
+    ],
     // Cambridge School Leader Domain 3 + PSEL Standard 4
     competencies: [
       { id: 'cial-1', name: 'Curriculum Review & Vertical Coherence', levels: ['awareness','practitioner','advanced','lead'] },
@@ -310,6 +337,11 @@ const FRAMEWORK = [
     name: 'People Development & Professional Capacity',
     desc: 'Building teacher capability through appraisal, coaching, CPD planning and a culture of collaborative professional learning.',
     icon: '🌱', color: 'dom-green',
+    keyTakeaways: [
+      'Design and implement appraisal processes that are genuinely development-focused and lead to measurable teacher growth.',
+      'Build a strategic CPD programme aligned to school priorities and Cambridge PDQ pathways.',
+      'Develop coaching and mentoring capacity so that professional learning is embedded in daily school practice.',
+    ],
     // Cambridge School Leader Domain 3 & 5 + PSEL Standard 6 & 7
     competencies: [
       { id: 'pdpc-1', name: 'Teacher Appraisal & Development Planning', levels: ['awareness','practitioner','advanced','lead'] },
@@ -323,6 +355,11 @@ const FRAMEWORK = [
     name: 'Equity, Wellbeing & School Culture',
     desc: 'Cultivating an inclusive, caring school community that is responsive to Indonesia\'s diverse cultural and social context.',
     icon: '🤝', color: 'dom-amber',
+    keyTakeaways: [
+      'Embed inclusive education practices that respect Indonesia\'s cultural and linguistic diversity across all school programmes.',
+      'Establish proactive wellbeing monitoring systems and clear safeguarding governance that protect all students.',
+      'Nurture a school climate grounded in shared values, belonging, and community identity.',
+    ],
     // Cambridge School Leader Domain 2 + PSEL Standard 3 & 5
     competencies: [
       { id: 'ewsc-1', name: 'Inclusive Education & Culturally Responsive Practice', levels: ['awareness','practitioner','advanced','lead'] },
@@ -336,6 +373,11 @@ const FRAMEWORK = [
     name: 'Ethics, Accountability & Operations',
     desc: 'Acting with integrity and transparency while managing Cambridge compliance, Indonesian regulatory requirements and school operations.',
     icon: '⚖️', color: 'dom-purple',
+    keyTakeaways: [
+      'Maintain Cambridge centre compliance and lead accreditation processes with accurate, well-documented evidence.',
+      'Navigate Indonesian regulatory frameworks (Permendikbud) and ensure school operations meet national requirements.',
+      'Make decisions transparently and ethically, modelling accountability at every level of school leadership.',
+    ],
     // Cambridge School Leader Domain 1 + PSEL Standard 2 & 9
     competencies: [
       { id: 'eao-1', name: 'Cambridge Centre Compliance & Accreditation', levels: ['awareness','practitioner','advanced','lead'] },
@@ -349,6 +391,11 @@ const FRAMEWORK = [
     name: 'Family, Community & External Partnerships',
     desc: 'Engaging families and building reciprocal community partnerships that strengthen the Cambridge programme and expand student opportunity.',
     icon: '🌐', color: 'dom-rose',
+    keyTakeaways: [
+      'Build consistent, two-way communication with families so they are genuine partners in student learning.',
+      'Develop community and external partnerships that expand student opportunities and strengthen the Cambridge programme.',
+      'Represent the school credibly in Cambridge networks and contribute to the wider professional community.',
+    ],
     // Cambridge School Leader Domain 5 + PSEL Standard 8
     competencies: [
       { id: 'fcep-1', name: 'Family Engagement & Parent Communication', levels: ['awareness','practitioner','advanced','lead'] },
@@ -361,16 +408,37 @@ const FRAMEWORK = [
 
 const LEVEL_LABEL = { awareness:'Awareness', practitioner:'Practitioner', advanced:'Advanced', lead:'Lead / Mentor' };
 let earned = {};
+let saScores = {};
 let currentFilter = 'all';
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('competency-framework', { user, profile });
   const ref = doc(window.db, 'user_competencies', user.uid);
   const snap = await getDoc(ref);
-  if (snap.exists()) earned = snap.data().earned_academic || {};
+  if (snap.exists()) {
+    earned = snap.data().earned_academic || {};
+    saScores = snap.data().saScores || {};
+  }
   renderProgressOverview();
   renderDomains();
 });
+
+function avgSaScore(compId) {
+  const vals = Object.entries(saScores).filter(([k]) => k.startsWith(compId + '/')).map(([, v]) => v);
+  if (!vals.length) return null;
+  return vals.reduce((a, b) => a + b, 0) / vals.length;
+}
+function domainAvgSa(domain) {
+  const scores = domain.competencies.map(c => avgSaScore(c.id)).filter(s => s !== null);
+  if (!scores.length) return null;
+  return scores.reduce((a, b) => a + b, 0) / scores.length;
+}
+function overallAvgSa() {
+  const allComps = FRAMEWORK.flatMap(d => d.competencies);
+  const scores = allComps.map(c => avgSaScore(c.id)).filter(s => s !== null);
+  if (!scores.length) return null;
+  return scores.reduce((a, b) => a + b, 0) / scores.length;
+}
 
 function renderProgressOverview() {
   let total = 0, earnedCount = 0, certCount = 0;
@@ -382,11 +450,16 @@ function renderProgressOverview() {
     if (d.competencies.every(c => earned[c.id]?.level === 'lead')) certCount++;
   });
   const pct = total > 0 ? Math.round((earnedCount / total) * 100) : 0;
+  const avgSa = overallAvgSa();
+  const saHtml = avgSa !== null
+    ? `<div class="progress-stat-sa"><span style="white-space:nowrap;">${avgSa.toFixed(1)}/4</span><div class="sa-score-bar"><div class="sa-score-fill" style="width:${Math.round((avgSa/4)*100)}%"></div></div></div>`
+    : `<div class="progress-stat-sub" style="margin-top:4px;">No self-assessments yet</div>`;
   document.getElementById('progressOverview').innerHTML = `
     <div class="progress-stat"><div class="progress-stat-num">${pct}%</div><div class="progress-stat-label">Overall Progress</div><div class="progress-stat-sub">${earnedCount} of ${total} competencies</div></div>
     <div class="progress-stat"><div class="progress-stat-num">${earnedCount}</div><div class="progress-stat-label">Competencies Earned</div><div class="progress-stat-sub">across all domains</div></div>
     <div class="progress-stat"><div class="progress-stat-num">${certCount}</div><div class="progress-stat-label">Certificates Earned</div><div class="progress-stat-sub">full domain mastery</div></div>
     <div class="progress-stat"><div class="progress-stat-num">${total - earnedCount}</div><div class="progress-stat-label">Remaining</div><div class="progress-stat-sub">competencies to unlock</div></div>
+    <div class="progress-stat"><div class="progress-stat-label" style="margin-bottom:6px;">Avg Self-Assessment</div>${saHtml}</div>
   `;
 }
 
@@ -419,6 +492,11 @@ function renderDomains() {
         </div>`;
     }).join('');
 
+    const domSa = domainAvgSa(domain);
+    const domSaHtml = domSa !== null
+      ? `<span style="font-size:10px;font-weight:700;color:var(--ink-3);margin-left:auto;flex-shrink:0;">SA ${domSa.toFixed(1)}/4</span>` : '';
+    const tkHtml = (domain.keyTakeaways || []).map(t => `<div class="domain-tk-item">${t}</div>`).join('');
+
     grid.innerHTML += `
       <div class="domain-card ${domain.color}">
         <div class="domain-card-header">
@@ -430,10 +508,20 @@ function renderDomains() {
           </div>
         </div>
         <div class="domain-progress">
-          <div class="dp-label"><span>${earnedInDomain}/${domain.competencies.length} earned</span><span>${pct}%</span></div>
+          <div class="dp-label"><span>${earnedInDomain}/${domain.competencies.length} earned</span><span style="display:flex;align-items:center;gap:6px;">${domSaHtml}<span>${pct}%</span></span></div>
           <div class="dp-bar"><div class="dp-fill" style="width:${pct}%;background:${fill};"></div></div>
         </div>
         <div class="domain-card-body"><div class="competency-list">${compsHtml}</div></div>
+        ${tkHtml ? `<div class="domain-takeaways">
+          <div class="domain-takeaways-toggle" onclick="toggleTakeaways(this)">
+            <span class="domain-takeaways-label">
+              <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 1a7 7 0 100 14A7 7 0 008 1zm.75 10.5h-1.5v-5h1.5v5zm0-6.5h-1.5V3.5h1.5V5z"/></svg>
+              What you will learn
+            </span>
+            <svg class="domain-takeaways-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+          </div>
+          <div class="domain-takeaways-list">${tkHtml}</div>
+        </div>` : ''}
       </div>`;
   });
 
@@ -449,6 +537,7 @@ window.setFilter = (f, btn) => {
   renderDomains();
 };
 window.goToPath = (id) => { window.location.href = `/learning-path?comp=${id}`; };
+window.toggleTakeaways = (toggleEl) => { toggleEl.closest('.domain-card').classList.toggle('tk-open'); };
 </script>
 <script src="partials/navbar-loader.js"></script>
 </body>
