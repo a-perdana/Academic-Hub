@@ -145,8 +145,26 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 .ref-pill {
   font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px;
   background:var(--paper-2); color:var(--ink-3); border:1px solid var(--border);
+  text-decoration:none; transition:background .15s, color .15s;
 }
+.ref-pill:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
 .ref-strip-label { font-size:11px; color:var(--ink-3); font-weight:500; align-self:center; margin-right:4px; }
+
+.evidence-link-section { margin-top:10px; }
+.evidence-link-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; display:block; }
+.evidence-link-row { display:flex; gap:6px; align-items:center; margin-bottom:6px; }
+.evidence-link-input { flex:1; font-size:12px; padding:7px 10px; border:1.5px solid var(--border); border-radius:8px; font-family:inherit; color:var(--ink); background:var(--white); }
+.evidence-link-input:focus { outline:none; border-color:var(--accent); }
+.evidence-link-input::placeholder { color:var(--ink-3); }
+.evidence-link-add-btn { font-size:11px; font-weight:600; padding:7px 12px; border-radius:8px; border:1.5px solid var(--accent); background:var(--white); color:var(--accent); cursor:pointer; white-space:nowrap; }
+.evidence-link-add-btn:hover { background:var(--accent); color:#fff; }
+.link-list { display:flex; flex-direction:column; gap:5px; margin-top:4px; }
+.link-item { display:flex; align-items:center; gap:8px; background:var(--paper); border:1px solid var(--border); border-radius:7px; padding:6px 10px; }
+.link-item-icon { font-size:13px; flex-shrink:0; }
+.link-item-url { font-size:11px; color:var(--accent); text-decoration:none; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.link-item-url:hover { text-decoration:underline; }
+.link-item-remove { font-size:10px; color:var(--ink-3); background:none; border:none; cursor:pointer; padding:2px 5px; border-radius:4px; flex-shrink:0; }
+.link-item-remove:hover { background:var(--border); color:var(--ink); }
 
 .domain-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; margin-bottom:22px; }
 .domain-card {
@@ -502,7 +520,7 @@ async function findOrCreateAppraisal(profile) {
     const d = snap.docs[0];
     appraisalDocId = d.id; appraisalDoc = { id: d.id, ...d.data() }; return appraisalDoc;
   }
-  const newDoc = { schoolId, schoolName, academicYear: currentYear, appraiser: profile.displayName || profile.email || '', status: 'draft', ratings: {}, evidence: {}, files: {}, strengths: '', improvements: '', recommendations: '', createdAt: serverTimestamp(), updatedAt: serverTimestamp(), createdBy: window.currentUser?.email || '' };
+  const newDoc = { schoolId, schoolName, academicYear: currentYear, appraiser: profile.displayName || profile.email || '', status: 'draft', ratings: {}, evidence: {}, files: {}, links: {}, strengths: '', improvements: '', recommendations: '', createdAt: serverTimestamp(), updatedAt: serverTimestamp(), createdBy: window.currentUser?.email || '' };
   const ref = doc(collection(window.db, 'school_appraisals_v2'));
   await setDoc(ref, newDoc);
   appraisalDocId = ref.id; appraisalDoc = { id: ref.id, ...newDoc }; return appraisalDoc;
@@ -517,6 +535,7 @@ async function saveAppraisal(newStatus) {
     ratings: appraisalDoc.ratings || {},
     evidence: appraisalDoc.evidence || {},
     files: appraisalDoc.files || {},
+    links: appraisalDoc.links || {},
     strengths: appraisalDoc.strengths || '',
     improvements: appraisalDoc.improvements || '',
     status, updatedAt: serverTimestamp(), updatedBy: window.currentUser?.email || ''
@@ -664,7 +683,14 @@ function renderOverview() {
   const pct = total ? Math.round((done/total)*100) : 0;
   const canEdit = !isReviewed && appraisalDoc?.status !== 'submitted';
 
-  const refs = FRAMEWORK.meta.references.map(r => `<span class="ref-pill">${r.split('(')[0].trim()}</span>`).join('');
+  const refs = FRAMEWORK.meta.references.map(r => {
+    const name = r.name || r;
+    const url = r.url || null;
+    const label = name.match(/\(([^)]+)\)/)?.[1] || name.split(' ').slice(0,2).join(' ');
+    return url
+      ? `<a class="ref-pill" href="${url}" target="_blank" rel="noopener" title="${name}">${label}</a>`
+      : `<span class="ref-pill" title="${name}">${label}</span>`;
+  }).join('');
 
   const domainCards = FRAMEWORK.domains.map(d => {
     const davg = domainAvg(d.id);
@@ -816,6 +842,23 @@ function renderDomain(domainId) {
             </div>
           </div>` : files.length ? `<div class="file-upload-section"><label class="file-upload-label">Evidence Files</label></div>` : ''}
           <div class="file-list" id="file-list-${aspect.id}">${fileListHtml}</div>
+
+          <!-- Evidence links -->
+          <div class="evidence-link-section">
+            <label class="evidence-link-label">Evidence Links</label>
+            ${canEdit ? `
+            <div class="evidence-link-row">
+              <input class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="https://drive.google.com/… or any evidence URL" />
+              <button class="evidence-link-add-btn" onclick="window.__addLink('${aspect.id}')">+ Add Link</button>
+            </div>` : ''}
+            <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `
+              <div class="link-item">
+                <span class="link-item-icon">🔗</span>
+                <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label||l.url}</a>
+                ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspect.id}',${i})" title="Remove">✕</button>` : ''}
+              </div>`).join('')}
+            </div>
+          </div>
         </div>
       </div>`;
   }).join('');
@@ -840,7 +883,14 @@ function renderDomain(domainId) {
           ${davg ? `Avg ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
         </div>
         <div class="dh-refs">
-          ${FRAMEWORK.meta.references.slice(0,3).map(r => `<span class="dh-ref-tag">${r.match(/\(([^)]+)\)/)?.[1] || r.split(' ')[0]}</span>`).join('')}
+          ${FRAMEWORK.meta.references.slice(0,3).map(r => {
+            const name = r.name || r;
+            const url = r.url || null;
+            const label = name.match(/\(([^)]+)\)/)?.[1] || name.split(' ')[0];
+            return url
+              ? `<a class="dh-ref-tag" href="${url}" target="_blank" rel="noopener" title="${name}" style="text-decoration:none;">${label}</a>`
+              : `<span class="dh-ref-tag" title="${name}">${label}</span>`;
+          }).join('')}
         </div>
       </div>
     </div>
@@ -899,6 +949,11 @@ function switchView(viewId) {
     content.querySelectorAll('textarea.evidence-textarea').forEach(ta => {
       ta.addEventListener('input', () => { if (!appraisalDoc.evidence) appraisalDoc.evidence = {}; appraisalDoc.evidence[ta.dataset.aspect] = ta.value; scheduleSave(); });
     });
+    // Wire evidence link inputs (Enter key)
+    content.querySelectorAll('.evidence-link-input').forEach(inp => {
+      const aspectId = inp.id.replace('link-input-', '');
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); window.__addLink(aspectId); } });
+    });
     // Wire drop zones
     content.querySelectorAll('.drop-zone').forEach(zone => {
       const aspectId = zone.dataset.aspect;
@@ -920,6 +975,40 @@ window.__switchDomain = id => switchView(id);
 window.__toggleBlock = (id, btn) => {
   const el = document.getElementById(id); if (!el) return;
   el.classList.toggle('open'); btn?.classList.toggle('open');
+};
+
+function renderLinkList(aspectId) {
+  const list = document.getElementById('link-list-' + aspectId);
+  if (!list) return;
+  const links = appraisalDoc?.links?.[aspectId] || [];
+  const canEdit = !isReviewed && appraisalDoc?.status !== 'submitted';
+  list.innerHTML = links.map((l, i) => `
+    <div class="link-item">
+      <span class="link-item-icon">🔗</span>
+      <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label || l.url}</a>
+      ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspectId}',${i})" title="Remove">✕</button>` : ''}
+    </div>`).join('');
+}
+
+window.__addLink = (aspectId) => {
+  const input = document.getElementById('link-input-' + aspectId);
+  if (!input) return;
+  let url = input.value.trim();
+  if (!url) return;
+  if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+  if (!appraisalDoc.links) appraisalDoc.links = {};
+  if (!appraisalDoc.links[aspectId]) appraisalDoc.links[aspectId] = [];
+  appraisalDoc.links[aspectId].push({ url, addedAt: new Date().toISOString() });
+  input.value = '';
+  renderLinkList(aspectId);
+  scheduleSave();
+};
+
+window.__removeLink = (aspectId, idx) => {
+  if (!appraisalDoc.links?.[aspectId]) return;
+  appraisalDoc.links[aspectId].splice(idx, 1);
+  renderLinkList(aspectId);
+  scheduleSave();
 };
 
 // ===== BUILD SIDEBAR =====
