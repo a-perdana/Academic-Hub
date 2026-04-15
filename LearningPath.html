@@ -959,7 +959,7 @@ window.openMat = function(compId, matId, lvl) {
         return '<div class="sa-item"><div class="sa-statement">' + s + '</div>' +
           '<div class="sa-scale">' + [1,2,3,4].map(function(n) {
             const active = saved === n ? ' active' : '';
-            return '<button class="sa-btn' + active + '" onclick="(function(btn,k,v){btn.parentElement.querySelectorAll(\'.sa-btn\').forEach(function(b){b.classList.remove(\'active\')});btn.classList.add(\'active\');saScores[k]=v;save();})(this,' + JSON.stringify(key) + ',' + n + ')">' + n + '</button>';
+            return '<button class="sa-btn' + active + '" onclick="(function(btn,k,v){btn.parentElement.querySelectorAll(\'.sa-btn\').forEach(function(b){b.classList.remove(\'active\')});btn.classList.add(\'active\');saScores[k]=v;save();})(this,\'' + key + '\',' + n + ')">' + n + '</button>';
           }).join('') + '</div></div>';
       }).join('')
     : '';
