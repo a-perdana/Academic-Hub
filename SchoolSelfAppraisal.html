@@ -71,31 +71,31 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 
 /* Domain card in sidebar */
 .domain-nav-card {
-  width:100%; margin-bottom:6px; border-radius:11px;
+  width:100%; margin-bottom:5px; border-radius:11px;
   border:1.5px solid var(--border); background:var(--white);
   cursor:pointer; text-align:left; font-family:inherit;
   padding:10px 12px; transition:all .2s; overflow:hidden;
-  position:relative;
+  position:relative; border-left-width:3px;
 }
-.domain-nav-card:hover { box-shadow:var(--shadow); transform:translateY(-1px); }
-.domain-nav-card.active { border-width:2px; box-shadow:var(--shadow); }
-.dnc-top { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.dnc-icon { font-size:16px; flex-shrink:0; }
-.dnc-code { font-size:9px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; }
+.domain-nav-card:hover { box-shadow:var(--shadow-sm); transform:translateX(2px); }
+.domain-nav-card.active { border-right-color:var(--border); box-shadow:var(--shadow-sm); }
+.dnc-top { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+.dnc-icon { font-size:15px; flex-shrink:0; }
+.dnc-code { font-size:8.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; }
 .dnc-title { font-size:11.5px; font-weight:700; color:var(--ink); line-height:1.3; flex:1; }
 .dnc-score-badge {
   font-size:11px; font-weight:800; padding:2px 8px;
   border-radius:99px; flex-shrink:0;
 }
-/* Progress mini-bar */
-.dnc-progress { display:flex; align-items:center; gap:7px; }
-.dnc-dots { display:flex; gap:3px; flex:1; }
+/* Progress: segmented bar */
+.dnc-progress { display:flex; align-items:center; gap:6px; }
+.dnc-dots { display:flex; gap:2px; flex:1; }
 .dnc-dot {
-  flex:1; height:4px; border-radius:2px;
-  background:var(--paper-2); transition:background .3s;
+  flex:1; height:5px; border-radius:2px;
+  background:var(--paper-2); transition:background .35s, transform .2s;
 }
-.dnc-dot.done { }
-.dnc-completion-txt { font-size:10px; color:var(--ink-3); font-weight:500; white-space:nowrap; }
+.dnc-dot.done { transform:scaleY(1.2); }
+.dnc-completion-txt { font-size:10px; color:var(--ink-3); font-weight:600; white-space:nowrap; }
 
 /* Sidebar overall progress */
 .sidebar-overall {
@@ -169,19 +169,20 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 .domain-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; margin-bottom:22px; }
 .domain-card {
   background:var(--white); border:1.5px solid var(--border);
-  border-radius:12px; padding:16px; cursor:pointer;
-  transition:box-shadow .15s, transform .15s;
+  border-radius:14px; padding:18px 16px; cursor:pointer;
+  transition:box-shadow .2s, transform .2s;
+  border-left-width:4px;
 }
-.domain-card:hover { box-shadow:var(--shadow); transform:translateY(-2px); }
-.dc-top { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
-.dc-icon { font-size:18px; }
+.domain-card:hover { box-shadow:var(--shadow); transform:translateY(-3px); }
+.dc-top { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
+.dc-icon { font-size:20px; }
 .dc-code { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
-.dc-title { font-size:13px; font-weight:700; line-height:1.35; margin-bottom:10px; }
-.dc-score-row { display:flex; align-items:center; gap:8px; }
-.dc-score-bar { flex:1; height:5px; background:var(--paper-2); border-radius:3px; overflow:hidden; }
-.dc-score-fill { height:100%; border-radius:3px; transition:width .4s ease; }
-.dc-score-num { font-size:12px; font-weight:700; min-width:24px; text-align:right; }
-.dc-completion { font-size:11px; color:var(--ink-3); margin-top:5px; }
+.dc-title { font-size:13px; font-weight:700; line-height:1.35; margin-bottom:12px; }
+.dc-score-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+.dc-score-bar { flex:1; height:6px; background:var(--paper-2); border-radius:3px; overflow:hidden; }
+.dc-score-fill { height:100%; border-radius:3px; transition:width .5s ease; }
+.dc-score-num { font-size:13px; font-weight:800; min-width:28px; text-align:right; }
+.dc-completion { font-size:11px; color:var(--ink-3); }
 
 .overview-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
 @media (max-width:600px) { .overview-fields { grid-template-columns:1fr; } }
@@ -197,126 +198,186 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 
 /* ===== DOMAIN PANEL ===== */
 .domain-header {
-  border-radius:16px; margin-bottom:6px; overflow:hidden;
+  border-radius:16px; margin-bottom:24px; overflow:hidden;
+  box-shadow:var(--shadow);
 }
 .dh-top {
-  display:flex; align-items:flex-start; gap:16px;
-  padding:22px 24px;
+  display:flex; align-items:flex-start; gap:18px;
+  padding:26px 28px;
 }
-.dh-icon { font-size:2.2rem; flex-shrink:0; margin-top:2px; }
+.dh-icon {
+  font-size:2.6rem; flex-shrink:0; margin-top:2px;
+  width:56px; height:56px; display:flex; align-items:center; justify-content:center;
+  background:rgba(255,255,255,.18); border-radius:14px;
+}
 .dh-meta { flex:1; }
-.dh-code { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.12em; margin-bottom:4px; }
-.dh-title { font-family:'Lora',serif; font-size:1.25rem; font-weight:600; line-height:1.25; margin-bottom:6px; }
-.dh-desc { font-size:13px; line-height:1.65; opacity:.85; }
+.dh-code { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.14em; margin-bottom:5px; opacity:.7; }
+.dh-title { font-family:'Lora',serif; font-size:1.35rem; font-weight:600; line-height:1.2; margin-bottom:8px; }
+.dh-desc { font-size:13px; line-height:1.7; opacity:.82; max-width:540px; }
 .dh-bottom {
-  padding:12px 24px; display:flex; align-items:center; gap:12px;
-  border-top:1px solid rgba(255,255,255,.2); flex-wrap:wrap;
+  padding:14px 28px; display:flex; align-items:center; gap:16px;
+  background:rgba(0,0,0,.12); flex-wrap:wrap;
 }
-.dh-stat { font-size:12px; opacity:.75; display:flex; align-items:center; gap:5px; }
+.dh-stat { font-size:12px; opacity:.8; display:flex; align-items:center; gap:6px; font-weight:500; }
 .dh-refs { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
 .dh-ref-tag {
-  font-size:10px; font-weight:700; padding:2px 8px; border-radius:99px;
+  font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px;
   background:rgba(255,255,255,.2); color:rgba(255,255,255,.9);
+  text-decoration:none; transition:background .15s;
 }
+.dh-ref-tag:hover { background:rgba(255,255,255,.35); }
 
 /* ===== ASPECT CARD ===== */
 .aspect-card {
   background:var(--white); border:1px solid var(--border);
-  border-radius:12px; margin-bottom:16px; overflow:hidden;
-  transition:box-shadow .15s;
+  border-radius:14px; margin-bottom:14px; overflow:hidden;
+  transition:box-shadow .2s, transform .2s;
+  border-left-width:4px;
 }
-.aspect-card:hover { box-shadow:var(--shadow-sm); }
+.aspect-card:hover { box-shadow:var(--shadow); transform:translateY(-1px); }
 .aspect-head {
-  padding:16px 20px; background:var(--paper);
+  padding:18px 20px 16px; background:var(--white);
   border-bottom:1px solid var(--border);
-  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
 }
-.aspect-num { font-size:10px; font-weight:800; color:var(--ink-3); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }
-.aspect-title { font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:4px; }
-.aspect-desc { font-size:12.5px; color:var(--ink-2); line-height:1.6; }
-.aspect-score-badge { font-size:11px; font-weight:700; padding:4px 11px; border-radius:99px; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+.aspect-head-left { flex:1; min-width:0; }
+.aspect-num {
+  display:inline-flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:800; color:var(--ink-3);
+  text-transform:uppercase; letter-spacing:.1em;
+  background:var(--paper-2); border:1px solid var(--border);
+  padding:2px 8px; border-radius:99px; margin-bottom:8px;
+}
+.aspect-title { font-size:15px; font-weight:700; color:var(--ink); margin-bottom:5px; line-height:1.35; }
+.aspect-desc { font-size:12.5px; color:var(--ink-2); line-height:1.65; }
+.aspect-score-badge {
+  font-size:11px; font-weight:700; padding:5px 12px; border-radius:99px;
+  white-space:nowrap; flex-shrink:0; margin-top:2px; letter-spacing:.02em;
+}
 
-.aspect-body { padding:18px 20px; }
+.aspect-body { padding:20px 22px; display:flex; flex-direction:column; gap:0; }
+
+/* Section dividers inside aspect body */
+.ab-section { margin-bottom:20px; }
+.ab-section:last-child { margin-bottom:0; }
+.ab-section-label {
+  font-size:10px; font-weight:800; color:var(--ink-3);
+  text-transform:uppercase; letter-spacing:.1em;
+  margin-bottom:10px; display:flex; align-items:center; gap:7px;
+}
+.ab-section-label::after {
+  content:''; flex:1; height:1px; background:var(--border);
+}
 
 /* Collapsible block */
 .collapsible-btn {
-  display:flex; align-items:center; gap:7px;
-  font-size:11.5px; font-weight:700; color:var(--ink-3);
-  text-transform:uppercase; letter-spacing:.05em;
-  cursor:pointer; background:none; border:none; padding:0;
-  font-family:inherit; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+  font-size:11px; font-weight:700; color:var(--ink-3);
+  text-transform:uppercase; letter-spacing:.06em;
+  cursor:pointer; background:var(--paper); border:1px solid var(--border);
+  padding:7px 12px; border-radius:8px;
+  font-family:inherit; margin-bottom:10px; transition:all .15s; width:100%;
 }
+.collapsible-btn:hover { background:var(--paper-2); color:var(--ink-2); }
 .collapsible-btn svg { transition:transform .2s; flex-shrink:0; }
+.collapsible-btn.open { background:var(--paper-2); color:var(--ink-2); }
 .collapsible-btn.open svg { transform:rotate(90deg); }
-.collapsible-block { display:none; border-radius:10px; margin-bottom:16px; overflow:hidden; }
+.collapsible-block { display:none; border-radius:10px; margin-bottom:14px; overflow:hidden; }
 .collapsible-block.open { display:block; }
 
 /* Expectations */
-.expectations-inner { padding:14px 16px; background:var(--paper); }
+.expectations-inner { padding:14px 16px; background:var(--paper); border-radius:10px; border:1px solid var(--border); }
 .expectations-inner li {
-  font-size:12.5px; color:var(--ink-2); line-height:1.65;
-  padding:5px 0 5px 18px; position:relative;
+  font-size:13px; color:var(--ink-2); line-height:1.65;
+  padding:6px 0 6px 22px; position:relative;
   border-bottom:1px solid var(--border);
 }
 .expectations-inner li:last-child { border-bottom:none; }
-.expectations-inner li::before { content:'✓'; position:absolute; left:0; color:#10b981; font-weight:700; font-size:11px; top:6px; }
-
-/* Rating scale info */
-.rating-scale-info {
-  display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;
+.expectations-inner li::before {
+  content:''; position:absolute; left:4px; top:13px;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--accent); opacity:.5;
 }
+
+/* Rating scale guide — always visible grid */
+.rsi-grid {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px;
+}
+@media (max-width:640px) { .rsi-grid { grid-template-columns:repeat(2,1fr); } }
 .rsi-item {
-  flex:1; min-width:90px; padding:8px 10px; border-radius:8px;
+  padding:12px 12px 10px; border-radius:10px;
   border:1.5px solid var(--border); background:var(--white);
-  text-align:center;
 }
-.rsi-num { font-size:16px; font-weight:800; line-height:1; margin-bottom:3px; }
-.rsi-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
-.rsi-desc { font-size:10px; color:var(--ink-3); line-height:1.4; }
-.rsi-guide { font-size:10px; color:var(--ink-2); line-height:1.45; margin-top:5px; padding-top:5px; border-top:1px solid var(--border); font-style:italic; }
-.rsi-1 { border-color:#fca5a5; background:#fff5f5; }
-.rsi-1 .rsi-num { color:#991b1b; }
-.rsi-2 { border-color:#fcd34d; background:#fffbeb; }
-.rsi-2 .rsi-num { color:#92400e; }
-.rsi-3 { border-color:#6ee7b7; background:#f0fdf4; }
-.rsi-3 .rsi-num { color:#065f46; }
-.rsi-4 { border-color:#93c5fd; background:#eff6ff; }
-.rsi-4 .rsi-num { color:#1e40af; }
+.rsi-num {
+  font-size:22px; font-weight:900; line-height:1; margin-bottom:4px;
+}
+.rsi-label { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px; }
+.rsi-desc { font-size:10.5px; color:var(--ink-3); line-height:1.45; }
+.rsi-guide {
+  font-size:10.5px; color:var(--ink-2); line-height:1.45;
+  margin-top:7px; padding-top:7px; border-top:1px solid var(--border);
+}
+.rsi-1 { border-color:#fca5a5; background:linear-gradient(160deg,#fff5f5,#fff); }
+.rsi-1 .rsi-num { color:#dc2626; }
+.rsi-1 .rsi-label { color:#991b1b; }
+.rsi-2 { border-color:#fcd34d; background:linear-gradient(160deg,#fffbeb,#fff); }
+.rsi-2 .rsi-num { color:#d97706; }
+.rsi-2 .rsi-label { color:#92400e; }
+.rsi-3 { border-color:#6ee7b7; background:linear-gradient(160deg,#f0fdf4,#fff); }
+.rsi-3 .rsi-num { color:#059669; }
+.rsi-3 .rsi-label { color:#065f46; }
+.rsi-4 { border-color:#93c5fd; background:linear-gradient(160deg,#eff6ff,#fff); }
+.rsi-4 .rsi-num { color:#2563eb; }
+.rsi-4 .rsi-label { color:#1e40af; }
 
-/* Rating buttons */
-.rating-section-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:10px; }
-.rating-options { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
-.rating-btn {
-  padding:9px 16px; border-radius:9px; font-size:13px; font-weight:600;
-  border:1.5px solid var(--border); background:var(--white);
-  cursor:pointer; transition:all .15s; color:var(--ink-2); font-family:inherit;
+/* Rating buttons — card style */
+.rating-options {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px;
 }
-.rating-btn:hover { border-color:var(--accent); color:var(--accent-dk); transform:translateY(-1px); }
-.rating-btn:disabled { cursor:not-allowed; opacity:.5; transform:none; }
-.rating-btn.sel-1 { background:#fee2e2; border-color:#fca5a5; color:#991b1b; }
-.rating-btn.sel-2 { background:#fef3c7; border-color:#fcd34d; color:#92400e; }
-.rating-btn.sel-3 { background:#d1fae5; border-color:#6ee7b7; color:#065f46; }
-.rating-btn.sel-4 { background:#dbeafe; border-color:#93c5fd; color:#1e40af; }
+@media (max-width:580px) { .rating-options { grid-template-columns:repeat(2,1fr); } }
+.rating-btn {
+  padding:12px 10px; border-radius:10px; font-size:12.5px; font-weight:600;
+  border:2px solid var(--border); background:var(--paper);
+  cursor:pointer; transition:all .15s; color:var(--ink-3);
+  font-family:inherit; text-align:center; line-height:1.3;
+  display:flex; flex-direction:column; align-items:center; gap:3px;
+}
+.rating-btn .rb-num { font-size:18px; font-weight:900; line-height:1; }
+.rating-btn .rb-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+.rating-btn:hover { border-color:var(--ink-2); color:var(--ink); background:var(--white); transform:translateY(-2px); box-shadow:var(--shadow-sm); }
+.rating-btn:disabled { cursor:not-allowed; opacity:.45; transform:none; box-shadow:none; }
+.rating-btn.sel-1 { background:#fee2e2; border-color:#f87171; color:#991b1b; box-shadow:0 3px 12px rgba(220,38,38,.15); }
+.rating-btn.sel-1 .rb-num { color:#dc2626; }
+.rating-btn.sel-2 { background:#fef3c7; border-color:#fbbf24; color:#92400e; box-shadow:0 3px 12px rgba(217,119,6,.15); }
+.rating-btn.sel-2 .rb-num { color:#d97706; }
+.rating-btn.sel-3 { background:#d1fae5; border-color:#34d399; color:#065f46; box-shadow:0 3px 12px rgba(5,150,105,.15); }
+.rating-btn.sel-3 .rb-num { color:#059669; }
+.rating-btn.sel-4 { background:#dbeafe; border-color:#60a5fa; color:#1e40af; box-shadow:0 3px 12px rgba(37,99,235,.15); }
+.rating-btn.sel-4 .rb-num { color:#2563eb; }
 
 /* Evidence */
-.evidence-section-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; }
 .evidence-textarea {
-  width:100%; min-height:80px; padding:10px 12px;
+  width:100%; min-height:90px; padding:12px 14px;
   border:1.5px solid var(--border); border-radius:10px;
   font-family:'DM Sans',sans-serif; font-size:13px; color:var(--ink);
-  resize:vertical; background:var(--white); line-height:1.55; transition:border-color .15s;
-  margin-bottom:10px;
+  resize:vertical; background:var(--white); line-height:1.6; transition:border-color .15s, background .15s;
 }
-.evidence-textarea:focus { outline:none; border-color:var(--accent); background:#fffdf8; }
+.evidence-textarea:focus { outline:none; border-color:var(--accent); background:#fffdf8; box-shadow:0 0 0 3px rgba(180,83,9,.08); }
 .evidence-textarea:disabled { opacity:.6; background:var(--paper); }
 
 /* Evidence examples */
-.hints-inner { padding:12px 14px; background:#fafaf8; border:1px solid var(--border); border-radius:10px; }
-.hints-inner li {
-  font-size:12px; color:var(--ink-3); line-height:1.65;
-  padding:3px 0 3px 18px; position:relative;
+.hints-inner {
+  padding:12px 16px; background:var(--paper); border:1px solid var(--border); border-radius:10px;
+  list-style:none;
 }
-.hints-inner li::before { content:'→'; position:absolute; left:0; color:var(--border); font-size:11px; }
+.hints-inner li {
+  font-size:12.5px; color:var(--ink-3); line-height:1.65;
+  padding:4px 0 4px 20px; position:relative;
+}
+.hints-inner li::before {
+  content:''; position:absolute; left:4px; top:12px;
+  width:6px; height:6px; border-radius:50%; border:2px solid var(--border);
+}
 
 /* ===== FILE UPLOAD ===== */
 .file-upload-section { margin-top:10px; }
@@ -358,12 +419,14 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 
 /* Domain score summary */
 .domain-score-bar-wrap {
-  background:var(--paper); border-radius:10px; padding:16px 20px;
-  margin-top:20px; display:flex; align-items:center; gap:16px;
-  border:1px solid var(--border);
+  background:var(--white); border-radius:14px; padding:18px 22px;
+  margin-top:8px; margin-bottom:8px;
+  display:flex; align-items:center; gap:18px;
+  border:1.5px solid var(--border);
+  box-shadow:var(--shadow-sm);
 }
 .dsb-label { font-size:13px; color:var(--ink-2); font-weight:500; flex:1; }
-.dsb-val { font-size:1.3rem; font-weight:800; }
+.dsb-val { font-size:1.4rem; font-weight:800; }
 
 /* Action bar */
 .action-bar {
@@ -698,7 +761,7 @@ function renderOverview() {
     const { done: dDone, total: dTotal } = domainCompletion(d.id);
     const col = domainColors[d.id]; const bg = domainBgs[d.id];
     return `
-      <div class="domain-card" onclick="window.__switchDomain('${d.id}')" style="border-color:${domainBorders[d.id]};">
+      <div class="domain-card" onclick="window.__switchDomain('${d.id}')" style="border-color:${domainBorders[d.id]};border-left-color:${col};">
         <div class="dc-top"><span class="dc-icon">${d.icon}</span><span class="dc-code" style="color:${col}">${d.code}</span></div>
         <div class="dc-title">${d.title}</div>
         <div class="dc-score-row">
@@ -718,7 +781,7 @@ function renderOverview() {
         <div class="oh-score-chip"><div class="oh-score-val">${avg||'—'}</div><div class="oh-score-label">Overall Score</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${pct}%</div><div class="oh-score-label">Completed</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${done}/${total}</div><div class="oh-score-label">Aspects Rated</div></div>
-        <div class="oh-score-chip"><div class="oh-score-val">${FRAMEWORK.meta.rating_scale[Math.round(avg)]?.label||'—'}</div><div class="oh-score-label">Rating Level</div></div>
+        <div class="oh-score-chip"><div class="oh-score-val">${avg ? (FRAMEWORK.meta.rating_scale[Math.round(parseFloat(avg))]?.label||'—') : '—'}</div><div class="oh-score-label">Rating Level</div></div>
       </div>
     </div>
 
@@ -762,7 +825,10 @@ function renderDomain(domainId) {
 
     const ratingBtns = [1,2,3,4].map(v => {
       const scale = FRAMEWORK.meta.rating_scale[v];
-      return `<button class="rating-btn${rating===v?` sel-${v}`:''}" value="${v}" data-aspect="${aspect.id}" ${!canEdit?'disabled':''} title="${scale.description}">${v} — ${scale.label}</button>`;
+      return `<button class="rating-btn${rating===v?` sel-${v}`:''}" value="${v}" data-aspect="${aspect.id}" ${!canEdit?'disabled':''} title="${scale.description}">
+        <span class="rb-num">${v}</span>
+        <span class="rb-label">${scale.label}</span>
+      </button>`;
     }).join('');
 
     const scaleCards = [1,2,3,4].map(v => {
@@ -785,9 +851,9 @@ function renderDomain(domainId) {
     }).join('');
 
     return `
-      <div class="aspect-card" id="aspect-${aspect.id}">
+      <div class="aspect-card" id="aspect-${aspect.id}" style="border-left-color:${col};">
         <div class="aspect-head">
-          <div>
+          <div class="aspect-head-left">
             <div class="aspect-num">${domain.code}.${idx+1}</div>
             <div class="aspect-title">${aspect.title}</div>
             <div class="aspect-desc">${aspect.description}</div>
@@ -796,96 +862,99 @@ function renderDomain(domainId) {
         </div>
         <div class="aspect-body">
 
-          <!-- Expectations -->
-          <button class="collapsible-btn" onclick="window.__toggleBlock('exp-${aspect.id}',this)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            What is expected (${aspect.expectations.length} criteria)
-          </button>
-          <div class="collapsible-block" id="exp-${aspect.id}">
-            <ul class="expectations-inner">${expectItems}</ul>
-          </div>
-
-          <!-- Rating scale info -->
-          <button class="collapsible-btn" onclick="window.__toggleBlock('scale-${aspect.id}',this)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            Rating scale guide
-          </button>
-          <div class="collapsible-block" id="scale-${aspect.id}">
-            <div style="padding:12px 14px;background:var(--paper);border-radius:10px;">
-              <div class="rating-scale-info">${scaleCards}</div>
+          <!-- Expectations (collapsible) -->
+          <div class="ab-section">
+            <button class="collapsible-btn" onclick="window.__toggleBlock('exp-${aspect.id}',this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              What is expected &nbsp;<span style="opacity:.55;font-weight:500;text-transform:none;letter-spacing:0">(${aspect.expectations.length} criteria)</span>
+            </button>
+            <div class="collapsible-block" id="exp-${aspect.id}">
+              <ul class="expectations-inner">${expectItems}</ul>
             </div>
           </div>
 
-          <!-- Rating buttons -->
-          <div class="rating-section-label">Self-Assessment Rating</div>
-          <div class="rating-options" id="rating-${aspect.id}">${ratingBtns}</div>
-
-          <!-- Evidence notes -->
-          <div class="evidence-section-label">Evidence & Notes</div>
-          <textarea class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific — refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
-
-          <!-- Evidence examples -->
-          <button class="collapsible-btn" onclick="window.__toggleBlock('hints-${aspect.id}',this)" style="margin-bottom:14px;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            Evidence examples for this aspect
-          </button>
-          <div class="collapsible-block" id="hints-${aspect.id}">
-            <ul class="hints-inner">${hintItems}</ul>
+          <!-- Rating scale guide — always visible -->
+          <div class="ab-section">
+            <div class="ab-section-label">Rating Scale Guide</div>
+            <div class="rsi-grid">${scaleCards}</div>
           </div>
 
-          <!-- File upload -->
-          ${canEdit ? `
-          <div class="file-upload-section">
-            <label class="file-upload-label">Evidence Files</label>
-            <div class="drop-zone" id="dropzone-${aspect.id}" data-aspect="${aspect.id}">
-              <span class="drop-zone-icon">📎</span>
-              <div>
-                <div class="drop-zone-text"><strong>Upload a file</strong> or drag and drop here</div>
-                <div class="drop-zone-sub">PDF, Word, Excel, PowerPoint, images — max 20MB</div>
+          <!-- Self-assessment rating -->
+          <div class="ab-section">
+            <div class="ab-section-label">Self-Assessment Rating</div>
+            <div class="rating-options" id="rating-${aspect.id}">${ratingBtns}</div>
+          </div>
+
+          <!-- Evidence & Notes -->
+          <div class="ab-section">
+            <div class="ab-section-label">Evidence & Notes</div>
+            <textarea class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific — refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
+          </div>
+
+          <!-- Evidence examples (collapsible) -->
+          <div class="ab-section">
+            <button class="collapsible-btn" onclick="window.__toggleBlock('hints-${aspect.id}',this)">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+              Evidence examples for this aspect
+            </button>
+            <div class="collapsible-block" id="hints-${aspect.id}">
+              <ul class="hints-inner">${hintItems}</ul>
+            </div>
+          </div>
+
+          <!-- Evidence files + links -->
+          <div class="ab-section">
+            <div class="ab-section-label">Supporting Evidence</div>
+            ${canEdit ? `
+            <div class="file-upload-section">
+              <div class="drop-zone" id="dropzone-${aspect.id}" data-aspect="${aspect.id}">
+                <span class="drop-zone-icon">📎</span>
+                <div>
+                  <div class="drop-zone-text"><strong>Upload a file</strong> or drag and drop here</div>
+                  <div class="drop-zone-sub">PDF, Word, Excel, PowerPoint, images — max 20MB</div>
+                </div>
+              </div>
+              <div class="upload-progress" id="upload-progress-${aspect.id}">
+                <div class="upload-progress-bar" style="width:0%"></div>
+              </div>
+            </div>` : files.length ? '' : ''}
+            <div class="file-list" id="file-list-${aspect.id}">${fileListHtml}</div>
+            <div class="evidence-link-section" style="margin-top:${files.length||canEdit?'10px':'0'};">
+              ${canEdit ? `
+              <div class="evidence-link-row">
+                <input class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="Or paste an evidence link (Google Drive, Dropbox, etc.)" />
+                <button class="evidence-link-add-btn" onclick="window.__addLink('${aspect.id}')">+ Add</button>
+              </div>` : ''}
+              <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `
+                <div class="link-item">
+                  <span class="link-item-icon">🔗</span>
+                  <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label||l.url}</a>
+                  ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspect.id}',${i})" title="Remove">✕</button>` : ''}
+                </div>`).join('')}
               </div>
             </div>
-            <div class="upload-progress" id="upload-progress-${aspect.id}">
-              <div class="upload-progress-bar" style="width:0%"></div>
-            </div>
-          </div>` : files.length ? `<div class="file-upload-section"><label class="file-upload-label">Evidence Files</label></div>` : ''}
-          <div class="file-list" id="file-list-${aspect.id}">${fileListHtml}</div>
-
-          <!-- Evidence links -->
-          <div class="evidence-link-section">
-            <label class="evidence-link-label">Evidence Links</label>
-            ${canEdit ? `
-            <div class="evidence-link-row">
-              <input class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="https://drive.google.com/… or any evidence URL" />
-              <button class="evidence-link-add-btn" onclick="window.__addLink('${aspect.id}')">+ Add Link</button>
-            </div>` : ''}
-            <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `
-              <div class="link-item">
-                <span class="link-item-icon">🔗</span>
-                <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label||l.url}</a>
-                ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspect.id}',${i})" title="Remove">✕</button>` : ''}
-              </div>`).join('')}
-            </div>
           </div>
+
         </div>
       </div>`;
   }).join('');
 
   return `
-    <div class="domain-header" style="background:${bg};border:1.5px solid ${border};">
+    <div class="domain-header" style="background:linear-gradient(135deg,${col},${col}dd);">
       <div class="dh-top">
-        <div class="dh-icon">${domain.icon}</div>
+        <div class="dh-icon" style="color:#fff;">${domain.icon}</div>
         <div class="dh-meta">
-          <div class="dh-code" style="color:${col}">${domain.code}</div>
-          <div class="dh-title" style="color:${col}">${domain.title}</div>
-          <div class="dh-desc" style="color:${col}">${domain.description}</div>
+          <div class="dh-code" style="color:rgba(255,255,255,.7)">${domain.code}</div>
+          <div class="dh-title" style="color:#fff;">${domain.title}</div>
+          <div class="dh-desc" style="color:rgba(255,255,255,.8);">${domain.description}</div>
         </div>
       </div>
-      <div class="dh-bottom" style="background:${bg};">
-        <div class="dh-stat" style="color:${col}">
+      <div class="dh-bottom">
+        <div class="dh-stat" style="color:rgba(255,255,255,.85);">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           ${done}/${total} aspects rated
         </div>
-        <div class="dh-stat" style="color:${col}">
+        <div class="dh-stat" style="color:rgba(255,255,255,.85);">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           ${davg ? `Avg ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
         </div>
@@ -902,7 +971,7 @@ function renderDomain(domainId) {
       </div>
     </div>
     ${aspectsHtml}
-    <div class="domain-score-bar-wrap" style="border-color:${border};">
+    <div class="domain-score-bar-wrap" style="border-color:${border};border-left:4px solid ${col};">
       <div class="dsb-label">Domain Average Score</div>
       <div class="dsb-val ${scoreCls(parseFloat(davg||0))}" id="domain-avg-${domainId}">
         ${davg ? `${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : '—'}
@@ -916,12 +985,14 @@ function switchView(viewId) {
   document.getElementById('overviewNavBtn')?.classList.toggle('active', viewId === 'overview');
   document.querySelectorAll('.domain-nav-card').forEach(c => {
     const active = c.dataset.domain === viewId;
-    const col = domainColors[c.dataset.domain] || '#6b7280';
-    const bg  = domainBgs[c.dataset.domain]    || '#f3f4f6';
+    const col    = domainColors[c.dataset.domain]  || '#6b7280';
+    const bg     = domainBgs[c.dataset.domain]     || '#f3f4f6';
     const border = domainBorders[c.dataset.domain] || '#e0ddd6';
     c.classList.toggle('active', active);
-    c.style.borderColor = active ? col : border;
-    c.style.background  = active ? bg : '';
+    c.style.borderColor     = active ? border : border;
+    c.style.borderLeftColor = col;
+    c.style.background      = active ? bg : '';
+    c.style.boxShadow       = active ? `inset 3px 0 0 ${col}` : '';
   });
 
   const content = document.getElementById('pageContent');
@@ -1027,6 +1098,7 @@ function buildSidebar() {
     const btn = document.createElement('button');
     btn.className = 'domain-nav-card'; btn.dataset.domain = d.id;
     btn.style.borderColor = border;
+    btn.style.borderLeftColor = col;
     btn.innerHTML = `
       <div class="dnc-top">
         <span class="dnc-icon">${d.icon}</span>
