@@ -273,6 +273,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 .rsi-num { font-size:16px; font-weight:800; line-height:1; margin-bottom:3px; }
 .rsi-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:2px; }
 .rsi-desc { font-size:10px; color:var(--ink-3); line-height:1.4; }
+.rsi-guide { font-size:10px; color:var(--ink-2); line-height:1.45; margin-top:5px; padding-top:5px; border-top:1px solid var(--border); font-style:italic; }
 .rsi-1 { border-color:#fca5a5; background:#fff5f5; }
 .rsi-1 .rsi-num { color:#991b1b; }
 .rsi-2 { border-color:#fcd34d; background:#fffbeb; }
@@ -422,7 +423,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
       <div class="sop-bar"><div class="sop-fill" id="sopFill" style="width:0%"></div></div>
       <div class="sop-row">
         <span class="sop-pct" id="sopPct">0%</span>
-        <span class="sop-count" id="sopCount">0/25 aspects</span>
+        <span class="sop-count" id="sopCount">0/— aspects</span>
       </div>
     </div>
 
@@ -766,7 +767,13 @@ function renderDomain(domainId) {
 
     const scaleCards = [1,2,3,4].map(v => {
       const s = FRAMEWORK.meta.rating_scale[v];
-      return `<div class="rsi-item rsi-${v}"><div class="rsi-num">${v}</div><div class="rsi-label">${s.label}</div><div class="rsi-desc">${s.description}</div></div>`;
+      const guide = aspect.rating_scale_guide?.[v];
+      return `<div class="rsi-item rsi-${v}">
+        <div class="rsi-num">${v}</div>
+        <div class="rsi-label">${s.label}</div>
+        <div class="rsi-desc">${s.description}</div>
+        ${guide ? `<div class="rsi-guide">${guide}</div>` : ''}
+      </div>`;
     }).join('');
 
     const expectItems = aspect.expectations.map(e => `<li>${e}</li>`).join('');
