@@ -394,6 +394,54 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 .sample-doc-item:hover .sample-doc-label { color:var(--accent-dk); }
 .sample-doc-arrow { font-size:11px; color:var(--ink-3); flex-shrink:0; }
 
+/* ===== SAMPLE DOC EDIT (admin) ===== */
+.sample-doc-edit-btn {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.05em;
+  color:var(--accent-dk); background:var(--accent-2); border:1.5px solid #fbbf24;
+  border-radius:7px; padding:4px 10px; cursor:pointer; margin-top:6px;
+  font-family:inherit; transition:all .15s;
+}
+.sample-doc-edit-btn:hover { background:#fde68a; border-color:#f59e0b; }
+.sample-doc-editor {
+  margin-top:8px; background:var(--paper); border:1.5px solid var(--border);
+  border-radius:10px; padding:12px 14px; display:none; flex-direction:column; gap:8px;
+}
+.sample-doc-editor.open { display:flex; }
+.sde-row {
+  display:grid; grid-template-columns:1fr 1.6fr auto;
+  gap:6px; align-items:center;
+}
+.sde-input {
+  padding:7px 10px; border:1.5px solid var(--border); border-radius:7px;
+  font-size:12px; font-family:inherit; color:var(--ink); background:var(--white);
+  transition:border-color .15s;
+}
+.sde-input:focus { outline:none; border-color:var(--accent); }
+.sde-input.invalid { border-color:#f87171; }
+.sde-remove-btn {
+  width:28px; height:28px; border-radius:7px; border:1.5px solid #fca5a5;
+  background:#fee2e2; color:#dc2626; font-size:13px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:inherit;
+}
+.sde-remove-btn:hover { background:#fecaca; }
+.sde-add-row {
+  display:flex; gap:6px; align-items:center; padding-top:4px; border-top:1px solid var(--border);
+}
+.sde-add-btn {
+  padding:7px 14px; border-radius:7px; border:1.5px dashed var(--border);
+  background:transparent; color:var(--accent); font-size:12px; font-weight:600;
+  cursor:pointer; font-family:inherit; transition:all .15s;
+}
+.sde-add-btn:hover { background:var(--accent-2); border-color:var(--accent); border-style:solid; }
+.sde-save-btn {
+  padding:7px 16px; border-radius:7px; border:none;
+  background:var(--accent); color:#fff; font-size:12px; font-weight:700;
+  cursor:pointer; font-family:inherit; margin-left:auto; transition:background .15s;
+}
+.sde-save-btn:hover { background:var(--accent-dk); }
+.sde-saving { font-size:11px; color:var(--ink-3); margin-left:8px; }
+
 /* ===== FILE UPLOAD ===== */
 .file-upload-section { margin-top:10px; }
 .file-upload-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:8px; display:block; }
@@ -541,6 +589,7 @@ let appraisalDoc = null;
 let appraisalDocId = null;
 let currentView = 'overview';
 let isReviewed = false;
+let isAdmin = false;
 let saveTimer = null;
 let pendingUploadAspect = null;
 
@@ -551,6 +600,30 @@ const domainBorders= { d1:'#bfdbfe', d2:'#a7f3d0', d3:'#fed7aa', d4:'#c4b5fd', d
 async function loadFramework() {
   const res = await fetch('/resources/School%20Appraisal%20Framework.json');
   FRAMEWORK = await res.json();
+  // Merge any admin-saved overrides from Firestore
+  try {
+    const overrideSnap = await getDoc(doc(window.db, 'framework_config', 'sample_documents'));
+    if (overrideSnap.exists()) {
+      const overrides = overrideSnap.data(); // { "d2-a1": [{label,url},...], ... }
+      FRAMEWORK.domains.forEach(domain => {
+        domain.aspects.forEach(aspect => {
+          if (overrides[aspect.id]) aspect.sample_documents = overrides[aspect.id];
+        });
+      });
+    }
+  } catch(e) { console.warn('Could not load sample doc overrides', e); }
+}
+
+async function saveSampleDocOverrides(aspectId, docs) {
+  const overrideRef = doc(window.db, 'framework_config', 'sample_documents');
+  // Use setDoc with merge so other aspects aren't affected
+  await setDoc(overrideRef, { [aspectId]: docs }, { merge: true });
+  // Also update local FRAMEWORK
+  FRAMEWORK.domains.forEach(domain => {
+    domain.aspects.forEach(aspect => {
+      if (aspect.id === aspectId) aspect.sample_documents = docs;
+    });
+  });
 }
 
 function scoreLabel(n) { return { 1:'Beginning', 2:'Developing', 3:'Established', 4:'Exemplary' }[n] || '—'; }
@@ -755,6 +828,83 @@ function renderFileList(aspectId) {
 }
 window.__renderFileList = renderFileList;
 
+// ===== SAMPLE DOC EDITOR (admin) =====
+window.__toggleDocEditor = function(aspectId) {
+  const editor = document.getElementById(`sample-doc-editor-${aspectId}`);
+  if (!editor) return;
+  editor.classList.toggle('open');
+};
+
+window.__addSdeRow = function(aspectId) {
+  const rows = document.getElementById(`sde-rows-${aspectId}`);
+  if (!rows) return;
+  const idx = rows.querySelectorAll('.sde-row').length;
+  const row = document.createElement('div');
+  row.className = 'sde-row';
+  row.id = `sde-row-${aspectId}-${idx}`;
+  row.innerHTML = `
+    <input class="sde-input" placeholder="Label" value="" data-field="label" data-aspect="${aspectId}" data-idx="${idx}">
+    <input class="sde-input" placeholder="https://..." value="" data-field="url" data-aspect="${aspectId}" data-idx="${idx}">
+    <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspectId}',${idx})" title="Remove">✕</button>`;
+  rows.appendChild(row);
+};
+
+window.__removeSdeRow = function(aspectId, idx) {
+  const row = document.getElementById(`sde-row-${aspectId}-${idx}`);
+  if (row) row.remove();
+};
+
+window.__saveSampleDocs = async function(aspectId) {
+  const rows = document.getElementById(`sde-rows-${aspectId}`);
+  const statusEl = document.getElementById(`sde-status-${aspectId}`);
+  if (!rows) return;
+
+  // Collect all rows
+  const docs = [];
+  let valid = true;
+  rows.querySelectorAll('.sde-row').forEach(row => {
+    const labelEl = row.querySelector('[data-field="label"]');
+    const urlEl   = row.querySelector('[data-field="url"]');
+    const label = labelEl?.value?.trim() || '';
+    const url   = urlEl?.value?.trim() || '';
+    // Only include rows where at least label or url is filled
+    if (!label && !url) return;
+    if (!url) { urlEl?.classList.add('invalid'); valid = false; return; }
+    if (!label) { labelEl?.classList.add('invalid'); valid = false; return; }
+    labelEl?.classList.remove('invalid');
+    urlEl?.classList.remove('invalid');
+    docs.push({ label, url });
+  });
+
+  if (!valid) { statusEl.textContent = 'Fill in missing fields'; return; }
+
+  statusEl.textContent = 'Saving…';
+  try {
+    await saveSampleDocOverrides(aspectId, docs);
+    // Re-render the display list
+    const listEl = document.getElementById(`sample-docs-list-${aspectId}`);
+    if (listEl) {
+      listEl.innerHTML = docs.map(d => {
+        const isSheet = d.url?.includes('spreadsheets');
+        const icon = isSheet ? '📊' : '📄';
+        return `<a class="sample-doc-item" href="${d.url}" target="_blank" rel="noopener">
+          <span class="sample-doc-icon">${icon}</span>
+          <span class="sample-doc-label">${d.label}</span>
+          <span class="sample-doc-arrow">↗</span>
+        </a>`;
+      }).join('');
+    }
+    statusEl.textContent = '✓ Saved';
+    setTimeout(() => {
+      statusEl.textContent = '';
+      document.getElementById(`sample-doc-editor-${aspectId}`)?.classList.remove('open');
+    }, 1500);
+  } catch(e) {
+    console.error('Save failed', e);
+    statusEl.textContent = 'Error saving';
+  }
+};
+
 // ===== RENDER OVERVIEW =====
 function renderOverview() {
   const avg = overallAvg();
@@ -918,12 +1068,12 @@ function renderDomain(domainId) {
           </div>
 
           <!-- Sample documents -->
-          ${aspect.sample_documents?.length ? `
-          <div class="ab-section">
+          ${aspect.sample_documents?.length || isAdmin ? `
+          <div class="ab-section" id="sample-docs-section-${aspect.id}">
             <div class="ab-section-label">Sample Documents</div>
-            <div class="sample-docs">
-              ${aspect.sample_documents.map(doc => {
-                const isSheet = doc.url.includes('spreadsheets');
+            <div class="sample-docs" id="sample-docs-list-${aspect.id}">
+              ${(aspect.sample_documents||[]).map(doc => {
+                const isSheet = doc.url?.includes('spreadsheets');
                 const icon = isSheet ? '📊' : '📄';
                 return `<a class="sample-doc-item" href="${doc.url}" target="_blank" rel="noopener">
                   <span class="sample-doc-icon">${icon}</span>
@@ -932,6 +1082,25 @@ function renderDomain(domainId) {
                 </a>`;
               }).join('')}
             </div>
+            ${isAdmin ? `
+            <button class="sample-doc-edit-btn" onclick="window.__toggleDocEditor('${aspect.id}')">
+              ✏️ Edit Links
+            </button>
+            <div class="sample-doc-editor" id="sample-doc-editor-${aspect.id}">
+              <div class="sde-rows" id="sde-rows-${aspect.id}">
+                ${(aspect.sample_documents||[]).map((doc, i) => `
+                <div class="sde-row" id="sde-row-${aspect.id}-${i}">
+                  <input class="sde-input" placeholder="Label" value="${doc.label.replace(/"/g,'&quot;')}" data-field="label" data-aspect="${aspect.id}" data-idx="${i}">
+                  <input class="sde-input" placeholder="https://..." value="${doc.url.replace(/"/g,'&quot;')}" data-field="url" data-aspect="${aspect.id}" data-idx="${i}">
+                  <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspect.id}',${i})" title="Remove">✕</button>
+                </div>`).join('')}
+              </div>
+              <div class="sde-add-row">
+                <button class="sde-add-btn" onclick="window.__addSdeRow('${aspect.id}')">+ Add link</button>
+                <button class="sde-save-btn" onclick="window.__saveSampleDocs('${aspect.id}')">Save</button>
+                <span class="sde-saving" id="sde-status-${aspect.id}"></span>
+              </div>
+            </div>` : ''}
           </div>` : ''}
 
           <!-- Evidence files + links -->
@@ -1151,6 +1320,7 @@ function buildSidebar() {
 
 // ===== INIT =====
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  isAdmin = profile?.role_academichub === 'academic_admin';
   window.__loadAcademicNavbar('school-appraisal', { user, profile });
   await loadFramework();
   const appraisal = await findOrCreateAppraisal(profile);
