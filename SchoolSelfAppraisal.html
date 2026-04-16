@@ -506,6 +506,19 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 .notice-warning { background:#fef3c7; color:#92400e; border:1px solid #fcd34d; }
 
 .page-loading { padding:60px 24px; text-align:center; color:var(--ink-3); font-size:14px; }
+
+/* Toast notification */
+.toast {
+  position:fixed; bottom:72px; left:50%; transform:translateX(-50%) translateY(12px);
+  background:#1c1c2e; color:#fff; font-size:13px; font-weight:500;
+  padding:10px 18px; border-radius:10px; z-index:200;
+  display:flex; align-items:center; gap:8px;
+  box-shadow:0 4px 20px rgba(0,0,0,.22);
+  opacity:0; pointer-events:none;
+  transition:opacity .2s, transform .2s;
+}
+.toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+.toast-icon { font-size:15px; }
 </style>
 </head>
 <body>
@@ -548,6 +561,7 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 </div>
 
 <input type="file" id="globalFileInput" style="display:none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
+<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
 
 <script src="firebase-config.js"></script>
 <script type="module" src="auth-guard.js"></script>
@@ -566,7 +580,20 @@ let currentView = 'overview';
 let isReviewed = false;
 let isAdmin = false;
 let saveTimer = null;
+let toastTimer = null;
 let pendingUploadAspect = null;
+
+function showToast(msg, icon = '✓') {
+  const toast = document.getElementById('toast');
+  const msgEl = document.getElementById('toastMsg');
+  const iconEl = toast.querySelector('.toast-icon');
+  if (!toast) return;
+  clearTimeout(toastTimer);
+  msgEl.textContent = msg;
+  iconEl.textContent = icon;
+  toast.classList.add('show');
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2500);
+}
 
 const domainColors = { d1:'#1e40af', d2:'#065f46', d3:'#7c2d12', d4:'#4338ca', d5:'#0f766e' };
 const domainBgs    = { d1:'#dbeafe', d2:'#d1fae5', d3:'#ffedd5', d4:'#ede9fe', d5:'#ccfbf1' };
@@ -670,6 +697,7 @@ async function saveAppraisal(newStatus) {
   appraisalDoc.status = status;
   document.getElementById('actionStatus').textContent = 'Saved ✓';
   updateSidebarScores();
+  if (newStatus === 'draft') showToast('Draft saved successfully');
   if (newStatus === 'submitted') {
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('btnSaveDraft').style.display = 'none';
