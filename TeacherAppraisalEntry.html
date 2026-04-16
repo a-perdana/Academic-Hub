@@ -58,8 +58,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .step {
   flex: 1; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  border-right: 1px solid #e2e8f0; cursor: pointer; transition: background .15s; position: relative;
+  border-right: 1px solid #e2e8f0; cursor: not-allowed; transition: background .15s; position: relative;
 }
+.step.active, .step.done { cursor: pointer; }
+.step.done:hover { background: #f0fdf4; }
 .step:last-child { border-right: none; }
 .step.active { background: #f5f3ff; }
 .step.done { background: #f0fdf4; }
@@ -719,6 +721,16 @@ window.goStep = function(n) {
   });
   window.scrollTo({top:0,behavior:'smooth'});
 };
+
+// Step bar click — allow navigating to any already-reached step
+document.getElementById('stepsBar').addEventListener('click', e => {
+  const stepEl = e.target.closest('.step');
+  if (!stepEl) return;
+  const target = parseInt(stepEl.dataset.step);
+  // Only navigate to steps that have been reached (≤ currentStep)
+  // or are already done. Step 1 is always reachable.
+  if (target <= currentStep) goStep(target);
+});
 
 window.selectScore = function(itemId, score) {
   scores[itemId] = score;
