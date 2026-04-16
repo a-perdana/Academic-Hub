@@ -332,7 +332,7 @@ import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/fir
 
 // ── RUBRIC DATA ───────────────────────────────────────────
 let RUBRIC = null;
-fetch('appraisal/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
+fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
 
 const fociResponses = {}; // focusId → { code, note }
 

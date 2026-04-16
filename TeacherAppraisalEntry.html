@@ -460,8 +460,8 @@ const scores = {}; // itemId → 1–4
 const notes  = {}; // itemId → string
 
 Promise.all([
-  fetch('appraisal/appraisal-framework-v2.json').then(r=>r.json()),
-  fetch('appraisal/appraisal-levels.json').then(r=>r.json())
+  fetch('resources/appraisal-framework-v2.json').then(r=>r.json()),
+  fetch('resources/appraisal-levels.json').then(r=>r.json())
 ]).then(([fw, lv]) => {
   FRAMEWORK = fw;
   LEVELS = lv;

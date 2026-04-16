@@ -211,10 +211,6 @@ if (fs.existsSync("resources")) {
   copyDirRecursive("resources", "dist/resources");
   console.log("Copied: resources/");
 }
-if (fs.existsSync("appraisal")) {
-  copyDirRecursive("appraisal", "dist/appraisal");
-  console.log("Copied: appraisal/");
-}
 
 // -- Generate Netlify _redirects
 // Files are now written as <slug>.html so Netlify/Vercel cleanUrls
