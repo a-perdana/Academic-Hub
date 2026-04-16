@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Observations — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
+  color: #fff; padding: 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; padding: 32px 32px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  position: relative; z-index: 1; flex-wrap: wrap;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
+  margin-bottom: 8px; letter-spacing: .02em;
+}
+.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.hero-sub { font-size: .85rem; opacity: .8; margin-top: 5px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn-hero {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 9px 18px; border-radius: 10px; font-family: inherit;
+  font-size: .85rem; font-weight: 600; cursor: pointer; text-decoration: none;
+  border: none; transition: background .15s, opacity .15s;
+}
+.btn-hero-primary { background: #fff; color: #4c1d95; }
+.btn-hero-primary:hover { opacity: .9; }
+.btn-hero-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
+.btn-hero-secondary:hover { background: rgba(255,255,255,.25); }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 32px 100px; }
+
+/* ── STATS ── */
+.stats-strip {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px; margin-bottom: 24px;
+}
+.stat-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+  padding: 16px 20px; display: flex; flex-direction: column; gap: 4px;
+}
+.stat-label { font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; }
+.stat-value { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1; }
+.stat-sub { font-size: .72rem; color: #64748b; }
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;
+}
+.tab-btn {
+  padding: 10px 20px; font-family: inherit; font-size: .85rem; font-weight: 600;
+  color: #64748b; background: none; border: none; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; cursor: pointer; transition: color .15s, border-color .15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.tab-btn:hover { color: #7c3aed; }
+.tab-btn.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+.tab-count {
+  font-size: .68rem; font-weight: 700; padding: 1px 6px; border-radius: 10px;
+  background: #f1f5f9; color: #64748b;
+}
+.tab-btn.active .tab-count { background: #ede9fe; color: #7c3aed; }
+
+/* ── FILTER BAR ── */
+.filter-bar {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+  padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+}
+.filter-bar input, .filter-bar select {
+  border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 7px 12px;
+  font-family: inherit; font-size: .83rem; color: #1e293b; background: #fff;
+  transition: border-color .15s;
+}
+.filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: #7c3aed; }
+.filter-bar input { flex: 1; min-width: 180px; }
+
+/* ── TABLE ── */
+.table-wrap {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;
+}
+.table-scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+thead tr { background: #f8fafc; }
+th {
+  padding: 10px 16px; text-align: left; font-size: .68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em; color: #64748b;
+  border-bottom: 1px solid #e2e8f0; white-space: nowrap;
+}
+td {
+  padding: 12px 16px; font-size: .83rem; border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #fafbff; }
+.empty-row td { text-align: center; color: #94a3b8; font-size: .85rem; padding: 40px; }
+
+/* ── PILLS & BADGES ── */
+.status-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700;
+}
+.pill-draft { background: #f1f5f9; color: #64748b; }
+.pill-shared { background: #dbeafe; color: #1d4ed8; }
+.pill-acknowledged { background: #fef9c3; color: #854d0e; }
+.pill-finalised { background: #dcfce7; color: #15803d; }
+.level-badge {
+  display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .68rem; font-weight: 700;
+}
+.level-I { background: #ede9fe; color: #6d28d9; }
+.level-D { background: #dbeafe; color: #1d4ed8; }
+.level-P { background: #dcfce7; color: #15803d; }
+.level-L { background: #fef3c7; color: #b45309; }
+
+/* ── SCORE BAR ── */
+.score-bar-wrap { display: flex; align-items: center; gap: 6px; min-width: 80px; }
+.score-bar-bg { flex: 1; height: 5px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 3px; background: #7c3aed; transition: width .3s; }
+.score-pct { font-size: .72rem; font-weight: 700; color: #475569; white-space: nowrap; }
+
+/* ── FOCI DOTS ── */
+.foci-dot {
+  display: inline-block; width: 10px; height: 10px; border-radius: 50%;
+  margin-right: 3px;
+}
+.foci-dot.yes { background: #7c3aed; }
+.foci-dot.no  { background: #e2e8f0; }
+
+/* ── VIEW BTN ── */
+.btn-view {
+  padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
+  font-weight: 600; cursor: pointer; background: #ede9fe; color: #6d28d9;
+  border: none; transition: background .15s; white-space: nowrap;
+}
+.btn-view:hover { background: #ddd6fe; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  z-index: 1000; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 20px; width: 100%; max-width: 680px;
+  max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+.modal-head {
+  padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-head h3 { font-size: 1rem; font-weight: 700; }
+.modal-close {
+  width: 30px; height: 30px; border-radius: 8px; border: none; background: #f1f5f9;
+  font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: #e2e8f0; }
+.modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 16px; }
+.detail-section { display: flex; flex-direction: column; gap: 8px; }
+.detail-section-title {
+  font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
+  color: #94a3b8; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.detail-item { display: flex; flex-direction: column; gap: 2px; }
+.detail-item-label { font-size: .68rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
+.detail-item-value { font-size: .85rem; font-weight: 600; color: #1e293b; }
+.score-row-detail { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.score-label-detail { font-size: .78rem; font-weight: 600; color: #475569; width: 80px; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center; padding: 60px 24px; color: #94a3b8;
+}
+.empty-state-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.empty-state h3 { font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
+.empty-state p { font-size: .83rem; }
+</style>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">&#x1F4CB; My Observations</div>
+      <h1>My Observation Records</h1>
+      <div class="hero-sub">Formal appraisals and classroom walkthroughs you have submitted.</div>
+    </div>
+    <div class="hero-actions">
+      <a href="TeacherAppraisalEntry.html" class="btn-hero btn-hero-primary">+ New Appraisal</a>
+      <a href="TeacherWalkthroughEntry.html" class="btn-hero btn-hero-secondary">+ New Walkthrough</a>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="stat-label">Appraisals</div>
+      <div class="stat-value" id="statAppraisals">—</div>
+      <div class="stat-sub">total submitted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Finalised</div>
+      <div class="stat-value" id="statFinalised">—</div>
+      <div class="stat-sub">appraisals</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Walkthroughs</div>
+      <div class="stat-value" id="statWalkthroughs">—</div>
+      <div class="stat-sub">total submitted</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Score</div>
+      <div class="stat-value" id="statAvg">—</div>
+      <div class="stat-sub">composite %</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="appraisals" id="tabAppraisals">
+      Formal Appraisals <span class="tab-count" id="tcAppraisals">0</span>
+    </button>
+    <button class="tab-btn" data-tab="walkthroughs" id="tabWalkthroughs">
+      Walkthroughs <span class="tab-count" id="tcWalkthroughs">0</span>
+    </button>
+  </div>
+
+  <!-- APPRAISALS PANEL -->
+  <div id="panelAppraisals">
+    <div class="filter-bar">
+      <input type="text" id="searchA" placeholder="Search teacher name…">
+      <select id="filterYear">
+        <option value="">All years</option>
+        <option value="2025/2026">2025/2026</option>
+        <option value="2026/2027">2026/2027</option>
+      </select>
+      <select id="filterLevel">
+        <option value="">All levels</option>
+        <option value="Induction">Induction</option>
+        <option value="Developing">Developing</option>
+        <option value="Proficient">Proficient</option>
+        <option value="Lead">Lead</option>
+      </select>
+      <select id="filterStatus">
+        <option value="">All statuses</option>
+        <option value="draft">Draft</option>
+        <option value="shared">Shared</option>
+        <option value="acknowledged">Acknowledged</option>
+        <option value="finalised">Finalised</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Teacher</th>
+              <th>School · Subject</th>
+              <th>Year</th>
+              <th>Level</th>
+              <th>F1</th>
+              <th>F2</th>
+              <th>F3</th>
+              <th>Composite</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="appraisalRows">
+            <tr class="empty-row"><td colspan="10">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- WALKTHROUGHS PANEL -->
+  <div id="panelWalkthroughs" style="display:none;">
+    <div class="filter-bar">
+      <input type="text" id="searchW" placeholder="Search teacher name…">
+      <select id="filterYearW">
+        <option value="">All years</option>
+        <option value="2025/2026">2025/2026</option>
+        <option value="2026/2027">2026/2027</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Teacher</th>
+              <th>Subject</th>
+              <th>Year</th>
+              <th>Visit Date</th>
+              <th>Phase</th>
+              <th>Foci (W1–W5)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="walkthroughRows">
+            <tr class="empty-row"><td colspan="7">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- APPRAISAL DETAIL MODAL -->
+<div class="modal-overlay" id="appraisalModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="aModalTitle">Appraisal Detail</h3>
+      <button class="modal-close" onclick="document.getElementById('appraisalModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="aModalBody"></div>
+  </div>
+</div>
+
+<!-- WALKTHROUGH DETAIL MODAL -->
+<div class="modal-overlay" id="walkthroughModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="wModalTitle">Walkthrough Detail</h3>
+      <button class="modal-close" onclick="document.getElementById('walkthroughModal').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body" id="wModalBody"></div>
+  </div>
+</div>
+
+<script type="module">
+import { getFirestore, collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const FOCI_LABELS = ['Behaviour', 'Questioning', 'Differentiation', 'Assessment', 'Curriculum'];
+
+let allAppraisals = [];
+let allWalkthroughs = [];
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('my-observations', { user, profile });
+
+  const db = window.db;
+  const uid = user.uid;
+
+  // Load both collections in parallel
+  const [aSnap, wSnap] = await Promise.all([
+    getDocs(query(collection(db, 'teacher_appraisals'), where('appraiserUid','==',uid), orderBy('createdAt','desc'))),
+    getDocs(query(collection(db, 'teacher_walkthroughs'), where('observerUid','==',uid), orderBy('createdAt','desc')))
+  ]);
+
+  allAppraisals = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  allWalkthroughs = wSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  updateStats();
+  renderAppraisals();
+  renderWalkthroughs();
+
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      document.getElementById('panelAppraisals').style.display = tab === 'appraisals' ? '' : 'none';
+      document.getElementById('panelWalkthroughs').style.display = tab === 'walkthroughs' ? '' : 'none';
+    });
+  });
+
+  // Filters — appraisals
+  ['searchA','filterYear','filterLevel','filterStatus'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderAppraisals);
+  });
+
+  // Filters — walkthroughs
+  ['searchW','filterYearW'].forEach(id => {
+    document.getElementById(id).addEventListener('input', renderWalkthroughs);
+  });
+
+  // Close modals on overlay click
+  document.getElementById('appraisalModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+  });
+  document.getElementById('walkthroughModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+  });
+});
+
+function updateStats() {
+  const finalised = allAppraisals.filter(a => a.status === 'finalised').length;
+  const scores = allAppraisals.map(a => a.compositePercent).filter(s => s != null);
+  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
+
+  document.getElementById('statAppraisals').textContent = allAppraisals.length;
+  document.getElementById('statFinalised').textContent = finalised;
+  document.getElementById('statWalkthroughs').textContent = allWalkthroughs.length;
+  document.getElementById('statAvg').textContent = avg != null ? avg + '%' : '—';
+  document.getElementById('tcAppraisals').textContent = allAppraisals.length;
+  document.getElementById('tcWalkthroughs').textContent = allWalkthroughs.length;
+}
+
+function renderAppraisals() {
+  const search = document.getElementById('searchA').value.toLowerCase();
+  const year   = document.getElementById('filterYear').value;
+  const level  = document.getElementById('filterLevel').value;
+  const status = document.getElementById('filterStatus').value;
+
+  let rows = allAppraisals.filter(a => {
+    if (search && !a.teacherName?.toLowerCase().includes(search)) return false;
+    if (year   && a.academicYear !== year) return false;
+    if (level  && !a.level?.startsWith(level)) return false;
+    if (status && a.status !== status) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('appraisalRows');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="10">No records found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(a => {
+    const levelKey = a.level?.[0] || 'I';
+    const levelLabel = a.level?.split(' ')[0] || '—';
+    const statusClass = `pill-${a.status || 'draft'}`;
+    const statusLabel = (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
+
+    const scoreBar = (val) => val != null
+      ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${val}%"></div></div><span class="score-pct">${Math.round(val)}%</span></div>`
+      : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
+
+    const composite = a.compositePercent != null
+      ? `<span style="font-weight:700;font-size:.88rem;color:#1e293b;">${Math.round(a.compositePercent)}%</span>`
+      : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
+
+    return `<tr>
+      <td style="font-weight:600;">${esc(a.teacherName||'—')}</td>
+      <td style="color:#475569;">${esc(a.schoolId||'—')} · ${esc(a.subject||'—')}</td>
+      <td style="color:#64748b;">${esc(a.academicYear||'—')}</td>
+      <td><span class="level-badge level-${levelKey}">${levelLabel}</span></td>
+      <td>${scoreBar(a.f1Score)}</td>
+      <td>${scoreBar(a.f2Score)}</td>
+      <td>${scoreBar(a.f3Score)}</td>
+      <td>${composite}</td>
+      <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
+      <td><button class="btn-view" data-id="${a.id}">View</button></td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.btn-view').forEach(btn => {
+    btn.addEventListener('click', () => openAppraisalModal(btn.dataset.id));
+  });
+}
+
+function renderWalkthroughs() {
+  const search = document.getElementById('searchW').value.toLowerCase();
+  const year   = document.getElementById('filterYearW').value;
+
+  let rows = allWalkthroughs.filter(w => {
+    if (search && !w.metadata?.teacherName?.toLowerCase().includes(search)) return false;
+    if (year   && w.academicYear !== year) return false;
+    return true;
+  });
+
+  const tbody = document.getElementById('walkthroughRows');
+  if (!rows.length) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="7">No records found.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(w => {
+    const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
+    const foci = w.fociResponses || {};
+    const fociDots = [1,2,3,4,5].map(n => {
+      const val = foci[`w${n}`];
+      const active = val && val !== 'not_observed';
+      return `<span class="foci-dot ${active?'yes':'no'}" title="W${n}: ${FOCI_LABELS[n-1]}"></span>`;
+    }).join('');
+
+    return `<tr>
+      <td style="font-weight:600;">${esc(w.metadata?.teacherName||'—')}</td>
+      <td style="color:#475569;">${esc(w.metadata?.subject||'—')}</td>
+      <td style="color:#64748b;">${esc(w.academicYear||'—')}</td>
+      <td>${visitDate}</td>
+      <td style="color:#64748b;font-size:.78rem;">${esc(w.metadata?.lessonPhase||'—')}</td>
+      <td>${fociDots}</td>
+      <td><button class="btn-view" data-id="${w.id}">View</button></td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.btn-view').forEach(btn => {
+    btn.addEventListener('click', () => openWalkthroughModal(btn.dataset.id));
+  });
+}
+
+function openAppraisalModal(id) {
+  const a = allAppraisals.find(x => x.id === id);
+  if (!a) return;
+  document.getElementById('aModalTitle').textContent = `Appraisal — ${a.teacherName || '—'}`;
+
+  const scoreRow = (label, val) => `
+    <div class="score-row-detail">
+      <span class="score-label-detail">${label}</span>
+      ${val != null
+        ? `<div class="score-bar-bg" style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div class="score-bar-fill" style="width:${val}%;background:#7c3aed;height:100%;border-radius:3px;"></div></div><span class="score-pct" style="font-size:.75rem;font-weight:700;color:#475569;white-space:nowrap;">${Math.round(val)}%</span>`
+        : '<span style="color:#cbd5e1;font-size:.78rem;flex:1;">Not scored</span>'
+      }
+    </div>`;
+
+  document.getElementById('aModalBody').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Teacher Information</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-item-label">Name</div><div class="detail-item-value">${esc(a.teacherName||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Level</div><div class="detail-item-value">${esc(a.level||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">School</div><div class="detail-item-value">${esc(a.schoolId||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(a.subject||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(a.academicYear||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(a.yearGroup||'—')}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Observation</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-item-label">Date</div><div class="detail-item-value">${a.observationDate?.toDate ? a.observationDate.toDate().toLocaleDateString('en-GB') : '—'}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${a.lessonDuration ? a.lessonDuration + ' min' : '—'}</div></div>
+        <div class="detail-item" style="grid-column:1/-1"><div class="detail-item-label">Lesson Topic</div><div class="detail-item-value">${esc(a.lessonTopic||'—')}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Scores</div>
+      ${scoreRow('F1 Admin', a.f1Score)}
+      ${scoreRow('F2 Observation', a.f2Score)}
+      ${scoreRow('F3 Work', a.f3Score)}
+      ${scoreRow('Composite', a.compositePercent)}
+      ${a.predicate ? `<div style="margin-top:6px;font-size:.83rem;font-weight:600;">Predicate: <span style="color:#7c3aed;">${esc(a.predicate)}</span></div>` : ''}
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Status</div>
+      <div><span class="status-pill pill-${a.status||'draft'}">${(a.status||'draft').charAt(0).toUpperCase()+(a.status||'draft').slice(1)}</span></div>
+      ${a.appraiserNarrative ? `<div style="margin-top:8px;font-size:.83rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative)}</div>` : ''}
+      ${a.teacherResponse ? `<div style="margin-top:8px;background:#f8fafc;border-radius:10px;padding:10px 14px;font-size:.83rem;color:#475569;line-height:1.6;"><strong>Teacher response:</strong> ${esc(a.teacherResponse)}</div>` : ''}
+    </div>
+  `;
+
+  document.getElementById('appraisalModal').classList.add('open');
+}
+
+function openWalkthroughModal(id) {
+  const w = allWalkthroughs.find(x => x.id === id);
+  if (!w) return;
+  document.getElementById('wModalTitle').textContent = `Walkthrough — ${w.metadata?.teacherName || '—'}`;
+
+  const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
+  const foci = w.fociResponses || {};
+  const fociRows = [1,2,3,4,5].map(n => {
+    const val = foci[`w${n}`] || 'not_observed';
+    const label = val.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    return `<div class="detail-item">
+      <div class="detail-item-label">W${n} — ${FOCI_LABELS[n-1]}</div>
+      <div class="detail-item-value" style="font-size:.8rem;">${label}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('wModalBody').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Teacher & Visit</div>
+      <div class="detail-grid">
+        <div class="detail-item"><div class="detail-item-label">Teacher</div><div class="detail-item-value">${esc(w.metadata?.teacherName||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(w.metadata?.subject||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(w.metadata?.yearGroup||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Visit Date</div><div class="detail-item-value">${visitDate}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${w.duration ? w.duration + ' min' : '—'}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Lesson Phase</div><div class="detail-item-value">${esc(w.metadata?.lessonPhase||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Observer Role</div><div class="detail-item-value">${esc(w.metadata?.observerRole||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(w.academicYear||'—')}</div></div>
+      </div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Foci Responses</div>
+      <div class="detail-grid">${fociRows}</div>
+    </div>
+    ${w.keyObservation ? `<div class="detail-section">
+      <div class="detail-section-title">Key Observation</div>
+      <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.keyObservation)}</div>
+    </div>` : ''}
+    ${w.suggestedFocus ? `<div class="detail-section">
+      <div class="detail-section-title">Suggested Focus</div>
+      <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.suggestedFocus)}</div>
+    </div>` : ''}
+  `;
+
+  document.getElementById('walkthroughModal').classList.add('open');
+}
+
+function esc(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
