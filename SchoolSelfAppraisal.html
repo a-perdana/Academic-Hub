@@ -28,28 +28,13 @@
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; font-size:14px; padding-top:62px; }
 
-/* ===== TOPBAR ===== */
-.page-topbar {
-  background:#1c1005; border-bottom:2px solid var(--accent);
-  position:sticky; top:62px; z-index:90; height:54px;
-  display:flex; align-items:center; padding:0 24px; gap:14px;
-}
-.topbar-back { display:flex; align-items:center; gap:6px; font-size:12px; color:rgba(255,255,255,.5); text-decoration:none; transition:color .15s; }
-.topbar-back:hover { color:#fff; }
-.topbar-sep { color:rgba(255,255,255,.25); }
-.topbar-title { font-size:14px; font-weight:700; color:#fff; }
-.topbar-status { margin-left:auto; font-size:12px; font-weight:600; padding:3px 10px; border-radius:99px; }
-.ts-draft     { background:rgba(255,255,255,.1); color:rgba(255,255,255,.6); }
-.ts-submitted { background:#fef3c7; color:#92400e; }
-.ts-reviewed  { background:#d1fae5; color:#065f46; }
-
 /* ===== LAYOUT ===== */
-.page-body { display:flex; min-height:calc(100vh - 116px); }
+.page-body { display:flex; min-height:calc(100vh - 62px); }
 
 /* ===== SIDEBAR ===== */
 .domain-sidebar {
   width:240px; flex-shrink:0;
-  position:sticky; top:116px; height:calc(100vh - 116px);
+  position:sticky; top:62px; height:calc(100vh - 62px);
   overflow-y:auto; background:var(--white);
   border-right:1px solid var(--border);
   padding:16px 10px 24px;
@@ -526,16 +511,6 @@ body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--in
 <body>
 <div id="navbarMount"></div>
 
-<div class="page-topbar">
-  <a class="topbar-back" href="index.html">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-    Dashboard
-  </a>
-  <span class="topbar-sep">/</span>
-  <span class="topbar-title" id="topbarTitle">School Self-Appraisal</span>
-  <span class="topbar-status ts-draft" id="topbarStatus">Loading…</span>
-</div>
-
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar">
     <div class="sidebar-section-label">Navigation</div>
@@ -694,7 +669,7 @@ async function saveAppraisal(newStatus) {
   }, { merge: true });
   appraisalDoc.status = status;
   document.getElementById('actionStatus').textContent = 'Saved ✓';
-  updateTopbarStatus(); updateSidebarScores();
+  updateSidebarScores();
   if (newStatus === 'submitted') {
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('btnSaveDraft').style.display = 'none';
@@ -706,12 +681,6 @@ function scheduleSave() {
   clearTimeout(saveTimer); saveTimer = setTimeout(() => saveAppraisal(), 4000);
 }
 
-function updateTopbarStatus() {
-  const el = document.getElementById('topbarStatus');
-  const s = appraisalDoc?.status || 'draft';
-  el.className = 'topbar-status ' + { draft:'ts-draft', submitted:'ts-submitted', reviewed:'ts-reviewed' }[s];
-  el.textContent = { draft:'In Progress', submitted:'Submitted', reviewed:'Reviewed' }[s] || s;
-}
 
 function updateSidebarScores() {
   if (!FRAMEWORK) return;
@@ -950,11 +919,6 @@ function renderOverview() {
       </div>
     </div>
 
-    <div class="ref-strip">
-      <span class="ref-strip-label">International References:</span>
-      ${refs}
-    </div>
-
     <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
       <span style="font-size:12px;color:var(--ink-3);font-weight:500;white-space:nowrap;">Overall Completion</span>
       <div style="flex:1;height:7px;background:var(--paper-2);border-radius:99px;overflow:hidden;"><div id="progressFill" style="height:100%;background:var(--accent);border-radius:99px;transition:width .4s;width:${pct}%"></div></div>
@@ -970,6 +934,11 @@ function renderOverview() {
         <div class="field-block"><label>Areas for Improvement</label><textarea data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
       </div>
       ${appraisalDoc?.recommendations ? `<div class="field-block" style="margin-top:4px;"><label>Eduversal Coordinator Recommendations</label><textarea disabled style="min-height:80px;background:var(--d2-bg);border-color:var(--d2-border);">${appraisalDoc.recommendations}</textarea></div>` : ''}
+    </div>
+
+    <div class="ref-strip">
+      <span class="ref-strip-label">International References:</span>
+      ${refs}
     </div>`;
 }
 
@@ -1333,8 +1302,6 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   }
 
   isReviewed = appraisal.status === 'reviewed';
-  document.getElementById('topbarTitle').textContent = appraisal.schoolName || 'School Self-Appraisal';
-  updateTopbarStatus();
   buildSidebar();
 
   document.getElementById('overviewNavBtn').addEventListener('click', () => switchView('overview'));
