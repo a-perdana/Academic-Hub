@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Appraisal Entry — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
+  color: #fff; padding: 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 1200px; margin: 0 auto; padding: 32px 32px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  position: relative; z-index: 1; flex-wrap: wrap;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
+  margin-bottom: 8px; letter-spacing: .02em;
+}
+.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.hero-sub { font-size: .85rem; opacity: .8; margin-top: 5px; }
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 32px 100px; }
+.form-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
+
+/* ── STEP INDICATOR ── */
+.steps-bar {
+  display: flex; gap: 0; background: #fff; border: 1px solid #e2e8f0;
+  border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.step {
+  flex: 1; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  border-right: 1px solid #e2e8f0; cursor: pointer; transition: background .15s; position: relative;
+}
+.step:last-child { border-right: none; }
+.step.active { background: #f5f3ff; }
+.step.done { background: #f0fdf4; }
+.step-num {
+  width: 26px; height: 26px; border-radius: 50%; font-size: .78rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  background: #e2e8f0; color: #64748b;
+}
+.step.active .step-num { background: #7c3aed; color: #fff; }
+.step.done .step-num { background: #16a34a; color: #fff; }
+.step-label { font-size: .72rem; font-weight: 600; color: #64748b; text-align: center; }
+.step.active .step-label { color: #7c3aed; }
+.step.done .step-label { color: #15803d; }
+
+/* ── CARDS ── */
+.card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
+}
+.card-head {
+  padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.card-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
+.card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
+.card-body { padding: 20px 24px; }
+
+/* ── FORM FIELDS ── */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-row.one { grid-template-columns: 1fr; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; }
+.field input, .field select, .field textarea {
+  border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 9px 12px;
+  font-family: inherit; font-size: .85rem; color: #1e293b;
+  transition: border-color .15s; background: #fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: #7c3aed;
+}
+.field textarea { resize: vertical; min-height: 70px; }
+
+/* ── DOMAIN BLOCK ── */
+.domain-block { margin-bottom: 24px; }
+.domain-label {
+  font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
+  color: #64748b; padding: 8px 24px; background: #f8fafc; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.domain-progress-text { font-size: .7rem; font-weight: 600; color: #94a3b8; }
+
+/* ── ITEM ROW ── */
+.item-row {
+  padding: 16px 24px; border-bottom: 1px solid #f8fafc; display: flex; flex-direction: column; gap: 10px;
+}
+.item-row:last-child { border-bottom: none; }
+.item-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.item-id-badge {
+  font-size: .67rem; font-weight: 700; color: #7c3aed; letter-spacing: .04em;
+  background: #ede9fe; border-radius: 5px; padding: 1px 7px; white-space: nowrap;
+}
+.item-title-text { font-size: .88rem; font-weight: 600; color: #1e293b; flex: 1; }
+.item-theory { font-size: .7rem; color: #94a3b8; font-style: italic; margin-top: 2px; }
+
+/* ── SCORE BUTTONS ── */
+.score-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.score-btn {
+  flex: 1; min-width: 140px; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  padding: 10px 8px; background: #fff; cursor: pointer; text-align: left;
+  transition: border-color .15s, background .15s; display: flex; flex-direction: column; gap: 3px;
+}
+.score-btn:hover { border-color: #c4b5fd; background: #faf5ff; }
+.score-btn.selected-1 { border-color: #dc2626; background: #fff1f2; }
+.score-btn.selected-2 { border-color: #f97316; background: #fff7ed; }
+.score-btn.selected-3 { border-color: #ca8a04; background: #fefce8; }
+.score-btn.selected-4 { border-color: #16a34a; background: #f0fdf4; }
+.score-btn-num {
+  font-size: .75rem; font-weight: 800; display: flex; align-items: center; gap: 4px;
+}
+.score-btn-num .dot { width: 8px; height: 8px; border-radius: 50%; }
+.score-btn-num .dot-1 { background: #dc2626; }
+.score-btn-num .dot-2 { background: #f97316; }
+.score-btn-num .dot-3 { background: #ca8a04; }
+.score-btn-num .dot-4 { background: #16a34a; }
+.score-btn-label { font-size: .72rem; font-weight: 700; }
+.score-btn-desc { font-size: .68rem; color: #64748b; line-height: 1.4; margin-top: 2px; }
+
+/* ── ITEM NOTE ── */
+.item-note-toggle {
+  font-size: .72rem; color: #7c3aed; font-weight: 600; cursor: pointer;
+  background: none; border: none; font-family: inherit; padding: 0;
+}
+.item-note-toggle:hover { text-decoration: underline; }
+.item-note-input {
+  border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 8px 12px;
+  font-family: inherit; font-size: .82rem; color: #1e293b; width: 100%; resize: none; min-height: 56px;
+  display: none;
+}
+.item-note-input:focus { outline: none; border-color: #7c3aed; }
+.item-note-input.visible { display: block; }
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.sticky-sidebar { position: sticky; top: 80px; }
+.progress-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 18px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+.progress-title { font-size: .78rem; font-weight: 700; color: #374151; margin-bottom: 14px; }
+.progress-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.progress-row-label { font-size: .72rem; color: #64748b; font-weight: 500; }
+.progress-bar-wrap { height: 5px; background: #f1f5f9; border-radius: 99px; overflow: hidden; width: 80px; }
+.progress-bar-fill { height: 100%; background: #7c3aed; border-radius: 99px; transition: width .3s; }
+.progress-count { font-size: .7rem; font-weight: 700; color: #374151; min-width: 36px; text-align: right; }
+
+.score-preview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.score-preview-item { background: #f8fafc; border-radius: 8px; padding: 8px 10px; }
+.score-preview-label { font-size: .62rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
+.score-preview-val { font-size: 1rem; font-weight: 800; color: #1e293b; margin-top: 2px; }
+
+/* ── ACTION BUTTONS ── */
+.action-bar {
+  display: flex; gap: 10px; justify-content: flex-end; align-items: center;
+  padding: 16px 24px; border-top: 1px solid #f1f5f9; background: #fafafa;
+}
+.btn-primary {
+  padding: 9px 22px; background: #7c3aed; color: #fff; border: none;
+  border-radius: 9px; font-family: inherit; font-size: .85rem; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.btn-primary:hover { background: #6d28d9; }
+.btn-primary:disabled { opacity: .5; cursor: default; }
+.btn-secondary {
+  padding: 9px 18px; background: #f1f5f9; color: #374151; border: 1px solid #e2e8f0;
+  border-radius: 9px; font-family: inherit; font-size: .85rem; font-weight: 600;
+  cursor: pointer; transition: background .15s;
+}
+.btn-secondary:hover { background: #e2e8f0; }
+
+.level-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 8px; padding: 4px 12px; font-size: .75rem; font-weight: 700;
+}
+.level-badge.induction  { background: #fef9c3; color: #713f12; }
+.level-badge.developing { background: #ffedd5; color: #9a3412; }
+.level-badge.proficient { background: #dbeafe; color: #1d4ed8; }
+.level-badge.lead       { background: #dcfce7; color: #15803d; }
+
+.toast {
+  position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: #fff;
+  border-radius: 10px; padding: 12px 20px; font-size: .83rem; font-weight: 600;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18); z-index: 9999; display: none;
+  animation: fadeIn .2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 900px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .form-row, .form-row.three { grid-template-columns: 1fr 1fr; }
+  .score-row { flex-direction: column; }
+  .score-btn { min-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">&#x1F4CB; Formal Appraisal Entry</div>
+      <h1>Teacher Formal Appraisal — v2.0</h1>
+      <div class="hero-sub">Complete the scored observation form for each teacher. Level determines which items appear.</div>
+    </div>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <!-- STEP BAR -->
+  <div class="steps-bar" id="stepsBar">
+    <div class="step active" data-step="1">
+      <div class="step-num">1</div>
+      <div class="step-label">Teacher &amp; Setup</div>
+    </div>
+    <div class="step" data-step="2">
+      <div class="step-num">2</div>
+      <div class="step-label">F1 Admin</div>
+    </div>
+    <div class="step" data-step="3">
+      <div class="step-num">3</div>
+      <div class="step-label">F2 Observation</div>
+    </div>
+    <div class="step" data-step="4">
+      <div class="step-num">4</div>
+      <div class="step-label">F3 Work + Leadership</div>
+    </div>
+    <div class="step" data-step="5">
+      <div class="step-num">5</div>
+      <div class="step-label">Review &amp; Submit</div>
+    </div>
+  </div>
+
+  <div class="form-grid">
+    <!-- MAIN AREA -->
+    <div id="mainArea">
+      <!-- STEP 1: Teacher & Setup -->
+      <div id="step1" class="step-panel">
+        <div class="card">
+          <div class="card-head"><h2>Teacher Information</h2></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="field">
+                <label>Teacher Name</label>
+                <input type="text" id="teacherName" placeholder="Full name">
+              </div>
+              <div class="field">
+                <label>Teacher UID (Firestore)</label>
+                <input type="text" id="teacherUid" placeholder="uid from Firestore users/{uid}">
+              </div>
+            </div>
+            <div class="form-row three">
+              <div class="field">
+                <label>School</label>
+                <input type="text" id="schoolId" placeholder="School ID or name">
+              </div>
+              <div class="field">
+                <label>Subject</label>
+                <input type="text" id="subject" placeholder="e.g. Mathematics">
+              </div>
+              <div class="field">
+                <label>Academic Year</label>
+                <select id="academicYear"></select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>Observation Setup</h2></div>
+          <div class="card-body">
+            <div class="form-row">
+              <div class="field">
+                <label>Observation Date</label>
+                <input type="date" id="observationDate">
+              </div>
+              <div class="field">
+                <label>Appraisal Level</label>
+                <select id="appraisalLevel">
+                  <option value="">— Select level —</option>
+                  <option value="induction">Induction (Year 1–2)</option>
+                  <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+                  <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
+                  <option value="lead">Lead (Subject Leader / HoD)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label>Year Group / Class Observed</label>
+                <input type="text" id="yearGroup" placeholder="e.g. Year 10A">
+              </div>
+              <div class="field">
+                <label>Lesson Duration (minutes)</label>
+                <input type="number" id="lessonDuration" value="40" min="20" max="90">
+              </div>
+            </div>
+            <div class="form-row one">
+              <div class="field">
+                <label>Lesson Topic / Objective (as stated by teacher)</label>
+                <input type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
+              </div>
+            </div>
+            <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+          <button class="btn-primary" id="step1Next">Next: F1 Admin &#x2192;</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: F1 Admin -->
+      <div id="step2" class="step-panel" style="display:none;">
+        <div class="card" id="f1Card">
+          <div class="card-head">
+            <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Weight 20%</div></div>
+            <div id="f1Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 9 scored</div>
+          </div>
+          <div id="f1Items"></div>
+        </div>
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="goStep(1)">&#x2190; Back</button>
+          <button class="btn-primary" id="step2Next">Next: F2 Observation &#x2192;</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: F2 Observation -->
+      <div id="step3" class="step-panel" style="display:none;">
+        <div class="card" id="f2Card">
+          <div class="card-head">
+            <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · Weight 60%</div></div>
+            <div id="f2Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
+          </div>
+          <div id="f2Items"></div>
+        </div>
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="goStep(2)">&#x2190; Back</button>
+          <button class="btn-primary" id="step3Next">Next: F3 Work &#x2192;</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: F3 Work -->
+      <div id="step4" class="step-panel" style="display:none;">
+        <div class="card" id="f3Card">
+          <div class="card-head">
+            <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Weight 20%</div></div>
+            <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
+          </div>
+          <div id="f3Items"></div>
+        </div>
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="goStep(3)">&#x2190; Back</button>
+          <button class="btn-primary" id="step4Next">Next: Review &#x2192;</button>
+        </div>
+      </div>
+
+      <!-- STEP 5: Review & Submit -->
+      <div id="step5" class="step-panel" style="display:none;">
+        <div class="card">
+          <div class="card-head"><h2>Score Summary</h2></div>
+          <div class="card-body" id="reviewSummary"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Appraiser's Overall Narrative</h2></div>
+          <div class="card-body">
+            <div class="field">
+              <label>Summary narrative (shared with teacher)</label>
+              <textarea id="appraiserNarrative" rows="5" placeholder="Write an overall professional summary of the appraisal observation. This will be visible to the teacher when the report is shared."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="surveyInputCard">
+          <div class="card-head"><h2>Student Survey Data (Optional)</h2><div style="font-size:.72rem;color:#94a3b8;">Informative only — does not affect score</div></div>
+          <div id="surveyInputArea" class="card-body"></div>
+        </div>
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="goStep(4)">&#x2190; Back</button>
+          <button class="btn-primary" id="saveDraftBtn">Save as Draft</button>
+          <button class="btn-primary" id="shareBtn" style="background:#16a34a;">Share with Teacher</button>
+        </div>
+        <div id="submitMsg" style="padding:0 24px 16px;font-size:.8rem;color:#64748b;"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sticky-sidebar">
+      <div class="progress-card">
+        <div class="progress-title">Scoring Progress</div>
+        <div id="sidebarProgress">
+          <div style="font-size:.78rem;color:#94a3b8;">Select a level to begin.</div>
+        </div>
+        <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:14px;" id="liveScores" style="display:none;">
+          <div class="progress-title">Live Scores</div>
+          <div class="score-preview-grid">
+            <div class="score-preview-item"><div class="score-preview-label">F1</div><div class="score-preview-val" id="liveF1">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F2</div><div class="score-preview-val" id="liveF2">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F3</div><div class="score-preview-val" id="liveF3">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
+          </div>
+          <div style="margin-top:12px;text-align:center;">
+            <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
+            <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="progress-card" style="margin-top:0;">
+        <div class="progress-title">Rubric Legend</div>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// ── DATA ──────────────────────────────────────────────────
+let FRAMEWORK = null;
+let LEVELS    = null;
+let currentStep = 1;
+const scores = {}; // itemId → 1–4
+const notes  = {}; // itemId → string
+
+Promise.all([
+  fetch('appraisal/appraisal-framework-v2.json').then(r=>r.json()),
+  fetch('appraisal/appraisal-levels.json').then(r=>r.json())
+]).then(([fw, lv]) => {
+  FRAMEWORK = fw;
+  LEVELS = lv;
+});
+
+// ── HELPERS ──────────────────────────────────────────────
+function showToast(msg, duration=3000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(()=>{ t.style.display='none'; }, duration);
+}
+
+function getLevel() { return document.getElementById('appraisalLevel').value; }
+
+function isVisible(item, level) {
+  const order = ['induction','developing','proficient','lead'];
+  return order.indexOf(item.visible_from) <= order.indexOf(level);
+}
+
+function scoreLabel(s) {
+  return ['','Unsatisfactory','Basic','Proficient','Distinguished'][s]||'—';
+}
+
+function buildItemRow(item) {
+  const scoreHtml = [1,2,3,4].map(s => {
+    const rubricText = item.rubric?.[s] || '';
+    const short = rubricText.substring(0, 90) + (rubricText.length > 90 ? '…' : '');
+    return `<button class="score-btn" data-item="${item.id}" data-score="${s}" onclick="selectScore('${item.id}',${s})">
+      <div class="score-btn-num"><span class="dot dot-${s}"></span> ${s}</div>
+      <div class="score-btn-label">${scoreLabel(s)}</div>
+      <div class="score-btn-desc">${short}</div>
+    </button>`;
+  }).join('');
+
+  const theory = item.theory_basis ? `<div class="item-theory">${item.theory_basis}</div>` : '';
+
+  return `<div class="item-row" id="row-${item.id}">
+    <div class="item-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
+          <span class="item-id-badge">${item.id}</span>
+          <span class="item-title-text">${item.title}</span>
+        </div>
+        ${theory}
+      </div>
+    </div>
+    <div class="score-row">${scoreHtml}</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="item-note-toggle" onclick="toggleNote('${item.id}')">+ Add note</button>
+      <textarea class="item-note-input" id="note-${item.id}" placeholder="Optional comment for this item…" onchange="notes['${item.id}']=this.value;updateLiveScores();"></textarea>
+    </div>
+  </div>`;
+}
+
+function buildF1() {
+  if (!FRAMEWORK) return;
+  const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
+  document.getElementById('f1Items').innerHTML = fw.items.map(buildItemRow).join('');
+}
+
+function buildF2(level) {
+  if (!FRAMEWORK || !level) return;
+  const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
+  let html = '';
+  for (const domain of fw.domains) {
+    const visible = domain.items.filter(i=>isVisible(i,level));
+    if (!visible.length) continue;
+    html += `<div class="domain-label"><span>${domain.id} — ${domain.title}</span><span class="domain-progress-text">${visible.length} items</span></div>`;
+    html += visible.map(buildItemRow).join('');
+  }
+  document.getElementById('f2Items').innerHTML = html;
+  updateF2Progress(level);
+}
+
+function buildF3(level) {
+  if (!FRAMEWORK || !level) return;
+  const f3fw  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+  const f3Lfw = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+  let html = '';
+
+  const visibleF3 = f3fw.items.filter(i=>isVisible(i,level));
+  if (visibleF3.length) {
+    html += `<div class="domain-label"><span>Professional Conduct & Responsibilities</span><span class="domain-progress-text">${visibleF3.length} items</span></div>`;
+    html += visibleF3.map(buildItemRow).join('');
+  }
+  if (level === 'lead') {
+    html += `<div class="domain-label"><span>F3L — Leadership Responsibilities</span><span class="domain-progress-text">6 items</span></div>`;
+    html += f3Lfw.items.map(buildItemRow).join('');
+    document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) · 20%';
+  }
+  document.getElementById('f3Items').innerHTML = html;
+}
+
+function buildSurveyInput() {
+  if (!FRAMEWORK) return;
+  const f4 = FRAMEWORK.frameworks.find(f=>f.id==='F4');
+  const labels = {4:'Always',3:'Usually',2:'Sometimes',1:'Rarely'};
+  document.getElementById('surveyInputArea').innerHTML = f4.items.map(item=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f8fafc;">
+      <div style="flex:1;font-size:.82rem;color:#374151;">${item.id}. ${item.title}</div>
+      <select style="border:1px solid #e2e8f0;border-radius:7px;padding:4px 8px;font-family:inherit;font-size:.78rem;" id="survey-${item.id}">
+        <option value="">—</option>
+        ${[4,3,2,1].map(v=>`<option value="${v}">${labels[v]}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function updateF1Progress() {
+  if (!FRAMEWORK) return;
+  const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
+  const scored = fw.items.filter(i=>scores[i.id]).length;
+  document.getElementById('f1Progress').textContent = `${scored} / ${fw.items.length} scored`;
+}
+
+function updateF2Progress(level) {
+  if (!FRAMEWORK || !level) return;
+  const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
+  const allVisible = fw.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
+  const scored = allVisible.filter(i=>scores[i.id]).length;
+  document.getElementById('f2Progress').textContent = `${scored} / ${allVisible.length} scored`;
+}
+
+function updateF3Progress(level) {
+  if (!FRAMEWORK || !level) return;
+  const f3fw  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+  const f3Lfw = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+  const visible = [...f3fw.items.filter(i=>isVisible(i,level)), ...(level==='lead'?f3Lfw.items:[])];
+  const scored = visible.filter(i=>scores[i.id]).length;
+  document.getElementById('f3Progress').textContent = `${scored} / ${visible.length} scored`;
+}
+
+function updateSidebarProgress(level) {
+  if (!FRAMEWORK || !level) return;
+  const lv = LEVELS?.levels.find(l=>l.id===level);
+  if (!lv) return;
+  const sections = [
+    { label:'F1 Admin', total: lv.item_counts.F1, items: FRAMEWORK.frameworks.find(f=>f.id==='F1').items },
+    { label:'F2 Observation', total: lv.item_counts.D1+lv.item_counts.D2+lv.item_counts.D3+lv.item_counts.D4,
+      items: FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.flatMap(d=>d.items.filter(i=>isVisible(i,level))) },
+    { label:'F3 Work'+(level==='lead'?' + Lead':''), total: lv.item_counts.F3+(lv.item_counts.F3L||0),
+      items: [...FRAMEWORK.frameworks.find(f=>f.id==='F3').items.filter(i=>isVisible(i,level)),
+              ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] }
+  ];
+  document.getElementById('sidebarProgress').innerHTML = sections.map(s => {
+    const done = s.items.filter(i=>scores[i.id]).length;
+    const pct = s.total ? Math.round(done/s.total*100) : 0;
+    return `<div class="progress-row">
+      <div class="progress-row-label">${s.label}</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+      <div class="progress-count">${done}/${s.total}</div>
+    </div>`;
+  }).join('');
+}
+
+function calcScores(level) {
+  if (!FRAMEWORK || !level) return null;
+  const fw1 = FRAMEWORK.frameworks.find(f=>f.id==='F1');
+  const fw2 = FRAMEWORK.frameworks.find(f=>f.id==='F2');
+  const fw3 = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+  const fw3L= FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+
+  function mean(items) {
+    const s = items.filter(i=>scores[i.id]);
+    return s.length ? s.reduce((a,i)=>a+scores[i.id],0)/s.length : null;
+  }
+
+  const f1Items = fw1.items;
+  const f2Items = fw2.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
+  const f3Base  = fw3.items.filter(i=>isVisible(i,level));
+  const f3Lead  = level==='lead' ? fw3L.items : [];
+  const f3Items = [...f3Base, ...f3Lead];
+
+  const m1 = mean(f1Items);
+  const m2 = mean(f2Items);
+  const m3 = mean(f3Items);
+  if (m1===null||m2===null||m3===null) return null;
+
+  const composite = ((m1/4)*0.20 + (m2/4)*0.60 + (m3/4)*0.20) * 100;
+  const bands = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
+  const pred = bands.find(b=>composite>=b.min)?.l || 'F';
+  return { f1: m1, f2: m2, f3: m3, composite, predicate: pred };
+}
+
+function updateLiveScores() {
+  const level = getLevel();
+  if (!level) return;
+  const r = calcScores(level);
+  if (!r) {
+    document.getElementById('liveF1').textContent = '—';
+    document.getElementById('liveF2').textContent = '—';
+    document.getElementById('liveF3').textContent = '—';
+    document.getElementById('liveFinal').textContent = '—';
+    document.getElementById('livePred').textContent = '—';
+    return;
+  }
+  document.getElementById('liveF1').textContent = r.f1.toFixed(2);
+  document.getElementById('liveF2').textContent = r.f2.toFixed(2);
+  document.getElementById('liveF3').textContent = r.f3.toFixed(2);
+  document.getElementById('liveFinal').textContent = r.composite.toFixed(1)+'%';
+  document.getElementById('livePred').textContent = r.predicate;
+  document.getElementById('liveScores').style.display = '';
+  updateSidebarProgress(level);
+  updateF1Progress();
+  updateF2Progress(level);
+  updateF3Progress(level);
+}
+
+function buildReviewSummary() {
+  const level = getLevel();
+  const r = calcScores(level);
+  if (!r) {
+    return '<div style="color:#64748b;font-size:.85rem;">Complete all sections to see the summary.</div>';
+  }
+  const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
+  return `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
+        <div style="font-size:1.4rem;font-weight:800;">${r.f1.toFixed(2)}</div>
+        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F2 Observation (60%)</div>
+        <div style="font-size:1.4rem;font-weight:800;">${r.f2.toFixed(2)}</div>
+        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
+      </div>
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
+        <div style="font-size:1.4rem;font-weight:800;">${r.f3.toFixed(2)}</div>
+        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
+      </div>
+      <div style="text-align:center;padding:20px 16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
+        <div style="font-size:1.8rem;font-weight:800;color:#7c3aed;">${r.composite.toFixed(1)}%</div>
+        <div style="font-size:1.6rem;font-weight:800;color:${predColors[r.predicate]};margin-top:4px;">${r.predicate}</div>
+      </div>
+    </div>
+    <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
+      Formula: (F1/4 × 20%) + (F2/4 × 60%) + (F3/4 × 20%) × 100
+    </div>
+  `;
+}
+
+// ── STEP NAVIGATION ──────────────────────────────────────
+window.goStep = function(n) {
+  currentStep = n;
+  document.querySelectorAll('.step-panel').forEach(p=>p.style.display='none');
+  document.getElementById(`step${n}`).style.display = '';
+  document.querySelectorAll('.step').forEach(s=>{
+    const sn = parseInt(s.dataset.step);
+    s.classList.remove('active','done');
+    if (sn === n) s.classList.add('active');
+    else if (sn < n) s.classList.add('done');
+  });
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+window.selectScore = function(itemId, score) {
+  scores[itemId] = score;
+  document.querySelectorAll(`[data-item="${itemId}"]`).forEach(btn=>{
+    btn.className = 'score-btn';
+    if (parseInt(btn.dataset.score) === score) btn.classList.add(`selected-${score}`);
+  });
+  updateLiveScores();
+};
+
+window.toggleNote = function(itemId) {
+  const el = document.getElementById(`note-${itemId}`);
+  el.classList.toggle('visible');
+};
+
+// ── AUTH READY ────────────────────────────────────────────
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  const isAdmin = profile?.role_academichub === 'academic_admin';
+  if (!isAdmin) {
+    document.getElementById('mainArea').innerHTML = '<div style="padding:40px;text-align:center;color:#64748b;">Access restricted to academic administrators.</div>';
+    return;
+  }
+
+  window.__loadAcademicNavbar('teacher-appraisal-entry', { user, profile });
+
+  const db = window.db;
+
+  // Populate year select
+  const yearSel = document.getElementById('academicYear');
+  const y = new Date().getFullYear();
+  for (let i = y; i >= y-3; i--) {
+    const o = document.createElement('option');
+    o.value = `${i}/${i+1}`; o.textContent = `${i}/${i+1}`;
+    yearSel.appendChild(o);
+  }
+
+  // Set today as default observation date
+  document.getElementById('observationDate').value = new Date().toISOString().split('T')[0];
+
+  // Level change → rebuild affected steps
+  document.getElementById('appraisalLevel').addEventListener('change', () => {
+    const level = getLevel();
+    if (!level || !FRAMEWORK) return;
+    const lv = LEVELS?.levels.find(l=>l.id===level);
+    if (lv) {
+      document.getElementById('levelSummary').style.display = '';
+      document.getElementById('levelSummary').innerHTML =
+        `<strong>${lv.label}</strong> — ${lv.description}<br>
+        <strong>Total scored items:</strong> ${lv.item_counts.total_scored}
+        (F1: ${lv.item_counts.F1}, D1: ${lv.item_counts.D1}, D2: ${lv.item_counts.D2},
+         D3: ${lv.item_counts.D3}, D4: ${lv.item_counts.D4}, F3: ${lv.item_counts.F3}${level==='lead'?`, F3L: ${lv.item_counts.F3L}`:''})`;
+    }
+    buildF2(level); buildF3(level); updateSidebarProgress(level);
+  });
+
+  // Build F1 once
+  await new Promise(resolve => {
+    if (FRAMEWORK) { buildF1(); buildSurveyInput(); resolve(); }
+    else {
+      const interval = setInterval(()=>{
+        if (FRAMEWORK && LEVELS) { buildF1(); buildSurveyInput(); clearInterval(interval); resolve(); }
+      }, 200);
+    }
+  });
+
+  // Step 1 → 2
+  document.getElementById('step1Next').addEventListener('click', () => {
+    if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
+    if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
+    if (!document.getElementById('observationDate').value) { showToast('Please set the observation date.'); return; }
+    buildF2(getLevel()); buildF3(getLevel());
+    goStep(2);
+  });
+
+  // Step 2 → 3
+  document.getElementById('step2Next').addEventListener('click', () => {
+    if (!FRAMEWORK) return;
+    const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
+    const unscored = fw.items.filter(i=>!scores[i.id]);
+    if (unscored.length > 0) { showToast(`${unscored.length} F1 items still unscored.`); return; }
+    goStep(3);
+  });
+
+  // Step 3 → 4
+  document.getElementById('step3Next').addEventListener('click', () => {
+    const level = getLevel();
+    const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
+    const visible = fw.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
+    const unscored = visible.filter(i=>!scores[i.id]);
+    if (unscored.length > 0) { showToast(`${unscored.length} F2 items still unscored.`); return; }
+    goStep(4);
+  });
+
+  // Step 4 → 5
+  document.getElementById('step4Next').addEventListener('click', () => {
+    const level = getLevel();
+    const fw3  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+    const fw3L = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+    const visible = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
+    const unscored = visible.filter(i=>!scores[i.id]);
+    if (unscored.length > 0) { showToast(`${unscored.length} F3 items still unscored.`); return; }
+    document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
+    goStep(5);
+  });
+
+  // Save
+  async function saveAppraisal(status) {
+    const level = getLevel();
+    const r = calcScores(level);
+    if (!r) { showToast('Cannot calculate — check all items are scored.'); return; }
+
+    // Collect survey
+    const surveyData = {};
+    document.querySelectorAll('[id^="survey-"]').forEach(el => {
+      if (el.value) surveyData[el.id.replace('survey-','')] = parseInt(el.value);
+    });
+    const surveyVals = Object.values(surveyData).map(Number).filter(Boolean);
+    const surveyMean = surveyVals.length ? surveyVals.reduce((a,b)=>a+b,0)/surveyVals.length : null;
+
+    const payload = {
+      teacherUid: document.getElementById('teacherUid').value.trim() || null,
+      teacherName: document.getElementById('teacherName').value.trim(),
+      appraiserUid: user.uid,
+      schoolId: document.getElementById('schoolId').value.trim(),
+      subject: document.getElementById('subject').value.trim(),
+      academicYear: document.getElementById('academicYear').value,
+      level,
+      observationDate: new Date(document.getElementById('observationDate').value),
+      yearGroup: document.getElementById('yearGroup').value.trim(),
+      lessonDuration: parseInt(document.getElementById('lessonDuration').value),
+      lessonTopic: document.getElementById('lessonTopic').value.trim(),
+      scores: { ...scores },
+      narratives: { ...notes },
+      f1Score: r.f1,
+      f2Score: r.f2,
+      f3Score: r.f3,
+      compositePercent: r.composite,
+      predicate: r.predicate,
+      appraiserNarrative: document.getElementById('appraiserNarrative').value.trim(),
+      surveyData,
+      surveyMean,
+      status,
+      teacherResponse: '',
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    };
+
+    try {
+      const ref = await addDoc(collection(db, 'teacher_appraisals'), payload);
+      showToast(status==='shared' ? 'Appraisal shared with teacher.' : 'Draft saved.');
+      document.getElementById('submitMsg').textContent = `Saved (ID: ${ref.id})`;
+    } catch(e) {
+      showToast('Error saving — check console.');
+      console.error(e);
+    }
+  }
+
+  document.getElementById('saveDraftBtn').addEventListener('click', () => saveAppraisal('draft'));
+  document.getElementById('shareBtn').addEventListener('click', () => saveAppraisal('shared'));
+});
+</script>
+</body>
+</html>

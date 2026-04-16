@@ -69,6 +69,8 @@ const cleanUrls = {
   "cambridge-calendar.html":         "cambridge-calendar",
   "CurriculumMap.html":             "curriculum-map",
   "teacher-kpi-evaluation.html":    "teacher-kpi-evaluation",
+  "TeacherAppraisalEntry.html":     "teacher-appraisal-entry",
+  "TeacherWalkthroughEntry.html":   "teacher-walkthrough-entry",
   "CompetencyFramework.html":       "competency-framework",
   "LearningPath.html":              "learning-path",
   "MyPortfolio.html":               "my-portfolio",
@@ -142,6 +144,8 @@ const htmlFiles = [
   "weekly-checklist.html",
   "CurriculumMap.html",
   "teacher-kpi-evaluation.html",
+  "TeacherAppraisalEntry.html",
+  "TeacherWalkthroughEntry.html",
   "cambridge-calendar.html",
   "CompetencyFramework.html",
   "LearningPath.html",
@@ -206,6 +210,10 @@ if (fs.existsSync("partials")) {
 if (fs.existsSync("resources")) {
   copyDirRecursive("resources", "dist/resources");
   console.log("Copied: resources/");
+}
+if (fs.existsSync("appraisal")) {
+  copyDirRecursive("appraisal", "dist/appraisal");
+  console.log("Copied: appraisal/");
 }
 
 // -- Generate Netlify _redirects

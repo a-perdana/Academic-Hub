@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Classroom Walkthrough — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #064e3b 0%, #059669 50%, #34d399 100%);
+  color: #fff; padding: 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 900px; margin: 0 auto; padding: 32px 32px 28px;
+  position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
+  margin-bottom: 10px; letter-spacing: .02em;
+}
+.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.hero-sub { font-size: .85rem; opacity: .82; margin-top: 5px; max-width: 520px; }
+
+.formative-notice {
+  margin-top: 14px; display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3);
+  border-radius: 8px; padding: 7px 14px; font-size: .77rem; font-weight: 600;
+}
+
+/* ── LAYOUT ── */
+.page-wrap { max-width: 900px; margin: 0 auto; padding: 28px 32px 100px; }
+
+/* ── CARD ── */
+.card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
+}
+.card-head {
+  padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
+.card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
+.card-body { padding: 20px 24px; }
+
+/* ── FORM ── */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.form-row.three { grid-template-columns: 1fr 1fr 1fr; }
+.form-row.one { grid-template-columns: 1fr; margin-bottom: 0; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; }
+.field input, .field select, .field textarea {
+  border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 9px 12px;
+  font-family: inherit; font-size: .85rem; color: #1e293b;
+  transition: border-color .15s; background: #fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #059669; }
+.field textarea { resize: vertical; min-height: 80px; }
+
+/* ── FOCUS CARDS ── */
+.foci-grid { display: flex; flex-direction: column; gap: 0; }
+.focus-card { padding: 20px 24px; border-bottom: 1px solid #f1f5f9; }
+.focus-card:last-child { border-bottom: none; }
+
+.focus-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+.focus-id-badge {
+  width: 38px; height: 38px; border-radius: 50%; background: #f0fdf4; color: #15803d;
+  font-size: .8rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; border: 2px solid #bbf7d0;
+}
+.focus-title { font-size: .92rem; font-weight: 700; color: #1e293b; }
+.focus-question { font-size: .8rem; color: #64748b; font-style: italic; margin-top: 3px; }
+.focus-desc { font-size: .78rem; color: #374151; line-height: 1.6; margin-bottom: 12px; }
+.focus-theory { font-size: .7rem; color: #94a3b8; font-style: italic; margin-bottom: 10px; }
+
+/* ── RESPONSE OPTIONS ── */
+.response-options { display: flex; gap: 10px; margin-bottom: 12px; }
+.resp-btn {
+  flex: 1; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 8px;
+  background: #fff; cursor: pointer; text-align: center; transition: all .15s;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.resp-btn:hover { border-color: #6ee7b7; background: #f0fdf4; }
+.resp-btn.sel-E { border-color: #16a34a; background: #f0fdf4; }
+.resp-btn.sel-D { border-color: #ca8a04; background: #fefce8; }
+.resp-btn.sel-N { border-color: #94a3b8; background: #f8fafc; }
+.resp-code {
+  width: 28px; height: 28px; border-radius: 50%; font-size: .78rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.resp-code.E { background: #dcfce7; color: #15803d; }
+.resp-code.D { background: #fef9c3; color: #92400e; }
+.resp-code.N { background: #f1f5f9; color: #64748b; }
+.resp-label { font-size: .72rem; font-weight: 700; }
+.resp-desc { font-size: .66rem; color: #64748b; line-height: 1.3; }
+
+.focus-note-label { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 5px; }
+.focus-note-input {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 9px 12px;
+  font-family: inherit; font-size: .82rem; color: #1e293b; resize: none; min-height: 60px;
+  transition: border-color .15s;
+}
+.focus-note-input:focus { outline: none; border-color: #059669; }
+
+/* ── NARRATIVE ── */
+.narrative-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 20px 24px; }
+.narrative-title { font-size: .82rem; font-weight: 700; color: #15803d; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
+.narrative-field { margin-bottom: 14px; }
+.narrative-field label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; display: block; margin-bottom: 5px; }
+.narrative-field textarea {
+  width: 100%; border: 1.5px solid #d1fae5; border-radius: 9px; padding: 10px 14px;
+  font-family: inherit; font-size: .85rem; color: #1e293b; resize: vertical; min-height: 80px;
+  background: #fff; transition: border-color .15s;
+}
+.narrative-field textarea:focus { outline: none; border-color: #059669; }
+
+/* ── PROGRESS TRACKER ── */
+.progress-tracker {
+  position: sticky; bottom: 0; background: #fff; border-top: 1px solid #e2e8f0;
+  padding: 12px 32px; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; z-index: 100; flex-wrap: wrap;
+}
+.progress-foci { display: flex; gap: 6px; }
+.foci-dot {
+  width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; transition: background .2s;
+}
+.foci-dot.filled { background: #059669; }
+.progress-label { font-size: .78rem; color: #64748b; font-weight: 500; }
+
+.btn-submit {
+  padding: 10px 28px; background: #059669; color: #fff; border: none;
+  border-radius: 10px; font-family: inherit; font-size: .9rem; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.btn-submit:hover { background: #047857; }
+.btn-submit:disabled { opacity: .5; cursor: default; }
+
+.toast {
+  position: fixed; bottom: 80px; right: 24px; background: #1e293b; color: #fff;
+  border-radius: 10px; padding: 12px 20px; font-size: .83rem; font-weight: 600;
+  box-shadow: 0 4px 24px rgba(0,0,0,.18); z-index: 9999; display: none;
+}
+
+/* ── SUCCESS STATE ── */
+.success-state {
+  background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px;
+  padding: 48px 32px; text-align: center; display: none;
+}
+.success-icon { font-size: 3.5rem; margin-bottom: 14px; }
+.success-title { font-size: 1.2rem; font-weight: 800; color: #15803d; margin-bottom: 8px; }
+.success-sub { font-size: .88rem; color: #374151; line-height: 1.6; max-width: 400px; margin: 0 auto 20px; }
+.btn-new {
+  padding: 9px 22px; background: #059669; color: #fff; border: none;
+  border-radius: 9px; font-family: inherit; font-size: .85rem; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+}
+.btn-new:hover { background: #047857; }
+
+@media (max-width: 640px) {
+  .form-row, .form-row.three { grid-template-columns: 1fr; }
+  .response-options { flex-direction: column; }
+  .page-wrap { padding: 20px 16px 80px; }
+}
+</style>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">&#x1F6B6; Classroom Walkthrough</div>
+    <h1>Classroom Walkthrough — Observation Form</h1>
+    <div class="hero-sub">Short, unannounced visits (5–10 min). Formative only — no score assigned. Findings shared with teacher as developmental feedback.</div>
+    <div class="formative-notice">&#x2139;&#xFE0F; This observation does not contribute to the teacher's formal appraisal score.</div>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <!-- FORM -->
+  <div id="formView">
+    <!-- VISIT DETAILS -->
+    <div class="card">
+      <div class="card-head"><h2>Visit Details</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field">
+            <label>Teacher Name</label>
+            <input type="text" id="teacherName" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label>Teacher UID (Firestore)</label>
+            <input type="text" id="teacherUid" placeholder="uid from users/{uid}">
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Subject</label>
+            <input type="text" id="subject" placeholder="e.g. Mathematics">
+          </div>
+          <div class="field">
+            <label>Year Group / Class</label>
+            <input type="text" id="yearGroup" placeholder="e.g. Year 9B">
+          </div>
+          <div class="field">
+            <label>Academic Year</label>
+            <select id="academicYear"></select>
+          </div>
+        </div>
+        <div class="form-row three">
+          <div class="field">
+            <label>Date of Visit</label>
+            <input type="date" id="visitDate">
+          </div>
+          <div class="field">
+            <label>Time of Visit (start)</label>
+            <input type="time" id="visitTime">
+          </div>
+          <div class="field">
+            <label>Duration (minutes)</label>
+            <input type="number" id="duration" value="10" min="5" max="20">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Observer Role</label>
+            <select id="observerRole">
+              <option value="Subject Leader">Subject Leader</option>
+              <option value="School Principal">School Principal</option>
+              <option value="Academic Coordinator">Academic Coordinator</option>
+              <option value="Cambridge Coordinator">Cambridge Coordinator</option>
+              <option value="Eduversal Representative">Eduversal Representative</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Lesson Phase at Time of Visit</label>
+            <select id="lessonPhase">
+              <option value="">— Optional —</option>
+              <option value="Opening / Introduction">Opening / Introduction</option>
+              <option value="Main Activity">Main Activity</option>
+              <option value="Guided Practice">Guided Practice</option>
+              <option value="Independent Work">Independent Work</option>
+              <option value="Group Work">Group Work</option>
+              <option value="Closure / Review">Closure / Review</option>
+              <option value="Transition">Transition</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- OBSERVATION FOCI -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Observation Foci</h2>
+          <div class="card-head-sub">For each focus, select E (Evident), D (Developing), or N (Not Observed). Add a brief note if useful.</div>
+        </div>
+      </div>
+      <div class="foci-grid" id="fociGrid">
+        <!-- built by JS -->
+      </div>
+    </div>
+
+    <!-- NARRATIVE -->
+    <div class="narrative-card">
+      <div class="narrative-title">&#x270F;&#xFE0F; Observer Narrative</div>
+      <div class="narrative-field">
+        <label>Key Observation <span style="color:#dc2626;">*</span></label>
+        <textarea id="keyObservation" placeholder="A brief, specific observation about what was most notable during this visit — a strength, a pattern, or something worth discussing."></textarea>
+      </div>
+      <div class="narrative-field" style="margin-bottom:0;">
+        <label>Suggested Focus (optional)</label>
+        <textarea id="suggestedFocus" placeholder="One specific, actionable suggestion or professional learning focus for the teacher to consider before the next visit."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">&#x2705;</div>
+    <div class="success-title">Walkthrough Saved</div>
+    <div class="success-sub">The observation record has been saved and is now visible to the teacher in their appraisal view.</div>
+    <button class="btn-new" onclick="resetForm()">Record Another Walkthrough</button>
+  </div>
+</div>
+
+<!-- STICKY PROGRESS + SUBMIT -->
+<div class="progress-tracker" id="progressTracker">
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="progress-foci" id="fociDots">
+      <div class="foci-dot" data-focus="W1"></div>
+      <div class="foci-dot" data-focus="W2"></div>
+      <div class="foci-dot" data-focus="W3"></div>
+      <div class="foci-dot" data-focus="W4"></div>
+      <div class="foci-dot" data-focus="W5"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 5 foci rated</div>
+  </div>
+  <button class="btn-submit" id="submitBtn">Save Walkthrough Record</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// ── RUBRIC DATA ───────────────────────────────────────────
+let RUBRIC = null;
+fetch('appraisal/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
+
+const fociResponses = {}; // focusId → { code, note }
+
+// ── HELPERS ──────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display = 'block';
+  setTimeout(()=>{ t.style.display='none'; }, 3500);
+}
+
+function updateProgress() {
+  const rated = Object.keys(fociResponses).filter(k=>fociResponses[k]?.code).length;
+  document.getElementById('progressLabel').textContent = `${rated} / 5 foci rated`;
+  document.querySelectorAll('.foci-dot').forEach(dot=>{
+    const id = dot.dataset.focus;
+    dot.classList.toggle('filled', !!(fociResponses[id]?.code));
+  });
+}
+
+function buildFoci() {
+  if (!RUBRIC) return;
+  const grid = document.getElementById('fociGrid');
+  grid.innerHTML = RUBRIC.foci.map(focus => `
+    <div class="focus-card">
+      <div class="focus-header">
+        <div class="focus-id-badge">${focus.id}</div>
+        <div>
+          <div class="focus-title">${focus.title}</div>
+          <div class="focus-question">${focus.guiding_question}</div>
+        </div>
+      </div>
+      <div class="focus-desc">${focus.description}</div>
+      ${focus.theory_basis ? `<div class="focus-theory">${focus.theory_basis}</div>` : ''}
+
+      <div class="response-options">
+        ${RUBRIC.response_options.map(opt=>`
+          <button class="resp-btn" id="btn-${focus.id}-${opt.code}" onclick="selectResponse('${focus.id}','${opt.code}')">
+            <div class="resp-code ${opt.code}">${opt.code}</div>
+            <div class="resp-label">${opt.label}</div>
+            <div class="resp-desc">${opt.description}</div>
+          </button>
+        `).join('')}
+      </div>
+
+      <div class="focus-note-label">${focus.prompt_for_observer}</div>
+      <textarea class="focus-note-input" id="note-${focus.id}"
+        placeholder="Optional note for this focus…"
+        onchange="setNote('${focus.id}',this.value)"></textarea>
+    </div>
+  `).join('');
+}
+
+window.selectResponse = function(focusId, code) {
+  if (!fociResponses[focusId]) fociResponses[focusId] = {};
+  fociResponses[focusId].code = code;
+  // Update button states
+  ['E','D','N'].forEach(c => {
+    const btn = document.getElementById(`btn-${focusId}-${c}`);
+    if (btn) { btn.className = 'resp-btn' + (c===code?` sel-${c}`:''); }
+  });
+  updateProgress();
+};
+
+window.setNote = function(focusId, note) {
+  if (!fociResponses[focusId]) fociResponses[focusId] = {};
+  fociResponses[focusId].note = note;
+};
+
+window.resetForm = function() {
+  document.getElementById('formView').style.display = '';
+  document.getElementById('successState').style.display = 'none';
+  document.getElementById('progressTracker').style.display = '';
+  document.getElementById('teacherName').value = '';
+  document.getElementById('teacherUid').value = '';
+  document.getElementById('subject').value = '';
+  document.getElementById('yearGroup').value = '';
+  document.getElementById('keyObservation').value = '';
+  document.getElementById('suggestedFocus').value = '';
+  Object.keys(fociResponses).forEach(k=>delete fociResponses[k]);
+  if (RUBRIC) buildFoci();
+  updateProgress();
+};
+
+// ── AUTH READY ────────────────────────────────────────────
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  const subRoles = profile?.ah_sub_roles || [];
+  const isAdmin  = profile?.role_academichub === 'academic_admin';
+  const canObserve = isAdmin || subRoles.includes('academic_coordinator') || subRoles.includes('cambridge_coordinator') || subRoles.includes('school_principal');
+
+  if (!canObserve) {
+    document.getElementById('formView').innerHTML = '<div style="padding:48px;text-align:center;color:#64748b;">Access restricted to authorised observers.</div>';
+    document.getElementById('progressTracker').style.display = 'none';
+    return;
+  }
+
+  window.__loadAcademicNavbar('teacher-walkthrough-entry', { user, profile });
+
+  const db = window.db;
+
+  // Populate year selector
+  const yearSel = document.getElementById('academicYear');
+  const yr = new Date().getFullYear();
+  for (let i = yr; i >= yr-3; i--) {
+    const o = document.createElement('option');
+    o.value = `${i}/${i+1}`; o.textContent = `${i}/${i+1}`;
+    yearSel.appendChild(o);
+  }
+
+  // Defaults
+  document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
+  const now = new Date();
+  document.getElementById('visitTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  // Wait for rubric to load
+  if (!RUBRIC) {
+    await new Promise(resolve => {
+      const interval = setInterval(()=>{ if (RUBRIC) { clearInterval(interval); resolve(); } }, 200);
+    });
+  }
+
+  // Submit
+  document.getElementById('submitBtn').addEventListener('click', async () => {
+    const teacherName = document.getElementById('teacherName').value.trim();
+    const keyObs      = document.getElementById('keyObservation').value.trim();
+    if (!teacherName) { showToast('Please enter the teacher name.'); return; }
+    if (!keyObs)      { showToast('Key Observation is required.'); return; }
+    const rated = Object.values(fociResponses).filter(r=>r?.code).length;
+    if (rated < 5) { showToast(`Please rate all 5 observation foci (${rated}/5 done).`); return; }
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+
+    const visitDateVal = document.getElementById('visitDate').value;
+    const visitTimeVal = document.getElementById('visitTime').value;
+    const visitDateObj = visitDateVal && visitTimeVal
+      ? new Date(`${visitDateVal}T${visitTimeVal}:00`) : new Date();
+
+    const payload = {
+      teacherUid: document.getElementById('teacherUid').value.trim() || null,
+      observerUid: user.uid,
+      schoolId: profile?.school || null,
+      academicYear: document.getElementById('academicYear').value,
+      visitDate: visitDateObj,
+      duration: parseInt(document.getElementById('duration').value) || 10,
+      metadata: {
+        teacherName,
+        subject: document.getElementById('subject').value.trim(),
+        yearGroup: document.getElementById('yearGroup').value.trim(),
+        observerName: profile?.displayName || user.email,
+        observerRole: document.getElementById('observerRole').value,
+        lessonPhase: document.getElementById('lessonPhase').value,
+      },
+      fociResponses: { ...fociResponses },
+      keyObservation: keyObs,
+      suggestedFocus: document.getElementById('suggestedFocus').value.trim(),
+      createdAt: serverTimestamp()
+    };
+
+    try {
+      await addDoc(collection(db, 'teacher_walkthroughs'), payload);
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('progressTracker').style.display = 'none';
+      document.getElementById('successState').style.display = '';
+    } catch(e) {
+      showToast('Error saving — please try again.');
+      console.error(e);
+      btn.disabled = false; btn.textContent = 'Save Walkthrough Record';
+    }
+  });
+});
+</script>
+</body>
+</html>
