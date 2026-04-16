@@ -230,97 +230,82 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 
 <!-- PHASE 1: SETUP -->
 <div id="setupPhase">
-<div class="page-wrap">
-  <div class="form-grid">
-    <div id="mainArea">
-      <div class="card">
-        <div class="card-head"><h2>Teacher Information</h2></div>
-        <div class="card-body">
-          <div class="form-row">
-            <div class="field">
-              <label>Teacher Name</label>
-              <input type="text" id="teacherName" placeholder="Full name">
-            </div>
-            <div class="field">
-              <label>Teacher UID (Firestore)</label>
-              <input type="text" id="teacherUid" placeholder="uid from Firestore users/{uid}">
-            </div>
-          </div>
-            <div class="form-row three">
-              <div class="field">
-                <label>School</label>
-                <input type="text" id="schoolId" placeholder="School ID or name">
-              </div>
-              <div class="field">
-                <label>Subject</label>
-                <input type="text" id="subject" placeholder="e.g. Mathematics">
-              </div>
-              <div class="field">
-                <label>Academic Year</label>
-                <select id="academicYear"></select>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div style="max-width:740px;margin:32px auto;padding:0 24px 80px;">
 
-        <div class="card">
-          <div class="card-head"><h2>Observation Setup</h2></div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="field">
-                <label>Observation Date</label>
-                <input type="date" id="observationDate">
-              </div>
-              <div class="field">
-                <label>Appraisal Level</label>
-                <select id="appraisalLevel">
-                  <option value="">— Select level —</option>
-                  <option value="induction">Induction (Year 1–2)</option>
-                  <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
-                  <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
-                  <option value="lead">Lead (Subject Leader / HoD)</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="field">
-                <label>Year Group / Class Observed</label>
-                <input type="text" id="yearGroup" placeholder="e.g. Year 10A">
-              </div>
-              <div class="field">
-                <label>Lesson Duration (minutes)</label>
-                <input type="number" id="lessonDuration" value="40" min="20" max="90">
-              </div>
-            </div>
-            <div class="form-row one">
-              <div class="field">
-                <label>Lesson Topic / Objective (as stated by teacher)</label>
-                <input type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
-              </div>
-            </div>
-            <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+    <div class="card">
+      <div class="card-head"><h2>Teacher Information</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field">
+            <label>Teacher Name <span style="color:#dc2626">*</span></label>
+            <input type="text" id="teacherName" placeholder="Full name">
+          </div>
+          <div class="field">
+            <label>Teacher UID (Firestore)</label>
+            <input type="text" id="teacherUid" placeholder="uid from users/{uid}">
           </div>
         </div>
-        <div style="display:flex;justify-content:flex-end;margin-top:4px;">
-          <button class="btn-primary" id="step1Next">Confirm &amp; Start Scoring &#x2192;</button>
+        <div class="form-row three">
+          <div class="field">
+            <label>School</label>
+            <input type="text" id="schoolId" placeholder="School name or ID">
+          </div>
+          <div class="field">
+            <label>Subject</label>
+            <input type="text" id="subject" placeholder="e.g. Mathematics">
+          </div>
+          <div class="field">
+            <label>Academic Year</label>
+            <select id="academicYear"></select>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- sidebar placeholder for setup phase -->
-    <div class="sticky-sidebar" id="setupSidebar">
-      <div class="progress-card">
-        <div class="progress-title">Rubric Legend</div>
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
+    <div class="card">
+      <div class="card-head"><h2>Observation Setup</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field">
+            <label>Observation Date</label>
+            <input type="date" id="observationDate">
+          </div>
+          <div class="field">
+            <label>Appraisal Level <span style="color:#dc2626">*</span></label>
+            <select id="appraisalLevel">
+              <option value="">— Select level —</option>
+              <option value="induction">Induction (Year 1–2)</option>
+              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+              <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
+              <option value="lead">Lead (Subject Leader / HoD)</option>
+            </select>
+          </div>
         </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Year Group / Class Observed</label>
+            <input type="text" id="yearGroup" placeholder="e.g. Year 10A">
+          </div>
+          <div class="field">
+            <label>Lesson Duration (minutes)</label>
+            <input type="number" id="lessonDuration" value="40" min="20" max="90">
+          </div>
+        </div>
+        <div class="form-row one">
+          <div class="field">
+            <label>Lesson Topic / Objective</label>
+            <input type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
+          </div>
+        </div>
+        <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
       </div>
     </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-top:4px;">
+      <button class="btn-primary" id="step1Next">Confirm &amp; Start Scoring &#x2192;</button>
+    </div>
+
   </div>
-</div><!-- /page-wrap -->
 </div><!-- /setupPhase -->
 
 <!-- PHASE 2: SCORING -->
