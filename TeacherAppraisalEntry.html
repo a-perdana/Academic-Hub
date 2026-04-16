@@ -640,32 +640,31 @@ function calcScores(level) {
   const m1 = mean(f1Items);
   const m2 = mean(f2Items);
   const m3 = mean(f3Items);
-  if (m1===null||m2===null||m3===null) return null;
 
-  const composite = ((m1/4)*0.20 + (m2/4)*0.60 + (m3/4)*0.20) * 100;
+  // Partial composite: only include frameworks that have at least one score
+  const hasAny = m1!==null || m2!==null || m3!==null;
+  if (!hasAny) return null;
+
+  // Full composite only when all three frameworks have scores
+  const isComplete = m1!==null && m2!==null && m3!==null;
+  const composite = isComplete
+    ? ((m1/4)*0.20 + (m2/4)*0.60 + (m3/4)*0.20) * 100
+    : null;
   const bands = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
-  const pred = bands.find(b=>composite>=b.min)?.l || 'F';
-  return { f1: m1, f2: m2, f3: m3, composite, predicate: pred };
+  const pred = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
+  return { f1: m1, f2: m2, f3: m3, composite, predicate: pred, isComplete };
 }
 
 function updateLiveScores() {
   const level = getLevel();
   if (!level) return;
   const r = calcScores(level);
-  if (!r) {
-    document.getElementById('liveF1').textContent = '—';
-    document.getElementById('liveF2').textContent = '—';
-    document.getElementById('liveF3').textContent = '—';
-    document.getElementById('liveFinal').textContent = '—';
-    document.getElementById('livePred').textContent = '—';
-    return;
-  }
-  document.getElementById('liveF1').textContent = r.f1.toFixed(2);
-  document.getElementById('liveF2').textContent = r.f2.toFixed(2);
-  document.getElementById('liveF3').textContent = r.f3.toFixed(2);
-  document.getElementById('liveFinal').textContent = r.composite.toFixed(1)+'%';
-  document.getElementById('livePred').textContent = r.predicate;
-  document.getElementById('liveScores').style.display = '';
+  document.getElementById('liveF1').textContent = r?.f1!=null ? r.f1.toFixed(2) : '—';
+  document.getElementById('liveF2').textContent = r?.f2!=null ? r.f2.toFixed(2) : '—';
+  document.getElementById('liveF3').textContent = r?.f3!=null ? r.f3.toFixed(2) : '—';
+  document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
+  document.getElementById('livePred').textContent = r?.predicate || '—';
+  if (r) document.getElementById('liveScores').style.display = '';
   updateSidebarProgress(level);
   updateF1Progress();
   updateF2Progress(level);
@@ -675,31 +674,40 @@ function updateLiveScores() {
 function buildReviewSummary() {
   const level = getLevel();
   const r = calcScores(level);
-  if (!r) {
-    return '<div style="color:#64748b;font-size:.85rem;">Complete all sections to see the summary.</div>';
-  }
   const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
+
+  const fmtScore = v => v!=null ? v.toFixed(2) : '<span style="color:#94a3b8;font-size:.9rem;">not scored</span>';
+
+  const incompleteNote = !r?.isComplete
+    ? `<div style="margin-bottom:16px;padding:10px 14px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.8rem;color:#92400e;">
+        ⚠ Some sections are not yet fully scored. Final score will be calculated once all frameworks are complete.
+       </div>` : '';
+
   return `
+    ${incompleteNote}
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
       <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${r.f1.toFixed(2)}</div>
+        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f1)}</div>
         <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
       </div>
       <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F2 Observation (60%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${r.f2.toFixed(2)}</div>
+        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f2)}</div>
         <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
       </div>
       <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${r.f3.toFixed(2)}</div>
+        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f3)}</div>
         <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
       </div>
       <div style="text-align:center;padding:20px 16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
-        <div style="font-size:1.8rem;font-weight:800;color:#7c3aed;">${r.composite.toFixed(1)}%</div>
-        <div style="font-size:1.6rem;font-weight:800;color:${predColors[r.predicate]};margin-top:4px;">${r.predicate}</div>
+        ${r?.isComplete
+          ? `<div style="font-size:1.8rem;font-weight:800;color:#7c3aed;">${r.composite.toFixed(1)}%</div>
+             <div style="font-size:1.6rem;font-weight:800;color:${predColors[r.predicate]};margin-top:4px;">${r.predicate}</div>`
+          : `<div style="font-size:1rem;font-weight:600;color:#94a3b8;margin-top:8px;">Incomplete</div>`
+        }
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
@@ -809,8 +817,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('step2Next').addEventListener('click', () => {
     if (!FRAMEWORK) return;
     const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
-    const unscored = fw.items.filter(i=>!scores[i.id]);
-    if (unscored.length > 0) { showToast(`${unscored.length} F1 items still unscored.`); return; }
+    const unscored = fw.items.filter(i=>!scores[i.id]).length;
+    if (unscored > 0) showToast(`Note: ${unscored} F1 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
     goStep(3);
   });
 
@@ -819,8 +827,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const level = getLevel();
     const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
     const visible = fw.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
-    const unscored = visible.filter(i=>!scores[i.id]);
-    if (unscored.length > 0) { showToast(`${unscored.length} F2 items still unscored.`); return; }
+    const unscored = visible.filter(i=>!scores[i.id]).length;
+    if (unscored > 0) showToast(`Note: ${unscored} F2 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
     goStep(4);
   });
 
@@ -830,17 +838,18 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const fw3  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
     const fw3L = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
     const visible = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
-    const unscored = visible.filter(i=>!scores[i.id]);
-    if (unscored.length > 0) { showToast(`${unscored.length} F3 items still unscored.`); return; }
+    const unscored = visible.filter(i=>!scores[i.id]).length;
+    if (unscored > 0) showToast(`Note: ${unscored} F3 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
     document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
     goStep(5);
   });
 
   // Save
   async function saveAppraisal(status) {
+    if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
+    if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     const level = getLevel();
     const r = calcScores(level);
-    if (!r) { showToast('Cannot calculate — check all items are scored.'); return; }
 
     // Collect survey
     const surveyData = {};
@@ -864,11 +873,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       lessonTopic: document.getElementById('lessonTopic').value.trim(),
       scores: { ...scores },
       narratives: { ...notes },
-      f1Score: r.f1,
-      f2Score: r.f2,
-      f3Score: r.f3,
-      compositePercent: r.composite,
-      predicate: r.predicate,
+      f1Score: r?.f1 ?? null,
+      f2Score: r?.f2 ?? null,
+      f3Score: r?.f3 ?? null,
+      compositePercent: r?.composite ?? null,
+      predicate: r?.predicate ?? null,
       appraiserNarrative: document.getElementById('appraiserNarrative').value.trim(),
       surveyData,
       surveyMean,
