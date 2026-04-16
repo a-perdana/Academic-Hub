@@ -402,9 +402,9 @@ window.setNote = function(focusId, note) {
 };
 
 window.resetForm = function() {
-  document.getElementById('formView').style.display = '';
+  document.getElementById('formView').style.display = 'block';
   document.getElementById('successState').style.display = 'none';
-  document.getElementById('progressTracker').style.display = '';
+  document.getElementById('progressTracker').style.display = 'flex';
   document.getElementById('teacherName').value = '';
   document.getElementById('teacherUid').value = '';
   document.getElementById('subject').value = '';
@@ -495,7 +495,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       await addDoc(collection(db, 'teacher_walkthroughs'), payload);
       document.getElementById('formView').style.display = 'none';
       document.getElementById('progressTracker').style.display = 'none';
-      document.getElementById('successState').style.display = '';
+      document.getElementById('successState').style.display = 'block';
     } catch(e) {
       showToast('Error saving — please try again.');
       console.error(e);
