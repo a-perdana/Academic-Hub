@@ -51,30 +51,20 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 32px 100px; }
 .form-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
 
-/* ── STEP INDICATOR ── */
-.steps-bar {
-  display: flex; gap: 0; background: #fff; border: 1px solid #e2e8f0;
-  border-radius: 14px; overflow: hidden; margin-bottom: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.04);
+/* ── FRAMEWORK TABS ── */
+.fw-tab {
+  padding: 10px 18px; font-family: inherit; font-size: .85rem; font-weight: 600;
+  color: #64748b; background: none; border: none; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; cursor: pointer; transition: color .15s, border-color .15s;
+  display: flex; align-items: center; gap: 8px;
 }
-.step {
-  flex: 1; padding: 14px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;
-  border-right: 1px solid #e2e8f0; cursor: not-allowed; transition: background .15s; position: relative;
+.fw-tab:hover { color: #7c3aed; }
+.fw-tab.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+.fw-tab-count {
+  font-size: .68rem; font-weight: 700; padding: 1px 6px; border-radius: 10px;
+  background: #f1f5f9; color: #64748b;
 }
-.step.active, .step.done { cursor: pointer; }
-.step.done:hover { background: #f0fdf4; }
-.step:last-child { border-right: none; }
-.step.active { background: #f5f3ff; }
-.step.done { background: #f0fdf4; }
-.step-num {
-  width: 26px; height: 26px; border-radius: 50%; font-size: .78rem; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  background: #e2e8f0; color: #64748b;
-}
-.step.active .step-num { background: #7c3aed; color: #fff; }
-.step.done .step-num { background: #16a34a; color: #fff; }
-.step-label { font-size: .72rem; font-weight: 600; color: #64748b; text-align: center; }
-.step.active .step-label { color: #7c3aed; }
-.step.done .step-label { color: #15803d; }
+.fw-tab.active .fw-tab-count { background: #ede9fe; color: #7c3aed; }
 
 /* ── CARDS ── */
 .card {
@@ -239,48 +229,23 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 </div>
 
 <div class="page-wrap">
-  <!-- STEP BAR -->
-  <div class="steps-bar" id="stepsBar">
-    <div class="step active" data-step="1">
-      <div class="step-num">1</div>
-      <div class="step-label">Teacher &amp; Setup</div>
-    </div>
-    <div class="step" data-step="2">
-      <div class="step-num">2</div>
-      <div class="step-label">F1 Admin</div>
-    </div>
-    <div class="step" data-step="3">
-      <div class="step-num">3</div>
-      <div class="step-label">F2 Observation</div>
-    </div>
-    <div class="step" data-step="4">
-      <div class="step-num">4</div>
-      <div class="step-label">F3 Work + Leadership</div>
-    </div>
-    <div class="step" data-step="5">
-      <div class="step-num">5</div>
-      <div class="step-label">Review &amp; Submit</div>
-    </div>
-  </div>
-
+  <!-- PHASE 1: SETUP (shown until confirmed) -->
+  <div id="setupPhase">
   <div class="form-grid">
-    <!-- MAIN AREA -->
     <div id="mainArea">
-      <!-- STEP 1: Teacher & Setup -->
-      <div id="step1" class="step-panel">
-        <div class="card">
-          <div class="card-head"><h2>Teacher Information</h2></div>
-          <div class="card-body">
-            <div class="form-row">
-              <div class="field">
-                <label>Teacher Name</label>
-                <input type="text" id="teacherName" placeholder="Full name">
-              </div>
-              <div class="field">
-                <label>Teacher UID (Firestore)</label>
-                <input type="text" id="teacherUid" placeholder="uid from Firestore users/{uid}">
-              </div>
+      <div class="card">
+        <div class="card-head"><h2>Teacher Information</h2></div>
+        <div class="card-body">
+          <div class="form-row">
+            <div class="field">
+              <label>Teacher Name</label>
+              <input type="text" id="teacherName" placeholder="Full name">
             </div>
+            <div class="field">
+              <label>Teacher UID (Firestore)</label>
+              <input type="text" id="teacherUid" placeholder="uid from Firestore users/{uid}">
+            </div>
+          </div>
             <div class="form-row three">
               <div class="field">
                 <label>School</label>
@@ -337,106 +302,14 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
         </div>
         <div style="display:flex;justify-content:flex-end;margin-top:4px;">
-          <button class="btn-primary" id="step1Next">Next: F1 Admin &#x2192;</button>
+          <button class="btn-primary" id="step1Next">Confirm &amp; Start Scoring &#x2192;</button>
         </div>
-      </div>
-
-      <!-- STEP 2: F1 Admin -->
-      <div id="step2" class="step-panel" style="display:none;">
-        <div class="card" id="f1Card">
-          <div class="card-head">
-            <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Weight 20%</div></div>
-            <div id="f1Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 9 scored</div>
-          </div>
-          <div id="f1Items"></div>
-        </div>
-        <div class="action-bar">
-          <button class="btn-secondary" onclick="goStep(1)">&#x2190; Back</button>
-          <button class="btn-primary" id="step2Next">Next: F2 Observation &#x2192;</button>
-        </div>
-      </div>
-
-      <!-- STEP 3: F2 Observation -->
-      <div id="step3" class="step-panel" style="display:none;">
-        <div class="card" id="f2Card">
-          <div class="card-head">
-            <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · Weight 60%</div></div>
-            <div id="f2Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
-          </div>
-          <div id="f2Items"></div>
-        </div>
-        <div class="action-bar">
-          <button class="btn-secondary" onclick="goStep(2)">&#x2190; Back</button>
-          <button class="btn-primary" id="step3Next">Next: F3 Work &#x2192;</button>
-        </div>
-      </div>
-
-      <!-- STEP 4: F3 Work -->
-      <div id="step4" class="step-panel" style="display:none;">
-        <div class="card" id="f3Card">
-          <div class="card-head">
-            <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Weight 20%</div></div>
-            <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
-          </div>
-          <div id="f3Items"></div>
-        </div>
-        <div class="action-bar">
-          <button class="btn-secondary" onclick="goStep(3)">&#x2190; Back</button>
-          <button class="btn-primary" id="step4Next">Next: Review &#x2192;</button>
-        </div>
-      </div>
-
-      <!-- STEP 5: Review & Submit -->
-      <div id="step5" class="step-panel" style="display:none;">
-        <div class="card">
-          <div class="card-head"><h2>Score Summary</h2></div>
-          <div class="card-body" id="reviewSummary"></div>
-        </div>
-        <div class="card">
-          <div class="card-head"><h2>Appraiser's Overall Narrative</h2></div>
-          <div class="card-body">
-            <div class="field">
-              <label>Summary narrative (shared with teacher)</label>
-              <textarea id="appraiserNarrative" rows="5" placeholder="Write an overall professional summary of the appraisal observation. This will be visible to the teacher when the report is shared."></textarea>
-            </div>
-          </div>
-        </div>
-        <div class="card" id="surveyInputCard">
-          <div class="card-head"><h2>Student Survey Data (Optional)</h2><div style="font-size:.72rem;color:#94a3b8;">Informative only — does not affect score</div></div>
-          <div id="surveyInputArea" class="card-body"></div>
-        </div>
-        <div class="action-bar">
-          <button class="btn-secondary" onclick="goStep(4)">&#x2190; Back</button>
-          <button class="btn-primary" id="saveDraftBtn">Save as Draft</button>
-          <button class="btn-primary" id="shareBtn" style="background:#16a34a;">Share with Teacher</button>
-        </div>
-        <div id="submitMsg" style="padding:0 24px 16px;font-size:.8rem;color:#64748b;"></div>
       </div>
     </div>
 
-    <!-- SIDEBAR -->
-    <div class="sticky-sidebar">
+    <!-- sidebar placeholder for setup phase -->
+    <div class="sticky-sidebar" id="setupSidebar">
       <div class="progress-card">
-        <div class="progress-title">Scoring Progress</div>
-        <div id="sidebarProgress">
-          <div style="font-size:.78rem;color:#94a3b8;">Select a level to begin.</div>
-        </div>
-        <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:14px;" id="liveScores" style="display:none;">
-          <div class="progress-title">Live Scores</div>
-          <div class="score-preview-grid">
-            <div class="score-preview-item"><div class="score-preview-label">F1</div><div class="score-preview-val" id="liveF1">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F2</div><div class="score-preview-val" id="liveF2">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F3</div><div class="score-preview-val" id="liveF3">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
-          </div>
-          <div style="margin-top:12px;text-align:center;">
-            <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
-            <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">—</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="progress-card" style="margin-top:0;">
         <div class="progress-title">Rubric Legend</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
           <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
@@ -447,7 +320,136 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       </div>
     </div>
   </div>
-</div>
+  </div><!-- /setupPhase -->
+
+  <!-- PHASE 2: SCORING (hidden until setup confirmed) -->
+  <div id="scoringPhase" style="display:none;">
+
+    <!-- Teacher info summary strip -->
+    <div id="teacherStrip" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Teacher</div>
+        <div style="font-size:.88rem;font-weight:700;" id="stripTeacher">—</div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Level</div>
+        <div id="stripLevel">—</div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Subject</div>
+        <div style="font-size:.88rem;font-weight:600;" id="stripSubject">—</div>
+      </div>
+      <div>
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Date</div>
+        <div style="font-size:.88rem;" id="stripDate">—</div>
+      </div>
+      <button class="btn-secondary" style="margin-left:auto;font-size:.78rem;padding:5px 14px;" onclick="backToSetup()">&#x270E; Edit Setup</button>
+    </div>
+
+    <!-- TAB BAR -->
+    <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;" id="frameworkTabs">
+      <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
+      <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
+      <button class="fw-tab" data-tab="f3">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
+      <button class="fw-tab" data-tab="review">Review &amp; Submit</button>
+    </div>
+
+    <div class="form-grid">
+      <div>
+        <!-- F1 TAB -->
+        <div id="panelF1" class="fw-panel">
+          <div class="card" id="f1Card">
+            <div class="card-head">
+              <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Weight 20%</div></div>
+              <div id="f1Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 9 scored</div>
+            </div>
+            <div id="f1Items"></div>
+          </div>
+        </div>
+
+        <!-- F2 TAB -->
+        <div id="panelF2" class="fw-panel" style="display:none;">
+          <div class="card" id="f2Card">
+            <div class="card-head">
+              <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · Weight 60%</div></div>
+              <div id="f2Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
+            </div>
+            <div id="f2Items"></div>
+          </div>
+        </div>
+
+        <!-- F3 TAB -->
+        <div id="panelF3" class="fw-panel" style="display:none;">
+          <div class="card" id="f3Card">
+            <div class="card-head">
+              <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Weight 20%</div></div>
+              <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
+            </div>
+            <div id="f3Items"></div>
+          </div>
+        </div>
+
+        <!-- REVIEW TAB -->
+        <div id="panelReview" class="fw-panel" style="display:none;">
+          <div class="card">
+            <div class="card-head"><h2>Score Summary</h2></div>
+            <div class="card-body" id="reviewSummary"></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>Appraiser's Overall Narrative</h2></div>
+            <div class="card-body">
+              <div class="field">
+                <label>Summary narrative (shared with teacher)</label>
+                <textarea id="appraiserNarrative" rows="5" placeholder="Write an overall professional summary of the appraisal observation. This will be visible to the teacher when the report is shared."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="card" id="surveyInputCard">
+            <div class="card-head"><h2>Student Survey Data (Optional)</h2><div style="font-size:.72rem;color:#94a3b8;">Informative only — does not affect score</div></div>
+            <div id="surveyInputArea" class="card-body"></div>
+          </div>
+          <div class="action-bar">
+            <button class="btn-primary" id="saveDraftBtn">Save as Draft</button>
+            <button class="btn-primary" id="shareBtn" style="background:#16a34a;">Share with Teacher</button>
+          </div>
+          <div id="submitMsg" style="padding:0 24px 16px;font-size:.8rem;color:#64748b;"></div>
+        </div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <div class="sticky-sidebar">
+        <div class="progress-card">
+          <div class="progress-title">Scoring Progress</div>
+          <div id="sidebarProgress">
+            <div style="font-size:.78rem;color:#94a3b8;">Select a level to begin.</div>
+          </div>
+          <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:14px;" id="liveScores">
+            <div class="progress-title">Live Scores</div>
+            <div class="score-preview-grid">
+              <div class="score-preview-item"><div class="score-preview-label">F1</div><div class="score-preview-val" id="liveF1">—</div></div>
+              <div class="score-preview-item"><div class="score-preview-label">F2</div><div class="score-preview-val" id="liveF2">—</div></div>
+              <div class="score-preview-item"><div class="score-preview-label">F3</div><div class="score-preview-val" id="liveF3">—</div></div>
+              <div class="score-preview-item"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
+            </div>
+            <div style="margin-top:12px;text-align:center;">
+              <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
+              <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="progress-card" style="margin-top:0;">
+          <div class="progress-title">Rubric Legend</div>
+          <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
+            <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
+          </div>
+        </div>
+      </div>
+    </div><!-- /form-grid -->
+  </div><!-- /scoringPhase -->
+</div><!-- /page-wrap -->
 
 <div class="toast" id="toast"></div>
 
@@ -655,6 +657,38 @@ function calcScores(level) {
   return { f1: m1, f2: m2, f3: m3, composite, predicate: pred, isComplete };
 }
 
+function updateTabCounts() {
+  if (!FRAMEWORK) return;
+  const level = getLevel();
+  if (!level) return;
+
+  const fw1 = FRAMEWORK.frameworks.find(f=>f.id==='F1');
+  const fw2 = FRAMEWORK.frameworks.find(f=>f.id==='F2');
+  const fw3 = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+  const fw3L= FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+
+  const f1Total = fw1.items.length;
+  const f1Done  = fw1.items.filter(i=>scores[i.id]).length;
+
+  const f2Items = fw2.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
+  const f2Done  = f2Items.filter(i=>scores[i.id]).length;
+
+  const f3Items = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
+  const f3Done  = f3Items.filter(i=>scores[i.id]).length;
+
+  document.getElementById('tabCountF1').textContent = `${f1Done}/${f1Total}`;
+  document.getElementById('tabCountF2').textContent = `${f2Done}/${f2Items.length}`;
+  document.getElementById('tabCountF3').textContent = `${f3Done}/${f3Items.length}`;
+
+  // Green tick if complete
+  ['F1','F2','F3'].forEach(fw => {
+    const el = document.getElementById(`tabCount${fw}`);
+    const [d,t] = el.textContent.split('/').map(Number);
+    el.style.background = d===t && t>0 ? '#dcfce7' : '';
+    el.style.color = d===t && t>0 ? '#15803d' : '';
+  });
+}
+
 function updateLiveScores() {
   const level = getLevel();
   if (!level) return;
@@ -664,11 +698,11 @@ function updateLiveScores() {
   document.getElementById('liveF3').textContent = r?.f3!=null ? r.f3.toFixed(2) : '—';
   document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
   document.getElementById('livePred').textContent = r?.predicate || '—';
-  if (r) document.getElementById('liveScores').style.display = '';
   updateSidebarProgress(level);
   updateF1Progress();
   updateF2Progress(level);
   updateF3Progress(level);
+  updateTabCounts();
 }
 
 function buildReviewSummary() {
@@ -716,29 +750,35 @@ function buildReviewSummary() {
   `;
 }
 
-// ── STEP NAVIGATION ──────────────────────────────────────
-window.goStep = function(n) {
-  currentStep = n;
-  document.querySelectorAll('.step-panel').forEach(p=>p.style.display='none');
-  document.getElementById(`step${n}`).style.display = '';
-  document.querySelectorAll('.step').forEach(s=>{
-    const sn = parseInt(s.dataset.step);
-    s.classList.remove('active','done');
-    if (sn === n) s.classList.add('active');
-    else if (sn < n) s.classList.add('done');
-  });
-  window.scrollTo({top:0,behavior:'smooth'});
-};
+// ── TAB NAVIGATION ───────────────────────────────────────
+const TAB_IDS = ['f1','f2','f3','review'];
 
-// Step bar click — allow navigating to any already-reached step
-document.getElementById('stepsBar').addEventListener('click', e => {
-  const stepEl = e.target.closest('.step');
-  if (!stepEl) return;
-  const target = parseInt(stepEl.dataset.step);
-  // Only navigate to steps that have been reached (≤ currentStep)
-  // or are already done. Step 1 is always reachable.
-  if (target <= currentStep) goStep(target);
+function switchTab(tab) {
+  TAB_IDS.forEach(t => {
+    const panel = document.getElementById(`panel${t.charAt(0).toUpperCase()+t.slice(1)}`);
+    if (panel) panel.style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.fw-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  if (tab === 'review') {
+    document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+document.getElementById('frameworkTabs').addEventListener('click', e => {
+  const btn = e.target.closest('.fw-tab');
+  if (btn) switchTab(btn.dataset.tab);
 });
+
+// Keep goStep as alias for any remaining back-button calls (none left, but safe)
+window.goStep = function(n) {};
+
+function backToSetup() {
+  document.getElementById('setupPhase').style.display = 'block';
+  document.getElementById('scoringPhase').style.display = 'none';
+}
 
 window.selectScore = function(itemId, score) {
   scores[itemId] = score;
@@ -804,44 +844,30 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
   });
 
-  // Step 1 → 2
+  // Setup confirm → enter scoring phase
   document.getElementById('step1Next').addEventListener('click', () => {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
     if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     if (!document.getElementById('observationDate').value) { showToast('Please set the observation date.'); return; }
-    buildF2(getLevel()); buildF3(getLevel());
-    goStep(2);
-  });
 
-  // Step 2 → 3
-  document.getElementById('step2Next').addEventListener('click', () => {
-    if (!FRAMEWORK) return;
-    const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
-    const unscored = fw.items.filter(i=>!scores[i.id]).length;
-    if (unscored > 0) showToast(`Note: ${unscored} F1 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
-    goStep(3);
-  });
-
-  // Step 3 → 4
-  document.getElementById('step3Next').addEventListener('click', () => {
     const level = getLevel();
-    const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
-    const visible = fw.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
-    const unscored = visible.filter(i=>!scores[i.id]).length;
-    if (unscored > 0) showToast(`Note: ${unscored} F2 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
-    goStep(4);
-  });
+    buildF2(level); buildF3(level);
+    updateSidebarProgress(level);
 
-  // Step 4 → 5
-  document.getElementById('step4Next').addEventListener('click', () => {
-    const level = getLevel();
-    const fw3  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
-    const fw3L = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
-    const visible = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
-    const unscored = visible.filter(i=>!scores[i.id]).length;
-    if (unscored > 0) showToast(`Note: ${unscored} F3 item${unscored>1?'s':''} not yet scored — you can return later.`, 2500);
-    document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
-    goStep(5);
+    // Populate teacher strip
+    document.getElementById('stripTeacher').textContent = document.getElementById('teacherName').value.trim();
+    document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
+    document.getElementById('stripDate').textContent = document.getElementById('observationDate').value;
+    const lvCap = level.charAt(0).toUpperCase()+level.slice(1);
+    document.getElementById('stripLevel').innerHTML = `<span class="level-badge ${level}">${lvCap}</span>`;
+
+    // Update tab counts
+    updateTabCounts();
+
+    document.getElementById('setupPhase').style.display = 'none';
+    document.getElementById('scoringPhase').style.display = 'block';
+    switchTab('f1');
+    window.scrollTo({top:0,behavior:'smooth'});
   });
 
   // Save
