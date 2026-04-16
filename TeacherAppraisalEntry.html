@@ -228,9 +228,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   </div>
 </div>
 
+<!-- PHASE 1: SETUP -->
+<div id="setupPhase">
 <div class="page-wrap">
-  <!-- PHASE 1: SETUP (shown until confirmed) -->
-  <div id="setupPhase">
   <div class="form-grid">
     <div id="mainArea">
       <div class="card">
@@ -320,10 +320,12 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       </div>
     </div>
   </div>
-  </div><!-- /setupPhase -->
+</div><!-- /page-wrap -->
+</div><!-- /setupPhase -->
 
-  <!-- PHASE 2: SCORING (hidden until setup confirmed) -->
-  <div id="scoringPhase" style="display:none;">
+<!-- PHASE 2: SCORING -->
+<div id="scoringPhase" style="display:none;">
+<div class="page-wrap">
 
     <!-- Teacher info summary strip -->
     <div id="teacherStrip" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
@@ -347,7 +349,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     </div>
 
     <!-- TAB BAR -->
-    <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;" id="frameworkTabs">
+    <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;overflow-x:auto;" id="frameworkTabs">
       <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
       <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
       <button class="fw-tab" data-tab="f3">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
@@ -448,8 +450,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
         </div>
       </div>
     </div><!-- /form-grid -->
-  </div><!-- /scoringPhase -->
 </div><!-- /page-wrap -->
+</div><!-- /scoringPhase -->
 
 <div class="toast" id="toast"></div>
 
@@ -751,11 +753,11 @@ function buildReviewSummary() {
 }
 
 // ── TAB NAVIGATION ───────────────────────────────────────
-const TAB_IDS = ['f1','f2','f3','review'];
+const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', review:'panelReview' };
 
 function switchTab(tab) {
-  TAB_IDS.forEach(t => {
-    const panel = document.getElementById(`panel${t.charAt(0).toUpperCase()+t.slice(1)}`);
+  Object.entries(TAB_PANELS).forEach(([t, panelId]) => {
+    const panel = document.getElementById(panelId);
     if (panel) panel.style.display = t === tab ? 'block' : 'none';
   });
   document.querySelectorAll('.fw-tab').forEach(btn => {
@@ -775,10 +777,11 @@ document.getElementById('frameworkTabs').addEventListener('click', e => {
 // Keep goStep as alias for any remaining back-button calls (none left, but safe)
 window.goStep = function(n) {};
 
-function backToSetup() {
+window.backToSetup = function() {
   document.getElementById('setupPhase').style.display = 'block';
   document.getElementById('scoringPhase').style.display = 'none';
-}
+  window.scrollTo({top:0,behavior:'smooth'});
+};
 
 window.selectScore = function(itemId, score) {
   scores[itemId] = score;
