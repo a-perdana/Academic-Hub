@@ -206,8 +206,8 @@ if (fs.existsSync("partials")) {
 // Copy school appraisal framework JSON to dist/resources
 if (fs.existsSync("school-appraisal-framework.json")) {
   if (!fs.existsSync("dist/resources")) fs.mkdirSync("dist/resources", { recursive: true });
-  fs.copyFileSync("school-appraisal-framework.json", "dist/resources/School Appraisal Framework.json");
-  console.log("Copied: school-appraisal-framework.json -> dist/resources/School Appraisal Framework.json");
+  fs.copyFileSync("school-appraisal-framework.json", "dist/resources/school-appraisal-framework.json");
+  console.log("Copied: school-appraisal-framework.json -> dist/resources/school-appraisal-framework.json");
 }
 
 // -- Generate Netlify _redirects

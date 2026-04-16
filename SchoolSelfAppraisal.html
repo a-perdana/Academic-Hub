@@ -573,7 +573,7 @@ const domainBgs    = { d1:'#dbeafe', d2:'#d1fae5', d3:'#ffedd5', d4:'#ede9fe', d
 const domainBorders= { d1:'#bfdbfe', d2:'#a7f3d0', d3:'#fed7aa', d4:'#c4b5fd', d5:'#99f6e4' };
 
 async function loadFramework() {
-  const res = await fetch('/resources/School%20Appraisal%20Framework.json');
+  const res = await fetch('/resources/school-appraisal-framework.json');
   FRAMEWORK = await res.json();
   // Merge any admin-saved overrides from Firestore
   try {
