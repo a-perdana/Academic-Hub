@@ -1442,16 +1442,27 @@ Promise.all([
   populateGrowItemSelects();
 });
 
-// Items where N/O is never permitted.
-// These are directly observable in any standard lesson and must always be scored.
-const MANDATORY_ITEMS = new Set([
-  'F1.3', 'F1.7', 'F1.8',      // Admin — appraiser must confirm from records
-  'D2.1', 'D2.3', 'D2.4',      // Classroom management — visible in any classroom
-  'D3.1', 'D3.3', 'D3.4',      // Instructional basics — observable in any lesson
-  'D3.11', 'D3.12', 'D3.13',   // Participation & concept acquisition
-  'D3.18', 'D3.19',             // Language of instruction & monitoring
-  'D4.1'                        // Assessment criteria — checkable from lesson plan
-]);
+// Returns the Set of item IDs that cannot be marked N/O for a given level.
+// Source: appraisal-levels.json — only items visible at the level can be mandatory.
+function getMandatoryItems(level) {
+  // Always mandatory at all levels (directly observable in any lesson):
+  const base = new Set([
+    'F1.3', 'F1.7', 'F1.8',
+    'D2.1', 'D2.3', 'D2.4',
+    'D3.1', 'D3.3', 'D3.4',
+    'D3.11', 'D3.12', 'D3.13',
+    'D3.18', 'D3.19',
+    'D4.1',
+    'F3.1', 'F3.2', 'F3.8',   // visible at all levels including Induction
+  ]);
+  // Additional F3 items mandatory only from Developing onwards:
+  if (level === 'developing' || level === 'proficient' || level === 'lead') {
+    ['F3.3', 'F3.4', 'F3.5', 'F3.9', 'F3.10'].forEach(id => base.add(id));
+  }
+  // F3.6, F3.7 visible from Developing but involve leadership initiative —
+  // legitimate to N/O in some contexts, so not in mandatory set.
+  return base;
+}
 
 // ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
 const LS_KEY = 'appraisal_draft_v2';
@@ -1558,7 +1569,7 @@ function buildItemRow(item) {
         ${theory}
       </div>
     </div>
-    <div class="score-row">${scoreHtml}${MANDATORY_ITEMS.has(item.id)
+    <div class="score-row">${scoreHtml}${getMandatoryItems(getLevel()).has(item.id)
       ? `<span style="font-size:.68rem;color:#94a3b8;font-style:italic;padding:6px 10px;align-self:center;white-space:nowrap;">Must be scored</span>`
       : noBtn}</div>
     <div class="item-note-row">
@@ -1853,15 +1864,14 @@ function updateF4Progress() {
     bannerEl.style.color        = '#c2410c';
     bannerEl.innerHTML =
       `⚠ <strong>F4 not yet counted</strong> — ${done}/${total} scored, need at least ${needed}. ` +
-      `Until then its <strong>10% weight shifts to F2</strong> (F2 becomes 60%).`;
+      `Its 10% is not yet included in the composite.`;
   } else {
     bannerEl.style.background  = '#f8fafc';
     bannerEl.style.borderColor = '#e2e8f0';
     bannerEl.style.color       = '#64748b';
     bannerEl.innerHTML =
       `ℹ F4 is scored by entering aggregated student survey results. ` +
-      `Score at least ${needed}/${total} items to include F4 in the composite (10%). ` +
-      `If left empty, F2 carries 60% instead.`;
+      `Score at least ${needed}/${total} items to include F4's 10% in the composite.`;
   }
 }
 window.updateF4Progress = updateF4Progress;
@@ -2105,16 +2115,16 @@ function calcScores(level) {
   if (s1.addressedCount === 0 && s2.addressedCount === 0 && s3.addressedCount === 0) return null;
 
   // Composite requires F1 + F2 + F3 thresholds met.
-  // F4 weight shift: JSON defines F4 weight as 0.10. However, student surveys are collected
-  // independently and may not always be available by the time of the appraisal session.
-  // Design decision (documented here): if F4 threshold is NOT met, its 10% shifts to F2
-  // so the composite can still be finalised. This is surfaced explicitly in the UI —
-  // the F4 tab shows a warning, the Review score box shows the adjusted weight, and the
-  // finalise guard prompts the appraiser before proceeding without F4.
+  // Fixed weights: F1=20%, F2=50%, F3=20%, F4=10%. No weight shifting.
+  // If F4 is not entered, composite reflects F1+F2+F3 only (90%) and is provisional.
   const isComplete = s1.meetsThreshold && s2.meetsThreshold && s3.meetsThreshold;
-  const w2 = (m4 !== null) ? 0.50 : 0.60;
   const composite = isComplete
-    ? ((m1/4)*0.20 + (m2/4)*w2 + (m3/4)*0.20 + (m4!=null ? (m4/4)*0.10 : 0)) * 100
+    ? (
+        (m1 !== null ? (m1 / 4) * 0.20 : 0) +
+        (m2 !== null ? (m2 / 4) * 0.50 : 0) +
+        (m3 !== null ? (m3 / 4) * 0.20 : 0) +
+        (m4 !== null ? (m4 / 4) * 0.10 : 0)
+      ) * 100
     : null;
   const bands     = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
@@ -2148,9 +2158,6 @@ function updateLiveScores() {
   document.getElementById('liveF2').textContent    = r?.f2!=null ? r.f2.toFixed(2) : '—';
   document.getElementById('liveF3').textContent    = r?.f3!=null ? r.f3.toFixed(2) : '—';
   document.getElementById('liveF4').textContent    = r?.f4!=null ? r.f4.toFixed(2) : '—';
-  // F2 weight label: 60% when F4 absent, 50% when F4 scored
-  const f2Label = document.querySelector('#liveF2')?.closest('.score-preview-item')?.querySelector('.score-preview-label');
-  if (f2Label) f2Label.textContent = r?.f4!=null ? 'F2 (50%)' : 'F2 (60%)';
   document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
   // Predicate only shown when composite is complete (anchoring bias fix)
   const predWrap = document.getElementById('predWrap');
@@ -2216,7 +2223,7 @@ function buildReviewSummary() {
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
         ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
-        ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2, 'f2')}
+        ${scoreBox('F2 Observation (50%)', r?.f2, 'f2')}
         <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
           <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
           <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending EOY</div>
@@ -2293,6 +2300,47 @@ function buildReviewSummary() {
               ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
             </div>
           </div>`;
+      })()}
+      ${(() => {
+        const lvl = getLevel();
+        const fw1 = FRAMEWORK?.frameworks?.find(f=>f.id==='F1');
+        const fw2 = FRAMEWORK?.frameworks?.find(f=>f.id==='F2');
+        const fw3 = FRAMEWORK?.frameworks?.find(f=>f.id==='F3');
+        const fw3L = FRAMEWORK?.frameworks?.find(f=>f.id==='F3L');
+        const allItems = [
+          ...(fw1?.items || []),
+          ...(fw2?.domains?.flatMap(d=>d.items) || []),
+          ...(fw3?.items || []),
+          ...(fw3L?.items || []),
+        ];
+        const allScoredItems = allItems
+          .filter(item => scores[item.id] && !notObserved.has(item.id))
+          .sort((a, b) => scores[a.id] - scores[b.id]);
+        let growItem = null, growQ = null;
+        for (const item of allScoredItems) {
+          const entry = COACHING_DB?.items?.[item.id];
+          if (!entry) continue;
+          const qs = entry.questions?.[lvl];
+          if (!qs || !qs.length) continue;
+          growItem = item;
+          growQ = qs[new Date().getDate() % qs.length];
+          break;
+        }
+        if (!growItem || !growQ) return '';
+        return `
+          <div style="margin-top:20px;padding:16px 18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;">
+            <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-bottom:8px;">
+              🌱 Suggested Grow Question
+            </div>
+            <div style="font-size:.78rem;color:#78350f;font-weight:600;margin-bottom:6px;">
+              ${growItem.id} — ${growItem.title}
+              <span style="font-weight:400;color:#b45309;margin-left:6px;">Score: ${scores[growItem.id]} / 4</span>
+            </div>
+            <div style="font-size:.88rem;color:#1c1917;line-height:1.65;font-style:italic;">"${growQ}"</div>
+            <div style="font-size:.68rem;color:#a16207;margin-top:8px;">
+              Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level · from coaching-questions.json
+            </div>
+          </div>`;
       })()}`;
   }
 
@@ -2315,7 +2363,7 @@ function buildReviewSummary() {
     ${obsNote}${incompleteNote}
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
-      ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2, 'f2')}
+      ${scoreBox('F2 Observation (50%)', r?.f2, 'f2')}
       ${level === 'lead'
         ? `<div style="background:#f8fafc;border-radius:12px;padding:12px 10px;display:flex;flex-direction:column;gap:6px;">
             <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:2px;text-align:center;">F3 Work (20%)</div>
@@ -2341,7 +2389,7 @@ function buildReviewSummary() {
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-      Formula: (F1/4 × 20%) + (F2/4 × ${r?.f4!=null?'50':'60'}%) + (F3/4 × 20%)${r?.f4!=null?' + (F4/4 × 10%)':''} × 100${r?.f4==null?' &nbsp;·&nbsp; Score F4 to include its 10% weight':''}
+      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 20%) + (F4/4 × 10%) × 100${r?.f4==null?' &nbsp;·&nbsp; F4 not yet scored — composite is provisional':''}
     </div>
     ${(() => {
       const FOCUS_LABELS = {
@@ -2408,6 +2456,47 @@ function buildReviewSummary() {
           ${barHtml}
           <div style="font-size:.69rem;color:#94a3b8;margin-top:10px;font-style:italic;">
             ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
+          </div>
+        </div>`;
+    })()}
+    ${(() => {
+      const lvl = getLevel();
+      const fw1 = FRAMEWORK?.frameworks?.find(f=>f.id==='F1');
+      const fw2 = FRAMEWORK?.frameworks?.find(f=>f.id==='F2');
+      const fw3 = FRAMEWORK?.frameworks?.find(f=>f.id==='F3');
+      const fw3L = FRAMEWORK?.frameworks?.find(f=>f.id==='F3L');
+      const allItems = [
+        ...(fw1?.items || []),
+        ...(fw2?.domains?.flatMap(d=>d.items) || []),
+        ...(fw3?.items || []),
+        ...(fw3L?.items || []),
+      ];
+      const allScoredItems = allItems
+        .filter(item => scores[item.id] && !notObserved.has(item.id))
+        .sort((a, b) => scores[a.id] - scores[b.id]);
+      let growItem = null, growQ = null;
+      for (const item of allScoredItems) {
+        const entry = COACHING_DB?.items?.[item.id];
+        if (!entry) continue;
+        const qs = entry.questions?.[lvl];
+        if (!qs || !qs.length) continue;
+        growItem = item;
+        growQ = qs[new Date().getDate() % qs.length];
+        break;
+      }
+      if (!growItem || !growQ) return '';
+      return `
+        <div style="margin-top:20px;padding:16px 18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;">
+          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-bottom:8px;">
+            🌱 Suggested Grow Question
+          </div>
+          <div style="font-size:.78rem;color:#78350f;font-weight:600;margin-bottom:6px;">
+            ${growItem.id} — ${growItem.title}
+            <span style="font-weight:400;color:#b45309;margin-left:6px;">Score: ${scores[growItem.id]} / 4</span>
+          </div>
+          <div style="font-size:.88rem;color:#1c1917;line-height:1.65;font-style:italic;">"${growQ}"</div>
+          <div style="font-size:.68rem;color:#a16207;margin-top:8px;">
+            Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level · from coaching-questions.json
           </div>
         </div>`;
     })()}`;
@@ -2627,6 +2716,88 @@ function applySessionMode(mode) {
     mode === 'observation' ? 'Confirm & Start Scoring →' : 'Confirm & Score F3 →';
 }
 
+// ── WALKTHROUGH HISTORY (EOY F3) ──────────────────────────
+async function loadWalkthroughHistory() {
+  const uid  = document.getElementById('teacherUid')?.value?.trim();
+  const year = document.getElementById('academicYear')?.value;
+  if (!uid || !year) return [];
+  try {
+    const snap = await getDocs(
+      query(
+        collection(window.db, 'teacher_walkthroughs'),
+        where('teacherUid',  '==', uid),
+        where('academicYear','==', year)
+      )
+    );
+    return snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .sort((a, b) => (b.visitDate?.seconds || 0) - (a.visitDate?.seconds || 0));
+  } catch (e) {
+    console.warn('Walkthrough load failed:', e);
+    return [];
+  }
+}
+
+function renderWalkthroughHistory(records) {
+  const containerId = 'walkthroughHistoryPanel';
+  let container = document.getElementById(containerId);
+  if (!container) {
+    const f3panel = document.getElementById('panelF3');
+    if (!f3panel) return;
+    container = document.createElement('div');
+    container.id = containerId;
+    container.style.marginBottom = '20px';
+    f3panel.prepend(container);
+  }
+
+  if (!records.length) {
+    container.innerHTML = `
+      <div style="padding:12px 16px;background:#f8fafc;border:1px solid #e2e8f0;
+                  border-radius:10px;font-size:.78rem;color:#94a3b8;font-style:italic;">
+        No walkthrough records found for this teacher this academic year.
+      </div>`;
+    return;
+  }
+
+  const FOCUS_LABELS = { W1:'Learning Intentions', W2:'Student Engagement', W3:'Classroom Climate', W4:'Instructional Strategy', W5:'Formative Monitoring' };
+  const CODE_STYLE   = { E:'background:#dcfce7;color:#15803d;', D:'background:#fef9c3;color:#854d0e;', N:'background:#f1f5f9;color:#64748b;' };
+
+  const rows = records.map(rec => {
+    const date = rec.visitDate?.toDate
+      ? rec.visitDate.toDate().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
+      : '—';
+    const fociHtml = Object.entries(rec.fociResponses || {}).map(([fid, val]) => {
+      const label = FOCUS_LABELS[fid] || fid;
+      const code  = val?.code || '—';
+      const style = CODE_STYLE[code] || '';
+      return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;${style}">${code} ${label}</span>`;
+    }).join(' ');
+    const keyObs = rec.keyObservation
+      ? `<div style="font-size:.78rem;color:#374151;margin-top:6px;font-style:italic;line-height:1.5;">"${rec.keyObservation}"</div>`
+      : '';
+    return `
+      <div style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
+          <span style="font-size:.75rem;font-weight:700;color:#1e293b;">${date}</span>
+          <span style="font-size:.68rem;color:#94a3b8;">${rec.duration ? rec.duration+' min' : ''}</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">${fociHtml}</div>
+        ${keyObs}
+      </div>`;
+  }).join('');
+
+  container.innerHTML = `
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04);">
+      <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:2px;">
+        Walkthrough History — ${records.length} visit${records.length > 1 ? 's' : ''} this year
+      </div>
+      <div style="font-size:.71rem;color:#94a3b8;margin-bottom:14px;font-style:italic;">
+        Formative records only — not included in composite score. Use as evidence when scoring F3 items.
+      </div>
+      ${rows}
+    </div>`;
+}
+
 // ── TAB NAVIGATION ────────────────────────────────────────
 const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', f4:'panelF4', review:'panelReview' };
 
@@ -2640,6 +2811,9 @@ function switchTab(tab) {
   document.querySelectorAll('.fw-tab').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.tab === tab);
   });
+  if (tab === 'f3' && sessionMode === 'endofyear') {
+    loadWalkthroughHistory().then(renderWalkthroughHistory);
+  }
   if (tab === 'review') {
     document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
     requestAnimationFrame(() => drawRadar());
@@ -2850,7 +3024,7 @@ window.backToSetup = function() {
 };
 
 window.selectScore = function(itemId, score) {
-  if (score === 'no' && MANDATORY_ITEMS.has(itemId)) {
+  if (score === 'no' && getMandatoryItems(getLevel()).has(itemId)) {
     showToast('⚠ This item must be scored — N/O is not permitted here.');
     return;
   }
@@ -3262,7 +3436,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
     if (d.scores)     Object.assign(scores,       d.scores);
     if (d.notes)      Object.assign(notes,        d.notes);
-    if (d.notObservedItems) d.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
+    if (d.notObservedItems) {
+      const lvl = getLevel();
+      const mandatoryAtLevel = lvl ? getMandatoryItems(lvl) : new Set();
+      d.notObservedItems.filter(id => !mandatoryAtLevel.has(id)).forEach(id => notObserved.add(id));
+    }
     if (d.surveyData) Object.assign(surveyScores, d.surveyData);
     if (d.currentDocId) currentDocId = d.currentDocId;
     document.querySelector('[data-draft-banner]')?.remove();
@@ -3445,7 +3623,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         }
         if (d.scores)     Object.assign(scores, d.scores);
         if (d.narratives) Object.assign(notes, d.narratives);
-        if (d.notObservedItems) d.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
+        if (d.notObservedItems) {
+          const lvl = getLevel();
+          const mandatoryAtLevel = lvl ? getMandatoryItems(lvl) : new Set();
+          d.notObservedItems.filter(id => !mandatoryAtLevel.has(id)).forEach(id => notObserved.add(id));
+        }
         if (d.surveyData) Object.assign(surveyScores, d.surveyData);
         if (d.f3Evidence) Object.assign(f3Evidence, d.f3Evidence);
         // Restore Glow/Grow/Go narrative fields
@@ -3588,7 +3770,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       if (loadedObsRecord.scores)     Object.assign(scores, loadedObsRecord.scores);
       if (loadedObsRecord.narratives) Object.assign(notes, loadedObsRecord.narratives);
       if (loadedObsRecord.notObservedItems)
-        loadedObsRecord.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
+        const lvl = getLevel();
+        const mandatoryAtLevel = lvl ? getMandatoryItems(lvl) : new Set();
+        loadedObsRecord.notObservedItems.filter(id => !mandatoryAtLevel.has(id)).forEach(id => notObserved.add(id));
       const obsDate = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
       statusEl.innerHTML = `<span style="color:#16a34a;">✓ Loaded: ${loadedObsRecord.teacherName||uid} — observed ${obsDate} (ID: ${currentDocId})</span>`;
       showToast('Observation record loaded — F1/F2 scores pre-filled.');
@@ -3846,22 +4030,6 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('shareBtn').addEventListener('click',        () => saveAppraisal('shared',    false));
   document.getElementById('saveEoyDraftBtn').addEventListener('click', () => saveAppraisal('draft',     true));
   document.getElementById('finaliseBtn').addEventListener('click', () => {
-    // F4 guard: block finalisation if student survey not entered
-    const f4Done = Object.keys(surveyScores).length;
-    const f4Total = FRAMEWORK?.frameworks.find(f=>f.id==='F4')?.items?.length || 17;
-    if (f4Done < f4Total) {
-      const missing = f4Total - f4Done;
-      const proceed = confirm(
-        `⚠ Student Survey (F4) is incomplete — ${f4Done}/${f4Total} items scored.\n\n` +
-        `Missing ${missing} item(s). F4 contributes 10% to the final composite. ` +
-        `If you finalise now, its weight will shift to F2 (50% → 60%).\n\n` +
-        `Go to the F4 tab to complete it, or click OK to finalise without it.`
-      );
-      if (!proceed) {
-        switchTab('f4');
-        return;
-      }
-    }
     saveAppraisal('finalised', true);
   });
 
