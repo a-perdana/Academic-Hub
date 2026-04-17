@@ -1342,6 +1342,7 @@ let prevYearScores   = {};  // itemId → score from previous academic year
 const scores         = {};  // itemId → 1–4
 const notes         = {};   // itemId → string
 const surveyScores  = {};   // F4 itemId → 1–4
+window.surveyScores = surveyScores;
 const notObserved = new Set(); // itemIds explicitly marked N/O
 let selectedQuestions = [];    // { itemId, text } — questions chosen for debrief
 let prevRecord = null;         // previous observation record (for follow-up)
@@ -1634,6 +1635,8 @@ function updateF4Progress() {
     el.style.color      = done === total ? '#15803d' : '';
   }
 }
+window.updateF4Progress = updateF4Progress;
+window.updateLiveScores = updateLiveScores;
 
 // Pre-populate score buttons + notes from loaded record (EOY mode)
 function refreshScoreUI() {
