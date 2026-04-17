@@ -51,6 +51,22 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 32px 100px; }
 .form-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
 
+/* ── SESSION TYPE SELECTOR ── */
+.session-opts {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.session-opt {
+  border: 2px solid #e2e8f0; border-radius: 14px; padding: 20px;
+  cursor: pointer; transition: border-color .15s, background .15s;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.session-opt:hover { border-color: #c4b5fd; background: #faf5ff; }
+.session-opt.active { border-color: #7c3aed; background: #f5f3ff; }
+.session-opt-icon { font-size: 1.6rem; }
+.session-opt-title { font-size: .95rem; font-weight: 700; color: #1e293b; }
+.session-opt-desc { font-size: .78rem; color: #64748b; line-height: 1.5; }
+.session-opt.active .session-opt-title { color: #7c3aed; }
+
 /* ── FRAMEWORK TABS ── */
 .fw-tab {
   padding: 10px 18px; font-family: inherit; font-size: .85rem; font-weight: 600;
@@ -198,6 +214,29 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .level-badge.proficient { background: #dbeafe; color: #1d4ed8; }
 .level-badge.lead       { background: #dcfce7; color: #15803d; }
 
+.session-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  border-radius: 8px; padding: 4px 12px; font-size: .75rem; font-weight: 700;
+}
+.session-badge.observation  { background: #e0f2fe; color: #0369a1; }
+.session-badge.endofyear    { background: #fce7f3; color: #9d174d; }
+
+.eoy-loaded-banner {
+  padding: 10px 16px; background: #f0fdf4; border: 1px solid #bbf7d0;
+  border-radius: 10px; font-size: .8rem; color: #166534; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.eoy-loaded-banner.warning {
+  background: #fefce8; border-color: #fde047; color: #92400e;
+}
+
+.session-panel-note {
+  padding: 10px 24px; font-size: .78rem; color: #0369a1;
+  background: #e0f2fe; border-bottom: 1px solid #bae6fd;
+  display: none;
+}
+.session-panel-note.visible { display: block; }
+
 .toast {
   position: fixed; bottom: 24px; right: 24px; background: #1e293b; color: #fff;
   border-radius: 10px; padding: 12px 20px; font-size: .83rem; font-weight: 600;
@@ -211,6 +250,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   .form-row, .form-row.three { grid-template-columns: 1fr 1fr; }
   .score-row { flex-direction: column; }
   .score-btn { min-width: 100%; }
+  .session-opts { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -232,6 +272,26 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div id="setupPhase">
   <div style="max-width:1200px;margin:0 auto;padding:28px 32px 80px;">
 
+    <!-- Session Type selector -->
+    <div class="card">
+      <div class="card-head"><h2>Session Type</h2><div class="card-head-sub">Select which part of the appraisal you are recording</div></div>
+      <div class="card-body">
+        <div class="session-opts">
+          <div class="session-opt active" data-mode="observation" id="optObservation">
+            <div class="session-opt-icon">&#x1F4CB;</div>
+            <div class="session-opt-title">Observation Session</div>
+            <div class="session-opt-desc">Score F1 Administration and F2 Class Observation. Conducted during a live classroom visit.</div>
+          </div>
+          <div class="session-opt" data-mode="endofyear" id="optEndOfYear">
+            <div class="session-opt-icon">&#x1F4CA;</div>
+            <div class="session-opt-title">End-of-Year Conference</div>
+            <div class="session-opt-desc">Score F3 Work Inspection — completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Teacher Information -->
     <div class="card">
       <div class="card-head"><h2>Teacher Information</h2></div>
       <div class="card-body">
@@ -262,7 +322,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       </div>
     </div>
 
-    <div class="card">
+    <!-- Observation Setup (shown in observation mode) -->
+    <div class="card" id="obsSetupCard">
       <div class="card-head"><h2>Observation Setup</h2></div>
       <div class="card-body">
         <div class="form-row">
@@ -311,6 +372,39 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       </div>
     </div>
 
+    <!-- End-of-Year Conference Setup (shown in EOY mode) -->
+    <div class="card" id="eoySetupCard" style="display:none;">
+      <div class="card-head"><h2>End-of-Year Conference Setup</h2></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="field">
+            <label>Conference Date <span style="color:#dc2626">*</span></label>
+            <input type="date" id="conferenceDate">
+          </div>
+          <div class="field">
+            <label>Appraisal Level <span style="color:#dc2626">*</span></label>
+            <select id="appraisalLevelEoy">
+              <option value="">— Select level —</option>
+              <option value="induction">Induction (Year 1–2)</option>
+              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+              <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
+              <option value="lead">Lead (Subject Leader / HoD)</option>
+            </select>
+          </div>
+        </div>
+        <div id="eoyLevelSummary" style="display:none;margin-bottom:16px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+        <div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;background:#f8fafc;">
+          <div style="font-size:.8rem;font-weight:700;color:#374151;margin-bottom:6px;">&#x1F50D; Load Existing Observation Record</div>
+          <div style="font-size:.75rem;color:#64748b;margin-bottom:12px;line-height:1.5;">
+            Search for a completed observation record for this teacher in the selected academic year.
+            F1 and F2 scores will be pre-loaded into the form so the composite can be calculated.
+          </div>
+          <button class="btn-secondary" id="loadObsRecordBtn" style="font-size:.8rem;">Search &amp; Load Record</button>
+          <div id="loadObsStatus" style="margin-top:10px;font-size:.78rem;color:#64748b;"></div>
+        </div>
+      </div>
+    </div>
+
     <div style="display:flex;justify-content:flex-end;margin-top:4px;">
       <button class="btn-primary" id="step1Next">Confirm &amp; Start Scoring &#x2192;</button>
     </div>
@@ -333,6 +427,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
         <div id="stripLevel">—</div>
       </div>
       <div>
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Session</div>
+        <div id="stripSession">—</div>
+      </div>
+      <div>
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Subject</div>
         <div style="font-size:.88rem;font-weight:600;" id="stripSubject">—</div>
       </div>
@@ -347,7 +445,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;overflow-x:auto;" id="frameworkTabs">
       <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
       <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
-      <button class="fw-tab" data-tab="f3">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
+      <button class="fw-tab" data-tab="f3" id="tabF3" style="display:none;">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
       <button class="fw-tab" data-tab="review">Review &amp; Submit</button>
     </div>
 
@@ -355,6 +453,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <div>
         <!-- F1 TAB -->
         <div id="panelF1" class="fw-panel">
+          <!-- TODO (pilot → production): lock F1 tab as read-only when sessionMode === 'endofyear' — scores loaded from observation record should not be modifiable during End-of-Year Conference -->
+          <div class="session-panel-note" id="f1EoyNote">
+            &#x1F4CB; F1 scores pre-loaded from the observation record. In this pilot, scores are editable — read-only enforcement is planned for production.
+          </div>
           <div class="card" id="f1Card">
             <div class="card-head">
               <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Weight 20%</div></div>
@@ -366,6 +468,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 
         <!-- F2 TAB -->
         <div id="panelF2" class="fw-panel" style="display:none;">
+          <!-- TODO (pilot → production): lock F2 tab as read-only when sessionMode === 'endofyear' — F2 observation scores should be finalised at observation time, not modified at conference -->
+          <div class="session-panel-note" id="f2EoyNote">
+            &#x1F4CB; F2 scores pre-loaded from the observation record. In this pilot, scores are editable — read-only enforcement is planned for production.
+          </div>
           <div class="card" id="f2Card">
             <div class="card-head">
               <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · Weight 60%</div></div>
@@ -392,12 +498,23 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="card-head"><h2>Score Summary</h2></div>
             <div class="card-body" id="reviewSummary"></div>
           </div>
-          <div class="card">
-            <div class="card-head"><h2>Appraiser's Overall Narrative</h2></div>
+          <!-- Observation narrative (shown in obs mode) -->
+          <div class="card" id="obsNarrativeCard">
+            <div class="card-head"><h2>Appraiser's Observation Narrative</h2></div>
             <div class="card-body">
               <div class="field">
-                <label>Summary narrative (shared with teacher)</label>
-                <textarea id="appraiserNarrative" rows="5" placeholder="Write an overall professional summary of the appraisal observation. This will be visible to the teacher when the report is shared."></textarea>
+                <label>Post-observation narrative (shared with teacher)</label>
+                <textarea id="appraiserNarrative" rows="5" placeholder="Write an overall professional summary of the classroom observation. This will be visible to the teacher when the report is shared."></textarea>
+              </div>
+            </div>
+          </div>
+          <!-- End-of-Year narrative (shown in EOY mode) -->
+          <div class="card" id="eoyNarrativeCard" style="display:none;">
+            <div class="card-head"><h2>End-of-Year Conference Narrative</h2></div>
+            <div class="card-body">
+              <div class="field">
+                <label>Conference summary (shared with teacher — covers full-year evidence review)</label>
+                <textarea id="endOfYearNarrative" rows="5" placeholder="Write a summary of the End-of-Year Conference discussion — cover work inspection findings, teacher-presented evidence, and professional development recommendations."></textarea>
               </div>
             </div>
           </div>
@@ -405,9 +522,15 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="card-head"><h2>Student Survey Data (Optional)</h2><div style="font-size:.72rem;color:#94a3b8;">Informative only — does not affect score</div></div>
             <div id="surveyInputArea" class="card-body"></div>
           </div>
-          <div class="action-bar">
+          <!-- Observation mode actions -->
+          <div class="action-bar" id="obsActionBar">
             <button class="btn-primary" id="saveDraftBtn">Save as Draft</button>
             <button class="btn-primary" id="shareBtn" style="background:#16a34a;">Share with Teacher</button>
+          </div>
+          <!-- End-of-Year mode actions -->
+          <div class="action-bar" id="eoyActionBar" style="display:none;">
+            <button class="btn-primary" id="saveEoyDraftBtn">Save F3 Draft</button>
+            <button class="btn-primary" id="finaliseBtn" style="background:#0369a1;">Finalise Annual Record</button>
           </div>
           <div id="submitMsg" style="padding:0 24px 16px;font-size:.8rem;color:#64748b;"></div>
         </div>
@@ -451,13 +574,15 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div class="toast" id="toast"></div>
 
 <script type="module">
-import { getFirestore, collection, doc, setDoc, addDoc, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ── DATA ──────────────────────────────────────────────────
 let FRAMEWORK = null;
 let LEVELS    = null;
 let currentStep = 1;
 let currentDocId = null;
+let sessionMode = 'observation'; // 'observation' | 'endofyear'
+let loadedObsRecord = null;      // full Firestore doc data from a loaded observation record
 const scores = {}; // itemId → 1–4
 const notes  = {}; // itemId → string
 
@@ -476,7 +601,10 @@ function showToast(msg, duration=3000) {
   setTimeout(()=>{ t.style.display='none'; }, duration);
 }
 
-function getLevel() { return document.getElementById('appraisalLevel').value; }
+function getLevel() {
+  if (sessionMode === 'endofyear') return document.getElementById('appraisalLevelEoy').value;
+  return document.getElementById('appraisalLevel').value;
+}
 
 function isVisible(item, level) {
   const order = ['induction','developing','proficient','lead'];
@@ -572,6 +700,26 @@ function buildSurveyInput() {
   `).join('');
 }
 
+// Pre-populate score buttons and notes from a loaded record
+function refreshScoreUI() {
+  if (!FRAMEWORK) return;
+  const level = getLevel();
+  // Re-apply selected state for all score buttons currently in DOM
+  Object.entries(scores).forEach(([itemId, score]) => {
+    document.querySelectorAll(`[data-item="${itemId}"]`).forEach(btn => {
+      btn.className = 'score-btn';
+      if (parseInt(btn.dataset.score) === score) btn.classList.add(`selected-${score}`);
+    });
+  });
+  Object.entries(notes).forEach(([itemId, text]) => {
+    const el = document.getElementById(`note-${itemId}`);
+    if (el) { el.value = text; el.classList.add('visible'); }
+    const toggle = el?.previousElementSibling;
+    if (toggle) toggle.textContent = '− Note';
+  });
+  updateLiveScores();
+}
+
 function updateF1Progress() {
   if (!FRAMEWORK) return;
   const fw = FRAMEWORK.frameworks.find(f=>f.id==='F1');
@@ -598,8 +746,6 @@ function updateF3Progress(level) {
 
 function updateSidebarProgress(level) {
   if (!FRAMEWORK || !level) return;
-  const lv = LEVELS?.levels.find(l=>l.id===level);
-  if (!lv) return;
   const sections = [
     { label:'F1 Admin',
       items: FRAMEWORK.frameworks.find(f=>f.id==='F1').items },
@@ -609,7 +755,10 @@ function updateSidebarProgress(level) {
       items: [...FRAMEWORK.frameworks.find(f=>f.id==='F3').items.filter(i=>isVisible(i,level)),
               ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] }
   ];
-  document.getElementById('sidebarProgress').innerHTML = sections.map(s => {
+  // In observation mode, exclude F3 from progress display (scored at EOY Conference)
+  const displaySections = sessionMode === 'observation' ? sections.slice(0, 2) : sections;
+
+  document.getElementById('sidebarProgress').innerHTML = displaySections.map(s => {
     const done  = s.items.filter(i=>scores[i.id]).length;
     const total = s.items.length;
     const pct   = total ? Math.round(done/total*100) : 0;
@@ -618,7 +767,9 @@ function updateSidebarProgress(level) {
       <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
       <div class="progress-count">${done}/${total}</div>
     </div>`;
-  }).join('');
+  }).join('') + (sessionMode === 'observation'
+    ? `<div style="font-size:.68rem;color:#94a3b8;margin-top:6px;font-style:italic;">F3 scored at End-of-Year Conference</div>`
+    : '');
 }
 
 function calcScores(level) {
@@ -643,7 +794,6 @@ function calcScores(level) {
   const m2 = mean(f2Items);
   const m3 = mean(f3Items);
 
-  // Partial composite: only include frameworks that have at least one score
   const hasAny = m1!==null || m2!==null || m3!==null;
   if (!hasAny) return null;
 
@@ -680,7 +830,6 @@ function updateTabCounts() {
   document.getElementById('tabCountF2').textContent = `${f2Done}/${f2Items.length}`;
   document.getElementById('tabCountF3').textContent = `${f3Done}/${f3Items.length}`;
 
-  // Green tick if complete
   ['F1','F2','F3'].forEach(fw => {
     const el = document.getElementById(`tabCount${fw}`);
     const [d,t] = el.textContent.split('/').map(Number);
@@ -709,16 +858,52 @@ function buildReviewSummary() {
   const level = getLevel();
   const r = calcScores(level);
   const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
-
   const fmtScore = v => v!=null ? v.toFixed(2) : '<span style="color:#94a3b8;font-size:.9rem;">not scored</span>';
 
+  if (sessionMode === 'observation') {
+    // Observation session — F3 is always pending
+    return `
+      <div style="margin-bottom:16px;padding:10px 14px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:10px;font-size:.8rem;color:#075985;">
+        &#x1F4CB; Observation Session — F1 and F2 are being scored. F3 (Work Inspection) will be completed at the End-of-Year Conference.
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
+        <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
+          <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f1)}</div>
+          <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F2 Observation (60%)</div>
+          <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f2)}</div>
+          <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
+        </div>
+        <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
+          <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending — EOY Conference</div>
+        </div>
+      </div>
+      <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
+        Final composite score will be calculated after F3 is scored at the End-of-Year Conference.
+      </div>`;
+  }
+
+  // End-of-Year Conference mode
   const incompleteNote = !r?.isComplete
     ? `<div style="margin-bottom:16px;padding:10px 14px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.8rem;color:#92400e;">
-        ⚠ Some sections are not yet fully scored. Final score will be calculated once all frameworks are complete.
+        ⚠ Some sections are not yet fully scored. Final score will be calculated once F1, F2 and F3 are all complete.
        </div>` : '';
+
+  const obsNote = loadedObsRecord
+    ? `<div style="margin-bottom:16px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:.8rem;color:#166534;">
+        ✓ F1 and F2 scores loaded from observation record (${loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || loadedObsRecord.observationDate || '—'}).
+       </div>`
+    : `<div style="margin-bottom:16px;padding:10px 14px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.8rem;color:#92400e;">
+        ⚠ No observation record was loaded. F1 and F2 scores must be entered manually for a valid composite.
+       </div>`;
 
   return `
     ${incompleteNote}
+    ${obsNote}
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
       <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
@@ -746,14 +931,44 @@ function buildReviewSummary() {
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
       Formula: (F1/4 × 20%) + (F2/4 × 60%) + (F3/4 × 20%) × 100
-    </div>
-  `;
+    </div>`;
+}
+
+// ── SESSION MODE TOGGLE ───────────────────────────────────
+function applySessionMode(mode) {
+  sessionMode = mode;
+  document.getElementById('optObservation').classList.toggle('active', mode === 'observation');
+  document.getElementById('optEndOfYear').classList.toggle('active', mode === 'endofyear');
+  document.getElementById('obsSetupCard').style.display   = mode === 'observation' ? '' : 'none';
+  document.getElementById('eoySetupCard').style.display   = mode === 'endofyear'   ? '' : 'none';
+
+  // Scoring phase tab visibility
+  document.getElementById('tabF3').style.display = mode === 'endofyear' ? '' : 'none';
+
+  // Review panel action bars
+  document.getElementById('obsActionBar').style.display   = mode === 'observation' ? '' : 'none';
+  document.getElementById('eoyActionBar').style.display   = mode === 'endofyear'   ? '' : 'none';
+
+  // Narrative cards
+  document.getElementById('obsNarrativeCard').style.display = mode === 'observation' ? '' : 'none';
+  document.getElementById('eoyNarrativeCard').style.display = mode === 'endofyear'   ? '' : 'none';
+
+  // EOY pilot notes on F1/F2 panels
+  document.getElementById('f1EoyNote').classList.toggle('visible', mode === 'endofyear');
+  document.getElementById('f2EoyNote').classList.toggle('visible', mode === 'endofyear');
+
+  // Button label
+  document.getElementById('step1Next').textContent =
+    mode === 'observation' ? 'Confirm & Start Scoring →' : 'Confirm & Score F3 →';
 }
 
 // ── TAB NAVIGATION ───────────────────────────────────────
 const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', review:'panelReview' };
 
 function switchTab(tab) {
+  // In observation mode, F3 tab is inaccessible — redirect to review
+  if (tab === 'f3' && sessionMode === 'observation') tab = 'review';
+
   Object.entries(TAB_PANELS).forEach(([t, panelId]) => {
     const panel = document.getElementById(panelId);
     if (panel) panel.style.display = t === tab ? 'block' : 'none';
@@ -772,7 +987,6 @@ document.getElementById('frameworkTabs').addEventListener('click', e => {
   if (btn) switchTab(btn.dataset.tab);
 });
 
-// Keep goStep as alias for any remaining back-button calls (none left, but safe)
 window.goStep = function(n) {};
 
 window.backToSetup = function() {
@@ -810,8 +1024,21 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     yearSel.appendChild(o);
   }
 
-  // Set today as default observation date
-  document.getElementById('observationDate').value = new Date().toISOString().split('T')[0];
+  // Set today as default dates
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('observationDate').value = today;
+  document.getElementById('conferenceDate').value = today;
+
+  // Session type selector
+  document.querySelectorAll('.session-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      applySessionMode(opt.dataset.mode);
+      // Reset loaded record when mode changes
+      loadedObsRecord = null;
+      currentDocId = null;
+      document.getElementById('loadObsStatus').textContent = '';
+    });
+  });
 
   // Teacher UID blur → auto-fill name + appraisal level from Firestore
   document.getElementById('teacherUid').addEventListener('blur', async () => {
@@ -826,17 +1053,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         nameInput.value = data.displayName || data.name;
       }
       if (data.appraisal_level) {
-        const sel = document.getElementById('appraisalLevel');
-        sel.value = data.appraisal_level;
-        sel.dispatchEvent(new Event('change'));
+        // Fill whichever level select is visible
+        const obsSel = document.getElementById('appraisalLevel');
+        const eoySel = document.getElementById('appraisalLevelEoy');
+        obsSel.value = data.appraisal_level;
+        eoySel.value = data.appraisal_level;
+        obsSel.dispatchEvent(new Event('change'));
+        eoySel.dispatchEvent(new Event('change'));
         showToast(`Level auto-filled: ${data.appraisal_level}`);
       }
     } catch(e) { console.warn('Could not fetch teacher profile:', e); }
   });
 
-  // Level change → rebuild affected steps
+  // Level change (observation mode select)
   document.getElementById('appraisalLevel').addEventListener('change', () => {
-    const level = getLevel();
+    if (sessionMode !== 'observation') return;
+    const level = document.getElementById('appraisalLevel').value;
     document.getElementById('secondAppraiserRow').style.display = level === 'lead' ? '' : 'none';
     if (!level || !FRAMEWORK) return;
     const lv = LEVELS?.levels.find(l=>l.id===level);
@@ -849,6 +1081,91 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
          D3: ${lv.item_counts.D3}, D4: ${lv.item_counts.D4}, F3: ${lv.item_counts.F3}${level==='lead'?`, F3L: ${lv.item_counts.F3L}`:''})`;
     }
     buildF2(level); buildF3(level); updateSidebarProgress(level);
+  });
+
+  // Level change (EOY mode select)
+  document.getElementById('appraisalLevelEoy').addEventListener('change', () => {
+    if (sessionMode !== 'endofyear') return;
+    const level = document.getElementById('appraisalLevelEoy').value;
+    if (!level || !FRAMEWORK) return;
+    const lv = LEVELS?.levels.find(l=>l.id===level);
+    if (lv) {
+      document.getElementById('eoyLevelSummary').style.display = '';
+      document.getElementById('eoyLevelSummary').innerHTML =
+        `<strong>${lv.label}</strong> — ${lv.description}<br>
+        <strong>Total scored items:</strong> ${lv.item_counts.total_scored}`;
+    }
+    buildF2(level); buildF3(level); updateSidebarProgress(level);
+  });
+
+  // Load observation record (EOY mode)
+  document.getElementById('loadObsRecordBtn').addEventListener('click', async () => {
+    const uid = document.getElementById('teacherUid').value.trim();
+    const year = document.getElementById('academicYear').value;
+    const statusEl = document.getElementById('loadObsStatus');
+
+    if (!uid) { showToast('Enter a Teacher UID first.'); return; }
+    if (!year) { showToast('Select an academic year first.'); return; }
+
+    statusEl.textContent = 'Searching…';
+    try {
+      const q = query(
+        collection(db, 'teacher_appraisals'),
+        where('teacherUid', '==', uid),
+        where('academicYear', '==', year),
+        where('f2Status', '==', 'complete')
+      );
+      const snap = await getDocs(q);
+
+      if (snap.empty) {
+        // Fall back: also check without f2Status filter in case legacy records exist
+        const q2 = query(
+          collection(db, 'teacher_appraisals'),
+          where('teacherUid', '==', uid),
+          where('academicYear', '==', year)
+        );
+        const snap2 = await getDocs(q2);
+        if (snap2.empty) {
+          statusEl.innerHTML = '<span style="color:#dc2626;">✗ No observation record found for this teacher/year. You can still proceed to score F3 manually.</span>';
+          loadedObsRecord = null;
+          currentDocId = null;
+          return;
+        }
+        // Use the most recent record
+        const sorted = snap2.docs.sort((a,b) => (b.data().updatedAt?.seconds||0) - (a.data().updatedAt?.seconds||0));
+        var bestDoc = sorted[0];
+      } else {
+        const sorted = snap.docs.sort((a,b) => (b.data().updatedAt?.seconds||0) - (a.data().updatedAt?.seconds||0));
+        var bestDoc = sorted[0];
+      }
+
+      loadedObsRecord = bestDoc.data();
+      currentDocId = bestDoc.id;
+
+      // Pre-populate teacher info
+      if (loadedObsRecord.teacherName) document.getElementById('teacherName').value = loadedObsRecord.teacherName;
+      if (loadedObsRecord.schoolId)    document.getElementById('schoolId').value    = loadedObsRecord.schoolId;
+      if (loadedObsRecord.subject)     document.getElementById('subject').value     = loadedObsRecord.subject;
+      if (loadedObsRecord.level) {
+        document.getElementById('appraisalLevelEoy').value = loadedObsRecord.level;
+        document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
+      }
+
+      // Load F1+F2 scores into scores object
+      if (loadedObsRecord.scores) {
+        Object.assign(scores, loadedObsRecord.scores);
+      }
+      if (loadedObsRecord.narratives) {
+        Object.assign(notes, loadedObsRecord.narratives);
+      }
+
+      const obsDateDisplay = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || loadedObsRecord.observationDate || '—';
+      statusEl.innerHTML = `<span style="color:#16a34a;">✓ Loaded: ${loadedObsRecord.teacherName || uid} — observed ${obsDateDisplay} (ID: ${currentDocId})</span>`;
+      showToast('Observation record loaded — F1/F2 scores pre-filled.');
+    } catch(e) {
+      console.error(e);
+      statusEl.innerHTML = '<span style="color:#dc2626;">✗ Error searching — check console.</span>';
+    }
   });
 
   // Build F1 once
@@ -864,10 +1181,16 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   // Setup confirm → enter scoring phase
   document.getElementById('step1Next').addEventListener('click', () => {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
-    if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
-    if (!document.getElementById('observationDate').value) { showToast('Please set the observation date.'); return; }
-    if (getLevel() === 'lead' && !document.getElementById('secondAppraiserName').value.trim()) {
-      showToast('Lead level requires a second appraiser name.'); return;
+
+    if (sessionMode === 'observation') {
+      if (!document.getElementById('appraisalLevel').value) { showToast('Please select an appraisal level.'); return; }
+      if (!document.getElementById('observationDate').value) { showToast('Please set the observation date.'); return; }
+      if (getLevel() === 'lead' && !document.getElementById('secondAppraiserName').value.trim()) {
+        showToast('Lead level requires a second appraiser name.'); return;
+      }
+    } else {
+      if (!document.getElementById('appraisalLevelEoy').value) { showToast('Please select an appraisal level.'); return; }
+      if (!document.getElementById('conferenceDate').value) { showToast('Please set the conference date.'); return; }
     }
 
     const level = getLevel();
@@ -875,23 +1198,35 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     updateSidebarProgress(level);
 
     // Populate teacher strip
+    const dateDisplay = sessionMode === 'observation'
+      ? document.getElementById('observationDate').value
+      : document.getElementById('conferenceDate').value;
     document.getElementById('stripTeacher').textContent = document.getElementById('teacherName').value.trim();
     document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
-    document.getElementById('stripDate').textContent = document.getElementById('observationDate').value;
+    document.getElementById('stripDate').textContent = dateDisplay;
     const lvCap = level.charAt(0).toUpperCase()+level.slice(1);
     document.getElementById('stripLevel').innerHTML = `<span class="level-badge ${level}">${lvCap}</span>`;
+    document.getElementById('stripSession').innerHTML = sessionMode === 'observation'
+      ? `<span class="session-badge observation">Observation</span>`
+      : `<span class="session-badge endofyear">End-of-Year</span>`;
 
-    // Update tab counts
     updateTabCounts();
+
+    // If loaded obs record, refresh score UI now that items are built
+    if (loadedObsRecord) {
+      refreshScoreUI();
+    }
 
     document.getElementById('setupPhase').style.display = 'none';
     document.getElementById('scoringPhase').style.display = 'block';
-    switchTab('f1');
+
+    // In EOY mode, open F3 tab directly (pilot: F1/F2 visible but not read-only)
+    switchTab(sessionMode === 'endofyear' ? 'f3' : 'f1');
     window.scrollTo({top:0,behavior:'smooth'});
   });
 
-  // Save
-  async function saveAppraisal(status) {
+  // ── SAVE / SUBMIT ────────────────────────────────────────
+  async function saveAppraisal(status, isEoy = false) {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
     if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     const level = getLevel();
@@ -905,53 +1240,114 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const surveyVals = Object.values(surveyData).map(Number).filter(Boolean);
     const surveyMean = surveyVals.length ? surveyVals.reduce((a,b)=>a+b,0)/surveyVals.length : null;
 
-    const payload = {
-      teacherUid: document.getElementById('teacherUid').value.trim() || null,
-      teacherName: document.getElementById('teacherName').value.trim(),
-      appraiserUid: user.uid,
-      secondAppraiserUid: level === 'lead' ? (document.getElementById('secondAppraiserUid').value.trim() || null) : null,
-      secondAppraiserName: level === 'lead' ? document.getElementById('secondAppraiserName').value.trim() : null,
-      schoolId: document.getElementById('schoolId').value.trim(),
-      subject: document.getElementById('subject').value.trim(),
-      academicYear: document.getElementById('academicYear').value,
-      level,
-      observationDate: new Date(document.getElementById('observationDate').value),
-      yearGroup: document.getElementById('yearGroup').value.trim(),
-      lessonDuration: parseInt(document.getElementById('lessonDuration').value),
-      lessonTopic: document.getElementById('lessonTopic').value.trim(),
-      scores: { ...scores },
-      narratives: { ...notes },
-      f1Score: r?.f1 ?? null,
-      f2Score: r?.f2 ?? null,
-      f3Score: r?.f3 ?? null,
-      compositePercent: r?.composite ?? null,
-      predicate: r?.predicate ?? null,
-      appraiserNarrative: document.getElementById('appraiserNarrative').value.trim(),
-      surveyData,
-      surveyMean,
-      status,
-      teacherResponse: '',
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp()
-    };
+    if (!isEoy) {
+      // ── Observation session save ──────────────────────────
+      const payload = {
+        teacherUid: document.getElementById('teacherUid').value.trim() || null,
+        teacherName: document.getElementById('teacherName').value.trim(),
+        appraiserUid: user.uid,
+        secondAppraiserUid: level === 'lead' ? (document.getElementById('secondAppraiserUid').value.trim() || null) : null,
+        secondAppraiserName: level === 'lead' ? document.getElementById('secondAppraiserName').value.trim() : null,
+        schoolId: document.getElementById('schoolId').value.trim(),
+        subject: document.getElementById('subject').value.trim(),
+        academicYear: document.getElementById('academicYear').value,
+        level,
+        sessionType: 'observation',
+        observationDate: new Date(document.getElementById('observationDate').value),
+        yearGroup: document.getElementById('yearGroup').value.trim(),
+        lessonDuration: parseInt(document.getElementById('lessonDuration').value),
+        lessonTopic: document.getElementById('lessonTopic').value.trim(),
+        scores: { ...scores },
+        narratives: { ...notes },
+        f1Score: r?.f1 ?? null,
+        f2Score: r?.f2 ?? null,
+        f3Score: null,
+        f1Status: 'complete',
+        f2Status: 'complete',
+        f3Status: 'pending',
+        compositePercent: null,
+        predicate: null,
+        appraiserNarrative: document.getElementById('appraiserNarrative').value.trim(),
+        surveyData,
+        surveyMean,
+        status,
+        teacherResponse: '',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      };
 
-    try {
-      if (currentDocId) {
-        await setDoc(doc(db, 'teacher_appraisals', currentDocId), { ...payload, updatedAt: serverTimestamp() }, { merge: true });
-      } else {
-        const ref = await addDoc(collection(db, 'teacher_appraisals'), payload);
-        currentDocId = ref.id;
+      try {
+        if (currentDocId) {
+          await setDoc(doc(db, 'teacher_appraisals', currentDocId), { ...payload, updatedAt: serverTimestamp() }, { merge: true });
+        } else {
+          const ref = await addDoc(collection(db, 'teacher_appraisals'), payload);
+          currentDocId = ref.id;
+        }
+        showToast(status === 'shared' ? 'Observation shared with teacher.' : 'Draft saved.');
+        document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
+      } catch(e) {
+        showToast('Error saving — check console.'); console.error(e);
       }
-      showToast(status==='shared' ? 'Appraisal shared with teacher.' : 'Draft saved.');
-      document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
-    } catch(e) {
-      showToast('Error saving — check console.');
-      console.error(e);
+
+    } else {
+      // ── End-of-Year Conference save ───────────────────────
+      // TODO (pilot → production): lock F1 and F2 tabs as read-only in End-of-Year mode so
+      //   observation scores cannot be altered during the conference session
+      const eoyNarrative = document.getElementById('endOfYearNarrative').value.trim();
+      const conferenceDateVal = document.getElementById('conferenceDate').value;
+
+      const eoyPayload = {
+        scores: { ...scores }, // includes F1+F2 from loaded record + F3 from this session
+        narratives: { ...notes },
+        f3Score: r?.f3 ?? null,
+        f3Status: 'complete',
+        f1Status: loadedObsRecord ? 'complete' : (r?.f1!=null ? 'complete' : 'pending'),
+        f2Status: loadedObsRecord ? 'complete' : (r?.f2!=null ? 'complete' : 'pending'),
+        f1Score: r?.f1 ?? null,
+        f2Score: r?.f2 ?? null,
+        compositePercent: r?.composite ?? null,
+        predicate: r?.predicate ?? null,
+        endOfYearNarrative: eoyNarrative,
+        endOfYearDate: conferenceDateVal ? new Date(conferenceDateVal) : null,
+        surveyData,
+        surveyMean,
+        status,
+        updatedAt: serverTimestamp()
+      };
+
+      try {
+        if (currentDocId) {
+          await setDoc(doc(db, 'teacher_appraisals', currentDocId), eoyPayload, { merge: true });
+        } else {
+          // No loaded record — create standalone EOY record
+          const standalone = {
+            ...eoyPayload,
+            teacherUid: document.getElementById('teacherUid').value.trim() || null,
+            teacherName: document.getElementById('teacherName').value.trim(),
+            appraiserUid: user.uid,
+            schoolId: document.getElementById('schoolId').value.trim(),
+            subject: document.getElementById('subject').value.trim(),
+            academicYear: document.getElementById('academicYear').value,
+            level,
+            sessionType: 'endofyear',
+            teacherResponse: '',
+            createdAt: serverTimestamp()
+          };
+          const ref = await addDoc(collection(db, 'teacher_appraisals'), standalone);
+          currentDocId = ref.id;
+        }
+        showToast(status === 'finalised' ? 'Annual record finalised.' : 'F3 draft saved.');
+        document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
+      } catch(e) {
+        showToast('Error saving — check console.'); console.error(e);
+      }
     }
   }
 
-  document.getElementById('saveDraftBtn').addEventListener('click', () => saveAppraisal('draft'));
-  document.getElementById('shareBtn').addEventListener('click', () => saveAppraisal('shared'));
+  document.getElementById('saveDraftBtn').addEventListener('click', () => saveAppraisal('draft', false));
+  document.getElementById('shareBtn').addEventListener('click',     () => saveAppraisal('shared', false));
+  document.getElementById('saveEoyDraftBtn').addEventListener('click', () => saveAppraisal('draft', true));
+  document.getElementById('finaliseBtn').addEventListener('click',     () => saveAppraisal('finalised', true));
 });
 </script>
 </body>
