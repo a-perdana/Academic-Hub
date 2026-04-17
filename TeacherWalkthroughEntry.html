@@ -43,6 +43,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
   margin-bottom: 10px; letter-spacing: .02em;
 }
+.hero-meta { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
 .hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
 .hero-sub { font-size: .85rem; opacity: .82; margin-top: 5px; max-width: 520px; }
 
@@ -50,6 +51,28 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   margin-top: 14px; display: inline-flex; align-items: center; gap: 8px;
   background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.3);
   border-radius: 8px; padding: 7px 14px; font-size: .77rem; font-weight: 600;
+}
+
+.walkthrough-count-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px; padding: 5px 12px; font-size: .77rem; font-weight: 600;
+  margin-top: 14px; margin-left: 10px;
+}
+
+/* ── AUTOSAVE BANNER ── */
+.autosave-banner {
+  max-width: 900px; margin: 0 auto; display: none;
+  background: #fef9c3; border: 1px solid #fde047; border-radius: 10px;
+  padding: 10px 18px; margin-top: 16px;
+  font-size: .78rem; color: #92400e; font-weight: 600;
+  align-items: center; gap: 10px; justify-content: space-between;
+}
+.autosave-banner.show { display: flex; }
+.autosave-banner button {
+  background: #f59e0b; color: #fff; border: none; border-radius: 7px;
+  padding: 4px 12px; font-family: inherit; font-size: .75rem; font-weight: 700;
+  cursor: pointer;
 }
 
 /* ── LAYOUT ── */
@@ -68,6 +91,18 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
 .card-body { padding: 20px 24px; }
 
+/* ── KEYBOARD HINT ── */
+.kbd-hint {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 8px 14px; font-size: .71rem; color: #64748b; margin-bottom: 16px;
+}
+.kbd { display: inline-flex; align-items: center; justify-content: center;
+  background: #fff; border: 1.5px solid #cbd5e1; border-radius: 5px;
+  padding: 1px 6px; font-size: .7rem; font-weight: 700; color: #374151;
+  box-shadow: 0 1px 0 #cbd5e1; min-width: 22px;
+}
+
 /* ── FORM ── */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
@@ -81,22 +116,51 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: #059669; }
 .field textarea { resize: vertical; min-height: 80px; }
+.field input.invalid, .field select.invalid { border-color: #dc2626 !important; background: #fef2f2; }
 
 /* ── FOCUS CARDS ── */
 .foci-grid { display: flex; flex-direction: column; gap: 0; }
-.focus-card { padding: 20px 24px; border-bottom: 1px solid #f1f5f9; }
+.focus-card {
+  padding: 20px 24px; border-bottom: 1px solid #f1f5f9;
+  transition: background .2s;
+}
 .focus-card:last-child { border-bottom: none; }
+.focus-card.active-focus { background: #f0fdf4; }
+.focus-card.invalid-focus { background: #fef2f2; border-left: 3px solid #dc2626; }
 
 .focus-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
 .focus-id-badge {
   width: 38px; height: 38px; border-radius: 50%; background: #f0fdf4; color: #15803d;
   font-size: .8rem; font-weight: 800; display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; border: 2px solid #bbf7d0;
+  flex-shrink: 0; border: 2px solid #bbf7d0; transition: all .2s; cursor: default;
 }
+.focus-id-badge.rated-E { background: #dcfce7; border-color: #16a34a; color: #15803d; }
+.focus-id-badge.rated-D { background: #fef9c3; border-color: #ca8a04; color: #92400e; }
+.focus-id-badge.rated-N { background: #f1f5f9; border-color: #94a3b8; color: #64748b; }
+
+.focus-title-row { display: flex; align-items: center; gap: 8px; }
 .focus-title { font-size: .92rem; font-weight: 700; color: #1e293b; }
 .focus-question { font-size: .8rem; color: #64748b; font-style: italic; margin-top: 3px; }
+
+.btn-rubric {
+  background: none; border: 1.5px solid #bfdbfe; border-radius: 7px;
+  padding: 3px 9px; font-family: inherit; font-size: .68rem; font-weight: 700;
+  color: #1d4ed8; cursor: pointer; transition: all .15s; white-space: nowrap;
+}
+.btn-rubric:hover { background: #eff6ff; }
+
 .focus-desc { font-size: .78rem; color: #374151; line-height: 1.6; margin-bottom: 12px; }
 .focus-theory { font-size: .7rem; color: #94a3b8; font-style: italic; margin-bottom: 10px; }
+
+/* ── LESSON-PHASE HINT ── */
+.phase-hint {
+  display: none; align-items: flex-start; gap: 8px;
+  background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px;
+  padding: 8px 12px; font-size: .74rem; color: #92400e;
+  margin-bottom: 12px; line-height: 1.5;
+}
+.phase-hint.show { display: flex; }
+.phase-hint-icon { flex-shrink: 0; margin-top: 1px; }
 
 /* ── RESPONSE OPTIONS ── */
 .response-options { display: flex; gap: 10px; margin-bottom: 12px; }
@@ -104,11 +168,19 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   flex: 1; border: 2px solid #e2e8f0; border-radius: 10px; padding: 10px 8px;
   background: #fff; cursor: pointer; text-align: center; transition: all .15s;
   display: flex; flex-direction: column; align-items: center; gap: 4px;
+  position: relative;
 }
 .resp-btn:hover { border-color: #6ee7b7; background: #f0fdf4; }
-.resp-btn.sel-E { border-color: #16a34a; background: #f0fdf4; }
-.resp-btn.sel-D { border-color: #ca8a04; background: #fefce8; }
-.resp-btn.sel-N { border-color: #94a3b8; background: #f8fafc; }
+.resp-btn.sel-E { border-color: #16a34a; background: #f0fdf4; box-shadow: 0 0 0 2px #bbf7d0; }
+.resp-btn.sel-D { border-color: #ca8a04; background: #fefce8; box-shadow: 0 0 0 2px #fde68a; }
+.resp-btn.sel-N { border-color: #94a3b8; background: #f8fafc; box-shadow: 0 0 0 2px #e2e8f0; }
+
+.resp-kbd {
+  position: absolute; top: 5px; right: 7px;
+  font-size: .58rem; color: #94a3b8; font-weight: 700; letter-spacing: .02em;
+}
+.focus-card.active-focus .resp-kbd { color: #059669; }
+
 .resp-code {
   width: 28px; height: 28px; border-radius: 50%; font-size: .78rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
@@ -117,27 +189,81 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .resp-code.D { background: #fef9c3; color: #92400e; }
 .resp-code.N { background: #f1f5f9; color: #64748b; }
 .resp-label { font-size: .72rem; font-weight: 700; }
-.resp-desc { font-size: .66rem; color: #64748b; line-height: 1.3; }
+.resp-desc { font-size: .64rem; color: #64748b; line-height: 1.3; }
 
 .focus-note-label { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 5px; }
+.focus-note-wrap { position: relative; }
 .focus-note-input {
   width: 100%; border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 9px 12px;
   font-family: inherit; font-size: .82rem; color: #1e293b; resize: none; min-height: 60px;
   transition: border-color .15s;
 }
 .focus-note-input:focus { outline: none; border-color: #059669; }
+.char-count {
+  position: absolute; bottom: 8px; right: 10px;
+  font-size: .64rem; color: #94a3b8; pointer-events: none;
+}
+.char-count.warn { color: #ca8a04; }
+
+/* ── CONFIDENCE ── */
+.confidence-row {
+  display: flex; align-items: center; gap: 10px; margin-top: 10px;
+}
+.confidence-label { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; }
+.confidence-opts { display: flex; gap: 6px; }
+.conf-btn {
+  padding: 3px 10px; border: 1.5px solid #e2e8f0; border-radius: 20px;
+  font-family: inherit; font-size: .7rem; font-weight: 700; cursor: pointer;
+  background: #fff; color: #64748b; transition: all .15s;
+}
+.conf-btn:hover { border-color: #059669; color: #059669; }
+.conf-btn.sel { border-color: #059669; background: #f0fdf4; color: #15803d; }
+.conf-btn.sel-low { border-color: #ca8a04; background: #fefce8; color: #92400e; }
 
 /* ── NARRATIVE ── */
-.narrative-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 14px; padding: 20px 24px; }
-.narrative-title { font-size: .82rem; font-weight: 700; color: #15803d; margin-bottom: 12px; display: flex; align-items: center; gap: 7px; }
-.narrative-field { margin-bottom: 14px; }
-.narrative-field label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; display: block; margin-bottom: 5px; }
-.narrative-field textarea {
-  width: 100%; border: 1.5px solid #d1fae5; border-radius: 9px; padding: 10px 14px;
+.narrative-card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
+}
+.narrative-head {
+  padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.narrative-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
+.narrative-body { padding: 20px 24px; }
+
+/* Glow/Grow/Go tabs */
+.narrative-tabs { display: flex; gap: 0; margin-bottom: 16px; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
+.narr-tab {
+  flex: 1; padding: 9px 8px; font-family: inherit; font-size: .78rem; font-weight: 700;
+  border: none; cursor: pointer; transition: all .15s; text-align: center;
+  background: #f8fafc; color: #64748b;
+}
+.narr-tab:not(:last-child) { border-right: 1px solid #e2e8f0; }
+.narr-tab.active { background: #fff; color: #1e293b; box-shadow: inset 0 -2px 0 #059669; }
+.narr-tab.complete::after { content: ' ✓'; color: #059669; }
+.narr-tab-pane { display: none; }
+.narr-tab-pane.active { display: block; }
+
+.narr-prompt {
+  font-size: .75rem; color: #64748b; line-height: 1.5;
+  background: #f8fafc; border-radius: 8px; padding: 9px 13px;
+  margin-bottom: 10px; border-left: 3px solid #e2e8f0;
+}
+.narr-field { margin-bottom: 12px; }
+.narr-field label {
+  font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+  color: #64748b; display: block; margin-bottom: 5px;
+}
+.narr-field textarea {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 10px 14px;
   font-family: inherit; font-size: .85rem; color: #1e293b; resize: vertical; min-height: 80px;
   background: #fff; transition: border-color .15s;
 }
-.narrative-field textarea:focus { outline: none; border-color: #059669; }
+.narr-field textarea:focus { outline: none; border-color: #059669; }
+.narr-field .char-count-inline {
+  font-size: .67rem; color: #94a3b8; text-align: right; margin-top: 3px;
+}
 
 /* ── PROGRESS TRACKER ── */
 .progress-tracker {
@@ -147,10 +273,19 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .progress-foci { display: flex; gap: 6px; }
 .foci-dot {
-  width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; transition: background .2s;
+  width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; transition: all .2s;
+  cursor: pointer;
 }
-.foci-dot.filled { background: #059669; }
+.foci-dot.rated-E { background: #16a34a; }
+.foci-dot.rated-D { background: #ca8a04; }
+.foci-dot.rated-N { background: #94a3b8; }
 .progress-label { font-size: .78rem; color: #64748b; font-weight: 500; }
+.progress-right { display: flex; align-items: center; gap: 10px; }
+
+.draft-indicator {
+  font-size: .72rem; color: #94a3b8; font-style: italic;
+}
+.draft-indicator.saved { color: #059669; }
 
 .btn-submit {
   padding: 10px 28px; background: #059669; color: #fff; border: none;
@@ -159,6 +294,44 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .btn-submit:hover { background: #047857; }
 .btn-submit:disabled { opacity: .5; cursor: default; }
+
+/* ── RUBRIC MODAL ── */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
+  z-index: 10000; align-items: center; justify-content: center; padding: 20px;
+}
+.modal-overlay.show { display: flex; }
+.modal-box {
+  background: #fff; border-radius: 18px; max-width: 540px; width: 100%;
+  box-shadow: 0 8px 40px rgba(0,0,0,.22); overflow: hidden;
+  max-height: 90vh; display: flex; flex-direction: column;
+}
+.modal-head {
+  padding: 18px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.modal-head h3 { font-size: 1rem; font-weight: 800; color: #1e293b; }
+.modal-close {
+  background: none; border: none; cursor: pointer; color: #94a3b8;
+  font-size: 1.2rem; line-height: 1; padding: 4px;
+}
+.modal-close:hover { color: #1e293b; }
+.modal-body { padding: 20px 24px; overflow-y: auto; }
+.modal-section { margin-bottom: 16px; }
+.modal-section:last-child { margin-bottom: 0; }
+.modal-section-label {
+  font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  color: #64748b; margin-bottom: 6px;
+}
+.modal-section-text { font-size: .82rem; color: #374151; line-height: 1.6; }
+.modal-theory {
+  font-size: .74rem; color: #94a3b8; font-style: italic; line-height: 1.5;
+  background: #f8fafc; border-radius: 8px; padding: 9px 13px;
+}
+.modal-prompt {
+  font-size: .78rem; color: #1d4ed8; background: #eff6ff; border-radius: 8px;
+  padding: 9px 13px; border-left: 3px solid #bfdbfe; line-height: 1.5;
+}
 
 .toast {
   position: fixed; bottom: 80px; right: 24px; background: #1e293b; color: #fff;
@@ -185,6 +358,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   .form-row, .form-row.three { grid-template-columns: 1fr; }
   .response-options { flex-direction: column; }
   .page-wrap { padding: 20px 16px 80px; }
+  .kbd-hint { display: none; }
 }
 </style>
 </head>
@@ -197,7 +371,23 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <div class="hero-badge">&#x1F6B6; Classroom Walkthrough</div>
     <h1>Classroom Walkthrough — Observation Form</h1>
     <div class="hero-sub">Short, unannounced visits (5–10 min). Formative only — no score assigned. Findings shared with teacher as developmental feedback.</div>
-    <div class="formative-notice">&#x2139;&#xFE0F; This observation does not contribute to the teacher's formal appraisal score.</div>
+    <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+      <div class="formative-notice">&#x2139;&#xFE0F; This observation does not contribute to the teacher's formal appraisal score.</div>
+      <div class="walkthrough-count-badge" id="walkthroughCountBadge" style="display:none;">
+        &#x1F4CB; <span id="walkthroughCountText">Loading…</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AUTOSAVE RESTORE BANNER -->
+<div class="page-wrap" style="padding-bottom:0;padding-top:0;">
+  <div class="autosave-banner" id="autosaveBanner">
+    <span>&#x1F4BE; A draft walkthrough from your last session was found. Restore it?</span>
+    <div style="display:flex;gap:8px;">
+      <button onclick="restoreDraft()">Restore Draft</button>
+      <button onclick="discardDraft()" style="background:#64748b;">Discard</button>
+    </div>
   </div>
 </div>
 
@@ -210,8 +400,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <div class="card-body">
         <div class="form-row">
           <div class="field">
-            <label>Teacher Name</label>
-            <input type="text" id="teacherName" placeholder="Full name">
+            <label>Teacher Name <span style="color:#dc2626;">*</span></label>
+            <input type="text" id="teacherName" placeholder="Full name" autocomplete="off">
           </div>
           <div class="field">
             <label>Teacher UID (Firestore)</label>
@@ -220,12 +410,12 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
         </div>
         <div class="form-row three">
           <div class="field">
-            <label>Subject</label>
-            <input type="text" id="subject" placeholder="e.g. Mathematics">
+            <label>Subject <span style="color:#dc2626;">*</span></label>
+            <input type="text" id="subject" placeholder="e.g. Mathematics" autocomplete="off">
           </div>
           <div class="field">
-            <label>Year Group / Class</label>
-            <input type="text" id="yearGroup" placeholder="e.g. Year 9B">
+            <label>Year Group / Class <span style="color:#dc2626;">*</span></label>
+            <input type="text" id="yearGroup" placeholder="e.g. Year 9B" autocomplete="off">
           </div>
           <div class="field">
             <label>Academic Year</label>
@@ -259,7 +449,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
           <div class="field">
             <label>Lesson Phase at Time of Visit</label>
-            <select id="lessonPhase">
+            <select id="lessonPhase" onchange="updatePhaseHints()">
               <option value="">— Optional —</option>
               <option value="Opening / Introduction">Opening / Introduction</option>
               <option value="Main Activity">Main Activity</option>
@@ -279,7 +469,18 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <div class="card-head">
         <div>
           <h2>Observation Foci</h2>
-          <div class="card-head-sub">For each focus, select E (Evident), D (Developing), or N (Not Observed). Add a brief note if useful.</div>
+          <div class="card-head-sub">For each focus, select E (Evident), D (Developing), or N (Not Observed). Click focus to activate, use keyboard shortcuts to rate.</div>
+        </div>
+      </div>
+      <div style="padding:0 24px 12px;">
+        <div class="kbd-hint">
+          <span style="font-weight:700;color:#374151;">Keyboard shortcuts:</span>
+          <span><span class="kbd">↑</span><span class="kbd">↓</span> navigate foci</span>
+          <span><span class="kbd">E</span> Evident</span>
+          <span><span class="kbd">D</span> Developing</span>
+          <span><span class="kbd">N</span> Not Observed</span>
+          <span><span class="kbd">Tab</span> jump to note</span>
+          <span><span class="kbd">?</span> open rubric</span>
         </div>
       </div>
       <div class="foci-grid" id="fociGrid">
@@ -287,16 +488,56 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       </div>
     </div>
 
-    <!-- NARRATIVE -->
+    <!-- NARRATIVE — Glow / Grow / Go -->
     <div class="narrative-card">
-      <div class="narrative-title">&#x270F;&#xFE0F; Observer Narrative</div>
-      <div class="narrative-field">
-        <label>Key Observation <span style="color:#dc2626;">*</span></label>
-        <textarea id="keyObservation" placeholder="A brief, specific observation about what was most notable during this visit — a strength, a pattern, or something worth discussing."></textarea>
+      <div class="narrative-head">
+        <div>
+          <h2>&#x270F;&#xFE0F; Observation Narrative</h2>
+          <div style="font-size:.73rem;color:#94a3b8;margin-top:2px;">Glow · Grow · Go — structured coaching feedback</div>
+        </div>
       </div>
-      <div class="narrative-field" style="margin-bottom:0;">
-        <label>Suggested Focus (optional)</label>
-        <textarea id="suggestedFocus" placeholder="One specific, actionable suggestion or professional learning focus for the teacher to consider before the next visit."></textarea>
+      <div class="narrative-body">
+        <div class="narrative-tabs" id="narrativeTabs">
+          <button class="narr-tab active" data-tab="glow" onclick="switchNarrTab('glow')">&#x2728; Glow</button>
+          <button class="narr-tab" data-tab="grow" onclick="switchNarrTab('grow')">&#x1F331; Grow</button>
+          <button class="narr-tab" data-tab="go" onclick="switchNarrTab('go')">&#x1F3AF; Go</button>
+        </div>
+
+        <!-- GLOW -->
+        <div class="narr-tab-pane active" id="pane-glow">
+          <div class="narr-prompt">
+            <strong>Glow</strong> — What did you see the teacher doing well? Name a specific strength observed during this visit. Be concrete: describe the behaviour, not just the outcome.
+          </div>
+          <div class="narr-field">
+            <label>Key Strength Observed <span style="color:#dc2626;">*</span></label>
+            <textarea id="narr_glow" rows="3" placeholder="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase." oninput="updateNarrChar(this,'glow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <div class="narr-field"><div class="char-count-inline" id="glow-count">0 / 300</div></div>
+          </div>
+        </div>
+
+        <!-- GROW -->
+        <div class="narr-tab-pane" id="pane-grow">
+          <div class="narr-prompt">
+            <strong>Grow</strong> — What one area, if strengthened, would most improve student learning in this context? Frame it as a professional question or an observation, not a judgment.
+          </div>
+          <div class="narr-field">
+            <label>Area for Development</label>
+            <textarea id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase — students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <div class="char-count-inline" id="grow-count">0 / 300</div>
+          </div>
+        </div>
+
+        <!-- GO -->
+        <div class="narr-tab-pane" id="pane-go">
+          <div class="narr-prompt">
+            <strong>Go</strong> — One specific, actionable next step. Framed as an invitation, not a mandate. Should be achievable before the next walkthrough visit.
+          </div>
+          <div class="narr-field">
+            <label>Suggested Next Step</label>
+            <textarea id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson — a quick show-of-hands, mini-whiteboard response, or traffic-light card — to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <div class="char-count-inline" id="go-count">0 / 300</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -305,7 +546,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   <div class="success-state" id="successState">
     <div class="success-icon">&#x2705;</div>
     <div class="success-title">Walkthrough Saved</div>
-    <div class="success-sub">The observation record has been saved and is now visible to the teacher in their appraisal view.</div>
+    <div class="success-sub" id="successSub">The observation record has been saved and is now visible to the teacher in their appraisal view.</div>
     <button class="btn-new" onclick="resetForm()">Record Another Walkthrough</button>
   </div>
 </div>
@@ -314,27 +555,124 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div class="progress-tracker" id="progressTracker">
   <div style="display:flex;align-items:center;gap:12px;">
     <div class="progress-foci" id="fociDots">
-      <div class="foci-dot" data-focus="W1"></div>
-      <div class="foci-dot" data-focus="W2"></div>
-      <div class="foci-dot" data-focus="W3"></div>
-      <div class="foci-dot" data-focus="W4"></div>
-      <div class="foci-dot" data-focus="W5"></div>
+      <div class="foci-dot" data-focus="W1" title="W1 — click to scroll" onclick="scrollToFocus('W1')"></div>
+      <div class="foci-dot" data-focus="W2" title="W2 — click to scroll" onclick="scrollToFocus('W2')"></div>
+      <div class="foci-dot" data-focus="W3" title="W3 — click to scroll" onclick="scrollToFocus('W3')"></div>
+      <div class="foci-dot" data-focus="W4" title="W4 — click to scroll" onclick="scrollToFocus('W4')"></div>
+      <div class="foci-dot" data-focus="W5" title="W5 — click to scroll" onclick="scrollToFocus('W5')"></div>
     </div>
     <div class="progress-label" id="progressLabel">0 / 5 foci rated</div>
   </div>
-  <button class="btn-submit" id="submitBtn">Save Walkthrough Record</button>
+  <div class="progress-right">
+    <div class="draft-indicator" id="draftIndicator"></div>
+    <button class="btn-submit" id="submitBtn">Save Walkthrough Record</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
+<!-- RUBRIC MODAL -->
+<div class="modal-overlay" id="rubricModal" onclick="closeRubricModal(event)">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="modalFocusTitle"></h3>
+      <button class="modal-close" onclick="closeRubricModal(null)">&#x2715;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-label">Guiding Question</div>
+        <div class="modal-section-text" id="modalGuidingQ" style="font-style:italic;color:#1d4ed8;"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">What to Look For</div>
+        <div class="modal-section-text" id="modalDesc"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">Observer Prompt</div>
+        <div class="modal-prompt" id="modalPrompt"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-theory" id="modalTheory"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script type="module">
-import { collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // ── RUBRIC DATA ───────────────────────────────────────────
 let RUBRIC = null;
 fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
 
-const fociResponses = {}; // focusId → { code, note }
+const fociResponses = {}; // focusId → { code, note, confidence }
+let activeFocusIndex = -1; // keyboard nav
+const FOCUS_ORDER = ['W1','W2','W3','W4','W5'];
+const DRAFT_KEY = 'wt_draft_v1';
+const DRAFT_TTL = 8 * 60 * 60 * 1000; // 8 hours
+
+// ── PHASE HINTS ─────────────────────────────────────────
+const PHASE_HINTS = {
+  'W1': {
+    'Opening / Introduction': 'Expect learning intentions now — check if objectives are stated or displayed.',
+    'Closure / Review': 'Look for a revisit of the learning intention: did students achieve the goal?',
+    'Transition': 'Learning intentions may not be visible at this moment — note if previously posted.',
+  },
+  'W2': {
+    'Independent Work': 'Note proportion on-task vs off-task. Are students self-managing effectively?',
+    'Group Work': 'Is collaboration structured? Are all group members engaged?',
+    'Guided Practice': 'Look for teacher circulation and checking-in, not just lecture engagement.',
+  },
+  'W3': {
+    'Transition': 'Climate is most visible during transitions — watch noise, movement, and teacher signals.',
+    'Closure / Review': 'Are students energised or disengaged at lesson end? Tone tells you a lot.',
+  },
+  'W4': {
+    'Main Activity': 'Core instructional strategy is most visible here — name the method precisely.',
+    'Guided Practice': 'Is the teacher gradually releasing responsibility? Scaffolding visible?',
+    'Opening / Introduction': 'How is the teacher activating prior knowledge or setting context?',
+  },
+  'W5': {
+    'Closure / Review': 'Formative monitoring is most observable here — look for exit-ticket or check.',
+    'Main Activity': 'Circulating, cold-calling, scanning work — what data is the teacher gathering?',
+    'Independent Work': 'Is the teacher using downtime to check-in individually or reviewing work?',
+  },
+};
+
+window.updatePhaseHints = function() {
+  const phase = document.getElementById('lessonPhase').value;
+  FOCUS_ORDER.forEach(id => {
+    const hintEl = document.getElementById(`hint-${id}`);
+    if (!hintEl) return;
+    const hint = PHASE_HINTS[id]?.[phase];
+    if (hint) {
+      hintEl.textContent = hint;
+      hintEl.classList.add('show');
+    } else {
+      hintEl.classList.remove('show');
+    }
+  });
+};
+
+// ── RUBRIC MODAL ─────────────────────────────────────────
+let currentModalFocusId = null;
+window.openRubricModal = function(focusId) {
+  if (!RUBRIC) return;
+  const focus = RUBRIC.foci.find(f=>f.id===focusId);
+  if (!focus) return;
+  currentModalFocusId = focusId;
+  document.getElementById('modalFocusTitle').textContent = `${focus.id} — ${focus.title}`;
+  document.getElementById('modalGuidingQ').textContent = focus.guiding_question;
+  document.getElementById('modalDesc').textContent = focus.description;
+  document.getElementById('modalPrompt').textContent = focus.prompt_for_observer;
+  document.getElementById('modalTheory').textContent = focus.theory_basis || '';
+  document.getElementById('rubricModal').classList.add('show');
+};
+window.closeRubricModal = function(evt) {
+  if (evt && evt.target !== document.getElementById('rubricModal')) return;
+  document.getElementById('rubricModal').classList.remove('show');
+  currentModalFocusId = null;
+};
 
 // ── HELPERS ──────────────────────────────────────────────
 function showToast(msg) {
@@ -344,32 +682,216 @@ function showToast(msg) {
 }
 
 function updateProgress() {
-  const rated = Object.keys(fociResponses).filter(k=>fociResponses[k]?.code).length;
-  document.getElementById('progressLabel').textContent = `${rated} / 5 foci rated`;
+  const counts = { E:0, D:0, N:0, total:0 };
+  FOCUS_ORDER.forEach(id => {
+    const code = fociResponses[id]?.code;
+    if (code) { counts[code]++; counts.total++; }
+  });
+  const label = counts.total === 5
+    ? `All 5 foci rated (${counts.E}E · ${counts.D}D · ${counts.N}N)`
+    : `${counts.total} / 5 foci rated`;
+  document.getElementById('progressLabel').textContent = label;
   document.querySelectorAll('.foci-dot').forEach(dot=>{
     const id = dot.dataset.focus;
-    dot.classList.toggle('filled', !!(fociResponses[id]?.code));
+    const code = fociResponses[id]?.code;
+    dot.className = 'foci-dot' + (code ? ` rated-${code}` : '');
   });
+}
+
+window.updateNarrChar = function(textarea, countId) {
+  const len = textarea.value.length;
+  const el = document.getElementById(countId);
+  if (el) { el.textContent = `${len} / 300`; el.className = 'char-count-inline' + (len > 260 ? ' warn' : ''); }
+};
+
+window.updateNarrTabState = function() {
+  const tabs = { glow: 'narr_glow', grow: 'narr_grow', go: 'narr_go' };
+  Object.entries(tabs).forEach(([tab, fieldId]) => {
+    const val = document.getElementById(fieldId)?.value.trim();
+    const tabEl = document.querySelector(`.narr-tab[data-tab="${tab}"]`);
+    if (!tabEl) return;
+    tabEl.classList.toggle('complete', !!val);
+  });
+};
+
+window.switchNarrTab = function(tab) {
+  document.querySelectorAll('.narr-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.narr-tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelector(`.narr-tab[data-tab="${tab}"]`)?.classList.add('active');
+  document.getElementById(`pane-${tab}`)?.classList.add('active');
+};
+
+// ── AUTOSAVE ─────────────────────────────────────────────
+function gatherDraft() {
+  return {
+    savedAt: Date.now(),
+    teacherName: document.getElementById('teacherName')?.value || '',
+    teacherUid: document.getElementById('teacherUid')?.value || '',
+    subject: document.getElementById('subject')?.value || '',
+    yearGroup: document.getElementById('yearGroup')?.value || '',
+    academicYear: document.getElementById('academicYear')?.value || '',
+    visitDate: document.getElementById('visitDate')?.value || '',
+    visitTime: document.getElementById('visitTime')?.value || '',
+    duration: document.getElementById('duration')?.value || '10',
+    observerRole: document.getElementById('observerRole')?.value || '',
+    lessonPhase: document.getElementById('lessonPhase')?.value || '',
+    fociResponses: JSON.parse(JSON.stringify(fociResponses)),
+    narr_glow: document.getElementById('narr_glow')?.value || '',
+    narr_grow: document.getElementById('narr_grow')?.value || '',
+    narr_go: document.getElementById('narr_go')?.value || '',
+  };
+}
+
+window.autosaveDraft = function() {
+  try {
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(gatherDraft()));
+    const el = document.getElementById('draftIndicator');
+    if (el) { el.textContent = 'Draft saved'; el.className = 'draft-indicator saved'; }
+  } catch(e) {}
+};
+
+window.restoreDraft = function() {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    document.getElementById('teacherName').value = d.teacherName || '';
+    document.getElementById('teacherUid').value  = d.teacherUid  || '';
+    document.getElementById('subject').value     = d.subject     || '';
+    document.getElementById('yearGroup').value   = d.yearGroup   || '';
+    if (d.academicYear) document.getElementById('academicYear').value = d.academicYear;
+    if (d.visitDate)    document.getElementById('visitDate').value    = d.visitDate;
+    if (d.visitTime)    document.getElementById('visitTime').value    = d.visitTime;
+    if (d.duration)     document.getElementById('duration').value     = d.duration;
+    if (d.observerRole) document.getElementById('observerRole').value = d.observerRole;
+    if (d.lessonPhase)  document.getElementById('lessonPhase').value  = d.lessonPhase;
+    if (d.narr_glow) { document.getElementById('narr_glow').value = d.narr_glow; window.updateNarrChar(document.getElementById('narr_glow'),'glow-count'); }
+    if (d.narr_grow) { document.getElementById('narr_grow').value = d.narr_grow; window.updateNarrChar(document.getElementById('narr_grow'),'grow-count'); }
+    if (d.narr_go)   { document.getElementById('narr_go').value   = d.narr_go;   window.updateNarrChar(document.getElementById('narr_go'),'go-count');   }
+    // restore foci
+    if (d.fociResponses) {
+      Object.assign(fociResponses, d.fociResponses);
+      FOCUS_ORDER.forEach(id => {
+        const resp = fociResponses[id];
+        if (!resp?.code) return;
+        ['E','D','N'].forEach(c => {
+          const btn = document.getElementById(`btn-${id}-${c}`);
+          if (btn) btn.className = 'resp-btn' + (c===resp.code ? ` sel-${c}` : '');
+        });
+        if (resp.note) { const ta = document.getElementById(`note-${id}`); if (ta) ta.value = resp.note; }
+        if (resp.confidence) {
+          document.querySelectorAll(`.conf-btn[data-focus="${id}"]`).forEach(b => {
+            b.className = 'conf-btn' + (b.dataset.conf === resp.confidence ? (resp.confidence==='low'?' sel-low':' sel') : '');
+          });
+        }
+        updateFocusBadge(id, resp.code);
+      });
+    }
+    window.updatePhaseHints();
+    updateNarrTabState();
+    updateProgress();
+    document.getElementById('autosaveBanner').classList.remove('show');
+    showToast('Draft restored ✓');
+    const el = document.getElementById('draftIndicator');
+    if (el) { el.textContent = 'Draft restored'; el.className = 'draft-indicator saved'; }
+  } catch(e) {}
+};
+
+window.discardDraft = function() {
+  localStorage.removeItem(DRAFT_KEY);
+  document.getElementById('autosaveBanner').classList.remove('show');
+};
+
+// ── KEYBOARD NAVIGATION ──────────────────────────────────
+function setActiveFocus(idx) {
+  activeFocusIndex = idx;
+  document.querySelectorAll('.focus-card').forEach((card, i) => {
+    card.classList.toggle('active-focus', i === idx);
+  });
+}
+
+document.addEventListener('keydown', (e) => {
+  const tag = e.target.tagName;
+  const isInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
+  const modal = document.getElementById('rubricModal');
+  if (modal.classList.contains('show')) {
+    if (e.key === 'Escape') { closeRubricModal(null); e.preventDefault(); }
+    return;
+  }
+
+  if (e.key === 'Escape' && isInput) { e.target.blur(); return; }
+
+  if (!isInput) {
+    if ((e.key === 'ArrowDown' || e.key === 'j') && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      const next = Math.min(activeFocusIndex + 1, FOCUS_ORDER.length - 1);
+      setActiveFocus(next);
+      const card = document.querySelectorAll('.focus-card')[next];
+      if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+    if ((e.key === 'ArrowUp' || e.key === 'k') && !e.ctrlKey && !e.metaKey) {
+      e.preventDefault();
+      const prev = Math.max(activeFocusIndex - 1, 0);
+      setActiveFocus(prev);
+      const card = document.querySelectorAll('.focus-card')[prev];
+      if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+    if (activeFocusIndex >= 0) {
+      const focusId = FOCUS_ORDER[activeFocusIndex];
+      if (e.key === 'e' || e.key === 'E') { e.preventDefault(); selectResponse(focusId, 'E'); return; }
+      if (e.key === 'd' || e.key === 'D') { e.preventDefault(); selectResponse(focusId, 'D'); return; }
+      if (e.key === 'n' || e.key === 'N') { e.preventDefault(); selectResponse(focusId, 'N'); return; }
+      if (e.key === '?' || e.key === '/') { e.preventDefault(); openRubricModal(focusId); return; }
+      if (e.key === 'Tab' && !e.shiftKey) {
+        e.preventDefault();
+        const noteEl = document.getElementById(`note-${focusId}`);
+        if (noteEl) { noteEl.focus(); }
+        return;
+      }
+    }
+    // Number keys 1-5 jump to focus
+    const num = parseInt(e.key);
+    if (num >= 1 && num <= 5) { e.preventDefault(); setActiveFocus(num-1); const card = document.querySelectorAll('.focus-card')[num-1]; if (card) card.scrollIntoView({behavior:'smooth',block:'center'}); }
+  }
+});
+
+// ── BUILD FOCI ────────────────────────────────────────────
+function updateFocusBadge(focusId, code) {
+  const badge = document.getElementById(`badge-${focusId}`);
+  if (!badge) return;
+  badge.className = 'focus-id-badge' + (code ? ` rated-${code}` : '');
 }
 
 function buildFoci() {
   if (!RUBRIC) return;
   const grid = document.getElementById('fociGrid');
-  grid.innerHTML = RUBRIC.foci.map(focus => `
-    <div class="focus-card">
+  grid.innerHTML = RUBRIC.foci.map((focus, idx) => `
+    <div class="focus-card" id="card-${focus.id}" tabindex="-1" onclick="activateFocusCard(${idx})">
       <div class="focus-header">
-        <div class="focus-id-badge">${focus.id}</div>
-        <div>
-          <div class="focus-title">${focus.title}</div>
+        <div class="focus-id-badge" id="badge-${focus.id}">${focus.id}</div>
+        <div style="flex:1;">
+          <div class="focus-title-row">
+            <div class="focus-title">${focus.title}</div>
+            <button class="btn-rubric" onclick="event.stopPropagation();openRubricModal('${focus.id}')">&#x1F4D6; Rubric</button>
+          </div>
           <div class="focus-question">${focus.guiding_question}</div>
         </div>
       </div>
       <div class="focus-desc">${focus.description}</div>
       ${focus.theory_basis ? `<div class="focus-theory">${focus.theory_basis}</div>` : ''}
 
+      <div class="phase-hint" id="hint-${focus.id}">
+        <span class="phase-hint-icon">&#x1F4A1;</span>
+        <span id="hint-text-${focus.id}"></span>
+      </div>
+
       <div class="response-options">
         ${RUBRIC.response_options.map(opt=>`
-          <button class="resp-btn" id="btn-${focus.id}-${opt.code}" onclick="selectResponse('${focus.id}','${opt.code}')">
+          <button class="resp-btn" id="btn-${focus.id}-${opt.code}"
+            onclick="event.stopPropagation();selectResponse('${focus.id}','${opt.code}')">
+            <span class="resp-kbd">${opt.code}</span>
             <div class="resp-code ${opt.code}">${opt.code}</div>
             <div class="resp-label">${opt.label}</div>
             <div class="resp-desc">${opt.description}</div>
@@ -377,23 +899,65 @@ function buildFoci() {
         `).join('')}
       </div>
 
-      <div class="focus-note-label">${focus.prompt_for_observer}</div>
-      <textarea class="focus-note-input" id="note-${focus.id}"
-        placeholder="Optional note for this focus…"
-        onchange="setNote('${focus.id}',this.value)"></textarea>
+      <div class="confidence-row">
+        <div class="confidence-label">Observer Confidence</div>
+        <div class="confidence-opts">
+          <button class="conf-btn" data-focus="${focus.id}" data-conf="high"
+            onclick="event.stopPropagation();setConfidence('${focus.id}','high',this)">High</button>
+          <button class="conf-btn" data-focus="${focus.id}" data-conf="low"
+            onclick="event.stopPropagation();setConfidence('${focus.id}','low',this)">Limited view</button>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;">
+        <div class="focus-note-label">${focus.prompt_for_observer}</div>
+        <div class="focus-note-wrap">
+          <textarea class="focus-note-input" id="note-${focus.id}" maxlength="300"
+            placeholder="Optional note for this focus…"
+            oninput="setNote('${focus.id}',this.value);updateCharCount('${focus.id}',this.value);autosaveDraft();"
+            onfocus="setActiveFocus(${idx})"></textarea>
+          <span class="char-count" id="cc-${focus.id}">0</span>
+        </div>
+      </div>
     </div>
   `).join('');
+
+  // restore phase hints if already selected
+  window.updatePhaseHints();
 }
+
+window.activateFocusCard = function(idx) {
+  setActiveFocus(idx);
+};
+
+window.updateCharCount = function(focusId, val) {
+  const el = document.getElementById(`cc-${focusId}`);
+  if (!el) return;
+  el.textContent = val.length;
+  el.className = 'char-count' + (val.length > 260 ? ' warn' : '');
+};
 
 window.selectResponse = function(focusId, code) {
   if (!fociResponses[focusId]) fociResponses[focusId] = {};
   fociResponses[focusId].code = code;
-  // Update button states
   ['E','D','N'].forEach(c => {
     const btn = document.getElementById(`btn-${focusId}-${c}`);
     if (btn) { btn.className = 'resp-btn' + (c===code?` sel-${c}`:''); }
   });
+  updateFocusBadge(focusId, code);
   updateProgress();
+  autosaveDraft();
+
+  // Auto-advance to next unfilled focus
+  const idx = FOCUS_ORDER.indexOf(focusId);
+  const nextUnfilled = FOCUS_ORDER.findIndex((id, i) => i > idx && !fociResponses[id]?.code);
+  if (nextUnfilled !== -1) {
+    setTimeout(() => {
+      setActiveFocus(nextUnfilled);
+      const card = document.querySelectorAll('.focus-card')[nextUnfilled];
+      if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 120);
+  }
 };
 
 window.setNote = function(focusId, note) {
@@ -401,20 +965,88 @@ window.setNote = function(focusId, note) {
   fociResponses[focusId].note = note;
 };
 
+window.setConfidence = function(focusId, conf, btn) {
+  if (!fociResponses[focusId]) fociResponses[focusId] = {};
+  const prev = fociResponses[focusId].confidence;
+  if (prev === conf) {
+    fociResponses[focusId].confidence = null;
+    btn.className = 'conf-btn';
+    return;
+  }
+  fociResponses[focusId].confidence = conf;
+  document.querySelectorAll(`.conf-btn[data-focus="${focusId}"]`).forEach(b => {
+    const isSelected = b.dataset.conf === conf;
+    b.className = 'conf-btn' + (isSelected ? (conf==='low'?' sel-low':' sel') : '');
+  });
+  autosaveDraft();
+};
+
+window.scrollToFocus = function(focusId) {
+  const card = document.getElementById(`card-${focusId}`);
+  if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+  const idx = FOCUS_ORDER.indexOf(focusId);
+  if (idx !== -1) setActiveFocus(idx);
+};
+
 window.resetForm = function() {
   document.getElementById('formView').style.display = 'block';
   document.getElementById('successState').style.display = 'none';
   document.getElementById('progressTracker').style.display = 'flex';
-  document.getElementById('teacherName').value = '';
-  document.getElementById('teacherUid').value = '';
-  document.getElementById('subject').value = '';
-  document.getElementById('yearGroup').value = '';
-  document.getElementById('keyObservation').value = '';
-  document.getElementById('suggestedFocus').value = '';
+  ['teacherName','teacherUid','subject','yearGroup','keyObservation','suggestedFocus'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  document.getElementById('narr_glow').value = '';
+  document.getElementById('narr_grow').value = '';
+  document.getElementById('narr_go').value = '';
   Object.keys(fociResponses).forEach(k=>delete fociResponses[k]);
+  activeFocusIndex = -1;
   if (RUBRIC) buildFoci();
   updateProgress();
+  updateNarrTabState();
+  localStorage.removeItem(DRAFT_KEY);
+  const el = document.getElementById('draftIndicator');
+  if (el) { el.textContent = ''; el.className = 'draft-indicator'; }
 };
+
+// validation highlight
+function highlightInvalid() {
+  let firstEl = null;
+  const fields = [
+    { id: 'teacherName', label: 'Teacher Name' },
+    { id: 'subject', label: 'Subject' },
+    { id: 'yearGroup', label: 'Year Group' },
+  ];
+  fields.forEach(f => {
+    const el = document.getElementById(f.id);
+    if (!el) return;
+    const empty = !el.value.trim();
+    el.classList.toggle('invalid', empty);
+    if (empty && !firstEl) firstEl = el;
+  });
+
+  // foci validation
+  const unratedFoci = FOCUS_ORDER.filter(id => !fociResponses[id]?.code);
+  unratedFoci.forEach(id => {
+    const card = document.getElementById(`card-${id}`);
+    if (card) card.classList.add('invalid-focus');
+  });
+  FOCUS_ORDER.filter(id => fociResponses[id]?.code).forEach(id => {
+    const card = document.getElementById(`card-${id}`);
+    if (card) card.classList.remove('invalid-focus');
+  });
+  if (unratedFoci.length && !firstEl) {
+    firstEl = document.getElementById(`card-${unratedFoci[0]}`);
+  }
+
+  // glow required
+  const glowEl = document.getElementById('narr_glow');
+  const glowEmpty = !glowEl?.value.trim();
+  if (glowEl) glowEl.parentElement.parentElement.classList.toggle('invalid', glowEmpty);
+  if (glowEmpty && !firstEl) { firstEl = glowEl; switchNarrTab('glow'); }
+
+  if (firstEl) firstEl.scrollIntoView({ behavior:'smooth', block:'center' });
+  return unratedFoci.length === 0 && fields.every(f => !!document.getElementById(f.id)?.value.trim()) && !glowEmpty;
+}
 
 // ── AUTH READY ────────────────────────────────────────────
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
@@ -446,6 +1078,33 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   const now = new Date();
   document.getElementById('visitTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
+  // Walkthrough count badge
+  try {
+    const q = query(collection(db,'teacher_walkthroughs'), where('observerUid','==',user.uid));
+    const snap = await getDocs(q);
+    const count = snap.size;
+    const badge = document.getElementById('walkthroughCountBadge');
+    const text  = document.getElementById('walkthroughCountText');
+    if (badge && text) {
+      text.textContent = `${count} walkthrough${count!==1?'s':''} recorded this year`;
+      badge.style.display = 'inline-flex';
+    }
+  } catch(e) { /* non-critical */ }
+
+  // Draft restore check
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (raw) {
+      const d = JSON.parse(raw);
+      const age = Date.now() - (d.savedAt || 0);
+      if (age < DRAFT_TTL && (d.teacherName || d.subject || Object.keys(d.fociResponses||{}).length)) {
+        document.getElementById('autosaveBanner').classList.add('show');
+      } else {
+        localStorage.removeItem(DRAFT_KEY);
+      }
+    }
+  } catch(e) {}
+
   // Wait for rubric to load
   if (!RUBRIC) {
     await new Promise(resolve => {
@@ -453,14 +1112,20 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     });
   }
 
+  // Autosave on field changes
+  ['teacherName','teacherUid','subject','yearGroup','visitDate','visitTime','duration','observerRole','lessonPhase'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => autosaveDraft());
+    if (el) el.addEventListener('change', () => autosaveDraft());
+  });
+
   // Submit
   document.getElementById('submitBtn').addEventListener('click', async () => {
-    const teacherName = document.getElementById('teacherName').value.trim();
-    const keyObs      = document.getElementById('keyObservation').value.trim();
-    if (!teacherName) { showToast('Please enter the teacher name.'); return; }
-    if (!keyObs)      { showToast('Key Observation is required.'); return; }
-    const rated = Object.values(fociResponses).filter(r=>r?.code).length;
-    if (rated < 5) { showToast(`Please rate all 5 observation foci (${rated}/5 done).`); return; }
+    const valid = highlightInvalid();
+    if (!valid) {
+      showToast('Please complete all required fields and rate all 5 foci.');
+      return;
+    }
 
     const btn = document.getElementById('submitBtn');
     btn.disabled = true; btn.textContent = 'Saving…';
@@ -470,6 +1135,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const visitDateObj = visitDateVal && visitTimeVal
       ? new Date(`${visitDateVal}T${visitTimeVal}:00`) : new Date();
 
+    const glowVal = document.getElementById('narr_glow').value.trim();
+    const growVal = document.getElementById('narr_grow').value.trim();
+    const goVal   = document.getElementById('narr_go').value.trim();
+
     const payload = {
       teacherUid: document.getElementById('teacherUid').value.trim() || null,
       observerUid: user.uid,
@@ -478,21 +1147,35 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       visitDate: visitDateObj,
       duration: parseInt(document.getElementById('duration').value) || 10,
       metadata: {
-        teacherName,
+        teacherName: document.getElementById('teacherName').value.trim(),
         subject: document.getElementById('subject').value.trim(),
         yearGroup: document.getElementById('yearGroup').value.trim(),
         observerName: profile?.displayName || user.email,
         observerRole: document.getElementById('observerRole').value,
         lessonPhase: document.getElementById('lessonPhase').value,
       },
-      fociResponses: { ...fociResponses },
-      keyObservation: keyObs,
-      suggestedFocus: document.getElementById('suggestedFocus').value.trim(),
+      fociResponses: JSON.parse(JSON.stringify(fociResponses)),
+      narrative: {
+        glow: glowVal,
+        grow: growVal,
+        go: goVal,
+        glowGrowGoComplete: !!(glowVal && growVal && goVal),
+      },
+      // Legacy fields for backward compatibility
+      keyObservation: glowVal,
+      suggestedFocus: goVal,
+      contributes_to_formal_score: false,
       createdAt: serverTimestamp()
     };
 
     try {
       await addDoc(collection(db, 'teacher_walkthroughs'), payload);
+      localStorage.removeItem(DRAFT_KEY);
+      const teacherName = document.getElementById('teacherName').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      document.getElementById('successSub').innerHTML =
+        `Walkthrough for <strong>${teacherName}</strong> (${subject}) has been saved. ` +
+        `${glowVal && growVal && goVal ? 'Full Glow·Grow·Go narrative recorded.' : 'Partial narrative saved.'}`;
       document.getElementById('formView').style.display = 'none';
       document.getElementById('progressTracker').style.display = 'none';
       document.getElementById('successState').style.display = 'block';
