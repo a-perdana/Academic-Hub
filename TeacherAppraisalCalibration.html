@@ -1,0 +1,1497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Appraiser Calibration — Academic Hub</title>
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script src="schools_compact.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+.hero {
+  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
+  color: #fff; padding: 0; position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-inner {
+  max-width: 960px; margin: 0 auto; padding: 32px 32px 28px;
+  position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
+  margin-bottom: 10px; letter-spacing: .02em;
+}
+.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
+.hero-sub { font-size: .85rem; opacity: .82; margin-top: 5px; max-width: 560px; }
+.hero-notice {
+  margin-top: 14px; display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px; padding: 7px 14px; font-size: .77rem; font-weight: 600;
+}
+
+.page-wrap { max-width: 960px; margin: 0 auto; padding: 28px 32px 100px; }
+
+/* Mode switcher */
+.mode-tabs {
+  display: flex; gap: 8px; margin-bottom: 20px;
+}
+.mode-tab {
+  font-family: inherit; font-size: .82rem; font-weight: 600;
+  padding: 8px 18px; border-radius: 10px; border: 1.5px solid #e2e8f0;
+  background: #fff; color: #64748b; cursor: pointer; transition: all .15s;
+}
+.mode-tab.active { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+.mode-tab:hover:not(.active) { border-color: #94a3b8; }
+
+.card {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
+}
+.card-head {
+  padding: 16px 24px; border-bottom: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.card-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
+.card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
+.card-body { padding: 20px 24px; }
+
+/* Progress */
+.progress-bar { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.progress-steps { display: flex; gap: 5px; flex: 1; }
+.step-dot { height: 4px; flex: 1; border-radius: 2px; background: #e2e8f0; transition: background .3s; }
+.step-dot.done { background: #1d4ed8; }
+.step-dot.active { background: #93c5fd; }
+.progress-label { font-size: .78rem; color: #64748b; white-space: nowrap; font-weight: 600; }
+
+/* Level badge */
+.level-badge {
+  font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+}
+.level-badge.induction  { background: #fef9c3; color: #854d0e; border: 1px solid #fde68a; }
+.level-badge.developing { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+.level-badge.proficient { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.level-badge.lead       { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+
+/* Tabs inside scenario */
+.tab-bar {
+  display: flex; border-bottom: 1px solid #f1f5f9; padding: 0 24px;
+  background: #fafafa;
+}
+.tab-btn {
+  font-family: inherit; font-size: .8rem; font-weight: 600;
+  padding: 10px 16px; border: none; background: none;
+  color: #94a3b8; cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -1px; transition: all .15s;
+}
+.tab-btn.active { color: #1d4ed8; border-bottom-color: #1d4ed8; }
+.tab-btn:hover:not(.active) { color: #475569; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* Item badge */
+.item-badge {
+  font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
+  background: #ede9fe; color: #3c3489; border: 1px solid #c4b5fd;
+  white-space: nowrap;
+}
+
+/* Vignette */
+.vignette-box {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 16px 20px; margin-bottom: 20px;
+}
+.vignette-label {
+  font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
+  color: #94a3b8; margin-bottom: 10px;
+}
+.vignette-text { font-size: .84rem; line-height: 1.75; color: #334155; }
+.vignette-text p { margin-bottom: 10px; }
+.vignette-text p:last-child { margin-bottom: 0; }
+
+/* Video embed */
+.video-wrap {
+  position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+  border-radius: 12px; background: #0f172a; margin-bottom: 16px;
+}
+.video-wrap iframe {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;
+}
+.video-note {
+  font-size: .78rem; color: #64748b; line-height: 1.5;
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 10px 14px; margin-bottom: 20px;
+}
+.video-channel {
+  font-size: .7rem; font-weight: 700; color: #94a3b8;
+  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px;
+}
+.video-observe-prompt {
+  font-size: .83rem; font-weight: 600; color: #1e3a5f; margin-bottom: 6px;
+}
+.video-focus-list { list-style: none; padding: 0; }
+.video-focus-list li {
+  font-size: .8rem; color: #475569; padding: 3px 0 3px 18px;
+  position: relative;
+}
+.video-focus-list li::before {
+  content: '→'; position: absolute; left: 0; color: #93c5fd; font-weight: 700;
+}
+
+/* Rubric anchors */
+.rubric-anchor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.anchor-card {
+  border-radius: 10px; padding: 12px 14px; border: 1.5px solid;
+}
+.anchor-card.a1 { background: #fff1f2; border-color: #fca5a5; }
+.anchor-card.a2 { background: #fffbeb; border-color: #fde68a; }
+.anchor-card.a3 { background: #f0fdfa; border-color: #99f6e4; }
+.anchor-card.a4 { background: #f0fdf4; border-color: #bbf7d0; }
+.anchor-score {
+  font-size: 1rem; font-weight: 800; margin-bottom: 4px;
+}
+.anchor-card.a1 .anchor-score { color: #dc2626; }
+.anchor-card.a2 .anchor-score { color: #b45309; }
+.anchor-card.a3 .anchor-score { color: #0f766e; }
+.anchor-card.a4 .anchor-score { color: #16a34a; }
+.anchor-lbl { font-size: .68rem; font-weight: 700; margin-bottom: 6px; }
+.anchor-card.a1 .anchor-lbl { color: #dc2626; }
+.anchor-card.a2 .anchor-lbl { color: #b45309; }
+.anchor-card.a3 .anchor-lbl { color: #0f766e; }
+.anchor-card.a4 .anchor-lbl { color: #16a34a; }
+.anchor-desc { font-size: .75rem; color: #475569; line-height: 1.55; }
+
+/* Score buttons */
+.item-block { margin-bottom: 20px; }
+.item-block:last-child { margin-bottom: 0; }
+.item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.item-title { font-size: .88rem; font-weight: 600; color: #1e293b; }
+.item-anchor-toggle {
+  font-family: inherit; font-size: .68rem; font-weight: 600; padding: 2px 8px;
+  border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc;
+  color: #64748b; cursor: pointer; margin-left: auto; transition: all .15s;
+}
+.item-anchor-toggle:hover { border-color: #818cf8; color: #3730a3; }
+.item-anchor-panel {
+  display: none; margin-bottom: 10px;
+}
+.item-anchor-panel.open { display: grid; }
+.score-row { display: flex; gap: 6px; }
+.s-btn {
+  flex: 1; padding: 10px 6px; border-radius: 10px;
+  border: 1.5px solid #e2e8f0; background: #fff;
+  cursor: pointer; text-align: center; transition: all .15s;
+  font-family: inherit;
+}
+.s-btn:hover { border-color: #818cf8; }
+.s-btn .s-num { font-size: 1rem; font-weight: 700; color: #475569; }
+.s-btn .s-lbl { font-size: .65rem; color: #94a3b8; margin-top: 2px; }
+.s-btn.sel-1 { background: #fff1f2; border-color: #f87171; }
+.s-btn.sel-1 .s-num { color: #dc2626; }
+.s-btn.sel-2 { background: #fffbeb; border-color: #fbbf24; }
+.s-btn.sel-2 .s-num { color: #b45309; }
+.s-btn.sel-3 { background: #f0fdfa; border-color: #2dd4bf; }
+.s-btn.sel-3 .s-num { color: #0f766e; }
+.s-btn.sel-4 { background: #f0fdf4; border-color: #4ade80; }
+.s-btn.sel-4 .s-num { color: #16a34a; }
+
+/* Action row */
+.action-row {
+  padding: 14px 24px; border-top: 1px solid #f1f5f9;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.action-hint { font-size: .78rem; color: #94a3b8; font-weight: 600; }
+.btn-primary {
+  font-family: inherit; font-size: .85rem; font-weight: 700;
+  padding: 9px 22px; border-radius: 10px;
+  background: #1d4ed8; color: #fff; border: none;
+  cursor: pointer; transition: background .15s;
+}
+.btn-primary:hover { background: #1e40af; }
+.btn-primary:disabled { opacity: .4; cursor: default; }
+.btn-ghost {
+  font-family: inherit; font-size: .85rem; font-weight: 600;
+  padding: 9px 22px; border-radius: 10px;
+  background: #fff; color: #1e293b; border: 1px solid #e2e8f0;
+  cursor: pointer; transition: background .15s;
+}
+.btn-ghost:hover { background: #f8fafc; }
+
+/* Results */
+.result-row {
+  display: grid; grid-template-columns: 80px auto 1fr;
+  align-items: start; gap: 12px;
+  padding: 14px 0; border-bottom: 1px solid #f1f5f9;
+}
+.result-row:last-child { border-bottom: none; }
+.score-compare { display: flex; align-items: center; gap: 6px; }
+.score-box {
+  width: 34px; height: 34px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; font-weight: 800;
+}
+.score-box.yours.s1 { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
+.score-box.yours.s2 { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.score-box.yours.s3 { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
+.score-box.yours.s4 { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.score-box.expert { background: #ede9fe; color: #3c3489; border: 1px solid #c4b5fd; }
+.arrow { font-size: .72rem; color: #cbd5e1; }
+.delta-pill {
+  font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+}
+.delta-0    { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.delta-1    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.delta-2up  { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
+.rationale-text { font-size: .8rem; line-height: 1.6; color: #475569; }
+.rationale-label { font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+
+/* IRR summary */
+.irr-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 16px; }
+.irr-card {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 14px;
+}
+.irr-label { font-size: .65rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; margin-bottom: 4px; }
+.irr-val { font-size: 1.4rem; font-weight: 800; color: #1e293b; }
+.irr-sub { font-size: .72rem; color: #64748b; margin-top: 2px; }
+
+/* Bar chart */
+.bar-row { margin-bottom: 10px; }
+.bar-label-row { display: flex; justify-content: space-between; font-size: .78rem; margin-bottom: 4px; }
+.bar-track { background: #e2e8f0; border-radius: 4px; height: 8px; }
+.bar-fill { height: 8px; border-radius: 4px; transition: width .6s; }
+.bar-green  { background: #22c55e; }
+.bar-amber  { background: #f59e0b; }
+.bar-red    { background: #ef4444; }
+
+/* Status badges */
+.badge-pass {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 20px;
+  background: #f0fdf4; color: #166534; border: 1px solid #86efac;
+  font-size: .82rem; font-weight: 700; margin-top: 12px;
+}
+.badge-retry {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 16px; border-radius: 20px;
+  background: #fffbeb; color: #92400e; border: 1px solid #fde68a;
+  font-size: .82rem; font-weight: 700; margin-top: 12px;
+}
+
+/* Save status */
+.save-status { font-size: .75rem; color: #94a3b8; text-align: center; padding: 8px; }
+
+/* Admin leaderboard */
+.lb-table { width: 100%; border-collapse: collapse; }
+.lb-table th {
+  font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
+  color: #94a3b8; padding: 8px 12px; text-align: left; border-bottom: 1px solid #e2e8f0;
+}
+.lb-table td { font-size: .82rem; color: #1e293b; padding: 10px 12px; border-bottom: 1px solid #f8fafc; }
+.lb-table tr:last-child td { border-bottom: none; }
+.lb-table tr:hover td { background: #f8fafc; }
+.lb-rank { font-weight: 800; color: #94a3b8; }
+.lb-name { font-weight: 600; }
+.lb-school { font-size: .73rem; color: #94a3b8; }
+.lb-pass { color: #16a34a; font-weight: 700; font-size: .78rem; }
+.lb-retry { color: #b45309; font-weight: 700; font-size: .78rem; }
+.lb-na { color: #cbd5e1; font-size: .78rem; }
+.lb-bar-wrap { width: 100px; }
+.lb-bar-track { background: #e2e8f0; border-radius: 3px; height: 6px; }
+.lb-bar-fill { height: 6px; border-radius: 3px; }
+.lb-bar-lbl { font-size: .68rem; color: #64748b; margin-top: 2px; }
+.lb-filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
+.lb-filter-row select {
+  font-family: inherit; font-size: .8rem; padding: 6px 10px;
+  border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; color: #1e293b;
+}
+.lb-empty { text-align: center; padding: 40px 0; color: #94a3b8; font-size: .85rem; }
+
+/* Group calibration */
+.gc-session-box {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px;
+  padding: 20px 24px; margin-bottom: 16px;
+}
+.gc-code {
+  font-size: 2rem; font-weight: 800; letter-spacing: .1em;
+  color: #1d4ed8; text-align: center; padding: 10px;
+  background: #eff6ff; border-radius: 10px; margin: 12px 0;
+}
+.gc-participants { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.gc-participant {
+  display: flex; align-items: center; gap: 6px;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 20px;
+  padding: 4px 10px; font-size: .78rem;
+}
+.gc-dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; }
+.gc-dot.online { background: #22c55e; }
+.gc-dot.scored { background: #1d4ed8; }
+.gc-waiting { font-size: .8rem; color: #94a3b8; font-style: italic; margin-top: 10px; }
+.gc-result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.gc-result-item {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px;
+}
+.gc-result-name { font-size: .73rem; font-weight: 700; color: #475569; margin-bottom: 8px; }
+.gc-score-badges { display: flex; gap: 5px; flex-wrap: wrap; }
+.gc-score-badge {
+  font-size: .72rem; font-weight: 800; padding: 3px 10px; border-radius: 6px;
+}
+.gc-s1 { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
+.gc-s2 { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.gc-s3 { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
+.gc-s4 { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.gc-consensus-row {
+  padding: 10px 0; border-top: 1px solid #f1f5f9; margin-top: 12px;
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.gc-consensus-lbl { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: #94a3b8; }
+.gc-spread-pill {
+  font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+}
+.gc-spread-low  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.gc-spread-mid  { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.gc-spread-high { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
+.gc-input-row { display: flex; gap: 10px; margin-bottom: 14px; }
+.gc-input {
+  font-family: inherit; font-size: .9rem; font-weight: 700; letter-spacing: .15em;
+  text-transform: uppercase; padding: 10px 16px; border-radius: 10px;
+  border: 1.5px solid #e2e8f0; width: 160px; text-align: center;
+}
+.gc-input:focus { outline: none; border-color: #1d4ed8; }
+
+@media (max-width: 640px) {
+  .page-wrap { padding: 16px 12px 80px; }
+  .score-row { flex-wrap: wrap; }
+  .s-btn { min-width: calc(50% - 4px); }
+  .result-row { grid-template-columns: 1fr; gap: 8px; }
+  .irr-grid { grid-template-columns: 1fr 1fr; }
+  .rubric-anchor-grid { grid-template-columns: 1fr; }
+  .gc-result-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">&#x1F3AF; Appraiser Calibration</div>
+    <h1>Inter-Rater Reliability<br>Calibration Session</h1>
+    <div class="hero-sub">Score each lesson vignette (and optional video), compare with expert consensus, and track your calibration status. Complete all scenarios before conducting formal appraisals.</div>
+    <div class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</div>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" onclick="setMode('solo')">&#x1F464; Solo Calibration</button>
+    <button class="mode-tab" onclick="setMode('group')">&#x1F465; Group Session</button>
+    <button class="mode-tab" id="adminTabBtn" style="display:none;" onclick="setMode('leaderboard')">&#x1F4CA; Leaderboard</button>
+  </div>
+
+  <!-- SOLO MODE -->
+  <div id="soloMode">
+    <div class="progress-bar">
+      <div class="progress-steps" id="stepDots"></div>
+      <span class="progress-label" id="progressLabel">Scenario 1 of 8</span>
+    </div>
+    <div id="scenarioView"></div>
+    <div id="resultsView" style="display:none;"></div>
+    <div class="save-status" id="saveStatus"></div>
+  </div>
+
+  <!-- GROUP MODE -->
+  <div id="groupMode" style="display:none;">
+    <div id="groupLanding"></div>
+    <div id="groupSession" style="display:none;"></div>
+  </div>
+
+  <!-- LEADERBOARD (admin only) -->
+  <div id="leaderboardMode" style="display:none;">
+    <div id="leaderboardContent"></div>
+  </div>
+
+</div>
+
+<script type="module">
+import {
+  collection, addDoc, query, where, getDocs, onSnapshot,
+  serverTimestamp, setDoc, doc, getDoc, updateDoc, orderBy, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const db = window.db;
+
+/* ─────────────────────────────────────────────
+   RUBRIC ANCHOR DESCRIPTORS
+   ───────────────────────────────────────────── */
+const ANCHORS = {
+  'D3.3': {
+    name: 'Making Learning Intentions Visible',
+    anchors: [
+      'Objective is absent, unclear, or completely unrelated to what is taught.',
+      'Objective is posted but not stated aloud, not referred to, or too vague for students to use.',
+      'Learning intention is stated and referred to at key moments; most students can articulate it.',
+      'Learning intention and success criteria are co-constructed or made explicit; students reference them throughout; closure links back.'
+    ]
+  },
+  'D3.4': {
+    name: 'Activity–Objective Alignment',
+    anchors: [
+      'Activities bear no clear relationship to the stated objective.',
+      'Some activities align but others are filler or off-objective; alignment is incidental.',
+      'All activities clearly serve the objective; minor gaps in difficulty range or real-world connection.',
+      'Every activity deliberately scaffolds toward the objective with purposeful variation in complexity and authentic application.'
+    ]
+  },
+  'D2.4': {
+    name: 'Time Management and Instructional Pace',
+    anchors: [
+      'Significant time wasted on transitions, unclear directions, or off-task activity (>10 min).',
+      'Pacing is uneven; one phase disproportionately long or short; teacher not circulating during work time.',
+      'Transitions are efficient; time allocation is appropriate; teacher circulates actively.',
+      'Every minute is purposeful; flexible pacing responds to student need; zero dead time.'
+    ]
+  },
+  'D2.1': {
+    name: 'Awareness of Classroom Dynamics',
+    anchors: [
+      'Teacher is unaware of off-task or disruptive students; disruptions escalate without response.',
+      'Teacher notices disruptions only after escalation; response is reactive rather than preventive.',
+      'Teacher scans continuously; uses proximity or quiet redirection before disruption escalates.',
+      'Proactive classroom management; students are self-regulating; teacher anticipates and prevents issues.'
+    ]
+  },
+  'D3.13': {
+    name: 'Guiding Concept and Skill Acquisition',
+    anchors: [
+      'No scaffolding; students are given tasks without modelling or guided practice.',
+      'Teacher models but immediately releases to independent work; no check for readiness.',
+      'Clear I Do–We Do–You Do sequence; re-teaching visible when misconception detected.',
+      'Gradual release is explicit and adaptive; students articulate the learning process; peer scaffolding encouraged.'
+    ]
+  },
+  'D3.5': {
+    name: 'Activating Higher-Order Thinking',
+    anchors: [
+      'All questions are recall-level; no analysis, evaluation, or creation demanded.',
+      'Occasional higher-order question but it is not followed up; majority remain recall.',
+      'Regular analysis and application questions; students challenged to justify or compare.',
+      'Consistent demand for evaluation, synthesis, or creation; student questioning evident; teacher responds with further probing.'
+    ]
+  },
+  'D3.19': {
+    name: 'Monitoring Student Understanding',
+    anchors: [
+      'No evidence teacher checks for understanding during lesson; feedback is post-lesson only.',
+      'Single whole-class check (e.g., "any questions?"); does not adjust based on response.',
+      'Multiple formative checks (mini-whiteboards, exit slips, targeted questioning); teacher adjusts in the moment.',
+      'Continuous, varied monitoring; real-time data drives re-teaching; every student\'s understanding is tracked.'
+    ]
+  },
+  'D1.8': {
+    name: 'Formative Assessment Planning',
+    anchors: [
+      'No planned formative assessment; lesson relies entirely on summative or no assessment.',
+      'One assessment method placed only at lesson end; no provision for mid-lesson data.',
+      'Two or more formative checkpoints planned; assessment is embedded, not bolted on.',
+      'Assessment is woven throughout; varied methods; data collection is systematic and feeds directly into planning.'
+    ]
+  },
+  'D1.3': {
+    name: 'Knowledge of Students',
+    anchors: [
+      'Instruction is entirely undifferentiated; no evidence of knowing individual learners.',
+      'Teacher acknowledges mixed ability but does not adjust materials or grouping.',
+      'Grouping or resources are differentiated; teacher checks in with specific students based on prior data.',
+      'Deep knowledge of individual learners drives every design decision; student strengths and gaps are explicitly leveraged.'
+    ]
+  },
+  'D3.10': {
+    name: 'Student Engagement',
+    anchors: [
+      'Most students are passive recipients; off-task behaviour is prevalent.',
+      'Students are compliant but not cognitively engaged; tasks are procedural only.',
+      'Students are on-task and actively participating; discussion and collaboration evident.',
+      'Students are intellectually absorbed; they initiate questions and extend thinking independently.'
+    ]
+  },
+  'D3.7': {
+    name: 'Feedback Quality',
+    anchors: [
+      'Feedback is absent or only evaluative ("good", "wrong") with no guidance for improvement.',
+      'Feedback identifies what is wrong but does not explain how to improve.',
+      'Feedback is specific and actionable; students are given strategies to close the gap.',
+      'Feedback is dialogic; teacher checks for uptake; students use feedback to self-correct in real time.'
+    ]
+  },
+  'D2.3': {
+    name: 'Classroom Environment and Respect',
+    anchors: [
+      'Dismissive or punitive tone; students appear reluctant to participate.',
+      'Neutral climate; teacher is polite but interactions are transactional.',
+      'Warm, respectful climate; mistakes are treated as learning opportunities; student contributions are valued.',
+      'Students feel psychologically safe to take risks; teacher actively celebrates effort and diversity of thought.'
+    ]
+  }
+};
+
+/* ─────────────────────────────────────────────
+   SCENARIOS  (8 total)
+   ───────────────────────────────────────────── */
+const SCENARIOS = [
+  {
+    id: 'S1',
+    title: 'Grade 10 Mathematics — Quadratic Functions',
+    level: 'developing',
+    items: ['D3.3','D3.4','D2.4'],
+    video: {
+      youtubeId: 'Nw4R3HwwiUY',
+      channel: 'FCOE Teacher Induction',
+      note: 'Watch the first 8 minutes. Focus on how the teacher opens the lesson and manages independent work time.',
+      focusPoints: [
+        'Is the learning objective stated verbally? When?',
+        'How closely do the tasks match the stated goal?',
+        'What is the teacher doing during student work time?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 08:14, two minutes after the bell. The teacher is writing the lesson topic on the whiteboard — "Quadratic Functions: Vertex Form" — while students settle. At 08:16 the teacher says, "Today we\'re looking at vertex form. Open to page 84." No learning objective is stated verbally. A handwritten objective is visible on the side whiteboard: "Students will convert standard form to vertex form." It remains posted for the entire lesson but is not referred to again.',
+      'The teacher demonstrates three worked examples on the board, narrating each step. Students copy. At 08:34 the teacher distributes a worksheet and says "complete questions 1 to 8." During independent work (18 minutes) the teacher sits at the desk and marks homework. At 08:49 the teacher calls time and reviews Q1 and Q2 from the front. The lesson ends without a closure activity. Two students in the back row are off-task for most of the independent phase — the teacher does not notice.'
+    ],
+    expertScores: { 'D3.3': 2, 'D3.4': 3, 'D2.4': 2 },
+    rationale: {
+      'D3.3': 'Objective is physically present but never verbalised, reinforced, or returned to — students have partial awareness at best. Score 2.',
+      'D3.4': 'Worked examples and worksheet are aligned to the stated vertex form objective. Minor misalignment: no higher-complexity application or real-world context. Score 3.',
+      'D2.4': 'Independent phase of 18 minutes is reasonable, but teacher circulation is absent throughout. Two students off-task for a sustained period without intervention. Score 2.'
+    }
+  },
+  {
+    id: 'S2',
+    title: 'Grade 7 English — Descriptive Writing',
+    level: 'induction',
+    items: ['D3.3','D2.1','D3.13'],
+    video: {
+      youtubeId: 'ERIwByt4xc0',
+      channel: 'FCOE Teacher Induction',
+      note: 'Watch the full video. Pay close attention to how the teacher communicates expectations and manages participation.',
+      focusPoints: [
+        'How does the teacher communicate the learning goal?',
+        'How does the teacher respond to off-task behaviour?',
+        'Is there a visible I-Do / We-Do / You-Do sequence?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 10:02. The teacher is already at the door greeting students as they arrive. The projector displays: "Learning Goal: I can use sensory language to describe a setting. Success criteria: I have used at least 3 senses; my description creates a clear picture." The teacher refers to the slide verbally: "Before we start, let\'s read our goal together." Students read it aloud as a class.',
+      'The teacher opens with a 4-minute paired activity — students describe a photo of a rainforest to each other using only one sense at a time. Feedback is gathered via mini-whiteboards. The teacher scans the room continuously, circulating every 2–3 minutes, and twice redirects off-task students by proximity before any disruption escalates. At 10:28 the teacher pauses the class: "Mini-whiteboards out — write one sentence using smell." She scans results, identifies a common gap, and re-explains the technique to three students. The lesson closes with students reading one sentence aloud and the teacher linking back to the success criteria on the projector.'
+    ],
+    expertScores: { 'D3.3': 4, 'D2.1': 4, 'D3.13': 3 },
+    rationale: {
+      'D3.3': 'Learning intention and success criteria are displayed, read aloud as a class, returned to mid-lesson, and linked explicitly at closure. Students can clearly articulate the goal throughout. Score 4.',
+      'D2.1': 'Continuous scanning, proactive proximity redirection before escalation, whiteboard check — all demonstrate keen and continuous awareness with no disruption allowed to develop. Score 4.',
+      'D3.13': 'Clear sequencing and scaffolded practice (one sense at a time, then combine). Re-teaching moment visible. Gradual release present but the transition from guided to independent is not made fully explicit to students. Score 3.'
+    }
+  },
+  {
+    id: 'S3',
+    title: 'Grade 9 Biology — Cell Division',
+    level: 'proficient',
+    items: ['D3.5','D3.19','D1.8'],
+    video: {
+      youtubeId: 'g9kyl_WPFhU',
+      channel: 'FCOE Teacher Induction',
+      note: 'This is a secondary science lesson. Watch for the quality of teacher questioning and how understanding is assessed.',
+      focusPoints: [
+        'What level of thinking do teacher questions demand (recall vs. analysis)?',
+        'How does the teacher check for understanding — when, how often, and how?',
+        'Is formative assessment embedded throughout or only at the end?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 13:05, lesson already underway. Students are in groups of four, each group assigned a phase of mitosis (prophase, metaphase, anaphase, telophase). Groups are building a physical model using pipe cleaners and card. The teacher moves between groups, asking: "What would happen if the spindle fibres failed here?" and "How would this phase differ in a plant cell?"',
+      'At 13:22 the teacher calls the class together. Each group presents their model. During presentations the teacher poses follow-up questions to the audience, not just the presenters: "Do you agree with their interpretation of cytokinesis?" At 13:38 the teacher asks students to write a 3-sentence "exit explanation" answering: "Why does cell division require chromosome duplication first?" — collected before students leave. No review of prior learning at the lesson\'s start was observed. Teacher does not circulate during the initial 8-minute independent model-building phase.'
+    ],
+    expertScores: { 'D3.5': 4, 'D3.19': 3, 'D1.8': 2 },
+    rationale: {
+      'D3.5': 'Spindle fibre failure question, plant vs animal cell comparison, cytokinesis interpretation — consistently demands analysis and application beyond recall throughout the lesson. Score 4.',
+      'D3.19': 'Exit explanation is a deliberate, well-placed formative check. Questioning during presentations serves as live monitoring. Limited monitoring in the opening independent phase reduces this from Distinguished. Score 3.',
+      'D1.8': 'Exit explanation is planned and well-placed. However, no formative check is planned for the opening phase (8 mins unmonitored), and only a single method is used, placed only at lesson end. Score 2.'
+    }
+  },
+  {
+    id: 'S4',
+    title: 'Grade 5 Mathematics — Fractions on a Number Line',
+    level: 'induction',
+    items: ['D3.13','D3.10','D3.7'],
+    video: {
+      youtubeId: 'D2o6MDpL1v0',
+      channel: 'FCOE Teacher Induction — K Math',
+      note: 'This is an early primary lesson. Observe the scaffolding sequence and the quality of feedback during student practice.',
+      focusPoints: [
+        'How does the teacher model before releasing students?',
+        'Are students actively engaged or passive?',
+        'What feedback does the teacher give — evaluative ("good") or specific and actionable?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 09:05. The teacher writes "3/4" on the board and asks, "Who can tell me what this means?" One student answers correctly. The teacher says "Good" and moves immediately to distributing worksheets. No physical model or visual representation is used. Students work individually for 22 minutes; the teacher circulates briefly in the first 5 minutes then returns to the front.',
+      'At 09:34, the teacher reviews the answers: "Number 1 — who got ¼?" Hands go up. "Good, it\'s the point halfway between 0 and ½." No explanation of why is offered. A student says, "But I put it on the ½ mark." The teacher replies, "That\'s wrong — the answer is ¼, not ½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems — the teacher does not return to them.'
+    ],
+    expertScores: { 'D3.13': 1, 'D3.10': 2, 'D3.7': 1 },
+    rationale: {
+      'D3.13': 'No modelling, no guided practice, no check for readiness before independent work. Students given the task without scaffolding — a score of 1 is appropriate.',
+      'D3.10': 'Students are mostly compliant but not cognitively engaged. Independent work is procedural; no discussion or collaborative sense-making. Score 2.',
+      'D3.7': 'Feedback is purely evaluative ("good", "that\'s wrong") with no strategy offered for improvement. The student who misplaced the fraction receives no actionable guidance. Score 1.'
+    }
+  },
+  {
+    id: 'S5',
+    title: 'Grade 11 Chemistry — Equilibrium and Le Chatelier\'s Principle',
+    level: 'lead',
+    items: ['D3.5','D3.3','D1.3'],
+    video: {
+      youtubeId: 'SuPb32ErPF8',
+      channel: 'FCOE Teacher Induction — Upper Primary',
+      note: 'Watch how the teacher opens the lesson and differentiates for different learners.',
+      focusPoints: [
+        'How explicitly is the lesson objective communicated?',
+        'Are questions consistently demanding higher-order thinking?',
+        'Is there evidence the teacher knows individual student needs?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress — and by the end you\'ll be able to design an industrial process that maximises yield."',
+      'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early — these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task — watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
+    ],
+    expertScores: { 'D3.5': 4, 'D3.3': 4, 'D1.3': 4 },
+    rationale: {
+      'D3.5': 'Every teacher question demands application, analysis, or evaluation. Students debate real industrial trade-offs. Consistently Distinguished-level questioning throughout. Score 4.',
+      'D3.3': 'Objective is delayed but then made explicit and ambitious; students clearly understand what success looks like by the end; referred back to at closure debate. Score 4.',
+      'D1.3': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards — all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
+    }
+  },
+  {
+    id: 'S6',
+    title: 'Grade 8 History — Causes of World War I',
+    level: 'developing',
+    items: ['D2.3','D3.10','D3.19'],
+    video: {
+      youtubeId: 'tl8IwYRnBqM',
+      channel: 'FCOE Teacher Induction',
+      note: 'Focus on the classroom climate and how students are responding to the teacher and each other.',
+      focusPoints: [
+        'How does the teacher respond when students give wrong answers?',
+        'Are students willing to volunteer and take risks?',
+        'How engaged are students — cognitively or just behaviourally?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 14:00. The teacher is reading from printed notes at the front. He pauses occasionally to ask recall questions: "Who was assassinated in Sarajevo?" One student answers correctly. Another student answers a different question incorrectly: "That\'s not right — we covered this last week. Were you paying attention?" The student lowers his head and does not volunteer again for the rest of the lesson.',
+      'At 14:25 the teacher puts students into pairs to discuss the MAIN acronym (Militarism, Alliances, Imperialism, Nationalism). The room becomes louder. The teacher waits at the front rather than circulating. At 14:35 he calls for quiet and asks, "Does everyone understand?" The class is silent. He says, "Good, we\'ll pick this up next lesson." No formative check was conducted. Three students were observed reading an unrelated book during the teacher\'s lecture phase.'
+    ],
+    expertScores: { 'D2.3': 2, 'D3.10': 2, 'D3.19': 1 },
+    rationale: {
+      'D2.3': 'The public correction ("were you paying attention?") is potentially damaging to psychological safety. Climate is functional but not warm; the student\'s retreat into silence signals risk aversion. Score 2.',
+      'D3.10': 'Students are mostly compliant but passive. Pair discussion is a positive moment but unmonitored. Overall engagement is procedural, not intellectual. Score 2.',
+      'D3.19': '"Does everyone understand?" is not a formative check — it yields no usable data. No other monitoring strategy was deployed. Score 1.'
+    }
+  },
+  {
+    id: 'S7',
+    title: 'Grade 6 Science — Properties of Materials',
+    level: 'proficient',
+    items: ['D3.13','D2.4','D1.8'],
+    video: {
+      youtubeId: 'f3--wV4MjOI',
+      channel: 'FCOE Teacher Induction',
+      note: 'Observe how the teacher structures the lesson sequence and uses time.',
+      focusPoints: [
+        'Is there a clear scaffold from modelling to independent work?',
+        'How efficiently does the teacher use lesson time?',
+        'What formative assessment strategies are used and when?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 08:58. The lesson is already 3 minutes in. The teacher is demonstrating a sorting activity at the visualiser: "I\'m going to sort these materials by conductivity. Watch what I do — I\'m asking myself: does this let electricity flow?" She sorts three materials aloud, narrating her thinking. She then passes a set of materials to pairs: "Your turn — sort your set and be ready to justify one decision." Pairs work for 6 minutes; the teacher circulates continuously, asking "What\'s your evidence for that?" rather than confirming answers.',
+      'At 09:12 the teacher brings the class together using a clap-call signal. Transitions take under 30 seconds. Each pair reports one decision; the teacher records answers on a class T-chart. At 09:22 the teacher distributes an independent investigation sheet. Students work individually. At 09:38 the teacher collects the sheets as an exit check. Two students have only completed 2 of 5 questions — the teacher notes their names for follow-up but does not intervene during the lesson. The lesson ends precisely on time.'
+    ],
+    expertScores: { 'D3.13': 4, 'D2.4': 3, 'D1.8': 3 },
+    rationale: {
+      'D3.13': 'Textbook I Do (visualiser modelling with think-aloud) → We Do (guided pair sort with teacher questioning) → You Do (independent investigation). Release is explicit and readiness-checked. Score 4.',
+      'D2.4': 'Transitions are highly efficient; time allocation is purposeful; teacher circulates actively during pair work. Minor note: two students behind at independent stage are not supported in-lesson. Score 3.',
+      'D1.8': 'Exit check is planned and embedded at end. A mid-lesson checkpoint (the T-chart reporting) also functions as informal data. Two formative points present but no mid-task individual check. Score 3.'
+    }
+  },
+  {
+    id: 'S8',
+    title: 'Grade 10 English Literature — The Great Gatsby',
+    level: 'lead',
+    items: ['D3.7','D2.3','D3.5'],
+    video: {
+      youtubeId: '2bhOoV0DQtU',
+      channel: 'Teacher Professional Development',
+      note: 'Focus on the quality of teacher-student dialogue and how the teacher handles student responses.',
+      focusPoints: [
+        'How specific and actionable is teacher feedback during discussion?',
+        'Does the classroom climate encourage students to take intellectual risks?',
+        'Are students thinking beyond the literal — analysing, evaluating, connecting?'
+      ]
+    },
+    vignette: [
+      'The observer enters at 10:05. A student is mid-sentence: "…so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move — \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far — write that sentence down verbatim. You\'ll want it in your essay. What do others think — fake, or aspirational but unattainable?"',
+      'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that — it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim — try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
+    ],
+    expertScores: { 'D3.7': 4, 'D2.3': 4, 'D3.5': 4 },
+    rationale: {
+      'D3.7': 'Feedback is dialogic, specific, and acted on in real time ("write that sentence verbatim"; margin annotation with precise vocabulary suggestion). Students use feedback to self-correct immediately. Score 4.',
+      'D2.3': 'The tentative student\'s contribution is publicly celebrated; counter-argument task normalises intellectual risk. Climate is psychologically safe — students openly revise their own positions. Score 4.',
+      'D3.5': 'Every teacher utterance extends student thinking — from "performing wealth" to the philosophical question of whether the American Dream is inherently performative. All students are challenged to evaluate and argue, not recall. Score 4.'
+    }
+  }
+];
+
+const LABELS = { 1: 'Unsatisf.', 2: 'Basic', 3: 'Proficient', 4: 'Distngshd' };
+
+/* ─────────────────────────────────────────────
+   STATE
+   ───────────────────────────────────────────── */
+let currentScenario = 0;
+let userScores = SCENARIOS.map(() => ({}));
+let activeMode = 'solo';
+let isAdmin = false;
+let groupSession = null; // { code, docRef, unsubscribe }
+let openAnchorPanels = {}; // itemId -> bool
+
+/* ─────────────────────────────────────────────
+   AUTH READY
+   ───────────────────────────────────────────── */
+document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('calibration', { user, profile });
+  isAdmin = profile?.role_academichub === 'academic_admin';
+  if (isAdmin) document.getElementById('adminTabBtn').style.display = '';
+  renderStepDots();
+  renderScenario(0);
+});
+
+/* ─────────────────────────────────────────────
+   MODE SWITCHER
+   ───────────────────────────────────────────── */
+window.setMode = function(mode) {
+  activeMode = mode;
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mode-tab')[['solo','group','leaderboard'].indexOf(mode)].classList.add('active');
+  document.getElementById('soloMode').style.display        = mode === 'solo'        ? '' : 'none';
+  document.getElementById('groupMode').style.display       = mode === 'group'       ? '' : 'none';
+  document.getElementById('leaderboardMode').style.display = mode === 'leaderboard' ? '' : 'none';
+  if (mode === 'group' && !groupSession) renderGroupLanding();
+  if (mode === 'leaderboard') renderLeaderboard();
+};
+
+/* ─────────────────────────────────────────────
+   SOLO — progress dots
+   ───────────────────────────────────────────── */
+function renderStepDots() {
+  document.getElementById('stepDots').innerHTML = SCENARIOS.map((_, i) => {
+    const cls = i < currentScenario ? 'done' : i === currentScenario ? 'active' : '';
+    return `<div class="step-dot ${cls}"></div>`;
+  }).join('');
+  document.getElementById('progressLabel').textContent =
+    currentScenario >= SCENARIOS.length
+      ? 'Session complete'
+      : `Scenario ${currentScenario + 1} of ${SCENARIOS.length}`;
+}
+
+/* ─────────────────────────────────────────────
+   SOLO — scenario render
+   ───────────────────────────────────────────── */
+function renderScenario(idx) {
+  const sc = SCENARIOS[idx];
+  const myScores = userScores[idx];
+  const scored = Object.keys(myScores).length;
+  const total = sc.items.length;
+  const canSubmit = scored === total;
+
+  const itemsHtml = sc.items.map(itemId => {
+    const sel = myScores[itemId];
+    const anchorData = ANCHORS[itemId];
+    const panelOpen = openAnchorPanels[itemId];
+
+    const anchorCards = anchorData ? anchorData.anchors.map((txt, i) => {
+      const cls = ['a1','a2','a3','a4'][i];
+      const lbl = ['1 — Unsatisfactory','2 — Basic','3 — Proficient','4 — Distinguished'][i];
+      return `<div class="anchor-card ${cls}">
+        <div class="anchor-score">${i+1}</div>
+        <div class="anchor-lbl">${lbl}</div>
+        <div class="anchor-desc">${txt}</div>
+      </div>`;
+    }).join('') : '';
+
+    const btns = [1,2,3,4].map(s =>
+      `<button class="s-btn ${sel === s ? 'sel-' + s : ''}"
+        onclick="window.selectScore(${idx},'${itemId}',${s})">
+        <div class="s-num">${s}</div>
+        <div class="s-lbl">${LABELS[s]}</div>
+      </button>`
+    ).join('');
+
+    return `
+      <div class="item-block">
+        <div class="item-header">
+          <span class="item-badge">${itemId}</span>
+          <span class="item-title">${anchorData?.name || itemId}</span>
+          ${anchorData ? `<button class="item-anchor-toggle" onclick="window.toggleAnchor('${itemId}')">${panelOpen ? '▲ Hide rubric' : '▼ Show rubric'}</button>` : ''}
+        </div>
+        <div class="item-anchor-panel rubric-anchor-grid ${panelOpen ? 'open' : ''}" id="anchor-${itemId}">
+          ${anchorCards}
+        </div>
+        <div class="score-row">${btns}</div>
+      </div>`;
+  }).join('');
+
+  const videoHtml = sc.video ? `
+    <div class="tab-pane active" id="tab-video-${idx}">
+      <div class="card-body">
+        <div class="video-channel">${sc.video.channel}</div>
+        <div class="video-wrap">
+          <iframe src="https://www.youtube.com/embed/${sc.video.youtubeId}?rel=0&modestbranding=1"
+            allowfullscreen loading="lazy" title="Classroom observation video"></iframe>
+        </div>
+        <div class="video-note">
+          <div class="video-observe-prompt">While watching, consider:</div>
+          <ul class="video-focus-list">
+            ${sc.video.focusPoints.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+          <div style="margin-top:8px;font-size:.75rem;color:#94a3b8;">${sc.video.note}</div>
+        </div>
+      </div>
+    </div>` : '';
+
+  document.getElementById('scenarioView').innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+            <span class="level-badge ${sc.level}">${sc.level.charAt(0).toUpperCase()+sc.level.slice(1)}</span>
+            <span style="font-size:.72rem;color:#94a3b8;">${sc.items.join(' · ')}</span>
+          </div>
+          <h2>${sc.title}</h2>
+        </div>
+      </div>
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="window.switchTab(${idx},'vignette',this)">&#x1F4CB; Vignette</button>
+        ${sc.video ? `<button class="tab-btn" onclick="window.switchTab(${idx},'video',this)">&#x25B6;&#xFE0F; Video</button>` : ''}
+        <button class="tab-btn" onclick="window.switchTab(${idx},'score',this)">&#x1F3AF; Score</button>
+      </div>
+      <div class="tab-pane active" id="tab-vignette-${idx}">
+        <div class="card-body">
+          <div class="vignette-box">
+            <div class="vignette-label">Observation vignette</div>
+            <div class="vignette-text">${sc.vignette.map(p=>`<p>${p}</p>`).join('')}</div>
+          </div>
+        </div>
+      </div>
+      ${sc.video ? `<div class="tab-pane" id="tab-video-${idx}">
+        <div class="card-body">
+          <div class="video-channel">${sc.video.channel}</div>
+          <div class="video-wrap">
+            <iframe src="https://www.youtube.com/embed/${sc.video.youtubeId}?rel=0&modestbranding=1"
+              allowfullscreen loading="lazy" title="Classroom observation video"></iframe>
+          </div>
+          <div class="video-note">
+            <div class="video-observe-prompt">While watching, consider:</div>
+            <ul class="video-focus-list">
+              ${sc.video.focusPoints.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+            <div style="margin-top:8px;font-size:.75rem;color:#94a3b8;">${sc.video.note}</div>
+          </div>
+        </div>
+      </div>` : ''}
+      <div class="tab-pane" id="tab-score-${idx}">
+        <div class="card-body">
+          <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">
+            Score each item independently based only on the evidence above. Use "Show rubric" for behavioural anchors.
+          </div>
+          ${itemsHtml}
+        </div>
+      </div>
+      <div class="action-row">
+        <span class="action-hint">${scored} of ${total} items scored</span>
+        <button class="btn-primary" ${canSubmit ? '' : 'disabled'}
+          onclick="window.submitScenario(${idx})">
+          See expert scores →
+        </button>
+      </div>
+    </div>`;
+  document.getElementById('scenarioView').style.display = 'block';
+  document.getElementById('resultsView').style.display = 'none';
+}
+
+window.switchTab = function(idx, tab, btn) {
+  const card = btn.closest('.card');
+  card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  card.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  const pane = card.querySelector(`#tab-${tab}-${idx}`);
+  if (pane) pane.classList.add('active');
+};
+
+window.toggleAnchor = function(itemId) {
+  openAnchorPanels[itemId] = !openAnchorPanels[itemId];
+  const panel = document.getElementById(`anchor-${itemId}`);
+  const btn = document.querySelector(`[onclick="window.toggleAnchor('${itemId}')"]`);
+  if (panel) panel.classList.toggle('open', openAnchorPanels[itemId]);
+  if (btn) btn.textContent = openAnchorPanels[itemId] ? '▲ Hide rubric' : '▼ Show rubric';
+};
+
+/* ─────────────────────────────────────────────
+   SOLO — results render
+   ───────────────────────────────────────────── */
+function renderResults(idx) {
+  const sc = SCENARIOS[idx];
+  const myScores = userScores[idx];
+
+  const rows = sc.items.map(itemId => {
+    const mine   = myScores[itemId];
+    const expert = sc.expertScores[itemId];
+    const delta  = Math.abs(mine - expert);
+    const deltaCls = delta === 0 ? 'delta-0' : delta === 1 ? 'delta-1' : 'delta-2up';
+    const deltaLbl = delta === 0 ? 'Exact' : `Δ ${delta}`;
+    return `
+      <div class="result-row">
+        <div>
+          <div style="font-size:.72rem;font-weight:700;color:#64748b;margin-bottom:6px;">${itemId}</div>
+          <div style="font-size:.7rem;color:#94a3b8;margin-bottom:6px;">${ANCHORS[itemId]?.name||''}</div>
+          <div class="score-compare">
+            <div class="score-box yours s${mine}">${mine}</div>
+            <span class="arrow">→</span>
+            <div class="score-box expert">${expert}</div>
+          </div>
+          <div style="margin-top:6px;">
+            <span class="delta-pill ${deltaCls}">${deltaLbl}</span>
+          </div>
+        </div>
+        <div>
+          <div class="rationale-label">Expert rationale</div>
+          <div class="rationale-text">${sc.rationale[itemId]}</div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const exact = sc.items.filter(id => myScores[id] === sc.expertScores[id]).length;
+  const adj   = sc.items.filter(id => Math.abs(myScores[id]-sc.expertScores[id]) <= 1).length;
+  const adjPct = Math.round(adj / sc.items.length * 100);
+  const isLast = idx === SCENARIOS.length - 1;
+
+  document.getElementById('resultsView').innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Results — ${sc.title}</h2>
+          <div class="card-head-sub">Your scores compared to expert consensus</div>
+        </div>
+      </div>
+      <div class="card-body">
+        ${rows}
+        <div class="irr-grid" style="margin-top:16px;">
+          <div class="irr-card">
+            <div class="irr-label">Exact agreement</div>
+            <div class="irr-val">${Math.round(exact/sc.items.length*100)}%</div>
+            <div class="irr-sub">${exact} of ${sc.items.length} items</div>
+          </div>
+          <div class="irr-card">
+            <div class="irr-label">Adjacent (±1)</div>
+            <div class="irr-val">${adjPct}%</div>
+            <div class="irr-sub">${adj} of ${sc.items.length} items</div>
+          </div>
+          <div class="irr-card">
+            <div class="irr-label">Target</div>
+            <div class="irr-val">≥85%</div>
+            <div class="irr-sub">adjacent agreement</div>
+          </div>
+        </div>
+      </div>
+      <div class="action-row">
+        <span class="action-hint">${isLast ? 'Last scenario' : 'Scenario '+(idx+1)+' of '+SCENARIOS.length}</span>
+        ${isLast
+          ? `<button class="btn-primary" onclick="window.showSummary()">View session summary →</button>`
+          : `<button class="btn-primary" onclick="window.nextScenario(${idx+1})">Next scenario →</button>`
+        }
+      </div>
+    </div>`;
+  document.getElementById('scenarioView').style.display = 'none';
+  document.getElementById('resultsView').style.display = 'block';
+}
+
+/* ─────────────────────────────────────────────
+   SOLO — session summary
+   ───────────────────────────────────────────── */
+function showSummary() {
+  currentScenario = SCENARIOS.length;
+  renderStepDots();
+
+  let exactTotal = 0; let adjTotal = 0; let itemTotal = 0;
+  const bars = SCENARIOS.map((sc, i) => {
+    const my = userScores[i];
+    const exact = sc.items.filter(id => my[id] === sc.expertScores[id]).length;
+    const adj   = sc.items.filter(id => Math.abs(my[id]-sc.expertScores[id]) <= 1).length;
+    exactTotal += exact; adjTotal += adj; itemTotal += sc.items.length;
+    const pct = Math.round(adj / sc.items.length * 100);
+    const barCls = pct >= 85 ? 'bar-green' : pct >= 67 ? 'bar-amber' : 'bar-red';
+    return `
+      <div class="bar-row">
+        <div class="bar-label-row">
+          <span style="color:#1e293b;font-size:.8rem;">${sc.title}</span>
+          <span style="color:#64748b;">${pct}% adj.</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill ${barCls}" style="width:${pct}%"></div>
+        </div>
+      </div>`;
+  }).join('');
+
+  const overallAdj   = Math.round(adjTotal / itemTotal * 100);
+  const overallExact = Math.round(exactTotal / itemTotal * 100);
+  const passed = overallAdj >= 85;
+
+  document.getElementById('resultsView').innerHTML = `
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Calibration session summary</h2>
+          <div class="card-head-sub">${SCENARIOS.length} scenarios · ${itemTotal} items total</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="irr-grid" style="margin-bottom:20px;">
+          <div class="irr-card">
+            <div class="irr-label">Overall exact</div>
+            <div class="irr-val">${overallExact}%</div>
+            <div class="irr-sub">${exactTotal}/${itemTotal} items</div>
+          </div>
+          <div class="irr-card">
+            <div class="irr-label">Overall adjacent</div>
+            <div class="irr-val">${overallAdj}%</div>
+            <div class="irr-sub">${adjTotal}/${itemTotal} items</div>
+          </div>
+          <div class="irr-card">
+            <div class="irr-label">Result</div>
+            <div class="irr-val" style="color:${passed?'#16a34a':'#b45309'};">${passed ? 'Pass' : 'Retry'}</div>
+            <div class="irr-sub">≥85% required</div>
+          </div>
+        </div>
+        <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">Per scenario</div>
+        ${bars}
+        ${passed
+          ? `<div class="badge-pass">&#x2713; Calibrated — ready to conduct formal appraisals</div>`
+          : `<div class="badge-retry">&#x26A0; Review rubric descriptors and retry before appraising</div>`
+        }
+      </div>
+      <div class="action-row">
+        <span class="action-hint" id="saveStatus2"></span>
+        <button class="btn-ghost" onclick="window.restartSession()">Restart session</button>
+      </div>
+    </div>`;
+  document.getElementById('scenarioView').style.display = 'none';
+  document.getElementById('resultsView').style.display = 'block';
+
+  saveResult(passed, overallAdj, overallExact);
+}
+
+async function saveResult(passed, adjPct, exactPct) {
+  const statusEl = document.getElementById('saveStatus2') || document.getElementById('saveStatus');
+  if (!db) { if (statusEl) statusEl.textContent = 'Firebase not connected.'; return; }
+  try {
+    if (statusEl) statusEl.textContent = 'Saving result…';
+    const uid = window.currentUser?.uid || null;
+    const profile = window.userProfile || {};
+    const payload = {
+      uid,
+      displayName: window.currentUser?.displayName || '',
+      email: window.currentUser?.email || '',
+      school: profile.school || '',
+      academicYear: new Date().getFullYear() + '/' + (new Date().getFullYear() + 1),
+      completedAt:  serverTimestamp(),
+      scenarioIds:  SCENARIOS.map(s => s.id),
+      adjPct, exactPct, passed,
+      status: passed ? 'calibrated' : 'needs_retry',
+      userScores: userScores.map((sc, i) => ({
+        scenarioId: SCENARIOS[i].id,
+        scores: sc,
+        expertScores: SCENARIOS[i].expertScores
+      }))
+    };
+    if (uid) {
+      const ref = doc(db, 'calibration_sessions', `${uid}_${new Date().getFullYear()}`);
+      await setDoc(ref, payload, { merge: true });
+      if (statusEl) statusEl.textContent = `Result saved — ${passed ? 'Calibrated ✓' : 'Needs retry'}`;
+    } else {
+      if (statusEl) statusEl.textContent = 'Not logged in — result not saved.';
+    }
+  } catch(e) {
+    console.error(e);
+    if (statusEl) statusEl.textContent = 'Save failed — check connection.';
+  }
+}
+
+/* ─────────────────────────────────────────────
+   ADMIN — LEADERBOARD
+   ───────────────────────────────────────────── */
+async function renderLeaderboard() {
+  const el = document.getElementById('leaderboardContent');
+  if (!isAdmin) {
+    el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;font-size:.85rem;">Admin access required.</p></div></div>`;
+    return;
+  }
+  el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;">Loading…</p></div></div>`;
+  try {
+    const snap = await getDocs(collection(db, 'calibration_sessions'));
+    const rows = [];
+    snap.forEach(d => rows.push(d.data()));
+    rows.sort((a,b) => (b.adjPct||0) - (a.adjPct||0));
+
+    if (!rows.length) {
+      el.innerHTML = `<div class="card"><div class="card-body lb-empty">No calibration results yet.</div></div>`;
+      return;
+    }
+
+    const tableRows = rows.map((r, i) => {
+      const pct = r.adjPct ?? '—';
+      const barW = typeof r.adjPct === 'number' ? r.adjPct : 0;
+      const barCls = barW >= 85 ? 'bar-green' : barW >= 67 ? 'bar-amber' : 'bar-red';
+      const statusHtml = r.passed === true
+        ? `<span class="lb-pass">&#x2713; Calibrated</span>`
+        : r.passed === false
+          ? `<span class="lb-retry">&#x26A0; Needs retry</span>`
+          : `<span class="lb-na">—</span>`;
+      const dateStr = r.completedAt?.toDate
+        ? r.completedAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
+        : '—';
+      return `<tr>
+        <td class="lb-rank">${i+1}</td>
+        <td>
+          <div class="lb-name">${r.displayName || r.email || 'Unknown'}</div>
+          <div class="lb-school">${r.school || r.email || ''}</div>
+        </td>
+        <td>
+          <div class="lb-bar-wrap">
+            <div class="lb-bar-track"><div class="lb-bar-fill ${barCls}" style="width:${Math.min(barW,100)}%"></div></div>
+            <div class="lb-bar-lbl">${pct}% adjacent</div>
+          </div>
+        </td>
+        <td>${typeof r.exactPct === 'number' ? r.exactPct+'%' : '—'}</td>
+        <td>${statusHtml}</td>
+        <td style="font-size:.75rem;color:#94a3b8;">${r.academicYear||'—'}</td>
+        <td style="font-size:.75rem;color:#94a3b8;">${dateStr}</td>
+      </tr>`;
+    }).join('');
+
+    const calibratedCount = rows.filter(r => r.passed).length;
+    const avgAdj = rows.length ? Math.round(rows.reduce((s,r) => s+(r.adjPct||0),0)/rows.length) : 0;
+
+    el.innerHTML = `
+      <div class="card" style="margin-bottom:16px;">
+        <div class="card-body">
+          <div class="irr-grid">
+            <div class="irr-card">
+              <div class="irr-label">Total completed</div>
+              <div class="irr-val">${rows.length}</div>
+              <div class="irr-sub">appraisers</div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-label">Calibrated</div>
+              <div class="irr-val" style="color:#16a34a;">${calibratedCount}</div>
+              <div class="irr-sub">${Math.round(calibratedCount/rows.length*100)}% pass rate</div>
+            </div>
+            <div class="irr-card">
+              <div class="irr-label">Avg adjacent</div>
+              <div class="irr-val">${avgAdj}%</div>
+              <div class="irr-sub">across all sessions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>Appraiser Calibration Results</h2>
+            <div class="card-head-sub">All sessions — sorted by adjacent agreement</div>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <table class="lb-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Appraiser</th><th>Adjacent score</th>
+                <th>Exact</th><th>Status</th><th>Year</th><th>Date</th>
+              </tr>
+            </thead>
+            <tbody>${tableRows}</tbody>
+          </table>
+        </div>
+      </div>`;
+  } catch(e) {
+    console.error(e);
+    el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#ef4444;">Error loading data: ${e.message}</p></div></div>`;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   GROUP CALIBRATION
+   ───────────────────────────────────────────── */
+function renderGroupLanding() {
+  document.getElementById('groupLanding').innerHTML = `
+    <div class="card">
+      <div class="card-head"><h2>Group Calibration Session</h2></div>
+      <div class="card-body">
+        <p style="font-size:.84rem;color:#475569;margin-bottom:20px;line-height:1.6;">
+          In a group session, all participants score the same vignette independently, then compare results in real time. The spread of scores drives a structured discussion before revealing the expert consensus.
+        </p>
+        <div style="font-size:.8rem;font-weight:700;color:#1e293b;margin-bottom:10px;">Create a new session</div>
+        <div>
+          <label style="font-size:.78rem;color:#64748b;font-weight:600;display:block;margin-bottom:6px;">
+            Choose scenario
+          </label>
+          <select id="gcScenarioSelect" style="font-family:inherit;font-size:.82rem;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;width:100%;margin-bottom:12px;">
+            ${SCENARIOS.map((s,i) => `<option value="${i}">${s.id} — ${s.title}</option>`).join('')}
+          </select>
+          <button class="btn-primary" onclick="window.createGroupSession()">Create session →</button>
+        </div>
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
+          <div style="font-size:.8rem;font-weight:700;color:#1e293b;margin-bottom:10px;">Join an existing session</div>
+          <div class="gc-input-row">
+            <input class="gc-input" id="gcJoinCode" placeholder="SESSION CODE" maxlength="6">
+            <button class="btn-primary" onclick="window.joinGroupSession()">Join →</button>
+          </div>
+          <div id="gcJoinError" style="font-size:.78rem;color:#ef4444;"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+window.createGroupSession = async function() {
+  if (!db) return;
+  const scIdx = parseInt(document.getElementById('gcScenarioSelect').value);
+  const code = Math.random().toString(36).substring(2,8).toUpperCase();
+  const uid = window.currentUser?.uid;
+  const displayName = window.currentUser?.displayName || 'Facilitator';
+  try {
+    const ref = doc(db, 'calibration_group_sessions', code);
+    await setDoc(ref, {
+      code, scenarioIdx: scIdx,
+      createdAt: serverTimestamp(),
+      facilitatorUid: uid,
+      participants: { [uid]: { displayName, joinedAt: serverTimestamp(), scores: null } },
+      status: 'open'
+    });
+    startGroupSession(code, scIdx, ref);
+  } catch(e) {
+    console.error(e);
+  }
+};
+
+window.joinGroupSession = async function() {
+  const code = document.getElementById('gcJoinCode').value.trim().toUpperCase();
+  if (!code || code.length < 4) return;
+  if (!db) return;
+  const ref = doc(db, 'calibration_group_sessions', code);
+  try {
+    const snap = await getDoc(ref);
+    if (!snap.exists()) {
+      document.getElementById('gcJoinError').textContent = 'Session not found. Check the code and try again.';
+      return;
+    }
+    const data = snap.data();
+    const uid = window.currentUser?.uid;
+    const displayName = window.currentUser?.displayName || 'Appraiser';
+    await updateDoc(ref, { [`participants.${uid}`]: { displayName, joinedAt: serverTimestamp(), scores: null } });
+    startGroupSession(code, data.scenarioIdx, ref);
+  } catch(e) {
+    document.getElementById('gcJoinError').textContent = 'Error joining session: ' + e.message;
+  }
+};
+
+function startGroupSession(code, scIdx, ref) {
+  document.getElementById('groupLanding').style.display = 'none';
+  document.getElementById('groupSession').style.display = '';
+  const sc = SCENARIOS[scIdx];
+  const uid = window.currentUser?.uid;
+  let myGroupScores = {};
+
+  const renderGroupSession = (data) => {
+    const participants = data.participants || {};
+    const pList = Object.entries(participants);
+    const allScored = pList.every(([,p]) => p.scores !== null);
+
+    const scored = Object.keys(myGroupScores).length;
+    const total = sc.items.length;
+    const canSubmit = scored === total;
+
+    const itemsHtml = sc.items.map(itemId => {
+      const sel = myGroupScores[itemId];
+      const anchorData = ANCHORS[itemId];
+      const btns = [1,2,3,4].map(s =>
+        `<button class="s-btn ${sel === s ? 'sel-' + s : ''}"
+          onclick="window.gcSelectScore('${itemId}',${s})">
+          <div class="s-num">${s}</div>
+          <div class="s-lbl">${LABELS[s]}</div>
+        </button>`
+      ).join('');
+      return `<div class="item-block">
+        <div class="item-header">
+          <span class="item-badge">${itemId}</span>
+          <span class="item-title">${anchorData?.name || itemId}</span>
+        </div>
+        <div class="score-row">${btns}</div>
+      </div>`;
+    }).join('');
+
+    const participantChips = pList.map(([puid, p]) => {
+      const hasScored = p.scores !== null;
+      const isSelf = puid === uid;
+      return `<div class="gc-participant">
+        <div class="gc-dot ${hasScored ? 'scored' : 'online'}"></div>
+        <span style="font-weight:${isSelf?'700':'400'}">${p.displayName}${isSelf?' (you)':''}</span>
+        ${hasScored ? '<span style="color:#1d4ed8;font-size:.68rem;">✓</span>' : ''}
+      </div>`;
+    }).join('');
+
+    let resultsHtml = '';
+    if (allScored) {
+      const resultRows = sc.items.map(itemId => {
+        const allScores = pList.map(([,p]) => p.scores?.[itemId]).filter(Boolean);
+        const expert = sc.expertScores[itemId];
+        const spread = Math.max(...allScores) - Math.min(...allScores);
+        const spreadCls = spread === 0 ? 'gc-spread-low' : spread === 1 ? 'gc-spread-mid' : 'gc-spread-high';
+        const scoreChips = pList.map(([,p]) => {
+          const s = p.scores?.[itemId];
+          return s ? `<span class="gc-score-badge gc-s${s}">${s} — ${p.displayName}</span>` : '';
+        }).join('');
+        return `<div class="gc-result-item">
+          <div class="gc-result-name">${itemId} — ${ANCHORS[itemId]?.name||itemId}</div>
+          <div class="gc-score-badges">${scoreChips}</div>
+          <div class="gc-consensus-row">
+            <span class="gc-consensus-lbl">Spread</span>
+            <span class="gc-spread-pill ${spreadCls}">Δ ${spread}</span>
+            <span class="gc-consensus-lbl" style="margin-left:8px;">Expert</span>
+            <span class="gc-score-badge gc-s${expert}" style="background:#ede9fe;color:#3c3489;border-color:#c4b5fd;">${expert}</span>
+          </div>
+        </div>`;
+      }).join('');
+      resultsHtml = `
+        <div style="margin-top:16px;">
+          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">All scores revealed — discuss divergences before moving on</div>
+          <div class="gc-result-grid">${resultRows}</div>
+        </div>`;
+    }
+
+    document.getElementById('groupSession').innerHTML = `
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <h2>&#x1F465; Group Session — ${sc.title}</h2>
+            <div class="card-head-sub">Score independently, then compare</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="gc-session-box">
+            <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:4px;">Session code (share with your group)</div>
+            <div class="gc-code">${code}</div>
+            <div style="font-size:.75rem;color:#64748b;margin-bottom:8px;">${pList.length} participant${pList.length!==1?'s':''}</div>
+            <div class="gc-participants">${participantChips}</div>
+            ${!allScored && pList.some(([puid2,p]) => puid2!==uid && p.scores===null)
+              ? `<div class="gc-waiting">Waiting for others to submit their scores…</div>` : ''}
+          </div>
+          <div class="vignette-box" style="margin-bottom:20px;">
+            <div class="vignette-label">Observation vignette</div>
+            <div class="vignette-text">${sc.vignette.map(p=>`<p>${p}</p>`).join('')}</div>
+          </div>
+          ${!participants[uid]?.scores ? `
+            <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">Score each item independently. Results hidden until everyone submits.</div>
+            ${itemsHtml}
+          ` : `<div style="font-size:.82rem;color:#16a34a;font-weight:700;padding:10px 0;">&#x2713; Your scores submitted — waiting for all participants.</div>`}
+          ${resultsHtml}
+        </div>
+        <div class="action-row">
+          ${!participants[uid]?.scores
+            ? `<span class="action-hint">${scored} of ${total} items scored</span>
+               <button class="btn-primary" ${canSubmit ? '' : 'disabled'} onclick="window.gcSubmitScores('${code}')">Submit my scores →</button>`
+            : `<button class="btn-ghost" onclick="window.leaveGroupSession()">← Leave session</button>`
+          }
+        </div>
+      </div>`;
+
+    window._myGroupScores = myGroupScores;
+  };
+
+  window.gcSelectScore = function(itemId, score) {
+    myGroupScores[itemId] = score;
+    const snap2 = groupSession?._lastSnap;
+    if (snap2) renderGroupSession(snap2);
+  };
+
+  window.gcSubmitScores = async function(sessionCode) {
+    const uid2 = window.currentUser?.uid;
+    await updateDoc(ref, { [`participants.${uid2}.scores`]: myGroupScores });
+  };
+
+  window.leaveGroupSession = function() {
+    if (groupSession?.unsubscribe) groupSession.unsubscribe();
+    groupSession = null;
+    document.getElementById('groupSession').style.display = 'none';
+    document.getElementById('groupLanding').style.display = '';
+    renderGroupLanding();
+  };
+
+  const unsub = onSnapshot(ref, (snap) => {
+    if (!snap.exists()) return;
+    const data = snap.data();
+    groupSession = { code, docRef: ref, unsubscribe: unsub, _lastSnap: data };
+    renderGroupSession(data);
+  });
+  groupSession = { code, docRef: ref, unsubscribe: unsub };
+}
+
+/* ─────────────────────────────────────────────
+   SOLO CONTROLS
+   ───────────────────────────────────────────── */
+window.selectScore = function(scIdx, itemId, score) {
+  userScores[scIdx][itemId] = score;
+  renderScenario(scIdx);
+};
+window.submitScenario = function(idx) { renderResults(idx); };
+window.nextScenario = function(idx) {
+  currentScenario = idx;
+  renderStepDots();
+  openAnchorPanels = {};
+  renderScenario(idx);
+};
+window.showSummary = showSummary;
+window.restartSession = function() {
+  currentScenario = 0;
+  userScores = SCENARIOS.map(() => ({}));
+  openAnchorPanels = {};
+  renderStepDots();
+  renderScenario(0);
+};
+</script>
+
+</body>
+</html>
