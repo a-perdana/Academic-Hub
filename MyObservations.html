@@ -156,13 +156,19 @@ tr:hover td { background: #fafbff; }
 .foci-dot.yes { background: #7c3aed; }
 .foci-dot.no  { background: #e2e8f0; }
 
-/* ── VIEW BTN ── */
+/* ── VIEW / CONTINUE BTN ── */
 .btn-view {
   padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
   font-weight: 600; cursor: pointer; background: #ede9fe; color: #6d28d9;
   border: none; transition: background .15s; white-space: nowrap;
 }
 .btn-view:hover { background: #ddd6fe; }
+.btn-continue {
+  padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
+  font-weight: 600; cursor: pointer; background: #fef3c7; color: #92400e;
+  border: none; transition: background .15s; white-space: nowrap;
+}
+.btn-continue:hover { background: #fde68a; }
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -479,12 +485,23 @@ function renderAppraisals() {
       <td>${scoreBar(a.f3Score)}</td>
       <td>${composite}</td>
       <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
-      <td><button class="btn-view" data-id="${a.id}">View</button></td>
+      <td style="display:flex;gap:6px;align-items:center;">
+        ${a.status === 'draft'
+          ? `<button class="btn-continue" data-continue-id="${a.id}">Continue</button>`
+          : ''}
+        <button class="btn-view" data-id="${a.id}">View</button>
+      </td>
     </tr>`;
   }).join('');
 
   tbody.querySelectorAll('.btn-view').forEach(btn => {
     btn.addEventListener('click', () => openAppraisalModal(btn.dataset.id));
+  });
+  tbody.querySelectorAll('.btn-continue').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const base = location.pathname.endsWith('.html') ? 'TeacherAppraisalEntry.html' : '/teacher-appraisal-entry';
+      window.location.href = base + '?id=' + btn.dataset.continueId;
+    });
   });
 }
 

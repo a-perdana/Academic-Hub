@@ -1132,6 +1132,51 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('observationDate').value = today;
   document.getElementById('conferenceDate').value  = today;
 
+  // Load existing draft via ?id= URL param
+  const urlId = new URLSearchParams(location.search).get('id');
+  if (urlId) {
+    try {
+      const snap = await getDoc(doc(db, 'teacher_appraisals', urlId));
+      if (snap.exists()) {
+        const d = snap.data();
+        currentDocId = urlId;
+        // Determine mode from record
+        const mode = d.f3Score != null ? 'endofyear' : 'observation';
+        applySessionMode(mode);
+        // Fill teacher fields
+        if (d.teacherUid)  document.getElementById('teacherUid').value  = d.teacherUid;
+        if (d.teacherName) document.getElementById('teacherName').value = d.teacherName;
+        if (d.schoolId)    document.getElementById('schoolId').value    = d.schoolId;
+        if (d.subject)     document.getElementById('subject').value     = d.subject;
+        if (d.yearGroup)   document.getElementById('yearGroup').value   = d.yearGroup;
+        if (d.academicYear) {
+          const opt = [...document.getElementById('academicYear').options].find(o => o.value === d.academicYear);
+          if (!opt) {
+            const o = document.createElement('option');
+            o.value = d.academicYear; o.textContent = d.academicYear;
+            document.getElementById('academicYear').appendChild(o);
+          }
+          document.getElementById('academicYear').value = d.academicYear;
+        }
+        if (d.observationDate?.toDate) {
+          document.getElementById('observationDate').value = d.observationDate.toDate().toISOString().split('T')[0];
+        }
+        if (d.lessonTopic)    document.getElementById('lessonTopic').value    = d.lessonTopic;
+        if (d.lessonDuration) document.getElementById('lessonDuration').value = d.lessonDuration;
+        if (d.level) {
+          const lvField = mode === 'endofyear' ? 'appraisalLevelEoy' : 'appraisalLevel';
+          document.getElementById(lvField).value = d.level;
+          document.getElementById(lvField).dispatchEvent(new Event('change'));
+        }
+        if (d.scores)     Object.assign(scores, d.scores);
+        if (d.narratives) Object.assign(notes, d.narratives);
+        if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+        loadedObsRecord = d;
+        showToast('Draft loaded — continue where you left off.');
+      }
+    } catch(e) { console.warn('Could not load draft by id:', e); }
+  }
+
   // Session type selector
   document.querySelectorAll('.session-opt').forEach(opt => {
     opt.addEventListener('click', () => {
