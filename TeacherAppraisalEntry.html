@@ -379,7 +379,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .score-btn.selected-2  { border-color: #f97316; background: #fff7ed; }
 .score-btn.selected-3  { border-color: #ca8a04; background: #fefce8; }
 .score-btn.selected-4  { border-color: #16a34a; background: #f0fdf4; }
-.score-btn.selected-no { border-color: #94a3b8; background: #f1f5f9; }
+.score-btn.selected-no { border-color: #dc2626; background: #fee2e2; }
 /* N/O button narrower than score buttons */
 .score-btn.no-obs { flex: 0 0 auto; min-width: 90px; }
 .score-btn-num {
@@ -1300,7 +1300,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
           <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
           <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#94a3b8;display:inline-block;"></span><span><strong>N/O</strong> — Not observed in lesson</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>N/O</strong> — Not observed · excluded from score</span></div>
         </div>
       </div>
     </div>
@@ -1486,13 +1486,14 @@ function buildItemRow(item) {
     </button>`;
   }).join('');
 
-  // Not Observed button (fix #2)
+  // Not Observed button — red-tinted to signal it's a deliberate exclusion, not a neutral choice
   const noBtn = `<button class="score-btn no-obs" data-item="${item.id}" data-score="no"
       onclick="selectScore('${item.id}','no')"
-      title="This item was not observable during the lesson — it will be excluded from the mean">
-    <div class="score-btn-num"><span class="dot dot-no"></span> N/O</div>
-    <div class="score-btn-label" style="color:#64748b;">Not Observed</div>
-    <div class="score-btn-desc" style="font-style:italic;">Exclude from score</div>
+      style="border-color:#fca5a5;background:#fff1f2;"
+      title="This item was not observable during the lesson — it will be excluded from the mean. Use only when the item genuinely could not be assessed.">
+    <div class="score-btn-num"><span class="dot" style="background:#dc2626;"></span> <span style="color:#dc2626;font-weight:800;">N/O</span></div>
+    <div class="score-btn-label" style="color:#dc2626;">Not Observed</div>
+    <div class="score-btn-desc" style="font-style:italic;color:#ef4444;">Excluded from score</div>
   </button>`;
 
   const theory = item.theory_basis ? `<div class="item-theory">${item.theory_basis}</div>` : '';
@@ -1861,34 +1862,58 @@ function updateF3Progress(level) {
 function updateSidebarProgress(level) {
   if (!FRAMEWORK || !level) return;
   const fw4items = FRAMEWORK.frameworks.find(f=>f.id==='F4').items;
+
   const sections = [
-    { label: 'F1 Admin (20%)',
+    { label: 'F1 Admin (20%)',          thKey: 'F1',
       items: FRAMEWORK.frameworks.find(f=>f.id==='F1').items,
-      doneCount: () => FRAMEWORK.frameworks.find(f=>f.id==='F1').items.filter(addressed).length },
-    { label: 'F2 Observation (50%)',
+      doneCount: null },
+    { label: 'F2 Observation (50%)',     thKey: 'F2',
       items: FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.flatMap(d=>d.items.filter(i=>isVisible(i,level))),
       doneCount: null },
-    { label: 'F3 Work' + (level==='lead'?' + Lead':'') + ' (20%)',
+    { label: 'F3 Work' + (level==='lead'?' + Lead':'') + ' (20%)', thKey: 'F3',
       items: [...FRAMEWORK.frameworks.find(f=>f.id==='F3').items.filter(i=>isVisible(i,level)),
               ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] },
-    { label: 'F4 Student Survey (10%)',
+    { label: 'F4 Student Survey (10%)', thKey: 'F4',
       items: fw4items,
       doneCount: () => Object.keys(surveyScores).filter(id => fw4items.find(i=>i.id===id)).length }
   ];
-  const displaySections = sessionMode === 'observation' ? [sections[0], sections[1], sections[3]] : sections;
+
+  const displaySections = sessionMode === 'observation'
+    ? [sections[0], sections[1], sections[3]]
+    : sections;
+
   document.getElementById('sidebarProgress').innerHTML =
     displaySections.map(s => {
-      const done  = s.doneCount ? s.doneCount() : s.items.filter(addressed).length;
-      const total = s.items.length;
-      const pct   = total ? Math.round(done/total*100) : 0;
-      return `<div class="progress-row">
-        <div class="progress-row-label">${s.label}</div>
-        <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-        <div class="progress-count">${done}/${total}</div>
+      const done      = s.doneCount ? s.doneCount() : s.items.filter(addressed).length;
+      const total     = s.items.length;
+      const pct       = total ? Math.round(done / total * 100) : 0;
+      const threshold = COMPLETION_THRESHOLD[s.thKey] ?? 0.80;
+      const thPct     = Math.round(threshold * 100);
+      const meetsThreshold = total && (done / total) >= threshold;
+      const barColor  = meetsThreshold ? '#7c3aed' : (pct > 0 ? '#f97316' : '#e2e8f0');
+      const countColor= meetsThreshold ? '#374151' : (pct > 0 ? '#c2410c' : '#94a3b8');
+      const thresholdMarker = `<div style="position:absolute;top:-3px;bottom:-3px;width:2px;
+        background:#7c3aed;opacity:.4;left:${thPct}%;" title="Score threshold (${thPct}%)"></div>`;
+
+      return `<div class="progress-row" style="flex-direction:column;align-items:stretch;gap:3px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span class="progress-row-label">${s.label}</span>
+          <span style="font-size:.7rem;font-weight:700;color:${countColor};">${done}/${total}</span>
+        </div>
+        <div style="position:relative;">
+          <div class="progress-bar-wrap" style="width:100%;height:6px;">
+            <div class="progress-bar-fill" style="width:${pct}%;background:${barColor};"></div>
+          </div>
+          ${thresholdMarker}
+        </div>
+        ${!meetsThreshold && done > 0 ? `<div style="font-size:.65rem;color:#c2410c;font-weight:600;">
+          Score ${Math.ceil(total * threshold) - done} more to unlock score (${thPct}% min)
+        </div>` : ''}
+        ${meetsThreshold ? `<div style="font-size:.65rem;color:#15803d;font-weight:600;">✓ Threshold met — score visible</div>` : ''}
       </div>`;
     }).join('') +
     (sessionMode === 'observation'
-      ? `<div style="font-size:.68rem;color:#94a3b8;margin-top:6px;font-style:italic;">F3 scored at End-of-Year Conference</div>`
+      ? `<div style="font-size:.68rem;color:#94a3b8;margin-top:2px;font-style:italic;">F3 scored at End-of-Year Conference</div>`
       : '');
 }
 
@@ -1918,6 +1943,19 @@ function updateTabCounts() {
   });
 }
 
+// ── SCORING COMPLETION THRESHOLDS ────────────────────────────
+// A section mean is only shown when enough items have been addressed.
+// "Addressed" = scored (1–4) OR explicitly marked N/O (a deliberate decision).
+// Rationale: if only 2/37 items are scored, the mean is driven by cherry-picked items
+// and does not represent the teacher's actual performance — showing it causes anchoring bias.
+//
+// Thresholds:
+//   F1 (9 items)  — all 9 must be addressed (administrative checklist, no excuse to skip)
+//   F2 (variable) — 80% must be addressed  (live observation; N/O is legitimate for unseen items)
+//   F3 (variable) — 80% must be addressed  (EOY conference; some items may not apply)
+//   F4 (17 items) — 80% must be addressed  (survey; some questions may not be applicable)
+const COMPLETION_THRESHOLD = { F1: 1.0, F2: 0.80, F3: 0.80, F4: 0.80 };
+
 function calcScores(level) {
   if (!FRAMEWORK || !level) return null;
   const fw1  = FRAMEWORK.frameworks.find(f=>f.id==='F1');
@@ -1926,16 +1964,37 @@ function calcScores(level) {
   const fw3L = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
   const fw4  = FRAMEWORK.frameworks.find(f=>f.id==='F4');
 
-  // N/O items excluded from denominator
-  function mean(items) {
-    const scored = items.filter(i => scores[i.id] && !notObserved.has(i.id));
-    return scored.length ? scored.reduce((a,i) => a + scores[i.id], 0) / scored.length : null;
+  // "addressed" = scored OR explicitly N/O (a deliberate appraiser decision)
+  function addressed(item) { return !!scores[item.id] || notObserved.has(item.id); }
+
+  // Returns { mean, addressedCount, totalCount, pct, meetsThreshold }
+  // mean is ONLY calculated over scored (non-N/O) items — N/O items are excluded from denominator.
+  // But the section mean is suppressed (null) until the threshold % of items are addressed.
+  function sectionStats(items, thresholdKey) {
+    const total      = items.length;
+    const addrItems  = items.filter(addressed);
+    const scoredItems= items.filter(i => scores[i.id] && !notObserved.has(i.id));
+    const addrCount  = addrItems.length;
+    const pct        = total ? addrCount / total : 0;
+    const threshold  = COMPLETION_THRESHOLD[thresholdKey] ?? 0.80;
+    const meetsThreshold = pct >= threshold;
+    const mean = (meetsThreshold && scoredItems.length)
+      ? scoredItems.reduce((a,i) => a + scores[i.id], 0) / scoredItems.length
+      : null;
+    return { mean, addressedCount: addrCount, totalCount: total, pct, meetsThreshold };
   }
 
-  // F4 mean from surveyScores
-  function surveyMean(items) {
-    const scored = items.filter(i => surveyScores[i.id]);
-    return scored.length ? scored.reduce((a,i) => a + surveyScores[i.id], 0) / scored.length : null;
+  function surveyStats(items) {
+    const total     = items.length;
+    const scored    = items.filter(i => surveyScores[i.id]);
+    const addrCount = scored.length;
+    const pct       = total ? addrCount / total : 0;
+    const threshold = COMPLETION_THRESHOLD.F4;
+    const meetsThreshold = pct >= threshold;
+    const mean = (meetsThreshold && scored.length)
+      ? scored.reduce((a,i) => a + surveyScores[i.id], 0) / scored.length
+      : null;
+    return { mean, addressedCount: addrCount, totalCount: total, pct, meetsThreshold };
   }
 
   const f1Items = fw1.items;
@@ -1943,22 +2002,31 @@ function calcScores(level) {
   const f3Items = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
   const f4Items = fw4.items;
 
-  const m1 = mean(f1Items);
-  const m2 = mean(f2Items);
-  const m3 = mean(f3Items);
-  const m4 = surveyMean(f4Items);
+  const s1 = sectionStats(f1Items, 'F1');
+  const s2 = sectionStats(f2Items, 'F2');
+  const s3 = sectionStats(f3Items, 'F3');
+  const s4 = surveyStats(f4Items);
 
-  if (m1===null && m2===null && m3===null) return null;
+  const m1 = s1.mean, m2 = s2.mean, m3 = s3.mean, m4 = s4.mean;
 
-  // Weights: F1 20%, F2 50%, F3 20%, F4 10% — F4 optional; if absent its weight shifts to F2
-  const isComplete = m1!==null && m2!==null && m3!==null;
-  const w2 = m4!==null ? 0.50 : 0.60;
-  const composite  = isComplete
+  if (s1.addressedCount === 0 && s2.addressedCount === 0 && s3.addressedCount === 0) return null;
+
+  // Composite only when F1, F2, F3 all meet their thresholds.
+  // F4 is optional — if absent its 10% weight shifts to F2.
+  const isComplete = s1.meetsThreshold && s2.meetsThreshold && s3.meetsThreshold;
+  const w2 = (m4 !== null) ? 0.50 : 0.60;
+  const composite = isComplete
     ? ((m1/4)*0.20 + (m2/4)*w2 + (m3/4)*0.20 + (m4!=null ? (m4/4)*0.10 : 0)) * 100
     : null;
-  const bands      = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
-  const predicate  = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
-  return { f1:m1, f2:m2, f3:m3, f4:m4, composite, predicate, isComplete };
+  const bands     = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
+  const predicate = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
+
+  return {
+    f1: m1, f2: m2, f3: m3, f4: m4,
+    composite, predicate, isComplete,
+    // Section-level completion info for UI warnings
+    sections: { f1: s1, f2: s2, f3: s3, f4: s4 },
+  };
 }
 
 function updateLiveScores() {
@@ -1993,14 +2061,41 @@ function buildReviewSummary() {
   const level = getLevel();
   const r = calcScores(level);
   const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
-  const fmtScore = v => v!=null ? v.toFixed(2) : '<span style="color:#94a3b8;font-size:.9rem;">not scored</span>';
 
-  const scoreBox = (label, val, note='') => `
-    <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">${label}</div>
-      <div style="font-size:1.4rem;font-weight:800;">${fmtScore(val)}</div>
-      <div style="font-size:.7rem;color:#94a3b8;">${note || '/ 4.00'}</div>
-    </div>`;
+  // scoreBox with threshold awareness
+  // sectionKey: 'f1'|'f2'|'f3'|'f4' — maps to r.sections for completion info
+  const scoreBox = (label, val, sectionKey, note='') => {
+    const sec = r?.sections?.[sectionKey];
+    const meetsThreshold = sec?.meetsThreshold ?? (val !== null);
+    const addrCount = sec?.addressedCount ?? 0;
+    const totalCount = sec?.totalCount ?? 0;
+    const threshold = COMPLETION_THRESHOLD[sectionKey.toUpperCase()] ?? 0.80;
+    const thNeeded = Math.ceil(totalCount * threshold);
+
+    if (!meetsThreshold && addrCount > 0) {
+      // In progress but below threshold — show progress instead of score
+      return `
+        <div style="text-align:center;padding:16px;background:#fff7ed;border-radius:12px;border:1.5px solid #fed7aa;">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#c2410c;font-weight:700;margin-bottom:4px;">${label}</div>
+          <div style="font-size:1rem;font-weight:800;color:#c2410c;">${addrCount}/${totalCount}</div>
+          <div style="font-size:.68rem;color:#c2410c;margin-top:3px;">Need ${thNeeded - addrCount} more to score</div>
+        </div>`;
+    }
+    if (!meetsThreshold && addrCount === 0) {
+      return `
+        <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;border:1.5px dashed #cbd5e1;">
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">${label}</div>
+          <div style="font-size:.9rem;font-weight:600;color:#94a3b8;margin-top:8px;">Not started</div>
+        </div>`;
+    }
+    return `
+      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">${label}</div>
+        <div style="font-size:1.4rem;font-weight:800;">${val!=null ? val.toFixed(2) : '—'}</div>
+        <div style="font-size:.7rem;color:#94a3b8;">${note || '/ 4.00'}</div>
+        <div style="font-size:.65rem;color:#15803d;margin-top:3px;">✓ ${addrCount}/${totalCount} addressed</div>
+      </div>`;
+  };
 
   if (sessionMode === 'observation') {
     return `
@@ -2009,13 +2104,13 @@ function buildReviewSummary() {
         &#x1F4CB; Observation Session — F3 will be scored at the End-of-Year Conference.
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
-        ${scoreBox('F1 Admin (20%)', r?.f1)}
-        ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2)}
+        ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
+        ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2, 'f2')}
         <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
           <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
           <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending EOY</div>
         </div>
-        ${scoreBox('F4 Survey (10%)', r?.f4, r?.f4!=null ? '/ 4.00' : 'not scored yet')}
+        ${scoreBox('F4 Survey (10%)', r?.f4, 'f4', r?.f4!=null ? '/ 4.00' : 'not scored yet')}
       </div>
       <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
         Final composite will be calculated after F3 is scored at the End-of-Year Conference.
@@ -2040,10 +2135,10 @@ function buildReviewSummary() {
     ${buildCalibrationWarning(level)}
     ${obsNote}${incompleteNote}
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
-      ${scoreBox('F1 Admin (20%)', r?.f1)}
-      ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2)}
-      ${scoreBox('F3 Work (20%)', r?.f3)}
-      ${scoreBox('F4 Survey (10%)', r?.f4, r?.f4!=null ? '/ 4.00' : 'not scored yet')}
+      ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
+      ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2, 'f2')}
+      ${scoreBox('F3 Work (20%)', r?.f3, 'f3')}
+      ${scoreBox('F4 Survey (10%)', r?.f4, 'f4', r?.f4!=null ? '/ 4.00' : 'not scored yet')}
       <div style="text-align:center;padding:16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
         ${r?.isComplete
