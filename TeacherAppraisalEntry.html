@@ -238,6 +238,50 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .feedback-tag-input:focus { outline: none; border-color: #7c3aed; }
 
+/* ── COACHING QUESTIONS ── */
+.coaching-item-group { margin-bottom: 20px; }
+.coaching-item-group:last-child { margin-bottom: 0; }
+.coaching-item-header {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.coaching-item-id {
+  font-size: .68rem; font-weight: 800; background: #fef3c7; color: #92400e;
+  border-radius: 6px; padding: 2px 7px; text-transform: uppercase; letter-spacing: .04em;
+}
+.coaching-item-title { font-size: .78rem; font-weight: 700; color: #1e293b; }
+.coaching-score-badge {
+  font-size: .68rem; font-weight: 700; border-radius: 6px; padding: 2px 7px; margin-left: auto;
+}
+.coaching-score-1 { background: #fee2e2; color: #b91c1c; }
+.coaching-score-2 { background: #fef3c7; color: #92400e; }
+.coaching-q-list { display: flex; flex-direction: column; gap: 6px; }
+.coaching-q-item {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 12px; border-radius: 10px; border: 1.5px solid #e2e8f0;
+  background: #fff; cursor: pointer; transition: border-color .15s, background .15s;
+}
+.coaching-q-item:hover { border-color: #c4b5fd; background: #faf5ff; }
+.coaching-q-item.selected { border-color: #7c3aed; background: #ede9fe; }
+.coaching-q-checkbox {
+  width: 16px; height: 16px; border-radius: 4px; border: 2px solid #cbd5e1;
+  flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center;
+  transition: background .15s, border-color .15s;
+}
+.coaching-q-item.selected .coaching-q-checkbox {
+  background: #7c3aed; border-color: #7c3aed; color: #fff;
+}
+.coaching-q-text { font-size: .82rem; color: #334155; line-height: 1.5; }
+.coaching-selected-pill {
+  display: flex; align-items: flex-start; gap: 8px; padding: 8px 12px;
+  background: #f5f3ff; border: 1.5px solid #ddd6fe; border-radius: 10px;
+}
+.coaching-selected-pill-text { font-size: .82rem; color: #4c1d95; line-height: 1.5; flex: 1; }
+.coaching-selected-remove {
+  background: none; border: none; color: #a78bfa; cursor: pointer;
+  font-size: .9rem; padding: 0; line-height: 1; flex-shrink: 0;
+}
+.coaching-selected-remove:hover { color: #7c3aed; }
+
 /* ── DOMAIN BLOCK ── */
 .domain-label {
   font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
@@ -978,6 +1022,32 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
         </div>
 
+        <!-- COACHING QUESTIONS -->
+        <div class="card" id="coachingCard" style="display:none;">
+          <div class="card-head">
+            <div>
+              <h2>&#x1F4AC; Debrief Coaching Questions</h2>
+              <div class="card-head-sub">Suggested questions based on items scored 1 or 2. Select the ones you'll use in your post-observation conversation.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="coachingQuestionsBody">
+              <div style="font-size:.83rem;color:#94a3b8;">Score some items first to generate suggestions.</div>
+            </div>
+            <div id="coachingCustomWrap" style="margin-top:18px;display:none;">
+              <div class="feedback-tag-label" style="margin-bottom:6px;">Add your own question</div>
+              <div style="display:flex;gap:8px;">
+                <input type="text" id="coachingCustomInput" class="field feedback-tag-input" placeholder="Type a custom coaching question…" style="flex:1;">
+                <button class="btn-secondary" id="coachingAddBtn" style="white-space:nowrap;padding:7px 14px;font-size:.8rem;">Add</button>
+              </div>
+            </div>
+            <div id="coachingSelectedWrap" style="margin-top:18px;display:none;">
+              <div class="feedback-tag-label" style="margin-bottom:8px;">&#x2714; Questions selected for debrief <span id="coachingCount" style="background:#ede9fe;color:#7c3aed;border-radius:10px;padding:1px 7px;font-size:.68rem;font-weight:700;margin-left:4px;">0</span></div>
+              <div id="coachingSelectedList" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+          </div>
+        </div>
+
         <!-- Observation narratives (obs mode) -->
         <div class="card" id="obsNarrativeCard">
           <div class="card-head">
@@ -1196,6 +1266,7 @@ import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs, query, 
 // ── STATE ─────────────────────────────────────────────────
 let FRAMEWORK = null;
 let LEVELS    = null;
+let COACHING_DB = null;       // coaching-questions.json data
 let currentDocId  = null;
 let sessionMode   = 'observation'; // 'observation' | 'endofyear'
 let loadedObsRecord  = null;
@@ -1204,11 +1275,13 @@ const scores         = {};  // itemId → 1–4
 const notes         = {};   // itemId → string
 const surveyScores  = {};   // F4 itemId → 1–4
 const notObserved = new Set(); // itemIds explicitly marked N/O
+let selectedQuestions = [];    // { itemId, text } — questions chosen for debrief
 
 Promise.all([
   fetch('resources/appraisal-framework-v2.json').then(r=>r.json()),
-  fetch('resources/appraisal-levels.json').then(r=>r.json())
-]).then(([fw, lv]) => { FRAMEWORK = fw; LEVELS = lv; });
+  fetch('resources/appraisal-levels.json').then(r=>r.json()),
+  fetch('resources/coaching-questions.json').then(r=>r.json())
+]).then(([fw, lv, cq]) => { FRAMEWORK = fw; LEVELS = lv; COACHING_DB = cq; });
 
 // ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
 const LS_KEY = 'appraisal_draft_v2';
@@ -1873,8 +1946,110 @@ function switchTab(tab) {
   if (tab === 'review') {
     document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
     requestAnimationFrame(() => drawRadar());
+    buildCoachingQuestions();
   }
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── COACHING QUESTIONS ─────────────────────────────────────
+function buildCoachingQuestions() {
+  if (!COACHING_DB) return;
+  const level = (document.getElementById('appraisalLevel')?.value ||
+                 document.getElementById('appraisalLevelEoy')?.value || 'induction');
+
+  // Find F2 items scored 1 or 2
+  const lowItems = Object.entries(scores)
+    .filter(([id, val]) => val <= 2 && COACHING_DB.items[id])
+    .sort((a, b) => a[1] - b[1]); // score 1 first
+
+  const card = document.getElementById('coachingCard');
+  const body = document.getElementById('coachingQuestionsBody');
+
+  if (!lowItems.length) {
+    card.style.display = 'none';
+    return;
+  }
+
+  card.style.display = '';
+  document.getElementById('coachingCustomWrap').style.display = '';
+
+  const groups = lowItems.map(([itemId, score]) => {
+    const cqItem = COACHING_DB.items[itemId];
+    // Pick questions for this level, fall back up the hierarchy
+    const levelOrder = ['induction','developing','proficient','lead'];
+    const lvIdx = levelOrder.indexOf(level);
+    let questions = [];
+    for (let i = lvIdx; i >= 0 && !questions.length; i--) {
+      questions = cqItem.questions[levelOrder[i]] || [];
+    }
+    if (!questions.length) return '';
+
+    const qs = questions.map(q => {
+      const alreadySelected = selectedQuestions.some(s => s.itemId === itemId && s.text === q);
+      return `<div class="coaching-q-item${alreadySelected ? ' selected' : ''}" data-item="${itemId}" data-q="${escAttr(q)}">
+        <div class="coaching-q-checkbox">${alreadySelected ? '✓' : ''}</div>
+        <div class="coaching-q-text">${esc(q)}</div>
+      </div>`;
+    }).join('');
+
+    return `<div class="coaching-item-group">
+      <div class="coaching-item-header">
+        <span class="coaching-item-id">${itemId}</span>
+        <span class="coaching-item-title">${esc(cqItem.title)}</span>
+        <span class="coaching-score-badge coaching-score-${score}">${score === 1 ? 'Unsatisfactory' : 'Basic'}</span>
+      </div>
+      <div class="coaching-q-list">${qs}</div>
+    </div>`;
+  }).join('');
+
+  body.innerHTML = groups || '<div style="font-size:.83rem;color:#94a3b8;">No coaching questions available for these items.</div>';
+
+  // Click handlers
+  body.querySelectorAll('.coaching-q-item').forEach(el => {
+    el.addEventListener('click', () => toggleCoachingQuestion(el));
+  });
+
+  renderSelectedQuestions();
+}
+
+function toggleCoachingQuestion(el) {
+  const itemId = el.dataset.item;
+  const text   = el.dataset.q;
+  const idx    = selectedQuestions.findIndex(s => s.itemId === itemId && s.text === text);
+  if (idx >= 0) {
+    selectedQuestions.splice(idx, 1);
+    el.classList.remove('selected');
+    el.querySelector('.coaching-q-checkbox').textContent = '';
+  } else {
+    selectedQuestions.push({ itemId, text });
+    el.classList.add('selected');
+    el.querySelector('.coaching-q-checkbox').textContent = '✓';
+  }
+  renderSelectedQuestions();
+}
+
+function renderSelectedQuestions() {
+  const wrap = document.getElementById('coachingSelectedWrap');
+  const list = document.getElementById('coachingSelectedList');
+  const count = document.getElementById('coachingCount');
+  count.textContent = selectedQuestions.length;
+  if (!selectedQuestions.length) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  list.innerHTML = selectedQuestions.map((q, i) => `
+    <div class="coaching-selected-pill">
+      <div class="coaching-selected-pill-text">${esc(q.text)}</div>
+      <button class="coaching-selected-remove" data-idx="${i}" title="Remove">✕</button>
+    </div>`).join('');
+  list.querySelectorAll('.coaching-selected-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedQuestions.splice(+btn.dataset.idx, 1);
+      buildCoachingQuestions(); // re-render to update checkboxes
+    });
+  });
+}
+
+function escAttr(str) {
+  return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 document.getElementById('frameworkTabs').addEventListener('click', e => {
@@ -2426,6 +2601,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (en.growItem)    document.getElementById('eoy_grow_item').value    = en.growItem;
         if (en.goDate)      document.getElementById('eoy_go_date').value      = en.goDate;
         if (en.goCheck)     document.getElementById('eoy_go_check').value     = en.goCheck;
+        if (d.coachingQuestions?.length) selectedQuestions.push(...d.coachingQuestions);
         loadedObsRecord = d;
         showToast('Draft loaded — continue where you left off.');
       }
@@ -2673,6 +2849,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             goDate:      document.getElementById('narr_go_date').value,
             goCheck:     document.getElementById('narr_go_check').value.trim(),
           },
+          coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
           surveyData, surveyMean,
           status, teacherResponse: '',
           createdAt: serverTimestamp(), updatedAt: serverTimestamp()
@@ -2710,6 +2887,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             goDate:      document.getElementById('eoy_go_date').value,
             goCheck:     document.getElementById('eoy_go_check').value.trim(),
           },
+          coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
           endOfYearDate: document.getElementById('conferenceDate').value
             ? new Date(document.getElementById('conferenceDate').value) : null,
           surveyData, surveyMean,
@@ -2744,6 +2922,18 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('shareBtn').addEventListener('click',        () => saveAppraisal('shared',    false));
   document.getElementById('saveEoyDraftBtn').addEventListener('click', () => saveAppraisal('draft',     true));
   document.getElementById('finaliseBtn').addEventListener('click',     () => saveAppraisal('finalised', true));
+
+  document.getElementById('coachingAddBtn').addEventListener('click', () => {
+    const input = document.getElementById('coachingCustomInput');
+    const text  = input.value.trim();
+    if (!text) return;
+    selectedQuestions.push({ itemId: 'custom', text });
+    input.value = '';
+    buildCoachingQuestions();
+  });
+  document.getElementById('coachingCustomInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('coachingAddBtn').click();
+  });
 
   // ── PDF EXPORT ────────────────────────────────────────────
   window.exportPDF = function exportPDF() {
@@ -2860,6 +3050,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       ${document.getElementById('eoy_go_date')?.value ? narrativeBlock('First review date', document.getElementById('eoy_go_date').value) : ''}
       ${document.getElementById('eoy_go_check')?.value ? narrativeBlock('Success criteria', document.getElementById('eoy_go_check').value) : ''}
       `}
+
+      ${selectedQuestions.length ? `
+      <h2 class="pr-section">Debrief Coaching Questions</h2>
+      <ul style="margin:0;padding-left:18px;">
+        ${selectedQuestions.map(q => `<li style="margin-bottom:6px;font-size:.85rem;color:#334155;">${esc(q.text)}</li>`).join('')}
+      </ul>` : ''}
 
       <p class="pr-footer">Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})} · Eduversal Academic Hub</p>
     `;
