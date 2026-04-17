@@ -18,6 +18,7 @@
 </script>
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
+<script src="schools_compact.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -295,6 +296,45 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .btn-submit:hover { background: #047857; }
 .btn-submit:disabled { opacity: .5; cursor: default; }
 
+/* ── TEACHER PICKER ── */
+.teacher-picker-wrap { position: relative; }
+.teacher-dropdown {
+  display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 999;
+  background: #fff; border: 1.5px solid #bbf7d0; border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12); max-height: 220px; overflow-y: auto;
+  margin-top: 2px;
+}
+.teacher-dropdown-item {
+  padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid #f1f5f9; transition: background .1s;
+}
+.teacher-dropdown-item:last-child { border-bottom: none; }
+.teacher-dropdown-item:hover { background: #f0fdf4; }
+.teacher-dropdown-avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: #d1fae5;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #059669; font-size: .88rem; flex-shrink: 0;
+}
+.teacher-dropdown-name { font-size: .87rem; font-weight: 700; color: #1e293b; }
+.teacher-dropdown-meta { font-size: .71rem; color: #64748b; margin-top: 1px; }
+.teacher-chip {
+  display: flex; align-items: center; gap: 8px;
+  background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 9px;
+  padding: 7px 12px; margin-top: 0;
+}
+.teacher-chip-avatar {
+  width: 28px; height: 28px; border-radius: 50%; background: #d1fae5;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: #059669; font-size: .82rem; flex-shrink: 0;
+}
+.teacher-chip-name { font-size: .87rem; font-weight: 700; color: #1e293b; flex: 1; }
+.teacher-chip-meta { font-size: .7rem; color: #64748b; }
+.teacher-chip-clear {
+  background: none; border: none; cursor: pointer; color: #94a3b8;
+  font-size: 1rem; line-height: 1; padding: 2px; transition: color .1s;
+}
+.teacher-chip-clear:hover { color: #dc2626; }
+
 /* ── RUBRIC MODAL ── */
 .modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
@@ -398,14 +438,34 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <div class="card">
       <div class="card-head"><h2>Visit Details</h2></div>
       <div class="card-body">
-        <div class="form-row">
-          <div class="field">
-            <label>Teacher Name <span style="color:#dc2626;">*</span></label>
-            <input type="text" id="teacherName" placeholder="Full name" autocomplete="off">
+        <!-- Teacher picker row -->
+        <div class="form-row" style="margin-bottom:12px;">
+          <div class="field teacher-picker-wrap" style="grid-column:1/-1;">
+            <label>Teacher <span style="color:#dc2626;">*</span></label>
+            <input type="text" id="teacherNameSearch" placeholder="Type name or email to search teachers…" autocomplete="off"
+              oninput="teacherSearch(this.value)" style="display:block;">
+            <div class="teacher-dropdown" id="teacherDropdown"></div>
+            <!-- chip shown after selection -->
+            <div class="teacher-chip" id="teacherChip" style="display:none;">
+              <div class="teacher-chip-avatar" id="teacherChipAvatar"></div>
+              <div style="flex:1;min-width:0;">
+                <div class="teacher-chip-name" id="teacherChipName"></div>
+                <div class="teacher-chip-meta" id="teacherChipMeta"></div>
+              </div>
+              <button class="teacher-chip-clear" onclick="clearTeacher()" title="Change teacher">&#x2715;</button>
+            </div>
+            <!-- hidden fields -->
+            <input type="hidden" id="teacherName">
+            <input type="hidden" id="teacherUid">
+            <input type="hidden" id="schoolId">
           </div>
-          <div class="field">
-            <label>Teacher UID (Firestore)</label>
-            <input type="text" id="teacherUid" placeholder="uid from users/{uid}">
+        </div>
+        <!-- School (auto-filled) -->
+        <div class="form-row" style="margin-bottom:12px;">
+          <div class="field" style="grid-column:1/-1;">
+            <label>School <span style="font-size:.68rem;color:#94a3b8;font-weight:400;">(auto-filled when teacher selected)</span></label>
+            <input type="text" id="schoolName" placeholder="Auto-filled when teacher selected" readonly
+              style="background:#f8fafc;color:#475569;cursor:default;">
           </div>
         </div>
         <div class="form-row three">
@@ -601,6 +661,96 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <script type="module">
 import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+// ── TEACHER SEARCH ───────────────────────────────────────
+let allTeachersCache = null;
+async function loadTeachersCache() {
+  if (allTeachersCache) return allTeachersCache;
+  const snap = await getDocs(query(
+    collection(window.db, 'users'),
+    where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
+  ));
+  allTeachersCache = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+  return allTeachersCache;
+}
+
+function safeStr(s) { return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'"); }
+
+let teacherSearchTimer = null;
+window.teacherSearch = async function(val) {
+  const dropdown = document.getElementById('teacherDropdown');
+  clearTimeout(teacherSearchTimer);
+  const q = val.trim();
+  if (q.length < 2) { dropdown.style.display = 'none'; return; }
+  teacherSearchTimer = setTimeout(async () => {
+    try {
+      const teachers = await loadTeachersCache();
+      const ql = q.toLowerCase();
+      const results = teachers.filter(u =>
+        (u.displayName || '').toLowerCase().includes(ql) ||
+        (u.email || '').toLowerCase().includes(ql)
+      );
+      const schoolMap = {};
+      if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
+      if (!results.length) {
+        dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found matching "${q}"</div>`;
+      } else {
+        dropdown.innerHTML = results.slice(0, 8).map(u => {
+          const schoolId   = u.schoolId || u.school || '';
+          const schoolName = schoolMap[schoolId] || schoolId;
+          const subj = u.subject || '';
+          const meta = [schoolName, subj].filter(Boolean).join(' · ');
+          return `<div class="teacher-dropdown-item"
+            onclick="selectTeacher('${safeStr(u.uid)}','${safeStr(u.displayName)}','${safeStr(schoolId)}','${safeStr(u.subject||'')}','${safeStr(schoolName)}')">
+            <div class="teacher-dropdown-avatar">${(u.displayName||'?')[0].toUpperCase()}</div>
+            <div>
+              <div class="teacher-dropdown-name">${u.displayName || '—'}</div>
+              ${meta ? `<div class="teacher-dropdown-meta">${meta}</div>` : ''}
+            </div>
+          </div>`;
+        }).join('');
+      }
+      dropdown.style.display = 'block';
+    } catch(e) { console.error(e); dropdown.style.display = 'none'; }
+  }, 280);
+};
+
+window.selectTeacher = function(uid, name, schoolId, subject, schoolNameParam) {
+  // Hide search input, show chip
+  document.getElementById('teacherNameSearch').style.display = 'none';
+  document.getElementById('teacherDropdown').style.display = 'none';
+  document.getElementById('teacherChip').style.display = 'flex';
+  document.getElementById('teacherChipAvatar').textContent = (name||'?')[0].toUpperCase();
+  document.getElementById('teacherChipName').textContent = name || '—';
+  const schoolMap = {};
+  if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
+  const schoolDisplay = schoolNameParam || schoolMap[schoolId] || schoolId || '';
+  const metaParts = [schoolDisplay, subject].filter(Boolean);
+  document.getElementById('teacherChipMeta').textContent = metaParts.join(' · ');
+  // Write hidden fields
+  document.getElementById('teacherName').value = name || '';
+  document.getElementById('teacherUid').value  = uid  || '';
+  document.getElementById('schoolId').value    = schoolId || '';
+  document.getElementById('schoolName').value  = schoolDisplay;
+  if (subject) document.getElementById('subject').value = subject;
+  autosaveDraft();
+};
+
+window.clearTeacher = function() {
+  document.getElementById('teacherNameSearch').value = '';
+  document.getElementById('teacherNameSearch').style.display = 'block';
+  document.getElementById('teacherChip').style.display = 'none';
+  document.getElementById('teacherName').value = '';
+  document.getElementById('teacherUid').value  = '';
+  document.getElementById('schoolId').value    = '';
+  document.getElementById('schoolName').value  = '';
+  document.getElementById('teacherNameSearch').focus();
+};
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#teacherDropdown') && e.target.id !== 'teacherNameSearch')
+    document.getElementById('teacherDropdown').style.display = 'none';
+});
+
 // ── RUBRIC DATA ───────────────────────────────────────────
 let RUBRIC = null;
 fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
@@ -727,6 +877,8 @@ function gatherDraft() {
     savedAt: Date.now(),
     teacherName: document.getElementById('teacherName')?.value || '',
     teacherUid: document.getElementById('teacherUid')?.value || '',
+    schoolId: document.getElementById('schoolId')?.value || '',
+    schoolName: document.getElementById('schoolName')?.value || '',
     subject: document.getElementById('subject')?.value || '',
     yearGroup: document.getElementById('yearGroup')?.value || '',
     academicYear: document.getElementById('academicYear')?.value || '',
@@ -755,9 +907,10 @@ window.restoreDraft = function() {
     const raw = localStorage.getItem(DRAFT_KEY);
     if (!raw) return;
     const d = JSON.parse(raw);
-    document.getElementById('teacherName').value = d.teacherName || '';
-    document.getElementById('teacherUid').value  = d.teacherUid  || '';
-    document.getElementById('subject').value     = d.subject     || '';
+    if (d.teacherName) {
+      selectTeacher(d.teacherUid||'', d.teacherName, d.schoolId||'', d.subject||'', d.schoolName||'');
+    }
+    if (d.subject)    document.getElementById('subject').value    = d.subject;
     document.getElementById('yearGroup').value   = d.yearGroup   || '';
     if (d.academicYear) document.getElementById('academicYear').value = d.academicYear;
     if (d.visitDate)    document.getElementById('visitDate').value    = d.visitDate;
@@ -992,9 +1145,11 @@ window.resetForm = function() {
   document.getElementById('formView').style.display = 'block';
   document.getElementById('successState').style.display = 'none';
   document.getElementById('progressTracker').style.display = 'flex';
-  ['teacherName','teacherUid','subject','yearGroup','keyObservation','suggestedFocus'].forEach(id => {
+  clearTeacher();
+  ['subject','yearGroup'].forEach(id => {
     const el = document.getElementById(id); if (el) el.value = '';
   });
+  document.getElementById('schoolName').value = '';
   document.getElementById('narr_glow').value = '';
   document.getElementById('narr_grow').value = '';
   document.getElementById('narr_go').value = '';
@@ -1011,8 +1166,18 @@ window.resetForm = function() {
 // validation highlight
 function highlightInvalid() {
   let firstEl = null;
+  // Teacher picker validation
+  const teacherPicked = !!document.getElementById('teacherName')?.value.trim();
+  const searchEl = document.getElementById('teacherNameSearch');
+  const chipEl   = document.getElementById('teacherChip');
+  if (!teacherPicked) {
+    if (searchEl) { searchEl.style.display = 'block'; searchEl.classList.add('invalid'); }
+    if (chipEl) chipEl.style.display = 'none';
+    if (!firstEl) firstEl = searchEl;
+  } else {
+    if (searchEl) searchEl.classList.remove('invalid');
+  }
   const fields = [
-    { id: 'teacherName', label: 'Teacher Name' },
     { id: 'subject', label: 'Subject' },
     { id: 'yearGroup', label: 'Year Group' },
   ];
@@ -1113,7 +1278,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   }
 
   // Autosave on field changes
-  ['teacherName','teacherUid','subject','yearGroup','visitDate','visitTime','duration','observerRole','lessonPhase'].forEach(id => {
+  ['subject','yearGroup','visitDate','visitTime','duration','observerRole','lessonPhase'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => autosaveDraft());
     if (el) el.addEventListener('change', () => autosaveDraft());
