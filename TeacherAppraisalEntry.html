@@ -282,6 +282,41 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .coaching-selected-remove:hover { color: #7c3aed; }
 
+/* ── FOLLOW-UP ── */
+.followup-prev-banner {
+  border-radius: 12px; padding: 14px 16px;
+  background: #fffbeb; border: 1.5px solid #fde68a;
+  font-size: .82rem; color: #374151; line-height: 1.6;
+  margin-top: 12px;
+}
+.followup-prev-banner-title {
+  font-size: .7rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; color: #92400e; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.followup-prev-goal { font-size: .85rem; font-weight: 600; color: #1e293b; margin-bottom: 4px; }
+.followup-prev-meta { font-size: .75rem; color: #64748b; }
+.followup-prev-gosum {
+  border-radius: 12px; padding: 14px 16px;
+  background: #f0f9ff; border: 1.5px solid #bae6fd;
+  margin-bottom: 4px;
+}
+.followup-prev-gosum-label {
+  font-size: .68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .06em; color: #0369a1; margin-bottom: 6px;
+}
+.followup-prev-gosum-text { font-size: .85rem; color: #1e293b; line-height: 1.6; }
+.followup-prev-gosum-meta { font-size: .75rem; color: #64748b; margin-top: 4px; }
+.followup-verdict-btn {
+  flex: 1; padding: 8px 10px; border-radius: 9px; font-family: inherit;
+  font-size: .8rem; font-weight: 700; cursor: pointer; border: 2px solid #e2e8f0;
+  background: #fff; color: #475569; transition: all .15s; text-align: center;
+}
+.followup-verdict-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+.followup-verdict-btn.verdict-yes     { border-color: #16a34a; background: #f0fdf4; color: #15803d; }
+.followup-verdict-btn.verdict-partial { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
+.followup-verdict-btn.verdict-no      { border-color: #dc2626; background: #fef2f2; color: #b91c1c; }
+
 /* ── DOMAIN BLOCK ── */
 .domain-label {
   font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
@@ -851,6 +886,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
         </div>
         <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+        <!-- Previous follow-up banner — injected by JS when prior record found -->
+        <div id="prevFollowUpBanner" style="display:none;"></div>
       </div>
     </div>
 
@@ -1044,6 +1081,33 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div id="coachingSelectedWrap" style="margin-top:18px;display:none;">
               <div class="feedback-tag-label" style="margin-bottom:8px;">&#x2714; Questions selected for debrief <span id="coachingCount" style="background:#ede9fe;color:#7c3aed;border-radius:10px;padding:1px 7px;font-size:.68rem;font-weight:700;margin-left:4px;">0</span></div>
               <div id="coachingSelectedList" style="display:flex;flex-direction:column;gap:6px;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOLLOW-UP CHECK-IN (shown when prior Go target exists) -->
+        <div class="card" id="followUpCheckCard" style="display:none;">
+          <div class="card-head">
+            <div>
+              <h2>&#x1F504; Follow-up — Previous Go Target</h2>
+              <div class="card-head-sub">Check in on the action agreed at the last observation before writing this session's feedback.</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="followUpPrevGoSummary" style="margin-bottom:16px;"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+              <div>
+                <div class="feedback-tag-label" style="margin-bottom:8px;">Did the teacher achieve the target?</div>
+                <div style="display:flex;gap:8px;">
+                  <button class="followup-verdict-btn" data-verdict="yes" id="fuVerdictYes">&#x2714; Yes</button>
+                  <button class="followup-verdict-btn" data-verdict="partial" id="fuVerdictPartial">&#x223C; Partially</button>
+                  <button class="followup-verdict-btn" data-verdict="no" id="fuVerdictNo">&#x2717; Not yet</button>
+                </div>
+              </div>
+              <div>
+                <div class="feedback-tag-label" style="margin-bottom:4px;">Evidence / context</div>
+                <textarea class="field feedback-textarea" id="followUpNote" placeholder="What did you observe that tells you this? Be specific." style="min-height:60px;"></textarea>
+              </div>
             </div>
           </div>
         </div>
@@ -1276,6 +1340,8 @@ const notes         = {};   // itemId → string
 const surveyScores  = {};   // F4 itemId → 1–4
 const notObserved = new Set(); // itemIds explicitly marked N/O
 let selectedQuestions = [];    // { itemId, text } — questions chosen for debrief
+let prevRecord = null;         // previous observation record (for follow-up)
+let followUpVerdict = null;    // 'yes' | 'partial' | 'no'
 
 Promise.all([
   fetch('resources/appraisal-framework-v2.json').then(r=>r.json()),
@@ -1947,6 +2013,7 @@ function switchTab(tab) {
     document.getElementById('reviewSummary').innerHTML = buildReviewSummary();
     requestAnimationFrame(() => drawRadar());
     buildCoachingQuestions();
+    renderFollowUpCheckIn();
   }
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -2050,6 +2117,49 @@ function renderSelectedQuestions() {
 
 function escAttr(str) {
   return String(str).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ── FOLLOW-UP CHECK-IN ─────────────────────────────────────
+function renderFollowUpCheckIn() {
+  const card = document.getElementById('followUpCheckCard');
+  if (!prevRecord) { card.style.display = 'none'; return; }
+  const an = prevRecord.appraiserNarrative || {};
+  if (!an.actions && !an.goDate && !an.growItem) { card.style.display = 'none'; return; }
+
+  card.style.display = '';
+
+  const obsDate = prevRecord.observationDate?.toDate
+    ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB') : '—';
+
+  document.getElementById('followUpPrevGoSummary').innerHTML = `
+    <div class="followup-prev-gosum">
+      <div class="followup-prev-gosum-label">&#x1F3AF; Go target from last observation (${obsDate})</div>
+      ${an.growItem ? `<div class="followup-prev-meta" style="margin-bottom:4px;">Grow: <strong>${esc(an.growItem)}</strong></div>` : ''}
+      ${an.actions  ? `<div class="followup-prev-gosum-text">${esc(an.actions)}</div>` : ''}
+      <div class="followup-prev-gosum-meta" style="margin-top:6px;">
+        ${an.goDate  ? `Target: ${an.goDate}` : ''}
+        ${an.goDate && an.goCheck ? ' · ' : ''}
+        ${an.goCheck ? `Check: ${esc(an.goCheck)}` : ''}
+      </div>
+    </div>`;
+
+  // Restore previous verdict if any
+  ['yes','partial','no'].forEach(v => {
+    const btn = document.getElementById(`fuVerdict${v.charAt(0).toUpperCase()+v.slice(1)}`);
+    if (btn) {
+      btn.className = 'followup-verdict-btn' + (followUpVerdict === v ? ` verdict-${v}` : '');
+    }
+  });
+
+  // Verdict buttons
+  document.querySelectorAll('.followup-verdict-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      followUpVerdict = btn.dataset.verdict;
+      document.querySelectorAll('.followup-verdict-btn').forEach(b => {
+        b.className = 'followup-verdict-btn' + (b.dataset.verdict === followUpVerdict ? ` verdict-${followUpVerdict}` : '');
+      });
+    });
+  });
 }
 
 document.getElementById('frameworkTabs').addEventListener('click', e => {
@@ -2523,7 +2633,6 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     document.getElementById('teacherDropdown').style.display = 'none';
     if (schoolId) {
       document.getElementById('schoolId').value = schoolId;
-      // Look up full school name from schools_compact.js SCHOOLS array
       const schoolMap = {};
       if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
       const displayName = schoolNameParam || schoolMap[schoolId] || schoolId;
@@ -2537,7 +2646,56 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
       showToast(`${name} seçildi — level: ${level}`);
     }
+    // Fetch previous observation record for follow-up banner
+    fetchPreviousRecord(uid);
   };
+
+  async function fetchPreviousRecord(uid) {
+    if (!uid) return;
+    prevRecord = null;
+    document.getElementById('prevFollowUpBanner').style.display = 'none';
+    document.getElementById('prevFollowUpBanner').innerHTML = '';
+    try {
+      const snap = await getDocs(query(
+        collection(db, 'teacher_appraisals'),
+        where('teacherUid', '==', uid),
+        where('appraiserUid', '==', user.uid),
+        orderBy('createdAt', 'desc')
+      ));
+      if (snap.empty) return;
+      // Skip currentDocId (the record we're editing right now)
+      const candidates = snap.docs.filter(d => d.id !== currentDocId);
+      if (!candidates.length) return;
+      const best = candidates[0];
+      prevRecord = { id: best.id, ...best.data() };
+      renderPrevFollowUpBanner();
+    } catch(e) { console.warn('Follow-up fetch failed:', e); }
+  }
+
+  function renderPrevFollowUpBanner() {
+    const banner = document.getElementById('prevFollowUpBanner');
+    if (!prevRecord) { banner.style.display = 'none'; return; }
+    const an = prevRecord.appraiserNarrative || {};
+    const hasGoal = an.actions || an.goDate || an.growItem;
+    if (!hasGoal) { banner.style.display = 'none'; return; }
+
+    const obsDate = prevRecord.observationDate?.toDate
+      ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB')
+      : '—';
+
+    banner.style.display = '';
+    banner.innerHTML = `
+      <div class="followup-prev-banner">
+        <div class="followup-prev-banner-title">&#x1F552; Previous observation — ${obsDate}</div>
+        ${an.growItem ? `<div class="followup-prev-meta" style="margin-bottom:6px;">Grow area: <strong>${esc(an.growItem)}</strong></div>` : ''}
+        ${an.actions ? `<div class="followup-prev-goal">Go target: ${esc(an.actions)}</div>` : ''}
+        ${an.goDate  ? `<div class="followup-prev-meta">Target date: ${an.goDate}</div>` : ''}
+        ${an.goCheck ? `<div class="followup-prev-meta">Progress check: ${esc(an.goCheck)}</div>` : ''}
+        <div style="margin-top:8px;font-size:.75rem;color:#92400e;font-weight:600;">
+          &#x1F4AC; You'll be asked to check in on this target in the Review tab before writing today's feedback.
+        </div>
+      </div>`;
+  }
 
   document.addEventListener('click', e => {
     if (!e.target.closest('#teacherDropdown') && e.target.id !== 'teacherName')
@@ -2602,6 +2760,23 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (en.goDate)      document.getElementById('eoy_go_date').value      = en.goDate;
         if (en.goCheck)     document.getElementById('eoy_go_check').value     = en.goCheck;
         if (d.coachingQuestions?.length) selectedQuestions.push(...d.coachingQuestions);
+        // Restore follow-up state
+        if (d.followUp?.previousDocId) {
+          followUpVerdict = d.followUp.achieved || null;
+          if (d.followUp.note) {
+            const fuNote = document.getElementById('followUpNote');
+            if (fuNote) fuNote.value = d.followUp.note;
+          }
+          // Re-fetch the previous record to show the banner
+          try {
+            const prevSnap = await getDoc(doc(db, 'teacher_appraisals', d.followUp.previousDocId));
+            if (prevSnap.exists()) {
+              prevRecord = { id: prevSnap.id, ...prevSnap.data() };
+              renderPrevFollowUpBanner();
+            }
+          } catch(e) {}
+        }
+        if (d.teacherUid) fetchPreviousRecord(d.teacherUid);
         loadedObsRecord = d;
         showToast('Draft loaded — continue where you left off.');
       }
@@ -2850,6 +3025,14 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             goCheck:     document.getElementById('narr_go_check').value.trim(),
           },
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
+          followUp: prevRecord ? {
+            previousDocId: prevRecord.id,
+            goalText:      prevRecord.appraiserNarrative?.actions || '',
+            growItem:      prevRecord.appraiserNarrative?.growItem || '',
+            goDate:        prevRecord.appraiserNarrative?.goDate   || '',
+            achieved:      followUpVerdict,
+            note:          document.getElementById('followUpNote')?.value.trim() || '',
+          } : null,
           surveyData, surveyMean,
           status, teacherResponse: '',
           createdAt: serverTimestamp(), updatedAt: serverTimestamp()
@@ -2888,6 +3071,14 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             goCheck:     document.getElementById('eoy_go_check').value.trim(),
           },
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
+          followUp: prevRecord ? {
+            previousDocId: prevRecord.id,
+            goalText:      prevRecord.appraiserNarrative?.actions || prevRecord.endOfYearNarrative?.actions || '',
+            growItem:      prevRecord.appraiserNarrative?.growItem || prevRecord.endOfYearNarrative?.growItem || '',
+            goDate:        prevRecord.appraiserNarrative?.goDate   || prevRecord.endOfYearNarrative?.goDate   || '',
+            achieved:      followUpVerdict,
+            note:          document.getElementById('followUpNote')?.value.trim() || '',
+          } : null,
           endOfYearDate: document.getElementById('conferenceDate').value
             ? new Date(document.getElementById('conferenceDate').value) : null,
           surveyData, surveyMean,
@@ -3051,6 +3242,16 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       ${document.getElementById('eoy_go_check')?.value ? narrativeBlock('Success criteria', document.getElementById('eoy_go_check').value) : ''}
       `}
 
+      ${prevRecord && followUpVerdict ? (() => {
+        const an = prevRecord.appraiserNarrative || {};
+        const verdictLabels = { yes: '✔ Achieved', partial: '~ Partially achieved', no: '✗ Not yet achieved' };
+        const verdictColors  = { yes: '#15803d',    partial: '#92400e',              no: '#b91c1c' };
+        const note = document.getElementById('followUpNote')?.value.trim() || '';
+        return `<h2 class="pr-section">Follow-up — Previous Go Target</h2>
+          ${an.actions ? `<p style="font-size:.83rem;color:#475569;margin-bottom:6px;"><strong>Previous target:</strong> ${esc(an.actions)}</p>` : ''}
+          <p style="font-size:.85rem;font-weight:700;color:${verdictColors[followUpVerdict]};margin-bottom:4px;">${verdictLabels[followUpVerdict]}</p>
+          ${note ? `<p style="font-size:.83rem;color:#475569;">${esc(note)}</p>` : ''}`;
+      })() : ''}
       ${selectedQuestions.length ? `
       <h2 class="pr-section">Debrief Coaching Questions</h2>
       <ul style="margin:0;padding-left:18px;">

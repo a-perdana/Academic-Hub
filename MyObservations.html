@@ -596,6 +596,23 @@ function openAppraisalModal(id) {
       ${a.appraiserNarrative?.actions     ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go${a.appraiserNarrative.goDate ? ' — by ' + a.appraiserNarrative.goDate : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.actions)}</div>${a.appraiserNarrative.goCheck ? `<div style="font-size:.75rem;color:#64748b;margin-top:3px;">Check: ${esc(a.appraiserNarrative.goCheck)}</div>` : ''}</div>` : ''}
       ${a.teacherResponse ? `<div style="margin-top:8px;background:#f8fafc;border-radius:10px;padding:10px 14px;font-size:.83rem;color:#475569;line-height:1.6;"><strong>Teacher response:</strong> ${esc(a.teacherResponse)}</div>` : ''}
     </div>
+    ${a.followUp?.achieved ? (() => {
+      const verdictLabels = { yes:'✔ Achieved', partial:'~ Partially achieved', no:'✗ Not yet achieved' };
+      const verdictColors  = { yes:'#15803d',   partial:'#92400e',              no:'#b91c1c' };
+      const v = a.followUp.achieved;
+      return `<div class="detail-section">
+        <div class="detail-section-title">🔄 Follow-up — Previous Go Target</div>
+        ${a.followUp.goalText ? `<div style="font-size:.82rem;color:#475569;margin-bottom:6px;">Target: ${esc(a.followUp.goalText)}</div>` : ''}
+        <div style="font-size:.83rem;font-weight:700;color:${verdictColors[v]};">${verdictLabels[v]||v}</div>
+        ${a.followUp.note ? `<div style="font-size:.8rem;color:#64748b;margin-top:4px;">${esc(a.followUp.note)}</div>` : ''}
+      </div>`;
+    })() : ''}
+    ${a.coachingQuestions?.length ? `<div class="detail-section">
+      <div class="detail-section-title">💬 Debrief Questions Used</div>
+      <ul style="margin:6px 0 0;padding-left:16px;">
+        ${a.coachingQuestions.map(q=>`<li style="font-size:.8rem;color:#475569;margin-bottom:4px;">${esc(q.text)}</li>`).join('')}
+      </ul>
+    </div>` : ''}
   `;
 
   document.getElementById('appraisalModal').classList.add('open');
