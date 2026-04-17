@@ -3659,8 +3659,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     try {
       const now  = new Date();
       const year = now.getMonth() >= 6
-        ? `${now.getFullYear()}/${now.getFullYear()+1}`
-        : `${now.getFullYear()-1}/${now.getFullYear()}`;
+        ? `${now.getFullYear()}-${now.getFullYear()+1}`
+        : `${now.getFullYear()-1}-${now.getFullYear()}`;
       const docId   = `${uid}_${year}`;
       const snap    = await getDoc(doc(db, 'teacher_self_appraisals', docId));
       if (!snap.exists() || snap.data().status !== 'submitted') return;
