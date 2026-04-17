@@ -543,6 +543,30 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   .score-row { flex-direction: column; }
   .score-btn { min-width: 100%; }
   .session-opts { grid-template-columns: 1fr; }
+
+  /* Context bar — stack on small screens */
+  .context-bar        { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .context-bar-right  { margin-left: 0; width: 100%; justify-content: flex-start; }
+  .context-kbd-hints  { display: none; }
+
+  /* Framework tab bar — allow horizontal scroll, no wrapping */
+  .fw-tabs-bar {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+    padding-bottom: 2px;
+  }
+  .fw-tab { white-space: nowrap; padding: 10px 14px; font-size: .8rem; }
+}
+
+@media (max-width: 600px) {
+  .form-row, .form-row.three { grid-template-columns: 1fr; }
+  .hero h1                   { font-size: 1.3rem; }
+  .hero-inner                { padding: 20px 16px; }
+  .page-wrap                 { padding: 16px 12px 80px; }
+  .card-body                 { padding: 14px 16px; }
+  .context-badges            { flex-wrap: wrap; }
+  .score-preview-grid        { grid-template-columns: 1fr 1fr; }
 }
 
 /* ── FRAMEWORK OVERVIEW ── */
@@ -949,6 +973,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <div class="context-badges">
       <div id="stripLevel" class="context-badge-level">—</div>
       <div id="stripSession" class="context-badge-session">—</div>
+      <span id="autosaveStatus" style="font-size:.68rem;color:#94a3b8;margin-left:8px;transition:color .3s;"></span>
     </div>
     <div class="context-bar-right">
       <div class="context-kbd-hints">
@@ -1417,6 +1442,17 @@ Promise.all([
   populateGrowItemSelects();
 });
 
+// Items where N/O is never permitted.
+// These are directly observable in any standard lesson and must always be scored.
+const MANDATORY_ITEMS = new Set([
+  'F1.3', 'F1.7', 'F1.8',      // Admin — appraiser must confirm from records
+  'D2.1', 'D2.3', 'D2.4',      // Classroom management — visible in any classroom
+  'D3.1', 'D3.3', 'D3.4',      // Instructional basics — observable in any lesson
+  'D3.11', 'D3.12', 'D3.13',   // Participation & concept acquisition
+  'D3.18', 'D3.19',             // Language of instruction & monitoring
+  'D4.1'                        // Assessment criteria — checkable from lesson plan
+]);
+
 // ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
 const LS_KEY = 'appraisal_draft_v2';
 
@@ -1522,7 +1558,9 @@ function buildItemRow(item) {
         ${theory}
       </div>
     </div>
-    <div class="score-row">${scoreHtml}${noBtn}</div>
+    <div class="score-row">${scoreHtml}${MANDATORY_ITEMS.has(item.id)
+      ? `<span style="font-size:.68rem;color:#94a3b8;font-style:italic;padding:6px 10px;align-self:center;white-space:nowrap;">Must be scored</span>`
+      : noBtn}</div>
     <div class="item-note-row">
       <button class="item-note-toggle" id="noteToggle-${item.id}" onclick="toggleNote('${item.id}')">+ Add note</button>
       <span class="note-required-hint" id="noteHint-${item.id}">⚠ note required for score ≤ 2</span>
@@ -2081,8 +2119,21 @@ function calcScores(level) {
   const bands     = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
 
+  // Display-only sub-scores for Lead teachers — NOT used in composite
+  const fw3Base  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
+  const fw3LFw   = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+  const f3BaseItems = fw3Base.items.filter(i => isVisible(i, level));
+  const f3LeadItems = level === 'lead' ? (fw3LFw?.items || []) : [];
+  const _mean = items => {
+    const scored = items.filter(i => scores[i.id] && !notObserved.has(i.id));
+    return scored.length ? scored.reduce((a, i) => a + scores[i.id], 0) / scored.length : null;
+  };
+  const f3BaseMean = _mean(f3BaseItems);
+  const f3LeadMean = _mean(f3LeadItems);
+
   return {
     f1: m1, f2: m2, f3: m3, f4: m4,
+    f3Base: f3BaseMean, f3Lead: f3LeadMean,
     composite, predicate, isComplete,
     // Section-level completion info for UI warnings
     sections: { f1: s1, f2: s2, f3: s3, f4: s4 },
@@ -2174,7 +2225,75 @@ function buildReviewSummary() {
       </div>
       <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
         Final composite will be calculated after F3 is scored at the End-of-Year Conference.
-      </div>`;
+      </div>
+      ${(() => {
+        const FOCUS_LABELS = {
+          professional_organisation: 'Professional Organisation',
+          planning_quality:          'Planning Quality',
+          differentiation:           'Differentiation',
+          instructional_design:      'Instructional Design',
+          instructional_process:     'Instructional Process',
+          classroom_management:      'Classroom Management',
+          student_engagement:        'Student Engagement',
+          higher_order_thinking:     'Higher-Order Thinking',
+          assessment_for_learning:   'Assessment for Learning',
+          assessment_design:         'Assessment Design',
+          subject_knowledge:         'Subject Knowledge',
+          reflective_practice:       'Reflective Practice',
+          professional_conduct:      'Professional Conduct',
+          leadership:                'Leadership (Lead)',
+        };
+        const focusMap = {};
+        const fw1 = FRAMEWORK?.frameworks?.find(f=>f.id==='F1');
+        const fw2 = FRAMEWORK?.frameworks?.find(f=>f.id==='F2');
+        const fw3 = FRAMEWORK?.frameworks?.find(f=>f.id==='F3');
+        const fw3L = FRAMEWORK?.frameworks?.find(f=>f.id==='F3L');
+        const allItems = [
+          ...(fw1?.items || []),
+          ...(fw2?.domains?.flatMap(d=>d.items) || []),
+          ...(fw3?.items || []),
+          ...(fw3L?.items || []),
+        ];
+        allItems.forEach(item => {
+          const s = scores[item.id];
+          const focus = item.coaching_focus;
+          if (!s || !focus || notObserved.has(item.id)) return;
+          if (!focusMap[focus]) focusMap[focus] = { total: 0, count: 0 };
+          focusMap[focus].total += s;
+          focusMap[focus].count += 1;
+        });
+        const focusSorted = Object.entries(focusMap)
+          .map(([focus, { total, count }]) => ({ focus, avg: total / count, count }))
+          .sort((a, b) => a.avg - b.avg);
+        if (!focusSorted.length) return '';
+        const barHtml = focusSorted.map(({ focus, avg, count }) => {
+          const pct = Math.round((avg / 4) * 100);
+          const label = FOCUS_LABELS[focus] || focus;
+          const isWeak = avg < 2.5;
+          const barColor = isWeak ? '#ef4444' : avg < 3.2 ? '#f59e0b' : '#16a34a';
+          return `
+            <div style="margin-bottom:10px;">
+              <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:3px;">
+                <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'⚠ ':''}${label}</span>
+                <span style="color:#64748b;">${avg.toFixed(1)} &nbsp;(${count} item${count>1?'s':''})</span>
+              </div>
+              <div style="background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden;">
+                <div style="width:${pct}%;height:100%;background:${barColor};border-radius:6px;transition:width .4s;"></div>
+              </div>
+            </div>`;
+        }).join('');
+        return `
+          <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0;">
+            <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:14px;">
+              Coaching Focus Analysis
+              <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">— weakest domains first · scored items only</span>
+            </div>
+            ${barHtml}
+            <div style="font-size:.69rem;color:#94a3b8;margin-top:10px;font-style:italic;">
+              ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
+            </div>
+          </div>`;
+      })()}`;
   }
 
   // EOY mode
@@ -2197,7 +2316,20 @@ function buildReviewSummary() {
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
       ${scoreBox(`F2 Observation (${r?.f4!=null?'50':'60'}%)`, r?.f2, 'f2')}
-      ${scoreBox('F3 Work (20%)', r?.f3, 'f3')}
+      ${level === 'lead'
+        ? `<div style="background:#f8fafc;border-radius:12px;padding:12px 10px;display:flex;flex-direction:column;gap:6px;">
+            <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:2px;text-align:center;">F3 Work (20%)</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:.75rem;">
+              <span style="color:#64748b;">Professional (F3)</span>
+              <span style="font-weight:800;color:#1e293b;">${r?.f3Base!=null ? r.f3Base.toFixed(2) : '—'} / 4</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:.75rem;">
+              <span style="color:#64748b;">Leadership (F3L)</span>
+              <span style="font-weight:800;color:#1e293b;">${r?.f3Lead!=null ? r.f3Lead.toFixed(2) : '—'} / 4</span>
+            </div>
+            <div style="font-size:.65rem;color:#94a3b8;text-align:center;margin-top:2px;">Combined weight: 20%</div>
+          </div>`
+        : scoreBox('F3 Work (20%)', r?.f3, 'f3')}
       ${scoreBox('F4 Survey (10%)', r?.f4, 'f4', r?.f4!=null ? '/ 4.00' : 'not scored yet')}
       <div style="text-align:center;padding:16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
@@ -2210,7 +2342,75 @@ function buildReviewSummary() {
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
       Formula: (F1/4 × 20%) + (F2/4 × ${r?.f4!=null?'50':'60'}%) + (F3/4 × 20%)${r?.f4!=null?' + (F4/4 × 10%)':''} × 100${r?.f4==null?' &nbsp;·&nbsp; Score F4 to include its 10% weight':''}
-    </div>`;
+    </div>
+    ${(() => {
+      const FOCUS_LABELS = {
+        professional_organisation: 'Professional Organisation',
+        planning_quality:          'Planning Quality',
+        differentiation:           'Differentiation',
+        instructional_design:      'Instructional Design',
+        instructional_process:     'Instructional Process',
+        classroom_management:      'Classroom Management',
+        student_engagement:        'Student Engagement',
+        higher_order_thinking:     'Higher-Order Thinking',
+        assessment_for_learning:   'Assessment for Learning',
+        assessment_design:         'Assessment Design',
+        subject_knowledge:         'Subject Knowledge',
+        reflective_practice:       'Reflective Practice',
+        professional_conduct:      'Professional Conduct',
+        leadership:                'Leadership (Lead)',
+      };
+      const focusMap = {};
+      const fw1 = FRAMEWORK?.frameworks?.find(f=>f.id==='F1');
+      const fw2 = FRAMEWORK?.frameworks?.find(f=>f.id==='F2');
+      const fw3 = FRAMEWORK?.frameworks?.find(f=>f.id==='F3');
+      const fw3L = FRAMEWORK?.frameworks?.find(f=>f.id==='F3L');
+      const allItems = [
+        ...(fw1?.items || []),
+        ...(fw2?.domains?.flatMap(d=>d.items) || []),
+        ...(fw3?.items || []),
+        ...(fw3L?.items || []),
+      ];
+      allItems.forEach(item => {
+        const s = scores[item.id];
+        const focus = item.coaching_focus;
+        if (!s || !focus || notObserved.has(item.id)) return;
+        if (!focusMap[focus]) focusMap[focus] = { total: 0, count: 0 };
+        focusMap[focus].total += s;
+        focusMap[focus].count += 1;
+      });
+      const focusSorted = Object.entries(focusMap)
+        .map(([focus, { total, count }]) => ({ focus, avg: total / count, count }))
+        .sort((a, b) => a.avg - b.avg);
+      if (!focusSorted.length) return '';
+      const barHtml = focusSorted.map(({ focus, avg, count }) => {
+        const pct = Math.round((avg / 4) * 100);
+        const label = FOCUS_LABELS[focus] || focus;
+        const isWeak = avg < 2.5;
+        const barColor = isWeak ? '#ef4444' : avg < 3.2 ? '#f59e0b' : '#16a34a';
+        return `
+          <div style="margin-bottom:10px;">
+            <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:3px;">
+              <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'⚠ ':''}${label}</span>
+              <span style="color:#64748b;">${avg.toFixed(1)} &nbsp;(${count} item${count>1?'s':''})</span>
+            </div>
+            <div style="background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden;">
+              <div style="width:${pct}%;height:100%;background:${barColor};border-radius:6px;transition:width .4s;"></div>
+            </div>
+          </div>`;
+      }).join('');
+      return `
+        <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0;">
+          <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:14px;">
+            Coaching Focus Analysis
+            <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">— weakest domains first · scored items only</span>
+          </div>
+          ${barHtml}
+          <div style="font-size:.69rem;color:#94a3b8;margin-top:10px;font-style:italic;">
+            ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
+          </div>
+        </div>`;
+    })()}`;
 }
 
 // ── CALIBRATION WARNING ────────────────────────────────────
@@ -2274,16 +2474,25 @@ function applyPrevYearBadges() {
     const el = document.getElementById(`prev-${itemId}`);
     if (!el) return;
     const cur = scores[itemId];
+    let trend = null;
     let trendHtml = '';
     if (cur && cur !== prevScore) {
       const diff = cur - prevScore;
+      trend = diff > 0 ? 'up' : 'down';
       trendHtml = diff > 0
         ? `<span class="trend-up">▲${diff}</span>`
         : `<span class="trend-down">▼${Math.abs(diff)}</span>`;
     } else if (cur && cur === prevScore) {
+      trend = 'same';
       trendHtml = `<span class="trend-same">→</span>`;
     }
-    el.innerHTML = `Last yr: ${scoreLabels[prevScore] || prevScore} ${trendHtml}`;
+    // Plateau: same score for this year as last, and not yet Distinguished
+    const isPlateaued = (trend === 'same' && cur <= 3);
+    const plateauHtml = isPlateaued
+      ? `<span title="Same score as last year — consider discussing a stretch goal in the post-conference"
+           style="color:#f59e0b;font-size:.65rem;margin-left:2px;cursor:default;">⚠</span>`
+      : '';
+    el.innerHTML = `Last yr: ${scoreLabels[prevScore] || prevScore} ${trendHtml}${plateauHtml}`;
     el.style.display = 'inline-flex';
   });
 }
@@ -2641,6 +2850,10 @@ window.backToSetup = function() {
 };
 
 window.selectScore = function(itemId, score) {
+  if (score === 'no' && MANDATORY_ITEMS.has(itemId)) {
+    showToast('⚠ This item must be scored — N/O is not permitted here.');
+    return;
+  }
   if (score === 'no') {
     notObserved.add(itemId);
     delete scores[itemId];
@@ -2683,6 +2896,28 @@ window.selectScore = function(itemId, score) {
   updateLiveScores();
   if (Object.keys(prevYearScores).length) applyPrevYearBadges();
   if (s > 2) advanceFocus(itemId); // skip auto-advance for low scores so user can add note
+
+  // Debounced Firebase autosave — fires 1500ms after the last score change
+  clearTimeout(autoSaveTimer);
+  autoSaveTimer = setTimeout(() => {
+    if (typeof window.saveAppraisal === 'function' && getLevel()) {
+      const el = document.getElementById('autosaveStatus');
+      if (el) { el.textContent = '💾 Saving…'; el.style.color = '#94a3b8'; }
+      window.saveAppraisal('draft', sessionMode === 'endofyear', true)
+        .then(() => {
+          const el = document.getElementById('autosaveStatus');
+          if (!el) return;
+          const now = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+          el.textContent = `✓ Saved ${now}`;
+          el.style.color = '#16a34a';
+          setTimeout(() => { el.textContent = ''; }, 4000);
+        })
+        .catch(() => {
+          const el = document.getElementById('autosaveStatus');
+          if (el) { el.textContent = '⚠ Save failed'; el.style.color = '#dc2626'; }
+        });
+    }
+  }, 1500);
 };
 
 function markItemDone(itemId, done) {
@@ -3027,7 +3262,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
     if (d.scores)     Object.assign(scores,       d.scores);
     if (d.notes)      Object.assign(notes,        d.notes);
-    if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+    if (d.notObservedItems) d.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
     if (d.surveyData) Object.assign(surveyScores, d.surveyData);
     if (d.currentDocId) currentDocId = d.currentDocId;
     document.querySelector('[data-draft-banner]')?.remove();
@@ -3210,7 +3445,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         }
         if (d.scores)     Object.assign(scores, d.scores);
         if (d.narratives) Object.assign(notes, d.narratives);
-        if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+        if (d.notObservedItems) d.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
         if (d.surveyData) Object.assign(surveyScores, d.surveyData);
         if (d.f3Evidence) Object.assign(f3Evidence, d.f3Evidence);
         // Restore Glow/Grow/Go narrative fields
@@ -3353,7 +3588,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       if (loadedObsRecord.scores)     Object.assign(scores, loadedObsRecord.scores);
       if (loadedObsRecord.narratives) Object.assign(notes, loadedObsRecord.narratives);
       if (loadedObsRecord.notObservedItems)
-        loadedObsRecord.notObservedItems.forEach(id => notObserved.add(id));
+        loadedObsRecord.notObservedItems.filter(id => !MANDATORY_ITEMS.has(id)).forEach(id => notObserved.add(id));
       const obsDate = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
       statusEl.innerHTML = `<span style="color:#16a34a;">✓ Loaded: ${loadedObsRecord.teacherName||uid} — observed ${obsDate} (ID: ${currentDocId})</span>`;
       showToast('Observation record loaded — F1/F2 scores pre-filled.');
