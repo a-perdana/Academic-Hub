@@ -427,6 +427,27 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   .session-opts { grid-template-columns: 1fr; }
 }
 
+/* ── WHO / WHEN BANNER ── */
+.who-banner {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px; font-size: .8rem; line-height: 1.4;
+  border-bottom: 1px solid transparent;
+}
+.who-banner.who-appraiser {
+  background: #eff6ff; border-bottom-color: #bfdbfe; color: #1e40af;
+}
+.who-banner.who-students {
+  background: #f0fdf4; border-bottom-color: #bbf7d0; color: #166534;
+}
+.who-icon { font-size: 1.1rem; flex-shrink: 0; }
+.who-text { flex: 1; }
+.who-text strong { font-weight: 700; }
+.who-weight {
+  flex-shrink: 0; font-size: .75rem; font-weight: 800;
+  padding: 3px 10px; border-radius: 12px;
+  background: rgba(0,0,0,.07);
+}
+
 /* ── PRINT REPORT CONTENT ── */
 #printReportArea { display: none; }
 .pr-header { margin-bottom: 18pt; border-bottom: 2px solid #1e1b4b; padding-bottom: 10pt; }
@@ -688,8 +709,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           &#x1F4CB; F1 scores pre-loaded from the observation record. Pilot: editable. Production: will be read-only.
         </div>
         <div class="card">
+          <div class="who-banner who-appraiser">
+            <span class="who-icon">👤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>Observation Session</strong> — during or immediately after the formal classroom visit</span>
+            <span class="who-weight">20%</span>
+          </div>
           <div class="card-head">
-            <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Weight 20%</div></div>
+            <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Administrative readiness & compliance</div></div>
             <div id="f1Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 9 scored</div>
           </div>
           <div id="f1Items"></div>
@@ -703,8 +729,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           &#x1F4CB; F2 scores pre-loaded from the observation record. Pilot: editable. Production: will be read-only.
         </div>
         <div class="card">
+          <div class="who-banner who-appraiser">
+            <span class="who-icon">👤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>Observation Session</strong> — scored live during the formal announced lesson (35–40 min)</span>
+            <span class="who-weight">50%</span>
+          </div>
           <div class="card-head">
-            <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · Weight 60%</div></div>
+            <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · 4 domains: Planning, Management, Instruction, Assessment</div></div>
             <div id="f2Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
           </div>
           <div id="f2Items"></div>
@@ -714,8 +745,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <!-- F3 TAB -->
       <div id="panelF3" class="fw-panel" style="display:none;">
         <div class="card">
+          <div class="who-banner who-appraiser">
+            <span class="who-icon">👤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>End-of-Year Conference</strong> — scored at the annual review meeting with the teacher</span>
+            <span class="who-weight">20%</span>
+          </div>
           <div class="card-head">
-            <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Weight 20%</div></div>
+            <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Professional conduct & responsibilities beyond the classroom</div></div>
             <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
           </div>
           <div id="f3Items"></div>
@@ -725,8 +761,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <!-- F4 TAB -->
       <div id="panelF4" class="fw-panel" style="display:none;">
         <div class="card">
+          <div class="who-banner who-students">
+            <span class="who-icon">🎓</span>
+            <span class="who-text"><strong>Students</strong> fill the original survey · Appraiser enters aggregated results here · <strong>Collected independently during the academic year</strong></span>
+            <span class="who-weight">10%</span>
+          </div>
           <div class="card-head">
-            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Weight 10% · Enter data collected from student survey</div></div>
+            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Student perspective on teaching quality</div></div>
             <div id="f4Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 17 scored</div>
           </div>
           <div id="f4Items" class="card-body" style="padding:0;"></div>
@@ -1278,11 +1319,11 @@ function calcScores(level) {
   const m3 = mean(f3Items);
   const m4 = surveyMean(f4Items);
 
-  if (m1===null && m2===null && m3===null && m4===null) return null;
+  if (m1===null && m2===null && m3===null) return null;
 
-  // Weights: F1 20%, F2 50%, F3 20%, F4 10%
-  const isComplete = m1!==null && m2!==null && m3!==null && m4!==null;
-  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.50 + (m3/4)*0.20 + (m4/4)*0.10) * 100 : null;
+  // Weights: F1 20%, F2 60%, F3 20% — F4 is informative only, not scored
+  const isComplete = m1!==null && m2!==null && m3!==null;
+  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.60 + (m3/4)*0.20) * 100 : null;
   const bands      = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate  = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
   return { f1:m1, f2:m2, f3:m3, f4:m4, composite, predicate, isComplete };
@@ -1333,12 +1374,12 @@ function buildReviewSummary() {
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
         ${scoreBox('F1 Admin (20%)', r?.f1)}
-        ${scoreBox('F2 Observation (50%)', r?.f2)}
+        ${scoreBox('F2 Observation (60%)', r?.f2)}
         <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
           <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
           <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending EOY</div>
         </div>
-        ${scoreBox('F4 Survey (10%)', r?.f4)}
+        ${scoreBox('F4 Survey', r?.f4, 'informative only')}
       </div>
       <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
         Final composite will be calculated after F3 is scored at the End-of-Year Conference.
@@ -1363,9 +1404,9 @@ function buildReviewSummary() {
     ${obsNote}${incompleteNote}
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       ${scoreBox('F1 Admin (20%)', r?.f1)}
-      ${scoreBox('F2 Observation (50%)', r?.f2)}
+      ${scoreBox('F2 Observation (60%)', r?.f2)}
       ${scoreBox('F3 Work (20%)', r?.f3)}
-      ${scoreBox('F4 Survey (10%)', r?.f4)}
+      ${scoreBox('F4 Survey', r?.f4, 'informative only')}
       <div style="text-align:center;padding:16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
         ${r?.isComplete
@@ -1376,7 +1417,7 @@ function buildReviewSummary() {
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 20%) + (F4/4 × 10%) × 100
+      Formula: (F1/4 × 20%) + (F2/4 × 60%) + (F3/4 × 20%) × 100 &nbsp;·&nbsp; F4 reported separately
     </div>`;
 }
 
