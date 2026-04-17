@@ -670,6 +670,7 @@ let activeMode = 'solo';
 let isAdmin = false;
 let groupSession = null; // { code, docRef, unsubscribe }
 let openAnchorPanels = {}; // itemId -> bool
+let activeTab = 'vignette'; // persists across score clicks
 
 /* ─────────────────────────────────────────────
    AUTH READY
@@ -769,10 +770,10 @@ function renderScenario(idx) {
         </div>
       </div>
       <div class="tab-bar">
-        <button class="tab-btn active" onclick="window.switchTab(${idx},'vignette',this)">&#x1F4CB; Vignette</button>
-        <button class="tab-btn" onclick="window.switchTab(${idx},'score',this)">&#x1F3AF; Score</button>
+        <button class="tab-btn ${activeTab==='vignette'?'active':''}" onclick="window.switchTab(${idx},'vignette',this)">&#x1F4CB; Vignette</button>
+        <button class="tab-btn ${activeTab==='score'?'active':''}" onclick="window.switchTab(${idx},'score',this)">&#x1F3AF; Score</button>
       </div>
-      <div class="tab-pane active" id="tab-vignette-${idx}">
+      <div class="tab-pane ${activeTab==='vignette'?'active':''}" id="tab-vignette-${idx}">
         <div class="card-body">
           <div class="vignette-box">
             <div class="vignette-label">Observation vignette</div>
@@ -780,7 +781,7 @@ function renderScenario(idx) {
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="tab-score-${idx}">
+      <div class="tab-pane ${activeTab==='score'?'active':''}" id="tab-score-${idx}">
         <div class="card-body">
           <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">
             Score each item independently based only on the evidence above. Use "Show rubric" for behavioural anchors.
@@ -801,6 +802,7 @@ function renderScenario(idx) {
 }
 
 window.switchTab = function(idx, tab, btn) {
+  activeTab = tab;
   const card = btn.closest('.card');
   card.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   card.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
@@ -1335,6 +1337,7 @@ window.selectScore = function(scIdx, itemId, score) {
 window.submitScenario = function(idx) { renderResults(idx); };
 window.nextScenario = function(idx) {
   currentScenario = idx;
+  activeTab = 'vignette';
   renderStepDots();
   openAnchorPanels = {};
   renderScenario(idx);
@@ -1342,6 +1345,7 @@ window.nextScenario = function(idx) {
 window.showSummary = showSummary;
 window.restartSession = function() {
   currentScenario = 0;
+  activeTab = 'vignette';
   userScores = SCENARIOS.map(() => ({}));
   openAnchorPanels = {};
   renderStepDots();
