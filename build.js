@@ -215,13 +215,6 @@ if (fs.existsSync("resources")) {
   copyDirRecursive("resources", "dist/resources");
   console.log("Copied: resources/");
 }
-// Copy shared framework JSON from monorepo root (single source of truth)
-const sharedFramework = path.join(__dirname, '..', 'resources', 'appraisal-framework-v2.json');
-if (fs.existsSync(sharedFramework)) {
-  if (!fs.existsSync('dist/resources')) fs.mkdirSync('dist/resources', { recursive: true });
-  fs.copyFileSync(sharedFramework, 'dist/resources/appraisal-framework-v2.json');
-  console.log('Copied: dist/resources/appraisal-framework-v2.json (from monorepo root)');
-}
 
 // -- Generate Netlify _redirects
 // Files are now written as <slug>.html so Netlify/Vercel cleanUrls
