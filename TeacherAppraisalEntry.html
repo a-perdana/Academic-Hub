@@ -3769,10 +3769,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       }
       if (loadedObsRecord.scores)     Object.assign(scores, loadedObsRecord.scores);
       if (loadedObsRecord.narratives) Object.assign(notes, loadedObsRecord.narratives);
-      if (loadedObsRecord.notObservedItems)
+      if (loadedObsRecord.notObservedItems) {
         const lvl = getLevel();
         const mandatoryAtLevel = lvl ? getMandatoryItems(lvl) : new Set();
         loadedObsRecord.notObservedItems.filter(id => !mandatoryAtLevel.has(id)).forEach(id => notObserved.add(id));
+      }
       const obsDate = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
       statusEl.innerHTML = `<span style="color:#16a34a;">✓ Loaded: ${loadedObsRecord.teacherName||uid} — observed ${obsDate} (ID: ${currentDocId})</span>`;
       showToast('Observation record loaded — F1/F2 scores pre-filled.');
