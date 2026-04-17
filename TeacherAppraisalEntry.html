@@ -2283,6 +2283,18 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   };
 
   // ── TEACHER AUTOCOMPLETE ─────────────────────────────────
+  let allTeachersCache = null;
+
+  async function loadTeachersCache() {
+    if (allTeachersCache) return allTeachersCache;
+    const snap = await getDocs(query(
+      collection(window.db, 'users'),
+      where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
+    ));
+    allTeachersCache = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+    return allTeachersCache;
+  }
+
   let teacherSearchTimer = null;
   window.teacherSearch = async function(val) {
     const dropdown = document.getElementById('teacherDropdown');
@@ -2291,14 +2303,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (q.length < 2) { dropdown.style.display = 'none'; return; }
     teacherSearchTimer = setTimeout(async () => {
       try {
-        // Search by displayName (full name) — Firestore prefix range query
-        const snap = await getDocs(query(
-          collection(db, 'users'),
-          where('displayName', '>=', q),
-          where('displayName', '<=', q + '\uf8ff'),
-          where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
-        ));
-        const results = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+        const teachers = await loadTeachersCache();
+        const ql = q.toLowerCase();
+        const results = teachers.filter(u =>
+          (u.displayName || '').toLowerCase().includes(ql) ||
+          (u.email || '').toLowerCase().includes(ql)
+        );
 
         // Build school lookup map from schools_compact.js SCHOOLS array
         const schoolMap = {};
