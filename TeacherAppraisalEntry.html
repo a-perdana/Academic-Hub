@@ -1753,22 +1753,77 @@ function buildSurveyInput() {
 }
 
 function updateF4Progress() {
-  const done = Object.keys(surveyScores).length;
+  const done  = Object.keys(surveyScores).length;
   const total = FRAMEWORK?.frameworks.find(f=>f.id==='F4')?.items?.length || 17;
-  document.getElementById('f4Progress').textContent = `${done} / ${total} scored`;
-  // Green tint on completed survey rows
+  const threshold    = COMPLETION_THRESHOLD.F4;           // 0.80
+  const needed       = Math.ceil(total * threshold);      // 14
+  const meetsThreshold = done >= needed;
+
+  // Progress text in card header — show threshold status clearly
+  const progEl = document.getElementById('f4Progress');
+  if (progEl) {
+    if (done === 0) {
+      progEl.textContent = `0 / ${total} scored`;
+      progEl.style.color = '#94a3b8';
+    } else if (!meetsThreshold) {
+      progEl.innerHTML =
+        `<span style="color:#c2410c;font-weight:800;">${done} / ${total} scored</span>` +
+        `<span style="color:#c2410c;font-size:.68rem;margin-left:6px;">` +
+        `— score ${needed - done} more to include F4 in composite</span>`;
+    } else {
+      progEl.innerHTML =
+        `<span style="color:#15803d;font-weight:800;">${done} / ${total} scored</span>` +
+        `<span style="color:#15803d;font-size:.68rem;margin-left:6px;">✓ threshold met — F4 counts as 10%</span>`;
+    }
+  }
+
+  // Row tinting
   if (FRAMEWORK) {
     FRAMEWORK.frameworks.find(f=>f.id==='F4').items.forEach(item => {
       const row = document.getElementById(`srow-${item.id}`);
       if (row) row.style.background = surveyScores[item.id] ? '#f0fdf4' : '';
     });
   }
-  // Tab count
+
+  // Tab count badge
   const el = document.getElementById('tabCountF4');
   if (el) {
-    el.textContent = `${done}/${total}`;
-    el.style.background = done === total ? '#dcfce7' : '';
-    el.style.color      = done === total ? '#15803d' : '';
+    el.textContent      = `${done}/${total}`;
+    el.style.background = meetsThreshold ? '#dcfce7' : (done > 0 ? '#fff7ed' : '');
+    el.style.color      = meetsThreshold ? '#15803d' : (done > 0 ? '#c2410c' : '');
+  }
+
+  // Inline banner below the who-banner in the F4 card — persistent threshold reminder
+  let bannerEl = document.getElementById('f4ThresholdBanner');
+  if (!bannerEl) {
+    bannerEl = document.createElement('div');
+    bannerEl.id = 'f4ThresholdBanner';
+    bannerEl.style.cssText =
+      'padding:8px 20px;font-size:.76rem;line-height:1.5;border-bottom:1px solid transparent;';
+    const card = document.getElementById('f4Items')?.closest('.card');
+    const whoBanner = card?.querySelector('.who-banner');
+    if (whoBanner) whoBanner.after(bannerEl);
+  }
+  if (meetsThreshold) {
+    bannerEl.style.background   = '#f0fdf4';
+    bannerEl.style.borderColor  = '#bbf7d0';
+    bannerEl.style.color        = '#15803d';
+    bannerEl.innerHTML = `✓ <strong>F4 will contribute 10%</strong> to the composite — threshold met (${done}/${total} scored).`;
+  } else if (done > 0) {
+    bannerEl.style.background   = '#fff7ed';
+    bannerEl.style.borderColor  = '#fed7aa';
+    bannerEl.style.color        = '#c2410c';
+    bannerEl.innerHTML =
+      `⚠ <strong>F4 not yet counted</strong> — ${done}/${total} scored, need at least ${needed}. ` +
+      `Until then its <strong>10% weight shifts to F2</strong> (F2 becomes 60%).`;
+  } else {
+    bannerEl.style.background  = '#f8fafc';
+    bannerEl.style.borderColor = '#e2e8f0';
+    bannerEl.style.color       = '#64748b';
+    bannerEl.innerHTML =
+      `ℹ F4 is scored by entering aggregated student survey results. ` +
+      `Score at least ${needed}/${total} items to include F4 in the composite (10%). ` +
+      `If left empty, F2 carries 60% instead.`;
   }
 }
 window.updateF4Progress = updateF4Progress;
@@ -2011,8 +2066,13 @@ function calcScores(level) {
 
   if (s1.addressedCount === 0 && s2.addressedCount === 0 && s3.addressedCount === 0) return null;
 
-  // Composite only when F1, F2, F3 all meet their thresholds.
-  // F4 is optional — if absent its 10% weight shifts to F2.
+  // Composite requires F1 + F2 + F3 thresholds met.
+  // F4 weight shift: JSON defines F4 weight as 0.10. However, student surveys are collected
+  // independently and may not always be available by the time of the appraisal session.
+  // Design decision (documented here): if F4 threshold is NOT met, its 10% shifts to F2
+  // so the composite can still be finalised. This is surfaced explicitly in the UI —
+  // the F4 tab shows a warning, the Review score box shows the adjusted weight, and the
+  // finalise guard prompts the appraiser before proceeding without F4.
   const isComplete = s1.meetsThreshold && s2.meetsThreshold && s3.meetsThreshold;
   const w2 = (m4 !== null) ? 0.50 : 0.60;
   const composite = isComplete
