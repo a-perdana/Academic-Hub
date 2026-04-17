@@ -1688,14 +1688,14 @@ function buildF2(level) {
           <span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 8px;border-radius:5px;font-weight:700;">🔄 Post — ${phaseCounts.post}</span>
         </div>`;
       html += `
-        <div class="domain-label" onclick="toggleDomain(this)" data-domain="${domain.id}">
+        <div class="domain-label${isFirst ? '' : ' collapsed'}" onclick="toggleDomain(this)" data-domain="${domain.id}">
           <span>${domain.id} — ${domain.title}</span>
           <span style="display:flex;align-items:center;gap:10px;">
             <span class="domain-progress-text domain-prog-${domain.id}">${visible.length} items</span>
             <span class="domain-chevron">▾</span>
           </span>
         </div>
-        <div class="domain-body" data-domain-body="${domain.id}">
+        <div class="domain-body${isFirst ? '' : ' collapsed'}" data-domain-body="${domain.id}">
           ${legendHtml}
           ${visible.map(buildD3ItemRow).join('')}
         </div>`;
@@ -3724,7 +3724,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         (F1: ${lv.item_counts.F1}, D1+D2+D3+D4: ${lv.item_counts.D1+lv.item_counts.D2+lv.item_counts.D3+lv.item_counts.D4},
          F3: ${lv.item_counts.F3}${level==='lead'?`, F3L: ${lv.item_counts.F3L}`:''})`;
     }
-    buildF2(level); buildF3(level); updateSidebarProgress(level);
+    buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
   });
 
   document.getElementById('appraisalLevelEoy').addEventListener('change', () => {
@@ -3735,7 +3735,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       el.style.display = '';
       el.innerHTML = `<strong>${lv.label}</strong> — ${lv.description}`;
     }
-    buildF2(level); buildF3(level); updateSidebarProgress(level);
+    buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
   });
 
   // Load observation record (EOY mode)
@@ -3814,7 +3814,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
 
     const level = getLevel();
-    buildF2(level); buildF3(level); updateSidebarProgress(level);
+    buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
 
     const dateDisplay = sessionMode === 'observation'
       ? document.getElementById('observationDate').value
