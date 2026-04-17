@@ -200,6 +200,44 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   width: 8px; height: 8px; border-radius: 50%; display: inline-block;
 }
 
+/* ── FEEDBACK BLOCKS (Glow / Grow / Go) ── */
+.feedback-block {
+  border-radius: 12px; padding: 16px 18px; margin-bottom: 16px;
+  border: 1.5px solid transparent;
+}
+.feedback-block:last-child { margin-bottom: 0; }
+.feedback-glow    { background: #f0fdf4; border-color: #bbf7d0; }
+.feedback-grow    { background: #fff7ed; border-color: #fed7aa; }
+.feedback-go      { background: #f5f3ff; border-color: #ddd6fe; }
+.feedback-summary { background: #f0f9ff; border-color: #bae6fd; }
+.feedback-block-header {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;
+}
+.feedback-icon { font-size: 1.2rem; line-height: 1; margin-top: 1px; flex-shrink: 0; }
+.feedback-block-title {
+  font-size: .82rem; font-weight: 800; color: #1e293b; margin-bottom: 2px;
+}
+.feedback-block-hint {
+  font-size: .75rem; color: #64748b; line-height: 1.5;
+}
+.feedback-textarea {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 9px;
+  padding: 9px 12px; font-family: inherit; font-size: .85rem;
+  color: #1e293b; resize: vertical; min-height: 80px; background: #fff;
+}
+.feedback-textarea:focus { outline: none; border-color: #7c3aed; }
+.feedback-framework-tag-wrap { margin-top: 10px; }
+.feedback-tag-label {
+  display: block; font-size: .7rem; font-weight: 700; color: #64748b;
+  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 4px;
+}
+.feedback-tag-input {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 8px;
+  padding: 7px 10px; font-family: inherit; font-size: .82rem;
+  color: #1e293b; background: #fff;
+}
+.feedback-tag-input:focus { outline: none; border-color: #7c3aed; }
+
 /* ── DOMAIN BLOCK ── */
 .domain-label {
   font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
@@ -946,18 +984,57 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div><h2>Observation Report</h2><div class="card-head-sub">Shared with teacher when report is marked Shared</div></div>
           </div>
           <div class="card-body">
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#16a34a;"></span>Strengths Observed</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:80px;" id="narr_strengths" placeholder="Specific evidence of strong practice observed in this lesson…"></textarea>
+
+            <!-- GLOW -->
+            <div class="narrative-section feedback-block feedback-glow">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x2728;</span>
+                <div>
+                  <div class="feedback-block-title">Glow — What is working well</div>
+                  <div class="feedback-block-hint">Specific evidence of strong practice. Name the strategy, describe what you saw, explain the impact on learners.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="narr_strengths" placeholder="e.g. "Cold-calling with 3-second wait time ensured all students had processing time — 85% of responses were substantive.""></textarea>
             </div>
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#f97316;"></span>Areas for Development</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:80px;" id="narr_development" placeholder="Specific areas where teaching practice can be strengthened — linked to observed evidence…"></textarea>
+
+            <!-- GROW -->
+            <div class="narrative-section feedback-block feedback-grow">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x1F331;</span>
+                <div>
+                  <div class="feedback-block-title">Grow — Priority development area</div>
+                  <div class="feedback-block-hint">One focused area linked to a framework item. Describe the gap and its impact — avoid generalisations.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 — Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
+              <div class="feedback-framework-tag-wrap">
+                <label class="feedback-tag-label">Linked framework item</label>
+                <input type="text" class="field feedback-tag-input" id="narr_grow_item" placeholder="e.g. D3-F2-04 — Differentiation &amp; Adaptation">
+              </div>
             </div>
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#7c3aed;"></span>Agreed Actions</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:70px;" id="narr_actions" placeholder="Specific, time-bound actions agreed with the teacher during the post-observation debrief…"></textarea>
+
+            <!-- GO -->
+            <div class="narrative-section feedback-block feedback-go">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x1F3AF;</span>
+                <div>
+                  <div class="feedback-block-title">Go — Next step (SMART)</div>
+                  <div class="feedback-block-hint">One concrete action. Specify <strong>what</strong> the teacher will do, <strong>by when</strong>, and <strong>how progress will be checked</strong>.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="narr_actions" placeholder="e.g. "By [date]: prepare tiered exit tasks for Year 10 lessons. Progress check: bring two examples to next pre-conference.""></textarea>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+                <div>
+                  <label class="feedback-tag-label">Target date</label>
+                  <input type="date" class="field feedback-tag-input" id="narr_go_date">
+                </div>
+                <div>
+                  <label class="feedback-tag-label">How progress will be checked</label>
+                  <input type="text" class="field feedback-tag-input" id="narr_go_check" placeholder="e.g. Bring lesson plan to pre-conference">
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -967,22 +1044,69 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div><h2>End-of-Year Conference Report</h2><div class="card-head-sub">Covers full-year evidence — shared with teacher at finalisation</div></div>
           </div>
           <div class="card-body">
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#0369a1;"></span>Overall Annual Summary</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:70px;" id="eoy_summary" placeholder="Brief summary of the teacher's overall professional performance across the academic year…"></textarea>
+
+            <!-- Annual Summary -->
+            <div class="narrative-section feedback-block feedback-summary">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x1F4CB;</span>
+                <div>
+                  <div class="feedback-block-title">Overall Annual Summary</div>
+                  <div class="feedback-block-hint">2–3 sentences capturing the teacher's professional trajectory across the year.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="eoy_summary" placeholder="e.g. "Over this academic year, [name] has demonstrated consistent growth in instructional practice, particularly in formative assessment…""></textarea>
             </div>
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#16a34a;"></span>Strengths (Full Year)</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:80px;" id="eoy_strengths" placeholder="Sustained strengths evidenced across observation, work inspection, and professional conduct…"></textarea>
+
+            <!-- GLOW -->
+            <div class="narrative-section feedback-block feedback-glow">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x2728;</span>
+                <div>
+                  <div class="feedback-block-title">Glow — Sustained strengths (full year)</div>
+                  <div class="feedback-block-hint">Strengths evidenced across observation, work inspection, and professional conduct. Reference specific moments.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="eoy_strengths" placeholder="e.g. "Consistently strong questioning technique across all three observations. Work inspection showed well-structured feedback cycles.""></textarea>
             </div>
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#f97316;"></span>Areas for Development</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:80px;" id="eoy_development" placeholder="Priority development areas for the coming academic year — reference specific framework items…"></textarea>
+
+            <!-- GROW -->
+            <div class="narrative-section feedback-block feedback-grow">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x1F331;</span>
+                <div>
+                  <div class="feedback-block-title">Grow — Priority development area for next year</div>
+                  <div class="feedback-block-hint">The single most important area for growth. Link to a framework domain. Be specific about the gap pattern.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 — Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
+              <div class="feedback-framework-tag-wrap">
+                <label class="feedback-tag-label">Linked framework domain / item</label>
+                <input type="text" class="field feedback-tag-input" id="eoy_grow_item" placeholder="e.g. D4 — Assessment for Learning">
+              </div>
             </div>
-            <div class="narrative-section">
-              <div class="narrative-label"><span class="narrative-label-dot" style="background:#7c3aed;"></span>Professional Development Plan &amp; Agreed Actions</div>
-              <textarea class="field" style="width:100%;border:1.5px solid #e2e8f0;border-radius:9px;padding:9px 12px;font-family:inherit;font-size:.85rem;color:#1e293b;resize:vertical;min-height:80px;" id="eoy_actions" placeholder="Specific, time-bound targets for the coming year — link to CPD programme, training, mentoring, or peer observation plan…"></textarea>
+
+            <!-- GO / PDP -->
+            <div class="narrative-section feedback-block feedback-go">
+              <div class="feedback-block-header">
+                <span class="feedback-icon">&#x1F3AF;</span>
+                <div>
+                  <div class="feedback-block-title">Go — Professional Development Plan</div>
+                  <div class="feedback-block-hint">Specific, time-bound targets. Link to CPD programme, training, mentoring, or peer observation. Include success criteria.</div>
+                </div>
+              </div>
+              <textarea class="field feedback-textarea" id="eoy_actions" placeholder="e.g. "Term 1: attend AfL workshop (CPD calendar). Terms 1–2: co-plan one lesson/fortnight with subject leader. Success: F2 D4 score ≥ 3 by next formal observation.""></textarea>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
+                <div>
+                  <label class="feedback-tag-label">First review date</label>
+                  <input type="date" class="field feedback-tag-input" id="eoy_go_date">
+                </div>
+                <div>
+                  <label class="feedback-tag-label">Success criteria / evidence</label>
+                  <input type="text" class="field feedback-tag-input" id="eoy_go_check" placeholder="e.g. F2 D4 score ≥ 3 by next observation">
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
 
@@ -2276,6 +2400,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.scores)     Object.assign(scores, d.scores);
         if (d.narratives) Object.assign(notes, d.narratives);
         if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+        // Restore Glow/Grow/Go narrative fields
+        const an = d.appraiserNarrative || {};
+        const en = d.endOfYearNarrative || {};
+        if (an.strengths)   document.getElementById('narr_strengths').value   = an.strengths;
+        if (an.development) document.getElementById('narr_development').value = an.development;
+        if (an.actions)     document.getElementById('narr_actions').value     = an.actions;
+        if (an.growItem)    document.getElementById('narr_grow_item').value   = an.growItem;
+        if (an.goDate)      document.getElementById('narr_go_date').value     = an.goDate;
+        if (an.goCheck)     document.getElementById('narr_go_check').value    = an.goCheck;
+        if (en.summary)     document.getElementById('eoy_summary').value      = en.summary;
+        if (en.strengths)   document.getElementById('eoy_strengths').value    = en.strengths;
+        if (en.development) document.getElementById('eoy_development').value  = en.development;
+        if (en.actions)     document.getElementById('eoy_actions').value      = en.actions;
+        if (en.growItem)    document.getElementById('eoy_grow_item').value    = en.growItem;
+        if (en.goDate)      document.getElementById('eoy_go_date').value      = en.goDate;
+        if (en.goCheck)     document.getElementById('eoy_go_check').value     = en.goCheck;
         loadedObsRecord = d;
         showToast('Draft loaded — continue where you left off.');
       }
@@ -2519,6 +2659,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             strengths:   document.getElementById('narr_strengths').value.trim(),
             development: document.getElementById('narr_development').value.trim(),
             actions:     document.getElementById('narr_actions').value.trim(),
+            growItem:    document.getElementById('narr_grow_item').value.trim(),
+            goDate:      document.getElementById('narr_go_date').value,
+            goCheck:     document.getElementById('narr_go_check').value.trim(),
           },
           surveyData, surveyMean,
           status, teacherResponse: '',
@@ -2553,6 +2696,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             strengths:   document.getElementById('eoy_strengths').value.trim(),
             development: document.getElementById('eoy_development').value.trim(),
             actions:     document.getElementById('eoy_actions').value.trim(),
+            growItem:    document.getElementById('eoy_grow_item').value.trim(),
+            goDate:      document.getElementById('eoy_go_date').value,
+            goCheck:     document.getElementById('eoy_go_check').value.trim(),
           },
           endOfYearDate: document.getElementById('conferenceDate').value
             ? new Date(document.getElementById('conferenceDate').value) : null,
@@ -2686,14 +2832,24 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         <table class="pr-items"><thead><tr><th>Item</th><th>Score (1–4)</th></tr></thead>
         <tbody>${surveyItemsHtml()}</tbody></table>` : ''}
 
-      ${narrativeBlock('Pre-Conference Notes', document.getElementById('preNotes')?.value)}
-      ${narrativeBlock('Key Strengths', document.getElementById('strengths')?.value)}
-      ${narrativeBlock('Areas for Development', document.getElementById('development')?.value)}
-      ${narrativeBlock('Agreed Actions', document.getElementById('actions')?.value)}
-      ${isEoy ? narrativeBlock('End-of-Year Summary', document.getElementById('eoy_summary')?.value) : ''}
-      ${isEoy ? narrativeBlock('Strengths', document.getElementById('eoy_strengths')?.value) : ''}
-      ${isEoy ? narrativeBlock('Development Priorities', document.getElementById('eoy_development')?.value) : ''}
-      ${isEoy ? narrativeBlock('Actions for Next Year', document.getElementById('eoy_actions')?.value) : ''}
+      ${!isEoy ? `
+      <h2 class="pr-section">Observation Feedback</h2>
+      ${narrativeBlock('✨ Glow — What is working well', document.getElementById('narr_strengths')?.value)}
+      ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('narr_development')?.value)}
+      ${document.getElementById('narr_grow_item')?.value ? narrativeBlock('Linked framework item', document.getElementById('narr_grow_item').value) : ''}
+      ${narrativeBlock('🎯 Go — Next step', document.getElementById('narr_actions')?.value)}
+      ${document.getElementById('narr_go_date')?.value ? narrativeBlock('Target date', document.getElementById('narr_go_date').value) : ''}
+      ${document.getElementById('narr_go_check')?.value ? narrativeBlock('Progress check', document.getElementById('narr_go_check').value) : ''}
+      ` : `
+      <h2 class="pr-section">End-of-Year Conference Report</h2>
+      ${narrativeBlock('Overall Annual Summary', document.getElementById('eoy_summary')?.value)}
+      ${narrativeBlock('✨ Glow — Sustained strengths', document.getElementById('eoy_strengths')?.value)}
+      ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('eoy_development')?.value)}
+      ${document.getElementById('eoy_grow_item')?.value ? narrativeBlock('Linked framework domain', document.getElementById('eoy_grow_item').value) : ''}
+      ${narrativeBlock('🎯 Go — Professional Development Plan', document.getElementById('eoy_actions')?.value)}
+      ${document.getElementById('eoy_go_date')?.value ? narrativeBlock('First review date', document.getElementById('eoy_go_date').value) : ''}
+      ${document.getElementById('eoy_go_check')?.value ? narrativeBlock('Success criteria', document.getElementById('eoy_go_check').value) : ''}
+      `}
 
       <p class="pr-footer">Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})} · Eduversal Academic Hub</p>
     `;
