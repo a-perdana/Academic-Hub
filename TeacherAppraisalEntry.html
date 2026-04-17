@@ -63,6 +63,90 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .session-opt.active .session-opt-title { color: #7c3aed; }
 .session-opt-desc { font-size: .78rem; color: #64748b; line-height: 1.5; }
 
+/* ── CONTEXT BAR ── */
+.context-bar {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 14px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+}
+.context-bar-left {
+  display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0;
+}
+.context-avatar {
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #fff; font-size: 1.1rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  letter-spacing: -.02em; box-shadow: 0 2px 6px rgba(124,58,237,.3);
+}
+.context-main { min-width: 0; }
+.context-name {
+  font-size: 1.05rem; font-weight: 800; color: #0f172a;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.context-meta-row {
+  display: flex; align-items: center; gap: 8px; margin-top: 3px; flex-wrap: wrap;
+}
+.context-meta-item { display: flex; align-items: center; gap: 5px; }
+.context-meta-label {
+  font-size: .65rem; text-transform: uppercase; letter-spacing: .06em;
+  color: #94a3b8; font-weight: 700;
+}
+.context-meta-item span:last-child { font-size: .82rem; color: #475569; font-weight: 600; }
+.context-divider { color: #cbd5e1; font-size: .75rem; }
+
+.context-badges { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.context-badge-level {
+  font-size: .78rem; font-weight: 700; padding: 5px 14px; border-radius: 20px;
+  background: #f3f4f6; color: #374151;
+}
+.context-badge-level.induction  { background: #fef9c3; color: #854d0e; border: 1px solid #fde68a; }
+.context-badge-level.developing { background: #ffedd5; color: #9a3412; border: 1px solid #fdba74; }
+.context-badge-level.proficient { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
+.context-badge-level.lead       { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.context-badge-session {
+  font-size: .78rem; font-weight: 700; padding: 5px 14px; border-radius: 20px;
+  background: #f5f3ff; color: #7c3aed; border: 1px solid #c4b5fd;
+}
+
+.context-bar-right {
+  display: flex; align-items: center; gap: 14px; flex-shrink: 0; margin-left: auto;
+}
+.context-kbd-hints {
+  display: flex; align-items: center; gap: 10px;
+}
+.context-kbd-hints > span {
+  display: flex; align-items: center; gap: 5px;
+  font-size: .7rem; color: #94a3b8;
+}
+.kbd {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-bottom-width: 2px;
+  border-radius: 5px; padding: 2px 7px; font-family: inherit;
+  font-size: .68rem; font-weight: 700; color: #475569;
+}
+.btn-ghost-sm {
+  font-family: inherit; font-size: .78rem; font-weight: 600;
+  color: #7c3aed; background: #f5f3ff; border: 1px solid #c4b5fd;
+  border-radius: 8px; padding: 6px 14px; cursor: pointer; white-space: nowrap;
+  transition: background .15s;
+}
+.btn-ghost-sm:hover { background: #ede9fe; }
+
+/* ── FRAMEWORK TABS BAR ── */
+.fw-tabs-bar {
+  display: flex; gap: 0; border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 20px; overflow-x: auto;
+  background: #fff; border-radius: 12px 12px 0 0;
+  padding: 0 4px;
+}
+
 /* ── FRAMEWORK TABS ── */
 .fw-tab {
   padding: 10px 18px; font-family: inherit; font-size: .85rem; font-weight: 600;
@@ -558,36 +642,35 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div id="scoringPhase" style="display:none;">
 <div class="page-wrap">
 
-  <div id="teacherStrip" style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:12px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-    <div>
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Teacher</div>
-      <div style="font-size:.88rem;font-weight:700;" id="stripTeacher">—</div>
+  <!-- Context bar -->
+  <div id="teacherStrip" class="context-bar">
+    <div class="context-bar-left">
+      <div class="context-avatar" id="stripAvatar">?</div>
+      <div class="context-main">
+        <div class="context-name" id="stripTeacher">—</div>
+        <div class="context-meta-row">
+          <span class="context-meta-item"><span class="context-meta-label">Subject</span><span id="stripSubject">—</span></span>
+          <span class="context-divider">·</span>
+          <span class="context-meta-item"><span class="context-meta-label">Date</span><span id="stripDate">—</span></span>
+        </div>
+      </div>
     </div>
-    <div>
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Level</div>
-      <div id="stripLevel">—</div>
+    <div class="context-badges">
+      <div id="stripLevel" class="context-badge-level">—</div>
+      <div id="stripSession" class="context-badge-session">—</div>
     </div>
-    <div>
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Session</div>
-      <div id="stripSession">—</div>
+    <div class="context-bar-right">
+      <div class="context-kbd-hints">
+        <span title="Press S to save draft"><kbd class="kbd">S</kbd><span>save</span></span>
+        <span title="Press 1–4 to score focused item"><kbd class="kbd">1–4</kbd><span>score</span></span>
+        <span title="Press N for Not Observed"><kbd class="kbd">N</kbd><span>N/O</span></span>
+      </div>
+      <button class="btn-ghost-sm" onclick="backToSetup()">&#x270E; Edit</button>
     </div>
-    <div>
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Subject</div>
-      <div style="font-size:.88rem;font-weight:600;" id="stripSubject">—</div>
-    </div>
-    <div>
-      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;font-weight:700;">Date</div>
-      <div style="font-size:.88rem;" id="stripDate">—</div>
-    </div>
-    <span style="margin-left:auto;font-size:.68rem;color:#94a3b8;display:flex;align-items:center;gap:10px;">
-      <span title="Press S to save draft"><kbd style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;font-family:inherit;font-size:.68rem;">S</kbd> save draft</span>
-      <span title="Press 1–4 to score focused item"><kbd style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;font-family:inherit;font-size:.68rem;">1–4</kbd> score</span>
-      <span title="Press N for Not Observed"><kbd style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:4px;padding:1px 6px;font-family:inherit;font-size:.68rem;">N</kbd> not obs.</span>
-    </span>
-    <button class="btn-secondary" style="font-size:.78rem;padding:5px 14px;" onclick="backToSetup()">&#x270E; Edit Setup</button>
   </div>
 
-  <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;overflow-x:auto;" id="frameworkTabs">
+  <!-- Framework tabs -->
+  <div class="fw-tabs-bar" id="frameworkTabs">
     <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
     <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
     <button class="fw-tab" data-tab="f3" id="tabF3" style="display:none;">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
@@ -1893,14 +1976,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const dateDisplay = sessionMode === 'observation'
       ? document.getElementById('observationDate').value
       : document.getElementById('conferenceDate').value;
-    document.getElementById('stripTeacher').textContent = document.getElementById('teacherName').value.trim();
+    const teacherName = document.getElementById('teacherName').value.trim();
+    document.getElementById('stripTeacher').textContent = teacherName;
     document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
     document.getElementById('stripDate').textContent    = dateDisplay;
-    const lvCap = level.charAt(0).toUpperCase() + level.slice(1);
-    document.getElementById('stripLevel').innerHTML   = `<span class="level-badge ${level}">${lvCap}</span>`;
-    document.getElementById('stripSession').innerHTML = sessionMode === 'observation'
-      ? `<span class="session-badge observation">Observation</span>`
-      : `<span class="session-badge endofyear">End-of-Year</span>`;
+    // Avatar initial
+    const avatarEl = document.getElementById('stripAvatar');
+    avatarEl.textContent = teacherName ? teacherName.trim().charAt(0).toUpperCase() : '?';
+    // Level badge — apply class directly on the element
+    const lvLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level;
+    const lvEl = document.getElementById('stripLevel');
+    lvEl.textContent  = lvLabel;
+    lvEl.className    = `context-badge-level ${level}`;
+    // Session badge
+    const sesEl = document.getElementById('stripSession');
+    sesEl.textContent = sessionMode === 'observation' ? 'Observation' : 'End-of-Year';
+    sesEl.className   = 'context-badge-session';
 
     updateTabCounts();
     if (loadedObsRecord) refreshScoreUI();
