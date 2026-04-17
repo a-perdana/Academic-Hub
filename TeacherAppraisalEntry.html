@@ -18,6 +18,7 @@
 </script>
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
+<script src="schools_compact.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -474,6 +475,10 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 8px;
 }
 .fw-ov-level-sep { color: #cbd5e1; }
+.fw-ov-tip {
+  cursor: pointer; transition: filter .15s, transform .1s;
+}
+.fw-ov-tip:hover { filter: brightness(.93); transform: translateY(-1px); }
 
 /* ── WHO / WHEN BANNER ── */
 .who-banner {
@@ -573,9 +578,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="fw-ov-title" style="color:#4338ca;">Teacher Administration <span class="fw-ov-weight" style="background:#eef2ff;color:#4338ca;">20%</span></div>
             <div class="fw-ov-desc">Checks whether the teacher fulfils their administrative responsibilities: calendar awareness, lesson plans, gradebook, attendance, resource stewardship.</div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-blue">📋 9 items · all levels</span>
-              <span class="fw-ov-chip chip-blue">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-blue">🗓 Observation Session</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-items">📋 9 items · all levels</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-who">👤 Appraiser</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-when">🗓 Observation Session</span>
             </div>
           </div>
         </div>
@@ -587,43 +592,39 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="fw-ov-title" style="color:#7c3aed;">Class Observation <span class="fw-ov-weight" style="background:#f5f3ff;color:#7c3aed;">50%</span></div>
             <div class="fw-ov-desc">Observed live during a formal announced lesson (35–40 min). Covers four domains — item count and complexity increase with appraisal level.</div>
             <div class="fw-ov-domains">
-              <div class="fw-ov-domain-chip" style="border-color:#818cf8;">
+              <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#818cf8;cursor:pointer;" data-tip="d1">
                 <span class="fw-ov-domain-label">D1 · Lesson Planning</span>
-                <span class="fw-ov-domain-items">10 items</span>
-                <span class="fw-ov-domain-level">Induction+</span>
+                <span class="fw-ov-domain-items">10 items · all levels</span>
               </div>
-              <div class="fw-ov-domain-chip" style="border-color:#a78bfa;">
+              <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#a78bfa;cursor:pointer;" data-tip="d2">
                 <span class="fw-ov-domain-label">D2 · Classroom Management</span>
-                <span class="fw-ov-domain-items">8 items</span>
-                <span class="fw-ov-domain-level">Induction+</span>
+                <span class="fw-ov-domain-items">8 items · all levels</span>
               </div>
-              <div class="fw-ov-domain-chip" style="border-color:#c084fc;">
+              <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#c084fc;cursor:pointer;" data-tip="d3">
                 <span class="fw-ov-domain-label">D3 · Instructional Process</span>
-                <span class="fw-ov-domain-items">up to 21 items</span>
-                <span class="fw-ov-domain-level">Induction → Lead</span>
+                <span class="fw-ov-domain-items">9–21 items · level-gated</span>
               </div>
-              <div class="fw-ov-domain-chip" style="border-color:#e879f9;">
+              <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#e879f9;cursor:pointer;" data-tip="d4">
                 <span class="fw-ov-domain-label">D4 · Assessment</span>
-                <span class="fw-ov-domain-items">up to 6 items</span>
-                <span class="fw-ov-domain-level">Induction → Proficient</span>
+                <span class="fw-ov-domain-items">4–6 items · level-gated</span>
               </div>
             </div>
             <div class="fw-ov-level-legend">
-              <span class="fw-ov-level-chip" style="background:#fef9c3;color:#854d0e;">Induction</span>
-              <span style="color:#94a3b8;font-size:.72rem;">sees foundational items only</span>
+              <span class="fw-ov-level-chip fw-ov-tip" style="background:#fef9c3;color:#854d0e;cursor:pointer;" data-tip="lvl-induction">Induction</span>
+              <span style="color:#94a3b8;font-size:.72rem;">foundational items only</span>
               <span class="fw-ov-level-sep">·</span>
-              <span class="fw-ov-level-chip" style="background:#ffedd5;color:#9a3412;">Developing</span>
+              <span class="fw-ov-level-chip fw-ov-tip" style="background:#ffedd5;color:#9a3412;cursor:pointer;" data-tip="lvl-developing">Developing</span>
               <span style="color:#94a3b8;font-size:.72rem;">+ higher-order thinking, variety, values</span>
               <span class="fw-ov-level-sep">·</span>
-              <span class="fw-ov-level-chip" style="background:#dbeafe;color:#1e40af;">Proficient</span>
-              <span style="color:#94a3b8;font-size:.72rem;">+ questioning, content-standard coherence, closure</span>
+              <span class="fw-ov-level-chip fw-ov-tip" style="background:#dbeafe;color:#1e40af;cursor:pointer;" data-tip="lvl-proficient">Proficient</span>
+              <span style="color:#94a3b8;font-size:.72rem;">+ questioning, coherence, closure</span>
               <span class="fw-ov-level-sep">·</span>
-              <span class="fw-ov-level-chip" style="background:#dcfce7;color:#166534;">Lead</span>
-              <span style="color:#94a3b8;font-size:.72rem;">+ persistence, full D3/D4 set</span>
+              <span class="fw-ov-level-chip fw-ov-tip" style="background:#dcfce7;color:#166534;cursor:pointer;" data-tip="lvl-lead">Lead</span>
+              <span style="color:#94a3b8;font-size:.72rem;">+ persistence, full set + F3L</span>
             </div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-purple">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-purple">🗓 Observation Session — scored live in classroom</span>
+              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-who">👤 Appraiser</span>
+              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-when">🗓 Observation Session — scored live in classroom</span>
             </div>
           </div>
         </div>
@@ -635,9 +636,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="fw-ov-title" style="color:#0e7490;">Work Inspection <span class="fw-ov-weight" style="background:#ecfeff;color:#0e7490;">20%</span></div>
             <div class="fw-ov-desc">Professional conduct, responsibilities beyond the classroom, and school community contribution. Lead teachers are assessed on 6 additional leadership items (F3L).</div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-teal">📋 10 items (+ 6 Lead-only leadership items)</span>
-              <span class="fw-ov-chip chip-teal">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-teal">🗓 End-of-Year Conference</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-items">📋 10 items (+ 6 Lead-only)</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-who">👤 Appraiser</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-when">🗓 End-of-Year Conference</span>
             </div>
           </div>
         </div>
@@ -649,9 +650,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="fw-ov-title" style="color:#15803d;">Student Survey <span class="fw-ov-weight" style="background:#f0fdf4;color:#15803d;">10%</span></div>
             <div class="fw-ov-desc">Student perspectives on teaching quality, collected independently during the year. <strong>Students fill the survey — you enter the aggregated results here.</strong></div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-green">📋 17 items · all levels</span>
-              <span class="fw-ov-chip chip-green">🎓 Filled by students</span>
-              <span class="fw-ov-chip chip-green">🗓 Collected independently · enter results anytime</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-items">📋 17 items · all levels</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-who">🎓 Filled by students</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-when">🗓 Collected independently · enter results anytime</span>
             </div>
           </div>
         </div>
@@ -1036,6 +1037,17 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 </div><!-- /scoringPhase -->
 
 <div class="toast" id="toast"></div>
+
+<!-- FRAMEWORK DETAIL POPOVER -->
+<div id="fwPopoverOverlay" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.35);" onclick="closeFwPopover()">
+  <div id="fwPopover" style="position:absolute;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:460px;width:90%;padding:0;overflow:hidden;" onclick="event.stopPropagation()">
+    <div id="fwPopoverHead" style="padding:16px 20px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
+      <div id="fwPopoverTitle" style="font-size:.95rem;font-weight:800;color:#1e293b;"></div>
+      <button onclick="closeFwPopover()" style="background:none;border:none;font-size:1.2rem;color:#94a3b8;cursor:pointer;line-height:1;">×</button>
+    </div>
+    <div id="fwPopoverBody" style="padding:16px 20px;font-size:.83rem;color:#374151;line-height:1.6;max-height:70vh;overflow-y:auto;"></div>
+  </div>
+</div>
 
 <!-- RUBRIC MODAL -->
 <div id="rubricModalOverlay" class="rubric-modal-overlay" style="display:none;" onclick="if(event.target===this)closeRubricModal()">
@@ -1858,7 +1870,213 @@ window.closeRubricModal = function() {
 };
 
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeRubricModal();
+  if (e.key === 'Escape') { closeRubricModal(); closeFwPopover(); }
+});
+
+// ── FRAMEWORK OVERVIEW POPOVER ────────────────────────────
+const FW_TIP_CONTENT = {
+  'f1-items': {
+    title: '📋 F1 — Items',
+    body: `<p>F1 contains <strong>9 items</strong>, all visible at every appraisal level (Induction through Lead).</p>
+      <ol style="padding-left:18px;margin-top:8px;">
+        <li>Knowledge of the School Academic Calendar</li>
+        <li>Annual Plan and Syllabus Preparation</li>
+        <li>Lesson Plan Submission Timeliness</li>
+        <li>Lesson Plan Quality and Format</li>
+        <li>Teaching Schedule Adherence</li>
+        <li>Lesson Journal / Teaching Log</li>
+        <li>Gradebook Accuracy and Currency</li>
+        <li>Student Attendance Recording</li>
+        <li>Coursebook and Resource Stewardship</li>
+      </ol>`
+  },
+  'f1-who': {
+    title: '👤 Who fills F1?',
+    body: `<p>The <strong>Appraiser</strong> fills F1 — this is the academic coordinator or school principal conducting the formal appraisal.</p>
+      <p style="margin-top:8px;">The teacher being appraised does <em>not</em> self-score F1. Evidence is gathered from school records (submission logs, gradebook, attendance system) and direct appraiser observation.</p>`
+  },
+  'f1-when': {
+    title: '🗓 When is F1 scored?',
+    body: `<p>F1 is scored during the <strong>Observation Session</strong> — the formal announced classroom visit. It is typically completed during or immediately after the visit, while records are being reviewed.</p>
+      <p style="margin-top:8px;">F1 scores are saved as part of the Observation record. They are carried forward and locked in the End-of-Year composite.</p>`
+  },
+  'f2-who': {
+    title: '👤 Who fills F2?',
+    body: `<p>The <strong>Appraiser</strong> fills F2 live during the observation lesson. This requires the appraiser to be physically present in the classroom for a minimum of 35 minutes.</p>
+      <p style="margin-top:8px;">Two appraisers are required for Lead-level teachers (joint calibration).</p>`
+  },
+  'f2-when': {
+    title: '🗓 When is F2 scored?',
+    body: `<p>F2 is scored <strong>live in the classroom</strong> during the formal announced lesson (35–40 minutes). The appraiser scores in real time or completes scoring within 30 minutes of the lesson ending.</p>
+      <p style="margin-top:8px;">Scores must not be altered after the post-observation debrief without documented justification.</p>`
+  },
+  'd1': {
+    title: 'D1 · Lesson Planning — 10 items',
+    body: `<p>Evaluates the quality of lesson design before the class. All 10 items are visible at all levels.</p>
+      <ul style="padding-left:18px;margin-top:8px;">
+        <li>Lesson Plan Structure: Layout, Sequencing, Timing</li>
+        <li>Clarity and Measurability of Learning Objectives</li>
+        <li>Content–Objective Alignment</li>
+        <li>Differentiated Planning for Diverse Learners</li>
+        <li>Balance of Individual and Collaborative Activities</li>
+        <li>Selection of Instructional Materials</li>
+        <li>Coherence and Organisational Logic</li>
+        <li>Formative Assessment Planning</li>
+        <li>Accessibility of Content Presentation</li>
+        <li>Interdisciplinary and Cross-Curricular Connections</li>
+      </ul>`
+  },
+  'd2': {
+    title: 'D2 · Classroom Management — 8 items',
+    body: `<p>Evaluates the teacher's creation and maintenance of a productive, orderly learning environment. All 8 items visible at all levels.</p>
+      <ul style="padding-left:18px;margin-top:8px;">
+        <li>Awareness of Classroom Dynamics</li>
+        <li>Establishing a Purposeful Learning Atmosphere</li>
+        <li>Equitable and Respectful Treatment of Students</li>
+        <li>Time Management and Instructional Pace</li>
+        <li>Responsible Use of Classroom Resources</li>
+        <li>Managing Learning Activities and Student Behaviour</li>
+        <li>Smooth and Purposeful Transitions</li>
+        <li>Attendance and Punctuality Management</li>
+      </ul>`
+  },
+  'd3': {
+    title: 'D3 · Instructional Process — up to 21 items',
+    body: `<p>The largest domain. Items are <strong>level-gated</strong> — each item has a minimum level from which it becomes visible:</p>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem;">
+        <tr style="background:#f8fafc;"><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Visible from</th><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Items added</th></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Punctuality & readiness, Learning intentions, Activity–objective alignment, Response distribution, Participation, Concept acquisition, Language of instruction, Monitoring understanding (9 items)</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#ffedd5;color:#9a3412;padding:1px 6px;border-radius:5px;font-weight:700;">Developing</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Higher-order thinking, Teaching strategy variety, Instructional materials, Timely feedback, Lesson progression, Values integration (6 items)</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dbeafe;color:#1e40af;padding:1px 6px;border-radius:5px;font-weight:700;">Proficient</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Class opening, Student performance awareness, Subject-matter coherence, Questioning for critical thinking, Content-standard coherence, Lesson closure (5 items)</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dcfce7;color:#166534;padding:1px 6px;border-radius:5px;font-weight:700;">Lead</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Determination and persistence in student success (1 item)</td></tr>
+      </table>`
+  },
+  'd4': {
+    title: 'D4 · Assessment — up to 6 items',
+    body: `<p>Evaluates assessment design and use of data. Level-gated:</p>
+      <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem;">
+        <tr style="background:#f8fafc;"><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Visible from</th><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Items</th></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Clarity of Assessment Criteria · Appropriateness of Activities · Curriculum Alignment · Records in Edunav (4 items)</td></tr>
+        <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#ffedd5;color:#9a3412;padding:1px 6px;border-radius:5px;font-weight:700;">Developing</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Student Progress Monitoring Over Time (1 item)</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dbeafe;color:#1e40af;padding:1px 6px;border-radius:5px;font-weight:700;">Proficient</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Action Based on Assessment Results (1 item)</td></tr>
+      </table>`
+  },
+  'lvl-induction': {
+    title: '🟡 Induction Level (Year 1–2)',
+    body: `<p>New teachers in their first two years. Scored on <strong>foundational items only</strong> across all domains.</p>
+      <p style="margin-top:8px;">Focus: building core routines — lesson planning basics, classroom presence, administrative compliance, clear learning intentions, equitable participation.</p>
+      <p style="margin-top:8px;">D3: 9 items · D4: 4 items · F3: 5 items</p>`
+  },
+  'lvl-developing': {
+    title: '🟠 Developing Level (Year 3–5 or Predicate C/D)',
+    body: `<p>Teachers who have moved beyond foundational routines but have not yet demonstrated consistent mastery. Also assigned to teachers who scored Predicate C or D in the previous year.</p>
+      <p style="margin-top:8px;">Adds: higher-order thinking, teaching strategy variety, purposeful materials, timely feedback, lesson progression, values integration, progress monitoring, co-curricular contribution, leadership initiative, stakeholder communication.</p>
+      <p style="margin-top:8px;">D3: 15 items · D4: 5 items · F3: 9 items</p>`
+  },
+  'lvl-proficient': {
+    title: '🔵 Proficient Level (Year 5+ and Predicate B+)',
+    body: `<p>Experienced teachers with a consistent track record of effective practice. Requires 5+ years of service and a prior-year predicate of B or above.</p>
+      <p style="margin-top:8px;">Adds: deliberate lesson opening, awareness of student performance patterns, subject-matter depth, higher-order questioning, content-standard coherence, lesson closure, data-informed assessment action.</p>
+      <p style="margin-top:8px;">D3: 20 items · D4: 6 items · F3: 10 items</p>`
+  },
+  'lvl-lead': {
+    title: '🟢 Lead Level (Subject Leader / HoD)',
+    body: `<p>Subject Leaders and Heads of Department. Assessed on the full F2 item set plus 6 additional <strong>F3L Leadership items</strong>.</p>
+      <p style="margin-top:8px;">F3L adds: Subject Expertise & Knowledge Sharing, Coaching & Mentoring, Curriculum Leadership, Data-Informed Departmental Decision Making, Professional Community Building, Strategic Communication with Stakeholders.</p>
+      <p style="margin-top:8px;">D3: 21 items · D4: 6 items · F3: 10 items + F3L: 6 leadership items · Requires two appraisers.</p>`
+  },
+  'f3-items': {
+    title: '📋 F3 — Items',
+    body: `<p>F3 has <strong>10 core items</strong> on professional conduct and responsibilities beyond the classroom. Lead teachers also receive <strong>6 additional F3L leadership items</strong>.</p>
+      <p style="margin-top:8px;"><strong>Core items (all levels):</strong></p>
+      <ul style="padding-left:18px;margin-top:4px;">
+        <li>Work Punctuality and Deadline Adherence</li>
+        <li>Task Performance and Completion</li>
+        <li>Proactive Pursuit of Professional Development</li>
+        <li>Participation in School PD Activities</li>
+        <li>Adherence to the Eduversal Code of Ethics</li>
+        <li>Upholding Student Dignity and Positive Reinforcement</li>
+      </ul>
+      <p style="margin-top:8px;"><strong>Developing+ adds:</strong> Leadership Skills & Initiative, Co-Curricular Contribution, Contribution to School Community, Communication with Stakeholders.</p>
+      <p style="margin-top:8px;"><strong>F3L (Lead only):</strong> Curriculum Leadership, Coaching & Mentoring, Data-Informed Decisions, Professional Community Building, Subject Expertise Sharing, Strategic Communication.</p>`
+  },
+  'f3-who': {
+    title: '👤 Who fills F3?',
+    body: `<p>The <strong>Appraiser</strong> fills F3 — typically the academic coordinator or school principal. Evidence is drawn from school records, observation over the year, and direct appraiser knowledge of the teacher's professional conduct.</p>
+      <p style="margin-top:8px;">F3 is not a self-assessment — the teacher may share evidence but does not score themselves.</p>`
+  },
+  'f3-when': {
+    title: '🗓 When is F3 scored?',
+    body: `<p>F3 is scored at the <strong>End-of-Year Conference</strong> — the formal annual review meeting between appraiser and teacher. This meeting brings together all four framework scores to produce the composite annual predicate.</p>
+      <p style="margin-top:8px;">The conference typically takes place in the final 6 weeks of the academic year. Load the observation record first so F1 and F2 scores are included in the composite.</p>`
+  },
+  'f4-items': {
+    title: '📋 F4 — 17 Survey Items',
+    body: `<p>The Student Survey contains <strong>17 standardised items</strong>, all visible at every appraisal level. Students respond on a 4-point scale: Always · Usually · Sometimes · Rarely.</p>
+      <ol style="padding-left:18px;margin-top:8px;columns:2;column-gap:16px;">
+        <li>Assignments are helpful for my learning</li>
+        <li>The teacher responds to late or incomplete submissions</li>
+        <li>I have the opportunity to ask questions in class</li>
+        <li>The classroom feels safe and comfortable for learning</li>
+        <li>I receive feedback that helps me improve</li>
+        <li>The teacher explains the subject with confidence</li>
+        <li>The teacher answers my questions clearly</li>
+        <li>The teacher reviews previous lessons to help me remember</li>
+        <li>The teacher does not give up on students who are struggling</li>
+        <li>Lessons are interactive and engaging</li>
+        <li>The teacher suggests useful resources for further learning</li>
+        <li>The teacher explains concepts in ways I can understand</li>
+        <li>The teacher helps me prepare for exams effectively</li>
+        <li>I receive feedback on my assignments that helps me improve</li>
+        <li>I understand the criteria by which my work is graded</li>
+        <li>The teacher helps me when I find something difficult</li>
+        <li>The teacher uses practical activities or experiments when appropriate</li>
+      </ol>`
+  },
+  'f4-who': {
+    title: '🎓 Who fills F4?',
+    body: `<p><strong>Students</strong> fill the original survey — not the teacher and not the appraiser. The survey is distributed and collected independently, outside of any appraisal session, to ensure honest responses.</p>
+      <p style="margin-top:8px;">The appraiser enters the <em>aggregated results</em> into this system — the mean score per item from the collected student responses.</p>`
+  },
+  'f4-when': {
+    title: '🗓 When is F4 collected?',
+    body: `<p>Student surveys are collected <strong>independently during the academic year</strong> — typically once per semester or at a set point defined by the school calendar.</p>
+      <p style="margin-top:8px;">The appraiser enters the aggregated scores into this form at any time before finalising the End-of-Year record. F4 contributes <strong>10%</strong> to the composite score.</p>`
+  }
+};
+
+window.openFwPopover = function(tipKey, triggerEl) {
+  const content = FW_TIP_CONTENT[tipKey];
+  if (!content) return;
+  const overlay = document.getElementById('fwPopoverOverlay');
+  const popover = document.getElementById('fwPopover');
+  document.getElementById('fwPopoverTitle').innerHTML = content.title;
+  document.getElementById('fwPopoverBody').innerHTML  = content.body;
+
+  overlay.style.display = 'block';
+
+  // Position near trigger
+  const rect = triggerEl.getBoundingClientRect();
+  const pw = 460;
+  let left = rect.left + window.scrollX;
+  let top  = rect.bottom + window.scrollY + 8;
+  if (left + pw > window.innerWidth - 16) left = window.innerWidth - pw - 16;
+  if (left < 8) left = 8;
+  popover.style.left = left + 'px';
+  popover.style.top  = top  + 'px';
+  popover.style.maxWidth = pw + 'px';
+};
+
+window.closeFwPopover = function() {
+  document.getElementById('fwPopoverOverlay').style.display = 'none';
+};
+
+// Wire up all fw-ov-tip elements
+document.querySelectorAll('.fw-ov-tip').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    openFwPopover(el.dataset.tip, el);
+  });
 });
 
 window.toggleNote = function(itemId) {
@@ -1937,32 +2155,44 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (q.length < 2) { dropdown.style.display = 'none'; return; }
     teacherSearchTimer = setTimeout(async () => {
       try {
-        // Range query on displayName — Firestore prefix search
+        // Search by displayName (full name) — Firestore prefix range query
         const snap = await getDocs(query(
           collection(db, 'users'),
           where('displayName', '>=', q),
-          where('displayName', '<=', q + '\uf8ff')
+          where('displayName', '<=', q + '\uf8ff'),
+          where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
         ));
-        const results = snap.docs.map(d => ({ uid: d.id, ...d.data() }))
-          .filter(u => u.role_academichub); // only AH users
+        const results = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+
+        // Build school lookup map from schools_compact.js SCHOOLS array
+        const schoolMap = {};
+        if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
+
         if (!results.length) {
           dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found</div>`;
         } else {
-          dropdown.innerHTML = results.slice(0,8).map(u => `
-            <div onclick="selectTeacher('${u.uid}','${(u.displayName||'').replace(/'/g,"\\'")}','${(u.appraisal_level||'').replace(/'/g,"\\'")}','${(u.schoolId||u.school||'').replace(/'/g,"\\'")}','${(u.subject||'').replace(/'/g,"\\'")}','${(u.schoolName||u.school_name||'').replace(/'/g,"\\'")}')"
+          dropdown.innerHTML = results.slice(0,8).map(u => {
+            const schoolId   = u.schoolId || u.school || '';
+            const schoolName = schoolMap[schoolId] || schoolId;
+            const safeStr    = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+            return `
+            <div onclick="selectTeacher('${safeStr(u.uid)}','${safeStr(u.displayName)}','${safeStr(u.appraisal_level)}','${safeStr(schoolId)}','${safeStr(u.subject)}','${safeStr(schoolName)}')"
               style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;"
               onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background=''">
-              <div style="width:32px;height:32px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#7c3aed;font-size:.85rem;flex-shrink:0;">
+              <div style="width:36px;height:36px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#7c3aed;font-size:.9rem;flex-shrink:0;">
                 ${(u.displayName||'?')[0].toUpperCase()}
               </div>
               <div>
-                <div style="font-size:.85rem;font-weight:600;color:#1e293b;">${u.displayName||'—'}</div>
-                <div style="font-size:.7rem;color:#94a3b8;">${u.email||''} ${u.appraisal_level ? '· '+u.appraisal_level : ''}</div>
+                <div style="font-size:.88rem;font-weight:700;color:#1e293b;">${u.displayName||'—'}</div>
+                <div style="font-size:.72rem;color:#64748b;margin-top:1px;">
+                  ${schoolName ? schoolName : ''}${u.subject ? ' · ' + u.subject : ''}
+                </div>
               </div>
-            </div>`).join('');
+            </div>`;
+          }).join('');
         }
         dropdown.style.display = 'block';
-      } catch(e) { dropdown.style.display = 'none'; }
+      } catch(e) { console.error(e); dropdown.style.display = 'none'; }
     }, 300);
   };
 
@@ -1972,10 +2202,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     document.getElementById('teacherDropdown').style.display = 'none';
     if (schoolId) {
       document.getElementById('schoolId').value = schoolId;
-      // Show school name: prefer explicit schoolName, else look up in SCHOOL_DATA, else show the ID
-      const displayName = schoolNameParam
-        || (window.SCHOOL_DATA && window.SCHOOL_DATA[schoolId])
-        || schoolId;
+      // Look up full school name from schools_compact.js SCHOOLS array
+      const schoolMap = {};
+      if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
+      const displayName = schoolNameParam || schoolMap[schoolId] || schoolId;
       document.getElementById('schoolName').value = displayName;
     }
     if (subject)  document.getElementById('subject').value  = subject;
