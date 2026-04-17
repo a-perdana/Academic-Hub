@@ -1039,8 +1039,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div class="toast" id="toast"></div>
 
 <!-- FRAMEWORK DETAIL POPOVER -->
-<div id="fwPopoverOverlay" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.35);" onclick="closeFwPopover()">
-  <div id="fwPopover" style="position:absolute;background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:460px;width:90%;padding:0;overflow:hidden;" onclick="event.stopPropagation()">
+<div id="fwPopoverOverlay" style="display:none;position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.35);align-items:center;justify-content:center;" onclick="closeFwPopover()">
+  <div id="fwPopover" style="background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:480px;width:90%;padding:0;overflow:hidden;max-height:85vh;display:flex;flex-direction:column;" onclick="event.stopPropagation()">
     <div id="fwPopoverHead" style="padding:16px 20px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
       <div id="fwPopoverTitle" style="font-size:.95rem;font-weight:800;color:#1e293b;"></div>
       <button onclick="closeFwPopover()" style="background:none;border:none;font-size:1.2rem;color:#94a3b8;cursor:pointer;line-height:1;">×</button>
@@ -2045,26 +2045,12 @@ const FW_TIP_CONTENT = {
   }
 };
 
-window.openFwPopover = function(tipKey, triggerEl) {
+window.openFwPopover = function(tipKey) {
   const content = FW_TIP_CONTENT[tipKey];
   if (!content) return;
-  const overlay = document.getElementById('fwPopoverOverlay');
-  const popover = document.getElementById('fwPopover');
   document.getElementById('fwPopoverTitle').innerHTML = content.title;
   document.getElementById('fwPopoverBody').innerHTML  = content.body;
-
-  overlay.style.display = 'block';
-
-  // Position near trigger
-  const rect = triggerEl.getBoundingClientRect();
-  const pw = 460;
-  let left = rect.left + window.scrollX;
-  let top  = rect.bottom + window.scrollY + 8;
-  if (left + pw > window.innerWidth - 16) left = window.innerWidth - pw - 16;
-  if (left < 8) left = 8;
-  popover.style.left = left + 'px';
-  popover.style.top  = top  + 'px';
-  popover.style.maxWidth = pw + 'px';
+  document.getElementById('fwPopoverOverlay').style.display = 'flex';
 };
 
 window.closeFwPopover = function() {
@@ -2075,7 +2061,7 @@ window.closeFwPopover = function() {
 document.querySelectorAll('.fw-ov-tip').forEach(el => {
   el.addEventListener('click', e => {
     e.stopPropagation();
-    openFwPopover(el.dataset.tip, el);
+    openFwPopover(el.dataset.tip);
   });
 });
 
