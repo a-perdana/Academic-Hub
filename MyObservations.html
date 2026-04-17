@@ -213,6 +213,35 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .empty-state-icon { font-size: 2.5rem; margin-bottom: 12px; }
 .empty-state h3 { font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
 .empty-state p { font-size: .83rem; }
+
+/* ── DISPUTE ── */
+.btn-flag {
+  padding: 5px 12px; border-radius: 8px; font-family: inherit; font-size: .75rem;
+  font-weight: 600; cursor: pointer; background: #fff7ed; color: #c2410c;
+  border: 1.5px solid #fed7aa; transition: background .15s; white-space: nowrap;
+}
+.btn-flag:hover { background: #ffedd5; }
+.btn-flag:disabled { opacity: .45; cursor: default; }
+.pill-disputed { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+.dispute-modal-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+.dispute-notice {
+  background: #fffbeb; border: 1px solid #fde68a; border-radius: 10px;
+  padding: 12px 16px; font-size: .8rem; color: #92400e; line-height: 1.55;
+}
+.dispute-label { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748b; margin-bottom: 5px; }
+.dispute-textarea {
+  width: 100%; border: 1.5px solid #e2e8f0; border-radius: 9px; padding: 10px 14px;
+  font-family: inherit; font-size: .84rem; color: #1e293b; resize: vertical; min-height: 90px;
+  transition: border-color .15s;
+}
+.dispute-textarea:focus { outline: none; border-color: #c2410c; }
+.btn-dispute-submit {
+  padding: 10px 24px; background: #c2410c; color: #fff; border: none;
+  border-radius: 10px; font-family: inherit; font-size: .88rem; font-weight: 700;
+  cursor: pointer; transition: background .15s; align-self: flex-end;
+}
+.btn-dispute-submit:hover { background: #9a3412; }
+.btn-dispute-submit:disabled { opacity: .5; cursor: default; }
 </style>
 </head>
 <body>
@@ -256,6 +285,11 @@ td.action-cell { overflow: visible; white-space: nowrap; }
       <div class="stat-label">Avg Score</div>
       <div class="stat-value" id="statAvg">—</div>
       <div class="stat-sub">composite %</div>
+    </div>
+    <div class="stat-card" id="statDisputedCard" style="display:none;">
+      <div class="stat-label">Disputed</div>
+      <div class="stat-value" id="statDisputed" style="color:#c2410c;">—</div>
+      <div class="stat-sub">awaiting review</div>
     </div>
   </div>
 
@@ -386,13 +420,35 @@ td.action-cell { overflow: visible; white-space: nowrap; }
   </div>
 </div>
 
-<script type="module">
-import { getFirestore, collection, query, where, orderBy, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+<!-- DISPUTE MODAL -->
+<div class="modal-overlay" id="disputeModal">
+  <div class="modal" style="max-width:520px;">
+    <div class="modal-head">
+      <h3>⚑ Flag Appraisal for Review</h3>
+      <button class="modal-close" onclick="closeDisputeModal()">✕</button>
+    </div>
+    <div class="dispute-modal-body">
+      <div class="dispute-notice">
+        Flagging this appraisal will notify your coordinator that you wish to discuss or contest the outcome.
+        This does <strong>not</strong> automatically change your score — it opens a formal review dialogue.
+      </div>
+      <div>
+        <div class="dispute-label">Reason for flagging <span style="color:#dc2626;">*</span></div>
+        <textarea class="dispute-textarea" id="disputeReason" placeholder="Describe your concern clearly — e.g. a specific score you believe is inaccurate, evidence not considered, or a procedural concern."></textarea>
+      </div>
+      <button class="btn-dispute-submit" id="disputeSubmitBtn" onclick="submitDispute()">Submit Flag for Review</button>
+    </div>
+  </div>
+</div>
 
-const FOCI_LABELS = ['Behaviour', 'Questioning', 'Differentiation', 'Assessment', 'Curriculum'];
+<script type="module">
+import { collection, query, where, orderBy, getDocs, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const FOCI_LABELS = ['Learning Intentions', 'Student Engagement', 'Classroom Climate', 'Instructional Strategy', 'Formative Monitoring'];
 
 let allAppraisals = [];
 let allWalkthroughs = [];
+let disputeTargetId = null;
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('my-observations', { user, profile });
@@ -441,10 +497,14 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('walkthroughModal').addEventListener('click', e => {
     if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
   });
+  document.getElementById('disputeModal').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeDisputeModal();
+  });
 });
 
 function updateStats() {
   const finalised = allAppraisals.filter(a => a.status === 'finalised').length;
+  const disputed  = allAppraisals.filter(a => a.disputed && a.disputeStatus === 'open').length;
   const scores = allAppraisals.map(a => a.compositePercent).filter(s => s != null);
   const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : null;
 
@@ -454,6 +514,10 @@ function updateStats() {
   document.getElementById('statAvg').textContent = avg != null ? avg + '%' : '—';
   document.getElementById('tcAppraisals').textContent = allAppraisals.length;
   document.getElementById('tcWalkthroughs').textContent = allWalkthroughs.length;
+  if (disputed > 0) {
+    document.getElementById('statDisputed').textContent = disputed;
+    document.getElementById('statDisputedCard').style.display = '';
+  }
 }
 
 function renderAppraisals() {
@@ -479,8 +543,9 @@ function renderAppraisals() {
   tbody.innerHTML = rows.map(a => {
     const levelKey = a.level?.[0] || 'I';
     const levelLabel = a.level?.split(' ')[0] || '—';
-    const statusClass = `pill-${a.status || 'draft'}`;
-    const statusLabel = (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
+    const isDisputed = a.disputed && a.disputeStatus === 'open';
+    const statusClass = isDisputed ? 'pill-disputed' : `pill-${a.status || 'draft'}`;
+    const statusLabel = isDisputed ? '⚑ Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
 
     const scoreBar = (val) => val != null
       ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${val}%"></div></div><span class="score-pct">${Math.round(val)}%</span></div>`
@@ -489,6 +554,8 @@ function renderAppraisals() {
     const composite = a.compositePercent != null
       ? `<span style="font-weight:700;font-size:.88rem;color:#1e293b;">${Math.round(a.compositePercent)}%</span>`
       : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
+
+    const canFlag = a.status === 'finalised' && !a.disputed;
 
     return `<tr>
       <td style="font-weight:600;">${esc(a.teacherName||'—')}</td>
@@ -504,6 +571,7 @@ function renderAppraisals() {
         ${a.status === 'draft'
           ? `<button class="btn-continue" data-continue-id="${a.id}">Continue</button>`
           : ''}
+        ${canFlag ? `<button class="btn-flag" data-id="${a.id}">⚑ Flag</button>` : ''}
         <button class="btn-view" data-id="${a.id}">View</button>
       </td>
     </tr>`;
@@ -517,6 +585,9 @@ function renderAppraisals() {
       const base = location.pathname.endsWith('.html') ? 'TeacherAppraisalEntry.html' : '/teacher-appraisal-entry';
       window.location.href = base + '?id=' + btn.dataset.continueId;
     });
+  });
+  tbody.querySelectorAll('.btn-flag').forEach(btn => {
+    btn.addEventListener('click', () => openDisputeModal(btn.dataset.id));
   });
 }
 
@@ -540,9 +611,9 @@ function renderWalkthroughs() {
     const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
     const foci = w.fociResponses || {};
     const fociDots = [1,2,3,4,5].map(n => {
-      const val = foci[`w${n}`];
-      const active = val && val !== 'not_observed';
-      return `<span class="foci-dot ${active?'yes':'no'}" title="W${n}: ${FOCI_LABELS[n-1]}"></span>`;
+      const resp = foci[`W${n}`];
+      const active = resp?.code && resp.code !== 'N';
+      return `<span class="foci-dot ${active?'yes':'no'}" title="W${n}: ${FOCI_LABELS[n-1]} (${resp?.code||'N'})"></span>`;
     }).join('');
 
     return `<tr>
@@ -640,12 +711,14 @@ function openWalkthroughModal(id) {
 
   const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
   const foci = w.fociResponses || {};
+  const codeColors = { E: '#15803d', D: '#92400e', N: '#64748b' };
+  const codeLabels = { E: 'Evident', D: 'Developing', N: 'Not Observed' };
   const fociRows = [1,2,3,4,5].map(n => {
-    const val = foci[`w${n}`] || 'not_observed';
-    const label = val.replace(/_/g,' ').replace(/\b\w/g, c => c.toUpperCase());
+    const resp = foci[`W${n}`] || {};
+    const code = resp.code || 'N';
     return `<div class="detail-item">
       <div class="detail-item-label">W${n} — ${FOCI_LABELS[n-1]}</div>
-      <div class="detail-item-value" style="font-size:.8rem;">${label}</div>
+      <div class="detail-item-value" style="font-size:.8rem;color:${codeColors[code]};">${codeLabels[code]}${resp.note ? ` — <span style="color:#475569;font-weight:400;">${esc(resp.note)}</span>` : ''}</div>
     </div>`;
   }).join('');
 
@@ -667,18 +740,62 @@ function openWalkthroughModal(id) {
       <div class="detail-section-title">Foci Responses</div>
       <div class="detail-grid">${fociRows}</div>
     </div>
-    ${w.keyObservation ? `<div class="detail-section">
+    ${(w.narrative?.glow || w.narrative?.grow || w.narrative?.go) ? `<div class="detail-section">
+      <div class="detail-section-title">Observation Narrative</div>
+      ${w.narrative?.glow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">✨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.glow)}</div></div>` : ''}
+      ${w.narrative?.grow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">🌱 Grow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.grow)}</div></div>` : ''}
+      ${w.narrative?.go   ? `<div><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.go)}</div></div>` : ''}
+    </div>` : (w.keyObservation ? `<div class="detail-section">
       <div class="detail-section-title">Key Observation</div>
       <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.keyObservation)}</div>
-    </div>` : ''}
-    ${w.suggestedFocus ? `<div class="detail-section">
-      <div class="detail-section-title">Suggested Focus</div>
-      <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.suggestedFocus)}</div>
-    </div>` : ''}
+      ${w.suggestedFocus ? `<div style="margin-top:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#64748b;margin-bottom:3px;">Suggested Focus</div><div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.suggestedFocus)}</div></div>` : ''}
+    </div>` : '')}
   `;
 
   document.getElementById('walkthroughModal').classList.add('open');
 }
+
+window.openDisputeModal = function(id) {
+  disputeTargetId = id;
+  document.getElementById('disputeReason').value = '';
+  document.getElementById('disputeSubmitBtn').disabled = false;
+  document.getElementById('disputeSubmitBtn').textContent = 'Submit Flag for Review';
+  document.getElementById('disputeModal').classList.add('open');
+};
+
+window.closeDisputeModal = function() {
+  document.getElementById('disputeModal').classList.remove('open');
+  disputeTargetId = null;
+};
+
+window.submitDispute = async function() {
+  const reason = document.getElementById('disputeReason').value.trim();
+  if (!reason) {
+    document.getElementById('disputeReason').focus();
+    return;
+  }
+  const btn = document.getElementById('disputeSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  try {
+    await updateDoc(doc(window.db, 'teacher_appraisals', disputeTargetId), {
+      disputed: true,
+      disputeReason: reason,
+      disputedAt: serverTimestamp(),
+      disputeStatus: 'open',
+    });
+    const a = allAppraisals.find(x => x.id === disputeTargetId);
+    if (a) { a.disputed = true; a.disputeStatus = 'open'; a.disputeReason = reason; }
+    closeDisputeModal();
+    updateStats();
+    renderAppraisals();
+  } catch(e) {
+    console.error(e);
+    btn.disabled = false;
+    btn.textContent = 'Submit Flag for Review';
+    alert('Error submitting — please try again.');
+  }
+};
 
 function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
