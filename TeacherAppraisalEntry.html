@@ -1424,8 +1424,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.lessonTopic)    document.getElementById('lessonTopic').value    = d.lessonTopic;
         if (d.lessonDuration) document.getElementById('lessonDuration').value = d.lessonDuration;
         if (d.level) {
+          // Fill both selects so switching session mode doesn't lose the level
+          document.getElementById('appraisalLevel').value    = d.level;
+          document.getElementById('appraisalLevelEoy').value = d.level;
           const lvField = mode === 'endofyear' ? 'appraisalLevelEoy' : 'appraisalLevel';
-          document.getElementById(lvField).value = d.level;
           document.getElementById(lvField).dispatchEvent(new Event('change'));
         }
         if (d.scores)     Object.assign(scores, d.scores);
@@ -1440,9 +1442,23 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   // Session type selector
   document.querySelectorAll('.session-opt').forEach(opt => {
     opt.addEventListener('click', () => {
+      const prevMode = sessionMode;
       applySessionMode(opt.dataset.mode);
-      loadedObsRecord = null; currentDocId = null;
-      document.getElementById('loadObsStatus').textContent = '';
+
+      // If a record is loaded, carry over level and keep record context
+      if (loadedObsRecord) {
+        const lvl = loadedObsRecord.level;
+        if (lvl) {
+          document.getElementById('appraisalLevel').value    = lvl;
+          document.getElementById('appraisalLevelEoy').value = lvl;
+          document.getElementById('appraisalLevel').dispatchEvent(new Event('change'));
+          document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
+        }
+        // Don't wipe record/docId when switching between modes on same record
+      } else {
+        loadedObsRecord = null; currentDocId = null;
+        document.getElementById('loadObsStatus').textContent = '';
+      }
     });
   });
 
