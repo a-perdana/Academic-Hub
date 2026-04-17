@@ -668,6 +668,57 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   .rubric-modal-overlay, .toast { display: none !important; }
   #printReportArea { display: block !important; }
 }
+
+/* ── SELF-APPRAISAL PANEL ───────────────────────────── */
+.collapsed-body { display: none !important; }
+
+.sa-not-submitted {
+  padding: 16px 0; color: #94a3b8; font-size: .83rem; font-style: italic;
+}
+.sa-meta-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid #f1f5f9;
+}
+.sa-status-pill {
+  font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  background: #f0fdf4; color: #166534; border: 1px solid #86efac;
+}
+.sa-level-pill {
+  font-size: .72rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+  background: #ede9fe; color: #5b21b6; border: 1px solid #c4b5fd;
+}
+.sa-date-text { font-size: .75rem; color: #94a3b8; }
+
+.sa-fw-section { margin-bottom: 18px; }
+.sa-fw-title {
+  font-size: .72rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: #64748b; margin-bottom: 10px;
+}
+.sa-item-grid { display: flex; flex-direction: column; gap: 8px; }
+.sa-item-row {
+  display: grid; grid-template-columns: 60px 1fr auto;
+  align-items: start; gap: 10px;
+  padding: 10px 12px; background: #f8fafc;
+  border: 1px solid #e2e8f0; border-radius: 10px;
+}
+.sa-item-id { font-size: .72rem; font-weight: 800; color: #94a3b8; padding-top: 2px; }
+.sa-item-title { font-size: .82rem; font-weight: 600; color: #334155; }
+.sa-item-evidence { font-size: .75rem; color: #64748b; margin-top: 4px; line-height: 1.5; font-style: italic; }
+.sa-score-col { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.sa-score-badge {
+  font-size: .8rem; font-weight: 800; width: 30px; height: 30px;
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+}
+.sa-s1 { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
+.sa-s2 { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.sa-s3 { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
+.sa-s4 { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.sa-delta {
+  font-size: .65rem; font-weight: 700; padding: 2px 6px; border-radius: 6px; white-space: nowrap;
+}
+.sa-delta-0    { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+.sa-delta-1    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
+.sa-delta-2up  { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
 </style>
 </head>
 <body>
@@ -1209,6 +1260,20 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
               </div>
             </div>
 
+          </div>
+        </div>
+
+        <!-- Teacher Self-Appraisal Panel (shown when teacher has submitted) -->
+        <div class="card" id="selfAppraisalPanel" style="display:none;">
+          <div class="card-head">
+            <div>
+              <h2>&#x1F4CB; Teacher Self-Appraisal</h2>
+              <div class="card-head-sub">Scores submitted by the teacher — compare with your observation ratings below</div>
+            </div>
+            <button class="btn-secondary" style="font-size:.75rem;padding:6px 12px;" onclick="document.getElementById('selfAppraisalBody').classList.toggle('collapsed-body')">Toggle</button>
+          </div>
+          <div id="selfAppraisalBody">
+            <div id="selfAppraisalContent" style="padding:20px 24px;"></div>
           </div>
         </div>
 
@@ -3535,6 +3600,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
     // Fetch previous observation record for follow-up banner
     fetchPreviousRecord(uid);
+    // Fetch teacher self-appraisal (shows panel if submitted)
+    fetchSelfAppraisal(uid);
   };
 
   async function fetchPreviousRecord(uid) {
@@ -3581,6 +3648,99 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         <div style="margin-top:8px;font-size:.75rem;color:#92400e;font-weight:600;">
           &#x1F4AC; You'll be asked to check in on this target in the Review tab before writing today's feedback.
         </div>
+      </div>`;
+  }
+
+  async function fetchSelfAppraisal(uid) {
+    const panel   = document.getElementById('selfAppraisalPanel');
+    const content = document.getElementById('selfAppraisalContent');
+    panel.style.display = 'none';
+    if (!uid) return;
+    try {
+      const now  = new Date();
+      const year = now.getMonth() >= 6
+        ? `${now.getFullYear()}/${now.getFullYear()+1}`
+        : `${now.getFullYear()-1}/${now.getFullYear()}`;
+      const docId   = `${uid}_${year}`;
+      const snap    = await getDoc(doc(db, 'teacher_self_appraisals', docId));
+      if (!snap.exists() || snap.data().status !== 'submitted') return;
+      const data = snap.data();
+      panel.style.display = '';
+      content.innerHTML   = renderSelfAppraisalPanel(data);
+    } catch(e) { console.warn('Self-appraisal fetch failed:', e); }
+  }
+
+  function renderSelfAppraisalPanel(data) {
+    const selfScores = data.scores   || {};
+    const selfEv     = data.evidence || {};
+    const level      = data.level    || 'induction';
+    const submittedTs = data.submittedAt?.toDate?.();
+    const dateStr     = submittedTs
+      ? submittedTs.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+      : '—';
+
+    const LEVEL_ORDER = ['induction','developing','proficient','lead'];
+    const isVis = item => LEVEL_ORDER.indexOf(level) >= LEVEL_ORDER.indexOf(item.visible_from || 'induction');
+
+    const SCORE_LBL = { 1: 'Unsatisf.', 2: 'Basic', 3: 'Proficient', 4: 'Distngshd' };
+
+    function scoreCell(itemId) {
+      const s = selfScores[itemId];
+      if (!s) return '<span style="font-size:.72rem;color:#94a3b8;font-style:italic;">—</span>';
+      const appScore = scores[itemId];
+      let deltaHtml = '';
+      if (appScore) {
+        const d = s - appScore;
+        const cls = d === 0 ? 'sa-delta-0' : Math.abs(d) === 1 ? 'sa-delta-1' : 'sa-delta-2up';
+        const lbl = d === 0 ? 'Match' : (d > 0 ? `+${d}` : `${d}`);
+        deltaHtml = `<span class="sa-delta ${cls}">${lbl}</span>`;
+      }
+      return `<div class="sa-score-col">
+        <div class="sa-score-badge sa-s${s}" title="${SCORE_LBL[s]}">${s}</div>
+        ${deltaHtml}
+      </div>`;
+    }
+
+    function itemRows(items) {
+      return items.filter(isVis).map(item => {
+        const ev = selfEv[item.id] ? `<div class="sa-item-evidence">"${esc(selfEv[item.id])}"</div>` : '';
+        return `<div class="sa-item-row">
+          <div class="sa-item-id">${item.id}</div>
+          <div><div class="sa-item-title">${item.title}</div>${ev}</div>
+          ${scoreCell(item.id)}
+        </div>`;
+      }).join('');
+    }
+
+    if (!FRAMEWORK) return '<div class="sa-not-submitted">Framework not loaded.</div>';
+    const f1 = FRAMEWORK.frameworks.find(f => f.id === 'F1');
+    const f2 = FRAMEWORK.frameworks.find(f => f.id === 'F2');
+    const f3 = FRAMEWORK.frameworks.find(f => f.id === 'F3');
+
+    const f2Sections = f2.domains.map(d => {
+      const rows = itemRows(d.items);
+      if (!rows) return '';
+      return `<div class="sa-fw-section">
+        <div class="sa-fw-title">${d.id} — ${d.title}</div>
+        <div class="sa-item-grid">${rows}</div>
+      </div>`;
+    }).join('');
+
+    return `
+      <div class="sa-meta-row">
+        <span class="sa-status-pill">&#x2713; Submitted</span>
+        <span class="sa-level-pill">${level.charAt(0).toUpperCase()+level.slice(1)}</span>
+        <span class="sa-date-text">${dateStr}</span>
+        <span style="font-size:.73rem;color:#94a3b8;margin-left:auto;">Delta shows teacher score minus your score. Negative = teacher scored themselves lower.</span>
+      </div>
+      <div class="sa-fw-section">
+        <div class="sa-fw-title">F1 — Teacher Administration</div>
+        <div class="sa-item-grid">${itemRows(f1.items)}</div>
+      </div>
+      ${f2Sections}
+      <div class="sa-fw-section">
+        <div class="sa-fw-title">F3 — Professional Conduct &amp; Development</div>
+        <div class="sa-item-grid">${itemRows(f3.items)}</div>
       </div>`;
   }
 
@@ -3676,6 +3836,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           } catch(e) {}
         }
         if (d.teacherUid) fetchPreviousRecord(d.teacherUid);
+        if (d.teacherUid) fetchSelfAppraisal(d.teacherUid);
         loadedObsRecord = d;
         showToast('Draft loaded — continue where you left off.');
       }
