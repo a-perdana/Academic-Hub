@@ -120,15 +120,44 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
   color: #64748b; padding: 8px 24px; background: #f8fafc; border-bottom: 1px solid #f1f5f9;
   display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none;
 }
+.domain-label:hover { background: #f1f5f9; }
+.domain-label .domain-chevron { font-size: .8rem; transition: transform .2s; }
+.domain-label.collapsed .domain-chevron { transform: rotate(-90deg); }
+.domain-body.collapsed { display: none; }
 .domain-progress-text { font-size: .7rem; font-weight: 600; color: #94a3b8; }
 
 /* ── ITEM ROW ── */
 .item-row {
   padding: 16px 24px; border-bottom: 1px solid #f8fafc;
   display: flex; flex-direction: column; gap: 10px;
+  outline: none; transition: background .12s;
 }
 .item-row:last-child { border-bottom: none; }
+.item-row.item-focused { background: #faf5ff !important; box-shadow: inset 3px 0 0 #7c3aed; }
+.item-row.item-done { background: #f0fdf4 !important; }
+.item-row.item-done .item-title-text::after { content: ' ✓'; color: #16a34a; font-size: .75rem; font-weight: 800; }
+
+/* Level colour stripe — left border shows which level introduced the item */
+.item-row.level-induction  { border-left: 4px solid #eab308; }
+.item-row.level-developing { border-left: 4px solid #f97316; }
+.item-row.level-proficient { border-left: 4px solid #3b82f6; }
+.item-row.level-lead       { border-left: 4px solid #16a34a; }
+
+/* Level legend pill on item */
+.level-intro-pill {
+  font-size: .6rem; font-weight: 700; border-radius: 5px; padding: 1px 6px;
+  text-transform: uppercase; letter-spacing: .04em;
+}
+.level-intro-pill.induction  { background: #fef9c3; color: #854d0e; }
+.level-intro-pill.developing { background: #ffedd5; color: #9a3412; }
+.level-intro-pill.proficient { background: #dbeafe; color: #1e40af; }
+.level-intro-pill.lead       { background: #dcfce7; color: #166534; }
+.kbd-hint {
+  font-size: .63rem; color: #a78bfa; background: #ede9fe; border-radius: 5px;
+  padding: 1px 6px; font-weight: 600; letter-spacing: .02em; cursor: default;
+}
 .item-id-badge {
   font-size: .67rem; font-weight: 700; color: #7c3aed; letter-spacing: .04em;
   background: #ede9fe; border-radius: 5px; padding: 1px 7px; white-space: nowrap;
@@ -161,7 +190,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .score-btn-num .dot-4 { background: #16a34a; }
 .score-btn-num .dot-no { background: #94a3b8; }
 .score-btn-label { font-size: .72rem; font-weight: 700; }
-.score-btn-desc { font-size: .68rem; color: #64748b; line-height: 1.4; margin-top: 2px; }
+.score-btn-desc { font-size: .80rem; color: #64748b; line-height: 1.45; margin-top: 2px; }
 
 /* ── ITEM NOTE ── */
 .item-note-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
@@ -300,13 +329,18 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <div class="card-head"><h2>Teacher Information</h2></div>
       <div class="card-body">
         <div class="form-row">
-          <div class="field">
+          <div class="field" style="position:relative;">
             <label>Teacher Name <span style="color:#dc2626">*</span></label>
-            <input type="text" id="teacherName" placeholder="Full name">
+            <input type="text" id="teacherName" placeholder="Type to search teachers…" autocomplete="off"
+              oninput="teacherSearch(this.value)">
+            <div id="teacherDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:999;
+              background:#fff;border:1.5px solid #c4b5fd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);
+              max-height:220px;overflow-y:auto;margin-top:2px;"></div>
           </div>
           <div class="field">
-            <label>Teacher UID (Firestore)</label>
-            <input type="text" id="teacherUid" placeholder="uid from users/{uid}">
+            <label>Teacher UID <span style="font-size:.68rem;color:#94a3b8;font-weight:400;">(auto-filled on select)</span></label>
+            <input type="text" id="teacherUid" placeholder="Auto-filled when teacher selected" readonly
+              style="background:#f8fafc;color:#64748b;cursor:default;">
           </div>
         </div>
         <div class="form-row three">
@@ -605,7 +639,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="score-preview-item"><div class="score-preview-label">F3</div><div class="score-preview-val" id="liveF3">—</div></div>
             <div class="score-preview-item"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
           </div>
-          <div style="margin-top:12px;text-align:center;">
+          <div id="predWrap" style="margin-top:12px;text-align:center;display:none;">
             <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
             <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">—</div>
           </div>
@@ -646,6 +680,41 @@ Promise.all([
   fetch('resources/appraisal-framework-v2.json').then(r=>r.json()),
   fetch('resources/appraisal-levels.json').then(r=>r.json())
 ]).then(([fw, lv]) => { FRAMEWORK = fw; LEVELS = lv; });
+
+// ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
+const LS_KEY = 'appraisal_draft_v2';
+
+function lsSave() {
+  try {
+    const draft = {
+      sessionMode, currentDocId,
+      scores: { ...scores },
+      notes: { ...notes },
+      notObservedItems: [...notObserved],
+      teacherName:   document.getElementById('teacherName')?.value  || '',
+      teacherUid:    document.getElementById('teacherUid')?.value   || '',
+      schoolId:      document.getElementById('schoolId')?.value     || '',
+      subject:       document.getElementById('subject')?.value      || '',
+      academicYear:  document.getElementById('academicYear')?.value || '',
+      level: getLevel(),
+      savedAt: Date.now()
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(draft));
+  } catch(e) { /* quota exceeded — ignore */ }
+}
+
+function lsRestore() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return false;
+    const d = JSON.parse(raw);
+    const age = (Date.now() - (d.savedAt || 0)) / 3600000; // hours
+    if (age > 24) { localStorage.removeItem(LS_KEY); return false; }
+    return d;
+  } catch(e) { return false; }
+}
+
+function lsClear() { localStorage.removeItem(LS_KEY); }
 
 // ── HELPERS ──────────────────────────────────────────────
 function showToast(msg, duration=3500) {
@@ -690,13 +759,25 @@ function buildItemRow(item) {
   </button>`;
 
   const theory = item.theory_basis ? `<div class="item-theory">${item.theory_basis}</div>` : '';
+  const lvFrom = item.visible_from || '';
+  const lvClass = lvFrom ? `level-${lvFrom}` : '';
+  const lvPillLabels = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' };
+  const lvPill = lvFrom
+    ? `<span class="level-intro-pill ${lvFrom}" title="Introduced at ${lvPillLabels[lvFrom]} level">${lvPillLabels[lvFrom]}</span>`
+    : '';
 
-  return `<div class="item-row" id="row-${item.id}">
+  return `<div class="item-row ${lvClass}" id="row-${item.id}" tabindex="0"
+      data-item-id="${item.id}"
+      onkeydown="handleItemKey(event,'${item.id}')"
+      onfocus="this.classList.add('item-focused')"
+      onblur="this.classList.remove('item-focused')">
     <div class="item-header">
       <div>
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">
           <span class="item-id-badge">${item.id}</span>
           <span class="item-title-text">${item.title}</span>
+          ${lvPill}
+          <span class="kbd-hint" title="Keyboard: 1–4 to score, N for Not Observed">⌨ 1–4 / N</span>
         </div>
         ${theory}
       </div>
@@ -718,6 +799,28 @@ function buildF1() {
   document.getElementById('f1Items').innerHTML = fw.items.map(buildItemRow).join('');
 }
 
+function domainSection(id, title, items) {
+  return `
+    <div class="domain-label" onclick="toggleDomain(this)" data-domain="${id}">
+      <span>${title}</span>
+      <span style="display:flex;align-items:center;gap:10px;">
+        <span class="domain-progress-text domain-prog-${id}">${items.length} items</span>
+        <span class="domain-chevron">▾</span>
+      </span>
+    </div>
+    <div class="domain-body" data-domain-body="${id}">
+      ${items.map(buildItemRow).join('')}
+    </div>`;
+}
+
+window.toggleDomain = function(labelEl) {
+  const domainId = labelEl.dataset.domain;
+  const body = document.querySelector(`[data-domain-body="${domainId}"]`);
+  if (!body) return;
+  labelEl.classList.toggle('collapsed');
+  body.classList.toggle('collapsed');
+};
+
 function buildF2(level) {
   if (!FRAMEWORK || !level) return;
   const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
@@ -725,8 +828,7 @@ function buildF2(level) {
   for (const domain of fw.domains) {
     const visible = domain.items.filter(i=>isVisible(i,level));
     if (!visible.length) continue;
-    html += `<div class="domain-label"><span>${domain.id} — ${domain.title}</span><span class="domain-progress-text">${visible.length} items</span></div>`;
-    html += visible.map(buildItemRow).join('');
+    html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible);
   }
   document.getElementById('f2Items').innerHTML = html;
 }
@@ -738,12 +840,10 @@ function buildF3(level) {
   let html = '';
   const visibleF3 = f3fw.items.filter(i=>isVisible(i,level));
   if (visibleF3.length) {
-    html += `<div class="domain-label"><span>Professional Conduct &amp; Responsibilities</span><span class="domain-progress-text">${visibleF3.length} items</span></div>`;
-    html += visibleF3.map(buildItemRow).join('');
+    html += domainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3);
   }
   if (level === 'lead') {
-    html += `<div class="domain-label"><span>F3L — Leadership Responsibilities</span><span class="domain-progress-text">6 items</span></div>`;
-    html += f3Lfw.items.map(buildItemRow).join('');
+    html += domainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items);
     document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) · 20%';
   }
   document.getElementById('f3Items').innerHTML = html;
@@ -752,15 +852,36 @@ function buildF3(level) {
 function buildSurveyInput() {
   if (!FRAMEWORK) return;
   const f4 = FRAMEWORK.frameworks.find(f=>f.id==='F4');
-  const labels = {4:'Always',3:'Usually',2:'Sometimes',1:'Rarely'};
-  document.getElementById('surveyInputArea').innerHTML = f4.items.map(item=>`
-    <div style="display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f8fafc;">
-      <div style="flex:1;font-size:.82rem;color:#374151;">${item.id}. ${item.title}</div>
-      <select style="border:1px solid #e2e8f0;border-radius:7px;padding:4px 8px;font-family:inherit;font-size:.78rem;" id="survey-${item.id}">
-        <option value="">—</option>
-        ${[4,3,2,1].map(v=>`<option value="${v}">${labels[v]}</option>`).join('')}
-      </select>
-    </div>`).join('');
+  const cols = [
+    { val:4, label:'Always',    color:'#16a34a' },
+    { val:3, label:'Usually',   color:'#ca8a04' },
+    { val:2, label:'Sometimes', color:'#f97316' },
+    { val:1, label:'Rarely',    color:'#dc2626' },
+  ];
+  const headerRow = `<tr style="background:#f8fafc;">
+    <th style="text-align:left;padding:8px 12px;font-size:.7rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #e2e8f0;min-width:200px;">Statement</th>
+    ${cols.map(c=>`<th style="text-align:center;padding:8px 14px;font-size:.7rem;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #e2e8f0;white-space:nowrap;">${c.label}</th>`).join('')}
+  </tr>`;
+  const bodyRows = f4.items.map((item, idx) => {
+    const bg = idx % 2 === 0 ? '#fff' : '#f8fafc';
+    const cells = cols.map(c => `
+      <td style="text-align:center;padding:10px 14px;">
+        <label style="cursor:pointer;display:block;">
+          <input type="radio" name="survey-${item.id}" value="${c.val}" id="survey-${item.id}-${c.val}"
+            onchange="document.getElementById('survey-${item.id}').value=this.value"
+            style="accent-color:${c.color};width:16px;height:16px;">
+        </label>
+      </td>`).join('');
+    return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
+      <td style="padding:10px 12px;font-size:.82rem;color:#374151;line-height:1.4;">
+        <span style="font-weight:700;color:#94a3b8;margin-right:6px;">${item.id}.</span>${item.title}
+        <input type="hidden" id="survey-${item.id}" value="">
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+  document.getElementById('surveyInputArea').innerHTML =
+    `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">${headerRow}${bodyRows}</table></div>`;
 }
 
 // Pre-populate score buttons + notes from loaded record (EOY mode)
@@ -790,6 +911,9 @@ function refreshScoreUI() {
     const toggle = document.getElementById(`noteToggle-${itemId}`);
     if (toggle) toggle.textContent = '− Note';
   });
+  // Mark done rows after pre-fill
+  Object.keys(scores).forEach(id => markItemDone(id, true));
+  notObserved.forEach(id => markItemDone(id, true));
   updateLiveScores();
 }
 
@@ -933,12 +1057,20 @@ function updateLiveScores() {
   document.getElementById('liveF2').textContent    = r?.f2!=null      ? r.f2.toFixed(2)        : '—';
   document.getElementById('liveF3').textContent    = r?.f3!=null      ? r.f3.toFixed(2)        : '—';
   document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
-  document.getElementById('livePred').textContent  = r?.predicate || '—';
+  // Predicate only shown when composite is complete (anchoring bias fix)
+  const predWrap = document.getElementById('predWrap');
+  if (r?.isComplete && r.predicate) {
+    document.getElementById('livePred').textContent = r.predicate;
+    predWrap.style.display = 'block';
+  } else {
+    predWrap.style.display = 'none';
+  }
   updateSidebarProgress(level);
   updateF1Progress();
   updateF2Progress(level);
   updateF3Progress(level);
   updateTabCounts();
+  lsSave();
 }
 
 function buildReviewSummary() {
@@ -1073,11 +1205,12 @@ window.selectScore = function(itemId, score) {
       btn.className = btn.classList.contains('no-obs') ? 'score-btn no-obs' : 'score-btn';
       if (btn.dataset.score === 'no') btn.classList.add('selected-no');
     });
-    // Remove required hint — N/O is a valid decision
     const hint = document.getElementById(`noteHint-${itemId}`);
     if (hint) hint.classList.remove('visible');
     document.getElementById(`note-${itemId}`)?.classList.remove('note-warn');
+    markItemDone(itemId, true);
     updateLiveScores();
+    advanceFocus(itemId);
     return;
   }
 
@@ -1090,7 +1223,6 @@ window.selectScore = function(itemId, score) {
     if (parseInt(btn.dataset.score) === s) btn.classList.add(`selected-${s}`);
   });
 
-  // Auto-show note textarea and required hint for low scores (fix #4)
   if (s <= 2) {
     const noteEl = document.getElementById(`note-${itemId}`);
     if (noteEl) { noteEl.classList.add('visible'); checkNoteWarn(itemId); }
@@ -1104,7 +1236,38 @@ window.selectScore = function(itemId, score) {
     document.getElementById(`note-${itemId}`)?.classList.remove('note-warn');
   }
 
+  markItemDone(itemId, true);
   updateLiveScores();
+  if (s > 2) advanceFocus(itemId); // skip auto-advance for low scores so user can add note
+};
+
+function markItemDone(itemId, done) {
+  const row = document.getElementById(`row-${itemId}`);
+  if (row) row.classList.toggle('item-done', done);
+}
+
+function advanceFocus(itemId) {
+  const allRows = [...document.querySelectorAll('.item-row[tabindex="0"]')];
+  const idx = allRows.findIndex(r => r.id === `row-${itemId}`);
+  if (idx >= 0 && idx < allRows.length - 1) allRows[idx + 1].focus();
+}
+
+window.handleItemKey = function(e, itemId) {
+  if (['1','2','3','4'].includes(e.key)) {
+    e.preventDefault();
+    selectScore(itemId, parseInt(e.key));
+  } else if (e.key === 'n' || e.key === 'N') {
+    e.preventDefault();
+    selectScore(itemId, 'no');
+  } else if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    advanceFocus(itemId);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    const allRows = [...document.querySelectorAll('.item-row[tabindex="0"]')];
+    const idx = allRows.findIndex(r => r.id === `row-${itemId}`);
+    if (idx > 0) allRows[idx - 1].focus();
+  }
 };
 
 window.toggleNote = function(itemId) {
@@ -1131,6 +1294,103 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('observationDate').value = today;
   document.getElementById('conferenceDate').value  = today;
+
+  // Restore localStorage draft if exists
+  const savedDraft = lsRestore();
+  if (savedDraft) {
+    const age = Math.round((Date.now() - savedDraft.savedAt) / 60000);
+    const banner = document.createElement('div');
+    banner.style.cssText = 'margin:16px 32px 0;padding:12px 18px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.82rem;color:#92400e;display:flex;align-items:center;justify-content:space-between;gap:12px;';
+    banner.innerHTML = `<span>&#x1F4BE; Unsaved draft found (${age} min ago) — <strong>${savedDraft.teacherName || 'unnamed teacher'}</strong></span>
+      <span style="display:flex;gap:8px;">
+        <button onclick="restoreDraft()" style="padding:4px 14px;background:#ca8a04;color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;">Restore</button>
+        <button onclick="this.closest('div').remove();lsClear();" style="padding:4px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:7px;font-family:inherit;font-size:.8rem;cursor:pointer;">Discard</button>
+      </span>`;
+    document.getElementById('setupPhase').prepend(banner);
+  }
+
+  window.restoreDraft = function() {
+    const d = lsRestore();
+    if (!d) return;
+    applySessionMode(d.sessionMode || 'observation');
+    if (d.teacherName) document.getElementById('teacherName').value = d.teacherName;
+    if (d.teacherUid)  document.getElementById('teacherUid').value  = d.teacherUid;
+    if (d.schoolId)    document.getElementById('schoolId').value    = d.schoolId;
+    if (d.subject)     document.getElementById('subject').value     = d.subject;
+    if (d.academicYear) {
+      document.getElementById('academicYear').value = d.academicYear;
+    }
+    if (d.level) {
+      const lvField = d.sessionMode === 'endofyear' ? 'appraisalLevelEoy' : 'appraisalLevel';
+      document.getElementById(lvField).value = d.level;
+      document.getElementById(lvField).dispatchEvent(new Event('change'));
+    }
+    if (d.scores) Object.assign(scores, d.scores);
+    if (d.notes)  Object.assign(notes,  d.notes);
+    if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+    if (d.currentDocId) currentDocId = d.currentDocId;
+    document.querySelector('[data-draft-banner]')?.remove();
+    document.querySelectorAll('[style*="fefce8"]').forEach(el => el.remove());
+    showToast('Draft restored — continue where you left off.');
+  };
+
+  // ── TEACHER AUTOCOMPLETE ─────────────────────────────────
+  let teacherSearchTimer = null;
+  window.teacherSearch = async function(val) {
+    const dropdown = document.getElementById('teacherDropdown');
+    clearTimeout(teacherSearchTimer);
+    const q = val.trim();
+    if (q.length < 2) { dropdown.style.display = 'none'; return; }
+    teacherSearchTimer = setTimeout(async () => {
+      try {
+        // Range query on displayName — Firestore prefix search
+        const snap = await getDocs(query(
+          collection(db, 'users'),
+          where('displayName', '>=', q),
+          where('displayName', '<=', q + '\uf8ff')
+        ));
+        const results = snap.docs.map(d => ({ uid: d.id, ...d.data() }))
+          .filter(u => u.role_academichub); // only AH users
+        if (!results.length) {
+          dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found</div>`;
+        } else {
+          dropdown.innerHTML = results.slice(0,8).map(u => `
+            <div onclick="selectTeacher('${u.uid}','${(u.displayName||'').replace(/'/g,"\\'")}','${(u.appraisal_level||'').replace(/'/g,"\\'")}','${(u.schoolId||u.school||'').replace(/'/g,"\\'")}','${(u.subject||'').replace(/'/g,"\\'")}')"
+              style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;"
+              onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background=''">
+              <div style="width:32px;height:32px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#7c3aed;font-size:.85rem;flex-shrink:0;">
+                ${(u.displayName||'?')[0].toUpperCase()}
+              </div>
+              <div>
+                <div style="font-size:.85rem;font-weight:600;color:#1e293b;">${u.displayName||'—'}</div>
+                <div style="font-size:.7rem;color:#94a3b8;">${u.email||''} ${u.appraisal_level ? '· '+u.appraisal_level : ''}</div>
+              </div>
+            </div>`).join('');
+        }
+        dropdown.style.display = 'block';
+      } catch(e) { dropdown.style.display = 'none'; }
+    }, 300);
+  };
+
+  window.selectTeacher = function(uid, name, level, school, subject) {
+    document.getElementById('teacherName').value = name;
+    document.getElementById('teacherUid').value  = uid;
+    document.getElementById('teacherDropdown').style.display = 'none';
+    if (school)   document.getElementById('schoolId').value = school;
+    if (subject)  document.getElementById('subject').value  = subject;
+    if (level) {
+      document.getElementById('appraisalLevel').value    = level;
+      document.getElementById('appraisalLevelEoy').value = level;
+      document.getElementById('appraisalLevel').dispatchEvent(new Event('change'));
+      document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
+      showToast(`${name} seçildi — level: ${level}`);
+    }
+  };
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#teacherDropdown') && e.target.id !== 'teacherName')
+      document.getElementById('teacherDropdown').style.display = 'none';
+  });
 
   // Load existing draft via ?id= URL param
   const urlId = new URLSearchParams(location.search).get('id');
@@ -1184,27 +1444,6 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       loadedObsRecord = null; currentDocId = null;
       document.getElementById('loadObsStatus').textContent = '';
     });
-  });
-
-  // Teacher UID blur → auto-fill from Firestore
-  document.getElementById('teacherUid').addEventListener('blur', async () => {
-    const uid = document.getElementById('teacherUid').value.trim();
-    if (!uid) return;
-    try {
-      const snap = await getDoc(doc(db, 'users', uid));
-      if (!snap.exists()) { showToast('No user found for this UID.'); return; }
-      const data = snap.data();
-      const nameInput = document.getElementById('teacherName');
-      if (!nameInput.value && (data.displayName || data.name))
-        nameInput.value = data.displayName || data.name;
-      if (data.appraisal_level) {
-        document.getElementById('appraisalLevel').value    = data.appraisal_level;
-        document.getElementById('appraisalLevelEoy').value = data.appraisal_level;
-        document.getElementById('appraisalLevel').dispatchEvent(new Event('change'));
-        document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
-        showToast(`Level auto-filled: ${data.appraisal_level}`);
-      }
-    } catch(e) { console.warn('Could not fetch teacher profile:', e); }
   });
 
   // Level change handlers
@@ -1456,6 +1695,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         showToast(status==='finalised' ? 'Annual record finalised.' : 'F3 draft saved.');
       }
       document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
+      lsClear();
     } catch(e) {
       showToast('Error saving — check console.'); console.error(e);
     }
