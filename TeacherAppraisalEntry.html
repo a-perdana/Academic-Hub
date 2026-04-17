@@ -797,12 +797,6 @@ window.toggleNote = function(itemId) {
 
 // ── AUTH READY ────────────────────────────────────────────
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
-  const isAdmin = profile?.role_academichub === 'academic_admin';
-  if (!isAdmin) {
-    document.getElementById('setupPhase').innerHTML = '<div style="padding:40px;text-align:center;color:#64748b;">Access restricted to academic administrators.</div>';
-    return;
-  }
-
   window.__loadAcademicNavbar('teacher-appraisal-entry', { user, profile });
 
   const db = window.db;
