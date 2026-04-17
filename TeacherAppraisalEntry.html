@@ -546,28 +546,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 <div id="setupPhase">
   <div style="max-width:1200px;margin:0 auto;padding:28px 32px 80px;">
 
-    <div class="card">
-      <div class="card-head"><h2>Session Type</h2><div class="card-head-sub">Select which part of the appraisal you are recording</div></div>
-      <div class="card-body">
-        <div class="session-opts">
-          <div class="session-opt active" data-mode="observation" id="optObservation">
-            <div class="session-opt-icon">&#x1F4CB;</div>
-            <div class="session-opt-title">Observation Session</div>
-            <div class="session-opt-desc">Score F1 Administration and F2 Class Observation. Conducted during a live classroom visit.</div>
-          </div>
-          <div class="session-opt" data-mode="endofyear" id="optEndOfYear">
-            <div class="session-opt-icon">&#x1F4CA;</div>
-            <div class="session-opt-title">End-of-Year Conference</div>
-            <div class="session-opt-desc">Score F3 Work Inspection — completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Framework Overview -->
     <div class="card" id="frameworkOverviewCard">
-      <div class="card-head">
+      <div class="card-head" style="cursor:pointer;user-select:none;" onclick="toggleFwOverview()">
         <div><h2>Framework Overview</h2><div class="card-head-sub">What you will be scoring — weights, who fills each section, and when</div></div>
+        <span id="fwOverviewToggleBtn" style="font-size:.78rem;font-weight:600;color:#7c3aed;display:flex;align-items:center;gap:5px;white-space:nowrap;">
+          <span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;">▲</span> Hide
+        </span>
       </div>
       <div class="card-body" style="padding:0;">
 
@@ -657,6 +642,24 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Session Type</h2><div class="card-head-sub">Select which part of the appraisal you are recording</div></div>
+      <div class="card-body">
+        <div class="session-opts">
+          <div class="session-opt active" data-mode="observation" id="optObservation">
+            <div class="session-opt-icon">&#x1F4CB;</div>
+            <div class="session-opt-title">Observation Session</div>
+            <div class="session-opt-desc">Score F1 Administration and F2 Class Observation. Conducted during a live classroom visit.</div>
+          </div>
+          <div class="session-opt" data-mode="endofyear" id="optEndOfYear">
+            <div class="session-opt-icon">&#x1F4CA;</div>
+            <div class="session-opt-title">End-of-Year Conference</div>
+            <div class="session-opt-desc">Score F3 Work Inspection — completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -2056,6 +2059,29 @@ window.openFwPopover = function(tipKey) {
 window.closeFwPopover = function() {
   document.getElementById('fwPopoverOverlay').style.display = 'none';
 };
+
+// ── FRAMEWORK OVERVIEW TOGGLE ────────────────────────────
+(function() {
+  const LS_KEY = 'fw_overview_hidden';
+  const body   = document.querySelector('#frameworkOverviewCard .card-body');
+  const chevron = document.getElementById('fwOverviewChevron');
+  const btn     = document.getElementById('fwOverviewToggleBtn');
+
+  function setVisible(visible, save) {
+    body.style.display   = visible ? '' : 'none';
+    chevron.style.transform = visible ? '' : 'rotate(180deg)';
+    btn.innerHTML = `<span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;transform:${visible ? '' : 'rotate(180deg)'}">${visible ? '▲' : '▼'}</span> ${visible ? 'Hide' : 'Show'}`;
+    if (save) localStorage.setItem(LS_KEY, visible ? '0' : '1');
+  }
+
+  // Restore preference
+  setVisible(localStorage.getItem(LS_KEY) !== '1', false);
+
+  window.toggleFwOverview = function() {
+    const isVisible = body.style.display !== 'none';
+    setVisible(!isVisible, true);
+  };
+})();
 
 // Wire up all fw-ov-tip elements
 document.querySelectorAll('.fw-ov-tip').forEach(el => {
