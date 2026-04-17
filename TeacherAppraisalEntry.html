@@ -2000,6 +2000,7 @@ function applySessionMode(mode) {
 // ── TAB NAVIGATION ────────────────────────────────────────
 const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', f4:'panelF4', review:'panelReview' };
 
+let autoSaveTimer = null;
 function switchTab(tab) {
   if (tab === 'f3' && sessionMode === 'observation') tab = 'review';
   Object.entries(TAB_PANELS).forEach(([t, panelId]) => {
@@ -2016,6 +2017,11 @@ function switchTab(tab) {
     renderFollowUpCheckIn();
   }
   window.scrollTo({top:0,behavior:'smooth'});
+  // Auto-save draft to Firestore on tab switch if there are any scores
+  if (Object.keys(scores).length > 0 && getLevel() && typeof window.saveAppraisal === 'function') {
+    clearTimeout(autoSaveTimer);
+    autoSaveTimer = setTimeout(() => window.saveAppraisal('draft', sessionMode === 'endofyear', true), 800);
+  }
 }
 
 // ── COACHING QUESTIONS ─────────────────────────────────────
@@ -2969,7 +2975,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   });
 
   // ── SAVE ─────────────────────────────────────────────────
-  async function saveAppraisal(status, isEoy) {
+  async function saveAppraisal(status, isEoy, silent = false) {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
     if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     const level = getLevel();
@@ -3049,7 +3055,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           const ref = await addDoc(collection(db,'teacher_appraisals'), payload);
           currentDocId = ref.id;
         }
-        showToast(status==='shared' ? 'Observation shared with teacher.' : 'Draft saved.');
+        if (!silent) showToast(status==='shared' ? 'Observation shared with teacher.' : 'Draft saved.');
 
       } else {
         // ── End-of-Year Conference ─────────────────────────
@@ -3106,14 +3112,16 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           });
           currentDocId = ref.id;
         }
-        showToast(status==='finalised' ? 'Annual record finalised.' : 'F3 draft saved.');
+        if (!silent) showToast(status==='finalised' ? 'Annual record finalised.' : 'F3 draft saved.');
       }
-      document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
+      if (!silent) document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
       lsClear();
     } catch(e) {
       showToast('Error saving — check console.'); console.error(e);
     }
   }
+
+  window.saveAppraisal = saveAppraisal;
 
   document.getElementById('saveDraftBtn').addEventListener('click',    () => saveAppraisal('draft',     false));
   document.getElementById('shareBtn').addEventListener('click',        () => saveAppraisal('shared',    false));
