@@ -129,35 +129,6 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .vignette-text p { margin-bottom: 10px; }
 .vignette-text p:last-child { margin-bottom: 0; }
 
-/* Video embed */
-.video-wrap {
-  position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-  border-radius: 12px; background: #0f172a; margin-bottom: 16px;
-}
-.video-wrap iframe {
-  position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 12px;
-}
-.video-note {
-  font-size: .78rem; color: #64748b; line-height: 1.5;
-  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
-  padding: 10px 14px; margin-bottom: 20px;
-}
-.video-channel {
-  font-size: .7rem; font-weight: 700; color: #94a3b8;
-  text-transform: uppercase; letter-spacing: .05em; margin-bottom: 6px;
-}
-.video-observe-prompt {
-  font-size: .83rem; font-weight: 600; color: #1e3a5f; margin-bottom: 6px;
-}
-.video-focus-list { list-style: none; padding: 0; }
-.video-focus-list li {
-  font-size: .8rem; color: #475569; padding: 3px 0 3px 18px;
-  position: relative;
-}
-.video-focus-list li::before {
-  content: '→'; position: absolute; left: 0; color: #93c5fd; font-weight: 700;
-}
-
 /* Rubric anchors */
 .rubric-anchor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
 .anchor-card {
@@ -395,7 +366,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   <div class="hero-inner">
     <div class="hero-badge">&#x1F3AF; Appraiser Calibration</div>
     <h1>Inter-Rater Reliability<br>Calibration Session</h1>
-    <div class="hero-sub">Score each lesson vignette (and optional video), compare with expert consensus, and track your calibration status. Complete all scenarios before conducting formal appraisals.</div>
+    <div class="hero-sub">Score each lesson vignette independently, compare with expert consensus, and track your calibration status. Complete all scenarios before conducting formal appraisals.</div>
     <div class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</div>
   </div>
 </div>
@@ -563,16 +534,6 @@ const SCENARIOS = [
     title: 'Grade 10 Mathematics — Quadratic Functions',
     level: 'developing',
     items: ['D3.3','D3.4','D2.4'],
-    video: {
-      youtubeId: 'Nw4R3HwwiUY',
-      channel: 'FCOE Teacher Induction',
-      note: 'Watch the first 8 minutes. Focus on how the teacher opens the lesson and manages independent work time.',
-      focusPoints: [
-        'Is the learning objective stated verbally? When?',
-        'How closely do the tasks match the stated goal?',
-        'What is the teacher doing during student work time?'
-      ]
-    },
     vignette: [
       'The observer enters at 08:14, two minutes after the bell. The teacher is writing the lesson topic on the whiteboard — "Quadratic Functions: Vertex Form" — while students settle. At 08:16 the teacher says, "Today we\'re looking at vertex form. Open to page 84." No learning objective is stated verbally. A handwritten objective is visible on the side whiteboard: "Students will convert standard form to vertex form." It remains posted for the entire lesson but is not referred to again.',
       'The teacher demonstrates three worked examples on the board, narrating each step. Students copy. At 08:34 the teacher distributes a worksheet and says "complete questions 1 to 8." During independent work (18 minutes) the teacher sits at the desk and marks homework. At 08:49 the teacher calls time and reviews Q1 and Q2 from the front. The lesson ends without a closure activity. Two students in the back row are off-task for most of the independent phase — the teacher does not notice.'
@@ -589,16 +550,6 @@ const SCENARIOS = [
     title: 'Grade 7 English — Descriptive Writing',
     level: 'induction',
     items: ['D3.3','D2.1','D3.13'],
-    video: {
-      youtubeId: 'ERIwByt4xc0',
-      channel: 'FCOE Teacher Induction',
-      note: 'Watch the full video. Pay close attention to how the teacher communicates expectations and manages participation.',
-      focusPoints: [
-        'How does the teacher communicate the learning goal?',
-        'How does the teacher respond to off-task behaviour?',
-        'Is there a visible I-Do / We-Do / You-Do sequence?'
-      ]
-    },
     vignette: [
       'The observer enters at 10:02. The teacher is already at the door greeting students as they arrive. The projector displays: "Learning Goal: I can use sensory language to describe a setting. Success criteria: I have used at least 3 senses; my description creates a clear picture." The teacher refers to the slide verbally: "Before we start, let\'s read our goal together." Students read it aloud as a class.',
       'The teacher opens with a 4-minute paired activity — students describe a photo of a rainforest to each other using only one sense at a time. Feedback is gathered via mini-whiteboards. The teacher scans the room continuously, circulating every 2–3 minutes, and twice redirects off-task students by proximity before any disruption escalates. At 10:28 the teacher pauses the class: "Mini-whiteboards out — write one sentence using smell." She scans results, identifies a common gap, and re-explains the technique to three students. The lesson closes with students reading one sentence aloud and the teacher linking back to the success criteria on the projector.'
@@ -615,16 +566,6 @@ const SCENARIOS = [
     title: 'Grade 9 Biology — Cell Division',
     level: 'proficient',
     items: ['D3.5','D3.19','D1.8'],
-    video: {
-      youtubeId: 'g9kyl_WPFhU',
-      channel: 'FCOE Teacher Induction',
-      note: 'This is a secondary science lesson. Watch for the quality of teacher questioning and how understanding is assessed.',
-      focusPoints: [
-        'What level of thinking do teacher questions demand (recall vs. analysis)?',
-        'How does the teacher check for understanding — when, how often, and how?',
-        'Is formative assessment embedded throughout or only at the end?'
-      ]
-    },
     vignette: [
       'The observer enters at 13:05, lesson already underway. Students are in groups of four, each group assigned a phase of mitosis (prophase, metaphase, anaphase, telophase). Groups are building a physical model using pipe cleaners and card. The teacher moves between groups, asking: "What would happen if the spindle fibres failed here?" and "How would this phase differ in a plant cell?"',
       'At 13:22 the teacher calls the class together. Each group presents their model. During presentations the teacher poses follow-up questions to the audience, not just the presenters: "Do you agree with their interpretation of cytokinesis?" At 13:38 the teacher asks students to write a 3-sentence "exit explanation" answering: "Why does cell division require chromosome duplication first?" — collected before students leave. No review of prior learning at the lesson\'s start was observed. Teacher does not circulate during the initial 8-minute independent model-building phase.'
@@ -641,16 +582,6 @@ const SCENARIOS = [
     title: 'Grade 5 Mathematics — Fractions on a Number Line',
     level: 'induction',
     items: ['D3.13','D3.10','D3.7'],
-    video: {
-      youtubeId: 'D2o6MDpL1v0',
-      channel: 'FCOE Teacher Induction — K Math',
-      note: 'This is an early primary lesson. Observe the scaffolding sequence and the quality of feedback during student practice.',
-      focusPoints: [
-        'How does the teacher model before releasing students?',
-        'Are students actively engaged or passive?',
-        'What feedback does the teacher give — evaluative ("good") or specific and actionable?'
-      ]
-    },
     vignette: [
       'The observer enters at 09:05. The teacher writes "3/4" on the board and asks, "Who can tell me what this means?" One student answers correctly. The teacher says "Good" and moves immediately to distributing worksheets. No physical model or visual representation is used. Students work individually for 22 minutes; the teacher circulates briefly in the first 5 minutes then returns to the front.',
       'At 09:34, the teacher reviews the answers: "Number 1 — who got ¼?" Hands go up. "Good, it\'s the point halfway between 0 and ½." No explanation of why is offered. A student says, "But I put it on the ½ mark." The teacher replies, "That\'s wrong — the answer is ¼, not ½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems — the teacher does not return to them.'
@@ -667,16 +598,6 @@ const SCENARIOS = [
     title: 'Grade 11 Chemistry — Equilibrium and Le Chatelier\'s Principle',
     level: 'lead',
     items: ['D3.5','D3.3','D1.3'],
-    video: {
-      youtubeId: 'SuPb32ErPF8',
-      channel: 'FCOE Teacher Induction — Upper Primary',
-      note: 'Watch how the teacher opens the lesson and differentiates for different learners.',
-      focusPoints: [
-        'How explicitly is the lesson objective communicated?',
-        'Are questions consistently demanding higher-order thinking?',
-        'Is there evidence the teacher knows individual student needs?'
-      ]
-    },
     vignette: [
       'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress — and by the end you\'ll be able to design an industrial process that maximises yield."',
       'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early — these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task — watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
@@ -693,16 +614,6 @@ const SCENARIOS = [
     title: 'Grade 8 History — Causes of World War I',
     level: 'developing',
     items: ['D2.3','D3.10','D3.19'],
-    video: {
-      youtubeId: 'tl8IwYRnBqM',
-      channel: 'FCOE Teacher Induction',
-      note: 'Focus on the classroom climate and how students are responding to the teacher and each other.',
-      focusPoints: [
-        'How does the teacher respond when students give wrong answers?',
-        'Are students willing to volunteer and take risks?',
-        'How engaged are students — cognitively or just behaviourally?'
-      ]
-    },
     vignette: [
       'The observer enters at 14:00. The teacher is reading from printed notes at the front. He pauses occasionally to ask recall questions: "Who was assassinated in Sarajevo?" One student answers correctly. Another student answers a different question incorrectly: "That\'s not right — we covered this last week. Were you paying attention?" The student lowers his head and does not volunteer again for the rest of the lesson.',
       'At 14:25 the teacher puts students into pairs to discuss the MAIN acronym (Militarism, Alliances, Imperialism, Nationalism). The room becomes louder. The teacher waits at the front rather than circulating. At 14:35 he calls for quiet and asks, "Does everyone understand?" The class is silent. He says, "Good, we\'ll pick this up next lesson." No formative check was conducted. Three students were observed reading an unrelated book during the teacher\'s lecture phase.'
@@ -719,16 +630,6 @@ const SCENARIOS = [
     title: 'Grade 6 Science — Properties of Materials',
     level: 'proficient',
     items: ['D3.13','D2.4','D1.8'],
-    video: {
-      youtubeId: 'f3--wV4MjOI',
-      channel: 'FCOE Teacher Induction',
-      note: 'Observe how the teacher structures the lesson sequence and uses time.',
-      focusPoints: [
-        'Is there a clear scaffold from modelling to independent work?',
-        'How efficiently does the teacher use lesson time?',
-        'What formative assessment strategies are used and when?'
-      ]
-    },
     vignette: [
       'The observer enters at 08:58. The lesson is already 3 minutes in. The teacher is demonstrating a sorting activity at the visualiser: "I\'m going to sort these materials by conductivity. Watch what I do — I\'m asking myself: does this let electricity flow?" She sorts three materials aloud, narrating her thinking. She then passes a set of materials to pairs: "Your turn — sort your set and be ready to justify one decision." Pairs work for 6 minutes; the teacher circulates continuously, asking "What\'s your evidence for that?" rather than confirming answers.',
       'At 09:12 the teacher brings the class together using a clap-call signal. Transitions take under 30 seconds. Each pair reports one decision; the teacher records answers on a class T-chart. At 09:22 the teacher distributes an independent investigation sheet. Students work individually. At 09:38 the teacher collects the sheets as an exit check. Two students have only completed 2 of 5 questions — the teacher notes their names for follow-up but does not intervene during the lesson. The lesson ends precisely on time.'
@@ -745,16 +646,6 @@ const SCENARIOS = [
     title: 'Grade 10 English Literature — The Great Gatsby',
     level: 'lead',
     items: ['D3.7','D2.3','D3.5'],
-    video: {
-      youtubeId: '2bhOoV0DQtU',
-      channel: 'Teacher Professional Development',
-      note: 'Focus on the quality of teacher-student dialogue and how the teacher handles student responses.',
-      focusPoints: [
-        'How specific and actionable is teacher feedback during discussion?',
-        'Does the classroom climate encourage students to take intellectual risks?',
-        'Are students thinking beyond the literal — analysing, evaluating, connecting?'
-      ]
-    },
     vignette: [
       'The observer enters at 10:05. A student is mid-sentence: "…so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move — \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far — write that sentence down verbatim. You\'ll want it in your essay. What do others think — fake, or aspirational but unattainable?"',
       'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that — it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim — try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
@@ -866,24 +757,6 @@ function renderScenario(idx) {
       </div>`;
   }).join('');
 
-  const videoHtml = sc.video ? `
-    <div class="tab-pane active" id="tab-video-${idx}">
-      <div class="card-body">
-        <div class="video-channel">${sc.video.channel}</div>
-        <div class="video-wrap">
-          <iframe src="https://www.youtube.com/embed/${sc.video.youtubeId}?rel=0&modestbranding=1"
-            allowfullscreen loading="lazy" title="Classroom observation video"></iframe>
-        </div>
-        <div class="video-note">
-          <div class="video-observe-prompt">While watching, consider:</div>
-          <ul class="video-focus-list">
-            ${sc.video.focusPoints.map(p => `<li>${p}</li>`).join('')}
-          </ul>
-          <div style="margin-top:8px;font-size:.75rem;color:#94a3b8;">${sc.video.note}</div>
-        </div>
-      </div>
-    </div>` : '';
-
   document.getElementById('scenarioView').innerHTML = `
     <div class="card">
       <div class="card-head">
@@ -897,7 +770,6 @@ function renderScenario(idx) {
       </div>
       <div class="tab-bar">
         <button class="tab-btn active" onclick="window.switchTab(${idx},'vignette',this)">&#x1F4CB; Vignette</button>
-        ${sc.video ? `<button class="tab-btn" onclick="window.switchTab(${idx},'video',this)">&#x25B6;&#xFE0F; Video</button>` : ''}
         <button class="tab-btn" onclick="window.switchTab(${idx},'score',this)">&#x1F3AF; Score</button>
       </div>
       <div class="tab-pane active" id="tab-vignette-${idx}">
@@ -908,22 +780,6 @@ function renderScenario(idx) {
           </div>
         </div>
       </div>
-      ${sc.video ? `<div class="tab-pane" id="tab-video-${idx}">
-        <div class="card-body">
-          <div class="video-channel">${sc.video.channel}</div>
-          <div class="video-wrap">
-            <iframe src="https://www.youtube.com/embed/${sc.video.youtubeId}?rel=0&modestbranding=1"
-              allowfullscreen loading="lazy" title="Classroom observation video"></iframe>
-          </div>
-          <div class="video-note">
-            <div class="video-observe-prompt">While watching, consider:</div>
-            <ul class="video-focus-list">
-              ${sc.video.focusPoints.map(p => `<li>${p}</li>`).join('')}
-            </ul>
-            <div style="margin-top:8px;font-size:.75rem;color:#94a3b8;">${sc.video.note}</div>
-          </div>
-        </div>
-      </div>` : ''}
       <div class="tab-pane" id="tab-score-${idx}">
         <div class="card-body">
           <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">
