@@ -1143,7 +1143,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
               <textarea class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 — Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework item</label>
-                <input type="text" class="field feedback-tag-input" id="narr_grow_item" placeholder="e.g. D3-F2-04 — Differentiation &amp; Adaptation">
+                <select class="field feedback-tag-input" id="narr_grow_item" style="height:38px;">
+                  <option value="">— Select framework item —</option>
+                </select>
               </div>
             </div>
 
@@ -1215,7 +1217,9 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
               <textarea class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 — Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework domain / item</label>
-                <input type="text" class="field feedback-tag-input" id="eoy_grow_item" placeholder="e.g. D4 — Assessment for Learning">
+                <select class="field feedback-tag-input" id="eoy_grow_item" style="height:38px;">
+                  <option value="">— Select framework item —</option>
+                </select>
               </div>
             </div>
 
@@ -1343,11 +1347,66 @@ let selectedQuestions = [];    // { itemId, text } — questions chosen for debr
 let prevRecord = null;         // previous observation record (for follow-up)
 let followUpVerdict = null;    // 'yes' | 'partial' | 'no'
 
+let frameworkItemMap = {}; // itemId → item object with feedback_prompts, follow_up_indicators
+
+function buildFrameworkItemMap() {
+  if (!FRAMEWORK) return;
+  FRAMEWORK.frameworks.forEach(fw => {
+    if (fw.domains) {
+      fw.domains.forEach(d => (d.items||[]).forEach(item => { frameworkItemMap[item.id] = item; }));
+    } else {
+      (fw.items||[]).forEach(item => { frameworkItemMap[item.id] = item; });
+    }
+  });
+}
+
+function populateGrowItemSelects() {
+  ['narr_grow_item', 'eoy_grow_item'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    const currentVal = sel.value;
+    // Clear all except the placeholder option
+    while (sel.options.length > 1) sel.remove(1);
+    FRAMEWORK.frameworks.forEach(fw => {
+      if (fw.id === 'F4') return; // skip student survey
+      const grp = document.createElement('optgroup');
+      grp.label = fw.title;
+      const addItems = (items) => items.forEach(item => {
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.textContent = `${item.id} — ${item.title}`;
+        grp.appendChild(opt);
+      });
+      if (fw.domains) fw.domains.forEach(d => addItems(d.items||[]));
+      else addItems(fw.items||[]);
+      if (grp.children.length) sel.appendChild(grp);
+    });
+    if (currentVal) sel.value = currentVal;
+  });
+}
+
+function applyGrowItemPrompts(selId) {
+  const sel = document.getElementById(selId);
+  if (!sel) return;
+  const item = frameworkItemMap[sel.value];
+  const isObs = selId === 'narr_grow_item';
+  const devId = isObs ? 'narr_development' : 'eoy_development';
+  const actId = isObs ? 'narr_actions' : 'eoy_actions';
+  const devEl = document.getElementById(devId);
+  const actEl = document.getElementById(actId);
+  if (devEl && item?.feedback_prompts?.grow) devEl.placeholder = item.feedback_prompts.grow;
+  if (actEl && item?.feedback_prompts?.go)   actEl.placeholder = item.feedback_prompts.go;
+}
+
 Promise.all([
   fetch('resources/appraisal-framework-v2.json').then(r=>r.json()),
   fetch('resources/appraisal-levels.json').then(r=>r.json()),
   fetch('resources/coaching-questions.json').then(r=>r.json())
-]).then(([fw, lv, cq]) => { FRAMEWORK = fw; LEVELS = lv; COACHING_DB = cq; });
+]).then(([fw, lv, cq]) => {
+  FRAMEWORK = fw; LEVELS = lv; COACHING_DB = cq;
+  buildFrameworkItemMap();
+  populateGrowItemSelects();
+});
 
 // ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
 const LS_KEY = 'appraisal_draft_v2';
@@ -1359,6 +1418,7 @@ function lsSave() {
       scores: { ...scores },
       notes: { ...notes },
       notObservedItems: [...notObserved],
+      surveyData: { ...surveyScores },
       teacherName:   document.getElementById('teacherName')?.value  || '',
       teacherUid:    document.getElementById('teacherUid')?.value   || '',
       schoolId:      document.getElementById('schoolId')?.value     || '',
@@ -1605,6 +1665,12 @@ function refreshScoreUI() {
   // Mark done rows after pre-fill
   Object.keys(scores).forEach(id => markItemDone(id, true));
   notObserved.forEach(id => markItemDone(id, true));
+  // Restore F4 survey radio buttons
+  Object.entries(surveyScores).forEach(([itemId, val]) => {
+    const radio = document.querySelector(`input[name="survey-${itemId}"][value="${val}"]`);
+    if (radio) radio.checked = true;
+  });
+  updateF4Progress();
   updateLiveScores();
 }
 
@@ -2143,16 +2209,34 @@ function renderFollowUpCheckIn() {
   const obsDate = prevRecord.observationDate?.toDate
     ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB') : '—';
 
+  // Look up follow_up_indicators for the linked framework item
+  const prevItem = an.growItem ? frameworkItemMap[an.growItem] : null;
+  const indicators = prevItem?.follow_up_indicators || [];
+  const growLabel = an.growItem
+    ? `${an.growItem}${prevItem ? ` — ${prevItem.title}` : ''}`
+    : null;
+
   document.getElementById('followUpPrevGoSummary').innerHTML = `
     <div class="followup-prev-gosum">
       <div class="followup-prev-gosum-label">&#x1F3AF; Go target from last observation (${obsDate})</div>
-      ${an.growItem ? `<div class="followup-prev-meta" style="margin-bottom:4px;">Grow: <strong>${esc(an.growItem)}</strong></div>` : ''}
+      ${growLabel ? `<div class="followup-prev-meta" style="margin-bottom:4px;">Grow: <strong>${esc(growLabel)}</strong></div>` : ''}
       ${an.actions  ? `<div class="followup-prev-gosum-text">${esc(an.actions)}</div>` : ''}
       <div class="followup-prev-gosum-meta" style="margin-top:6px;">
         ${an.goDate  ? `Target: ${an.goDate}` : ''}
         ${an.goDate && an.goCheck ? ' · ' : ''}
         ${an.goCheck ? `Check: ${esc(an.goCheck)}` : ''}
       </div>
+      ${indicators.length ? `
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;">
+        <div class="feedback-tag-label" style="margin-bottom:6px;">&#x1F4CB; Observable indicators — what to look for</div>
+        <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;">
+          ${indicators.map(ind => `
+          <li style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#1e293b;">
+            <span style="color:#7c3aed;font-size:.9rem;flex-shrink:0;margin-top:1px;">&#x25B8;</span>
+            <span>${esc(ind)}</span>
+          </li>`).join('')}
+        </ul>
+      </div>` : ''}
     </div>`;
 
   // Restore previous verdict if any
@@ -2173,6 +2257,10 @@ function renderFollowUpCheckIn() {
     });
   });
 }
+
+// Wire grow-item selects → dynamic placeholder prompts
+document.getElementById('narr_grow_item').addEventListener('change', () => applyGrowItemPrompts('narr_grow_item'));
+document.getElementById('eoy_grow_item').addEventListener('change', () => applyGrowItemPrompts('eoy_grow_item'));
 
 document.getElementById('frameworkTabs').addEventListener('click', e => {
   const btn = e.target.closest('.fw-tab');
@@ -2576,9 +2664,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       document.getElementById(lvField).value = d.level;
       document.getElementById(lvField).dispatchEvent(new Event('change'));
     }
-    if (d.scores) Object.assign(scores, d.scores);
-    if (d.notes)  Object.assign(notes,  d.notes);
+    if (d.scores)     Object.assign(scores,       d.scores);
+    if (d.notes)      Object.assign(notes,        d.notes);
     if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+    if (d.surveyData) Object.assign(surveyScores, d.surveyData);
     if (d.currentDocId) currentDocId = d.currentDocId;
     document.querySelector('[data-draft-banner]')?.remove();
     document.querySelectorAll('[style*="fefce8"]').forEach(el => el.remove());
@@ -2761,20 +2850,27 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.scores)     Object.assign(scores, d.scores);
         if (d.narratives) Object.assign(notes, d.narratives);
         if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
+        if (d.surveyData) Object.assign(surveyScores, d.surveyData);
         // Restore Glow/Grow/Go narrative fields
         const an = d.appraiserNarrative || {};
         const en = d.endOfYearNarrative || {};
         if (an.strengths)   document.getElementById('narr_strengths').value   = an.strengths;
         if (an.development) document.getElementById('narr_development').value = an.development;
         if (an.actions)     document.getElementById('narr_actions').value     = an.actions;
-        if (an.growItem)    document.getElementById('narr_grow_item').value   = an.growItem;
+        if (an.growItem) {
+          document.getElementById('narr_grow_item').value = an.growItem;
+          applyGrowItemPrompts('narr_grow_item');
+        }
         if (an.goDate)      document.getElementById('narr_go_date').value     = an.goDate;
         if (an.goCheck)     document.getElementById('narr_go_check').value    = an.goCheck;
         if (en.summary)     document.getElementById('eoy_summary').value      = en.summary;
         if (en.strengths)   document.getElementById('eoy_strengths').value    = en.strengths;
         if (en.development) document.getElementById('eoy_development').value  = en.development;
         if (en.actions)     document.getElementById('eoy_actions').value      = en.actions;
-        if (en.growItem)    document.getElementById('eoy_grow_item').value    = en.growItem;
+        if (en.growItem) {
+          document.getElementById('eoy_grow_item').value = en.growItem;
+          applyGrowItemPrompts('eoy_grow_item');
+        }
         if (en.goDate)      document.getElementById('eoy_go_date').value      = en.goDate;
         if (en.goCheck)     document.getElementById('eoy_go_check').value     = en.goCheck;
         if (d.coachingQuestions?.length) selectedQuestions.push(...d.coachingQuestions);
@@ -3034,14 +3130,19 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           f3Status:            'pending',
           compositePercent:    null,
           predicate:           null,
-          appraiserNarrative: {
-            strengths:   document.getElementById('narr_strengths').value.trim(),
-            development: document.getElementById('narr_development').value.trim(),
-            actions:     document.getElementById('narr_actions').value.trim(),
-            growItem:    document.getElementById('narr_grow_item').value.trim(),
-            goDate:      document.getElementById('narr_go_date').value,
-            goCheck:     document.getElementById('narr_go_check').value.trim(),
-          },
+          appraiserNarrative: (() => {
+            const growId = document.getElementById('narr_grow_item').value.trim();
+            const growFwItem = frameworkItemMap[growId];
+            return {
+              strengths:   document.getElementById('narr_strengths').value.trim(),
+              development: document.getElementById('narr_development').value.trim(),
+              actions:     document.getElementById('narr_actions').value.trim(),
+              growItem:    growId,
+              growItemLabel: growFwItem ? `${growId} — ${growFwItem.title}` : growId,
+              goDate:      document.getElementById('narr_go_date').value,
+              goCheck:     document.getElementById('narr_go_check').value.trim(),
+            };
+          })(),
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
           followUp: prevRecord ? {
             previousDocId: prevRecord.id,
@@ -3079,15 +3180,20 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           f2Score:          r?.f2 ?? null,
           compositePercent: r?.composite ?? null,
           predicate:        r?.predicate ?? null,
-          endOfYearNarrative: {
-            summary:     document.getElementById('eoy_summary').value.trim(),
-            strengths:   document.getElementById('eoy_strengths').value.trim(),
-            development: document.getElementById('eoy_development').value.trim(),
-            actions:     document.getElementById('eoy_actions').value.trim(),
-            growItem:    document.getElementById('eoy_grow_item').value.trim(),
-            goDate:      document.getElementById('eoy_go_date').value,
-            goCheck:     document.getElementById('eoy_go_check').value.trim(),
-          },
+          endOfYearNarrative: (() => {
+            const growId = document.getElementById('eoy_grow_item').value.trim();
+            const growFwItem = frameworkItemMap[growId];
+            return {
+              summary:     document.getElementById('eoy_summary').value.trim(),
+              strengths:   document.getElementById('eoy_strengths').value.trim(),
+              development: document.getElementById('eoy_development').value.trim(),
+              actions:     document.getElementById('eoy_actions').value.trim(),
+              growItem:    growId,
+              growItemLabel: growFwItem ? `${growId} — ${growFwItem.title}` : growId,
+              goDate:      document.getElementById('eoy_go_date').value,
+              goCheck:     document.getElementById('eoy_go_check').value.trim(),
+            };
+          })(),
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
           followUp: prevRecord ? {
             previousDocId: prevRecord.id,
@@ -3247,7 +3353,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       <h2 class="pr-section">Observation Feedback</h2>
       ${narrativeBlock('✨ Glow — What is working well', document.getElementById('narr_strengths')?.value)}
       ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('narr_development')?.value)}
-      ${document.getElementById('narr_grow_item')?.value ? narrativeBlock('Linked framework item', document.getElementById('narr_grow_item').value) : ''}
+      ${document.getElementById('narr_grow_item')?.value ? narrativeBlock('Linked framework item', (() => { const v = document.getElementById('narr_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} — ${it.title}` : v; })()) : ''}
       ${narrativeBlock('🎯 Go — Next step', document.getElementById('narr_actions')?.value)}
       ${document.getElementById('narr_go_date')?.value ? narrativeBlock('Target date', document.getElementById('narr_go_date').value) : ''}
       ${document.getElementById('narr_go_check')?.value ? narrativeBlock('Progress check', document.getElementById('narr_go_check').value) : ''}
@@ -3256,7 +3362,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       ${narrativeBlock('Overall Annual Summary', document.getElementById('eoy_summary')?.value)}
       ${narrativeBlock('✨ Glow — Sustained strengths', document.getElementById('eoy_strengths')?.value)}
       ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('eoy_development')?.value)}
-      ${document.getElementById('eoy_grow_item')?.value ? narrativeBlock('Linked framework domain', document.getElementById('eoy_grow_item').value) : ''}
+      ${document.getElementById('eoy_grow_item')?.value ? narrativeBlock('Linked framework domain / item', (() => { const v = document.getElementById('eoy_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} — ${it.title}` : v; })()) : ''}
       ${narrativeBlock('🎯 Go — Professional Development Plan', document.getElementById('eoy_actions')?.value)}
       ${document.getElementById('eoy_go_date')?.value ? narrativeBlock('First review date', document.getElementById('eoy_go_date').value) : ''}
       ${document.getElementById('eoy_go_check')?.value ? narrativeBlock('Success criteria', document.getElementById('eoy_go_check').value) : ''}
