@@ -557,7 +557,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <div id="panelF4" class="fw-panel" style="display:none;">
         <div class="card">
           <div class="card-head">
-            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Weight 15% · Enter data collected from student survey</div></div>
+            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Weight 10% · Enter data collected from student survey</div></div>
             <div id="f4Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 17 scored</div>
           </div>
           <div id="f4Items" class="card-body" style="padding:0;"></div>
@@ -643,8 +643,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           <div class="score-preview-grid">
             <div class="score-preview-item"><div class="score-preview-label">F1 (20%)</div><div class="score-preview-val" id="liveF1">—</div></div>
             <div class="score-preview-item"><div class="score-preview-label">F2 (50%)</div><div class="score-preview-val" id="liveF2">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F3 (15%)</div><div class="score-preview-val" id="liveF3">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F4 (15%)</div><div class="score-preview-val" id="liveF4">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F3 (20%)</div><div class="score-preview-val" id="liveF3">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F4 (10%)</div><div class="score-preview-val" id="liveF4">—</div></div>
             <div class="score-preview-item" style="grid-column:span 2;"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
           </div>
           <div id="predWrap" style="margin-top:12px;text-align:center;display:none;">
@@ -1003,10 +1003,10 @@ function updateSidebarProgress(level) {
     { label: 'F2 Observation (50%)',
       items: FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.flatMap(d=>d.items.filter(i=>isVisible(i,level))),
       doneCount: null },
-    { label: 'F3 Work' + (level==='lead'?' + Lead':'') + ' (15%)',
+    { label: 'F3 Work' + (level==='lead'?' + Lead':'') + ' (20%)',
       items: [...FRAMEWORK.frameworks.find(f=>f.id==='F3').items.filter(i=>isVisible(i,level)),
               ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] },
-    { label: 'F4 Student Survey (15%)',
+    { label: 'F4 Student Survey (10%)',
       items: fw4items,
       doneCount: () => Object.keys(surveyScores).filter(id => fw4items.find(i=>i.id===id)).length }
   ];
@@ -1085,9 +1085,9 @@ function calcScores(level) {
 
   if (m1===null && m2===null && m3===null && m4===null) return null;
 
-  // Weights: F1 20%, F2 50%, F3 15%, F4 15%
+  // Weights: F1 20%, F2 50%, F3 20%, F4 10%
   const isComplete = m1!==null && m2!==null && m3!==null && m4!==null;
-  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.50 + (m3/4)*0.15 + (m4/4)*0.15) * 100 : null;
+  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.50 + (m3/4)*0.20 + (m4/4)*0.10) * 100 : null;
   const bands      = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate  = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
   return { f1:m1, f2:m2, f3:m3, f4:m4, composite, predicate, isComplete };
@@ -1140,10 +1140,10 @@ function buildReviewSummary() {
         ${scoreBox('F1 Admin (20%)', r?.f1)}
         ${scoreBox('F2 Observation (50%)', r?.f2)}
         <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
-          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (15%)</div>
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
           <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending EOY</div>
         </div>
-        ${scoreBox('F4 Survey (15%)', r?.f4)}
+        ${scoreBox('F4 Survey (10%)', r?.f4)}
       </div>
       <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
         Final composite will be calculated after F3 is scored at the End-of-Year Conference.
@@ -1169,8 +1169,8 @@ function buildReviewSummary() {
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       ${scoreBox('F1 Admin (20%)', r?.f1)}
       ${scoreBox('F2 Observation (50%)', r?.f2)}
-      ${scoreBox('F3 Work (15%)', r?.f3)}
-      ${scoreBox('F4 Survey (15%)', r?.f4)}
+      ${scoreBox('F3 Work (20%)', r?.f3)}
+      ${scoreBox('F4 Survey (10%)', r?.f4)}
       <div style="text-align:center;padding:16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
         ${r?.isComplete
@@ -1181,7 +1181,7 @@ function buildReviewSummary() {
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 15%) + (F4/4 × 15%) × 100
+      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 20%) + (F4/4 × 10%) × 100
     </div>`;
 }
 
