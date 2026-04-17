@@ -505,6 +505,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
     <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
     <button class="fw-tab" data-tab="f3" id="tabF3" style="display:none;">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
+    <button class="fw-tab" data-tab="f4">F4 Student Survey <span class="fw-tab-count" id="tabCountF4">0/17</span></button>
     <button class="fw-tab" data-tab="review">Review &amp; Submit</button>
   </div>
 
@@ -549,6 +550,17 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
           </div>
           <div id="f3Items"></div>
+        </div>
+      </div>
+
+      <!-- F4 TAB -->
+      <div id="panelF4" class="fw-panel" style="display:none;">
+        <div class="card">
+          <div class="card-head">
+            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Weight 15% · Enter data collected from student survey</div></div>
+            <div id="f4Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 17 scored</div>
+          </div>
+          <div id="f4Items" class="card-body" style="padding:0;"></div>
         </div>
       </div>
 
@@ -606,11 +618,6 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
           </div>
         </div>
 
-        <div class="card" id="surveyInputCard">
-          <div class="card-head"><h2>Student Survey Data (Optional)</h2><div style="font-size:.72rem;color:#94a3b8;">Informative only — does not affect score</div></div>
-          <div id="surveyInputArea" class="card-body"></div>
-        </div>
-
         <div class="action-bar" id="obsActionBar">
           <button class="btn-primary" id="saveDraftBtn">Save as Draft</button>
           <button class="btn-primary" id="shareBtn" style="background:#16a34a;">Share with Teacher</button>
@@ -634,10 +641,11 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
         <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:14px;">
           <div class="progress-title">Live Scores</div>
           <div class="score-preview-grid">
-            <div class="score-preview-item"><div class="score-preview-label">F1</div><div class="score-preview-val" id="liveF1">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F2</div><div class="score-preview-val" id="liveF2">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F3</div><div class="score-preview-val" id="liveF3">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F1 (20%)</div><div class="score-preview-val" id="liveF1">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F2 (50%)</div><div class="score-preview-val" id="liveF2">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F3 (15%)</div><div class="score-preview-val" id="liveF3">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F4 (15%)</div><div class="score-preview-val" id="liveF4">—</div></div>
+            <div class="score-preview-item" style="grid-column:span 2;"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
           </div>
           <div id="predWrap" style="margin-top:12px;text-align:center;display:none;">
             <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
@@ -672,8 +680,9 @@ let LEVELS    = null;
 let currentDocId  = null;
 let sessionMode   = 'observation'; // 'observation' | 'endofyear'
 let loadedObsRecord = null;
-const scores      = {};   // itemId → 1–4
-const notes       = {};   // itemId → string
+const scores        = {};   // itemId → 1–4
+const notes         = {};   // itemId → string
+const surveyScores  = {};   // F4 itemId → 1–4
 const notObserved = new Set(); // itemIds explicitly marked N/O
 
 Promise.all([
@@ -799,16 +808,16 @@ function buildF1() {
   document.getElementById('f1Items').innerHTML = fw.items.map(buildItemRow).join('');
 }
 
-function domainSection(id, title, items) {
+function domainSection(id, title, items, collapsed = false) {
   return `
-    <div class="domain-label" onclick="toggleDomain(this)" data-domain="${id}">
+    <div class="domain-label${collapsed ? ' collapsed' : ''}" onclick="toggleDomain(this)" data-domain="${id}">
       <span>${title}</span>
       <span style="display:flex;align-items:center;gap:10px;">
         <span class="domain-progress-text domain-prog-${id}">${items.length} items</span>
         <span class="domain-chevron">▾</span>
       </span>
     </div>
-    <div class="domain-body" data-domain-body="${id}">
+    <div class="domain-body${collapsed ? ' collapsed' : ''}" data-domain-body="${id}">
       ${items.map(buildItemRow).join('')}
     </div>`;
 }
@@ -825,10 +834,12 @@ function buildF2(level) {
   if (!FRAMEWORK || !level) return;
   const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
   let html = '';
+  let isFirst = true;
   for (const domain of fw.domains) {
     const visible = domain.items.filter(i=>isVisible(i,level));
     if (!visible.length) continue;
-    html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible);
+    html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible, !isFirst);
+    isFirst = false;
   }
   document.getElementById('f2Items').innerHTML = html;
 }
@@ -840,10 +851,10 @@ function buildF3(level) {
   let html = '';
   const visibleF3 = f3fw.items.filter(i=>isVisible(i,level));
   if (visibleF3.length) {
-    html += domainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3);
+    html += domainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3, false);
   }
   if (level === 'lead') {
-    html += domainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items);
+    html += domainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items, true);
     document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) · 20%';
   }
   document.getElementById('f3Items').innerHTML = html;
@@ -859,29 +870,48 @@ function buildSurveyInput() {
     { val:1, label:'Rarely',    color:'#dc2626' },
   ];
   const headerRow = `<tr style="background:#f8fafc;">
-    <th style="text-align:left;padding:8px 12px;font-size:.7rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #e2e8f0;min-width:200px;">Statement</th>
-    ${cols.map(c=>`<th style="text-align:center;padding:8px 14px;font-size:.7rem;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #e2e8f0;white-space:nowrap;">${c.label}</th>`).join('')}
+    <th style="text-align:left;padding:10px 16px;font-size:.7rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #e2e8f0;min-width:220px;">Statement</th>
+    ${cols.map(c=>`<th style="text-align:center;padding:10px 18px;font-size:.7rem;font-weight:800;color:${c.color};text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #e2e8f0;white-space:nowrap;">${c.label}<br><span style="font-weight:400;font-size:.65rem;">${c.val}</span></th>`).join('')}
   </tr>`;
   const bodyRows = f4.items.map((item, idx) => {
     const bg = idx % 2 === 0 ? '#fff' : '#f8fafc';
     const cells = cols.map(c => `
-      <td style="text-align:center;padding:10px 14px;">
+      <td style="text-align:center;padding:12px 18px;">
         <label style="cursor:pointer;display:block;">
-          <input type="radio" name="survey-${item.id}" value="${c.val}" id="survey-${item.id}-${c.val}"
-            onchange="document.getElementById('survey-${item.id}').value=this.value"
-            style="accent-color:${c.color};width:16px;height:16px;">
+          <input type="radio" name="survey-${item.id}" value="${c.val}"
+            onchange="surveyScores['${item.id}']=${c.val}; updateF4Progress(); updateLiveScores();"
+            style="accent-color:${c.color};width:18px;height:18px;">
         </label>
       </td>`).join('');
-    return `<tr style="background:${bg};border-bottom:1px solid #f1f5f9;">
-      <td style="padding:10px 12px;font-size:.82rem;color:#374151;line-height:1.4;">
-        <span style="font-weight:700;color:#94a3b8;margin-right:6px;">${item.id}.</span>${item.title}
-        <input type="hidden" id="survey-${item.id}" value="">
+    return `<tr class="survey-row" id="srow-${item.id}" style="background:${bg};border-bottom:1px solid #f1f5f9;">
+      <td style="padding:10px 16px;font-size:.83rem;color:#374151;line-height:1.45;">
+        <span style="font-weight:700;color:#94a3b8;margin-right:6px;font-size:.75rem;">${item.id}</span>${item.title}
       </td>
       ${cells}
     </tr>`;
   }).join('');
-  document.getElementById('surveyInputArea').innerHTML =
+  document.getElementById('f4Items').innerHTML =
     `<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;">${headerRow}${bodyRows}</table></div>`;
+}
+
+function updateF4Progress() {
+  const done = Object.keys(surveyScores).length;
+  const total = FRAMEWORK?.frameworks.find(f=>f.id==='F4')?.items?.length || 17;
+  document.getElementById('f4Progress').textContent = `${done} / ${total} scored`;
+  // Green tint on completed survey rows
+  if (FRAMEWORK) {
+    FRAMEWORK.frameworks.find(f=>f.id==='F4').items.forEach(item => {
+      const row = document.getElementById(`srow-${item.id}`);
+      if (row) row.style.background = surveyScores[item.id] ? '#f0fdf4' : '';
+    });
+  }
+  // Tab count
+  const el = document.getElementById('tabCountF4');
+  if (el) {
+    el.textContent = `${done}/${total}`;
+    el.style.background = done === total ? '#dcfce7' : '';
+    el.style.color      = done === total ? '#15803d' : '';
+  }
 }
 
 // Pre-populate score buttons + notes from loaded record (EOY mode)
@@ -965,19 +995,25 @@ function updateF3Progress(level) {
 
 function updateSidebarProgress(level) {
   if (!FRAMEWORK || !level) return;
+  const fw4items = FRAMEWORK.frameworks.find(f=>f.id==='F4').items;
   const sections = [
-    { label: 'F1 Admin',
-      items: FRAMEWORK.frameworks.find(f=>f.id==='F1').items },
-    { label: 'F2 Observation',
-      items: FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.flatMap(d=>d.items.filter(i=>isVisible(i,level))) },
-    { label: 'F3 Work' + (level==='lead'?' + Lead':''),
+    { label: 'F1 Admin (20%)',
+      items: FRAMEWORK.frameworks.find(f=>f.id==='F1').items,
+      doneCount: () => FRAMEWORK.frameworks.find(f=>f.id==='F1').items.filter(addressed).length },
+    { label: 'F2 Observation (50%)',
+      items: FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.flatMap(d=>d.items.filter(i=>isVisible(i,level))),
+      doneCount: null },
+    { label: 'F3 Work' + (level==='lead'?' + Lead':'') + ' (15%)',
       items: [...FRAMEWORK.frameworks.find(f=>f.id==='F3').items.filter(i=>isVisible(i,level)),
-              ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] }
+              ...(level==='lead'?FRAMEWORK.frameworks.find(f=>f.id==='F3L').items:[])] },
+    { label: 'F4 Student Survey (15%)',
+      items: fw4items,
+      doneCount: () => Object.keys(surveyScores).filter(id => fw4items.find(i=>i.id===id)).length }
   ];
-  const displaySections = sessionMode === 'observation' ? sections.slice(0, 2) : sections;
+  const displaySections = sessionMode === 'observation' ? [sections[0], sections[1], sections[3]] : sections;
   document.getElementById('sidebarProgress').innerHTML =
     displaySections.map(s => {
-      const done  = s.items.filter(addressed).length;
+      const done  = s.doneCount ? s.doneCount() : s.items.filter(addressed).length;
       const total = s.items.length;
       const pct   = total ? Math.round(done/total*100) : 0;
       return `<div class="progress-row">
@@ -1023,39 +1059,48 @@ function calcScores(level) {
   const fw2  = FRAMEWORK.frameworks.find(f=>f.id==='F2');
   const fw3  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
   const fw3L = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
+  const fw4  = FRAMEWORK.frameworks.find(f=>f.id==='F4');
 
-  // N/O items excluded from denominator — mean is over scored items only
+  // N/O items excluded from denominator
   function mean(items) {
-    const scoredItems = items.filter(i => scores[i.id] && !notObserved.has(i.id));
-    return scoredItems.length
-      ? scoredItems.reduce((a,i) => a + scores[i.id], 0) / scoredItems.length
-      : null;
+    const scored = items.filter(i => scores[i.id] && !notObserved.has(i.id));
+    return scored.length ? scored.reduce((a,i) => a + scores[i.id], 0) / scored.length : null;
+  }
+
+  // F4 mean from surveyScores
+  function surveyMean(items) {
+    const scored = items.filter(i => surveyScores[i.id]);
+    return scored.length ? scored.reduce((a,i) => a + surveyScores[i.id], 0) / scored.length : null;
   }
 
   const f1Items = fw1.items;
   const f2Items = fw2.domains.flatMap(d=>d.items.filter(i=>isVisible(i,level)));
   const f3Items = [...fw3.items.filter(i=>isVisible(i,level)), ...(level==='lead'?fw3L.items:[])];
+  const f4Items = fw4.items;
 
   const m1 = mean(f1Items);
   const m2 = mean(f2Items);
   const m3 = mean(f3Items);
+  const m4 = surveyMean(f4Items);
 
-  if (m1===null && m2===null && m3===null) return null;
+  if (m1===null && m2===null && m3===null && m4===null) return null;
 
-  const isComplete = m1!==null && m2!==null && m3!==null;
-  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.60 + (m3/4)*0.20) * 100 : null;
+  // Weights: F1 20%, F2 50%, F3 15%, F4 15%
+  const isComplete = m1!==null && m2!==null && m3!==null && m4!==null;
+  const composite  = isComplete ? ((m1/4)*0.20 + (m2/4)*0.50 + (m3/4)*0.15 + (m4/4)*0.15) * 100 : null;
   const bands      = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate  = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
-  return { f1:m1, f2:m2, f3:m3, composite, predicate, isComplete };
+  return { f1:m1, f2:m2, f3:m3, f4:m4, composite, predicate, isComplete };
 }
 
 function updateLiveScores() {
   const level = getLevel();
   if (!level) return;
   const r = calcScores(level);
-  document.getElementById('liveF1').textContent    = r?.f1!=null      ? r.f1.toFixed(2)        : '—';
-  document.getElementById('liveF2').textContent    = r?.f2!=null      ? r.f2.toFixed(2)        : '—';
-  document.getElementById('liveF3').textContent    = r?.f3!=null      ? r.f3.toFixed(2)        : '—';
+  document.getElementById('liveF1').textContent    = r?.f1!=null ? r.f1.toFixed(2) : '—';
+  document.getElementById('liveF2').textContent    = r?.f2!=null ? r.f2.toFixed(2) : '—';
+  document.getElementById('liveF3').textContent    = r?.f3!=null ? r.f3.toFixed(2) : '—';
+  document.getElementById('liveF4').textContent    = r?.f4!=null ? r.f4.toFixed(2) : '—';
   document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
   // Predicate only shown when composite is complete (anchoring bias fix)
   const predWrap = document.getElementById('predWrap');
@@ -1079,29 +1124,29 @@ function buildReviewSummary() {
   const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
   const fmtScore = v => v!=null ? v.toFixed(2) : '<span style="color:#94a3b8;font-size:.9rem;">not scored</span>';
 
+  const scoreBox = (label, val, note='') => `
+    <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
+      <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">${label}</div>
+      <div style="font-size:1.4rem;font-weight:800;">${fmtScore(val)}</div>
+      <div style="font-size:.7rem;color:#94a3b8;">${note || '/ 4.00'}</div>
+    </div>`;
+
   if (sessionMode === 'observation') {
     return `
       <div style="margin-bottom:16px;padding:10px 14px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:10px;font-size:.8rem;color:#075985;">
         &#x1F4CB; Observation Session — F3 will be scored at the End-of-Year Conference.
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px;">
-        <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
-          <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f1)}</div>
-          <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
-        </div>
-        <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F2 Observation (60%)</div>
-          <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f2)}</div>
-          <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
-        </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
+        ${scoreBox('F1 Admin (20%)', r?.f1)}
+        ${scoreBox('F2 Observation (50%)', r?.f2)}
         <div style="text-align:center;padding:16px;background:#f1f5f9;border-radius:12px;border:1px dashed #cbd5e1;">
-          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
-          <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending — EOY Conference</div>
+          <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (15%)</div>
+          <div style="font-size:.85rem;font-weight:600;color:#94a3b8;margin-top:8px;">Pending EOY</div>
         </div>
+        ${scoreBox('F4 Survey (15%)', r?.f4)}
       </div>
       <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-        Final composite score will be calculated after F3 is scored at the End-of-Year Conference.
+        Final composite will be calculated after F3 is scored at the End-of-Year Conference.
       </div>`;
   }
 
@@ -1121,33 +1166,22 @@ function buildReviewSummary() {
 
   return `
     ${obsNote}${incompleteNote}
-    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
-      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F1 Admin (20%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f1)}</div>
-        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F2 Observation (60%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f2)}</div>
-        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
-      </div>
-      <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
-        <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">F3 Work (20%)</div>
-        <div style="font-size:1.4rem;font-weight:800;">${fmtScore(r?.f3)}</div>
-        <div style="font-size:.7rem;color:#94a3b8;">/ 4.00</div>
-      </div>
-      <div style="text-align:center;padding:20px 16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
+      ${scoreBox('F1 Admin (20%)', r?.f1)}
+      ${scoreBox('F2 Observation (50%)', r?.f2)}
+      ${scoreBox('F3 Work (15%)', r?.f3)}
+      ${scoreBox('F4 Survey (15%)', r?.f4)}
+      <div style="text-align:center;padding:16px;background:#f5f3ff;border-radius:12px;border:2px solid #c4b5fd;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:700;margin-bottom:4px;">Final Score</div>
         ${r?.isComplete
-          ? `<div style="font-size:1.8rem;font-weight:800;color:#7c3aed;">${r.composite.toFixed(1)}%</div>
-             <div style="font-size:1.6rem;font-weight:800;color:${predColors[r.predicate]};margin-top:4px;">${r.predicate}</div>`
-          : `<div style="font-size:1rem;font-weight:600;color:#94a3b8;margin-top:8px;">Incomplete</div>`
+          ? `<div style="font-size:1.6rem;font-weight:800;color:#7c3aed;">${r.composite.toFixed(1)}%</div>
+             <div style="font-size:1.5rem;font-weight:800;color:${predColors[r.predicate]};margin-top:4px;">${r.predicate}</div>`
+          : `<div style="font-size:.9rem;font-weight:600;color:#94a3b8;margin-top:8px;">Incomplete</div>`
         }
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-      Formula: (F1/4 × 20%) + (F2/4 × 60%) + (F3/4 × 20%) × 100
+      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 15%) + (F4/4 × 15%) × 100
     </div>`;
 }
 
@@ -1171,7 +1205,7 @@ function applySessionMode(mode) {
 }
 
 // ── TAB NAVIGATION ────────────────────────────────────────
-const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', review:'panelReview' };
+const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', f4:'panelF4', review:'panelReview' };
 
 function switchTab(tab) {
   if (tab === 'f3' && sessionMode === 'observation') tab = 'review';
@@ -1606,11 +1640,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       showToast(`⚠ ${missingNotes.length} low-score item(s) have no supporting note: ${missingNotes.slice(0,3).join(', ')}${missingNotes.length>3?' …':''}`, 5000);
     }
 
-    // Collect survey
-    const surveyData = {};
-    document.querySelectorAll('[id^="survey-"]').forEach(el => {
-      if (el.value) surveyData[el.id.replace('survey-','')] = parseInt(el.value);
-    });
+    // Collect survey from surveyScores state
+    const surveyData = { ...surveyScores };
     const surveyVals = Object.values(surveyData).map(Number).filter(Boolean);
     const surveyMean = surveyVals.length ? surveyVals.reduce((a,b)=>a+b,0)/surveyVals.length : null;
 
