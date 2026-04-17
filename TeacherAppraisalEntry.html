@@ -799,7 +799,7 @@ window.toggleNote = function(itemId) {
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   const isAdmin = profile?.role_academichub === 'academic_admin';
   if (!isAdmin) {
-    document.getElementById('mainArea').innerHTML = '<div style="padding:40px;text-align:center;color:#64748b;">Access restricted to academic administrators.</div>';
+    document.getElementById('setupPhase').innerHTML = '<div style="padding:40px;text-align:center;color:#64748b;">Access restricted to academic administrators.</div>';
     return;
   }
 
