@@ -143,17 +143,17 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 /* ── FRAMEWORK TABS BAR ── */
 .fw-tabs-bar {
   display: flex; gap: 0; border-bottom: 2px solid #e2e8f0;
-  margin-bottom: 20px; overflow-x: auto;
+  margin-bottom: 20px; overflow-x: visible;
   background: #fff; border-radius: 12px 12px 0 0;
   padding: 0 4px;
 }
 
 /* ── FRAMEWORK TABS ── */
 .fw-tab {
-  padding: 10px 18px; font-family: inherit; font-size: .85rem; font-weight: 600;
+  padding: 12px 22px; font-family: inherit; font-size: .85rem; font-weight: 600;
   color: #64748b; background: none; border: none; border-bottom: 2px solid transparent;
   margin-bottom: -2px; cursor: pointer; transition: color .15s, border-color .15s;
-  display: flex; align-items: center; gap: 8px;
+  display: flex; align-items: center; gap: 8px; white-space: nowrap;
 }
 .fw-tab:hover { color: #7c3aed; }
 .fw-tab.active { color: #7c3aed; border-bottom-color: #7c3aed; }
@@ -2168,6 +2168,12 @@ document.getElementById('frameworkTabs').addEventListener('click', e => {
 });
 
 window.backToSetup = function() {
+  // Sync level between the two selects so switching session type doesn't re-prompt
+  const currentLevel = getLevel();
+  if (currentLevel) {
+    document.getElementById('appraisalLevel').value    = currentLevel;
+    document.getElementById('appraisalLevelEoy').value = currentLevel;
+  }
   document.getElementById('setupPhase').style.display = 'block';
   document.getElementById('scoringPhase').style.display = 'none';
   window.scrollTo({top:0,behavior:'smooth'});
