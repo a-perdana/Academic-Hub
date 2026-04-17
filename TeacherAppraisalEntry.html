@@ -1153,20 +1153,28 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
             <div class="narrative-section feedback-block feedback-go">
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x1F3AF;</span>
-                <div>
-                  <div class="feedback-block-title">Go — Next step (SMART)</div>
-                  <div class="feedback-block-hint">One concrete action. Specify <strong>what</strong> the teacher will do, <strong>by when</strong>, and <strong>how progress will be checked</strong>.</div>
+                <div style="flex:1;">
+                  <div class="feedback-block-title" style="display:flex;align-items:center;gap:8px;">
+                    Go — Next step (SMART)
+                    <span id="goCompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#dcfce7;color:#15803d;letter-spacing:.03em;">✓ Complete</span>
+                    <span id="goIncompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#fff1f2;color:#b91c1c;letter-spacing:.03em;">⚠ Incomplete — add date & check</span>
+                  </div>
+                  <div class="feedback-block-hint">One concrete action. Specify <strong>what</strong> the teacher will do, <strong>by when</strong>, and <strong>how progress will be checked</strong>. All three fields required for this target to appear in the next observation's follow-up.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="narr_actions" placeholder="e.g. "By [date]: prepare tiered exit tasks for Year 10 lessons. Progress check: bring two examples to next pre-conference.""></textarea>
+              <textarea class="field feedback-textarea" id="narr_actions"
+                placeholder="e.g. "By [date]: prepare tiered exit tasks for Year 10 lessons. Progress check: bring two examples to next pre-conference.""
+                oninput="checkGoCompleteness()"></textarea>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
                 <div>
-                  <label class="feedback-tag-label">Target date</label>
-                  <input type="date" class="field feedback-tag-input" id="narr_go_date">
+                  <label class="feedback-tag-label">Target date <span style="color:#dc2626;">*</span></label>
+                  <input type="date" class="field feedback-tag-input" id="narr_go_date" onchange="checkGoCompleteness()">
                 </div>
                 <div>
-                  <label class="feedback-tag-label">How progress will be checked</label>
-                  <input type="text" class="field feedback-tag-input" id="narr_go_check" placeholder="e.g. Bring lesson plan to pre-conference">
+                  <label class="feedback-tag-label">How progress will be checked <span style="color:#dc2626;">*</span></label>
+                  <input type="text" class="field feedback-tag-input" id="narr_go_check"
+                    placeholder="e.g. Bring lesson plan to pre-conference"
+                    oninput="checkGoCompleteness()">
                 </div>
               </div>
             </div>
@@ -1552,6 +1560,58 @@ window.toggleDomain = function(labelEl) {
   body.classList.toggle('collapsed');
 };
 
+// D3 observation phase map — helps appraiser know WHEN to score each item
+// pre = reviewable before lesson (from lesson plan); live = score during lesson; post = reflect after
+const D3_PHASE = {
+  'D3.1':  'live',   // Punctuality & readiness — observable at lesson start
+  'D3.2':  'pre',    // Communication style — can note from plan, confirmed live
+  'D3.3':  'live',   // Learning intentions — observed live
+  'D3.4':  'live',   // Activity–objective alignment — observed live
+  'D3.5':  'live',   // Higher-order thinking — observed live
+  'D3.6':  'post',   // Student performance awareness — requires post-lesson reflection
+  'D3.7':  'live',   // Teaching strategy variety — observed live
+  'D3.8':  'live',   // Instructional materials — observed live
+  'D3.9':  'post',   // Timely feedback — may require checking workbooks post-lesson
+  'D3.10': 'live',   // Lesson progression — observed live
+  'D3.11': 'live',   // Values integration — observed live
+  'D3.12': 'pre',    // Class opening (Proficient+) — observe first 5 min
+  'D3.13': 'post',   // Subject-matter coherence — easier to assess post-lesson
+  'D3.14': 'live',   // Questioning for critical thinking — observed live
+  'D3.15': 'pre',    // Content-standard coherence — assess from lesson plan
+  'D3.16': 'post',   // Lesson closure — observe last 5 min / reflect post
+  'D3.17': 'live',   // Equitable participation — observed live
+  'D3.18': 'live',   // Concept acquisition — observed live
+  'D3.19': 'live',   // Language of instruction — observed live
+  'D3.20': 'live',   // Monitoring understanding — observed live
+  'D3.21': 'live',   // Determination & persistence (Lead) — observed live
+};
+
+const D3_PHASE_STYLE = {
+  pre:  { label: 'Pre / Plan', bg: '#eff6ff', color: '#1d4ed8', border: '#bfdbfe' },
+  live: { label: 'Live',       bg: '#f0fdf4', color: '#15803d', border: '#bbf7d0' },
+  post: { label: 'Post',       bg: '#fff7ed', color: '#c2410c', border: '#fed7aa' },
+};
+
+function buildD3ItemRow(item) {
+  const phase = D3_PHASE[item.id];
+  const style = phase ? D3_PHASE_STYLE[phase] : null;
+  const baseRow = buildItemRow(item);
+  if (!style) return baseRow;
+
+  const phaseTag = `<span style="font-size:.63rem;font-weight:800;padding:2px 8px;border-radius:5px;
+    background:${style.bg};color:${style.color};border:1px solid ${style.border};
+    letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;"
+    title="Score this item ${phase === 'pre' ? 'before the lesson (from lesson plan)' : phase === 'live' ? 'live during the lesson' : 'after the lesson in post-observation reflection'}">
+    ${phase === 'pre' ? '📋' : phase === 'live' ? '🔴' : '🔄'} ${style.label}
+  </span>`;
+
+  // Inject phase tag after the item ID badge
+  return baseRow.replace(
+    /(<span class="item-id-badge">[^<]*<\/span>)/,
+    `$1${phaseTag}`
+  );
+}
+
 function buildF2(level) {
   if (!FRAMEWORK || !level) return;
   const fw = FRAMEWORK.frameworks.find(f=>f.id==='F2');
@@ -1560,10 +1620,59 @@ function buildF2(level) {
   for (const domain of fw.domains) {
     const visible = domain.items.filter(i=>isVisible(i,level));
     if (!visible.length) continue;
-    html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible, !isFirst);
+    if (domain.id === 'D3') {
+      // D3 gets phase-tagged items + a legend banner
+      const phaseCounts = { pre: 0, live: 0, post: 0 };
+      visible.forEach(i => { const p = D3_PHASE[i.id]; if (p) phaseCounts[p]++; });
+      const legendHtml = `
+        <div style="padding:8px 24px;background:#f8fafc;border-bottom:1px solid #f1f5f9;
+          display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.72rem;">
+          <span style="font-weight:700;color:#64748b;">Score timing:</span>
+          <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:2px 8px;border-radius:5px;font-weight:700;">📋 Pre / Plan — ${phaseCounts.pre}</span>
+          <span style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 8px;border-radius:5px;font-weight:700;">🔴 Live — ${phaseCounts.live}</span>
+          <span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 8px;border-radius:5px;font-weight:700;">🔄 Post — ${phaseCounts.post}</span>
+        </div>`;
+      html += `
+        <div class="domain-label" onclick="toggleDomain(this)" data-domain="${domain.id}">
+          <span>${domain.id} — ${domain.title}</span>
+          <span style="display:flex;align-items:center;gap:10px;">
+            <span class="domain-progress-text domain-prog-${domain.id}">${visible.length} items</span>
+            <span class="domain-chevron">▾</span>
+          </span>
+        </div>
+        <div class="domain-body" data-domain-body="${domain.id}">
+          ${legendHtml}
+          ${visible.map(buildD3ItemRow).join('')}
+        </div>`;
+    } else {
+      html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible, !isFirst);
+    }
     isFirst = false;
   }
   document.getElementById('f2Items').innerHTML = html;
+}
+
+// F3 evidence notes — teacher-provided evidence gathered at EOY conference
+const f3Evidence = {};  // itemId → string
+
+function buildF3ItemRow(item) {
+  const baseRow = buildItemRow(item);
+  // Inject evidence field after the note row inside the item-row div
+  const evidenceHtml = `
+    <div class="f3-evidence-row" style="margin-top:6px;">
+      <div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;
+        color:#0e7490;display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#0891b2;display:inline-block;"></span>
+        Teacher Evidence
+        <span style="font-weight:400;font-size:.65rem;color:#94a3b8;">(what the teacher presented at the conference)</span>
+      </div>
+      <textarea class="item-note-input visible" id="f3ev-${item.id}"
+        style="border-color:#a5f3fc;min-height:52px;"
+        placeholder="e.g. Showed CPD certificate, shared lesson journal, referenced PD attendance record…"
+        onchange="f3Evidence['${item.id}']=this.value;"></textarea>
+    </div>`;
+  // Insert before the closing </div> of the item-row
+  return baseRow.replace(/(<\/div>)$/, evidenceHtml + '$1');
 }
 
 function buildF3(level) {
@@ -1572,11 +1681,37 @@ function buildF3(level) {
   const f3Lfw = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
   let html = '';
   const visibleF3 = f3fw.items.filter(i=>isVisible(i,level));
-  if (visibleF3.length) {
-    html += domainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3, false);
-  }
+
+  // Lead item count banner
   if (level === 'lead') {
-    html += domainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items, true);
+    const totalF3Items = visibleF3.length + (f3Lfw?.items?.length || 0);
+    html += `<div style="padding:10px 24px;background:#ecfeff;border-bottom:1px solid #a5f3fc;
+      font-size:.78rem;color:#0e7490;display:flex;align-items:center;gap:8px;">
+      <span>&#x1F4CB;</span>
+      <span><strong>Lead level — ${totalF3Items} items total:</strong> ${visibleF3.length} core + 6 F3L Leadership items (expanded below)</span>
+    </div>`;
+  }
+
+  // Override domainSection to use F3-specific item builder
+  function f3DomainSection(id, title, items, collapsed) {
+    return `
+      <div class="domain-label${collapsed ? ' collapsed' : ''}" onclick="toggleDomain(this)" data-domain="${id}">
+        <span>${title}</span>
+        <span style="display:flex;align-items:center;gap:10px;">
+          <span class="domain-progress-text domain-prog-${id}">${items.length} items</span>
+          <span class="domain-chevron">▾</span>
+        </span>
+      </div>
+      <div class="domain-body${collapsed ? ' collapsed' : ''}" data-domain-body="${id}">
+        ${items.map(buildF3ItemRow).join('')}
+      </div>`;
+  }
+
+  if (visibleF3.length) {
+    html += f3DomainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3, false);
+  }
+  if (level === 'lead' && f3Lfw) {
+    html += f3DomainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items, false);
     document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) · 20%';
   }
   document.getElementById('f3Items').innerHTML = html;
@@ -1869,6 +2004,7 @@ function buildReviewSummary() {
 
   if (sessionMode === 'observation') {
     return `
+      ${buildCalibrationWarning(level)}
       <div style="margin-bottom:16px;padding:10px 14px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:10px;font-size:.8rem;color:#075985;">
         &#x1F4CB; Observation Session — F3 will be scored at the End-of-Year Conference.
       </div>
@@ -1901,6 +2037,7 @@ function buildReviewSummary() {
        </div>` : '';
 
   return `
+    ${buildCalibrationWarning(level)}
     ${obsNote}${incompleteNote}
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:20px;">
       ${scoreBox('F1 Admin (20%)', r?.f1)}
@@ -1918,6 +2055,60 @@ function buildReviewSummary() {
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
       Formula: (F1/4 × 20%) + (F2/4 × ${r?.f4!=null?'50':'60'}%) + (F3/4 × 20%)${r?.f4!=null?' + (F4/4 × 10%)':''} × 100${r?.f4==null?' &nbsp;·&nbsp; Score F4 to include its 10% weight':''}
+    </div>`;
+}
+
+// ── CALIBRATION WARNING ────────────────────────────────────
+// Shown in Review tab when current scores deviate significantly from previous year
+function buildCalibrationWarning(level) {
+  if (!Object.keys(prevYearScores).length || !FRAMEWORK || !level) return '';
+
+  // Compute per-framework mean deltas
+  const fw1items = FRAMEWORK.frameworks.find(f=>f.id==='F1')?.items || [];
+  const fw2items = FRAMEWORK.frameworks.find(f=>f.id==='F2')?.domains?.flatMap(d=>d.items.filter(i=>isVisible(i,level))) || [];
+
+  function prevMean(items) {
+    const vals = items.map(i=>prevYearScores[i.id]).filter(Boolean);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  }
+  function curMean(items) {
+    const vals = items.filter(i=>scores[i.id] && !notObserved.has(i.id)).map(i=>scores[i.id]);
+    return vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+  }
+
+  const checks = [
+    { label: 'F1 Admin',    prev: prevMean(fw1items), cur: curMean(fw1items) },
+    ...FRAMEWORK.frameworks.find(f=>f.id==='F2').domains.map(d => {
+      const vis = d.items.filter(i=>isVisible(i,level));
+      return { label: d.id, prev: prevMean(vis), cur: curMean(vis) };
+    }),
+  ].filter(c => c.prev !== null && c.cur !== null);
+
+  const flagged = checks.filter(c => Math.abs(c.cur - c.prev) >= 0.75);
+  if (!flagged.length) return '';
+
+  const items = flagged.map(c => {
+    const delta = c.cur - c.prev;
+    const dir   = delta > 0 ? '▲' : '▼';
+    const color = delta > 0 ? '#15803d' : '#dc2626';
+    return `<li style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+      <strong style="min-width:60px;">${c.label}</strong>
+      <span style="color:${color};font-weight:800;">${dir} ${Math.abs(delta).toFixed(2)}</span>
+      <span style="color:#64748b;font-size:.8rem;">(prev ${c.prev.toFixed(2)} → now ${c.cur.toFixed(2)})</span>
+    </li>`;
+  }).join('');
+
+  return `
+    <div style="margin-bottom:16px;padding:12px 16px;background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;">
+      <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
+        ⚖️ Calibration check — significant shift from previous year
+      </div>
+      <ul style="list-style:none;padding:0;margin:0;font-size:.82rem;">
+        ${items}
+      </ul>
+      <div style="font-size:.74rem;color:#92400e;margin-top:8px;padding-top:8px;border-top:1px solid #fde68a;">
+        A shift ≥ 0.75 points warrants reflection: is this genuine growth/decline, or a scoring inconsistency? Consider reviewing the rubric or discussing with a second appraiser.
+      </div>
     </div>`;
 }
 
@@ -2260,6 +2451,18 @@ function renderFollowUpCheckIn() {
     });
   });
 }
+
+window.checkGoCompleteness = function() {
+  const actions = document.getElementById('narr_actions')?.value.trim();
+  const goDate  = document.getElementById('narr_go_date')?.value;
+  const goCheck = document.getElementById('narr_go_check')?.value.trim();
+  const complete = !!(actions && goDate && goCheck);
+  const okBadge  = document.getElementById('goCompleteBadge');
+  const warnBadge= document.getElementById('goIncompleteBadge');
+  if (!actions) { if(okBadge) okBadge.style.display='none'; if(warnBadge) warnBadge.style.display='none'; return; }
+  if (okBadge)   okBadge.style.display   = complete ? '' : 'none';
+  if (warnBadge) warnBadge.style.display = complete ? 'none' : '';
+};
 
 // Wire grow-item selects → dynamic placeholder prompts
 document.getElementById('narr_grow_item').addEventListener('change', () => applyGrowItemPrompts('narr_grow_item'));
@@ -2854,6 +3057,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.narratives) Object.assign(notes, d.narratives);
         if (d.notObservedItems) d.notObservedItems.forEach(id => notObserved.add(id));
         if (d.surveyData) Object.assign(surveyScores, d.surveyData);
+        if (d.f3Evidence) Object.assign(f3Evidence, d.f3Evidence);
         // Restore Glow/Grow/Go narrative fields
         const an = d.appraiserNarrative || {};
         const en = d.endOfYearNarrative || {};
@@ -3136,14 +3340,19 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           appraiserNarrative: (() => {
             const growId = document.getElementById('narr_grow_item').value.trim();
             const growFwItem = frameworkItemMap[growId];
+            const goDate  = document.getElementById('narr_go_date').value;
+            const goCheck = document.getElementById('narr_go_check').value.trim();
             return {
-              strengths:   document.getElementById('narr_strengths').value.trim(),
-              development: document.getElementById('narr_development').value.trim(),
-              actions:     document.getElementById('narr_actions').value.trim(),
-              growItem:    growId,
-              growItemLabel: growFwItem ? `${growId} — ${growFwItem.title}` : growId,
-              goDate:      document.getElementById('narr_go_date').value,
-              goCheck:     document.getElementById('narr_go_check').value.trim(),
+              strengths:        document.getElementById('narr_strengths').value.trim(),
+              development:      document.getElementById('narr_development').value.trim(),
+              actions:          document.getElementById('narr_actions').value.trim(),
+              growItem:         growId,
+              growItemLabel:    growFwItem ? `${growId} — ${growFwItem.title}` : growId,
+              goDate,
+              goCheck,
+              // Flag whether Go target is sufficiently defined (needed for follow-up quality check)
+              goIsComplete:     !!(document.getElementById('narr_actions').value.trim() && goDate && goCheck),
+              goCollectedAt:    new Date().toISOString(),
             };
           })(),
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
@@ -3184,19 +3393,24 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           compositePercent: r?.composite ?? null,
           predicate:        r?.predicate ?? null,
           endOfYearNarrative: (() => {
-            const growId = document.getElementById('eoy_grow_item').value.trim();
+            const growId  = document.getElementById('eoy_grow_item').value.trim();
             const growFwItem = frameworkItemMap[growId];
+            const goDate  = document.getElementById('eoy_go_date').value;
+            const goCheck = document.getElementById('eoy_go_check').value.trim();
             return {
-              summary:     document.getElementById('eoy_summary').value.trim(),
-              strengths:   document.getElementById('eoy_strengths').value.trim(),
-              development: document.getElementById('eoy_development').value.trim(),
-              actions:     document.getElementById('eoy_actions').value.trim(),
-              growItem:    growId,
+              summary:       document.getElementById('eoy_summary').value.trim(),
+              strengths:     document.getElementById('eoy_strengths').value.trim(),
+              development:   document.getElementById('eoy_development').value.trim(),
+              actions:       document.getElementById('eoy_actions').value.trim(),
+              growItem:      growId,
               growItemLabel: growFwItem ? `${growId} — ${growFwItem.title}` : growId,
-              goDate:      document.getElementById('eoy_go_date').value,
-              goCheck:     document.getElementById('eoy_go_check').value.trim(),
+              goDate,
+              goCheck,
+              goIsComplete:  !!(document.getElementById('eoy_actions').value.trim() && goDate && goCheck),
+              goCollectedAt: new Date().toISOString(),
             };
           })(),
+          f3Evidence: { ...f3Evidence },
           coachingQuestions: selectedQuestions.length ? [...selectedQuestions] : null,
           followUp: prevRecord ? {
             previousDocId: prevRecord.id,
@@ -3241,7 +3455,25 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.getElementById('saveDraftBtn').addEventListener('click',    () => saveAppraisal('draft',     false));
   document.getElementById('shareBtn').addEventListener('click',        () => saveAppraisal('shared',    false));
   document.getElementById('saveEoyDraftBtn').addEventListener('click', () => saveAppraisal('draft',     true));
-  document.getElementById('finaliseBtn').addEventListener('click',     () => saveAppraisal('finalised', true));
+  document.getElementById('finaliseBtn').addEventListener('click', () => {
+    // F4 guard: block finalisation if student survey not entered
+    const f4Done = Object.keys(surveyScores).length;
+    const f4Total = FRAMEWORK?.frameworks.find(f=>f.id==='F4')?.items?.length || 17;
+    if (f4Done < f4Total) {
+      const missing = f4Total - f4Done;
+      const proceed = confirm(
+        `⚠ Student Survey (F4) is incomplete — ${f4Done}/${f4Total} items scored.\n\n` +
+        `Missing ${missing} item(s). F4 contributes 10% to the final composite. ` +
+        `If you finalise now, its weight will shift to F2 (50% → 60%).\n\n` +
+        `Go to the F4 tab to complete it, or click OK to finalise without it.`
+      );
+      if (!proceed) {
+        switchTab('f4');
+        return;
+      }
+    }
+    saveAppraisal('finalised', true);
+  });
 
   document.getElementById('coachingAddBtn').addEventListener('click', () => {
     const input = document.getElementById('coachingCustomInput');
