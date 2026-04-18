@@ -424,6 +424,7 @@ body { padding-top: 62px; }
       <button class="checklist-tab active" data-tab="foundation_representative" id="tabFoundation">Foundation Representative</button>
       <button class="checklist-tab" data-tab="school_principal" id="tabPrincipal" style="display:none">School Principal</button>
       <button class="checklist-tab" data-tab="academic_coordinator" id="tabCoordinator" style="display:none">Academic Coordinator</button>
+      <button class="checklist-tab" data-tab="cambridge_coordinator" id="tabCambridge" style="display:none">Cambridge Coordinator</button>
     </nav>
   </div>
 </section>
@@ -542,6 +543,7 @@ const PLATFORM_LABELS = {
   foundation_representative: 'Foundation Representative',
   school_principal:          'School Principal',
   academic_coordinator:      'Academic Coordinator',
+  cambridge_coordinator:     'Cambridge Coordinator',
 };
 
 const CAT_COLORS = {
@@ -581,7 +583,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 
   // ── Determine visible tabs from ah_sub_roles ───────────────────
   const ahSubRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
-  const PLATFORM_ORDER = ['foundation_representative', 'school_principal', 'academic_coordinator'];
+  const PLATFORM_ORDER = ['foundation_representative', 'school_principal', 'academic_coordinator', 'cambridge_coordinator'];
   const visiblePlatforms = isAdmin ? PLATFORM_ORDER : PLATFORM_ORDER.filter(p => ahSubRoles.includes(p));
 
   // Fallback: if user has no sub_roles (and is not admin), show foundation tab as default
@@ -598,6 +600,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     document.getElementById('tabFoundation').style.display = activePlatforms.includes('foundation_representative') ? '' : 'none';
     document.getElementById('tabPrincipal').style.display  = activePlatforms.includes('school_principal')          ? '' : 'none';
     document.getElementById('tabCoordinator').style.display= activePlatforms.includes('academic_coordinator')      ? '' : 'none';
+    document.getElementById('tabCambridge').style.display  = activePlatforms.includes('cambridge_coordinator')     ? '' : 'none';
     // Set initial active tab
     document.querySelectorAll('.checklist-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.tab === currentPlatform);
