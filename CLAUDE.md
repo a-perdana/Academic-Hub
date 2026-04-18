@@ -11,11 +11,10 @@ Academic Hub is an analytics and assessment dashboard for Eduversal's academic c
 ```
 Eduversal Web/                    ← monorepo root (not a deployed app)
 ├── Academic Hub/                 ← THIS app (Vercel)
-├── CentralHub/                   ← admin control panel (Vercel)
+├── Central Hub/                  ← admin control panel (Vercel)
 │   ├── firestore.rules           ← ⚠️ ONLY Firestore rules file — deploy from here
 │   └── firebase.json             ← firebase deploy config
 ├── Teachers Hub/                 ← teacher tools (Vercel)
-├── migrate-auth-and-firestore.js ← one-time migration script
 └── keys/                         ← service account JSON keys (gitignored)
 ```
 
