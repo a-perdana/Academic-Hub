@@ -2,7 +2,16 @@
 
 ## What This App Is
 
-Academic Hub is an analytics and assessment dashboard for Eduversal's academic coordinators and central administrators. It is a **vanilla HTML/CSS/JS application** (no React, no bundler framework). Pages are plain `.html` files with inline scripts that load Firebase via CDN.
+Academic Hub is the **partner school leadership portal** for Eduversal's network. Its users are partner school management staff:
+
+- **Foundation Representatives** — governance and foundation oversight
+- **School Principals** — school-level operations and quality
+- **Academic Coordinators** — curriculum, teaching quality, and academic standards
+- **Cambridge Exam Officers / Coordinators** — Cambridge exam administration and pathway planning
+
+Key features: EASE assessment dashboards (4 cycles/year), Cambridge exam performance tracking, school appraisal and self-appraisal tools, teacher appraisal entry and calibration, school KPI and accreditation dashboards, academic standards framework, competency learning path and portfolio for coordinators, role-based weekly checklists, satisfaction surveys (student/staff/parent), and resource library.
+
+New users require approval from a `central_admin` before accessing the platform. It is a **vanilla HTML/CSS/JS application** (no React, no bundler framework). Pages are plain `.html` files with inline scripts that load Firebase via CDN.
 
 ---
 
