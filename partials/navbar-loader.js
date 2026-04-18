@@ -379,8 +379,7 @@ function ensureNavbarSharedStyles() {
     }
     /* Two-column wide panel */
     #topNav .nav-dropdown-panel--wide {
-      min-width: 520px;
-      left: 0;
+      min-width: 480px;
     }
     #topNav .nav-dd-col-group {
       display: flex;
@@ -774,6 +773,23 @@ function initDropdowns(activeKey) {
       });
       wrap.classList.toggle('open', !isOpen);
       trigger.setAttribute('aria-expanded', String(!isOpen));
+
+      // Adjust panel position to keep it within viewport
+      if (!isOpen) {
+        requestAnimationFrame(() => {
+          const panelEl = wrap.querySelector('.nav-dropdown-panel');
+          if (!panelEl) return;
+          panelEl.style.left = '';
+          panelEl.style.right = '';
+          panelEl.style.transform = '';
+          const rect = panelEl.getBoundingClientRect();
+          if (rect.right > window.innerWidth - 8) {
+            panelEl.style.left = 'auto';
+            panelEl.style.right = '0';
+            panelEl.style.transform = '';
+          }
+        });
+      }
     });
   });
 
