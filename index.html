@@ -18,6 +18,7 @@
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="tokens.css" />
     <style>
       :root {
         --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1006,6 +1007,79 @@
         to {
           opacity: 1;
         }
+      }
+
+      /* ── Hero personalization ────────────────────────────────── */
+      .hero-greeting {
+        margin-bottom: 0.75rem;
+        animation: fadeInDown 0.8s ease-out 0.05s both;
+      }
+
+      .hero-greeting-text {
+        font-size: var(--text-lg, 1.0625rem);
+        color: var(--text-secondary);
+        margin-right: 0.75rem;
+      }
+
+      .hero-subrole-chips {
+        display: inline-flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        vertical-align: middle;
+      }
+
+      .hero-subrole-chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 10px;
+        background: rgba(102,126,234,0.18);
+        border: 1px solid rgba(102,126,234,0.35);
+        border-radius: 20px;
+        font-size: var(--text-xs, 0.6875rem);
+        font-weight: var(--fw-semibold, 600);
+        color: #c7d2fe;
+        letter-spacing: 0.02em;
+        text-transform: capitalize;
+      }
+
+      /* ── Hero quick actions ──────────────────────────────────── */
+      .hero-quick-actions {
+        display: flex;
+        justify-content: center;
+        gap: var(--space-3, 12px);
+        flex-wrap: wrap;
+        margin-top: var(--space-5, 20px);
+        animation: fadeInDown 0.8s ease-out 0.4s both;
+      }
+
+      .hero-action-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2, 8px);
+        padding: 8px 18px;
+        background: var(--glass-bg);
+        border: 1px solid var(--glass-border);
+        border-radius: 50px;
+        font-size: var(--text-sm, 0.8125rem);
+        font-weight: var(--fw-medium, 500);
+        color: rgba(255,255,255,0.85);
+        text-decoration: none;
+        backdrop-filter: blur(10px);
+        transition: all var(--transition, 0.2s ease);
+      }
+
+      .hero-action-pill svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+      }
+
+      .hero-action-pill:hover {
+        background: rgba(102,126,234,0.2);
+        border-color: rgba(102,126,234,0.5);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(102,126,234,0.25);
       }
 
       /* ==========================================================
@@ -2065,6 +2139,10 @@
           </div>
           <span class="logo-text">Eduversal Indonesia</span>
         </div>
+        <div class="hero-greeting" id="heroGreeting" style="display:none;">
+          <span class="hero-greeting-text" id="heroGreetingText"></span>
+          <span class="hero-subrole-chips" id="heroSubroleChips"></span>
+        </div>
         <h1>Academic Hub</h1>
         <p class="subtitle">
           Central dashboard portal providing unified access to all academic
@@ -2072,6 +2150,24 @@
         </p>
         <div class="semester-badge">
           <span>2025/2026 Academic Year • July-December 2025</span>
+        </div>
+        <div class="hero-quick-actions">
+          <a href="/weekly-checklist" class="hero-action-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            Weekly Checklist
+          </a>
+          <a href="/ease-1" class="hero-action-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            EASE Results
+          </a>
+          <a href="/cambridge-calendar" class="hero-action-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Cambridge Calendar
+          </a>
+          <a href="/documents" class="hero-action-pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Documents
+          </a>
         </div>
       </header>
 
@@ -4175,6 +4271,26 @@
         if (profile.role_academichub === 'academic_admin') {
           document.body.classList.add('is-admin');
         }
+
+        // Hero personalisation
+        const firstName = (profile?.displayName || user.displayName || '').split(' ')[0];
+        if (firstName) {
+          const hour = new Date().getHours();
+          const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+          document.getElementById('heroGreetingText').textContent = `${greeting}, ${firstName}.`;
+          const subRoleLabels = {
+            foundation_representative: 'Foundation Representative',
+            school_principal: 'School Principal',
+            academic_coordinator: 'Academic Coordinator',
+            cambridge_coordinator: 'Cambridge Coordinator',
+          };
+          const chips = (profile?.ah_sub_roles || [])
+            .map(r => `<span class="hero-subrole-chip">${subRoleLabels[r] || r}</span>`)
+            .join('');
+          document.getElementById('heroSubroleChips').innerHTML = chips;
+          document.getElementById('heroGreeting').style.display = 'block';
+        }
+
         initCategorySystem(window.db);
       });
 

@@ -21,62 +21,59 @@
 
   <div class="nav-actions">
 
-    <!-- Assessments dropdown -->
-    <div class="nav-dropdown-wrap" id="ddWrap-assessments">
-      <button class="nav-dropdown-trigger" id="ddTrigger-assessments" aria-haspopup="true" aria-expanded="false" data-dd="assessments">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-        <span>Assessments</span>
+    <!-- Dashboards dropdown (all legacy hardcoded dashboard pages) -->
+    <div class="nav-dropdown-wrap" id="ddWrap-dashboards">
+      <button class="nav-dropdown-trigger" id="ddTrigger-dashboards" aria-haspopup="true" aria-expanded="false" data-dd="dashboards">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        <span>Dashboards</span>
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <div class="nav-dropdown-panel" id="ddPanel-assessments">
-        <a href="/ease-1" class="nav-dropdown-item" data-nav-key="ease-1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          EASE I Results
-        </a>
-        <a href="/ease-2" class="nav-dropdown-item" data-nav-key="ease-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          EASE II Results
-        </a>
-        <a href="/ease-3" class="nav-dropdown-item" data-nav-key="ease-3">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          EASE III Results
-        </a>
-        <a href="/a-ease-1" class="nav-dropdown-item" data-nav-key="a-ease-1">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          A-EASE I Results
-        </a>
-        <div class="nav-dd-divider"></div>
-        <a href="/ease-analytics" class="nav-dropdown-item" data-nav-key="ease-analytics">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          EASE Analytics
-        </a>
-        <a href="/ease-archive" class="nav-dropdown-item" data-nav-key="ease-archive">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
-          EASE Archive
-        </a>
-        <div class="nav-dd-divider"></div>
-        <a href="/cambridge-exams" class="nav-dropdown-item" data-nav-key="cambridge-exams">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-          Cambridge Exams
-        </a>
-        <a href="/cambridge-pathway" class="nav-dropdown-item" data-nav-key="cambridge-pathway">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Cambridge Pathway Simulator
-        </a>
-      </div>
-    </div>
-
-    <!-- School dropdown (Quality + Teaching + Surveys) -->
-    <div class="nav-dropdown-wrap" id="ddWrap-school">
-      <button class="nav-dropdown-trigger" id="ddTrigger-school" aria-haspopup="true" aria-expanded="false" data-dd="school">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span>School</span>
-        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="nav-dropdown-panel nav-dropdown-panel--wide" id="ddPanel-school">
+      <div class="nav-dropdown-panel nav-dropdown-panel--wide" id="ddPanel-dashboards">
         <div class="nav-dd-col-group">
           <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Quality</div>
+            <div class="nav-dd-col-header">EASE</div>
+            <a href="/ease-1" class="nav-dropdown-item" data-nav-key="ease-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              EASE I Results
+            </a>
+            <a href="/ease-2" class="nav-dropdown-item" data-nav-key="ease-2">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              EASE II Results
+            </a>
+            <a href="/ease-3" class="nav-dropdown-item" data-nav-key="ease-3">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              EASE III Results
+            </a>
+            <a href="/a-ease-1" class="nav-dropdown-item" data-nav-key="a-ease-1">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              A-EASE I Results
+            </a>
+            <a href="/ease-analytics" class="nav-dropdown-item" data-nav-key="ease-analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              EASE Analytics
+            </a>
+            <a href="/ease-archive" class="nav-dropdown-item" data-nav-key="ease-archive">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>
+              EASE Archive
+            </a>
+            <div class="nav-dd-divider"></div>
+            <div class="nav-dd-col-header" style="padding:4px 12px;">Cambridge</div>
+            <a href="/cambridge-exams" class="nav-dropdown-item" data-nav-key="cambridge-exams">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Cambridge Exams
+            </a>
+            <a href="/cambridge-pathway" class="nav-dropdown-item" data-nav-key="cambridge-pathway">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Cambridge Pathway Simulator
+            </a>
+            <a href="/cambridge-school-quality" class="nav-dropdown-item" data-nav-key="cambridge-school-quality">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Cambridge School Quality
+            </a>
+          </div>
+          <div class="nav-dd-col-divider"></div>
+          <div class="nav-dd-col">
+            <div class="nav-dd-col-header">School Quality</div>
             <a href="/school-appraisals" class="nav-dropdown-item" data-nav-key="school-appraisals">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
               School Appraisals
@@ -84,18 +81,6 @@
             <a href="/school-self-appraisal" class="nav-dropdown-item" data-nav-key="school-self-appraisal">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               School Self-Appraisal
-            </a>
-            <a href="/partner-schools" class="nav-dropdown-item" data-nav-key="partner-schools">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              Partner Schools
-            </a>
-            <a href="/islamic-schools" class="nav-dropdown-item" data-nav-key="islamic-schools">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-              Islamic Schools
-            </a>
-            <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Academic Standards
             </a>
             <a href="/school-performance-kpi" class="nav-dropdown-item" data-nav-key="school-performance-kpi">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -109,56 +94,16 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6l11 13L23 6"/></svg>
               Network Audit
             </a>
-            <a href="/cambridge-school-quality" class="nav-dropdown-item" data-nav-key="cambridge-school-quality">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-              Cambridge School Quality
+            <a href="/partner-schools" class="nav-dropdown-item" data-nav-key="partner-schools">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              Partner Schools
             </a>
-            <a href="/rapor-pendidikan-2025" class="nav-dropdown-item" data-nav-key="rapor-pendidikan-2025">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Rapor Pendidikan 2025
+            <a href="/islamic-schools" class="nav-dropdown-item" data-nav-key="islamic-schools">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+              Islamic Schools
             </a>
-            <a href="/ai-prompts" class="nav-dropdown-item" data-nav-key="ai-prompts">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-              AI Prompts
-            </a>
-          </div>
-          <div class="nav-dd-col-divider"></div>
-          <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Teaching</div>
-            <a href="/teacher-appraisal-entry" class="nav-dropdown-item" data-nav-key="teacher-appraisal-entry">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-              Teacher Appraisal Entry
-            </a>
-            <a href="/teacher-walkthrough-entry" class="nav-dropdown-item" data-nav-key="teacher-walkthrough-entry">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              Teacher Walkthrough
-            </a>
-            <a href="/appraiser-calibration" class="nav-dropdown-item" data-nav-key="appraiser-calibration">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
-              Appraisal Calibration
-            </a>
-            <a href="/my-observations" class="nav-dropdown-item" data-nav-key="my-observations">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-              My Observations
-            </a>
-            <a href="/teacher-kpi-evaluation" class="nav-dropdown-item" data-nav-key="teacher-kpi-evaluation">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-              Teacher KPI Evaluation
-            </a>
-            <a href="/curriculum-map" class="nav-dropdown-item" data-nav-key="curriculum-map">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-              Curriculum Map
-            </a>
-            <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Cambridge Calendar
-            </a>
-            <a href="/weekly-checklist" class="nav-dropdown-item" data-nav-key="weekly-checklist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-              Weekly Checklist
-            </a>
-            <div class="nav-dd-divider" style="margin:8px 0 4px;"></div>
-            <div class="nav-dd-col-header" style="padding:0 12px 4px;">Surveys</div>
+            <div class="nav-dd-divider"></div>
+            <div class="nav-dd-col-header" style="padding:4px 12px;">Surveys</div>
             <a href="/student-survey" class="nav-dropdown-item" data-nav-key="student-survey">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
               Student Survey
@@ -171,8 +116,66 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               Parent Survey
             </a>
+            <div class="nav-dd-divider"></div>
+            <a href="/rapor-pendidikan-2025" class="nav-dropdown-item" data-nav-key="rapor-pendidikan-2025">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Rapor Pendidikan 2025
+            </a>
+            <a href="/ai-prompts" class="nav-dropdown-item" data-nav-key="ai-prompts">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              AI Prompts
+            </a>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- School dropdown (dynamic pages only) -->
+    <div class="nav-dropdown-wrap" id="ddWrap-school">
+      <button class="nav-dropdown-trigger" id="ddTrigger-school" aria-haspopup="true" aria-expanded="false" data-dd="school">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span>School</span>
+        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-panel" id="ddPanel-school">
+        <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Academic Standards
+        </a>
+        <a href="/curriculum-map" class="nav-dropdown-item" data-nav-key="curriculum-map">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+          Curriculum Map
+        </a>
+        <div class="nav-dd-divider"></div>
+        <a href="/teacher-appraisal-entry" class="nav-dropdown-item" data-nav-key="teacher-appraisal-entry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Teacher Appraisal Entry
+        </a>
+        <a href="/teacher-walkthrough-entry" class="nav-dropdown-item" data-nav-key="teacher-walkthrough-entry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Teacher Walkthrough
+        </a>
+        <a href="/appraiser-calibration" class="nav-dropdown-item" data-nav-key="appraiser-calibration">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+          Appraisal Calibration
+        </a>
+        <a href="/my-observations" class="nav-dropdown-item" data-nav-key="my-observations">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          My Observations
+        </a>
+        <a href="/teacher-kpi-evaluation" class="nav-dropdown-item" data-nav-key="teacher-kpi-evaluation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          Teacher KPI Evaluation
+        </a>
+        <div class="nav-dd-divider"></div>
+        <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Cambridge Calendar
+        </a>
+        <a href="/weekly-checklist" class="nav-dropdown-item" data-nav-key="weekly-checklist">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Weekly Checklist
+        </a>
       </div>
     </div>
 

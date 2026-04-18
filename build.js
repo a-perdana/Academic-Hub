@@ -197,6 +197,10 @@ if (fs.existsSync("favicon.svg")) {
   fs.copyFileSync("favicon.svg", "dist/favicon.svg");
   console.log("Copied: favicon.svg");
 }
+if (fs.existsSync("tokens.css")) {
+  fs.copyFileSync("tokens.css", "dist/tokens.css");
+  console.log("Copied: tokens.css");
+}
 
 // -- Copy static assets
 if (fs.existsSync("images")) {
