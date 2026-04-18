@@ -292,6 +292,92 @@ function ensureNavbarSharedStyles() {
     .ah-mobile-badge.visible { display: flex; }
     .ah-mobile-badge--count { background: #6c5ce7; }
 
+    /* ── Mobile section header ──────────────────────────────────── */
+    .ah-mobile-section-header {
+      padding: 8px 14px 2px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    /* ── Desktop dropdown groups ─────────────────────────────────── */
+    #topNav .nav-dropdown-wrap {
+      position: relative;
+    }
+    #topNav .nav-dropdown-trigger {
+      display: flex; align-items: center; gap: 7px;
+      padding: 9px 14px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(108,92,231,0.20), rgba(0,217,255,0.10));
+      border: 1px solid rgba(108,92,231,0.45);
+      color: rgba(255,255,255,0.85);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px; font-weight: 500;
+      cursor: pointer; white-space: nowrap;
+      transition: all 0.22s ease;
+      user-select: none;
+    }
+    #topNav .nav-dropdown-trigger svg { width: 15px; height: 15px; flex-shrink: 0; }
+    #topNav .nav-dropdown-trigger .dd-caret {
+      width: 12px; height: 12px; flex-shrink: 0;
+      transition: transform 0.22s ease;
+      margin-left: 2px;
+    }
+    #topNav .nav-dropdown-wrap.open .nav-dropdown-trigger {
+      background: linear-gradient(135deg, rgba(108,92,231,0.45), rgba(0,217,255,0.25));
+      border-color: rgba(108,92,231,0.7); color: #fff;
+      box-shadow: 0 0 16px rgba(108,92,231,0.40);
+    }
+    #topNav .nav-dropdown-wrap.open .dd-caret { transform: rotate(180deg); }
+    #topNav .nav-dropdown-trigger:hover {
+      background: linear-gradient(135deg, rgba(108,92,231,0.35), rgba(0,217,255,0.20));
+      border-color: rgba(108,92,231,0.65); color: #fff;
+    }
+    #topNav .nav-dropdown-trigger.active {
+      background: linear-gradient(135deg, rgba(108,92,231,0.50), rgba(0,217,255,0.30));
+      border-color: rgba(108,92,231,0.80); color: #fff;
+      box-shadow: 0 0 16px rgba(108,92,231,0.35);
+    }
+    #topNav .nav-dropdown-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 230px;
+      background: rgba(8, 8, 22, 0.97);
+      border: 1px solid rgba(108,92,231,0.3);
+      border-radius: 14px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 8px;
+      z-index: 1100;
+      animation: navDdOpen 0.20s cubic-bezier(0.34,1.2,0.64,1) both;
+    }
+    #topNav .nav-dropdown-wrap.open .nav-dropdown-panel { display: block; }
+    #topNav .nav-dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 9px;
+      color: rgba(255,255,255,0.75);
+      font-family: "DM Sans", sans-serif;
+      font-size: 13px; font-weight: 500;
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    #topNav .nav-dropdown-item svg { width: 15px; height: 15px; flex-shrink: 0; color: rgba(255,255,255,0.4); transition: color 0.15s; }
+    #topNav .nav-dropdown-item:hover { background: rgba(108,92,231,0.18); color: #fff; }
+    #topNav .nav-dropdown-item:hover svg { color: rgba(255,255,255,0.85); }
+    #topNav .nav-dropdown-item.active { background: rgba(108,92,231,0.28); color: #fff; }
+    #topNav .nav-dropdown-item.active svg { color: #a78bfa; }
+    #topNav .nav-dd-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 4px 0;
+    }
+
     /* Stage 1 — 1100px: hide brand name */
     @media (max-width: 1100px) {
       #topNav { padding: 0 18px; }
@@ -520,12 +606,57 @@ function ensureNavbarSharedStyles() {
 }
 
 // Nav items config — used to build the mobile menu
+// Groups have a `group` key with `label` and `items[]`
 const NAV_ITEMS = [
-  { key: 'calendar',     href: '/academic-calendar',  label: 'Academic Calendar', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
-  { key: 'announcements',href: '/announcements',       label: 'Announcements',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/></svg>', badgeId: 'annBadge' },
-  { key: 'messageboard', href: '/message-board',       label: 'Message Board',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', badgeId: 'msgBadge' },
+  { group: 'assessments', label: 'Assessments', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
+    { key: 'ease-1',          href: '/ease-1',           label: 'EASE I Results' },
+    { key: 'ease-2',          href: '/ease-2',           label: 'EASE II Results' },
+    { key: 'ease-3',          href: '/ease-3',           label: 'EASE III Results' },
+    { key: 'a-ease-1',        href: '/a-ease-1',         label: 'A-EASE I Results' },
+    { key: 'ease-analytics',  href: '/ease-analytics',   label: 'EASE Analytics' },
+    { key: 'ease-archive',    href: '/ease-archive',     label: 'EASE Archive' },
+    { key: 'cambridge-exams', href: '/cambridge-exams',  label: 'Cambridge Exams' },
+    { key: 'cambridge-pathway', href: '/cambridge-pathway', label: 'Cambridge Pathway Simulator' },
+  ]},
+  { group: 'quality', label: 'School Quality', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
+    { key: 'school-appraisals',      href: '/school-appraisals',      label: 'School Appraisals' },
+    { key: 'school-self-appraisal',  href: '/school-self-appraisal',  label: 'School Self-Appraisal' },
+    { key: 'partner-schools',        href: '/partner-schools',        label: 'Partner Schools Performance' },
+    { key: 'islamic-schools',        href: '/islamic-schools',        label: 'Islamic Schools Performance' },
+    { key: 'academic-standards',     href: '/academic-standards',     label: 'Academic Standards' },
+    { key: 'school-performance-kpi', href: '/school-performance-kpi', label: 'School KPI' },
+    { key: 'accreditation-dashboard',href: '/accreditation-dashboard',label: 'Accreditation' },
+    { key: 'network-audit',          href: '/network-audit',          label: 'Network Audit' },
+    { key: 'cambridge-school-quality',href: '/cambridge-school-quality',label: 'Cambridge School Quality' },
+    { key: 'rapor-pendidikan-2025',  href: '/rapor-pendidikan-2025',  label: 'Rapor Pendidikan 2025' },
+    { key: 'ai-prompts',             href: '/ai-prompts',             label: 'AI Prompts' },
+  ]},
+  { group: 'teaching', label: 'Teaching', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>', items: [
+    { key: 'teacher-appraisal-entry',  href: '/teacher-appraisal-entry',  label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry', label: 'Teacher Walkthrough Entry' },
+    { key: 'appraiser-calibration',    href: '/appraiser-calibration',     label: 'Appraisal Calibration' },
+    { key: 'my-observations',          href: '/my-observations',           label: 'My Observations' },
+    { key: 'teacher-kpi-evaluation',   href: '/teacher-kpi-evaluation',    label: 'Teacher KPI Evaluation' },
+    { key: 'curriculum-map',           href: '/curriculum-map',            label: 'Curriculum Map' },
+    { key: 'cambridge-calendar',       href: '/cambridge-calendar',        label: 'Cambridge Calendar' },
+    { key: 'weekly-checklist',         href: '/weekly-checklist',          label: 'Weekly Checklist' },
+  ]},
+  { group: 'surveys', label: 'Surveys', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>', items: [
+    { key: 'student-survey', href: '/student-survey', label: 'Student Satisfaction Survey' },
+    { key: 'staff-survey',   href: '/staff-survey',   label: 'Staff Satisfaction Survey' },
+    { key: 'parent-survey',  href: '/parent-survey',  label: 'Parent Satisfaction Survey' },
+  ]},
+  { group: 'coordinator', label: 'Coordinator', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>', items: [
+    { key: 'competency-framework', href: '/competency-framework', label: 'Competency Framework' },
+    { key: 'learning-path',        href: '/learning-path',        label: 'Learning Path' },
+    { key: 'my-portfolio',         href: '/my-portfolio',         label: 'My Portfolio' },
+    { key: 'my-certificates',      href: '/my-certificates',      label: 'My Certificates' },
+  ]},
   { divider: true },
-  { key: 'documents',    href: '/documents',           label: 'Documents',        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', badgeId: 'docBadge', badgeCount: true },
+  { key: 'calendar',      href: '/academic-calendar', label: 'Academic Calendar', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>' },
+  { key: 'announcements', href: '/announcements',     label: 'Announcements',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/></svg>', badgeId: 'annBadge' },
+  { key: 'messageboard',  href: '/message-board',     label: 'Message Board',    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', badgeId: 'msgBadge' },
+  { key: 'documents',     href: '/documents',         label: 'Documents',        icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>', badgeId: 'docBadge', badgeCount: true },
 ];
 
 function buildMobileMenu(activeKey) {
@@ -542,6 +673,24 @@ function buildMobileMenu(activeKey) {
       const d = document.createElement('div');
       d.className = 'ah-mobile-divider';
       menu.appendChild(d);
+      return;
+    }
+
+    if (item.group) {
+      const header = document.createElement('div');
+      header.className = 'ah-mobile-section-header';
+      header.textContent = item.label;
+      menu.appendChild(header);
+
+      item.items.forEach(sub => {
+        const a = document.createElement('a');
+        a.href = sub.href;
+        a.className = 'ah-mobile-menu-item' + (sub.key === activeKey ? ' active' : '');
+        a.setAttribute('data-mobile-nav-key', sub.key);
+        a.innerHTML = `<span>${sub.label}</span>`;
+        a.addEventListener('click', () => closeMobileMenu());
+        menu.appendChild(a);
+      });
       return;
     }
 
@@ -568,6 +717,60 @@ function buildMobileMenu(activeKey) {
   } else {
     document.body.insertBefore(menu, document.body.firstChild);
   }
+}
+
+function initDropdowns(activeKey) {
+  // Find which group the activeKey belongs to
+  const activeGroups = new Set();
+  NAV_ITEMS.forEach(item => {
+    if (item.group && item.items.some(s => s.key === activeKey)) {
+      activeGroups.add(item.group);
+    }
+  });
+
+  document.querySelectorAll('.nav-dropdown-wrap').forEach(wrap => {
+    const triggerId = wrap.querySelector('.nav-dropdown-trigger')?.dataset.dd;
+    if (!triggerId) return;
+
+    const trigger = wrap.querySelector('.nav-dropdown-trigger');
+    const panel   = wrap.querySelector('.nav-dropdown-panel');
+    if (!trigger || !panel) return;
+
+    // Mark trigger as active if current page is in this group
+    if (activeGroups.has(triggerId)) trigger.classList.add('active');
+
+    trigger.addEventListener('click', e => {
+      e.stopPropagation();
+      const isOpen = wrap.classList.contains('open');
+      // Close all other dropdowns
+      document.querySelectorAll('.nav-dropdown-wrap.open').forEach(w => {
+        if (w !== wrap) {
+          w.classList.remove('open');
+          w.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+        }
+      });
+      wrap.classList.toggle('open', !isOpen);
+      trigger.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.nav-dropdown-wrap.open').forEach(w => {
+      w.classList.remove('open');
+      w.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  // Close on Escape
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.nav-dropdown-wrap.open').forEach(w => {
+        w.classList.remove('open');
+        w.querySelector('.nav-dropdown-trigger')?.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
 }
 
 function closeMobileMenu() {
@@ -847,8 +1050,9 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
     link.classList.toggle('active', link.dataset.navKey === activeKey);
   });
 
-  // Build and wire mobile menu
+  // Build and wire mobile menu + desktop dropdowns
   buildMobileMenu(activeKey);
+  initDropdowns(activeKey);
   initHamburger();
   syncMobileBadges();
 
