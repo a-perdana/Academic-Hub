@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Academic Services — Eduversal</title>
+  <meta name="description" content="Eduversal provides Cambridge-aligned academic services to partner schools across Indonesia — from centralised assessment and appraisal visits to safeguarding, curriculum guidance, and school quality assurance." />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #07071a;
+      color: #ffffff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated background orbs ──────────────────────────────────── */
+    .bg-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      animation: floatOrb 18s ease-in-out infinite;
+    }
+    .orb-1 { width: 600px; height: 600px; background: #667eea; top: -200px; left: -150px; animation-delay: 0s; }
+    .orb-2 { width: 500px; height: 500px; background: #764ba2; top: 40%; right: -150px; animation-delay: -6s; }
+    .orb-3 { width: 400px; height: 400px; background: #4facfe; bottom: -100px; left: 30%; animation-delay: -12s; }
+    @keyframes floatOrb {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33%       { transform: translate(40px, -30px) scale(1.05); }
+      66%       { transform: translate(-20px, 20px) scale(0.97); }
+    }
+
+    /* ── Layout wrapper ─────────────────────────────────────────────── */
+    .page-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+    }
+
+    /* ── Top bar (no auth) ──────────────────────────────────────────── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(7, 7, 26, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topbar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      text-decoration: none;
+    }
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .brand-icon svg { width: 20px; height: 20px; fill: #fff; }
+    .brand-text { line-height: 1.2; }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: #fff;
+    }
+    .brand-sub {
+      font-size: var(--text-xs);
+      color: rgba(255,255,255,0.5);
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    .btn-ghost {
+      padding: 8px 18px;
+      border-radius: var(--radius);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: rgba(255,255,255,0.75);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      border-color: rgba(255,255,255,0.2);
+    }
+    .btn-primary {
+      padding: 8px 20px;
+      border-radius: var(--radius);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity var(--transition), transform var(--transition);
+      white-space: nowrap;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ── Hero ───────────────────────────────────────────────────────── */
+    .hero {
+      padding: 96px 0 72px;
+      text-align: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 6px 16px;
+      border-radius: 999px;
+      background: rgba(102, 126, 234, 0.15);
+      border: 1px solid rgba(102, 126, 234, 0.3);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      color: #a5b4fc;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-6);
+    }
+    .hero-eyebrow svg { width: 13px; height: 13px; }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #fff;
+      max-width: 760px;
+      margin: 0 auto var(--space-6);
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, #a5b4fc, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-lead {
+      font-size: var(--text-lg);
+      line-height: 1.75;
+      color: rgba(255,255,255,0.65);
+      max-width: 680px;
+      margin: 0 auto var(--space-10);
+      font-weight: 400;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-10);
+      flex-wrap: wrap;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #a5b4fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.5);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* ── Section titles ─────────────────────────────────────────────── */
+    .section-header {
+      text-align: center;
+      margin-bottom: var(--space-12);
+    }
+    .section-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: var(--space-4);
+    }
+    .section-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-4xl);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: var(--space-4);
+    }
+    .section-header p {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.55);
+      max-width: 560px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Glass card base ────────────────────────────────────────────── */
+    .glass {
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+    }
+
+    /* ── Divider ─────────────────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+      margin: 0;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       SECTION 1 — Core Services
+    ════════════════════════════════════════════════════════════════ */
+    .services-section { padding: 80px 0; }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: var(--space-6);
+    }
+
+    .service-card {
+      background: rgba(255,255,255,0.055);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+      transition: transform 0.4s cubic-bezier(.22,.68,0,1.2), box-shadow 0.4s ease, border-color 0.3s ease;
+      animation: cardIn 0.6s ease both;
+    }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.45);
+      border-color: rgba(255,255,255,0.18);
+    }
+
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .service-card:nth-child(1) { animation-delay: 0.05s; }
+    .service-card:nth-child(2) { animation-delay: 0.10s; }
+    .service-card:nth-child(3) { animation-delay: 0.15s; }
+    .service-card:nth-child(4) { animation-delay: 0.20s; }
+    .service-card:nth-child(5) { animation-delay: 0.25s; }
+    .service-card:nth-child(6) { animation-delay: 0.30s; }
+    .service-card:nth-child(7) { animation-delay: 0.35s; }
+
+    .service-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .service-icon svg { width: 26px; height: 26px; }
+
+    .service-badge {
+      display: inline-flex;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: var(--text-xs);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      width: fit-content;
+    }
+
+    .service-title {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+    }
+
+    .service-desc {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.62);
+      line-height: 1.75;
+    }
+
+    .service-details {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .service-details li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--space-3);
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.7);
+      line-height: 1.55;
+    }
+    .service-details li::before {
+      content: '';
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      margin-top: 7px;
+      flex-shrink: 0;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+      margin-top: auto;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+      width: fit-content;
+    }
+    .service-link:hover {
+      background: rgba(255,255,255,0.14);
+      color: #fff;
+      border-color: rgba(255,255,255,0.25);
+    }
+    .service-link svg { width: 14px; height: 14px; }
+
+    /* ── Per-card accent colours ─────────────────────────────────── */
+    /* EASE */
+    .sc-ease .service-icon   { background: rgba(102,126,234,0.2); }
+    .sc-ease .service-icon svg { color: #a5b4fc; }
+    .sc-ease .service-badge  { background: rgba(102,126,234,0.2); color: #a5b4fc; }
+    .sc-ease .service-details li::before { background: #a5b4fc; }
+    /* Appraisal */
+    .sc-appraisal .service-icon  { background: rgba(249,115,22,0.18); }
+    .sc-appraisal .service-icon svg { color: #fb923c; }
+    .sc-appraisal .service-badge { background: rgba(249,115,22,0.18); color: #fb923c; }
+    .sc-appraisal .service-details li::before { background: #fb923c; }
+    /* Cambridge */
+    .sc-cambridge .service-icon  { background: rgba(22,163,74,0.18); }
+    .sc-cambridge .service-icon svg { color: #4ade80; }
+    .sc-cambridge .service-badge { background: rgba(22,163,74,0.18); color: #4ade80; }
+    .sc-cambridge .service-details li::before { background: #4ade80; }
+    /* School Quality */
+    .sc-quality .service-icon  { background: rgba(59,130,246,0.18); }
+    .sc-quality .service-icon svg { color: #93c5fd; }
+    .sc-quality .service-badge { background: rgba(59,130,246,0.18); color: #93c5fd; }
+    .sc-quality .service-details li::before { background: #93c5fd; }
+    /* Teacher Dev */
+    .sc-teacher .service-icon  { background: rgba(240,93,251,0.16); }
+    .sc-teacher .service-icon svg { color: #e879f9; }
+    .sc-teacher .service-badge { background: rgba(240,93,251,0.16); color: #e879f9; }
+    .sc-teacher .service-details li::before { background: #e879f9; }
+    /* Safeguarding */
+    .sc-safe .service-icon  { background: rgba(109,40,217,0.22); }
+    .sc-safe .service-icon svg { color: #c4b5fd; }
+    .sc-safe .service-badge { background: rgba(109,40,217,0.22); color: #c4b5fd; }
+    .sc-safe .service-details li::before { background: #c4b5fd; }
+    /* Curriculum */
+    .sc-curriculum .service-icon  { background: rgba(20,184,166,0.18); }
+    .sc-curriculum .service-icon svg { color: #5eead4; }
+    .sc-curriculum .service-badge { background: rgba(20,184,166,0.18); color: #5eead4; }
+    .sc-curriculum .service-details li::before { background: #5eead4; }
+
+    /* ════════════════════════════════════════════════════════════════
+       SECTION 2 — Academic Standards reference panel
+    ════════════════════════════════════════════════════════════════ */
+    .standards-section {
+      padding: 80px 0;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .standards-intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-16);
+      align-items: start;
+      margin-bottom: var(--space-12);
+    }
+    @media (max-width: 780px) {
+      .standards-intro { grid-template-columns: 1fr; gap: var(--space-8); }
+    }
+
+    .standards-intro-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      margin-bottom: var(--space-5);
+    }
+    .standards-intro-text p {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.6);
+      line-height: 1.75;
+      margin-bottom: var(--space-5);
+    }
+    .standards-cta-group {
+      display: flex;
+      gap: var(--space-3);
+      flex-wrap: wrap;
+      margin-top: var(--space-6);
+    }
+    .btn-accent {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 10px 22px;
+      border-radius: var(--radius);
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      text-decoration: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .btn-accent:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-accent svg { width: 15px; height: 15px; }
+
+    /* 23-section grid */
+    .standards-domains {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-3);
+    }
+    @media (max-width: 900px) { .standards-domains { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 560px) { .standards-domains { grid-template-columns: 1fr; } }
+
+    .domain-group-label {
+      grid-column: 1 / -1;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      padding: var(--space-3) 0 var(--space-1);
+      margin-top: var(--space-4);
+    }
+    .domain-group-label:first-child { margin-top: 0; }
+
+    .domain-chip {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: 12px 14px;
+      border-radius: var(--radius-lg);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: background var(--transition), border-color var(--transition);
+    }
+    .domain-chip:hover {
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.16);
+    }
+    .domain-num {
+      width: 28px;
+      height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-xs);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .domain-chip-text {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.72);
+      line-height: 1.35;
+      font-weight: 500;
+    }
+    /* safeguarding chip highlight */
+    .domain-chip.highlight {
+      background: rgba(109,40,217,0.18);
+      border-color: rgba(196,181,253,0.3);
+    }
+    .domain-chip.highlight .domain-chip-text { color: #c4b5fd; }
+
+    /* ════════════════════════════════════════════════════════════════
+       SECTION 3 — How it works
+    ════════════════════════════════════════════════════════════════ */
+    .how-section { padding: 80px 0; }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-6);
+      position: relative;
+    }
+    @media (max-width: 720px) { .steps-grid { grid-template-columns: 1fr; } }
+
+    /* connector line between steps */
+    .steps-grid::before {
+      content: '';
+      position: absolute;
+      top: 40px;
+      left: calc(33.33% + 16px);
+      right: calc(33.33% + 16px);
+      height: 2px;
+      background: linear-gradient(90deg, rgba(102,126,234,0.4), rgba(118,75,162,0.4));
+      pointer-events: none;
+    }
+    @media (max-width: 720px) { .steps-grid::before { display: none; } }
+
+    .step-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8) var(--space-6);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: var(--text-xl);
+      font-weight: 700;
+      color: #fff;
+    }
+    .step-body {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.58);
+      line-height: 1.7;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       SECTION 4 — Partner school commitments
+    ════════════════════════════════════════════════════════════════ */
+    .commitments-section { padding: 80px 0; background: rgba(255,255,255,0.02); }
+
+    .commitments-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--space-5);
+    }
+    @media (max-width: 640px) { .commitments-grid { grid-template-columns: 1fr; } }
+
+    .commitment-item {
+      display: flex;
+      gap: var(--space-4);
+      padding: var(--space-6);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      align-items: flex-start;
+      transition: background var(--transition);
+    }
+    .commitment-item:hover { background: rgba(255,255,255,0.07); }
+    .commitment-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .commitment-icon svg { width: 22px; height: 22px; }
+    .commitment-title {
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: var(--space-2);
+    }
+    .commitment-text {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.55);
+      line-height: 1.65;
+    }
+
+    /* ════════════════════════════════════════════════════════════════
+       SECTION 5 — CTA / Contact
+    ════════════════════════════════════════════════════════════════ */
+    .cta-section { padding: 80px 0 100px; }
+
+    .cta-card {
+      background: linear-gradient(135deg, rgba(102,126,234,0.18), rgba(118,75,162,0.18));
+      border: 1px solid rgba(102,126,234,0.25);
+      border-radius: var(--radius-xl);
+      padding: var(--space-16) var(--space-10);
+      text-align: center;
+    }
+    @media (max-width: 560px) { .cta-card { padding: var(--space-10) var(--space-6); } }
+    .cta-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: var(--space-4);
+      line-height: 1.2;
+    }
+    .cta-card p {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.6);
+      max-width: 520px;
+      margin: 0 auto var(--space-8);
+      line-height: 1.7;
+    }
+    .cta-actions {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+    }
+    .btn-cta-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 14px 32px;
+      border-radius: var(--radius-lg);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border: none;
+      text-decoration: none;
+      transition: opacity var(--transition), transform var(--transition);
+    }
+    .btn-cta-primary:hover { opacity: 0.88; transform: translateY(-2px); }
+    .btn-cta-primary svg { width: 16px; height: 16px; }
+    .btn-cta-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 14px 32px;
+      border-radius: var(--radius-lg);
+      font-size: var(--text-base);
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.15);
+      text-decoration: none;
+      transition: background var(--transition), color var(--transition);
+    }
+    .btn-cta-ghost:hover { background: rgba(255,255,255,0.13); color: #fff; }
+    .btn-cta-ghost svg { width: 16px; height: 16px; }
+
+    /* ── Footer ─────────────────────────────────────────────────────── */
+    .footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: var(--space-8) 0;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--space-4);
+    }
+    .footer-copy {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.35);
+    }
+    .footer-links {
+      display: flex;
+      gap: var(--space-5);
+    }
+    .footer-links a {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.4);
+      text-decoration: none;
+      transition: color var(--transition);
+    }
+    .footer-links a:hover { color: rgba(255,255,255,0.75); }
+
+    /* ── Responsive ─────────────────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .hero { padding: 72px 0 56px; }
+      .hero-stats { gap: var(--space-8); }
+      .topbar-actions .btn-ghost { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ── Top bar ─────────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a href="/" class="brand" aria-label="Eduversal Academic Hub">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">Academic Hub</div>
+          <div class="brand-sub">Eduversal · Indonesia</div>
+        </div>
+      </a>
+      <div class="topbar-actions">
+        <a href="academic-standards-public" class="btn-ghost">Academic Standards</a>
+        <a href="login.html" class="btn-primary">Partner Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Hero ───────────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="page-wrap">
+      <div class="hero-eyebrow">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        Cambridge Partner Network · Indonesia
+      </div>
+      <h1>Academic Services for <span>Cambridge Partner Schools</span></h1>
+      <p class="hero-lead">
+        Eduversal supports its network of partner schools with structured academic services — from centralised assessment cycles and specialist appraisal visits to safeguarding compliance, school quality assurance, and professional development for school leaders and teachers.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">15+</div>
+          <div class="stat-label">Partner Schools</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4,000+</div>
+          <div class="stat-label">Students</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4×</div>
+          <div class="stat-label">EASE Cycles / Year</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">23</div>
+          <div class="stat-label">Academic Standards Sections</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 1 — Core Services
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="services-section">
+    <div class="page-wrap">
+      <div class="section-header">
+        <div class="section-tag" style="background:rgba(102,126,234,0.15);color:#a5b4fc;">Core Services</div>
+        <h2>What Eduversal Provides</h2>
+        <p>Each service is designed to raise academic standards, ensure Cambridge compliance, and support the sustainable growth of partner schools across Indonesia.</p>
+      </div>
+
+      <div class="services-grid">
+
+        <!-- 1. EASE -->
+        <div class="service-card sc-ease">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
+            </svg>
+          </div>
+          <div class="service-badge">Assessment</div>
+          <h3 class="service-title">EASE — Centralised Assessment</h3>
+          <p class="service-desc">
+            The Eduversal Academic Standardised Examination (EASE) is a centralised assessment administered to all partner schools four times per academic year. It provides a network-wide benchmark, enabling schools to track student performance against a shared standard and identify areas for targeted intervention.
+          </p>
+          <ul class="service-details">
+            <li>Four assessment cycles per year (EASE I, II, III, and A-EASE I for A-Level)</li>
+            <li>Covers key Cambridge subject areas across IGCSE and AS/A-Level programmes</li>
+            <li>Results are visible through the Academic Hub dashboard with school-level and subject-level breakdowns</li>
+            <li>Historical archive available for year-on-year trend analysis</li>
+            <li>Analytics tools for identifying high-performing and at-risk cohorts</li>
+          </ul>
+        </div>
+
+        <!-- 2. Appraisal Visits -->
+        <div class="service-card sc-appraisal">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="service-badge">School Visit</div>
+          <h3 class="service-title">Appraisal Visits</h3>
+          <p class="service-desc">
+            Eduversal Subject Specialists conduct structured appraisal visits to partner schools one to two times per academic year. These visits combine classroom observation, teacher walkthrough sessions, and structured interviews with school leadership to produce a detailed report aligned to the Eduversal Appraisal Framework.
+          </p>
+          <ul class="service-details">
+            <li>Specialist-led visits by trained Subject Specialists in Math, English, Sciences, and Bahasa</li>
+            <li>Structured classroom walkthrough observations with standardised rubrics</li>
+            <li>Appraiser calibration sessions to ensure consistency across schools</li>
+            <li>Post-visit reports with actionable recommendations and follow-up targets</li>
+            <li>Full digital record of all observations accessible in Academic Hub</li>
+          </ul>
+        </div>
+
+        <!-- 3. Cambridge Centre Support -->
+        <div class="service-card sc-cambridge">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div class="service-badge">Cambridge</div>
+          <h3 class="service-title">Cambridge Centre Compliance</h3>
+          <p class="service-desc">
+            Eduversal supports partner schools in meeting and maintaining their obligations as Cambridge International Centres. This includes examination entry management, results review, pathway planning, and preparation for Cambridge school quality reviews.
+          </p>
+          <ul class="service-details">
+            <li>Guidance on Cambridge Centre requirements and annual compliance obligations</li>
+            <li>Cambridge Pathway Simulator to model subject combinations and predicted grades</li>
+            <li>Cambridge Exam dashboard tracking entries, results, and grade distributions</li>
+            <li>Cambridge Calendar integration for key examination and registration deadlines</li>
+            <li>Support with Cambridge School Quality and accreditation processes (CIS/WASC)</li>
+          </ul>
+        </div>
+
+        <!-- 4. School Quality & KPI -->
+        <div class="service-card sc-quality">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
+          <div class="service-badge">Quality Assurance</div>
+          <h3 class="service-title">School Quality & KPI Monitoring</h3>
+          <p class="service-desc">
+            Eduversal provides a comprehensive school quality assurance framework, combining externally-set KPIs with school self-appraisal tools. This allows partner schools to benchmark their performance across academic, operational, and community dimensions, while supporting accreditation readiness for CIS and WASC.
+          </p>
+          <ul class="service-details">
+            <li>School Performance KPI dashboard with tracking across multiple quality domains</li>
+            <li>Annual School Self-Appraisal tool for structured internal review</li>
+            <li>School Appraisals Dashboard aggregating all visit outcomes by school</li>
+            <li>Network-wide audit view identifying patterns across the partner school network</li>
+            <li>Accreditation Toolkit aligned to CIS and WASC self-study requirements</li>
+            <li>Partner Schools Performance and Islamic Schools Performance dashboards</li>
+          </ul>
+        </div>
+
+        <!-- 5. Teacher Development -->
+        <div class="service-card sc-teacher">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+              <path d="M15.5 3.5 17 5l3-3"/>
+            </svg>
+          </div>
+          <div class="service-badge">Professional Development</div>
+          <h3 class="service-title">Teacher Appraisal & Development</h3>
+          <p class="service-desc">
+            Beyond school-level appraisal, Eduversal provides a structured system for teacher appraisal and professional growth. School leaders can record classroom observations, submit appraisal entries, and track individual teacher development over time — all within Academic Hub.
+          </p>
+          <ul class="service-details">
+            <li>Teacher Appraisal Entry forms for structured post-observation documentation</li>
+            <li>Classroom Walkthrough Entry tool with subject-specific observation criteria</li>
+            <li>My Observations log for appraisers to track their own walkthrough history</li>
+            <li>Teacher KPI Evaluation framework aligned to national and Cambridge teaching standards</li>
+            <li>Appraiser Calibration sessions to standardise observation quality across schools</li>
+            <li>Coordinator Competency Framework and Learning Path for academic coordinators</li>
+          </ul>
+        </div>
+
+        <!-- 6. Safeguarding & Child Protection -->
+        <div class="service-card sc-safe">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="service-badge">Safeguarding</div>
+          <h3 class="service-title">Safeguarding & Child Protection</h3>
+          <p class="service-desc">
+            Eduversal requires all partner schools to maintain a robust safeguarding and child protection policy in line with both Indonesian law and Cambridge International requirements. This is not optional — it is a core compliance obligation for all schools in the network, and a dedicated section of the Academic Standards framework.
+          </p>
+          <ul class="service-details">
+            <li>Dedicated Section 09 in the Eduversal Academic Standards covering safeguarding policy, procedures, and evidence requirements</li>
+            <li>Child protection policy template aligned to Cambridge Centre compliance requirements</li>
+            <li>Student wellbeing frameworks covering mental health, inclusion, and pastoral care</li>
+            <li>Clear reporting lines and designated safeguarding lead (DSL) role requirements</li>
+            <li>Data protection obligations for safeguarding records (Section 14: Data Protection)</li>
+            <li>Risk management protocols for safeguarding incidents (Section 15: Risk Management)</li>
+            <li>Staff recruitment safeguarding checks integrated into the Staff Lifecycle framework (Section 12)</li>
+          </ul>
+          <a href="academic-standards-public" class="service-link">
+            View Safeguarding Standards
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- 7. Curriculum & Learning -->
+        <div class="service-card sc-curriculum">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div class="service-badge">Curriculum</div>
+          <h3 class="service-title">Curriculum Guidance & Learning Pathway</h3>
+          <p class="service-desc">
+            Eduversal supports partner schools in mapping their curriculum to Cambridge requirements and national standards. Schools have access to curriculum planning tools, subject pacing guides, and an academic calendar — enabling consistent, standards-aligned delivery across the network.
+          </p>
+          <ul class="service-details">
+            <li>Curriculum Map aligned to Cambridge IGCSE, AS/A-Level, and Checkpoint frameworks</li>
+            <li>Academic Calendar with key Eduversal and Cambridge milestones for the school year</li>
+            <li>Subject pacing guides (via Teachers Hub) for Math, Sciences, and English at all levels</li>
+            <li>Inclusion, EAL, and Learning Support framework (Section 08 of Academic Standards)</li>
+            <li>Student Conduct and Discipline standards with restorative practice guidance (Section 22)</li>
+            <li>External Partnerships and Student Pathways support for university and career guidance (Section 23)</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 2 — Academic Standards Reference
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="standards-section">
+    <div class="page-wrap">
+
+      <div class="standards-intro">
+        <div class="standards-intro-text">
+          <div class="section-tag" style="background:rgba(102,126,234,0.15);color:#a5b4fc;display:inline-block;padding:4px 12px;border-radius:999px;font-size:var(--text-xs);font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:var(--space-4);">Academic Standards Framework</div>
+          <h2>A 23-Section Framework Covering Every Dimension of School Quality</h2>
+          <p>
+            The Eduversal Academic Standards is a comprehensive policy and operational framework developed for partner schools in the Cambridge network across Indonesia. It covers governance, legal compliance, teaching quality, student wellbeing, safeguarding, examinations, operations, and external relations — in a single structured document available to all partner school leaders.
+          </p>
+          <p>
+            Each section is maintained as a living document in Google Docs and accessible through the Academic Standards portal. School leaders with an Academic Hub account can access the full interactive version with inline AI assistance.
+          </p>
+          <div class="standards-cta-group">
+            <a href="academic-standards-public" class="btn-accent">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              Browse All Sections
+            </a>
+            <a href="login.html" class="btn-ghost" style="color:rgba(255,255,255,0.65);">Login for Full Access</a>
+          </div>
+        </div>
+
+        <div class="standards-domains">
+          <div class="domain-group-label">Governance &amp; Compliance</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(30,64,175,0.3);color:#93c5fd;">01</div>
+            <span class="domain-chip-text">Front Matter &amp; Governance Charter</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(30,58,138,0.3);color:#93c5fd;">02</div>
+            <span class="domain-chip-text">Legal &amp; Regulatory Compliance</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(22,101,52,0.3);color:#86efac;">03</div>
+            <span class="domain-chip-text">Cambridge Centre Compliance</span>
+          </div>
+
+          <div class="domain-group-label">Academic Framework</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(37,99,235,0.3);color:#93c5fd;">04</div>
+            <span class="domain-chip-text">Strategic Planning &amp; School Improvement</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(21,128,61,0.3);color:#86efac;">05</div>
+            <span class="domain-chip-text">Curriculum Architecture</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(22,163,74,0.3);color:#86efac;">06</div>
+            <span class="domain-chip-text">Assessment &amp; Reporting</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(34,197,94,0.25);color:#86efac;">07</div>
+            <span class="domain-chip-text">Teaching Quality &amp; Practice</span>
+          </div>
+
+          <div class="domain-group-label">Student Support</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(124,58,237,0.3);color:#c4b5fd;">08</div>
+            <span class="domain-chip-text">Inclusion, EAL &amp; Learning Support</span>
+          </div>
+          <div class="domain-chip highlight">
+            <div class="domain-num" style="background:rgba(109,40,217,0.4);color:#c4b5fd;">09</div>
+            <span class="domain-chip-text">Safeguarding, Child Protection &amp; Wellbeing</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(139,92,246,0.25);color:#c4b5fd;">22</div>
+            <span class="domain-chip-text">Student Conduct, Discipline &amp; Restorative Practices</span>
+          </div>
+
+          <div class="domain-group-label">Examinations &amp; Operations</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(20,83,45,0.35);color:#86efac;">10</div>
+            <span class="domain-chip-text">Cambridge Examinations Management</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(249,115,22,0.2);color:#fb923c;">13</div>
+            <span class="domain-chip-text">Operations, Finance &amp; Resources</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(251,146,60,0.2);color:#fb923c;">14</div>
+            <span class="domain-chip-text">Data Protection, Records &amp; Information Systems</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(194,65,12,0.25);color:#fb923c;">15</div>
+            <span class="domain-chip-text">Risk Management &amp; Business Continuity</span>
+          </div>
+
+          <div class="domain-group-label">External Relations</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(220,38,38,0.2);color:#fca5a5;">11</div>
+            <span class="domain-chip-text">Admissions, Enrollment &amp; Marketing Ethics</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(239,68,68,0.2);color:#fca5a5;">16</div>
+            <span class="domain-chip-text">Parent, Student &amp; Community Engagement</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(59,130,246,0.2);color:#93c5fd;">17</div>
+            <span class="domain-chip-text">Quality Assurance &amp; Internal Review</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(185,28,28,0.25);color:#fca5a5;">18</div>
+            <span class="domain-chip-text">Accreditation Toolkit (CIS/WASC)</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(248,113,113,0.2);color:#fca5a5;">23</div>
+            <span class="domain-chip-text">External Partnerships &amp; Student Pathways</span>
+          </div>
+
+          <div class="domain-group-label">Resources &amp; Tools</div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(234,88,12,0.2);color:#fb923c;">12</div>
+            <span class="domain-chip-text">Staff Lifecycle: Recruitment, Induction, Appraisal</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(120,53,15,0.3);color:#fcd34d;">19</div>
+            <span class="domain-chip-text">Templates &amp; Operational Tools</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(146,64,14,0.3);color:#fcd34d;">20</div>
+            <span class="domain-chip-text">References &amp; Compliance Library</span>
+          </div>
+          <div class="domain-chip">
+            <div class="domain-num" style="background:rgba(161,98,7,0.3);color:#fcd34d;">21</div>
+            <span class="domain-chip-text">Digital Learning &amp; Technology Infrastructure</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 3 — How It Works
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="how-section">
+    <div class="page-wrap">
+      <div class="section-header">
+        <div class="section-tag" style="background:rgba(79,172,254,0.15);color:#7dd3fc;">How It Works</div>
+        <h2>Becoming a Partner School</h2>
+        <p>Eduversal's services are available exclusively to schools that have formally joined the partner network.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <div class="step-title">Join the Network</div>
+          <p class="step-body">
+            Your school enters a formal partnership agreement with Eduversal (Yayasan Edukasi Universal Indonesia). This establishes the school as an active Cambridge-aligned partner within the Eduversal network and unlocks access to all academic services.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <div class="step-title">Access Academic Hub</div>
+          <p class="step-body">
+            School leadership — Foundation Representatives, Principals, Academic Coordinators, and Cambridge Exam Officers — are onboarded to the Academic Hub portal. After account creation and admin approval, each role sees a tailored dashboard with tools relevant to their responsibilities.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <div class="step-title">Data-Driven Progress</div>
+          <p class="step-body">
+            With EASE results, appraisal visit data, KPI tracking, and the Academic Standards framework all in one place, your school can make evidence-based decisions, track improvement over time, and ensure full compliance with Cambridge and Eduversal requirements year-round.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 4 — Partner school commitments
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="commitments-section">
+    <div class="page-wrap">
+      <div class="section-header">
+        <div class="section-tag" style="background:rgba(52,211,153,0.15);color:#6ee7b7;">Partnership Commitments</div>
+        <h2>What We Expect from Partner Schools</h2>
+        <p>A genuine partnership means mutual accountability. These are the core commitments Eduversal asks of every partner school.</p>
+      </div>
+
+      <div class="commitments-grid">
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(109,40,217,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">Safeguarding Policy</div>
+            <p class="commitment-text">Every partner school must maintain an up-to-date safeguarding and child protection policy with a designated lead, clear reporting procedures, and staff trained to recognise and respond to concerns. This is a non-negotiable compliance requirement under both Indonesian law and Cambridge Centre obligations.</p>
+          </div>
+        </div>
+
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(37,99,235,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">EASE Participation</div>
+            <p class="commitment-text">All partner schools are expected to participate in all four EASE cycles each year, submitting student data on time and using the results to inform teaching and intervention planning across subject areas.</p>
+          </div>
+        </div>
+
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(249,115,22,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">Cooperation with Appraisal Visits</div>
+            <p class="commitment-text">Partner schools must cooperate fully with Eduversal appraisal visits — providing classroom access, making teachers available for observation, and engaging honestly with post-visit feedback and action plans.</p>
+          </div>
+        </div>
+
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(22,163,74,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">Cambridge Centre Obligations</div>
+            <p class="commitment-text">Schools are responsible for maintaining their Cambridge Centre registration, ensuring exam entry deadlines are met, and implementing Cambridge's policies on assessment integrity, student conduct, and centre operations.</p>
+          </div>
+        </div>
+
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(20,184,166,0.2);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#5eead4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">Academic Standards Alignment</div>
+            <p class="commitment-text">Partner schools are expected to work towards alignment with all 23 sections of the Eduversal Academic Standards framework over time, with priority given to governance, safeguarding, teaching quality, and Cambridge compliance.</p>
+          </div>
+        </div>
+
+        <div class="commitment-item">
+          <div class="commitment-icon" style="background:rgba(240,93,251,0.18);">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#e879f9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="commitment-title">Data & Reporting</div>
+            <p class="commitment-text">Schools must maintain accurate student data, submit self-appraisal reports as required, and use Academic Hub tools as the primary record system for academic performance, teacher appraisal, and school quality monitoring.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+       SECTION 5 — CTA
+  ══════════════════════════════════════════════════════════════════ -->
+  <section class="cta-section">
+    <div class="page-wrap">
+      <div class="cta-card">
+        <h2>Interested in Partnering with Eduversal?</h2>
+        <p>If your school follows the Cambridge curriculum and is located in Indonesia, we'd love to hear from you. Reach out to the Eduversal team to learn more about joining the network.</p>
+        <div class="cta-actions">
+          <a href="mailto:info@eduversal.org" class="btn-cta-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Contact Us — info@eduversal.org
+          </a>
+          <a href="academic-standards-public" class="btn-cta-ghost">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+            Explore Academic Standards
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ─────────────────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-copy">
+        &copy; <span id="yr"></span> Yayasan Edukasi Universal Indonesia · All rights reserved
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="academic-standards-public">Academic Standards</a>
+        <a href="login.html">Partner Login</a>
+        <a href="mailto:info@eduversal.org">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
