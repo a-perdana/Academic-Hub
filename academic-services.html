@@ -764,6 +764,9 @@
     .print-modal-overlay.open { display: flex; flex-direction: column; align-items: center; }
 
     .print-modal-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
       width: 100%;
       max-width: 794px;
       display: flex;
@@ -772,6 +775,10 @@
       margin-bottom: 16px;
       gap: 12px;
       flex-wrap: wrap;
+      padding: 12px 0 12px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
     .print-modal-toolbar-title {
       font-size: var(--text-sm);
@@ -851,15 +858,15 @@
     .ps-stat-lbl { font-size: 7pt; opacity: 0.75; margin-top: 2px; }
 
     /* Sheet body */
-    .ps-body { padding: 28px 36px 32px; }
+    .ps-body { padding: 20px 36px 24px; }
 
     /* Intro paragraph */
     .ps-intro {
-      font-size: 9.5pt;
+      font-size: 9pt;
       color: #44445a;
-      line-height: 1.65;
-      margin-bottom: 22px;
-      padding-bottom: 18px;
+      line-height: 1.6;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
       border-bottom: 1px solid #e0ddd6;
     }
 
@@ -870,8 +877,8 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: #8888a8;
-      margin-bottom: 10px;
-      margin-top: 22px;
+      margin-bottom: 6px;
+      margin-top: 14px;
     }
     .ps-section-label:first-child { margin-top: 0; }
 
@@ -879,9 +886,9 @@
     .ps-services { display: flex; flex-direction: column; gap: 0; }
     .ps-service-row {
       display: grid;
-      grid-template-columns: 26px 160px 1fr;
-      gap: 10px 12px;
-      padding: 11px 0;
+      grid-template-columns: 26px 150px 1fr;
+      gap: 8px 10px;
+      padding: 8px 0;
       border-bottom: 1px solid #efede8;
       align-items: start;
     }
@@ -897,11 +904,11 @@
     .ps-svc-name { font-size: 9.5pt; font-weight: 700; color: #1c1c2e; line-height: 1.25; padding-top: 4px; }
     .ps-svc-badge { font-size: 7pt; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; margin-top: 3px; }
 
-    .ps-svc-desc { font-size: 8.5pt; color: #44445a; line-height: 1.6; padding-top: 2px; }
+    .ps-svc-desc { font-size: 8pt; color: #44445a; line-height: 1.55; padding-top: 2px; }
 
-    .ps-svc-bullets { list-style: none; margin-top: 5px; display: flex; flex-direction: column; gap: 2px; }
+    .ps-svc-bullets { list-style: none; margin-top: 4px; display: flex; flex-direction: column; gap: 1px; }
     .ps-svc-bullets li {
-      font-size: 8pt; color: #44445a; line-height: 1.5;
+      font-size: 7.5pt; color: #44445a; line-height: 1.5;
       display: flex; align-items: flex-start; gap: 6px;
     }
     .ps-svc-bullets li::before {
@@ -1685,7 +1692,7 @@
             </div>
           </div>
 
-          <div class="ps-service-row" style="background:#faf5ff;border-radius:6px;padding:11px 8px;border:1px solid #e9d5ff;margin-bottom:2px;">
+          <div class="ps-service-row">
             <div class="ps-svc-icon" style="background:#ede9fe;">
               <svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
@@ -1723,7 +1730,7 @@
         </div><!-- /ps-services -->
 
         <!-- Academic Standards -->
-        <div class="ps-section-label" style="margin-top:20px;">Academic Standards Framework — 23 Sections</div>
+        <div class="ps-section-label" style="margin-top:14px;">Academic Standards Framework — 23 Sections</div>
         <div class="ps-standards-grid">
           <div class="ps-std-chip"><div class="ps-std-num" style="background:#dbeafe;color:#1e40af;">01</div><span class="ps-std-text">Front Matter &amp; Governance Charter</span></div>
           <div class="ps-std-chip"><div class="ps-std-num" style="background:#dbeafe;color:#1e40af;">02</div><span class="ps-std-text">Legal &amp; Regulatory Compliance</span></div>
