@@ -759,26 +759,34 @@
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
       overflow-y: auto;
-      padding: 32px 16px;
+      overflow-x: hidden;
+      padding: 0 16px 48px;
     }
-    .print-modal-overlay.open { display: flex; flex-direction: column; align-items: center; }
+    .print-modal-overlay.open { display: block; }
+
+    .print-modal-inner {
+      max-width: 794px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
 
     .print-modal-toolbar {
       position: sticky;
       top: 0;
       z-index: 10;
       width: 100%;
-      max-width: 794px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
       gap: 12px;
       flex-wrap: wrap;
-      padding: 12px 0 12px;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      padding: 14px 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
     .print-modal-toolbar-title {
       font-size: var(--text-sm);
@@ -917,6 +925,11 @@
     }
 
     /* Standards panel */
+    .ps-standards-block {
+      page-break-before: always;
+      break-before: page;
+    }
+
     .ps-standards-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1553,6 +1566,7 @@
        PRINT MODAL
   ══════════════════════════════════════════════════════════════════ -->
   <div class="print-modal-overlay" id="printModal" role="dialog" aria-modal="true" aria-label="Print preview">
+  <div class="print-modal-inner">
 
     <div class="print-modal-toolbar">
       <span class="print-modal-toolbar-title">Print Preview — A4</span>
@@ -1730,6 +1744,7 @@
         </div><!-- /ps-services -->
 
         <!-- Academic Standards -->
+        <div class="ps-standards-block">
         <div class="ps-section-label" style="margin-top:14px;">Academic Standards Framework — 23 Sections</div>
         <div class="ps-standards-grid">
           <div class="ps-std-chip"><div class="ps-std-num" style="background:#dbeafe;color:#1e40af;">01</div><span class="ps-std-text">Front Matter &amp; Governance Charter</span></div>
@@ -1756,6 +1771,7 @@
           <div class="ps-std-chip"><div class="ps-std-num" style="background:#ede9fe;color:#7c3aed;">22</div><span class="ps-std-text">Student Conduct &amp; Restorative Practices</span></div>
           <div class="ps-std-chip"><div class="ps-std-num" style="background:#fee2e2;color:#ef4444;">23</div><span class="ps-std-text">External Partnerships &amp; Student Pathways</span></div>
         </div>
+        </div><!-- /ps-standards-block -->
 
         <!-- How It Works -->
         <div class="ps-section-label">How It Works</div>
@@ -1795,6 +1811,7 @@
       </div>
 
     </div><!-- /print-sheet -->
+  </div><!-- /print-modal-inner -->
   </div><!-- /print-modal-overlay -->
 
   <!-- ── Footer ─────────────────────────────────────────────────────── -->
