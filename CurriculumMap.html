@@ -317,6 +317,23 @@
     .status-pending .tc-status-dot { background: #d1d5db; }
     .empty-week { color: var(--ink-3); font-size: 0.75rem; font-style: italic; }
 
+    /* ── Month separator row ── */
+    .month-separator-row td { padding: 0; border-bottom: none; }
+    .month-separator-cell {
+      position: sticky;
+      left: 0;
+      padding: 6px 14px 5px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--accent);
+      background: var(--accent-2);
+      border-top: 2px solid #ddd6fe;
+      border-bottom: 1px solid #ddd6fe;
+    }
+    .month-separator-row:first-child .month-separator-cell { border-top: none; }
+
     /* ── GAP PANEL ── */
     .gap-panel {
       background: #fff8f8;
@@ -893,6 +910,24 @@
       }
     }
 
+    // ── Academic calendar month map (mirrors AcademicCalendar.html MONTHS) ──
+    const AC_MONTHS = [
+      { name:'July',      short:'Jul', year:2025 },
+      { name:'August',    short:'Aug', year:2025 },
+      { name:'September', short:'Sep', year:2025 },
+      { name:'October',   short:'Oct', year:2025 },
+      { name:'November',  short:'Nov', year:2025 },
+      { name:'December',  short:'Dec', year:2025 },
+      { name:'January',   short:'Jan', year:2026 },
+      { name:'February',  short:'Feb', year:2026 },
+      { name:'March',     short:'Mar', year:2026 },
+      { name:'April',     short:'Apr', year:2026 },
+      { name:'May',       short:'May', year:2026 },
+    ];
+    // Academic week 1 = July W1 → 4 weeks per month
+    function weekToMonth(w) { return Math.floor((w - 1) / 4); } // 0-indexed into AC_MONTHS
+    function weekWithinMonth(w) { return ((w - 1) % 4) + 1; }   // 1–4
+
     // ── Week View ─────────────────────────────────────────────────
     function renderWeekView(configs) {
       const weekMap = {};
@@ -917,12 +952,28 @@
         return;
       }
 
+      const colCount = configs.length + 1; // +1 for week col
       const subjectCols = configs.map(cfg =>
         `<th style="border-top: 3px solid ${cfg.color}">${esc(cfg.label)}</th>`
       ).join('');
 
       let rows = '';
+      let lastMonthIdx = -1;
+
       for (let w = 1; w <= maxWeek; w++) {
+        const mIdx      = weekToMonth(w);
+        const wInMonth  = weekWithinMonth(w);
+        const month     = AC_MONTHS[mIdx];
+
+        // Insert month separator row when month changes
+        if (mIdx !== lastMonthIdx) {
+          lastMonthIdx = mIdx;
+          const label = month ? `${month.name} ${month.year}` : `Month ${mIdx + 1}`;
+          rows += `<tr class="month-separator-row">
+            <td colspan="${colCount}" class="month-separator-cell">${esc(label)}</td>
+          </tr>`;
+        }
+
         const weekData = weekMap[w] || {};
         const cells = configs.map(cfg => {
           const topics = weekData[cfg.key] || [];
@@ -950,7 +1001,7 @@
           return `<td>${chips}</td>`;
         }).join('');
 
-        rows += `<tr><td class="td-week">Wk ${w}</td>${cells}</tr>`;
+        rows += `<tr><td class="td-week">W${wInMonth}</td>${cells}</tr>`;
       }
 
       document.getElementById('mapContent').innerHTML = `
