@@ -1252,14 +1252,15 @@
           const done    = topics.filter(t => t.status === 'done').length;
           const pct     = topics.length ? Math.round((done / topics.length) * 100) : 0;
           const totalH  = topics.reduce((s, t) => s + (Number(t.hours) || 0), 0);
-          const origIdx = chapters.indexOf(ch);
+          const origIdx = chapters.findIndex(c => c.name === ch.name);
           const chNum   = origIdx >= 0 ? origIdx + 1 : ci + 1;
+          const chName  = ch.name || `Chapter ${chNum}`;
 
           html += `
           <div class="chapter-card" id="ch_${cfg.key}_${ci}">
             <div class="chapter-head" onclick="toggleChapter('ch_${cfg.key}_${ci}')">
               <span class="ch-number" style="background:${cfg.color}1a;color:${cfg.color}">${chNum}</span>
-              <span class="ch-name">${esc(ch.name)}</span>
+              <span class="ch-name">${esc(chName)}</span>
               <span class="ch-meta">
                 <span>${topics.length} topics</span>
                 <span>${totalH}h</span>
@@ -1290,7 +1291,7 @@
                     const spLabel = status === 'done' ? 'Done' : status === 'inprogress' ? 'In Progress' : 'Pending';
                     const codeBadges = codes.map(c => {
                       return `<span class="obj-badge${syllabusCache[c] === null ? ' uncovered' : ''}"
-                        data-topic='${JSON.stringify({ name: t.topic, week: t.week, hours: t.hours, chapter: ch.name, status, objective: t.objective || '', subjectKey: cfg.key, color: cfg.color }).replace(/'/g, '&#39;')}'
+                        data-topic='${JSON.stringify({ name: t.topic, week: t.week, hours: t.hours, chapter: chName, status, objective: t.objective || '', subjectKey: cfg.key, color: cfg.color }).replace(/'/g, '&#39;')}'
                         onclick="event.stopPropagation();openDetailFromEl(this)"
                       >${esc(c)}</span>`;
                     }).join('');
