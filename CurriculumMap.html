@@ -317,6 +317,40 @@
     .status-pending .tc-status-dot { background: #d1d5db; }
     .empty-week { color: var(--ink-3); font-size: 0.75rem; font-style: italic; }
 
+    /* ── Month pagination ── */
+    .month-pager {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .month-pager-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--ink-3);
+      margin-right: 4px;
+    }
+    .month-pager-btn {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      padding: 5px 12px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: var(--white);
+      color: var(--ink-2);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+    .month-pager-btn:hover:not(.active) { background: var(--paper); border-color: var(--accent); color: var(--accent); }
+    .month-pager-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+    .month-pager { display: none; }
+    .month-pager.visible { display: flex; }
+
     /* ── Month separator row ── */
     .month-separator-row td { padding: 0; border-bottom: none; }
     .month-separator-cell {
@@ -650,6 +684,11 @@
       </div>
     </div>
 
+    <!-- Month pagination (shown in week view only) -->
+    <div class="month-pager" id="monthPager">
+      <span class="month-pager-label">Month:</span>
+    </div>
+
     <!-- Legend -->
     <div class="legend">
       <span style="font-weight:600;color:var(--ink-2)">Status:</span>
@@ -755,6 +794,7 @@
     let currentLevel   = 'igcse';
     let currentSubject = 'all';
     let currentView    = 'week';
+    let currentMonth   = null; // null = show all months; number = AC_MONTHS index
     let syllabusCache  = {};
     let pacingData     = {};
 
@@ -771,6 +811,7 @@
     function bindControls() {
       document.getElementById('selLevel').addEventListener('change', e => {
         currentLevel  = e.target.value;
+        currentMonth  = null;
         pacingData    = {};
         syllabusCache = {};
         loadAndRender();
@@ -784,6 +825,7 @@
           document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           currentView = btn.dataset.view;
+          document.getElementById('monthPager').classList.toggle('visible', currentView === 'week');
           render();
         });
       });
@@ -842,8 +884,12 @@
       const configs = getActiveConfigs();
       renderSummary(configs);
       renderGaps(configs);
-      if (currentView === 'week') renderWeekView(configs);
-      else renderChapterView(configs);
+      if (currentView === 'week') {
+        renderWeekView(configs);
+      } else {
+        document.getElementById('monthPager').classList.remove('visible');
+        renderChapterView(configs);
+      }
     }
 
     function getActiveConfigs() {
@@ -949,31 +995,57 @@
       if (maxWeek === 0) {
         document.getElementById('mapContent').innerHTML =
           '<div class="map-loading">No pacing data available for this selection.</div>';
+        document.getElementById('monthPager').classList.remove('visible');
         return;
       }
 
-      const colCount = configs.length + 1; // +1 for week col
+      // Determine which months have data
+      const monthsWithData = new Set();
+      for (let w = 1; w <= maxWeek; w++) {
+        const mIdx = weekToMonth(w);
+        const hasTopics = configs.some(cfg => (weekMap[w]?.[cfg.key] || []).length > 0);
+        if (hasTopics) monthsWithData.add(mIdx);
+      }
+      const sortedMonths = [...monthsWithData].sort((a, b) => a - b);
+
+      // If currentMonth not set or not in data, default to first available month
+      if (currentMonth === null || !monthsWithData.has(currentMonth)) {
+        currentMonth = sortedMonths[0];
+      }
+
+      // Build month pagination
+      const pager = document.getElementById('monthPager');
+      pager.classList.add('visible');
+      pager.innerHTML = `<span class="month-pager-label">Month:</span>` +
+        sortedMonths.map(mIdx => {
+          const m = AC_MONTHS[mIdx];
+          const label = m ? m.short : `M${mIdx + 1}`;
+          const active = mIdx === currentMonth ? ' active' : '';
+          return `<button class="month-pager-btn${active}" data-mth="${mIdx}">${esc(label)}</button>`;
+        }).join('');
+
+      pager.querySelectorAll('.month-pager-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentMonth = Number(btn.dataset.mth);
+          renderWeekView(configs);
+        });
+      });
+
+      // Render only the selected month's weeks
+      const colCount = configs.length + 1;
       const subjectCols = configs.map(cfg =>
         `<th style="border-top: 3px solid ${cfg.color}">${esc(cfg.label)}</th>`
       ).join('');
 
-      let rows = '';
-      let lastMonthIdx = -1;
+      const activeMonth = AC_MONTHS[currentMonth];
+      const monthLabel  = activeMonth ? `${activeMonth.name} ${activeMonth.year}` : `Month ${currentMonth + 1}`;
 
-      for (let w = 1; w <= maxWeek; w++) {
-        const mIdx      = weekToMonth(w);
-        const wInMonth  = weekWithinMonth(w);
-        const month     = AC_MONTHS[mIdx];
+      let rows = `<tr class="month-separator-row">
+        <td colspan="${colCount}" class="month-separator-cell">${esc(monthLabel)}</td>
+      </tr>`;
 
-        // Insert month separator row when month changes
-        if (mIdx !== lastMonthIdx) {
-          lastMonthIdx = mIdx;
-          const label = month ? `${month.name} ${month.year}` : `Month ${mIdx + 1}`;
-          rows += `<tr class="month-separator-row">
-            <td colspan="${colCount}" class="month-separator-cell">${esc(label)}</td>
-          </tr>`;
-        }
-
+      for (let wInMonth = 1; wInMonth <= 4; wInMonth++) {
+        const w = currentMonth * 4 + wInMonth;
         const weekData = weekMap[w] || {};
         const cells = configs.map(cfg => {
           const topics = weekData[cfg.key] || [];
