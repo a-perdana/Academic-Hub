@@ -1033,7 +1033,7 @@
             if (w > maxWeek) maxWeek = w;
             if (!weekMap[w]) weekMap[w] = {};
             if (!weekMap[w][cfg.key]) weekMap[w][cfg.key] = [];
-            weekMap[w][cfg.key].push({ ...t, chapterName: ch.name, cfg });
+            weekMap[w][cfg.key].push({ ...t, chapterName: ch.chapter || ch.name, cfg });
           });
         });
       });
@@ -1252,9 +1252,9 @@
           const done    = topics.filter(t => t.status === 'done').length;
           const pct     = topics.length ? Math.round((done / topics.length) * 100) : 0;
           const totalH  = topics.reduce((s, t) => s + (Number(t.hours) || 0), 0);
-          const origIdx = chapters.findIndex(c => c.name === ch.name);
+          const origIdx = chapters.findIndex(c => c.chapter === ch.chapter);
           const chNum   = origIdx >= 0 ? origIdx + 1 : ci + 1;
-          const chName  = ch.name || `Chapter ${chNum}`;
+          const chName  = ch.chapter || ch.name || `Chapter ${chNum}`;
 
           html += `
           <div class="chapter-card" id="ch_${cfg.key}_${ci}">
