@@ -1045,10 +1045,11 @@
         return;
       }
 
-      // Determine which months have data
+      // Determine which months have data (clamp to AC_MONTHS range)
       const monthsWithData = new Set();
       for (let w = 1; w <= maxWeek; w++) {
         const mIdx = weekToMonth(w);
+        if (mIdx >= AC_MONTHS.length) continue;
         const hasTopics = configs.some(cfg => (weekMap[w]?.[cfg.key] || []).length > 0);
         if (hasTopics) monthsWithData.add(mIdx);
       }
@@ -1170,13 +1171,15 @@
       }
       const cfg = validConfigs.find(c => c.key === currentChapterSubject);
 
-      // Gather months that have topics for this subject
+      // Gather months that have topics for this subject (clamp to AC_MONTHS range)
       const chapters = pacingData[cfg.key]?.chapters || [];
       const monthsWithData = new Set();
       chapters.forEach(ch => {
         (ch.topics || []).forEach(t => {
           const w = Number(t.week) || 0;
-          if (w) monthsWithData.add(weekToMonth(w));
+          if (!w) return;
+          const mIdx = weekToMonth(w);
+          if (mIdx < AC_MONTHS.length) monthsWithData.add(mIdx);
         });
       });
       const sortedMonths = [...monthsWithData].sort((a, b) => a - b);
