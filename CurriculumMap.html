@@ -808,6 +808,23 @@
       collection, doc, getDoc, getDocs, query, where,
     } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+    // ── Syllabus lazy-fetch (called on modal open, not page load) ──
+    async function fetchSyllabusCodesIfNeeded(codes) {
+      const missing = codes.filter(c => !(c in syllabusCache));
+      if (!missing.length) return;
+      for (let i = 0; i < missing.length; i += 30) {
+        const chunk = missing.slice(i, i + 30);
+        try {
+          const snaps = await getDocs(query(
+            collection(db, 'cambridge_syllabus'),
+            where('code', 'in', chunk),
+          ));
+          snaps.forEach(s => { syllabusCache[s.data().code] = s.data(); });
+        } catch {}
+      }
+      missing.forEach(c => { if (!(c in syllabusCache)) syllabusCache[c] = null; });
+    }
+
     // ── Subject configs per level ──────────────────────────────────
     const SUBJECT_CONFIGS = {
       igcse: [
@@ -877,9 +894,32 @@
       document.getElementById('detailOverlay').addEventListener('click', e => {
         if (e.target === document.getElementById('detailOverlay')) closeDetail();
       });
+
+      // Event delegation for pager buttons (replaces per-render addEventListener calls)
+      document.getElementById('monthPager').addEventListener('click', e => {
+        const btn = e.target.closest('.month-pager-btn');
+        if (!btn) return;
+        currentMonth = Number(btn.dataset.mth);
+        render();
+      });
+      document.getElementById('chapterPagers').addEventListener('click', e => {
+        const subjBtn = e.target.closest('[data-subj]');
+        if (subjBtn) { currentChapterSubject = subjBtn.dataset.subj; render(); return; }
+        const mthBtn = e.target.closest('[data-mth]');
+        if (mthBtn) {
+          const key = mthBtn.dataset.key;
+          if (key) currentChapterMonth[key] = Number(mthBtn.dataset.mth);
+          render();
+        }
+      });
+      document.getElementById('mapContent').addEventListener('click', e => {
+        const chip = e.target.closest('.topic-chip');
+        if (!chip) return;
+        try { openDetail(JSON.parse(chip.dataset.topic.replace(/&#39;/g, "'"))); } catch(err) { console.error(err); }
+      });
     }
 
-    // ── Load pacing + syllabus data ───────────────────────────────
+    // ── Load pacing data only (syllabus fetched lazily on modal open) ──
     async function loadAndRender() {
       document.getElementById('mapContent').innerHTML =
         '<div class="map-loading"><div class="spinner"></div>Loading curriculum data…</div>';
@@ -893,32 +933,6 @@
           pacingData[cfg.key] = snap.exists() ? snap.data() : { chapters: [] };
         } catch { pacingData[cfg.key] = { chapters: [] }; }
       }));
-
-      // Collect all syllabus codes referenced in topics
-      const allCodes = new Set();
-      configs.forEach(cfg => {
-        (pacingData[cfg.key]?.chapters || []).forEach(ch => {
-          (ch.topics || []).forEach(t => {
-            (t.objective || '').split(/\s+/).filter(Boolean).forEach(c => allCodes.add(c));
-          });
-        });
-      });
-
-      // Load uncached syllabus docs in batches of 30
-      const uncached = [...allCodes].filter(c => !(c in syllabusCache));
-      if (uncached.length) {
-        for (let i = 0; i < uncached.length; i += 30) {
-          const chunk = uncached.slice(i, i + 30);
-          try {
-            const snaps = await getDocs(query(
-              collection(db, 'cambridge_syllabus'),
-              where('code', 'in', chunk),
-            ));
-            snaps.forEach(s => { syllabusCache[s.data().code] = s.data(); });
-          } catch {}
-        }
-        uncached.forEach(c => { if (!(c in syllabusCache)) syllabusCache[c] = null; });
-      }
 
       render();
     }
@@ -958,48 +972,15 @@
         });
       });
 
-      const gaps = countGaps(configs).length;
-      const pct  = (mappedCodes.size + gaps) > 0
-        ? Math.round((mappedCodes.size / (mappedCodes.size + gaps)) * 100)
-        : 100;
-
       document.getElementById('sumTopics').textContent   = totalTopics;
-      document.getElementById('sumCoverage').textContent = pct + '%';
+      document.getElementById('sumCoverage').textContent = mappedCodes.size ? mappedCodes.size + ' codes' : '—';
       document.getElementById('sumHours').textContent    = totalHours + 'h';
-      document.getElementById('sumGaps').textContent     = gaps;
+      document.getElementById('sumGaps').textContent     = '—';
     }
 
-    function countGaps(configs) {
-      const mapped = new Set();
-      configs.forEach(cfg => {
-        (pacingData[cfg.key]?.chapters || []).forEach(ch =>
-          (ch.topics || []).forEach(t =>
-            (t.objective || '').split(/\s+/).filter(Boolean).forEach(c => mapped.add(c))
-          )
-        );
-      });
-      return Object.entries(syllabusCache)
-        .filter(([code, data]) => data && !mapped.has(code))
-        .map(([code, data]) => ({ code, title: data.title || '' }));
-    }
-
-    // ── Gap panel ─────────────────────────────────────────────────
-    function renderGaps(configs) {
-      const gaps  = countGaps(configs);
-      const panel = document.getElementById('gapPanel');
-      const list  = document.getElementById('gapList');
-      document.getElementById('gapBadge').textContent = gaps.length;
-
-      panel.style.display = '';
-      if (gaps.length === 0) {
-        list.innerHTML = '<div class="no-gaps"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>All syllabus objectives are covered.</div>';
-      } else {
-        list.innerHTML = gaps.map(g => `
-          <span class="gap-chip">
-            ${esc(g.code)}
-            ${g.title ? `<span class="gap-chip-title">— ${esc(g.title)}</span>` : ''}
-          </span>`).join('');
-      }
+    // ── Gap panel hidden (syllabus loaded lazily on modal open) ───
+    function renderGaps() {
+      document.getElementById('gapPanel').style.display = 'none';
     }
 
     // ── Academic calendar month map (mirrors AcademicCalendar.html MONTHS) ──
@@ -1071,13 +1052,6 @@
           return `<button class="month-pager-btn${active}" data-mth="${mIdx}">${esc(label)}</button>`;
         }).join('');
 
-      pager.querySelectorAll('.month-pager-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentMonth = Number(btn.dataset.mth);
-          renderWeekView(configs);
-        });
-      });
-
       // Render only the selected month's weeks
       const colCount = configs.length + 1;
       const subjectCols = configs.map(cfg =>
@@ -1136,11 +1110,6 @@
           </table>
         </div>`;
 
-      document.querySelectorAll('.topic-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
-          try { openDetail(JSON.parse(chip.dataset.topic.replace(/&#39;/g, "'"))); } catch {}
-        });
-      });
     }
 
     // ── Chapter View ──────────────────────────────────────────────
@@ -1211,7 +1180,7 @@
           const label = m ? m.short : `M${mIdx + 1}`;
           const active = mIdx === activeMIdx;
           return `<button class="subject-pager-btn${active ? ' active' : ''}"
-            data-mth="${mIdx}"
+            data-mth="${mIdx}" data-key="${cfg.key}"
             style="${active ? `background:${cfg.color};border-color:${cfg.color}` : `border-color:${cfg.color};color:${cfg.color}`}"
           >${esc(label)}</button>`;
         }).join('')}
@@ -1219,21 +1188,6 @@
 
       pagerEl.innerHTML = subjectRow + monthRow;
       pagerEl.classList.add('visible');
-
-      // Subject button events
-      pagerEl.querySelectorAll('[data-subj]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentChapterSubject = btn.dataset.subj;
-          renderChapterView(configs);
-        });
-      });
-      // Month button events
-      pagerEl.querySelectorAll('[data-mth]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentChapterMonth[cfg.key] = Number(btn.dataset.mth);
-          renderChapterView(configs);
-        });
-      });
 
       // ── Render chapters for active subject + month ──
       // Filter chapters to those containing at least one topic in the active month
@@ -1326,22 +1280,11 @@
       try { openDetail(JSON.parse(el.dataset.topic.replace(/&#39;/g, "'"))); } catch {}
     };
 
-    function openDetail(data) {
+    async function openDetail(data) {
       const { name, week, hours, chapter, status, objective, color } = data;
       const codes   = (objective || '').split(/\s+/).filter(Boolean);
       const spClass = status === 'done' ? 'sp-done' : status === 'inprogress' ? 'sp-inprogress' : 'sp-pending';
       const spLabel = status === 'done' ? 'Done' : status === 'inprogress' ? 'In Progress' : 'Pending';
-
-      const codeCards = codes.length ? codes.map(c => {
-        const s = syllabusCache[c];
-        if (!s) return `<div class="dm-code-card"><div class="dm-code-id">${esc(c)}</div><div class="dm-code-desc" style="font-style:italic">Not found in syllabus database.</div></div>`;
-        return `
-          <div class="dm-code-card">
-            <div class="dm-code-id">${esc(s.code)}${s.tier ? ` <span style="font-family:'DM Sans';font-size:0.7rem;font-weight:600;padding:1px 6px;border-radius:3px;background:${s.tier==='Core'?'#e0f2fe':'#ede9fe'};color:${s.tier==='Core'?'#0891b2':'#7c3aed'}">${s.tier}</span>` : ''}</div>
-            <div class="dm-code-title">${esc(s.title || '')}</div>
-            ${s.description ? `<div class="dm-code-desc">${esc(s.description)}</div>` : ''}
-          </div>`;
-      }).join('') : '<p class="dm-no-codes">No syllabus codes linked to this topic.</p>';
 
       document.getElementById('detailTitle').textContent = name;
       document.getElementById('detailBody').innerHTML = `
@@ -1364,10 +1307,30 @@
         </div>
         <div class="dm-section">
           <div class="dm-section-label">Cambridge Syllabus Objectives (${codes.length})</div>
-          <div style="display:flex;flex-direction:column;gap:8px">${codeCards}</div>
+          <div id="codeCardsArea" style="display:flex;flex-direction:column;gap:8px">
+            ${codes.length ? '<div class="map-loading" style="padding:16px 0"><div class="spinner"></div>Loading syllabus…</div>' : '<p class="dm-no-codes">No syllabus codes linked to this topic.</p>'}
+          </div>
         </div>`;
 
       document.getElementById('detailOverlay').classList.add('open');
+
+      if (!codes.length) return;
+
+      await fetchSyllabusCodesIfNeeded(codes);
+
+      const codeCards = codes.map(c => {
+        const s = syllabusCache[c];
+        if (!s) return `<div class="dm-code-card"><div class="dm-code-id">${esc(c)}</div><div class="dm-code-desc" style="font-style:italic">Not found in syllabus database.</div></div>`;
+        return `
+          <div class="dm-code-card">
+            <div class="dm-code-id">${esc(s.code)}${s.tier ? ` <span style="font-family:'DM Sans';font-size:0.7rem;font-weight:600;padding:1px 6px;border-radius:3px;background:${s.tier==='Core'?'#e0f2fe':'#ede9fe'};color:${s.tier==='Core'?'#0891b2':'#7c3aed'}">${s.tier}</span>` : ''}</div>
+            <div class="dm-code-title">${esc(s.title || '')}</div>
+            ${s.description ? `<div class="dm-code-desc">${esc(s.description)}</div>` : ''}
+          </div>`;
+      }).join('');
+
+      const area = document.getElementById('codeCardsArea');
+      if (area) area.innerHTML = codeCards;
     }
 
     function closeDetail() {
