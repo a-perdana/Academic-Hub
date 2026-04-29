@@ -663,6 +663,7 @@ const NAV_ITEMS = [
     { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
     { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
     { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
+    { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
     { key: 'weekly-checklist',        href: '/weekly-checklist',        label: 'Weekly Checklist' },
     { key: 'student-survey',          href: '/student-survey',          label: 'Student Survey' },

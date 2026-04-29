@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Syllabus Coverage — Academic Hub</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <script src="partials/navbar-loader.js"></script>
+
+  <style>
+    :root {
+      --ink:      #1c1c2e;
+      --ink-2:    #44445a;
+      --ink-3:    #8888a8;
+      --paper:    #f5f4f0;
+      --paper-2:  #ece9e0;
+      --white:    #ffffff;
+      --border:   #e5e0d8;
+      --radius:   12px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
+      --shadow:    0 4px 16px rgba(0,0,0,0.10);
+      --accent:    #7c3aed;
+      --accent-dk: #6d28d9;
+      --accent-2:  #ede9fe;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; padding-top: 62px; }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(140deg, #1e0a4e 0%, #3b1a8a 50%, #6c5ce7 100%);
+      padding: 44px 40px 40px;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 8% 80%, rgba(108,92,231,0.22) 0%, transparent 55%),
+        radial-gradient(circle at 90% 12%, rgba(255,255,255,0.05) 0%, transparent 48%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      position: relative; z-index: 1;
+      max-width: 1280px; margin: 0 auto;
+      display: flex; align-items: flex-start; gap: 20px;
+    }
+    .hero-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: rgba(255,255,255,0.14);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; flex-shrink: 0; margin-top: 2px;
+    }
+    .hero-eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 7px;
+    }
+    .hero-title {
+      font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 600;
+      color: #fff; margin-bottom: 6px; line-height: 1.2;
+    }
+    .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      max-width: 1280px; margin: 0 auto;
+      padding: 20px 40px 0;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    }
+    .toolbar-label { font-size: 0.82rem; font-weight: 500; color: var(--ink-2); }
+    .filter-select {
+      height: 36px; border: 1px solid var(--border); border-radius: 8px;
+      padding: 0 10px; font-family: inherit; font-size: 0.85rem;
+      background: var(--white); color: var(--ink); cursor: pointer;
+    }
+    .filter-select:focus { outline: none; border-color: var(--accent); }
+    .btn-refresh {
+      margin-left: auto; height: 36px; padding: 0 16px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--white); font-family: inherit; font-size: 0.85rem;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; color: var(--ink-2);
+      transition: border-color 0.15s;
+    }
+    .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── MAIN CONTENT ── */
+    .content {
+      max-width: 1280px; margin: 0 auto;
+      padding: 24px 40px 60px;
+    }
+
+    /* ── SUBJECT SECTION ── */
+    .subject-section { margin-bottom: 32px; }
+    .subject-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px;
+    }
+    .subject-dot {
+      width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+    }
+    .subject-name {
+      font-size: 1rem; font-weight: 600; color: var(--ink);
+    }
+    .subject-meta {
+      font-size: 0.78rem; color: var(--ink-3); margin-left: auto;
+    }
+
+    /* ── TEACHER CARD GRID ── */
+    .teacher-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 14px;
+    }
+
+    /* ── TEACHER CARD ── */
+    .teacher-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px 14px;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.15s;
+    }
+    .teacher-card:hover { box-shadow: var(--shadow); }
+    .tc-head {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .tc-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-2); color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem; font-weight: 600; flex-shrink: 0;
+    }
+    .tc-name { font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+    .tc-school { font-size: 0.75rem; color: var(--ink-3); }
+    .tc-stats {
+      display: flex; gap: 16px; margin-bottom: 10px;
+    }
+    .tc-stat { display: flex; flex-direction: column; }
+    .tc-stat-val { font-size: 1.1rem; font-weight: 700; color: var(--ink); font-family: 'DM Mono', monospace; }
+    .tc-stat-lbl { font-size: 0.7rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+
+    /* ── PROGRESS BAR ── */
+    .prog-wrap { margin-bottom: 8px; }
+    .prog-label {
+      display: flex; justify-content: space-between; align-items: baseline;
+      margin-bottom: 4px;
+    }
+    .prog-label-text { font-size: 0.75rem; color: var(--ink-2); }
+    .prog-label-pct { font-size: 0.75rem; font-weight: 600; font-family: 'DM Mono', monospace; }
+    .prog-bar-bg {
+      height: 6px; border-radius: 3px; background: var(--paper-2); overflow: hidden;
+    }
+    .prog-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    /* Status indicator on card */
+    .pace-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.7rem; font-weight: 600; padding: 2px 8px;
+      border-radius: 20px; text-transform: uppercase; letter-spacing: 0.05em;
+    }
+    .pace-badge.ahead   { background: #d1fae5; color: #065f46; }
+    .pace-badge.on-track{ background: #e0e7ff; color: #3730a3; }
+    .pace-badge.behind  { background: #fef9c3; color: #854d0e; }
+    .pace-badge.overdue { background: #fee2e2; color: #991b1b; }
+    .pace-badge.no-data { background: var(--paper-2); color: var(--ink-3); }
+
+    /* ── LOADING / EMPTY ── */
+    .state-box {
+      text-align: center; padding: 72px 20px; color: var(--ink-3);
+    }
+    .state-box svg { margin: 0 auto 16px; display: block; opacity: 0.4; }
+    .state-box h3 { font-size: 1rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+    .state-box p  { font-size: 0.85rem; }
+
+    .spinner {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid var(--border); border-top-color: var(--accent);
+      animation: spin 0.7s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── SUMMARY BAR ── */
+    .summary-bar {
+      display: flex; gap: 20px; flex-wrap: wrap;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px 24px;
+      margin-bottom: 24px; box-shadow: var(--shadow-sm);
+    }
+    .sum-stat { display: flex; flex-direction: column; }
+    .sum-val  { font-size: 1.5rem; font-weight: 700; color: var(--ink); font-family: 'DM Mono', monospace; }
+    .sum-lbl  { font-size: 0.72rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+    .sum-divider { width: 1px; background: var(--border); align-self: stretch; }
+
+    @media (max-width: 700px) {
+      .hero { padding: 32px 20px 28px; }
+      .toolbar { padding: 16px 20px 0; }
+      .content { padding: 20px 20px 48px; }
+      .teacher-grid { grid-template-columns: 1fr; }
+      .summary-bar { gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-icon">
+      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
+      </svg>
+    </div>
+    <div>
+      <div class="hero-eyebrow">Academic Hub · Teaching Quality</div>
+      <h1 class="hero-title">Syllabus Coverage</h1>
+      <p class="hero-desc">Track how far each teacher has progressed through the Cambridge curriculum this term relative to the scheduled pacing guide.</p>
+    </div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <span class="toolbar-label">Subject:</span>
+  <select class="filter-select" id="subjectFilter">
+    <option value="">All subjects</option>
+    <optgroup label="IGCSE (Year 9–10)">
+      <option value="math_pacing|year9-10|IGCSE Mathematics|#c0392b">IGCSE Mathematics</option>
+      <option value="biology_pacing|year9-10|IGCSE Biology|#27ae60">IGCSE Biology</option>
+      <option value="chemistry_pacing|year9-10|IGCSE Chemistry|#e67e22">IGCSE Chemistry</option>
+      <option value="physics_pacing|year9-10|IGCSE Physics|#2980b9">IGCSE Physics</option>
+    </optgroup>
+    <optgroup label="AS & A Level (Year 11–12)">
+      <option value="asalevel_math_pacing|year11-12|A-Level Mathematics|#c0392b">A-Level Mathematics</option>
+      <option value="asalevel_biology_pacing|year11-12|A-Level Biology|#27ae60">A-Level Biology</option>
+      <option value="asalevel_chemistry_pacing|year11-12|A-Level Chemistry|#e67e22">A-Level Chemistry</option>
+      <option value="asalevel_physics_pacing|year11-12|A-Level Physics|#2980b9">A-Level Physics</option>
+    </optgroup>
+    <optgroup label="Cambridge Checkpoint (Year 7–8)">
+      <option value="checkpoint_math_pacing|year7-8|Checkpoint Mathematics|#c0392b">Checkpoint Mathematics</option>
+      <option value="checkpoint_english_pacing|year7-8|Checkpoint English|#2980b9">Checkpoint English</option>
+      <option value="checkpoint_science_pacing|year7-8|Checkpoint Science|#27ae60">Checkpoint Science</option>
+    </optgroup>
+  </select>
+
+  <button class="btn-refresh" id="btnRefresh">
+    <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+    </svg>
+    Refresh
+  </button>
+</div>
+
+<div class="content">
+  <div id="summaryBar" class="summary-bar" style="display:none">
+    <div class="sum-stat"><span class="sum-val" id="sumTeachers">—</span><span class="sum-lbl">Teachers</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-stat"><span class="sum-val" id="sumAvgCoverage">—</span><span class="sum-lbl">Avg Coverage</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-stat"><span class="sum-val" id="sumOnTrack">—</span><span class="sum-lbl">On Track / Ahead</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-stat"><span class="sum-val" id="sumBehind">—</span><span class="sum-lbl">Behind / Overdue</span></div>
+    <div class="sum-divider"></div>
+    <div class="sum-stat"><span class="sum-val" id="sumScheduled">—</span><span class="sum-lbl">Scheduled Topics (this week)</span></div>
+  </div>
+
+  <div id="loadingState" class="state-box">
+    <div class="spinner"></div>
+    <h3>Loading coverage data…</h3>
+    <p>Fetching teacher progress and pacing schedules.</p>
+  </div>
+
+  <div id="emptyState" class="state-box" style="display:none">
+    <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+    </svg>
+    <h3>No coverage data</h3>
+    <p>No teachers at your school have pacing data for the selected subject.</p>
+  </div>
+
+  <div id="mainContent" style="display:none"></div>
+</div>
+
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+import { getFirestore, doc, getDoc, collection, query, where, getDocs }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+// ── Pacing collections config ────────────────────────────────────────
+const ALL_SUBJECTS = [
+  { col: 'math_pacing',               doc: 'year9-10',  label: 'IGCSE Mathematics',     color: '#c0392b', subjKey: 'math' },
+  { col: 'biology_pacing',            doc: 'year9-10',  label: 'IGCSE Biology',          color: '#27ae60', subjKey: 'biology' },
+  { col: 'chemistry_pacing',          doc: 'year9-10',  label: 'IGCSE Chemistry',        color: '#e67e22', subjKey: 'chemistry' },
+  { col: 'physics_pacing',            doc: 'year9-10',  label: 'IGCSE Physics',          color: '#2980b9', subjKey: 'physics' },
+  { col: 'asalevel_math_pacing',      doc: 'year11-12', label: 'A-Level Mathematics',    color: '#c0392b', subjKey: 'asalevel_math' },
+  { col: 'asalevel_biology_pacing',   doc: 'year11-12', label: 'A-Level Biology',        color: '#27ae60', subjKey: 'asalevel_biology' },
+  { col: 'asalevel_chemistry_pacing', doc: 'year11-12', label: 'A-Level Chemistry',      color: '#e67e22', subjKey: 'asalevel_chemistry' },
+  { col: 'asalevel_physics_pacing',   doc: 'year11-12', label: 'A-Level Physics',        color: '#2980b9', subjKey: 'asalevel_physics' },
+  { col: 'checkpoint_math_pacing',    doc: 'year7-8',   label: 'Checkpoint Mathematics', color: '#c0392b', subjKey: 'checkpoint_math' },
+  { col: 'checkpoint_english_pacing', doc: 'year7-8',   label: 'Checkpoint English',     color: '#2980b9', subjKey: 'checkpoint_english' },
+  { col: 'checkpoint_science_pacing', doc: 'year7-8',   label: 'Checkpoint Science',     color: '#27ae60', subjKey: 'checkpoint_science' },
+];
+
+// Maps Teachers Hub subjKey → Academic Hub subjKey (for userProgress field lookup)
+// Teachers Hub uses short keys in subjects[] array; pacing done field is pacingDone_<subjKey>
+const TH_SUBJ_KEYS = {
+  'math_pacing':               'math',
+  'biology_pacing':            'biology',
+  'chemistry_pacing':          'chemistry',
+  'physics_pacing':            'physics',
+  'asalevel_math_pacing':      'asalevel_math',
+  'asalevel_biology_pacing':   'asalevel_biology',
+  'asalevel_chemistry_pacing': 'asalevel_chemistry',
+  'asalevel_physics_pacing':   'asalevel_physics',
+  'checkpoint_math_pacing':    'checkpoint_math',
+  'checkpoint_english_pacing': 'checkpoint_english',
+  'checkpoint_science_pacing': 'checkpoint_science',
+};
+
+let db, currentUser, userProfile;
+let teachingWeeks = [];  // from teaching_schedule/main
+let allTeachers  = [];   // users at same school who have teachers_hub role
+let pacingStructs = {};  // col -> { chapters, weeklyHours }
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function getInitials(name) {
+  if (!name) return '?';
+  return name.split(' ').filter(Boolean).slice(0, 2).map(w => w[0].toUpperCase()).join('');
+}
+
+// Count total topics in chapters array
+function totalTopics(chapters) {
+  return (chapters || []).reduce((sum, ch) => sum + (ch.topics || []).length, 0);
+}
+
+// Count topics scheduled up to and including current week
+// Uses same cumulative hours algorithm as pacing pages
+function scheduledTopicsToDate(chapters, weeklyHours, teachingWks) {
+  if (!weeklyHours || !teachingWks.length) return 0;
+  const today = new Date();
+
+  // Find current teaching week index (0-based)
+  let currentWkIdx = -1;
+  for (let i = 0; i < teachingWks.length; i++) {
+    if (today >= teachingWks[i].mon && today <= teachingWks[i].fri) {
+      currentWkIdx = i;
+      break;
+    }
+    if (today > teachingWks[i].fri) currentWkIdx = i;
+  }
+  if (currentWkIdx < 0) return 0;
+
+  // Hours delivered so far = (currentWkIdx + 1) * weeklyHours  (end of current week)
+  const hoursToDate = (currentWkIdx + 1) * weeklyHours;
+
+  let cumHours = 0;
+  let count = 0;
+  for (const ch of (chapters || [])) {
+    for (const t of (ch.topics || [])) {
+      const h = Number(t.hours) || 1;
+      cumHours += h;
+      if (cumHours <= hoursToDate) count++;
+    }
+  }
+  return count;
+}
+
+// Determine pace status: compare done count vs scheduled count
+function paceStatus(doneCount, scheduledCount, totalCount) {
+  if (scheduledCount === 0) return 'no-data';
+  if (doneCount >= totalCount) return 'ahead';
+  const ratio = doneCount / scheduledCount;
+  if (ratio >= 1.05) return 'ahead';
+  if (ratio >= 0.85) return 'on-track';
+  if (ratio >= 0.60) return 'behind';
+  return 'overdue';
+}
+
+function paceBadgeHtml(status) {
+  const labels = { ahead: 'Ahead', 'on-track': 'On Track', behind: 'Behind', overdue: 'Overdue', 'no-data': 'No Data' };
+  return `<span class="pace-badge ${status}">${labels[status] || status}</span>`;
+}
+
+function barColor(status) {
+  const map = { ahead: '#10b981', 'on-track': '#6366f1', behind: '#eab308', overdue: '#ef4444', 'no-data': '#d1d5db' };
+  return map[status] || '#d1d5db';
+}
+
+// ── Load teaching schedule ───────────────────────────────────────────
+async function loadTeachingSchedule() {
+  const snap = await getDoc(doc(db, 'teaching_schedule', 'main'));
+  if (!snap.exists()) return [];
+  const data = snap.data();
+  const skipped = new Set((data.skippedWeeks || []).map(w => w.weekNo));
+  return (data.weeks || [])
+    .filter(w => !skipped.has(w.weekNo))
+    .map(w => ({
+      weekNo: w.weekNo,
+      mon: new Date(w.mon + 'T00:00:00'),
+      fri: new Date(w.fri + 'T23:59:59'),
+    }));
+}
+
+// ── Load pacing structures for needed subjects ───────────────────────
+async function loadPacingStructs(subjectCols) {
+  await Promise.all(subjectCols.map(async ({ col, doc: docId }) => {
+    if (pacingStructs[col]) return;
+    const snap = await getDoc(doc(db, col, docId));
+    if (snap.exists()) {
+      pacingStructs[col] = { chapters: snap.data().chapters || [], weeklyHours: snap.data().weeklyHours || 0 };
+    }
+  }));
+}
+
+// ── Load teachers at same school ─────────────────────────────────────
+async function loadTeachers(schoolId) {
+  const q = query(
+    collection(db, 'users'),
+    where('schoolId', '==', schoolId),
+    where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
+  );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+}
+
+// ── Load userProgress for a list of uids ────────────────────────────
+async function loadProgressBatch(uids) {
+  // Firestore `in` supports up to 30 items; batch if needed
+  const results = {};
+  const chunks = [];
+  for (let i = 0; i < uids.length; i += 30) chunks.push(uids.slice(i, i + 30));
+  await Promise.all(chunks.map(async chunk => {
+    await Promise.all(chunk.map(async uid => {
+      const snap = await getDoc(doc(db, 'userProgress', uid));
+      results[uid] = snap.exists() ? snap.data() : {};
+    }));
+  }));
+  return results;
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────
+
+function buildTeacherCard(teacher, subjectCfg, progressData, sched, total) {
+  const prog     = progressData[teacher.uid] || {};
+  const subjKey  = TH_SUBJ_KEYS[subjectCfg.col] || subjectCfg.subjKey;
+  const doneMap  = prog[`pacingDone_${subjKey}`] || {};
+  const doneCount = Object.keys(doneMap).length;
+  const covPct   = total > 0 ? Math.round((doneCount / total) * 100) : 0;
+  const schedPct = total > 0 ? Math.round((sched / total) * 100) : 0;
+  const status   = paceStatus(doneCount, sched, total);
+  const color    = barColor(status);
+  const initials = getInitials(teacher.displayName);
+
+  // Check teacher teaches this subject
+  const subjects = Array.isArray(teacher.subjects) ? teacher.subjects : [];
+  const teaches  = subjects.includes(subjKey) || subjects.includes(subjectCfg.subjKey);
+  if (!teaches) return null;
+
+  return `
+    <div class="teacher-card">
+      <div class="tc-head">
+        <div class="tc-avatar">${esc(initials)}</div>
+        <div>
+          <div class="tc-name">${esc(teacher.displayName || teacher.email || '—')}</div>
+          <div class="tc-school">${esc(teacher.school || teacher.schoolId || '—')}</div>
+        </div>
+        ${paceBadgeHtml(status)}
+      </div>
+      <div class="tc-stats">
+        <div class="tc-stat">
+          <span class="tc-stat-val">${doneCount}</span>
+          <span class="tc-stat-lbl">Topics done</span>
+        </div>
+        <div class="tc-stat">
+          <span class="tc-stat-val">${sched}</span>
+          <span class="tc-stat-lbl">Scheduled</span>
+        </div>
+        <div class="tc-stat">
+          <span class="tc-stat-val">${total}</span>
+          <span class="tc-stat-lbl">Total topics</span>
+        </div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-label">
+          <span class="prog-label-text">Coverage (done)</span>
+          <span class="prog-label-pct" style="color:${color}">${covPct}%</span>
+        </div>
+        <div class="prog-bar-bg">
+          <div class="prog-bar-fill" style="width:${covPct}%;background:${color}"></div>
+        </div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-label">
+          <span class="prog-label-text">Scheduled progress</span>
+          <span class="prog-label-pct" style="color:#94a3b8">${schedPct}%</span>
+        </div>
+        <div class="prog-bar-bg">
+          <div class="prog-bar-fill" style="width:${schedPct}%;background:#c7d2fe"></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderSubjectSection(subjectCfg, teachers, progressData) {
+  const struct = pacingStructs[subjectCfg.col];
+  if (!struct) return '';
+  const { chapters, weeklyHours } = struct;
+  const total  = totalTopics(chapters);
+  const sched  = scheduledTopicsToDate(chapters, weeklyHours, teachingWeeks);
+
+  const cards = teachers
+    .map(t => buildTeacherCard(t, subjectCfg, progressData, sched, total))
+    .filter(Boolean);
+
+  if (!cards.length) return '';
+
+  return `
+    <div class="subject-section">
+      <div class="subject-header">
+        <div class="subject-dot" style="background:${subjectCfg.color}"></div>
+        <span class="subject-name">${esc(subjectCfg.label)}</span>
+        <span class="subject-meta">${cards.length} teacher${cards.length !== 1 ? 's' : ''} · ${sched}/${total} topics scheduled</span>
+      </div>
+      <div class="teacher-grid">${cards.join('')}</div>
+    </div>`;
+}
+
+function updateSummaryBar(teachers, progressData, subjectsToShow) {
+  let totalTeachers = 0;
+  let totalCov = 0;
+  let onTrack = 0;
+  let behind  = 0;
+  let totalSched = 0;
+  const seen = new Set();
+
+  subjectsToShow.forEach(subjectCfg => {
+    const struct = pacingStructs[subjectCfg.col];
+    if (!struct) return;
+    const { chapters, weeklyHours } = struct;
+    const total  = totalTopics(chapters);
+    const sched  = scheduledTopicsToDate(chapters, weeklyHours, teachingWeeks);
+    const subjKey = TH_SUBJ_KEYS[subjectCfg.col] || subjectCfg.subjKey;
+
+    teachers.forEach(t => {
+      const subjects = Array.isArray(t.subjects) ? t.subjects : [];
+      if (!subjects.includes(subjKey) && !subjects.includes(subjectCfg.subjKey)) return;
+
+      const key = `${t.uid}-${subjectCfg.col}`;
+      if (seen.has(key)) return;
+      seen.add(key);
+
+      const prog     = progressData[t.uid] || {};
+      const doneMap  = prog[`pacingDone_${subjKey}`] || {};
+      const doneCount = Object.keys(doneMap).length;
+      const covPct   = total > 0 ? (doneCount / total) * 100 : 0;
+      const status   = paceStatus(doneCount, sched, total);
+      totalTeachers++;
+      totalCov += covPct;
+      if (status === 'ahead' || status === 'on-track') onTrack++;
+      if (status === 'behind' || status === 'overdue') behind++;
+      totalSched += sched;
+    });
+  });
+
+  const avgCov = totalTeachers > 0 ? Math.round(totalCov / totalTeachers) : 0;
+  document.getElementById('sumTeachers').textContent    = totalTeachers;
+  document.getElementById('sumAvgCoverage').textContent = `${avgCov}%`;
+  document.getElementById('sumOnTrack').textContent     = onTrack;
+  document.getElementById('sumBehind').textContent      = behind;
+  document.getElementById('sumScheduled').textContent   = Math.round(totalSched / Math.max(subjectsToShow.length, 1));
+  document.getElementById('summaryBar').style.display   = '';
+}
+
+async function loadAndRender() {
+  document.getElementById('loadingState').style.display = '';
+  document.getElementById('emptyState').style.display   = 'none';
+  document.getElementById('mainContent').style.display  = 'none';
+  document.getElementById('summaryBar').style.display   = 'none';
+
+  const schoolId = userProfile?.schoolId;
+  if (!schoolId) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('emptyState').style.display = '';
+    document.getElementById('emptyState').querySelector('p').textContent = 'Your profile is not linked to a school. Contact your administrator.';
+    return;
+  }
+
+  // Determine which subjects to show
+  const filterVal = document.getElementById('subjectFilter').value;
+  let subjectsToShow;
+  if (filterVal) {
+    const [col, docId, label, color] = filterVal.split('|');
+    const found = ALL_SUBJECTS.find(s => s.col === col);
+    subjectsToShow = found ? [found] : [];
+  } else {
+    subjectsToShow = ALL_SUBJECTS;
+  }
+
+  try {
+    // Parallel: schedule + teachers + pacing structs
+    const [wks, teachers] = await Promise.all([
+      loadTeachingSchedule(),
+      loadTeachers(schoolId),
+      loadPacingStructs(subjectsToShow),
+    ]);
+    teachingWeeks = wks;
+
+    if (!teachers.length) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display = '';
+      return;
+    }
+
+    // Load all teacher progress docs
+    const progressData = await loadProgressBatch(teachers.map(t => t.uid));
+
+    // Build HTML
+    let html = subjectsToShow.map(s => renderSubjectSection(s, teachers, progressData)).join('');
+    html = html.replace(/^\s+$/gm, '').replace(/\n{3,}/g, '\n\n').trim();
+
+    if (!html) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display = '';
+      return;
+    }
+
+    document.getElementById('mainContent').innerHTML = html;
+    document.getElementById('loadingState').style.display  = 'none';
+    document.getElementById('mainContent').style.display   = '';
+    updateSummaryBar(teachers, progressData, subjectsToShow);
+    allTeachers = teachers;
+
+  } catch (err) {
+    console.error('SyllabusCoverage load error:', err);
+    document.getElementById('loadingState').innerHTML = `
+      <svg width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.2" style="margin:0 auto 12px;display:block;opacity:0.4;">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+      </svg>
+      <h3 style="font-size:1rem;font-weight:600;color:#44445a;margin-bottom:6px;">Could not load coverage data</h3>
+      <p style="font-size:0.85rem;color:#8888a8;">${esc(err.message)}</p>`;
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────────────
+document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+  currentUser = user;
+  userProfile = profile;
+
+  // Initialise Firebase refs
+  const app = getApps().length ? getApps()[0] : initializeApp(window.ENV);
+  db = getFirestore(app);
+
+  window.__loadAcademicNavbar('syllabus-coverage', { user, profile });
+
+  loadAndRender();
+});
+
+document.getElementById('subjectFilter').addEventListener('change', loadAndRender);
+document.getElementById('btnRefresh').addEventListener('click', () => {
+  pacingStructs = {};  // clear cache to force re-fetch
+  loadAndRender();
+});
+</script>
+</body>
+</html>
