@@ -147,7 +147,7 @@ document.addEventListener('authReady',async({detail:{user,profile}})=>{
   uid=user.uid;userName=profile?.displayName||user.displayName||'Administrator';
   const snap=await getDoc(doc(window.db,'user_competencies',uid));
   if(snap.exists())earned=snap.data().earned_academic||{};
-  const certQ=query(collection(window.db,'competency_certificates'),where('uid','==',uid),where('platform','==','academic'),orderBy('issuedAt','desc'));
+  const certQ=query(collection(window.db,'competency_certificates'),where('userId','==',uid),where('platform','==','academic'),orderBy('issuedAt','desc'));
   const certSnap=await getDocs(certQ);
   myCerts=certSnap.docs.map(d=>({id:d.id,...d.data()}));
   render();

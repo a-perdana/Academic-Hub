@@ -1610,7 +1610,7 @@
 
       return {
         submissionId: activeSubmission.id,
-        teacherUid:   activeSubmission.uid,
+        teacherUid:   activeSubmission.userId,
         teacherEmail: activeSubmission.email,
         periodId:     activeSubmission.periodId,
         periodName:   activeSubmission.periodName,
@@ -1747,7 +1747,7 @@
       try {
         const proposalData = {
           submissionId:  activeSubmission.id,
-          teacherUid:    activeSubmission.uid,
+          teacherUid:    activeSubmission.userId,
           teacherEmail:  activeSubmission.email,
           evaluatorUid:  currentUser.uid,
           evaluatorEmail: currentUser.email,

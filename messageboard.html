@@ -1349,7 +1349,7 @@ body { padding-top: 62px; }
     btn.innerHTML = `<span class="btn-spinner"></span> Sending…`;
     try {
       await addDoc(collection(db,"topics",currentTopicId,"replies"), {
-        body, uid: currentUser.uid,
+        body, authorUid: currentUser.uid,
         displayName: getDisplayName(currentUser),
         createdAt: serverTimestamp(),
       });
@@ -1412,7 +1412,7 @@ body { padding-top: 62px; }
     try {
       const ref = await addDoc(collection(db,"topics"), {
         title, body, category,
-        uid: currentUser.uid,
+        authorUid: currentUser.uid,
         displayName: getDisplayName(currentUser),
         createdAt: serverTimestamp(),
         replyCount: 0,

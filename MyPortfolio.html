@@ -221,7 +221,7 @@ window.submitEvidence=async function(){
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
   try{
     const meta=COMP_META[compId];
-    await addDoc(collection(window.db,'competency_evidence'),{uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl:null,fileName:selectedFile?.name||null,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    await addDoc(collection(window.db,'competency_evidence'),{userId:uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl:null,fileName:selectedFile?.name||null,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     document.getElementById('formSuccess').classList.add('visible');
     document.getElementById('compSelect').value='';document.getElementById('levelSelect').innerHTML='<option value="">— select competency first —</option>';document.getElementById('evidenceDesc').value='';clearFile();
     await loadSubmissions();
@@ -232,7 +232,7 @@ window.submitEvidence=async function(){
 async function loadSubmissions(){
   const list=document.getElementById('evidenceList');
   list.innerHTML='<div class="skel" style="height:80px;border-radius:14px;"></div>';
-  const q=query(collection(window.db,'competency_evidence'),where('uid','==',uid),where('platform','==','academic'),orderBy('createdAt','desc'));
+  const q=query(collection(window.db,'competency_evidence'),where('userId','==',uid),where('platform','==','academic'),orderBy('createdAt','desc'));
   const snap=await getDocs(q);
   if(snap.empty){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">📂</div><div class="empty-state-title">No submissions yet</div><div class="empty-state-sub">Submit your first evidence above.</div></div>`;return;}
   const statusMap={pending:'Pending Review',approved:'Approved',rejected:'Revise & Resubmit','under-review':'Under Review'};

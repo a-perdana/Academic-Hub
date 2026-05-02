@@ -984,7 +984,7 @@ async function saveResult(passed, adjPct, exactPct) {
     const uid = window.currentUser?.uid || null;
     const profile = window.userProfile || {};
     const payload = {
-      uid,
+      userId: uid,
       displayName: window.currentUser?.displayName || '',
       email: window.currentUser?.email || '',
       school: profile.school || '',
