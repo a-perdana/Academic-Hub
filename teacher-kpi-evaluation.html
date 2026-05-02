@@ -1167,11 +1167,19 @@
         return;
       }
 
-      // Load submissions for this period (status = 'submitted' or 'evaluated')
-      const snap = await getDocs(query(
+      // Load submissions for this period (status = 'submitted' or 'evaluated').
+      // academic_admin sees every school's submissions; sub-role evaluators
+      // (school_principal, academic_coordinator) are restricted to their own
+      // school via Firestore rules — adding the where() here matches the rule
+      // and avoids partial result sets / permission-denied errors.
+      const isAdmin   = userProfile?.role_academichub === 'academic_admin';
+      const mySchool  = userProfile?.schoolId || '';
+      const subQueryParts = [
         collection(db, 'teacher_kpi_submissions'),
-        where('periodId', '==', periodId)
-      ));
+        where('periodId', '==', periodId),
+      ];
+      if (!isAdmin) subQueryParts.push(where('schoolId', '==', mySchool));
+      const snap = await getDocs(query(...subQueryParts));
 
       submissions = snap.docs
         .map(d => ({ id: d.id, ...d.data() }))
