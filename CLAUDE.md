@@ -84,18 +84,19 @@ Every protected page loads `auth-guard.js` as a module:
 <script type="module" src="auth-guard.js"></script>
 ```
 
-`auth-guard.js` (modular SDK v10):
+`auth-guard.js` (modular SDK v10). The school + sub-role prompt runs BEFORE the approval check so central_admin sees the user's declared school + roles when reviewing pending signups in `console.html`:
+
 1. Hides `document.body` immediately (prevents flash of content).
 2. Initialises Firebase (guards against double-init with `getApps()`).
 3. Listens on `onAuthStateChanged`. If no user → redirects to `login.html`.
-4. Fetches (or creates) Firestore profile. If missing, creates it and assigns `role_academichub: 'academic_user'` + `approval_status_academichub: 'pending'` automatically.
-5. **Domain check** — Google SSO users must have an email from `window.ACADEMIC_ALLOWED_DOMAINS` (15 school domains). Email/password accounts bypass this check. Fails → `login.html?error=domain`.
-6. Role check — `role_academichub` must be in `['academic_admin', 'academic_user']`. Fails → `login.html?error=access`.
-7. Name prompt if `displayName` is missing.
-8. **AH sub-role prompt** — shown until `ah_sub_roles` has at least one value. Checkbox cards for Foundation Representative, School Principal, Academic Coordinator. Runs BEFORE the approval check so admin sees role declarations when reviewing.
+4. Fetches (or creates) Firestore profile. First sign-in writes `role_academichub: 'academic_user'` + `approval_status_academichub: 'pending'`.
+5. **Domain check** — Google SSO emails must be in `window.ACADEMIC_ALLOWED_DOMAINS`; email/password accounts bypass.
+6. **Role check** — `role_academichub` must be in `['academic_admin', 'academic_user']`.
+7. **Name prompt** if `displayName` missing.
+8. **Profile prompt** — shown by `promptForAhProfile(user, profile)` until both `schoolId` AND `ah_sub_roles[]` are set (`ahProfileComplete()` checks both). The school dropdown is sourced from `partner_schools` ordered by name and auto-defaults to the doc whose `domain` matches the user's email domain. Multi-school domains (`semesta.sch.id`) leave the picker empty + show an amber hint. Writes back `{ schoolId, school, ah_sub_roles }` with `setDoc(..., { merge: true })`.
 9. **Approval check** — if `approval_status_academichub !== 'approved'` (and not `academic_admin`) → redirect to `waiting.html`. `waiting.html` polls every 30s and redirects on approval.
-10. **Page-access gate (Step 5b)** — for non-admins, fetches `page_access_config/{currentSlug}` and redirects to `/?denied=<slug>` (with a yellow toast) if the user's `ah_sub_roles[]` doesn't intersect the page's `visible_to[]`. Auth-flow pages (`/`, `/login`, `/waiting`) and pages without a config doc are bypassed.
-11. **UI gating (Step 7b)** — bulk-fetches every `page_access_config` doc for `academichub` (one read, 5-min `sessionStorage` cache as `pac:__all__`) and runs `applyPageAccessGating()`: hides any `[data-nav-key]` link or `<a class="card" href]` element the user cannot access, plus empty `.nav-dropdown-wrap` / `.nav-dd-col` / `.mob-nav-section` containers. A MutationObserver re-runs gating whenever the navbar partial mounts or any new card/link is inserted later.
+10. **Page-access gate** — for non-admins, fetches `page_access_config/{currentSlug}` and redirects to `/?denied=<slug>` (with a yellow toast) if the user's `ah_sub_roles[]` doesn't intersect the page's `visible_to[]`. Auth-flow pages (`/`, `/login`, `/waiting`) and pages without a config doc are bypassed.
+11. **UI gating** — bulk-fetches every `page_access_config` doc for `academichub` (one read, 5-min `sessionStorage` cache as `pac:__all__`) and runs `applyPageAccessGating()`: hides any `[data-nav-key]` link or `<a class="card" href]` element the user cannot access, plus empty `.nav-dropdown-wrap` / `.nav-dd-col` / `.mob-nav-section` containers. A MutationObserver re-runs gating whenever the navbar partial mounts or any new card/link is inserted later.
 12. Exposes globals and dispatches `authReady`.
 
 **Allowed domains** are defined centrally in `auth-guard.js` as `window.ACADEMIC_ALLOWED_DOMAINS` (15 entries: 14 partner school `.sch.id` domains + `eduversal.org`). Individual pages reference this via `const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS` — do NOT redefine the list inline.
@@ -133,9 +134,9 @@ Academic Hub uses `role_academichub` as the primary access field. **The legacy `
 
 **Academic Hub allowed roles:** `['academic_user', 'academic_admin']`
 
-First login automatically assigns `academic_user` + `approval_status_academichub: 'pending'` via `setDoc` with `{ merge: true }`. Users stay on `waiting.html` until a `central_admin` sets `approval_status_academichub: 'approved'` in `console.html`. `academic_admin` bypasses the approval check entirely.
+First login automatically assigns `academic_user` + `approval_status_academichub: 'pending'` via `setDoc` with `{ merge: true }`. Before reaching `waiting.html` the user must complete the **Profile prompt** (school + sub-roles) — the prompt re-shows on every login until both `schoolId` and `ah_sub_roles[]` are set, and writes back `{ schoolId, school, ah_sub_roles }`. After that, the user stays on `waiting.html` until a `central_admin` sets `approval_status_academichub: 'approved'` in `console.html` (which now sees the user's declared school + sub-roles when reviewing). `academic_admin` bypasses the approval check entirely.
 
-**Sub-roles (`ah_sub_roles[]`)** are set in `console.html` and control:
+**Sub-roles (`ah_sub_roles[]`)** are set at first sign-in by the profile prompt (and editable later via `console.html`). They control:
 - `weekly-checklist.html` — tab visibility: each sub-role maps to its own tab (Foundation Representative / School Principal / Academic Coordinator). Users with multiple sub-roles see multiple tabs; single sub-role users see no tab bar. Admins see all tabs.
 - `index.html` dashboard — categories with a `visible_to[]` field are filtered to matching sub-roles. Categories with empty `visible_to` are shown to everyone.
 - **Per-page access** via `page_access_config/{slug}` — see Page Access section below.
@@ -181,8 +182,8 @@ const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
 
 | Collection              | Purpose                                      | Write access         |
 |-------------------------|----------------------------------------------|----------------------|
-| `users/{uid}`           | User profiles (uid, email, displayName, photoURL, role, createdAt) | owner or central_admin |
-| `schools/{schoolId}`    | Partner school records                       | central_admin        |
+| `users/{uid}`           | User profiles. **`schoolId` is required for AH users** — set at first login by the profile prompt (auto-defaults from email domain via `partner_schools.domain`). Used by `isAHUserAtSameSchool()` rules helper for same-school access checks. | owner or central_admin |
+| `partner_schools/{schoolId}` | School directory (read here for the auth-guard school picker + KPI school selector). Each doc has `name`, `domain` (drives email-based auto-default in `promptForAhProfile()`), and a `classes/{classId}` subcollection. | central_admin (write) |
 | `staff/{staffId}`       | Staff records                                | central_admin        |
 | `announcements/{annId}` | Platform-wide announcements                  | central_admin        |
 | `central_documents/{docId}` | CentralHub-managed documents            | central_admin        |
