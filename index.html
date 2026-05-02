@@ -4015,6 +4015,25 @@
             </div><!-- /category-body -->
           </div><!-- /category-section#uncategorizedAccordion -->
         </div><!-- /uncategorized-section -->
+
+        <!-- == Auto-generated "Other Available Pages" section ============
+             Lists every page in page_access_config that:
+               1. is allowed for this user's ah_sub_roles, AND
+               2. does NOT already have a hand-crafted card on this page.
+             Populated by JS in this file once authReady fires. -->
+        <div class="other-pages-section" id="otherPagesSection" style="display:none;margin-top:32px">
+          <div class="category-section" id="otherPagesAccordion" data-cat-id="__otherpages__">
+            <div class="category-header" data-cat-id="__otherpages__">
+              <span class="category-color-dot" style="background:#475569;color:#475569;"></span>
+              <span class="category-name">Other available pages</span>
+              <span class="category-count" id="otherPagesCount">0</span>
+              <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </div>
+            <div class="category-body">
+              <div class="category-cards-grid" id="otherPagesGrid"></div>
+            </div>
+          </div>
+        </div>
       </main>
 
       <!-- == Manage Cards Modal == -->
@@ -4260,7 +4279,102 @@
         }
 
         initCategorySystem(window.db);
+        // Auto-generate the "Other available pages" section so every page
+        // the user has access to surfaces somewhere on the dashboard, even
+        // when no hand-crafted card exists for it yet.
+        renderOtherAvailablePages(window.db, profile).catch(err => {
+          console.warn('renderOtherAvailablePages failed', err);
+        });
       });
+
+      // ============================================================
+      // AUTO-GENERATED "OTHER AVAILABLE PAGES" SECTION
+      // ============================================================
+      // For pages declared in page_access_config that the user can access
+      // but have no hand-crafted <a class="card"> on this dashboard, we
+      // render a lightweight card so the page is reachable from the home
+      // screen. As you add proper cards over time, those auto-cards
+      // disappear (de-duplicated by pageKey).
+      async function renderOtherAvailablePages(db, profile) {
+        const isAdmin = profile?.role_academichub === 'academic_admin';
+        const subRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
+        const wrap  = document.getElementById('otherPagesSection');
+        const grid  = document.getElementById('otherPagesGrid');
+        const count = document.getElementById('otherPagesCount');
+        if (!wrap || !grid || !count) return;
+
+        // Reuse the bulk cache populated by auth-guard if available.
+        let configsMap;
+        try {
+          const raw = sessionStorage.getItem('pac:__all__');
+          const cached = raw ? JSON.parse(raw) : null;
+          if (cached?.entries && (Date.now() - cached.at) < 5 * 60 * 1000) {
+            configsMap = new Map(cached.entries);
+          }
+        } catch (_) {}
+        if (!configsMap) {
+          const { getDocs, collection } =
+            await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          const snap = await getDocs(collection(db, 'page_access_config'));
+          configsMap = new Map();
+          snap.forEach(d => {
+            const data = d.data() || {};
+            if (data.platform && data.platform !== 'academichub') return;
+            configsMap.set(d.id, data);
+          });
+        }
+
+        // Pages already represented by a hand-crafted card → de-dupe.
+        const existingKeys = new Set();
+        document.querySelectorAll('a.card[href]').forEach(a => {
+          try {
+            const u = new URL(a.getAttribute('href'), window.location.origin);
+            let p = u.pathname.toLowerCase()
+              .replace(/^\/+/, '').replace(/\/+$/, '').replace(/\.html$/, '');
+            if (p.includes('/')) p = p.split('/').pop();
+            if (p) existingKeys.add(p);
+          } catch (_) {}
+        });
+
+        const SKIP = new Set(['', 'index', 'login', 'waiting']);
+        const items = [];
+        configsMap.forEach((cfg, key) => {
+          if (SKIP.has(key)) return;
+          if (existingKeys.has(key)) return; // already has a hand-crafted card
+          // Access check (admin sees everything).
+          const vt = Array.isArray(cfg.visible_to) ? cfg.visible_to : [];
+          const allowed = isAdmin || vt.length === 0 || subRoles.some(r => vt.includes(r));
+          if (!allowed) return;
+          items.push({ key, ...cfg });
+        });
+
+        if (!items.length) {
+          wrap.style.display = 'none';
+          return;
+        }
+
+        items.sort((a, b) => (a.label || a.key).localeCompare(b.label || b.key));
+        count.textContent = items.length;
+        grid.innerHTML = items.map(it => `
+          <a href="/${escapeAttr(it.key)}" class="card card-auto" data-theme="auto" data-nav-key="${escapeAttr(it.key)}">
+            <div class="card-content" style="padding:18px">
+              <div class="card-arrow">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </div>
+              <h3 class="card-title">${escapeHtml(it.label || it.key)}</h3>
+              ${it.description ? `<p class="card-description">${escapeHtml(it.description)}</p>` : ''}
+            </div>
+          </a>
+        `).join('');
+        wrap.style.display = 'block';
+
+        function escapeHtml(s) {
+          return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+            {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+          ));
+        }
+        function escapeAttr(s) { return escapeHtml(s); }
+      }
 
       // ============================================================
       // CATEGORY SYSTEM

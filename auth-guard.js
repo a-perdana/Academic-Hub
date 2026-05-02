@@ -162,6 +162,124 @@ async function getPageAccessConfig(db, pageKey) {
   return data;
 }
 
+// Fetch every page_access_config doc once and cache as Map<pageKey, data>.
+// Used by the post-auth gating pass so we don't issue 40+ getDoc calls.
+async function getAllPageAccessConfigs(db) {
+  try {
+    const raw = sessionStorage.getItem('pac:__all__');
+    if (raw) {
+      const cached = JSON.parse(raw);
+      if (cached && (Date.now() - cached.at) < PAGE_ACCESS_TTL_MS) {
+        return new Map(cached.entries);
+      }
+    }
+  } catch (_) {}
+
+  const map = new Map();
+  try {
+    const { getDocs, collection } =
+      await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    const snap = await getDocs(collection(db, 'page_access_config'));
+    snap.forEach(d => {
+      const data = d.data() || {};
+      // Only entries for this platform.
+      if (data.platform && data.platform !== 'academichub') return;
+      map.set(d.id, data);
+    });
+    sessionStorage.setItem('pac:__all__', JSON.stringify({
+      at: Date.now(),
+      entries: [...map.entries()],
+    }));
+  } catch (err) {
+    console.warn('page_access_config bulk read failed', err);
+  }
+  return map;
+}
+
+// Derive a page slug from any anchor element's href (works for both source
+// HTML hrefs like 'EASE-Analytics.html' and dist/clean URLs like '/ease-analytics').
+// We rely on the fact that the navbar's data-nav-key is authoritative when present.
+function slugFromHref(href) {
+  if (!href) return '';
+  try {
+    // Strip protocol/host so cross-origin links don't match.
+    const url = new URL(href, window.location.origin);
+    if (url.origin !== window.location.origin) return '';
+    let p = url.pathname.toLowerCase();
+    p = p.replace(/^\/+/, '').replace(/\/+$/, '').replace(/\.html$/, '');
+    if (p.includes('/')) p = p.split('/').pop();
+    return p;
+  } catch (_) {
+    return '';
+  }
+}
+
+// Hide navbar links and dashboard cards the user cannot access.
+// - userSubRoles: array (admin treated upstream — caller skips this for admins)
+// - configs: Map<pageKey, {visible_to, label, ...}>
+function applyPageAccessGating(configs, userSubRoles) {
+  const isAllowed = (cfg) => {
+    if (!cfg) return true; // unknown page — fail-open
+    const vt = Array.isArray(cfg.visible_to) ? cfg.visible_to : [];
+    if (vt.length === 0) return true; // empty = open to all
+    return userSubRoles.some(r => vt.includes(r));
+  };
+
+  // 1. Navbar items — anything with [data-nav-key] is a candidate.
+  document.querySelectorAll('[data-nav-key]').forEach(el => {
+    const key = (el.getAttribute('data-nav-key') || '').toLowerCase();
+    if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
+    if (!configs.has(key)) return; // unknown to config — leave alone
+    if (!isAllowed(configs.get(key))) {
+      el.setAttribute('data-pa-hidden', '1');
+    }
+  });
+
+  // 2. Dashboard cards — <a class="card" href="...">.
+  document.querySelectorAll('a.card[href]').forEach(el => {
+    const key = slugFromHref(el.getAttribute('href'));
+    if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
+    if (!configs.has(key)) return;
+    if (!isAllowed(configs.get(key))) {
+      el.setAttribute('data-pa-hidden', '1');
+    }
+  });
+
+  // 3. Empty navbar dropdowns — if every item inside a dropdown is hidden,
+  //    hide the wrapper (button + panel) too. AH navbar uses
+  //    .nav-dropdown-wrap for desktop and .mob-nav-section for mobile.
+  ['.nav-dropdown-wrap', '.mob-nav-section'].forEach(selector => {
+    document.querySelectorAll(selector).forEach(group => {
+      const items = group.querySelectorAll('[data-nav-key]');
+      if (!items.length) return;
+      const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
+      if (allHidden) group.setAttribute('data-pa-hidden', '1');
+      else            group.removeAttribute('data-pa-hidden'); // re-show if user gains access mid-session
+    });
+  });
+
+  // 4. Empty dropdown columns — same idea, one level finer for the wide
+  //    multi-column panels so we don't leave empty white columns.
+  document.querySelectorAll('.nav-dd-col').forEach(col => {
+    const items = col.querySelectorAll('[data-nav-key]');
+    if (!items.length) return;
+    const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
+    if (allHidden) col.setAttribute('data-pa-hidden', '1');
+    else            col.removeAttribute('data-pa-hidden');
+  });
+}
+
+// Inject the CSS rule that actually hides flagged elements. Doing this in JS
+// (rather than asking every page to ship the rule) keeps gating fully
+// self-contained in auth-guard.
+function ensurePageAccessStyles() {
+  if (document.getElementById('paGatingStyle')) return;
+  const style = document.createElement('style');
+  style.id = 'paGatingStyle';
+  style.textContent = '[data-pa-hidden="1"] { display: none !important; }';
+  document.head.appendChild(style);
+}
+
 function promptForAhProfile(profile) {
   return new Promise(resolve => {
     const existing = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
@@ -379,6 +497,38 @@ onAuthStateChanged(auth, async (user) => {
       await signOut(auth);
       window.location.href = 'login.html';
     });
+  }
+
+  // 7b. Page-access GATING — hide navbar links + cards the user cannot access.
+  //     - admin sees everything
+  //     - other AH users only see entries where their ah_sub_roles intersect
+  //       the page's visible_to (or visible_to is empty = open to all)
+  //     - the navbar loads asynchronously, so we re-run after it mounts and
+  //       also via a MutationObserver to catch any late-added items.
+  if (platformRole !== 'academic_admin') {
+    ensurePageAccessStyles();
+    const subRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+    const configs  = await getAllPageAccessConfigs(db);
+    const runGating = () => applyPageAccessGating(configs, subRoles);
+    // Initial pass (covers cards already in DOM).
+    runGating();
+    // Re-run whenever new navbar links or cards are inserted (the navbar
+    // partial is fetched async and React-style components can also add cards
+    // after the fact). The observer is the only timing dependency we need.
+    const mo = new MutationObserver(muts => {
+      const interesting = muts.some(m =>
+        [...m.addedNodes].some(n =>
+          n.nodeType === 1 && (
+            n.matches?.('[data-nav-key], a.card[href]') ||
+            n.querySelector?.('[data-nav-key], a.card[href]')
+          )
+        )
+      );
+      if (interesting) runGating();
+    });
+    mo.observe(document.body, { childList: true, subtree: true });
+    // Expose for debugging / manual re-runs.
+    window.__paGate = runGating;
   }
 
   // 8. Show page and notify
