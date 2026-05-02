@@ -671,9 +671,9 @@ const NAV_ITEMS = [
     { key: 'parent-survey',           href: '/parent-survey',           label: 'Parent Survey' },
   ]},
   { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
-    { key: 'calendar',             href: '/academic-calendar',     label: 'Academic Calendar' },
+    { key: 'academic-calendar',    href: '/academic-calendar',     label: 'Academic Calendar' },
     { key: 'announcements',        href: '/announcements',         label: 'Announcements', badgeId: 'annBadge' },
-    { key: 'messageboard',         href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
+    { key: 'message-board',        href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
     { key: 'documents',            href: '/documents',             label: 'Documents', badgeId: 'docBadge', badgeCount: true },
     { key: 'competency-framework', href: '/competency-framework',  label: 'Competency Framework' },
     { key: 'learning-path',        href: '/learning-path',         label: 'Learning Path' },

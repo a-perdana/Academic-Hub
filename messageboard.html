@@ -939,7 +939,7 @@ body { padding-top: 62px; }
     currentUser = user;
     currentUserRole = profile.role_academichub === 'academic_admin' ? 'moderator' : null;
     currentUserDisplayName = profile.displayName || user.displayName || null;
-    window.__loadAcademicNavbar('messageboard', { user, profile });
+    window.__loadAcademicNavbar('message-board', { user, profile });
     setDoc(doc(db,'users',user.uid),{ lastReadMessageboard: serverTimestamp() },{ merge: true }).catch(()=>{});
     initForum();
   });

@@ -720,7 +720,7 @@
         isAdmin     = profile.role_academichub === 'academic_admin';
         isModerator = true; // all authenticated users can moderate their own posts
         userSchool  = profile.schoolName || null;
-        window.__loadAcademicNavbar('calendar', { user, profile });
+        window.__loadAcademicNavbar('academic-calendar', { user, profile });
         document.getElementById('addActBtn').style.display = 'flex';
         loadActivities();
         loadMyCompletions();
