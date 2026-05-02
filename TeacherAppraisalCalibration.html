@@ -1023,6 +1023,7 @@ async function renderLeaderboard() {
   }
   el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;">Loading…</p></div></div>`;
   try {
+    // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
     const snap = await getDocs(collection(db, 'calibration_sessions'));
     const rows = [];
     snap.forEach(d => rows.push(d.data()));

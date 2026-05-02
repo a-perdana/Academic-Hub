@@ -1612,7 +1612,7 @@ body { padding-top: 62px; }
       await addDoc(collection(db, 'announcements', annId, 'comments'), {
         body,
         authorName: currentUserDisplayName || currentUser.displayName || currentUser.email.split('@')[0],
-        authorId: currentUser.uid,
+        authorUid: currentUser.uid,
         authorPhotoURL: currentUser.photoURL || '',
         createdAt: serverTimestamp(),
       });
@@ -1832,7 +1832,7 @@ body { padding-top: 62px; }
           title, body, pinned, links, imageUrl, imagePath,
           platforms: ['academichub'],
           authorName: currentUserDisplayName || currentUser.displayName || currentUser.email.split('@')[0],
-          authorId: currentUser.uid,
+          authorUid: currentUser.uid,
           commentCount: 0,
           createdAt: serverTimestamp(),
         });

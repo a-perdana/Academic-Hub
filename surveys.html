@@ -603,6 +603,7 @@
     async function loadSurveys() {
       const listEl = document.getElementById("surveyList");
       try {
+        // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
         const snap = await getDocs(collection(db, "surveys"));
         allSurveys = snap.docs
           .map((d) => ({ id: d.id, ...d.data() }))

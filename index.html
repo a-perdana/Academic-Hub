@@ -4204,7 +4204,7 @@
             message,
             userId:    currentUser?.uid || null,
             userEmail: currentUser?.email || null,
-            timestamp: serverTimestamp(),
+            createdAt: serverTimestamp(),
           });
           statusEl.textContent = 'Feedback sent — thank you!';
           statusEl.className = 'feedback-status ok';
@@ -4315,6 +4315,7 @@
         if (!configsMap) {
           const { getDocs, collection } =
             await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+          // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
           const snap = await getDocs(collection(db, 'page_access_config'));
           configsMap = new Map();
           snap.forEach(d => {

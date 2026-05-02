@@ -1269,6 +1269,7 @@ The PDP should include:
 
   // Check if prompts collection is empty
   const { getDocs } = await import("https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js");
+  // @lint-allow-unbounded — bootstrap check, prompts collection is small (~50 docs)
   const snap = await getDocs(collection(db, 'prompts'));
   if (!snap.empty) return; // already seeded
 

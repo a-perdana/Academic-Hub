@@ -184,6 +184,7 @@ async function getAllPageAccessConfigs(db) {
   try {
     const { getDocs, collection } =
       await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+    // @lint-allow-unbounded — full config doc set (~43 small docs); cached for 5 min
     const snap = await getDocs(collection(db, 'page_access_config'));
     snap.forEach(d => {
       const data = d.data() || {};

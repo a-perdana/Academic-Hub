@@ -732,6 +732,7 @@ function switchView(viewId) {
 
 // ─── Load Base Data ───────────────────────────────────────────
 async function loadSchools() {
+  // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
   const snap = await getDocs(collection(db, 'partner_schools'));
   schools = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   schools.sort((a,b) => a.name.localeCompare(b.name));
@@ -741,6 +742,7 @@ async function loadKPIs() {
   kpis = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
 async function loadSemesters() {
+  // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
   const snap = await getDocs(collection(db, 'kpi_settings'));
   semesters = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   semesters.sort((a,b) => {

@@ -724,7 +724,7 @@ body { padding-top: 62px; }
       await addDoc(collection(db, 'library'), {
         title, url, description: desc, type, subject,
         authorName: currentUserDisplayName || currentUser.displayName || currentUser.email.split('@')[0],
-        authorId: currentUser.uid,
+        authorUid: currentUser.uid,
         createdAt: serverTimestamp(),
       });
       document.getElementById('modalOverlay').classList.remove('open');
