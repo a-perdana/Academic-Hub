@@ -21,8 +21,9 @@ import { initializeApp, getApps }
 import { getAuth, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, addDoc, serverTimestamp,
+  getFirestore, doc, getDoc, getDocs, setDoc, addDoc, serverTimestamp,
   collection, collectionGroup, onSnapshot, updateDoc, arrayUnion, arrayRemove,
+  query, orderBy,
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
@@ -67,8 +68,9 @@ window.auth          = auth;
 window.db            = db;
 window.storage       = storage;
 window.firestoreOps  = {
-  doc, getDoc, setDoc, serverTimestamp,
+  doc, getDoc, getDocs, setDoc, serverTimestamp,
   collection, collectionGroup, onSnapshot, updateDoc, arrayUnion, arrayRemove,
+  query, orderBy,
 };
 window.storageOps    = { ref, uploadBytes, getDownloadURL, deleteObject };
 
@@ -115,7 +117,10 @@ const AH_ROLE_OPTIONS = [
 ];
 
 function ahProfileComplete(profile) {
-  return Array.isArray(profile.ah_sub_roles) && profile.ah_sub_roles.length > 0;
+  return Array.isArray(profile.ah_sub_roles)
+    && profile.ah_sub_roles.length > 0
+    && typeof profile.schoolId === 'string'
+    && profile.schoolId.length > 0;
 }
 
 // ── Page-access helpers ──────────────────────────────────────────
@@ -280,32 +285,79 @@ function ensurePageAccessStyles() {
   document.head.appendChild(style);
 }
 
-function promptForAhProfile(profile) {
+async function promptForAhProfile(user, profile) {
+  // Fetch the canonical school list before showing the modal so the
+  // dropdown is ready immediately. partner_schools docs may include a
+  // `domain` field (e.g. "fatih.sch.id") used to auto-default the
+  // selection from the user's email domain.
+  let schoolDocs = []; // [{id, name, domain}]
+  try {
+    const snap = await getDocs(query(collection(db, 'partner_schools'), orderBy('name')));
+    snap.forEach(d => {
+      const v = d.data();
+      schoolDocs.push({ id: d.id, name: v.name || d.id, domain: v.domain || '' });
+    });
+  } catch (err) {
+    console.warn('partner_schools read failed', err);
+  }
+
+  // Pick a sensible default schoolId:
+  //   1. existing profile.schoolId (in case the user had one already)
+  //   2. first partner_schools doc whose `domain` matches the email domain
+  //   3. nothing — user must pick manually
+  const emailDomain = (user.email || '').split('@')[1] || '';
+  const domainMatches = schoolDocs.filter(s => s.domain === emailDomain);
+  const defaultSchoolId = profile.schoolId
+    || (domainMatches.length === 1 ? domainMatches[0].id : '')
+    || '';
+  const ambiguousDomain = domainMatches.length > 1; // e.g. semesta.sch.id has 2 campuses
+
   return new Promise(resolve => {
-    const existing = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+    const existingSubRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+
+    const schoolOptions = schoolDocs.map(s => `
+      <option value="${s.id}"${s.id === defaultSchoolId ? ' selected' : ''}>${s.name}</option>
+    `).join('');
 
     const roleCards = AH_ROLE_OPTIONS.map(o => `
       <label style="display:flex;align-items:flex-start;gap:12px;cursor:pointer;padding:12px 14px;border:1.5px solid #e0ddd6;border-radius:10px;transition:border-color .15s" id="_roleCard_${o.value}">
         <input type="checkbox" id="_chk_${o.value}" value="${o.value}"
-          style="margin-top:2px;accent-color:#d97706;width:16px;height:16px;flex-shrink:0" ${existing.includes(o.value) ? 'checked' : ''}>
+          style="margin-top:2px;accent-color:#d97706;width:16px;height:16px;flex-shrink:0" ${existingSubRoles.includes(o.value) ? 'checked' : ''}>
         <div>
           <div style="font-size:0.875rem;font-weight:600;color:#1c1c2e">${o.label}</div>
           <div style="font-size:0.78rem;color:#8888a8;margin-top:2px">${o.desc}</div>
         </div>
       </label>`).join('');
 
+    const ambiguityHint = ambiguousDomain
+      ? `<p style="font-size:0.75rem;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:6px;padding:6px 10px;margin-top:6px">We found multiple schools using <strong>@${emailDomain}</strong>. Please pick yours.</p>`
+      : '';
+
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(28,28,46,0.82);display:flex;align-items:center;justify-content:center;padding:24px;font-family:"DM Sans",sans-serif';
     overlay.innerHTML = `
-      <div style="background:#fff;border-radius:20px;padding:40px 36px;width:100%;max-width:480px;box-shadow:0 24px 64px rgba(0,0,0,0.40);max-height:90vh;overflow-y:auto">
-        <div style="margin-bottom:24px">
+      <div style="background:#fff;border-radius:20px;padding:36px 36px;width:100%;max-width:480px;box-shadow:0 24px 64px rgba(0,0,0,0.40);max-height:92vh;overflow-y:auto">
+        <div style="margin-bottom:22px">
           <h2 style="font-size:1.35rem;font-weight:700;color:#1c1c2e;margin-bottom:6px">Set up your profile</h2>
-          <p style="font-size:0.875rem;color:#8888a8;line-height:1.5">Select your role(s) so we can show you the right dashboards and checklists.</p>
+          <p style="font-size:0.875rem;color:#8888a8;line-height:1.5">Tell us your school and the role(s) you hold so we can tailor your dashboards and checklists.</p>
         </div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+
+        <label style="display:block;font-size:0.78rem;font-weight:600;color:#44445a;margin-bottom:6px">Your school <span style="color:#dc2626">*</span></label>
+        <select id="_ahSchoolInput"
+          style="width:100%;padding:10px 12px;border:1.5px solid #e0ddd6;border-radius:10px;font-size:0.9rem;color:#1c1c2e;outline:none;box-sizing:border-box;background:#fff;appearance:auto;margin-bottom:4px">
+          <option value="">— Select school —</option>
+          ${schoolOptions}
+        </select>
+        ${ambiguityHint}
+
+        <div style="height:18px"></div>
+
+        <label style="display:block;font-size:0.78rem;font-weight:600;color:#44445a;margin-bottom:8px">Your role(s) <span style="color:#dc2626">*</span></label>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px">
           ${roleCards}
         </div>
-        <p id="_ahProfileErr" style="font-size:0.82rem;color:#dc2626;min-height:18px;margin-bottom:12px"></p>
+
+        <p id="_ahProfileErr" style="font-size:0.82rem;color:#dc2626;min-height:18px;margin-bottom:10px"></p>
         <button id="_ahProfileBtn" style="width:100%;padding:12px;background:linear-gradient(135deg,#d97706,#b45309);color:#fff;border:none;border-radius:10px;font-size:0.95rem;font-weight:600;cursor:pointer">Save & Continue →</button>
       </div>`;
 
@@ -325,18 +377,19 @@ function promptForAhProfile(profile) {
     const err = overlay.querySelector('#_ahProfileErr');
 
     btn.addEventListener('click', () => {
+      const schoolSel = overlay.querySelector('#_ahSchoolInput');
+      const schoolId  = schoolSel.value.trim();
+      const school    = schoolSel.selectedOptions[0]?.textContent.trim() || '';
       const ah_sub_roles = AH_ROLE_OPTIONS
         .map(o => overlay.querySelector(`#_chk_${o.value}`).checked ? o.value : null)
         .filter(Boolean);
 
-      if (!ah_sub_roles.length) {
-        err.textContent = 'Please select at least one role.';
-        return;
-      }
+      if (!schoolId)            { err.textContent = 'Please select your school.'; return; }
+      if (!ah_sub_roles.length) { err.textContent = 'Please select at least one role.';  return; }
 
       overlay.remove();
       document.body.style.visibility = 'hidden';
-      resolve({ ah_sub_roles });
+      resolve({ schoolId, school, ah_sub_roles });
     });
   });
 }
@@ -397,12 +450,40 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 4. Approval check (academic_admin bypasses — they are always approved)
+  // 4. Role check (cheap; do this before any prompts)
+  const platformRole = profile[PLATFORM_KEY];
+  if (!ALLOWED_ROLES.includes(platformRole)) {
+    await signOut(auth);
+    window.location.replace('login.html?error=access');
+    return;
+  }
+
+  // 5. Name prompt if missing — required before profile prompt so the
+  // admin sees a real name when approving the user.
+  if (!profile.displayName) {
+    const name = await promptForName();
+    await setDoc(userRef, { displayName: name }, { merge: true });
+    profile.displayName = name;
+  }
+
+  // 6. AH profile prompt — shown until both schoolId AND ah_sub_roles
+  // are set. Runs BEFORE the approval check so the central_admin sees
+  // the user's school and role declarations when reviewing pending
+  // signups in console.html. Step 1.A migration (2026-05-02) made
+  // schoolId required so same-school Firestore rules can scope reads.
+  if (!ahProfileComplete(profile)) {
+    const { schoolId, school, ah_sub_roles } = await promptForAhProfile(user, profile);
+    await setDoc(userRef, { schoolId, school, ah_sub_roles }, { merge: true });
+    profile.schoolId = schoolId;
+    profile.school = school;
+    profile.ah_sub_roles = ah_sub_roles;
+  }
+
+  // 7. Approval check (academic_admin bypasses — always approved)
   const approvalStatus = profile[APPROVAL_KEY];
-  const isAdminRole    = profile[PLATFORM_KEY] === 'academic_admin';
+  const isAdminRole    = platformRole === 'academic_admin';
   if (!isAdminRole && approvalStatus !== 'approved') {
-    // Not yet approved — send to waiting room (do NOT sign out)
-    const pathname = window.location.pathname;
+    const pathname  = window.location.pathname;
     const isWaiting = pathname === '/waiting' || pathname.endsWith('/waiting.html');
     if (!isWaiting) {
       window.location.replace('waiting.html');
@@ -411,20 +492,12 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // 5. Role check
-  const platformRole = profile[PLATFORM_KEY];
-  if (!ALLOWED_ROLES.includes(platformRole)) {
-    await signOut(auth);
-    window.location.replace('login.html?error=access');
-    return;
-  }
-
-  // 5b. Page-access check (sub-role gate via page_access_config)
-  // - admin bypasses
-  // - root '/' and explicit allow-list pages skip the check
-  // - missing config doc => allow (back-compat)
-  // - empty visible_to  => allow (open to every AH sub-role)
-  // - else: user must hold at least one matching ah_sub_role
+  // 8. Page-access check (sub-role gate via page_access_config)
+  //    - admin bypasses
+  //    - root '/' and explicit allow-list pages skip the check
+  //    - missing config doc => allow (back-compat)
+  //    - empty visible_to  => allow (open to every AH sub-role)
+  //    - else: user must hold at least one matching ah_sub_role
   if (platformRole !== 'academic_admin') {
     const pageKey = currentPageKey();
     if (pageKey && !PAGE_ACCESS_BYPASS.has(pageKey)) {
@@ -447,21 +520,7 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
-  // 6. Name prompt if missing
-  if (!profile.displayName) {
-    const name = await promptForName();
-    await setDoc(userRef, { displayName: name }, { merge: true });
-    profile.displayName = name;
-  }
-
-  // 6b. AH sub-role prompt if ah_sub_roles not yet set
-  if (!ahProfileComplete(profile)) {
-    const { ah_sub_roles } = await promptForAhProfile(profile);
-    await setDoc(userRef, { ah_sub_roles }, { merge: true });
-    profile.ah_sub_roles = ah_sub_roles;
-  }
-
-  // 7. All checks passed — expose globals
+  // 9. All checks passed — expose globals
   window.currentUser = user;
   window.userProfile = profile;
 
@@ -499,7 +558,7 @@ onAuthStateChanged(auth, async (user) => {
     });
   }
 
-  // 7b. Page-access GATING — hide navbar links + cards the user cannot access.
+  // 10. Page-access GATING — hide navbar links + cards the user cannot access.
   //     - admin sees everything
   //     - other AH users only see entries where their ah_sub_roles intersect
   //       the page's visible_to (or visible_to is empty = open to all)
@@ -531,7 +590,7 @@ onAuthStateChanged(auth, async (user) => {
     window.__paGate = runGating;
   }
 
-  // 8. Show page and notify
+  // 11. Show page and notify
   document.body.style.visibility = 'visible';
   document.dispatchEvent(new CustomEvent('authReady', {
     detail: { user, profile },
