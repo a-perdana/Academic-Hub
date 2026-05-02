@@ -94,7 +94,9 @@ Every protected page loads `auth-guard.js` as a module:
 7. Name prompt if `displayName` is missing.
 8. **AH sub-role prompt** — shown until `ah_sub_roles` has at least one value. Checkbox cards for Foundation Representative, School Principal, Academic Coordinator. Runs BEFORE the approval check so admin sees role declarations when reviewing.
 9. **Approval check** — if `approval_status_academichub !== 'approved'` (and not `academic_admin`) → redirect to `waiting.html`. `waiting.html` polls every 30s and redirects on approval.
-10. Exposes globals and dispatches `authReady`.
+10. **Page-access gate (Step 5b)** — for non-admins, fetches `page_access_config/{currentSlug}` and redirects to `/?denied=<slug>` (with a yellow toast) if the user's `ah_sub_roles[]` doesn't intersect the page's `visible_to[]`. Auth-flow pages (`/`, `/login`, `/waiting`) and pages without a config doc are bypassed.
+11. **UI gating (Step 7b)** — bulk-fetches every `page_access_config` doc for `academichub` (one read, 5-min `sessionStorage` cache as `pac:__all__`) and runs `applyPageAccessGating()`: hides any `[data-nav-key]` link or `<a class="card" href]` element the user cannot access, plus empty `.nav-dropdown-wrap` / `.nav-dd-col` / `.mob-nav-section` containers. A MutationObserver re-runs gating whenever the navbar partial mounts or any new card/link is inserted later.
+12. Exposes globals and dispatches `authReady`.
 
 **Allowed domains** are defined centrally in `auth-guard.js` as `window.ACADEMIC_ALLOWED_DOMAINS` (15 entries: 14 partner school `.sch.id` domains + `eduversal.org`). Individual pages reference this via `const allowedDomains = window.ACADEMIC_ALLOWED_DOMAINS` — do NOT redefine the list inline.
 
@@ -136,6 +138,7 @@ First login automatically assigns `academic_user` + `approval_status_academichub
 **Sub-roles (`ah_sub_roles[]`)** are set in `console.html` and control:
 - `weekly-checklist.html` — tab visibility: each sub-role maps to its own tab (Foundation Representative / School Principal / Academic Coordinator). Users with multiple sub-roles see multiple tabs; single sub-role users see no tab bar. Admins see all tabs.
 - `index.html` dashboard — categories with a `visible_to[]` field are filtered to matching sub-roles. Categories with empty `visible_to` are shown to everyone.
+- **Per-page access** via `page_access_config/{slug}` — see Page Access section below.
 
 **isAdmin check pattern:**
 ```js
@@ -143,6 +146,34 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 ```
 
 **weekly-checklist.html Firestore IDs** follow the pattern `${ACADEMIC_YEAR}_w${week}_${currentPlatform}` where `currentPlatform` is one of `foundation_representative`, `school_principal`, `academic_coordinator`.
+
+---
+
+## Page Access System
+
+Sub-role-based page visibility is driven by the `page_access_config/{slug}` collection (see monorepo-root `CLAUDE.md` for the full collection spec) and enforced entirely from `auth-guard.js`. Edited from Central Hub `/page-access`.
+
+**Three layers of enforcement, all in `auth-guard.js`:**
+1. **Step 5b — per-navigation gate.** Reads `page_access_config/{currentSlug}`. If no intersection between `userProfile.ah_sub_roles[]` and `cfg.visible_to[]`, redirects to `/?denied=<slug>`. Bypassed for admin, auth-flow pages, and pages with no config doc (back-compat) or `visible_to: []` (open to all).
+2. **Step 7b — UI gating** via `applyPageAccessGating()`:
+   - Bulk-fetches every AH `page_access_config` doc once, caches as `pac:__all__` in `sessionStorage` (5 min TTL).
+   - Hides any `[data-nav-key]` element whose key is in the config and not allowed.
+   - Hides any `<a class="card" href="...">` whose slug (derived from href via `slugFromHref()`) is in the config and not allowed.
+   - Hides empty `.nav-dropdown-wrap`, `.nav-dd-col`, and `.mob-nav-section` containers.
+   - A `MutationObserver` re-runs gating whenever new matching elements appear (the navbar partial mounts asynchronously, so this is essential).
+   - Hidden elements get `data-pa-hidden="1"`; the CSS rule `[data-pa-hidden="1"] { display: none !important }` is injected by `ensurePageAccessStyles()`.
+3. **`index.html` "Other available pages" auto-section** (`renderOtherAvailablePages()`) — for pages the user can access but lack a hand-crafted card on the dashboard, renders a minimal auto-card using `label` + `description`. De-duplicates against existing `<a class="card" href]` (slug-matched) so hand-crafted cards always win.
+
+**Critical invariant — slug consistency:** Every `data-nav-key` in `partials/navbar.html` (and the `key:` field in `partials/navbar-loader.js`'s mobile menu config) must exactly match the `pageKey` in `page_access_config`. Example fixes from Step 1.1: `data-nav-key="calendar"` → `"academic-calendar"`, `data-nav-key="messageboard"` → `"message-board"`. When a page is added, also update `seed-ah-page-access.js` and re-run it.
+
+**Active-key passing:** Pages call `window.__loadAcademicNavbar('<slug>', { user, profile })` with their own slug for the active-link highlight. The slug must match `data-nav-key` (and therefore `pageKey`).
+
+**Bypass list** (in `auth-guard.js`):
+```js
+const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
+```
+
+**Debugging:** `window.__paGate()` re-runs the gating pass. To force a fresh fetch, `sessionStorage.removeItem('pac:__all__')` then call `__paGate()`.
 
 ---
 
@@ -159,6 +190,8 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 | `topics/{topicId}/replies/{replyId}` | Message board replies           | any authorised user  |
 | `user_competencies/{uid}` | Academic coordinator competency progress. Fields: `earned_academic` (map of compId → `{level, date}`), `matDone_academic` (map of matId → bool). Written by the owner, read by `LearningPath.html` and `CompetencyFramework.html`. | owner |
 | `competency_evidence/{docId}` | Evidence submissions for competency level certification. Fields: `uid`, `platform` (`'academic'`), `compId`, `compName`, `domain`, `level`, `description`, `fileUrl`, `fileName`, `status` (`'pending'`\|`'approved'`\|`'rejected'`), `reviewerNote`, `createdAt`, `updatedAt`. Written by coordinator (create), reviewed by `academic_admin` via Central Hub. | owner (create), central_admin (review) |
+| `page_access_config/{slug}` | Per-page sub-role visibility (read here, written from Central Hub `/page-access`). See Page Access System section for full enforcement model. | central_admin (write) |
+| `teacher_kpi_submissions/{uid}_{periodId}` | Teacher KPI submissions (read by AH evaluators on `teacher-kpi-evaluation.html`). After Step 1.3 hardening, AH sub-role evaluators (school_principal, academic_coordinator) are restricted by Firestore rule to submissions where `schoolId == userProfile.schoolId`. The page query adds `where('schoolId','==',mySchool)` for sub-role users; `academic_admin` keeps the unfiltered query. Composite index `(periodId, schoolId)` is required. | teacher (write own); AH evaluator (workflow status fields only) |
 
 **Timestamp field:** always `createdAt` (serverTimestamp). Do not use `timestamp` — that was the legacy name.
 
