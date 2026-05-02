@@ -118,6 +118,50 @@ function ahProfileComplete(profile) {
   return Array.isArray(profile.ah_sub_roles) && profile.ah_sub_roles.length > 0;
 }
 
+// ── Page-access helpers ──────────────────────────────────────────
+// Pages that never get gated (auth flow + dashboard itself).
+const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
+const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
+
+// Convert window.location.pathname to a clean URL slug (the doc ID
+// in page_access_config). '/academic-calendar' -> 'academic-calendar';
+// '/academic-calendar.html' -> 'academic-calendar'; '/' -> ''.
+function currentPageKey() {
+  const path = (window.location.pathname || '/').toLowerCase();
+  let slug = path.replace(/^\/+/, '').replace(/\/+$/, '');
+  slug = slug.replace(/\.html$/, '');
+  // Drop any nested path segments — only the top-level slug is the page key.
+  if (slug.includes('/')) slug = slug.split('/')[0];
+  return slug;
+}
+
+async function getPageAccessConfig(db, pageKey) {
+  // sessionStorage cache to avoid one Firestore read per navigation.
+  try {
+    const raw = sessionStorage.getItem('pac:' + pageKey);
+    if (raw) {
+      const cached = JSON.parse(raw);
+      if (cached && (Date.now() - cached.at) < PAGE_ACCESS_TTL_MS) {
+        return cached.data; // may be null (cached miss)
+      }
+    }
+  } catch (_) {}
+
+  let data = null;
+  try {
+    const snap = await getDoc(doc(db, 'page_access_config', pageKey));
+    data = snap.exists() ? snap.data() : null;
+  } catch (err) {
+    // On read failure, fail-open (don't lock everyone out on a transient error).
+    console.warn('page_access_config read failed for', pageKey, err);
+    return null;
+  }
+  try {
+    sessionStorage.setItem('pac:' + pageKey, JSON.stringify({ at: Date.now(), data }));
+  } catch (_) {}
+  return data;
+}
+
 function promptForAhProfile(profile) {
   return new Promise(resolve => {
     const existing = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
@@ -255,6 +299,34 @@ onAuthStateChanged(auth, async (user) => {
     await signOut(auth);
     window.location.replace('login.html?error=access');
     return;
+  }
+
+  // 5b. Page-access check (sub-role gate via page_access_config)
+  // - admin bypasses
+  // - root '/' and explicit allow-list pages skip the check
+  // - missing config doc => allow (back-compat)
+  // - empty visible_to  => allow (open to every AH sub-role)
+  // - else: user must hold at least one matching ah_sub_role
+  if (platformRole !== 'academic_admin') {
+    const pageKey = currentPageKey();
+    if (pageKey && !PAGE_ACCESS_BYPASS.has(pageKey)) {
+      const cfg = await getPageAccessConfig(db, pageKey);
+      if (cfg && Array.isArray(cfg.visible_to) && cfg.visible_to.length > 0) {
+        const userSubRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+        const allowed = userSubRoles.some(r => cfg.visible_to.includes(r));
+        if (!allowed) {
+          try {
+            sessionStorage.setItem('ah_access_denied', JSON.stringify({
+              pageKey,
+              label: cfg.label || pageKey,
+              at: Date.now(),
+            }));
+          } catch (_) {}
+          window.location.replace('/?denied=' + encodeURIComponent(pageKey));
+          return;
+        }
+      }
+    }
   }
 
   // 6. Name prompt if missing

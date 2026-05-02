@@ -4199,6 +4199,33 @@
         }
       });
 
+      // -- Page-access denied banner (set by auth-guard.js redirect) --
+      (function showAccessDeniedBanner() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const denied = params.get('denied');
+          if (!denied) return;
+          let label = denied;
+          try {
+            const raw = sessionStorage.getItem('ah_access_denied');
+            if (raw) {
+              const info = JSON.parse(raw);
+              if (info?.pageKey === denied && info?.label) label = info.label;
+              sessionStorage.removeItem('ah_access_denied');
+            }
+          } catch (_) {}
+          const el = document.createElement('div');
+          el.style.cssText = 'position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;background:#fef3c7;color:#92400e;border:1px solid #fcd34d;padding:12px 18px;border-radius:10px;font-family:"DM Sans",sans-serif;font-size:0.9rem;box-shadow:0 6px 20px rgba(0,0,0,0.12);max-width:90vw';
+          el.textContent = `Access denied: "${label}" is not available for your role.`;
+          document.body.appendChild(el);
+          setTimeout(() => el.remove(), 6000);
+          // Clean the URL so a refresh doesn't re-show the banner.
+          const url = new URL(window.location.href);
+          url.searchParams.delete('denied');
+          window.history.replaceState({}, '', url.pathname + (url.search ? url.search : ''));
+        } catch (_) {}
+      })();
+
       // -- Auth state (via auth-guard.js) -----------------------------
       document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
         currentUser = user;
