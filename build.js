@@ -226,6 +226,14 @@ if (fs.existsSync("base.css")) {
   console.log("Copied: base.css");
 }
 
+// Shared simple nav editor module (lives at monorepo root /shared-design/).
+// Copied into dist/ so the navbar loader can dynamic-import('/nav-edit-simple.js').
+const sharedNavEdit = path.join("..", "shared-design", "nav-edit-simple.js");
+if (fs.existsSync(sharedNavEdit)) {
+  fs.copyFileSync(sharedNavEdit, "dist/nav-edit-simple.js");
+  console.log("Copied: shared-design/nav-edit-simple.js -> dist/nav-edit-simple.js");
+}
+
 // -- Copy static assets
 if (fs.existsSync("images")) {
   copyDirRecursive("images", "dist/images");

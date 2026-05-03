@@ -87,6 +87,21 @@ function ensureNavbarSharedStyles() {
       border-color: rgba(108,92,231,0.80); color: #fff;
       box-shadow: 0 0 16px rgba(108,92,231,0.35);
     }
+    #topNav .nav-edit-trigger {
+      display: none; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 8px;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14);
+      color: rgba(255,255,255,0.75); font-family: "DM Sans", sans-serif;
+      font-size: 12.5px; font-weight: 500; cursor: pointer;
+      transition: all 0.18s ease; white-space: nowrap;
+    }
+    #topNav .nav-edit-trigger.visible { display: inline-flex; }
+    #topNav .nav-edit-trigger:hover { color: #fff; background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.30); }
+    #topNav .nav-edit-trigger.active {
+      color: #fff;
+      background: linear-gradient(135deg, rgba(108,92,231,0.45), rgba(0,217,255,0.25));
+      border-color: rgba(108,92,231,0.65);
+    }
     #topNav .profile-wrap { position: relative; }
     #topNav .profile-btn {
       display: flex; align-items: center; gap: 8px;
@@ -1100,6 +1115,21 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
   if (authCtx?.user) {
     _ahPopulateProfile(authCtx.user, authCtx.profile?.displayName || null, null, authCtx.profile || null);
     window.__initNavbarCounters?.({ db: window.db, user: authCtx.user });
+  }
+
+  // Boot the simple in-place nav editor (label rename, drag-reorder, hide).
+  // Hub admins see an "Edit nav" button on hover; non-admins see nothing.
+  // Loads from the shared module copied to /nav-edit-simple.js by build.js.
+  try {
+    const { initNavEditor } = await import('/nav-edit-simple.js');
+    initNavEditor({
+      platform:      'academichub',
+      itemSelector:  '.nav-dropdown-item[data-nav-key]',
+      panelSelector: '.nav-dd-col, .nav-dropdown-panel',
+      isAdmin:       authCtx?.profile?.role_academichub === 'academic_admin',
+    });
+  } catch (e) {
+    console.warn('[navbar-loader] nav-edit-simple unavailable:', e);
   }
 };
 
