@@ -192,6 +192,14 @@ htmlFiles.forEach((file) => {
   // 2. Rewrite internal links to clean URLs
   html = rewriteLinks(html);
 
+  // Phase 4 — inject /cambridge-crossref.js once per page (defer; auto-
+  // bootstraps from DOM scan). Skip auth-flow and pages without chips.
+  if (file !== 'index.html' && file !== 'login.html' && file !== 'waiting.html' &&
+      !html.includes('/cambridge-crossref.js')) {
+    html = html.replace('</body>',
+      '<script src="/cambridge-crossref.js" defer></script>\n</body>');
+  }
+
   // 3. Write to dist using the slug name so Vercel cleanUrls serves the
   //    correct path (e.g. cambridge-pathway.html -> /cambridge-pathway).
   //    Files whose slug matches their base name (e.g. announcements.html)
@@ -212,6 +220,10 @@ if (fs.existsSync("auth-guard.js")) {
 if (fs.existsSync("schools_compact.js")) {
   fs.copyFileSync("schools_compact.js", "dist/schools_compact.js");
   console.log("Copied: schools_compact.js");
+}
+if (fs.existsSync("cambridge-crossref.js")) {
+  fs.copyFileSync("cambridge-crossref.js", "dist/cambridge-crossref.js");
+  console.log("Copied: cambridge-crossref.js");
 }
 if (fs.existsSync("favicon.svg")) {
   fs.copyFileSync("favicon.svg", "dist/favicon.svg");
