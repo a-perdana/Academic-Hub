@@ -132,13 +132,17 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 
 <script type="module">
 import { collection, doc, getDoc, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+// Aligned with Cambridge School Leader Standards-grounded framework defined
+// in CompetencyFramework.html — same 6 domain IDs (evsi/cial/pdpc/ewsc/eao/
+// fcep) and same competency IDs that user_competencies.earned_academic and
+// competency_certificates.domainId actually use.
 const FRAMEWORK=[
-  {id:'data-leadership',name:'Data-Driven Leadership',icon:'📊',color:'#0d9488',bannerFrom:'#0f1e1a',bannerTo:'#071814',comps:['dl-1','dl-2','dl-3','dl-4']},
-  {id:'curriculum-oversight',name:'Curriculum Oversight & Quality',icon:'📚',color:'#2563eb',bannerFrom:'#0a1e3c',bannerTo:'#060d1e',comps:['co-1','co-2','co-3','co-4']},
-  {id:'staff-development',name:'Staff Development & Appraisal',icon:'🌱',color:'#16a34a',bannerFrom:'#0a2e1a',bannerTo:'#06180e',comps:['sd-1','sd-2','sd-3','sd-4']},
-  {id:'strategic-planning',name:'Strategic Planning & Improvement',icon:'🎯',color:'#d97706',bannerFrom:'#2e1a0a',bannerTo:'#180e06',comps:['sp-1','sp-2','sp-3','sp-4']},
-  {id:'accreditation',name:'Accreditation & Compliance',icon:'🏅',color:'#7c3aed',bannerFrom:'#1e0a3c',bannerTo:'#0c0820',comps:['ac-1','ac-2','ac-3','ac-4']},
-  {id:'student-outcomes',name:'Student Outcomes & Wellbeing',icon:'🎓',color:'#e11d48',bannerFrom:'#2e0a14',bannerTo:'#18060a',comps:['so-1','so-2','so-3','so-4']},
+  {id:'evsi',name:'Educational Vision & School Improvement',     icon:'🎯',color:'#0d9488',bannerFrom:'#0a2e2c',bannerTo:'#061616',comps:['evsi-1','evsi-2','evsi-3','evsi-4']},
+  {id:'cial',name:'Curriculum, Instruction & Assessment Leadership', icon:'📚',color:'#2563eb',bannerFrom:'#0a1e3c',bannerTo:'#060d1e',comps:['cial-1','cial-2','cial-3','cial-4']},
+  {id:'pdpc',name:'People Development & Professional Capacity',  icon:'🌱',color:'#16a34a',bannerFrom:'#0a3c1e',bannerTo:'#062010',comps:['pdpc-1','pdpc-2','pdpc-3','pdpc-4']},
+  {id:'ewsc',name:'Equity, Wellbeing & School Culture',          icon:'🤝',color:'#d97706',bannerFrom:'#3c1e0a',bannerTo:'#1e0c06',comps:['ewsc-1','ewsc-2','ewsc-3','ewsc-4']},
+  {id:'eao',name:'Ethics, Accountability & Operations',          icon:'⚖️',color:'#7c3aed',bannerFrom:'#1e0a3c',bannerTo:'#0c0820',comps:['eao-1','eao-2','eao-3','eao-4']},
+  {id:'fcep',name:'Family, Community & External Partnerships',   icon:'🌐',color:'#e11d48',bannerFrom:'#3c0a1a',bannerTo:'#200614',comps:['fcep-1','fcep-2','fcep-3','fcep-4']},
 ];
 let uid='',userName='',earned={},myCerts=[];
 
