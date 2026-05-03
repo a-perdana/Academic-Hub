@@ -752,6 +752,7 @@ body { padding-top: 62px; }
         userId: currentUser?.uid||null,
         userEmail: currentUser?.email||null,
         createdAt: serverTimestamp(),
+        __src: 'academichub',
       });
       statusEl.textContent='Feedback sent — thank you!'; statusEl.className='feedback-status ok';
       setTimeout(closeFabFeedback, 2000);
