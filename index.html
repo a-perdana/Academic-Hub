@@ -4515,13 +4515,63 @@
         });
 
         // -- Firestore: listen to categories ----------------------
-        const catQuery = query(collection(db, 'ah_categories'), orderBy('order', 'asc'));
-        onSnapshot(catQuery, snap => {
-          const cats = [];
-          snap.forEach(d => cats.push({ id: d.id, ...d.data() }));
-          window.__ahCatsSnapshot = cats; // used by delegated event handler
-          renderCategories(cats, db, isAdmin);
-        });
+        // Step 12 (2026-05-03) — visible_to is now enforced at rule
+        // level. Admins still pull the unfiltered set (single listener);
+        // non-admins must run TWO server-side queries to satisfy the
+        // rule (open-to-all + sub-role intersect) and merge the results
+        // client-side. This stops devtools-snooping of gated category
+        // names that the old client-only filter exposed.
+        const userSubRoles = Array.isArray(window.userProfile?.ah_sub_roles)
+          ? window.userProfile.ah_sub_roles : [];
+
+        const catsByQuery = { open: [], mine: [] };
+        const renderMerged = () => {
+          const seen = new Set();
+          const merged = [];
+          [...catsByQuery.open, ...catsByQuery.mine].forEach(c => {
+            if (seen.has(c.id)) return;
+            seen.add(c.id);
+            merged.push(c);
+          });
+          merged.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+          window.__ahCatsSnapshot = merged;
+          renderCategories(merged, db, isAdmin);
+        };
+
+        if (isAdmin) {
+          // Admin: single unfiltered listener.
+          // @lint-allow-unbounded — admin tooling, ah_categories is small (~20 docs)
+          const adminQuery = query(collection(db, 'ah_categories'), orderBy('order', 'asc'));
+          onSnapshot(adminQuery, snap => {
+            const cats = [];
+            snap.forEach(d => cats.push({ id: d.id, ...d.data() }));
+            window.__ahCatsSnapshot = cats;
+            renderCategories(cats, db, isAdmin);
+          });
+        } else {
+          // Non-admin: two listeners covering open-to-all + my sub-roles.
+          const openQuery = query(
+            collection(db, 'ah_categories'),
+            where('visible_to', '==', []),
+          );
+          onSnapshot(openQuery, snap => {
+            catsByQuery.open = [];
+            snap.forEach(d => catsByQuery.open.push({ id: d.id, ...d.data() }));
+            renderMerged();
+          });
+
+          if (userSubRoles.length) {
+            const mineQuery = query(
+              collection(db, 'ah_categories'),
+              where('visible_to', 'array-contains-any', userSubRoles),
+            );
+            onSnapshot(mineQuery, snap => {
+              catsByQuery.mine = [];
+              snap.forEach(d => catsByQuery.mine.push({ id: d.id, ...d.data() }));
+              renderMerged();
+            });
+          }
+        }
       }
 
       // -- Render category accordion sections --------------------
