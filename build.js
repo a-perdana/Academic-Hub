@@ -161,6 +161,10 @@ const htmlFiles = [
   "SyllabusCoverage.html",
 ];
 
+// Pages skipped from base.css injection (login/waiting are auth-flow,
+// no navbar/no auth guard — keep them self-contained).
+const BASE_CSS_SKIP = new Set(["login.html", "waiting.html"]);
+
 htmlFiles.forEach((file) => {
   if (!fs.existsSync(file)) return;
   let html = fs.readFileSync(file, "utf8");
@@ -172,6 +176,18 @@ htmlFiles.forEach((file) => {
 
   // Remove local-dev-only firebase-config.js script tag (not needed in dist)
   html = html.replace(/<script src="firebase-config\.js"><\/script>\n?/g, "");
+
+  // 1b. Inject /base.css before the first <style> tag (or before </head>).
+  //     Absolute path — relative paths fail from clean URL routes like
+  //     /school-performance-kpi. Skip if already linked or auth-flow page.
+  if (!BASE_CSS_SKIP.has(file) && !html.includes('href="/base.css"') && !html.includes("href='/base.css'")) {
+    const baseLink = '  <link rel="stylesheet" href="/base.css">\n';
+    if (/<style[\s>]/.test(html)) {
+      html = html.replace(/(\s*<style[\s>])/, `\n${baseLink}$1`);
+    } else if (html.includes("</head>")) {
+      html = html.replace("</head>", `${baseLink}</head>`);
+    }
+  }
 
   // 2. Rewrite internal links to clean URLs
   html = rewriteLinks(html);
@@ -204,6 +220,10 @@ if (fs.existsSync("favicon.svg")) {
 if (fs.existsSync("tokens.css")) {
   fs.copyFileSync("tokens.css", "dist/tokens.css");
   console.log("Copied: tokens.css");
+}
+if (fs.existsSync("base.css")) {
+  fs.copyFileSync("base.css", "dist/base.css");
+  console.log("Copied: base.css");
 }
 
 // -- Copy static assets
