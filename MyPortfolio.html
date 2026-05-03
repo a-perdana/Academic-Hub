@@ -132,6 +132,7 @@ body { padding-top: 62px; }
 
 <script type="module">
 import { collection, doc, addDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js';
 
 // Grounded in: Cambridge School Leader Standards 2019, PSEL 2015, Permendiknas No.16/2007
 const COMP_META = {
@@ -219,7 +220,16 @@ window.submitEvidence=async function(){
   const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
   try{
     const meta=COMP_META[compId];
-    await addDoc(collection(window.db,'competency_evidence'),{userId:uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl:null,fileName:selectedFile?.name||null,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+    let fileUrl=null,fileName=null;
+    if(selectedFile){
+      fileName=selectedFile.name;
+      const safeName=fileName.replace(/[^a-zA-Z0-9._-]/g,'_');
+      const path=`competency_evidence/academic/${uid}/${Date.now()}_${safeName}`;
+      const sRef=storageRef(window.storage,path);
+      const snap=await uploadBytes(sRef,selectedFile,{contentType:selectedFile.type||undefined});
+      fileUrl=await getDownloadURL(snap.ref);
+    }
+    await addDoc(collection(window.db,'competency_evidence'),{userId:uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl,fileName,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     document.getElementById('formSuccess').classList.add('visible');
     document.getElementById('compSelect').value='';document.getElementById('levelSelect').innerHTML='<option value="">— select competency first —</option>';document.getElementById('evidenceDesc').value='';clearFile();
     await loadSubmissions();
@@ -238,7 +248,8 @@ async function loadSubmissions(){
     const ev={id:d.id,...d.data()};
     const icon=DOMAIN_ICON[ev.domain]||'📋';
     const date=ev.createdAt?.toDate?.()?.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})||'';
-    return `<div class="evidence-card"><div class="ev-header"><div class="ev-icon">${icon}</div><div class="ev-body"><div class="ev-comp">${ev.domain}</div><div class="ev-desc">${ev.compName} — ${ev.description.substring(0,120)}${ev.description.length>120?'…':''}</div><div class="ev-meta"><span class="ev-status ${ev.status}">${statusMap[ev.status]||ev.status}</span><span class="ev-level-badge lvl-${ev.level}">${LEVEL_LABEL[ev.level]||ev.level}</span><span class="ev-date">${date}</span></div></div></div>${ev.reviewerNote?`<div class="ev-reviewer-note ${ev.status==='rejected'?'rejected-note':''}"><strong>Reviewer note:</strong> ${ev.reviewerNote}</div>`:''}</div>`;
+    const fileLink=ev.fileName?(ev.fileUrl?`<a class="ev-file-link" href="${ev.fileUrl}" target="_blank" rel="noopener">📎 ${ev.fileName}</a>`:`<span class="ev-file-link" title="Upload pending — file reference saved without URL">📎 ${ev.fileName}</span>`):'';
+    return `<div class="evidence-card"><div class="ev-header"><div class="ev-icon">${icon}</div><div class="ev-body"><div class="ev-comp">${ev.domain}</div><div class="ev-desc">${ev.compName} — ${ev.description.substring(0,120)}${ev.description.length>120?'…':''}</div><div class="ev-meta"><span class="ev-status ${ev.status}">${statusMap[ev.status]||ev.status}</span><span class="ev-level-badge lvl-${ev.level}">${LEVEL_LABEL[ev.level]||ev.level}</span><span class="ev-date">${date}</span>${fileLink}</div></div></div>${ev.reviewerNote?`<div class="ev-reviewer-note ${ev.status==='rejected'?'rejected-note':''}"><strong>Reviewer note:</strong> ${ev.reviewerNote}</div>`:''}</div>`;
   }).join('');
 }
 </script>
