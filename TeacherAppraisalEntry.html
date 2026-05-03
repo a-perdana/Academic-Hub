@@ -1632,6 +1632,9 @@ function buildItemRow(item) {
           <span class="item-id-badge">${item.id}</span>
           <span class="item-title-text">${item.title}</span>
           ${lvPill}
+          ${Array.isArray(item.cambridge_standard_refs) && item.cambridge_standard_refs.length
+            ? item.cambridge_standard_refs.map(r => `<span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:600;" title="Cambridge Teacher Standards 2023 — ${r}">CTS ${r}</span>`).join('')
+            : ''}
           <button class="rubric-view-btn" onclick="openRubricModal('${item.id}')">View rubric ↗</button>
           <span class="prev-score-badge" id="prev-${item.id}" style="display:none;"></span>
           <span class="kbd-hint" title="Keyboard: 1–4 to score, N for Not Observed">⌨ 1–4 / N</span>
@@ -3215,7 +3218,14 @@ window.openRubricModal = function(itemId) {
     { s:1, label:'1 — Unsatisfactory',cls:'s1' },
   ];
   document.getElementById('rubricModalTitle').textContent = `${item.id} — ${item.title}`;
-  document.getElementById('rubricModalSub').textContent   = item.theory_basis || '';
+  // Subtitle shows Cambridge Teacher Standards refs (Track B) +
+  // Eduversal theory_basis if present, separated by ·.
+  {
+    const refs = Array.isArray(item.cambridge_standard_refs) ? item.cambridge_standard_refs : [];
+    const cambridgeBit = refs.length ? `Cambridge Teacher Standards 2023 — ${refs.map(r => 'CTS ' + r).join(', ')}` : '';
+    const subEl = document.getElementById('rubricModalSub');
+    subEl.textContent = [cambridgeBit, item.theory_basis].filter(Boolean).join(' · ');
+  }
   document.getElementById('rubricModalBody').innerHTML = levels.map(lv => {
     const text = item.rubric?.[lv.s] || '—';
     return `<div class="rubric-level-row">
