@@ -7,8 +7,6 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
   <script src="firebase-config.js"></script>
   <script>
     if (!window.ENV) window.ENV = {
@@ -24,24 +22,14 @@
   <script src="partials/navbar-loader.js"></script>
 
   <style>
+    /* Page-specific accent override (mor). Tokens, reset, and base
+       typography come from /base.css. */
     :root {
-      --ink:      #1c1c2e;
-      --ink-2:    #44445a;
-      --ink-3:    #8888a8;
-      --paper:    #f5f4f0;
-      --paper-2:  #ece9e0;
-      --white:    #ffffff;
-      --border:   #e5e0d8;
-      --radius:   12px;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.07);
-      --shadow:    0 4px 16px rgba(0,0,0,0.10);
       --accent:    #7c3aed;
       --accent-dk: #6d28d9;
       --accent-2:  #ede9fe;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; padding-top: 62px; }
+    body { padding-top: 62px; }
 
     /* ── HERO ── */
     .hero {

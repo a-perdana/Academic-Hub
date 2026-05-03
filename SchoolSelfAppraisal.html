@@ -5,28 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>School Self-Appraisal — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
 <style>
+/* Page-specific accent override (amber) + 5 domain colors used by the
+   appraisal sidebar pills. Tokens, reset, base typography come from
+   /base.css. */
 :root {
-  --ink:#1c1c2e; --ink-2:#44445a; --ink-3:#8888a8;
-  --paper:#f7f6f3; --paper-2:#eeece8; --white:#ffffff; --border:#e0ddd6;
-  --accent:#b45309; --accent-2:#fef3c7; --accent-dk:#92400e;
+  --accent:    #b45309;
+  --accent-2:  #fef3c7;
+  --accent-dk: #92400e;
   --d1:#1e40af; --d1-bg:#dbeafe; --d1-border:#bfdbfe;
   --d2:#065f46; --d2-bg:#d1fae5; --d2-border:#a7f3d0;
   --d3:#7c2d12; --d3-bg:#ffedd5; --d3-border:#fed7aa;
   --d4:#4338ca; --d4-bg:#ede9fe; --d4-border:#c4b5fd;
   --d5:#0f766e; --d5-bg:#ccfbf1; --d5-border:#99f6e4;
-  --shadow-sm:0 1px 4px rgba(28,28,46,.07);
-  --shadow:0 3px 14px rgba(28,28,46,.10);
-  --shadow-lg:0 8px 32px rgba(28,28,46,.14);
-  --radius:10px;
 }
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-body { font-family:'DM Sans',sans-serif; background:var(--paper); color:var(--ink); min-height:100vh; font-size:14px; padding-top:62px; }
+body { padding-top: 62px; }
 
 /* ===== LAYOUT ===== */
 .page-body { display:flex; min-height:calc(100vh - 62px); }
