@@ -189,8 +189,13 @@ const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
 | `central_documents/{docId}` | CentralHub-managed documents            | central_admin        |
 | `topics/{topicId}`      | Message board topics                         | any authorised user  |
 | `topics/{topicId}/replies/{replyId}` | Message board replies           | any authorised user  |
-| `user_competencies/{uid}` | Academic coordinator competency progress. Fields: `earned_academic` (map of compId → `{level, date}`), `matDone_academic` (map of matId → bool). Written by the owner, read by `LearningPath.html` and `CompetencyFramework.html`. | owner |
-| `competency_evidence/{docId}` | Evidence submissions for competency level certification. Fields: `uid`, `platform` (`'academic'`), `compId`, `compName`, `domain`, `level`, `description`, `fileUrl`, `fileName`, `status` (`'pending'`\|`'approved'`\|`'rejected'`), `reviewerNote`, `createdAt`, `updatedAt`. Written by coordinator (create), reviewed by `academic_admin` via Central Hub. | owner (create), central_admin (review) |
+| `competency_framework/leaders` | Read-only here. AH leadership track. Fields: `domains[]` (6: evsi/cial/pdpc/ewsc/eao/fcep), `competencies[]` (24, with `cambridgeStandardRefs[]` + `cambridgeStandardTexts[]`), `levelOrder`, `levelLabels`, full `cambridgeStandards{}` lookup (Cambridge **School Leader** Standards 2023). Loaded by `CompetencyFramework.html`, `LearningPath.html`, `MyPortfolio.html`, `MyCertificates.html`. Seeded by `scripts/competency/seed-ah-competency-framework.js`. | central_admin (write) |
+| `competency_framework/leaders/levels/{compId}_{level}` | Read-only here. Per-(competency, level) base learning content. Fields: `reading` (~250 words), `keyTakeaways[]`, `selfAssessment[]`, `activity{...}`. Lazy-fetched on modal open by `LearningPath.html`. Admin overrides in `content_overrides_academic/{compId}_{lvl}` layer on top (HTML sanitised on save AND on render — same allowlist as TH). Seeded by `scripts/competency/seed-competency-content.js`. | central_admin (write) |
+| `cambridge_crossref/index` | Read-only here. Single aggregator doc — for every Cambridge Teacher Standards (2023) ID that any Eduversal artefact tags, lists every sibling artefact across KPI / Appraisal / Competency. Read by `cambridge-crossref.js` when an AH user clicks any CTS chip. | central_admin (write) |
+| `content_overrides_academic/{compId}_{lvl}` | Admin-edited reading override. Sanitised on save AND on render through a strict tag allowlist (Phase 1.5-equivalent fix shipped to AH 2026-05-03). | academic_admin |
+| `user_competencies/{uid}` | Academic coordinator competency progress. Fields: `earned_academic` (map of compId → `{level, date}`), `matDone_academic` (map of matId → bool). TH progress lives on the same doc under `earned`; CH specialist under `earned_central`. Written by the owner, read by `LearningPath.html` and `CompetencyFramework.html`. | owner |
+| `competency_evidence/{docId}` | Evidence submissions for competency level certification. Fields: `uid`, `platform` (`'academic'`), `compId`, `compName`, `domain`, `level`, `description`, `fileUrl`, `fileName`, `status` (`'pending'`\|`'approved'`\|`'rejected'`), `reviewerNote`, `createdAt`, `updatedAt`. **Storage path** for `fileUrl`: `competency_evidence/academic/{uid}/{timestamp}_{filename}` (≤25 MB). Written by coordinator (create), reviewed by `central_admin` via `Central Hub/competency-admin.html`. | owner (create), central_admin (review) |
+| `competency_certificates/{certId}` | Read-only here. Issued certificates filtered by `where('platform','==','academic')`. Read by `MyCertificates.html`. Issued from `Central Hub/competency-admin.html`. | central_admin (write) |
 | `page_access_config/{slug}` | Per-page sub-role visibility (read here, written from Central Hub `/page-access`). See Page Access System section for full enforcement model. | central_admin (write) |
 | `nav_config/academichub`   | Admin-editable navbar item config — labels, hidden flags, ordering. Read on `authReady` by `partials/navbar-loader.js` which then dynamic-imports `/nav-edit-simple.js` (shared module from monorepo `shared-design/`) for the in-place editor. Doc shape: `{ platform: 'academichub', items: [{key, label, hidden}], updatedAt }`. | academic_admin |
 | `feedbacks/{fbId}`         | Single canonical feedback collection (consolidated 2026-05-03). All AH writers (announcements, library, documents, EASE-Archive, messageboard, index) stamp `__src: 'academichub'` on every doc. The CH `feedback-management.html` reads + reviews. | any authorised user (create); central_admin (read/update/delete) |
@@ -298,6 +303,24 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 **Critical:** `navbar-loader.js` fetches `/partials/navbar.html` with an **absolute path** (not `partials/navbar.html`). The relative path fails from clean URL routes like `/competency-framework`. Never change this to a relative path.
 
 The navbar mounts into `<div id="navbarMount"></div>` — do NOT use `navbar-container` (that is the Teachers Hub ID).
+
+---
+
+## Cambridge Leadership Competency Framework — AH track (2026-05-03 / 2026-05-04)
+
+Eduversal runs three independent rating systems across the network. AH owns the **leadership** competency track. See the root CLAUDE.md "Three Rating Systems" section for the full architecture.
+
+**AH-specific:**
+- Leadership taxonomy: 6 domains (`evsi/cial/pdpc/ewsc/eao/fcep`) × 24 competencies, grounded in Cambridge **School Leader** Standards 2023 (25/25 standards covered) + Permendiknas No.16/2007.
+- 4 pages: `CompetencyFramework.html`, `LearningPath.html`, `MyPortfolio.html`, `MyCertificates.html`. The MyCertificates legacy domain ID bug (same class as TH 1.1) was fixed 2026-05-03 — `dl/co/sd/sp/ac/so` → canonical `evsi/cial/pdpc/ewsc/eao/fcep`.
+- `MyPortfolio.html` Storage upload was a no-op (same bug as TH had); fixed 2026-05-03. Uploads now go to `competency_evidence/academic/{uid}/{timestamp}_{filename}` (≤25 MB cap, deployed in `Central Hub/storage.rules`).
+- `LearningPath.html` lazy-fetches per-(comp, level) content from `competency_framework/leaders/levels/`. Admin override pipeline (`content_overrides_academic`) HTML-sanitises on save AND on render.
+- `teacher-kpi-evaluation.html` and `TeacherAppraisalEntry.html` render mor `CTS X.Y` chips on every KPI / appraisal item. Click → `cambridge-crossref.js` runtime opens a popover showing every sibling artefact across the 3 systems.
+- `TeacherAppraisalEntry.html` rubric modal subtitle now leads with Cambridge refs (`Cambridge Teacher Standards 2023 — CTS 3.6, CTS 4.4`) followed by `theory_basis`.
+- Per-school pilot enrolment: `index.html` reads `partner_schools/{schoolId}.enabled_systems[]` on `authReady` and hides cards by `data-theme` (kpi / appraisal / leadership-framework). Admin and HQ users bypass.
+
+**Bonus historical fix shipped alongside Phase 2-4:**
+- `MyObservations.html` (the read view) was deliberately left untouched in chip wiring because it only renders aggregate composite scores, not per-item rows.
 
 ---
 
