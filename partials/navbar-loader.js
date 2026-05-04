@@ -682,6 +682,7 @@ const NAV_ITEMS = [
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
     { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
     { key: 'weekly-checklist',        href: '/weekly-checklist',        label: 'Weekly Checklist' },
+    { key: 'team-induction',          href: '/team-induction',          label: 'Team Induction' },
     { key: 'student-survey',          href: '/student-survey',          label: 'Student Survey' },
     { key: 'staff-survey',            href: '/staff-survey',            label: 'Staff Survey' },
     { key: 'parent-survey',           href: '/parent-survey',           label: 'Parent Survey' },
@@ -695,6 +696,7 @@ const NAV_ITEMS = [
     { key: 'learning-path',        href: '/learning-path',         label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',          label: 'My Portfolio' },
     { key: 'my-certificates',      href: '/my-certificates',       label: 'My Certificates' },
+    { key: 'my-induction',         href: '/my-induction',          label: 'My Induction' },
   ]},
 ];
 
