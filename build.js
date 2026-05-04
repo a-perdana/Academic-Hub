@@ -196,10 +196,16 @@ htmlFiles.forEach((file) => {
 
   // Phase 4 — inject /cambridge-crossref.js once per page (defer; auto-
   // bootstraps from DOM scan). Skip auth-flow and pages without chips.
+  // Use lastIndexOf so we target the actual document </body> and not a
+  // </body> sitting inside an inline JS template literal.
   if (file !== 'index.html' && file !== 'login.html' && file !== 'waiting.html' &&
       !html.includes('/cambridge-crossref.js')) {
-    html = html.replace('</body>',
-      '<script src="/cambridge-crossref.js" defer></script>\n</body>');
+    const closeIdx = html.lastIndexOf('</body>');
+    if (closeIdx >= 0) {
+      html = html.slice(0, closeIdx)
+        + '<script src="/cambridge-crossref.js" defer></script>\n'
+        + html.slice(closeIdx);
+    }
   }
 
   // 3. Write to dist using the slug name so Vercel cleanUrls serves the
