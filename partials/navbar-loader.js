@@ -680,6 +680,7 @@ const NAV_ITEMS = [
     { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
     { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
+    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
     { key: 'weekly-checklist',        href: '/weekly-checklist',        label: 'Weekly Checklist' },
     { key: 'student-survey',          href: '/student-survey',          label: 'Student Survey' },
     { key: 'staff-survey',            href: '/staff-survey',            label: 'Staff Survey' },
