@@ -201,6 +201,12 @@ const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
 | `feedbacks/{fbId}`         | Single canonical feedback collection (consolidated 2026-05-03). All AH writers (announcements, library, documents, EASE-Archive, messageboard, index) stamp `__src: 'academichub'` on every doc. The CH `feedback-management.html` reads + reviews. | any authorised user (create); central_admin (read/update/delete) |
 | `weekly_progress/{docId}`  | Per-user weekly checklist progress. Doc id: `${uid}_${ACADEMIC_YEAR}_w${week}_${currentPlatform}`. Writes always include `schoolId: window.userProfile.schoolId` (denormalised 2026-05-03) so the `isAHUserAtSameSchool()` rule helper can read it directly without an extra `users/{uid}` get. Reads gated per Step 1.2 hardening. | owner; AH leadership (school_principal / academic_coordinator) read same-school |
 | `teacher_kpi_submissions/{uid}_{periodId}` | Teacher KPI submissions (read by AH evaluators on `teacher-kpi-evaluation.html`). After Step 1.3 hardening, AH sub-role evaluators (school_principal, academic_coordinator) are restricted by Firestore rule to submissions where `schoolId == userProfile.schoolId`. The page query adds `where('schoolId','==',mySchool)` for sub-role users; `academic_admin` keeps the unfiltered query. Composite index `(periodId, schoolId)` is required. | teacher (write own); AH evaluator (workflow status fields only) |
+| `induction_assignments/{menteeUid}` | **Induction Module (2026-05-04).** Read by `MyInduction.html` (own mentee induction) and `TeamInduction.html` (school principal team view, filtered `where('schoolId','==',mySchool)`). Charter NN3+NN4 — written by central_admin only. | central_admin (write) |
+| `induction_progress/{uid}_{taskId}` | Mentee task completion. Principal mentee writes from `MyInduction.html`; school leader writes Q4-formal-eval-related tasks from `ObservationEntry.html`. | owner / mentor / school-leader |
+| `induction_observations/{obsId}` | Observations including school leader's Q4 formal evaluation. Written from `ObservationEntry.html` (with `?type=formal_evaluation`). **Charter NN1: never feeds `teacher_appraisal_results`.** | observer (school leader) |
+| `induction_journal/{entryId}` | Principal's weekly reflection. Written from `MyInduction.html` sidebar. **Charter NN2: HQ never reads named entries.** | owner (mentee) |
+| `induction_pulses/{pulseId}` | Weekly mood pulse. Read aggregated by `TeamInduction.html` for school-pulse roll-up + 2-consecutive-low alarm. | owner (mentee); school leader read-roll-up |
+| `induction_programs/{programId}` | Read by `MyInduction.html` to render Listen→Diagnose→Act→Anchor windows. | central_admin (write — via seed script only) |
 
 **Timestamp field:** always `createdAt` (serverTimestamp). Do not use `timestamp` — that was the legacy name.
 
@@ -259,6 +265,9 @@ CLAUDE_API_KEY           ← for AIPrompts.html
 | `LearningPath.html`              | `/learning-path`               |
 | `MyPortfolio.html`               | `/my-portfolio`                |
 | `MyCertificates.html`            | `/my-certificates`             |
+| `MyInduction.html`               | `/my-induction`                |
+| `ObservationEntry.html`          | `/observation-entry`           |
+| `TeamInduction.html`             | `/team-induction`              |
 | *(see build.js for full list)*   |                                |
 
 ---

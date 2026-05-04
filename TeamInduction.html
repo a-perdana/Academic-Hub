@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team Induction — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
+body { padding-top: 62px; }
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
+  color: #fff; padding: 30px 28px; border-radius: 16px;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.page-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin-bottom: 4px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 680px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
+.stat-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 20px; box-shadow: var(--shadow-sm);
+}
+.stat-num { font-size: 2rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.stat-label { font-size: 12px; color: var(--ink-3); font-weight: 500; }
+
+.section { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+.section h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
+
+.charter-banner { background: linear-gradient(180deg, #ddd6fe 0%, #fff 100%); border: 1px solid #c4b5fd; border-radius: 12px; padding: 14px 16px; font-size: 12px; color: #5b21b6; margin-bottom: 18px; }
+.charter-banner strong { color: #4c1d95; }
+
+.team-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 14px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; gap: 14px;
+  align-items: center;
+}
+@media (max-width: 800px) { .team-card { grid-template-columns: 1fr; gap: 8px; } }
+.team-info { display: flex; flex-direction: column; gap: 2px; }
+.team-info .label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.team-info .value { font-size: 14px; color: var(--ink); font-weight: 500; }
+.team-info .sub { font-size: 11px; color: var(--ink-3); }
+.team-info .name { font-size: 15px; font-weight: 600; color: var(--ink); }
+
+.pulse-tile {
+  display: inline-flex; gap: 4px; align-items: center;
+}
+.pulse-tile-emoji { font-size: 14px; }
+.pulse-warn { color: #dc2626; font-weight: 600; }
+
+.status-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.status-pre_arrival { background: #f3f4f6; color: #4b5563; }
+.status-active { background: #dcfce7; color: #15803d; }
+.status-paused { background: #fef3c7; color: #92400e; }
+.status-completed { background: var(--accent-2); color: var(--accent-dark); }
+.status-extended { background: #fed7aa; color: #9a3412; }
+
+.alarm-row {
+  background: linear-gradient(180deg, #fee2e2 0%, #fff 100%);
+  border: 1px solid #fca5a5; border-radius: 12px; padding: 12px 16px;
+  margin-bottom: 10px; font-size: 13px; color: #991b1b;
+}
+.alarm-row strong { color: #7f1d1d; }
+
+.cohort-progress {
+  display: flex; align-items: center; gap: 8px;
+}
+.cohort-bar { flex: 1; height: 8px; background: #f3f4f6; border-radius: 4px; overflow: hidden; }
+.cohort-bar-fill { height: 100%; background: var(--accent); }
+.cohort-pct { font-size: 12px; color: var(--ink-2); font-weight: 600; }
+
+.empty-state { text-align: center; padding: 48px 20px; color: var(--ink-3); }
+.empty-state h3 { font-size: 16px; color: var(--ink-2); margin-bottom: 8px; }
+
+.action-btn {
+  display: inline-block; background: var(--accent); color: #fff; border: none; padding: 6px 12px;
+  border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; text-decoration: none;
+}
+.action-btn:hover { background: var(--accent-dark); }
+.action-btn.secondary { background: #fff; color: var(--ink); border: 1px solid var(--border); }
+</style>
+<script type="module" src="auth-guard.js"></script>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <p class="eyebrow">Academic Hub · School Principal · Foundation Representative</p>
+    <h1>Team Induction</h1>
+    <p>The first-year inductions at your school. As school principal you have read access to your team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
+  </div>
+
+  <div class="charter-banner">
+    <strong>Watch the pulses, not the journals.</strong> A pulse trend dropping for two consecutive weeks is the system's earliest warning that a new teacher is struggling. Aim for a 1:1 with the mentor pair within 7 days of an alarm — the Charter says induction is care, not surveillance.
+  </div>
+
+  <div id="loadingState" style="padding:40px;text-align:center;color:var(--ink-3);">Loading team inductions…</div>
+  <div id="content" style="display:none;"></div>
+</div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, doc, getDoc, getDocs, query, where, orderBy, limit }
+  from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const db = window.db;
+
+let assignments = [];
+let menteeProfiles = {};
+let mentorProfiles = {};
+let pulsesByMentee = {};
+let observationsByMentee = {};
+let progressByMentee = {};
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('team-induction', { user, profile });
+  }
+
+  // Authorisation: only AH school_principal / academic_admin can see all-school view.
+  const isAhAdmin = profile?.role_academichub === 'academic_admin'
+                 || profile?.role_centralhub === 'central_admin';
+  const isPrincipal = (profile?.ah_sub_roles || []).includes('school_principal');
+  const isFoundationRep = (profile?.ah_sub_roles || []).includes('foundation_representative');
+  if (!isAhAdmin && !isPrincipal && !isFoundationRep) {
+    document.getElementById('loadingState').innerHTML = `<div class="empty-state"><h3>Not authorised</h3><p>This page is for school principals, foundation representatives, and admins.</p></div>`;
+    return;
+  }
+
+  const schoolId = profile?.schoolId;
+  if (!schoolId && !isAhAdmin) {
+    document.getElementById('loadingState').innerHTML = `<div class="empty-state"><h3>No school assigned</h3><p>Your profile is missing a schoolId. Sign in again to set it.</p></div>`;
+    return;
+  }
+
+  try {
+    // Load all inductions at this school. Admin sees all schools.
+    const constraints = [where('status', 'in', ['pre_arrival', 'active', 'paused', 'extended', 'completed'])];
+    if (!isAhAdmin && schoolId) constraints.push(where('schoolId', '==', schoolId));
+    const assignSnap = await getDocs(query(collection(db, 'induction_assignments'), ...constraints, orderBy('hireDate', 'desc'), limit(100)));
+    assignments = assignSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+    if (assignments.length === 0) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('content').style.display = '';
+      document.getElementById('content').innerHTML = `<div class="empty-state"><h3>No active inductions at your school</h3><p>The HQ Induction Coordinator at Central Hub assigns mentors and mentees together at the start of each cohort.</p></div>`;
+      return;
+    }
+
+    const menteeUids = assignments.map(a => a.uid);
+    const mentorUids = [...new Set(assignments.map(a => a.mentorUid).filter(Boolean))];
+
+    await Promise.all([
+      ...menteeUids.map(async uid => {
+        const s = await getDoc(doc(db, 'users', uid));
+        menteeProfiles[uid] = s.exists() ? s.data() : null;
+      }),
+      ...mentorUids.map(async uid => {
+        const s = await getDoc(doc(db, 'users', uid));
+        mentorProfiles[uid] = s.exists() ? s.data() : null;
+      }),
+      ...menteeUids.map(async uid => {
+        try {
+          const ps = await getDocs(query(collection(db, 'induction_pulses'), where('uid', '==', uid), orderBy('weekStartDate', 'desc'), limit(4)));
+          pulsesByMentee[uid] = ps.docs.map(d => d.data());
+        } catch (e) { pulsesByMentee[uid] = []; }
+      }),
+      ...menteeUids.map(async uid => {
+        try {
+          const os = await getDocs(query(collection(db, 'induction_observations'), where('menteeUid', '==', uid), orderBy('observationDate', 'desc'), limit(10)));
+          observationsByMentee[uid] = os.docs.map(d => ({ id: d.id, ...d.data() }));
+        } catch (e) { observationsByMentee[uid] = []; }
+      }),
+      ...menteeUids.map(async uid => {
+        try {
+          const ps = await getDocs(query(collection(db, 'induction_progress'), where('uid', '==', uid), limit(500)));
+          progressByMentee[uid] = ps.docs.map(d => d.data());
+        } catch (e) { progressByMentee[uid] = []; }
+      }),
+    ]);
+
+    render();
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('content').style.display = '';
+  } catch (err) {
+    console.error('boot', err);
+    document.getElementById('loadingState').innerHTML = `<div class="empty-state"><h3>Could not load</h3><p>${escapeHtml(err.message || err.code || 'unknown')}</p></div>`;
+  }
+});
+
+function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function lowPulseAlarm(uid) {
+  const pulses = pulsesByMentee[uid] || [];
+  if (pulses.length < 2) return false;
+  return pulses[0].score <= 2 && pulses[1].score <= 2;
+}
+
+function avgPulseScore(uid) {
+  const pulses = pulsesByMentee[uid] || [];
+  if (pulses.length === 0) return null;
+  return (pulses.reduce((a, p) => a + p.score, 0) / pulses.length).toFixed(1);
+}
+
+function obsCount(uid) {
+  return (observationsByMentee[uid] || []).filter(o => o.completedAt).length;
+}
+
+function progressPct(uid) {
+  const tasks = progressByMentee[uid] || [];
+  const done = tasks.filter(t => t.completedAt).length;
+  // We don't know total task count without the program; use progressByMentee length as proxy.
+  return tasks.length > 0 ? Math.round((done / tasks.length) * 100) : 0;
+}
+
+function render() {
+  const totalMentees = assignments.length;
+  const active = assignments.filter(a => ['active','pre_arrival'].includes(a.status)).length;
+  const completed = assignments.filter(a => a.status === 'completed').length;
+  const alarms = assignments.filter(a => lowPulseAlarm(a.uid)).length;
+
+  const stats = `
+    <div class="stats-row">
+      <div class="stat-card"><div class="stat-num">${totalMentees}</div><div class="stat-label">Mentees at your school</div></div>
+      <div class="stat-card"><div class="stat-num">${active}</div><div class="stat-label">Active inductions</div></div>
+      <div class="stat-card"><div class="stat-num">${completed}</div><div class="stat-label">Completed Y1</div></div>
+      <div class="stat-card"><div class="stat-num" style="color:${alarms > 0 ? '#dc2626' : 'inherit'};">${alarms}</div><div class="stat-label">Pulse alarms</div></div>
+    </div>
+  `;
+
+  // Alarms section first.
+  let alarmHtml = '';
+  if (alarms > 0) {
+    alarmHtml = `<div class="section"><h2 style="color:#991b1b;">⚠ Two-week low-pulse alarms</h2>` + assignments
+      .filter(a => lowPulseAlarm(a.uid))
+      .map(a => {
+        const m = menteeProfiles[a.uid];
+        const mentor = mentorProfiles[a.mentorUid];
+        return `<div class="alarm-row"><strong>${escapeHtml(m?.displayName || a.uid)}</strong> recorded a hard or very-hard week twice in a row. Reach out to ${escapeHtml(mentor?.displayName || 'their mentor')} within 7 days.</div>`;
+      }).join('') + `</div>`;
+  }
+
+  // Mentees list
+  const cards = assignments.map(a => {
+    const mentee = menteeProfiles[a.uid];
+    const mentor = mentorProfiles[a.mentorUid];
+    const hireDate = a.hireDate?.toDate ? a.hireDate.toDate() : new Date(a.hireDate);
+    const days = Math.floor((Date.now() - hireDate.getTime()) / (1000 * 60 * 60 * 24));
+    const pulseAvg = avgPulseScore(a.uid);
+    const obs = obsCount(a.uid);
+    const alarm = lowPulseAlarm(a.uid);
+    const recentPulses = (pulsesByMentee[a.uid] || []).slice(0, 4);
+    const emojiFor = s => ({1:'😰',2:'😟',3:'😐',4:'🙂',5:'😊'}[s] || '·');
+
+    return `<div class="team-card">
+      <div class="team-info">
+        <span class="label">Mentee</span>
+        <span class="name">${escapeHtml(mentee?.displayName || a.uid)}</span>
+        <span class="sub">${escapeHtml(mentee?.email || '')}</span>
+      </div>
+      <div class="team-info">
+        <span class="label">Mentor</span>
+        <span class="value">${escapeHtml(mentor?.displayName || a.mentorUid)}</span>
+        <span class="sub">Day ${days} of induction</span>
+      </div>
+      <div class="team-info">
+        <span class="label">Status</span>
+        <span><span class="status-pill status-${a.status || 'pre_arrival'}">${escapeHtml(a.status || 'pre_arrival')}</span></span>
+        <span class="sub">${obs} observation${obs === 1 ? '' : 's'} done</span>
+      </div>
+      <div class="team-info">
+        <span class="label">Pulse (last 4 weeks)</span>
+        <span class="pulse-tile ${alarm ? 'pulse-warn' : ''}">${recentPulses.map(p => `<span class="pulse-tile-emoji">${emojiFor(p.score)}</span>`).join('')}${alarm ? ' ⚠' : ''}</span>
+        <span class="sub">${pulseAvg ? 'avg ' + pulseAvg + '/5' : 'no pulses yet'}</span>
+      </div>
+      <div class="team-info">
+        <a class="action-btn" href="/observation-entry?menteeUid=${encodeURIComponent(a.uid)}&type=formal_evaluation">Q4 formal eval</a>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('content').innerHTML = stats + alarmHtml + `<div class="section"><h2>All inductions at your school</h2>${cards}</div>`;
+}
+</script>
+</body>
+</html>
