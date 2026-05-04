@@ -697,6 +697,7 @@ const NAV_ITEMS = [
     { key: 'my-portfolio',         href: '/my-portfolio',          label: 'My Portfolio' },
     { key: 'my-certificates',      href: '/my-certificates',       label: 'My Certificates' },
     { key: 'my-induction',         href: '/my-induction',          label: 'My Induction' },
+    { key: 'handbook',             href: '/handbook',              label: 'Induction Handbook' },
   ]},
 ];
 
