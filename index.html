@@ -4045,24 +4045,6 @@
           </div><!-- /category-section#uncategorizedAccordion -->
         </div><!-- /uncategorized-section -->
 
-        <!-- == Auto-generated "Other Available Pages" section ============
-             Lists every page in page_access_config that:
-               1. is allowed for this user's ah_sub_roles, AND
-               2. does NOT already have a hand-crafted card on this page.
-             Populated by JS in this file once authReady fires. -->
-        <div class="other-pages-section" id="otherPagesSection" style="display:none;margin-top:32px">
-          <div class="category-section" id="otherPagesAccordion" data-cat-id="__otherpages__">
-            <div class="category-header" data-cat-id="__otherpages__">
-              <span class="category-color-dot" style="background:#475569;color:#475569;"></span>
-              <span class="category-name">Other available pages</span>
-              <span class="category-count" id="otherPagesCount">0</span>
-              <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-            </div>
-            <div class="category-body">
-              <div class="category-cards-grid" id="otherPagesGrid"></div>
-            </div>
-          </div>
-        </div>
       </main>
 
       <!-- == Manage Cards Modal == -->
@@ -4337,30 +4319,32 @@
           document.getElementById('heroGreeting').style.display = 'block';
         }
 
-        initCategorySystem(window.db);
-        // Auto-generate the "Other available pages" section so every page
-        // the user has access to surfaces somewhere on the dashboard, even
-        // when no hand-crafted card exists for it yet.
-        renderOtherAvailablePages(window.db, profile).catch(err => {
+        // Auto-generate cards for accessible pages without a hand-crafted
+        // card and inject them into the Uncategorized grid BEFORE the
+        // category system reads cards. Awaited so getAllCards() picks them
+        // up on its first call.
+        try {
+          await renderOtherAvailablePages(window.db, profile);
+        } catch (err) {
           console.warn('renderOtherAvailablePages failed', err);
-        });
+        }
+        initCategorySystem(window.db);
       });
 
       // ============================================================
-      // AUTO-GENERATED "OTHER AVAILABLE PAGES" SECTION
+      // AUTO-GENERATED CARDS FOR PAGES WITHOUT A HAND-CRAFTED CARD
       // ============================================================
       // For pages declared in page_access_config that the user can access
       // but have no hand-crafted <a class="card"> on this dashboard, we
-      // render a lightweight card so the page is reachable from the home
-      // screen. As you add proper cards over time, those auto-cards
-      // disappear (de-duplicated by pageKey).
+      // render a lightweight card and DROP IT INTO the Uncategorized grid
+      // so admins can sweep it into a category from the same place. As
+      // proper cards are added over time, those auto-cards disappear
+      // (de-duplicated by pageKey).
       async function renderOtherAvailablePages(db, profile) {
         const isAdmin = profile?.role_academichub === 'academic_admin';
         const subRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
-        const wrap  = document.getElementById('otherPagesSection');
-        const grid  = document.getElementById('otherPagesGrid');
-        const count = document.getElementById('otherPagesCount');
-        if (!wrap || !grid || !count) return;
+        const grid = document.getElementById('uncategorizedGrid');
+        if (!grid) return;
 
         // Reuse the bulk cache populated by auth-guard if available.
         let configsMap;
@@ -4396,11 +4380,12 @@
           } catch (_) {}
         });
 
-        const SKIP = new Set(['', 'index', 'login', 'waiting']);
+        const SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public']);
         const items = [];
         configsMap.forEach((cfg, key) => {
           if (SKIP.has(key)) return;
           if (existingKeys.has(key)) return; // already has a hand-crafted card
+          if (cfg.hidden === true) return;
           // Access check (admin sees everything).
           const vt = Array.isArray(cfg.visible_to) ? cfg.visible_to : [];
           const allowed = isAdmin || vt.length === 0 || subRoles.some(r => vt.includes(r));
@@ -4408,32 +4393,46 @@
           items.push({ key, ...cfg });
         });
 
-        if (!items.length) {
-          wrap.style.display = 'none';
-          return;
-        }
+        if (!items.length) return;
 
         items.sort((a, b) => (a.label || a.key).localeCompare(b.label || b.key));
-        count.textContent = items.length;
-        grid.innerHTML = items.map(it => `
-          <a href="/${escapeAttr(it.key)}" class="card card-auto" data-theme="auto" data-nav-key="${escapeAttr(it.key)}">
+        // Insert auto-cards into Uncategorized grid, before the
+        // "coming soon" placeholder so they appear at the end of the
+        // real card list. They carry data-card-id so admins can sweep
+        // them into a category via the Manage Cards modal.
+        const comingSoon = document.getElementById('comingSoonCard');
+        items.forEach(it => {
+          if (grid.querySelector(`[data-card-id="auto_${it.key}"]`)) return; // already inserted
+          const a = document.createElement('a');
+          a.href = '/' + it.key;
+          a.className = 'card card-auto';
+          a.dataset.theme = 'auto';
+          a.dataset.navKey = it.key;
+          a.dataset.cardId = 'auto_' + it.key;
+          a.innerHTML = `
             <div class="card-content" style="padding:18px">
               <div class="card-arrow">
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </div>
               <h3 class="card-title">${escapeHtml(it.label || it.key)}</h3>
               ${it.description ? `<p class="card-description">${escapeHtml(it.description)}</p>` : ''}
-            </div>
-          </a>
-        `).join('');
-        wrap.style.display = 'block';
+            </div>`;
+          if (comingSoon) grid.insertBefore(a, comingSoon);
+          else            grid.appendChild(a);
+        });
+
+        // Bump uncategorized count so the badge reflects the new cards
+        const count = document.getElementById('uncategorizedCount');
+        if (count) {
+          const live = grid.querySelectorAll('.card:not(.card-coming-soon)').length;
+          count.textContent = live;
+        }
 
         function escapeHtml(s) {
           return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
             {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
           ));
         }
-        function escapeAttr(s) { return escapeHtml(s); }
       }
 
       // ============================================================
