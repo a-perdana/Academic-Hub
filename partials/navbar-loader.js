@@ -396,6 +396,10 @@ function ensureNavbarSharedStyles() {
     #topNav .nav-dropdown-panel--wide {
       min-width: 480px;
     }
+    /* Three-column extra-wide panel (My Hub) */
+    #topNav .nav-dropdown-panel--xwide {
+      min-width: 720px;
+    }
     #topNav .nav-dd-col-group {
       display: flex;
       gap: 0;
@@ -661,45 +665,51 @@ const NAV_ITEMS = [
     { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
   ]},
   { group: 'school', label: 'School', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
+    // Curriculum
+    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
+    { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
+    { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
+    // Appraisal
+    { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
+    { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
+    { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
+    { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
+    // Other school-level pages still surfaced via Dashboards / direct nav
     { key: 'school-appraisals',       href: '/school-appraisals',       label: 'School Appraisals' },
     { key: 'school-self-appraisal',   href: '/school-self-appraisal',   label: 'School Self-Appraisal' },
     { key: 'partner-schools',         href: '/partner-schools',         label: 'Partner Schools' },
     { key: 'islamic-schools',         href: '/islamic-schools',         label: 'Islamic Schools' },
-    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
     { key: 'school-performance-kpi',  href: '/school-performance-kpi',  label: 'School KPI' },
     { key: 'accreditation-dashboard', href: '/accreditation-dashboard', label: 'Accreditation' },
     { key: 'network-audit',           href: '/network-audit',           label: 'Network Audit' },
     { key: 'cambridge-school-quality',href: '/cambridge-school-quality',label: 'Cambridge School Quality' },
     { key: 'rapor-pendidikan-2025',   href: '/rapor-pendidikan-2025',   label: 'Rapor Pendidikan 2025' },
     { key: 'ai-prompts',              href: '/ai-prompts',              label: 'AI Prompts' },
-    { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
-    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
-    { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
-    { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
-    { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
-    { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
-    { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
-    { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
-    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
-    { key: 'weekly-checklist',        href: '/weekly-checklist',        label: 'Weekly Checklist' },
-    { key: 'team-induction',          href: '/team-induction',          label: 'Team Induction' },
     { key: 'student-survey',          href: '/student-survey',          label: 'Student Survey' },
     { key: 'staff-survey',            href: '/staff-survey',            label: 'Staff Survey' },
     { key: 'parent-survey',           href: '/parent-survey',           label: 'Parent Survey' },
   ]},
   { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
+    // Communications
     { key: 'academic-calendar',    href: '/academic-calendar',     label: 'Academic Calendar' },
     { key: 'announcements',        href: '/announcements',         label: 'Announcements', badgeId: 'annBadge' },
     { key: 'message-board',        href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
     { key: 'documents',            href: '/documents',             label: 'Documents', badgeId: 'docBadge', badgeCount: true },
-    { key: 'library',              href: '/library',               label: 'Resource Library' },
-    { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
+    // CPD
     { key: 'competency-framework', href: '/competency-framework',  label: 'Competency Framework' },
     { key: 'learning-path',        href: '/learning-path',         label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',          label: 'My Portfolio' },
     { key: 'my-certificates',      href: '/my-certificates',       label: 'My Certificates' },
+    // Induction & Reference
     { key: 'my-induction',         href: '/my-induction',          label: 'My Induction' },
+    { key: 'team-induction',       href: '/team-induction',        label: 'Team Induction' },
     { key: 'handbook',             href: '/handbook',              label: 'Induction Handbook' },
+    { key: 'weekly-checklist',     href: '/weekly-checklist',      label: 'Weekly Checklist' },
+    { key: 'cambridge-calendar',   href: '/cambridge-calendar',    label: 'Cambridge Calendar' },
+    { key: 'cambridge-standards',  href: '/cambridge-standards',   label: 'Cambridge Standards' },
+    { key: 'library',              href: '/library',               label: 'Resource Library' },
+    { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
   ]},
 ];
 
