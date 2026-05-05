@@ -4598,6 +4598,17 @@
             renderMerged();
           });
 
+          // The meta doc `_uncategorized_settings_` does not carry a
+          // `visible_to` field, so neither the open-to-all query above
+          // nor the sub-role array-contains-any query below ever
+          // matches it. Subscribe to it directly so non-admins get the
+          // visible_to_users flag and the Uncategorized accordion can
+          // be hidden from them.
+          onSnapshot(doc(db, 'ah_categories', '_uncategorized_settings_'), snap => {
+            window.__ahUncatSettings = snap.exists() ? { id: snap.id, ...snap.data() } : {};
+            renderMerged();
+          });
+
           if (userSubRoles.length) {
             const mineQuery = query(
               collection(db, 'ah_categories'),
