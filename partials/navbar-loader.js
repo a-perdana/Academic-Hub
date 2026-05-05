@@ -692,6 +692,8 @@ const NAV_ITEMS = [
     { key: 'announcements',        href: '/announcements',         label: 'Announcements', badgeId: 'annBadge' },
     { key: 'message-board',        href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
     { key: 'documents',            href: '/documents',             label: 'Documents', badgeId: 'docBadge', badgeCount: true },
+    { key: 'library',              href: '/library',               label: 'Resource Library' },
+    { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
     { key: 'competency-framework', href: '/competency-framework',  label: 'Competency Framework' },
     { key: 'learning-path',        href: '/learning-path',         label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',          label: 'My Portfolio' },
