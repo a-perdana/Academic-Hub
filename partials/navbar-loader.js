@@ -947,120 +947,10 @@ function _ahRenderProfileInfo(profile) {
   if (subRolesRow) subRolesRow.style.display = subRoles.length ? 'flex' : 'none';
 }
 
-function _ahInitEditForm(user, profile) {
-  const editToggle  = document.getElementById('ddEditToggle');
-  const editForm    = document.getElementById('ddEditForm');
-  const editChevron = document.getElementById('ddEditChevron');
-  const nameInput   = document.getElementById('ddEditName');
-  const schoolInput = document.getElementById('ddEditSchool');
-  const checkboxesEl = document.getElementById('ddSubRoleCheckboxes');
-  const saveBtn     = document.getElementById('ddSaveProfile');
-  const saveMsg     = document.getElementById('ddSaveMsg');
-
-  if (!editToggle || !editForm) return;
-
-  // Populate initial values
-  if (nameInput)   nameInput.value   = profile?.displayName || user.displayName || '';
-  if (schoolInput) schoolInput.value = profile?.school || '';
-
-  // Build sub-role checkboxes
-  if (checkboxesEl) {
-    checkboxesEl.innerHTML = '';
-    const current = profile?.ah_sub_roles || [];
-    AH_SUB_ROLES.forEach(({ key, label }) => {
-      const row   = document.createElement('label');
-      row.className = 'dd-subrole-checkbox-row';
-      const cb    = document.createElement('input');
-      cb.type     = 'checkbox';
-      cb.value    = key;
-      cb.checked  = current.includes(key);
-      row.appendChild(cb);
-      row.appendChild(document.createTextNode(label));
-      checkboxesEl.appendChild(row);
-    });
-  }
-
-  // Toggle expand/collapse
-  editToggle.addEventListener('click', e => {
-    e.stopPropagation();
-    const open = editForm.style.display === 'none';
-    editForm.style.display = open ? '' : 'none';
-    if (editChevron) editChevron.classList.toggle('open', open);
-    const lbl = document.getElementById('ddEditToggleLabel');
-    if (lbl) lbl.textContent = open ? 'Cancel' : 'Edit Profile';
-    if (saveMsg) { saveMsg.style.display = 'none'; saveMsg.className = 'dd-save-msg'; }
-  });
-
-  // Save
-  if (saveBtn) {
-    saveBtn.addEventListener('click', async e => {
-      e.stopPropagation();
-      const newName   = nameInput?.value.trim()   || '';
-      const newSchool = schoolInput?.value.trim()  || '';
-      const newRoles  = Array.from(
-        checkboxesEl?.querySelectorAll('input[type="checkbox"]:checked') || []
-      ).map(cb => cb.value);
-
-      if (!newName) {
-        _ahShowSaveMsg(saveMsg, 'err', 'Display name cannot be empty.');
-        return;
-      }
-
-      saveBtn.disabled    = true;
-      saveBtn.textContent = 'Saving…';
-
-      try {
-        const db  = window.db;
-        const uid = user.uid;
-        if (!db || !uid) throw new Error('Not authenticated');
-
-        const { doc, updateDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-        await updateDoc(doc(db, 'users', uid), {
-          displayName: newName,
-          school:      newSchool,
-          ah_sub_roles: newRoles,
-        });
-
-        // Update in-memory profile
-        if (window.userProfile) {
-          window.userProfile.displayName  = newName;
-          window.userProfile.school       = newSchool;
-          window.userProfile.ah_sub_roles = newRoles;
-        }
-
-        // Refresh displayed info
-        const nameEl = document.getElementById('ddFullName');
-        if (nameEl) nameEl.textContent = newName;
-        const navFirst = document.getElementById('navFirstName');
-        if (navFirst) navFirst.textContent = newName.split(' ')[0];
-        _ahBuildAvatar(document.getElementById('navAvatar'), { ...user, displayName: newName });
-        _ahBuildAvatar(document.getElementById('ddAvatar'),  { ...user, displayName: newName });
-        _ahRenderProfileInfo(window.userProfile);
-
-        _ahShowSaveMsg(saveMsg, 'ok', 'Profile saved successfully.');
-        setTimeout(() => {
-          editForm.style.display = 'none';
-          if (editChevron) editChevron.classList.remove('open');
-          const lbl = document.getElementById('ddEditToggleLabel');
-          if (lbl) lbl.textContent = 'Edit Profile';
-          if (saveMsg) saveMsg.style.display = 'none';
-        }, 1600);
-      } catch (err) {
-        _ahShowSaveMsg(saveMsg, 'err', 'Save failed. Please try again.');
-      } finally {
-        saveBtn.disabled    = false;
-        saveBtn.textContent = 'Save Changes';
-      }
-    });
-  }
-}
-
-function _ahShowSaveMsg(el, type, text) {
-  if (!el) return;
-  el.textContent  = text;
-  el.className    = 'dd-save-msg ' + type;
-  el.style.display = '';
-}
+// Profile edit form removed — school + sub-roles are read-only in the
+// dropdown. Changes go through central_admin via Console, matching the
+// Teachers Hub pattern (security: prevents users from self-promoting
+// to a sub-role with broader page access).
 
 function _ahPopulateProfile(user, displayName, authInstance, profile) {
   const name      = displayName || user.displayName || user.email.split('@')[0];
@@ -1095,8 +985,6 @@ function _ahPopulateProfile(user, displayName, authInstance, profile) {
     });
   }
 
-  // Wire up edit form
-  _ahInitEditForm(user, profile);
 }
 
 // Public API: call after __loadAcademicNavbar resolves
