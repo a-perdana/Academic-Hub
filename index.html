@@ -57,6 +57,7 @@
         height: 100%;
         z-index: -1;
         overflow: hidden;
+        pointer-events: none;
       }
 
       .bg-animation::before {
@@ -1150,6 +1151,28 @@
         background: rgba(239,68,68,0.3);
       }
 
+      /* Visual cue for admins: sections hidden from non-admins */
+      body.is-admin .category-section.is-hidden-for-users > .category-header {
+        opacity: 0.55;
+      }
+      body.is-admin .category-section.is-hidden-for-users > .category-header .category-name::after {
+        content: ' (hidden)';
+        font-size: 0.7em;
+        color: #ef4444;
+        font-weight: 500;
+        margin-left: 4px;
+      }
+      body.is-admin .uncategorized-section.is-hidden-for-users > .category-section > .category-header {
+        opacity: 0.55;
+      }
+      body.is-admin .uncategorized-section.is-hidden-for-users > .category-section > .category-header .category-name::after {
+        content: ' (hidden)';
+        font-size: 0.7em;
+        color: #ef4444;
+        font-weight: 500;
+        margin-left: 4px;
+      }
+
       .category-body {
         overflow: hidden;
         transition: max-height 0.4s cubic-bezier(0.23,1,0.32,1);
@@ -2211,6 +2234,12 @@
               <span class="category-color-dot" style="background:#6b7280; color:#6b7280;"></span>
               <span class="category-name">Uncategorized</span>
               <span class="category-count" id="uncategorizedCount">0</span>
+              <div class="category-admin-actions" id="uncategorizedAdminActions">
+                <button class="cat-action-btn vis-toggle-btn uncat-toggle-btn" id="uncatToggleBtn" data-cat-id="__uncategorized__" title="Toggle visibility for non-admins">
+                  <svg id="uncatToggleIconShown" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5C21.3 7.6 17 4.5 12 4.5zm0 12.5a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>
+                  <svg id="uncatToggleIconHidden" viewBox="0 0 24 24" style="display:none"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>
+                </button>
+              </div>
               <svg class="category-chevron" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
             </div>
             <div class="category-body">
@@ -4445,16 +4474,37 @@
         const isAdmin = document.body.classList.contains('is-admin');
 
         // -- Delegated admin action handler (registered once) -----
+        // Bound on document so the Uncategorized header (which lives
+        // outside #categorySections) is also covered.
         if (isAdmin) {
-          document.getElementById('categorySections').addEventListener('click', async e => {
+          document.addEventListener('click', async e => {
             const btn = e.target.closest('.cat-action-btn');
             if (!btn) return;
             e.stopPropagation();
             const catId = btn.dataset.catId;
-            // We need the live cats list — read it from the rendered DOM state
-            const allSecs = Array.from(document.querySelectorAll('.category-section[data-cat-id]'));
-            const catsSnapshot = window.__ahCatsSnapshot || [];
-            const cats = catsSnapshot;
+
+            // Special case: the Uncategorized accordion uses the meta
+            // doc id `_uncategorized_settings_` for its visibility flag.
+            // We MUST write an `order` field too — the snapshot listener
+            // is bound with orderBy('order','asc'), which silently drops
+            // docs missing that field.
+            if (catId === '__uncategorized__' && btn.classList.contains('vis-toggle-btn')) {
+              const cur = window.__ahUncatSettings || {};
+              const desired = cur.visible_to_users === false; // hidden → show; else → hide
+              try {
+                await setDoc(doc(db, 'ah_categories', '_uncategorized_settings_'), {
+                  isMeta: true,
+                  order: -1,
+                  visible_to_users: desired,
+                  updatedAt: serverTimestamp(),
+                }, { merge: true });
+              } catch (err) {
+                console.warn('uncat toggle failed', err);
+              }
+              return;
+            }
+
+            const cats = window.__ahCatsSnapshot || [];
             const cat = cats.find(c => c.id === catId);
             if (!cat) return;
 
@@ -4466,6 +4516,16 @@
               if (idx < cats.length - 1) await swapCatOrder(db, cats[idx], cats[idx + 1]);
             } else if (btn.classList.contains('manage-btn')) {
               openManageModal(cat, cats, db);
+            } else if (btn.classList.contains('vis-toggle-btn')) {
+              const next = !(cat.hidden_for_users === true);
+              try {
+                await setDoc(doc(db, 'ah_categories', cat.id), {
+                  hidden_for_users: next,
+                  updatedAt: serverTimestamp(),
+                }, { merge: true });
+              } catch (err) {
+                console.warn('section visibility toggle failed', err);
+              }
             } else if (btn.classList.contains('rename-btn')) {
               const sec = btn.closest('.category-section');
               if (sec) startRename(sec, cat, db);
@@ -4570,23 +4630,51 @@
 
         if (isAdmin) {
           // Admin: single unfiltered listener.
+          // The dashboard config is split across two doc kinds:
+          //   • Regular section docs — cardIds[], visible_to[], etc.
+          //   • A single meta doc id `_uncategorized_settings_` with
+          //     { isMeta: true, visible_to_users: bool } that lets admins
+          //     hide the Uncategorized accordion from non-admin users.
           // @lint-allow-unbounded — admin tooling, ah_categories is small (~20 docs)
           const adminQuery = query(collection(db, 'ah_categories'), orderBy('order', 'asc'));
           onSnapshot(adminQuery, snap => {
             const cats = [];
-            snap.forEach(d => cats.push({ id: d.id, ...d.data() }));
+            let uncatSettings = {};
+            snap.forEach(d => {
+              const data = { id: d.id, ...d.data() };
+              if (data.isMeta || d.id === '_uncategorized_settings_') {
+                uncatSettings = data;
+                return;
+              }
+              cats.push(data);
+            });
             window.__ahCatsSnapshot = cats;
+            window.__ahUncatSettings = uncatSettings;
             renderCategories(cats, db, isAdmin);
+            refreshUncatToggleUi(uncatSettings);
           });
         } else {
           // Non-admin: two listeners covering open-to-all + my sub-roles.
+          // Both filter out the meta `_uncategorized_settings_` doc — the
+          // rule allows it through for non-admins (visible_to is always
+          // [] on the meta doc) but it is not a real section.
+          const stripMeta = list => list.filter(c => !(c.isMeta || c.id === '_uncategorized_settings_'));
           const openQuery = query(
             collection(db, 'ah_categories'),
             where('visible_to', '==', []),
           );
           onSnapshot(openQuery, snap => {
             catsByQuery.open = [];
-            snap.forEach(d => catsByQuery.open.push({ id: d.id, ...d.data() }));
+            let uncatSettings = window.__ahUncatSettings || {};
+            snap.forEach(d => {
+              const data = { id: d.id, ...d.data() };
+              if (data.isMeta || d.id === '_uncategorized_settings_') {
+                uncatSettings = data;
+                return;
+              }
+              catsByQuery.open.push(data);
+            });
+            window.__ahUncatSettings = uncatSettings;
             renderMerged();
           });
 
@@ -4597,11 +4685,29 @@
             );
             onSnapshot(mineQuery, snap => {
               catsByQuery.mine = [];
-              snap.forEach(d => catsByQuery.mine.push({ id: d.id, ...d.data() }));
+              snap.forEach(d => {
+                const data = { id: d.id, ...d.data() };
+                if (data.isMeta || d.id === '_uncategorized_settings_') return;
+                catsByQuery.mine.push(data);
+              });
               renderMerged();
             });
           }
         }
+      }
+
+      // ── Refresh the admin Uncategorized toggle icon + tooltip ──
+      function refreshUncatToggleUi(settings) {
+        const shownIcon  = document.getElementById('uncatToggleIconShown');
+        const hiddenIcon = document.getElementById('uncatToggleIconHidden');
+        const btn        = document.getElementById('uncatToggleBtn');
+        if (!shownIcon || !hiddenIcon || !btn) return;
+        const hiddenForUsers = settings?.visible_to_users === false;
+        shownIcon.style.display  = hiddenForUsers ? 'none' : '';
+        hiddenIcon.style.display = hiddenForUsers ? '' : 'none';
+        btn.title = hiddenForUsers
+          ? 'Hidden from non-admins — click to show'
+          : 'Visible to non-admins — click to hide';
       }
 
       // -- Render category accordion sections --------------------
@@ -4609,9 +4715,13 @@
         const container = document.getElementById('categorySections');
         const allCards = getAllCards(); // uses cached list — cards may be anywhere in DOM
 
-        // Filter categories by visible_to — admins always see all
+        // Filter categories by visible_to — admins always see all.
+        // Admins can also flip a per-section "hidden_for_users" toggle
+        // that hides the entire accordion from every non-admin (cleaner
+        // than listing every sub-role to exclude in visible_to[]).
         const userSubRoles = window.userProfile?.ah_sub_roles || [];
         const visibleCats = isAdmin ? cats : cats.filter(cat => {
+          if (cat.hidden_for_users === true) return false;
           const vt = cat.visible_to || [];
           return vt.length === 0 || userSubRoles.some(r => vt.includes(r));
         });
@@ -4641,7 +4751,7 @@
             .filter(Boolean);
 
           const sec = document.createElement('div');
-          sec.className = 'category-section';
+          sec.className = 'category-section' + (cat.hidden_for_users === true ? ' is-hidden-for-users' : '');
           sec.dataset.catId = cat.id;
 
           // Default: first category open, rest collapsed; preserve user state after first render
@@ -4651,6 +4761,13 @@
           const isFirst = idx === 0;
           const isLast  = idx === visibleCats.length - 1;
 
+          const hiddenForUsers = cat.hidden_for_users === true;
+          const visToggleIcon = hiddenForUsers
+            ? '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>'
+            : '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.7 7.6 1 12c1.7 4.4 6 7.5 11 7.5s9.3-3.1 11-7.5C21.3 7.6 17 4.5 12 4.5zm0 12.5a5 5 0 1 1 0-10 5 5 0 0 1 0 10zm0-8a3 3 0 1 0 0 6 3 3 0 0 0 0-6z"/></svg>';
+          const visToggleTitle = hiddenForUsers
+            ? 'Hidden from non-admins — click to show'
+            : 'Visible to non-admins — click to hide';
           // Admin action buttons HTML
           const adminHtml = isAdmin ? `
             <div class="category-admin-actions">
@@ -4662,6 +4779,9 @@
               </button>
               <button class="cat-action-btn manage-btn" title="Manage cards" data-cat-id="${cat.id}">
                 <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+              </button>
+              <button class="cat-action-btn vis-toggle-btn" title="${visToggleTitle}" data-cat-id="${cat.id}" data-cat-hidden="${hiddenForUsers ? '1' : '0'}">
+                ${visToggleIcon}
               </button>
               <button class="cat-action-btn rename-btn" title="Rename" data-cat-id="${cat.id}">
                 <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
@@ -4709,12 +4829,18 @@
         const uncatCount = uncatGrid.querySelectorAll('.card:not(.card-coming-soon)').length;
         document.getElementById('uncategorizedCount').textContent = uncatCount;
 
-        // Hide uncategorized section if empty and not admin
-        const uncatSection = document.getElementById('uncategorizedAccordion');
-        if (!isAdmin && uncatCount === 0) {
-          document.getElementById('uncategorizedSection').style.display = 'none';
+        // Visibility rules for non-admins:
+        //   1) empty grid → hide
+        //   2) admin toggled hidden via uncategorized_settings.visible_to_users === false → hide
+        // Admins always see the section so they can manage cards.
+        const settings = window.__ahUncatSettings || {};
+        const hiddenForUsers = settings.visible_to_users === false;
+        const uncatSection = document.getElementById('uncategorizedSection');
+        uncatSection.classList.toggle('is-hidden-for-users', hiddenForUsers);
+        if (!isAdmin && (uncatCount === 0 || hiddenForUsers)) {
+          uncatSection.style.display = 'none';
         } else {
-          document.getElementById('uncategorizedSection').style.display = '';
+          uncatSection.style.display = '';
         }
 
       }
