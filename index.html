@@ -655,6 +655,26 @@
       .card[data-theme="checklist"] {
         --card-accent: linear-gradient(135deg, #6c5ce7 0%, #a78bfa 100%);
       }
+      .card[data-theme="auto"] {
+        --card-accent: linear-gradient(135deg, #6c5ce7 0%, #0891b2 100%);
+      }
+      /* Compact header strip for auto-cards (no full image) */
+      .card.card-auto .card-image-strip {
+        position: relative;
+        height: 56px;
+        background: var(--card-accent);
+        overflow: hidden;
+      }
+      .card.card-auto .card-image-strip::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.18) 100%);
+      }
+      .card.card-auto .card-image-strip .card-badge {
+        top: 14px;
+        left: 14px;
+      }
       .card[data-theme="frameworks"] {
         --card-accent: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
       }
@@ -3848,188 +3868,6 @@
             </div>
           </a>
 
-          <div class="card card-frameworks" data-theme="frameworks">
-            <div class="frameworks-header">
-              <div class="frameworks-icon">
-                <svg viewBox="0 0 24 24">
-                  <path
-                    d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z"
-                  />
-                </svg>
-              </div>
-              <div class="frameworks-title-section">
-                <h3 class="card-title">Eduversal Frameworks</h3>
-                <p class="card-description">
-                  Comprehensive educational frameworks and guidelines for
-                  partner schools
-                </p>
-              </div>
-              <span class="frameworks-badge">Frameworks</span>
-            </div>
-            <div class="frameworks-grid">
-              <!-- Cambridge Pathway -->
-              <a
-                href="https://docs.google.com/document/d/16gQdAxhxaQbCCNd6t97DdRHXolZHmXMzev8kGPopuBU/edit?usp=sharing"
-                target="_blank"
-                class="framework-item"
-              >
-                <div
-                  class="framework-image"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #667eea 0%,
-                      #764ba2 100%
-                    );
-                  "
-                >
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"
-                    />
-                  </svg>
-                </div>
-                <div class="framework-content">
-                  <span class="framework-badge">Framework</span>
-                  <h4>Cambridge Pathway</h4>
-                  <p>
-                    Secondary education curriculum guide with subject pathways
-                    for Engineering, Business, and Medical tracks
-                  </p>
-                  <span class="framework-link">View Document →</span>
-                </div>
-              </a>
-              <!-- STEAM Integration -->
-              <a
-                href="https://docs.google.com/document/d/1cIgg-LrgWFuUicGg2uXTc5RBG8o--qdBS_VylsyMT5w/edit?usp=sharing"
-                target="_blank"
-                class="framework-item"
-              >
-                <div
-                  class="framework-image"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #f093fb 0%,
-                      #f5576c 100%
-                    );
-                  "
-                >
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M7.52 21.48C4.25 19.94 1.91 16.76 1.55 13H.05C.56 19.16 5.71 24 12 24l.66-.03-3.81-3.81-1.33 1.32zm.89-6.52c-.19 0-.37-.03-.52-.08-.16-.06-.29-.13-.4-.24-.11-.1-.2-.22-.26-.37-.06-.14-.09-.3-.09-.47h-1.3c0 .36.07.68.21.95.14.27.33.5.56.69.24.18.51.32.82.41.3.1.62.15.96.15.37 0 .72-.05 1.03-.15.32-.1.6-.25.83-.44s.42-.43.55-.72c.13-.29.2-.61.2-.97 0-.19-.02-.38-.07-.56-.05-.18-.12-.35-.23-.51-.1-.16-.24-.3-.4-.43-.17-.13-.37-.23-.61-.31.2-.09.37-.2.52-.33.15-.13.27-.27.37-.42.1-.15.17-.3.22-.46.05-.16.07-.32.07-.48 0-.36-.06-.68-.18-.96-.12-.28-.29-.51-.51-.69-.2-.19-.47-.33-.77-.43C9.1 8.05 8.76 8 8.39 8c-.36 0-.69.05-1 .16-.3.11-.57.26-.79.45-.21.19-.38.41-.51.67-.12.26-.18.54-.18.85h1.3c0-.17.03-.32.09-.45s.14-.25.25-.34c.11-.09.23-.17.38-.22.15-.05.3-.08.48-.08.4 0 .7.1.89.31.19.2.29.49.29.86 0 .18-.03.34-.08.49-.05.15-.14.27-.25.37-.11.1-.25.18-.41.24-.16.06-.36.09-.58.09H7.5v1.03h.77c.22 0 .42.02.6.07s.33.13.45.23c.12.11.22.24.29.4.07.16.1.35.1.57 0 .41-.12.72-.35.93-.23.23-.55.33-.95.33zm8.55-5.92c-.32-.33-.7-.59-1.14-.77-.43-.18-.92-.27-1.46-.27H12v8h2.3c.55 0 1.06-.09 1.51-.27.45-.18.84-.43 1.16-.76.32-.33.57-.73.74-1.19.17-.47.26-.99.26-1.57v-.4c0-.58-.09-1.1-.26-1.57-.18-.47-.43-.87-.75-1.2zm-.39 3.16c0 .42-.05.79-.14 1.13-.1.33-.24.62-.43.85-.19.23-.43.41-.71.53-.29.12-.62.18-.99.18h-.91V9.12h.97c.72 0 1.27.23 1.64.69.38.46.57 1.12.57 1.99v.4zM12 0l-.66.03 3.81 3.81 1.33-1.33c3.27 1.55 5.61 4.72 5.96 8.48h1.5C23.44 4.84 18.29 0 12 0z"
-                    />
-                  </svg>
-                </div>
-                <div class="framework-content">
-                  <span class="framework-badge">Framework</span>
-                  <h4>STEAM Integration</h4>
-                  <p>
-                    Comprehensive STEAM education approach with PBL, makerspace
-                    guidelines, and competition preparation
-                  </p>
-                  <span class="framework-link">View Document →</span>
-                </div>
-              </a>
-              <!-- AI Competency -->
-              <a
-                href="https://docs.google.com/document/d/12sYAJUSea8KUFl5cD6iYKi6U5D1OOleEu3ka6EKDd4s/edit?usp=sharing"
-                target="_blank"
-                class="framework-item"
-              >
-                <div
-                  class="framework-image"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #4facfe 0%,
-                      #00f2fe 100%
-                    );
-                  "
-                >
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M21 10.12h-6.78l2.74-2.82c-2.73-2.7-7.15-2.8-9.88-.1-2.73 2.71-2.73 7.08 0 9.79s7.15 2.71 9.88 0C18.32 15.65 19 14.08 19 12.1h2c0 1.98-.88 4.55-2.64 6.29-3.51 3.48-9.21 3.48-12.72 0-3.5-3.47-3.53-9.11-.02-12.58s9.14-3.47 12.65 0L21 3v7.12zM12.5 8v4.25l3.5 2.08-.72 1.21L11 13V8h1.5z"
-                    />
-                  </svg>
-                </div>
-                <div class="framework-content">
-                  <span class="framework-badge">Framework</span>
-                  <h4>AI Competency</h4>
-                  <p>
-                    Teacher and student AI competency framework with
-                    institutional maturity assessment guidelines
-                  </p>
-                  <span class="framework-link">View Document →</span>
-                </div>
-              </a>
-              <!-- Digital Citizenship -->
-              <a
-                href="https://docs.google.com/document/d/16igD73jJbgW4gSqjBDw7uffw4JWyOqbrC1dol4BSW8k/edit?usp=sharing"
-                target="_blank"
-                class="framework-item"
-              >
-                <div
-                  class="framework-image"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #f6d365 0%,
-                      #fda085 100%
-                    );
-                  "
-                >
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
-                    />
-                  </svg>
-                </div>
-                <div class="framework-content">
-                  <span class="framework-badge">Framework</span>
-                  <h4>Digital Citizenship</h4>
-                  <p>
-                    Integrated approach to digital citizenship education
-                    covering online safety, privacy, and academic integrity
-                  </p>
-                  <span class="framework-link">View Document →</span>
-                </div>
-              </a>
-              <!-- Assessment Policy -->
-              <a
-                href="https://docs.google.com/document/d/1qUux1fMQ7Csmex3Gxt9DMhLYmsXXAbTUb566dprRPxc/edit?usp=sharing"
-                target="_blank"
-                class="framework-item"
-              >
-                <div
-                  class="framework-image"
-                  style="
-                    background: linear-gradient(
-                      135deg,
-                      #a8edea 0%,
-                      #fed6e3 100%
-                    );
-                  "
-                >
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
-                    />
-                  </svg>
-                </div>
-                <div class="framework-content">
-                  <span class="framework-badge">Policy</span>
-                  <h4>Assessment Policy</h4>
-                  <p>
-                    Comprehensive assessment guidelines covering grading,
-                    homework, reporting schedules, and Cambridge alignment
-                  </p>
-                  <span class="framework-link">View Document →</span>
-                </div>
-              </a>
-            </div>
-          </div>
-
           <!-- Coming Soon Card (admin only — hidden via JS if needed) -->
           <div class="card card-coming-soon" id="comingSoonCard">
             <div class="coming-soon-content">
@@ -4401,6 +4239,13 @@
         // real card list. They carry data-card-id so admins can sweep
         // them into a category via the Manage Cards modal.
         const comingSoon = document.getElementById('comingSoonCard');
+        // Pick a short uppercase badge label from the page label/key
+        const badgeFor = (it) => {
+          const src = (it.label || it.key || '').toString();
+          const m = src.match(/^([A-Z][a-zA-Z0-9-]*)/);
+          const w = (m ? m[1] : src.split(/\s|-/)[0] || 'Page').toUpperCase();
+          return w.length > 14 ? w.slice(0, 14) : w;
+        };
         items.forEach(it => {
           if (grid.querySelector(`[data-card-id="auto_${it.key}"]`)) return; // already inserted
           const a = document.createElement('a');
@@ -4410,7 +4255,10 @@
           a.dataset.navKey = it.key;
           a.dataset.cardId = 'auto_' + it.key;
           a.innerHTML = `
-            <div class="card-content" style="padding:18px">
+            <div class="card-image-strip">
+              <span class="card-badge">${escapeHtml(badgeFor(it))}</span>
+            </div>
+            <div class="card-content">
               <div class="card-arrow">
                 <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
               </div>
