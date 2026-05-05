@@ -686,6 +686,7 @@ const NAV_ITEMS = [
     { key: 'cambridge-school-quality',href: '/cambridge-school-quality',label: 'Cambridge School Quality' },
     { key: 'rapor-pendidikan-2025',   href: '/rapor-pendidikan-2025',   label: 'Rapor Pendidikan 2025' },
     { key: 'ai-prompts',              href: '/ai-prompts',              label: 'AI Prompts' },
+    { key: 'surveys',                 href: '/surveys',                 label: 'My Surveys' },
     { key: 'student-survey',          href: '/student-survey',          label: 'Student Survey' },
     { key: 'staff-survey',            href: '/staff-survey',            label: 'Staff Survey' },
     { key: 'parent-survey',           href: '/parent-survey',           label: 'Parent Survey' },

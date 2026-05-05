@@ -232,13 +232,29 @@ function applyPageAccessGating(configs, userSubRoles) {
     return userSubRoles.some(r => vt.includes(r));
   };
 
-  // 1. Navbar items — anything with [data-nav-key] is a candidate.
+  // 1. Desktop navbar items — anything with [data-nav-key] is a candidate.
   document.querySelectorAll('[data-nav-key]').forEach(el => {
     const key = (el.getAttribute('data-nav-key') || '').toLowerCase();
     if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
     if (!configs.has(key)) return; // unknown to config — leave alone
     if (!isAllowed(configs.get(key))) {
       el.setAttribute('data-pa-hidden', '1');
+    } else {
+      el.removeAttribute('data-pa-hidden');
+    }
+  });
+
+  // 1b. Mobile drawer items — built dynamically by navbar-loader.js
+  //     with [data-mobile-nav-key]. Mirror the same gating so the
+  //     hamburger menu doesn't surface links the user can't open.
+  document.querySelectorAll('[data-mobile-nav-key]').forEach(el => {
+    const key = (el.getAttribute('data-mobile-nav-key') || '').toLowerCase();
+    if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
+    if (!configs.has(key)) return;
+    if (!isAllowed(configs.get(key))) {
+      el.setAttribute('data-pa-hidden', '1');
+    } else {
+      el.removeAttribute('data-pa-hidden');
     }
   });
 
@@ -273,6 +289,26 @@ function applyPageAccessGating(configs, userSubRoles) {
     const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
     if (allHidden) col.setAttribute('data-pa-hidden', '1');
     else            col.removeAttribute('data-pa-hidden');
+  });
+
+  // 5. Empty mobile section headers — mobile drawer uses sibling
+  //    `<div class="ah-mobile-section-header">` followed by ah-mobile-menu-item
+  //    siblings (no wrapper). Walk forward from each header until the next
+  //    header or divider; if every interactive sibling is hidden, hide the
+  //    header too.
+  document.querySelectorAll('.ah-mobile-section-header').forEach(header => {
+    let allHidden = true;
+    let any = false;
+    let n = header.nextElementSibling;
+    while (n && !n.classList.contains('ah-mobile-section-header') && !n.classList.contains('ah-mobile-divider')) {
+      if (n.hasAttribute('data-mobile-nav-key')) {
+        any = true;
+        if (n.getAttribute('data-pa-hidden') !== '1') { allHidden = false; break; }
+      }
+      n = n.nextElementSibling;
+    }
+    if (any && allHidden) header.setAttribute('data-pa-hidden', '1');
+    else                  header.removeAttribute('data-pa-hidden');
   });
 }
 
