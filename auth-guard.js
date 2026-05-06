@@ -441,6 +441,18 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
+  // 1b. Career applicant guard. TH `/careers-apply` uses
+  // sendSignInLinkToEmail to mail candidates a magic-link for application
+  // tracking. That sign-in must NEVER provision an Academic Hub profile —
+  // applicants are not staff. Detected via providerData carrying
+  // 'emailLink'. Redirect to TH careers-status host without creating a
+  // users/{uid} doc.
+  const isEmailLinkUser = user.providerData.some(p => p.providerId === 'emailLink');
+  if (isEmailLinkUser) {
+    window.location.replace('https://teachershub.eduversal.org/careers-status');
+    return;
+  }
+
   // 2. Fetch (or create) Firestore profile
   let profile;
   const userRef = doc(db, 'users', user.uid);
