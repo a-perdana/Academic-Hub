@@ -663,7 +663,6 @@ async function findOrCreateAppraisal(profile) {
   if (!schoolId) return null;
   let schoolName = null;
   try { const s = await getDoc(doc(window.db, 'partner_schools', schoolId)); if (s.exists()) schoolName = s.data().name || schoolId; } catch(_) {}
-  if (!schoolName) { try { const s = await getDoc(doc(window.db, 'schools', schoolId)); if (s.exists()) schoolName = s.data().name || schoolId; } catch(_) {} }
   if (!schoolName) return null;
   const currentYear = '2025-2026';
   const snap = await getDocs(query(collection(window.db, 'school_appraisals_v2'), where('schoolId','==',schoolId), where('academicYear','==',currentYear)));
