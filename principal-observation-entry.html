@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principal Observation Entry — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
+  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
+  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+
+.page-wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
+  color: #fff; padding: 32px 28px; border-radius: 16px;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%);
+}
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 700px; margin: 0; }
+
+.context-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 24px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+}
+.ctx-row { display: flex; flex-direction: column; gap: 2px; }
+.ctx-label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.ctx-value { font-size: 14px; color: var(--ink); font-weight: 500; }
+.ctx-row select, .ctx-row input {
+  padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px;
+  font-family: inherit; font-size: 14px; background: var(--white); color: var(--ink);
+}
+.ctx-row select:focus, .ctx-row input:focus { outline: none; border-color: var(--accent); }
+
+.focus-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.focus-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 14px 0 0 14px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dk));
+}
+.focus-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+.focus-id   { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: var(--accent-dk); padding: 2px 8px; background: var(--accent-2); border-radius: 6px; }
+.focus-title{ font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; flex: 1; }
+.focus-q    { font-style: italic; font-size: 13px; color: var(--ink-2); margin-bottom: 12px; padding-left: 14px; border-left: 3px solid var(--accent-2); }
+.focus-prompt { font-size: 13px; color: var(--ink-2); margin-bottom: 14px; }
+
+.code-row { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.code-pill {
+  cursor: pointer; padding: 9px 18px; border: 2px solid var(--border);
+  border-radius: 10px; background: var(--white); color: var(--ink-2);
+  font-size: 13px; font-weight: 600; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.code-pill .code-letter { font-family: 'DM Mono', monospace; font-weight: 800; }
+.code-pill:hover { border-color: var(--accent); }
+.code-pill.active.E { background: #d1fae5; border-color: #10b981; color: #065f46; }
+.code-pill.active.D { background: #fef3c7; border-color: #d97706; color: #92400e; }
+.code-pill.active.N { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+
+.indicator-list { margin: 12px 0 14px 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+.indicator-list li { margin-bottom: 4px; }
+.indicator-list-toggle {
+  background: none; border: none; cursor: pointer;
+  font-size: 11.5px; font-weight: 600; color: var(--accent-dk);
+  padding: 4px 8px; border-radius: 6px; margin-bottom: 6px;
+  display: inline-flex; align-items: center; gap: 4px; font-family: inherit;
+}
+.indicator-list-toggle:hover { background: var(--accent-2); }
+
+.notes-area {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-family: inherit; font-size: 13px; color: var(--ink); background: var(--paper);
+  outline: none; resize: vertical; min-height: 60px; line-height: 1.55;
+}
+.notes-area:focus { border-color: var(--accent); background: var(--white); }
+
+.refs-row { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; font-size: 11px; }
+.refs-row .hb-tag {
+  display: inline-flex; padding: 3px 9px; border-radius: 999px; font-family: 'DM Mono', monospace;
+  font-size: 10.5px; font-weight: 500;
+}
+.refs-row .hb-tag.skl  { background: #d1fae5; color: #065f46; cursor: pointer; }
+.refs-row .hb-tag.pigp { background: #fee2e2; color: #991b1b; cursor: pointer; }
+.refs-row .hb-tag.cts  { background: #ede9fe; color: #4c1d95; cursor: pointer; }
+.refs-row .ref-text    { background: #f3f4f6; color: var(--ink-2); padding: 3px 9px; border-radius: 999px; font-size: 11px; }
+
+/* Narrative section */
+.narrative-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+}
+.narrative-card h3 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; margin: 0 0 4px; }
+.narrative-card .help { font-size: 12.5px; color: var(--ink-3); margin: 0 0 12px; line-height: 1.55; }
+
+/* Sticky action bar */
+.action-bar {
+  position: sticky; bottom: 0; background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
+  padding: 14px 0; margin: 24px -20px 0; padding: 14px 20px;
+  display: flex; gap: 12px; align-items: center; justify-content: flex-end;
+}
+.action-bar .progress-info { margin-right: auto; font-size: 12.5px; color: var(--ink-3); }
+.action-bar .progress-info strong { color: var(--ink); }
+.btn {
+  padding: 10px 22px; border: none; border-radius: 9px; cursor: pointer;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  transition: transform 0.1s, background 0.15s;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dk); }
+.btn-secondary { background: #f3f4f6; color: var(--ink); border: 1px solid var(--border); }
+.btn-secondary:hover { background: #e5e7eb; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: #fff; padding: 11px 22px; border-radius: 10px;
+  font-size: 13px; font-weight: 500; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #dc2626; }
+
+.loading-state, .access-denied {
+  text-align: center; padding: 80px 20px; color: var(--ink-3);
+}
+.access-denied { color: #991b1b; }
+.access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+
+@media (max-width: 700px) {
+  .page-header { padding: 22px 18px; }
+  .focus-card { padding: 18px 16px; }
+  .code-pill { flex: 1; justify-content: center; }
+}
+</style>
+</head>
+<body style="display:none">
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="eyebrow">Principal Observation Entry · 8-foci rubric</div>
+    <h1>Annual Leadership Observation</h1>
+    <p>Formative coding (Established / Developing / Not yet) across 8 foci of the Principal Observation Rubric. No score is computed — narrative + coding feeds the annual appraisal conversation.</p>
+  </div>
+
+  <div id="content"><div class="loading-state">Loading rubric…</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, doc, getDoc, setDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// URL params: ?principalUid=X[&visitType=...&obsId=...]
+const params = new URLSearchParams(window.location.search);
+const PRINCIPAL_UID = params.get('principalUid');
+const VISIT_TYPE   = params.get('visitType') || 'scheduled_appraisal_visit';
+const OBS_ID       = params.get('obsId'); // present when editing existing draft
+
+let rubric = null;
+let principal = null;
+let observerProfile = null;
+let formData = {
+  foci: {},          // { P1: { code: 'E', notes: '...' }, ... }
+  narratives: {},    // { PNF1: '...', ... }
+  visitDate: '',
+  visitType: VISIT_TYPE,
+  status: 'draft',
+};
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('observation-entry', { user, profile });
+  }
+  observerProfile = profile;
+  document.body.style.display = '';
+
+  // Access check — must be observer-eligible role for principals.
+  // Allowed: academic_admin, foundation_representative, central_admin (cross-platform).
+  const ahSubs = profile?.ah_sub_roles || [];
+  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const eligible = isAdmin || ahSubs.includes('foundation_representative');
+  if (!eligible) {
+    showAccessDenied('This observation form is restricted to Foundation Representatives and Academic Admins.');
+    return;
+  }
+
+  if (!PRINCIPAL_UID) {
+    showAccessDenied('Missing principalUid in URL. Open this form from the principal\'s record or the appraisal cycle.');
+    return;
+  }
+
+  try {
+    // 1. Fetch the rubric (cross-origin from CH /references-data so we don't
+    //    have to mirror the JSON into AH's repo).
+    const rubricRes = await fetch('https://centralhub.eduversal.org/references-data/frameworks/principal-observation-rubric.json');
+    if (!rubricRes.ok) throw new Error('Could not load rubric (HTTP ' + rubricRes.status + ')');
+    rubric = await rubricRes.json();
+
+    // 2. Fetch principal profile for context display
+    const pSnap = await getDoc(doc(window.db, 'users', PRINCIPAL_UID));
+    if (pSnap.exists()) principal = pSnap.data();
+
+    // 3. If editing existing draft, load it
+    if (OBS_ID) {
+      const oSnap = await getDoc(doc(window.db, 'principal_observations', OBS_ID));
+      if (oSnap.exists()) {
+        const d = oSnap.data();
+        if (d.principalUid !== PRINCIPAL_UID) {
+          showAccessDenied('Observation does not match principalUid in URL.');
+          return;
+        }
+        formData = { ...formData, ...d };
+        if (d.status === 'submitted') {
+          showAccessDenied('This observation is already submitted and immutable. Open the next visit\'s form to record a new observation.');
+          return;
+        }
+      }
+    }
+
+    render();
+  } catch (err) {
+    console.error('boot', err);
+    document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown error')}</p></div>`;
+  }
+});
+
+function render() {
+  const root = document.getElementById('content');
+  root.innerHTML = `
+    <div class="context-card">
+      <div class="ctx-row">
+        <span class="ctx-label">Principal</span>
+        <span class="ctx-value">${escapeHtml(principal?.displayName || PRINCIPAL_UID)}</span>
+      </div>
+      <div class="ctx-row">
+        <span class="ctx-label">School</span>
+        <span class="ctx-value">${escapeHtml(principal?.school || '—')}</span>
+      </div>
+      <div class="ctx-row">
+        <label class="ctx-label" for="visitDate">Visit date</label>
+        <input type="date" id="visitDate" value="${escapeHtml(formData.visitDate || '')}">
+      </div>
+      <div class="ctx-row">
+        <label class="ctx-label" for="visitType">Visit type</label>
+        <select id="visitType">
+          ${(rubric.visit_types || []).map(t => `<option value="${escapeHtml(t)}"${formData.visitType === t ? ' selected' : ''}>${escapeHtml(t.replace(/_/g, ' '))}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+
+    ${(rubric.foci || []).map(f => renderFocus(f)).join('')}
+    ${renderNarrativeSection()}
+
+    <div class="action-bar">
+      <div class="progress-info" id="progressInfo">—</div>
+      <button class="btn btn-secondary" id="btnSaveDraft">Save draft</button>
+      <button class="btn btn-primary" id="btnSubmit">Submit observation</button>
+    </div>
+  `;
+
+  // Wire visit context
+  document.getElementById('visitDate').addEventListener('change', e => { formData.visitDate = e.target.value; updateProgress(); });
+  document.getElementById('visitType').addEventListener('change', e => { formData.visitType = e.target.value; });
+
+  // Wire each focus
+  (rubric.foci || []).forEach(f => wireFocus(f));
+  // Wire narratives
+  (rubric.narrative_fields || []).forEach(nf => {
+    const ta = document.getElementById('narr-' + nf.id);
+    if (ta) ta.addEventListener('input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
+  });
+
+  document.getElementById('btnSaveDraft').addEventListener('click', () => save('draft'));
+  document.getElementById('btnSubmit').addEventListener('click', () => save('submitted'));
+
+  updateProgress();
+}
+
+function renderFocus(f) {
+  const cur = formData.foci[f.id] || {};
+  const codes = (rubric.response_options || []).map(opt => `
+    <button class="code-pill ${opt.code} ${cur.code === opt.code ? 'active' : ''}"
+            data-focus="${escapeAttr(f.id)}" data-code="${escapeAttr(opt.code)}"
+            title="${escapeAttr(opt.description)}">
+      <span class="code-letter">${escapeHtml(opt.code)}</span>
+      <span>${escapeHtml(opt.label)}</span>
+    </button>
+  `).join('');
+
+  const indicators = (f.evidence_indicators || []).map(i => `<li>${escapeHtml(i)}</li>`).join('');
+  const refs = [
+    ...(f.regulatory_anchor || []).map(r => regChip(r)),
+    ...(f.theory_basis ? [`<span class="ref-text" title="${escapeAttr(f.theory_basis)}">${escapeHtml(f.theory_basis.slice(0, 80))}${f.theory_basis.length > 80 ? '…' : ''}</span>`] : []),
+  ].join('');
+
+  return `
+    <div class="focus-card" id="focus-${escapeAttr(f.id)}">
+      <div class="focus-head">
+        <span class="focus-id">${escapeHtml(f.id)}</span>
+        <h2 class="focus-title">${escapeHtml(f.title || '')}</h2>
+      </div>
+      ${f.guiding_question ? `<div class="focus-q">${escapeHtml(f.guiding_question)}</div>` : ''}
+      ${f.prompt_for_observer ? `<div class="focus-prompt">${escapeHtml(f.prompt_for_observer)}</div>` : ''}
+
+      <div class="code-row">${codes}</div>
+
+      ${indicators ? `
+        <button class="indicator-list-toggle" data-toggle-ind="${escapeAttr(f.id)}" type="button">
+          ${cur._indOpen ? '▾' : '▸'} Evidence indicators (${(f.evidence_indicators || []).length})
+        </button>
+        <ul class="indicator-list" id="ind-${escapeAttr(f.id)}" style="display:${cur._indOpen ? 'block' : 'none'};">${indicators}</ul>
+      ` : ''}
+
+      <textarea class="notes-area"
+                id="notes-${escapeAttr(f.id)}"
+                placeholder="Observer notes — what did you see / hear / read? Quote evidence if possible.">${escapeHtml(cur.notes || '')}</textarea>
+
+      ${refs ? `<div class="refs-row">${refs}</div>` : ''}
+    </div>
+  `;
+}
+
+function regChip(ref) {
+  const upper = String(ref).toUpperCase();
+  if (upper.includes('PIGP')) return '<span class="hb-tag pigp">PIGP</span>';
+  if (upper.includes('SKL') || upper.includes('PERMENDIKDASMEN_10_2025')) return '<span class="hb-tag skl">SKL</span>';
+  if (/CTS\s*\d/.test(ref)) {
+    const m = ref.match(/CTS\s*(\d+\.\d+)/);
+    return m ? `<span class="hb-tag cts" title="Cambridge Teacher Standards CTS ${m[1]}">CTS ${m[1]}</span>` : `<span class="ref-text">${escapeHtml(ref)}</span>`;
+  }
+  return `<span class="ref-text" title="${escapeAttr(ref)}">${escapeHtml(String(ref).replace(/_/g, ' ').slice(0, 32))}</span>`;
+}
+
+function wireFocus(f) {
+  // Code pills
+  document.querySelectorAll(`[data-focus="${cssEsc(f.id)}"]`).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.dataset.code;
+      formData.foci[f.id] = { ...(formData.foci[f.id] || {}), code };
+      // toggle active style without full re-render
+      btn.parentElement.querySelectorAll('.code-pill').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      updateProgress();
+    });
+  });
+
+  // Notes textarea
+  const ta = document.getElementById('notes-' + f.id);
+  if (ta) ta.addEventListener('input', e => {
+    formData.foci[f.id] = { ...(formData.foci[f.id] || {}), notes: e.target.value };
+    updateProgress();
+  });
+
+  // Indicator list toggle
+  const tBtn = document.querySelector(`[data-toggle-ind="${cssEsc(f.id)}"]`);
+  if (tBtn) tBtn.addEventListener('click', () => {
+    const list = document.getElementById('ind-' + f.id);
+    if (!list) return;
+    const open = list.style.display !== 'none';
+    list.style.display = open ? 'none' : 'block';
+    tBtn.textContent = (open ? '▸' : '▾') + ' ' + tBtn.textContent.slice(2);
+    formData.foci[f.id] = { ...(formData.foci[f.id] || {}), _indOpen: !open };
+  });
+}
+
+function renderNarrativeSection() {
+  return `
+    <div class="narrative-card">
+      <h3>Narrative</h3>
+      <p class="help">The conversation lives here. Specific, evidence-anchored observations always beat scores.</p>
+      ${(rubric.narrative_fields || []).map(nf => `
+        <div style="margin-bottom:14px;">
+          <label class="ctx-label" for="narr-${escapeAttr(nf.id)}" style="display:block;margin-bottom:6px;">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
+          <p style="font-size:12px;color:var(--ink-3);margin:0 0 6px;line-height:1.5;">${escapeHtml(nf.description || '')}</p>
+          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(formData.narratives[nf.id] || '')}</textarea>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function updateProgress() {
+  const totalFoci = (rubric.foci || []).length;
+  const codedFoci = Object.values(formData.foci).filter(v => v && v.code).length;
+  const totalNarr = (rubric.narrative_fields || []).filter(n => n.required).length;
+  const filledNarr = (rubric.narrative_fields || []).filter(n => n.required && (formData.narratives[n.id] || '').trim().length > 0).length;
+  const dateOk = !!formData.visitDate;
+  const info = document.getElementById('progressInfo');
+  if (info) info.innerHTML = `<strong>${codedFoci}/${totalFoci}</strong> foci coded · <strong>${filledNarr}/${totalNarr}</strong> required narratives · visit date ${dateOk ? '✓' : '⌛'}`;
+}
+
+async function save(targetStatus) {
+  if (targetStatus === 'submitted') {
+    // Validate
+    const missing = [];
+    if (!formData.visitDate) missing.push('visit date');
+    const requiredNarr = (rubric.narrative_fields || []).filter(n => n.required);
+    requiredNarr.forEach(n => {
+      if (!(formData.narratives[n.id] || '').trim()) missing.push(`"${n.label}"`);
+    });
+    if (missing.length) {
+      toast('Missing: ' + missing.join(', '), true);
+      return;
+    }
+    if (!confirm('Submitting will lock this observation (immutable). Continue?')) return;
+  }
+
+  const id = OBS_ID || `${PRINCIPAL_UID}_${Date.now()}`;
+  const payload = {
+    principalUid: PRINCIPAL_UID,
+    schoolId: principal?.schoolId || null,
+    observerUid: window.currentUser.uid,
+    observerName: observerProfile?.displayName || null,
+    observerRole: observerProfile?.ah_sub_roles?.includes('foundation_representative') ? 'foundation_representative'
+                : (observerProfile?.role_academichub === 'academic_admin' ? 'academic_admin' : 'central_admin'),
+    visitDate: formData.visitDate,
+    visitType: formData.visitType,
+    foci: cleanFoci(formData.foci),
+    narratives: { ...formData.narratives },
+    rubricVersion: rubric.version || '1.0',
+    status: targetStatus,
+    updatedAt: serverTimestamp(),
+  };
+  if (targetStatus === 'submitted') payload.submittedAt = serverTimestamp();
+
+  const btnSubmit = document.getElementById('btnSubmit');
+  const btnDraft  = document.getElementById('btnSaveDraft');
+  if (btnSubmit) btnSubmit.disabled = true;
+  if (btnDraft)  btnDraft.disabled  = true;
+
+  try {
+    await setDoc(doc(window.db, 'principal_observations', id), payload, { merge: true });
+    toast(targetStatus === 'submitted' ? 'Observation submitted ✓' : 'Draft saved ✓');
+    if (targetStatus === 'submitted') {
+      setTimeout(() => { window.location.href = '/team-induction'; }, 1200);
+    }
+  } catch (err) {
+    console.error('save', err);
+    toast('Could not save: ' + (err.message || err.code), true);
+  } finally {
+    if (btnSubmit) btnSubmit.disabled = false;
+    if (btnDraft)  btnDraft.disabled  = false;
+  }
+}
+
+function cleanFoci(foci) {
+  // Drop the UI-only _indOpen flag before persisting
+  const out = {};
+  Object.keys(foci).forEach(k => {
+    const { _indOpen, ...rest } = foci[k];
+    out[k] = rest;
+  });
+  return out;
+}
+
+function showAccessDenied(msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `
+    <div class="access-denied">
+      <h2>Cannot open form</h2>
+      <p>${escapeHtml(msg)}</p>
+    </div>
+  `;
+}
+
+function toast(msg, isErr) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', !!isErr);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function escapeAttr(s) { return escapeHtml(s); }
+function cssEsc(s) { return String(s).replace(/[^A-Za-z0-9_-]/g, ''); }
+</script>
+</body>
+</html>
