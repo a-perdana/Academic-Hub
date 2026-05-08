@@ -84,6 +84,12 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
 
 .loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
 .access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+@media (max-width: 720px) {
+  .page-header { padding: 22px 18px; }
+  .composite-banner { grid-template-columns: 1fr; gap: 8px; padding: 18px 20px; }
+  .composite-banner .helper { display: none; }
+  .focus-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body style="display:none">

@@ -49,6 +49,12 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
 .empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
 .loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
 .access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+@media (max-width: 720px) {
+  .page-header { padding: 22px 18px; }
+  .session-card { padding: 18px 16px; }
+  .session-head { flex-direction: column; gap: 4px; align-items: flex-start; }
+  .commit-item { grid-template-columns: 1fr; gap: 4px; }
+}
 </style>
 </head>
 <body style="display:none">

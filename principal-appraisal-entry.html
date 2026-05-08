@@ -157,6 +157,20 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
 .loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
 .access-denied { color: #991b1b; }
 .access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+
+@media (max-width: 720px) {
+  .page-header { padding: 22px 18px; }
+  .summary-card { grid-template-columns: 1fr auto; gap: 14px; padding: 18px 20px; }
+  .summary-card > div:nth-child(2) { display: none; }
+  .summary-card .value { font-size: 1.5rem; }
+  .summary-card .band { font-size: 1.5rem; padding: 10px 16px; min-width: 56px; }
+  .framework-card, .narrative-card { padding: 18px 16px; }
+  .item-row { grid-template-columns: 1fr; }
+  .score-row { width: 100%; }
+  .score-pill { flex: 1; min-width: 0; }
+  .action-bar { flex-wrap: wrap; }
+  .action-bar .progress-info { flex: 1 100%; margin-bottom: 8px; }
+}
 </style>
 </head>
 <body style="display:none">
