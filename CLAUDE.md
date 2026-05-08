@@ -131,6 +131,10 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 | `induction_journal/{entryId}` | Principal's weekly reflection. **Charter NN2: HQ never reads named entries.** | owner (mentee) |
 | `induction_pulses/{pulseId}` | Weekly mood pulse. Read aggregated by `TeamInduction.html` for school-pulse roll-up + 2-consecutive-low alarm. | owner; school leader read-roll-up |
 | `induction_programs/{programId}` | 3 handbook templates. Read by `MyInduction.html`. | central_admin via seed only |
+| `principal_observations/{obsId}` | 8-foci E/D/N rubric written by `principal-observation-entry`. Submitted = immutable. Audience: principal (own), observer (own), same-school AH leadership, central_admin. | Foundation Rep (observer) |
+| `principal_annual_appraisals/{principalUid}_{academicYear}` | F1-F5 + F_LEAD weighted composite + A-F band. Composite + percent + band persisted alongside raw scores. Submitted = immutable. | Foundation Rep (appraiser) |
+| `principal_360_cycles/{cycleId}` · `principal_360_responses/{respId}` · `principal_360_aggregates/{cycleId}` | Anonymous 360 cycle. Responses persist NO respondent uid (NN5). Aggregates threshold-gated (5+ per cohort). Cloud Function planned. | various — see root CLAUDE.md |
+| `principal_coaching_sessions/{principalUid}_{YYYY-MM-DD}` | Mentor session form lives in CH; AH `/principal-coaching-view` reads-only. Foundation Reps **excluded at rule level** for coaching confidentiality. | mentor (HQ Director — CH) |
 
 **Timestamp:** `createdAt` (serverTimestamp). NEVER `timestamp`.
 
@@ -172,6 +176,13 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 - Communications: `AcademicCalendar` (`/academic-calendar`), `announcements`, `messageboard` (`/message-board`), `documents`
 - CPD: `CompetencyFramework` (`/competency-framework`), `LearningPath` (`/learning-path`), `MyPortfolio` (`/my-portfolio`), `MyCertificates` (`/my-certificates`)
 - Induction: `MyInduction` (`/my-induction`), `TeamInduction` (`/team-induction`), `ObservationEntry` (`/observation-entry`), `handbook`
+- **References (2026-05-09):** `references` — narrowed AH variant (3 tabs · 16 docs). Fetches references-data cross-origin from CH (CORS-open).
+- **Principal Evaluation (Phase-2, 2026-05-09):**
+  - `principal-observation-entry` — 8-foci E/D/N rubric form (FR-only). Source: `principal-observation-rubric.json`. Doc id auto. Submitted = immutable.
+  - `principal-appraisal-entry` — F1-F5 + F_LEAD weighted appraisal (FR-only). Source: `principal-appraisal-framework-v1.json`. Doc id `{principalUid}_{academicYear}`. Composite + A-F band auto-computed. Submitted = immutable.
+  - `principal-360-respond?cycle=X&cohort=staff|parent|student` — anonymous respondent form. Open to any auth user (cycle gating in rule). Idempotency via localStorage hint.
+  - `principal-360-results?cycle=X` — aggregate read-only view (SP + FR). Threshold-gated (5+ respondents/cohort). Cloud Function `aggregatePrincipal360Responses` planned.
+  - `principal-coaching-view` — coachee read-only view of own coaching sessions (school_principal only). Mentor session form lives in CH (`/principal-coaching-session`).
 - Reference: `weekly-checklist`, `cambridge-calendar`, `cambridge-standards`, `library`, `academic-services`
 
 ---
