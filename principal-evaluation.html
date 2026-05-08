@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principal Evaluation — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
+  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
+  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+.page-wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 80px; }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
+  color: #fff; padding: 32px 28px; border-radius: 16px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.page-header::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 700px; margin: 0; }
+
+.toolbar {
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 18px; margin-bottom: 18px; display: flex; gap: 14px; align-items: center;
+  font-size: 13px; color: var(--ink-2);
+}
+.toolbar input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 14px; flex: 1; max-width: 360px; }
+.toolbar input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-2); }
+
+.principal-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 12px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
+}
+.p-info .name { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin: 0 0 2px; }
+.p-info .school { font-size: 12.5px; color: var(--ink-3); }
+.p-info .email  { font-size: 11.5px; color: var(--ink-3); font-family: 'DM Mono', monospace; }
+
+.actions { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.action-btn {
+  padding: 7px 12px; border-radius: 8px; cursor: pointer;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  border: 1px solid var(--border); background: var(--white); color: var(--ink-2);
+  text-decoration: none; transition: all 0.12s;
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.action-btn:hover { border-color: var(--accent); color: var(--accent-dk); background: var(--accent-2); transform: translateY(-1px); }
+.action-btn .ico { width: 13px; height: 13px; }
+
+.empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
+.loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
+.access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+
+@media (max-width: 720px) {
+  .page-header { padding: 22px 18px; }
+  .principal-card { grid-template-columns: 1fr; }
+  .actions { justify-content: flex-start; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar input { max-width: none; }
+}
+</style>
+</head>
+<body style="display:none">
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="eyebrow">Principal Evaluation Hub · Phase-2</div>
+    <h1>Principal Evaluation</h1>
+    <p>Launch observation, appraisal, 360° results or coaching session for any school principal in the network. Each form opens with the principal pre-bound via URL params.</p>
+  </div>
+  <div id="content"><div class="loading-state">Loading principals…</div></div>
+</div>
+
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, query, where, getDocs, doc, getDoc }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('principal-evaluation', { user, profile });
+  }
+  document.body.style.display = '';
+
+  const ahSubs = profile?.ah_sub_roles || [];
+  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  if (!isAdmin && !ahSubs.includes('foundation_representative')) {
+    showAccessDenied('Restricted to Foundation Representatives and admins.');
+    return;
+  }
+
+  try {
+    // Find users with school_principal sub-role.
+    const q = query(
+      collection(window.db, 'users'),
+      where('ah_sub_roles', 'array-contains', 'school_principal')
+    );
+    const snap = await getDocs(q);
+    let principals = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+
+    // Fetch school names for display
+    const schoolIds = [...new Set(principals.map(p => p.schoolId).filter(Boolean))];
+    const schoolMap = {};
+    for (const sid of schoolIds) {
+      try {
+        const sSnap = await getDoc(doc(window.db, 'partner_schools', sid));
+        if (sSnap.exists()) schoolMap[sid] = sSnap.data().name || sid;
+      } catch (_) { /* ignore */ }
+    }
+    principals.forEach(p => { p.schoolName = schoolMap[p.schoolId] || p.school || '—'; });
+    principals.sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
+
+    render(principals);
+  } catch (err) {
+    console.error('boot', err);
+    document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown error')}</p></div>`;
+  }
+});
+
+let allPrincipals = [];
+function render(principals) {
+  allPrincipals = principals;
+  const root = document.getElementById('content');
+  if (!principals.length) {
+    root.innerHTML = `<div class="empty">No school principals found across the network.</div>`;
+    return;
+  }
+  root.innerHTML = `
+    <div class="toolbar">
+      <input type="search" id="searchInput" placeholder="Search by name, school, or email…" autocomplete="off">
+      <span id="resultCount">${principals.length} principals</span>
+    </div>
+    <div id="cardList">${principals.map(renderCard).join('')}</div>
+  `;
+  document.getElementById('searchInput').addEventListener('input', (e) => filterPrincipals(e.target.value));
+}
+
+function filterPrincipals(qRaw) {
+  const q = qRaw.trim().toLowerCase();
+  const filtered = q
+    ? allPrincipals.filter(p => [p.displayName, p.schoolName, p.email].some(x => (x || '').toLowerCase().includes(q)))
+    : allPrincipals;
+  document.getElementById('cardList').innerHTML = filtered.map(renderCard).join('');
+  document.getElementById('resultCount').textContent = `${filtered.length} principal${filtered.length === 1 ? '' : 's'}`;
+}
+
+function renderCard(p) {
+  const uid = encodeURIComponent(p.uid);
+  return `
+    <div class="principal-card">
+      <div class="p-info">
+        <div class="name">${escapeHtml(p.displayName || p.uid)}</div>
+        <div class="school">${escapeHtml(p.schoolName)}</div>
+        <div class="email">${escapeHtml(p.email || '')}</div>
+      </div>
+      <div class="actions">
+        <a class="action-btn" href="/principal-observation-entry?principalUid=${uid}" title="Log a new observation visit">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Observe
+        </a>
+        <a class="action-btn" href="/principal-appraisal-entry?principalUid=${uid}" title="Open / draft annual appraisal">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Appraise
+        </a>
+        <a class="action-btn" href="/principal-360-results?cycle=${uid}_2025-2026_W17" title="Aggregated 360° results (most recent cycle)">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          360°
+        </a>
+      </div>
+    </div>
+  `;
+}
+
+function showAccessDenied(msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open</h2><p>${escapeHtml(msg)}</p></div>`;
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+</script>
+</body>
+</html>
