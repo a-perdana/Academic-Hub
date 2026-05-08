@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principal Annual Appraisal — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
+  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
+  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+
+.page-wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 80px; }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
+  color: #fff; padding: 32px 28px; border-radius: 16px;
+  margin-bottom: 24px; position: relative; overflow: hidden;
+}
+.page-header::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%);
+}
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 700px; margin: 0; }
+
+.context-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+}
+.ctx-row { display: flex; flex-direction: column; gap: 2px; }
+.ctx-label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.ctx-value { font-size: 14px; color: var(--ink); font-weight: 500; }
+.ctx-row select, .ctx-row input { padding: 7px 10px; border: 1px solid var(--border); border-radius: 7px; font-family: inherit; font-size: 14px; background: var(--white); }
+.ctx-row select:focus, .ctx-row input:focus { outline: none; border-color: var(--accent); }
+
+/* Composite score banner */
+.summary-card {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dk) 100%);
+  color: #fff; padding: 22px 28px; border-radius: 14px;
+  margin-bottom: 20px; display: grid; grid-template-columns: auto 1fr auto auto; gap: 24px; align-items: center;
+}
+.summary-card .label { font-size: 11px; font-weight: 600; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.1em; }
+.summary-card .value { font-family: 'Lora', serif; font-size: 2rem; font-weight: 700; line-height: 1; margin-top: 4px; }
+.summary-card .pct { font-family: 'Lora', serif; font-size: 1.25rem; font-weight: 600; line-height: 1; }
+.summary-card .band {
+  font-family: 'DM Mono', monospace; font-weight: 800; font-size: 2rem; line-height: 1;
+  padding: 12px 22px; border-radius: 12px; background: rgba(255,255,255,0.16); min-width: 70px; text-align: center;
+}
+
+.framework-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  position: relative;
+}
+.framework-card::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 4px; border-radius: 14px 0 0 14px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-dk));
+}
+.fw-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.fw-id { font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 700; color: var(--accent-dk); padding: 2px 10px; background: var(--accent-2); border-radius: 6px; }
+.fw-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; flex: 1; }
+.fw-weight { font-size: 12px; color: var(--ink-3); font-weight: 600; padding: 3px 10px; background: #f3f4f6; border-radius: 999px; }
+.fw-desc { font-size: 13px; color: var(--ink-2); margin-bottom: 14px; line-height: 1.55; }
+.fw-cambridge { font-size: 11px; color: var(--ink-3); margin-bottom: 14px; }
+.fw-cambridge .hb-tag.cts { display: inline-block; padding: 2px 8px; border-radius: 4px; background: var(--accent-2); color: var(--accent-dk); font-family: 'DM Mono', monospace; font-weight: 600; cursor: pointer; margin: 0 2px; }
+.fw-cambridge .hb-tag.cts:hover { background: #ddd6fe; }
+
+.item-row {
+  border-top: 1px solid var(--border); padding: 14px 0;
+  display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: flex-start;
+}
+.item-row:first-of-type { border-top: none; padding-top: 6px; }
+.item-info { min-width: 0; }
+.item-title { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.item-source { font-size: 11.5px; color: var(--ink-3); font-style: italic; line-height: 1.5; }
+.item-rubric-toggle {
+  background: none; border: none; cursor: pointer;
+  font-size: 11px; font-weight: 600; color: var(--accent-dk);
+  padding: 4px 8px; border-radius: 6px; margin-top: 6px;
+  display: inline-flex; align-items: center; gap: 4px; font-family: inherit;
+}
+.item-rubric-toggle:hover { background: var(--accent-2); }
+.item-rubric { display: none; margin-top: 10px; padding: 10px 14px; background: #faf5ff; border-radius: 8px; font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+.item-rubric.show { display: block; }
+.item-rubric .lvl { display: grid; grid-template-columns: 18px 1fr; gap: 8px; padding: 3px 0; }
+.item-rubric .lvl strong { font-family: 'DM Mono', monospace; color: var(--accent-dk); }
+
+.score-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.score-pill {
+  cursor: pointer; padding: 8px 14px; border: 2px solid var(--border);
+  border-radius: 9px; background: var(--white); color: var(--ink-2);
+  font-size: 12px; font-weight: 600; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 6px; min-width: 100px;
+  justify-content: center;
+}
+.score-pill .num { font-family: 'DM Mono', monospace; font-weight: 800; font-size: 13px; }
+.score-pill:hover { border-color: var(--accent); }
+.score-pill.active.s4 { background: #d1fae5; border-color: #10b981; color: #065f46; }
+.score-pill.active.s3 { background: #cffafe; border-color: #0891b2; color: #155e75; }
+.score-pill.active.s2 { background: #fef3c7; border-color: #d97706; color: #92400e; }
+.score-pill.active.s1 { background: #fee2e2; border-color: #dc2626; color: #991b1b; }
+
+.narrative-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+}
+.narrative-card h3 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; margin: 0 0 4px; }
+.narr-field { margin-bottom: 14px; }
+.narr-field label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.narr-field .help { font-size: 11.5px; color: var(--ink-3); margin-bottom: 6px; line-height: 1.5; }
+.notes-area {
+  width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-family: inherit; font-size: 13px; color: var(--ink); background: var(--paper);
+  outline: none; resize: vertical; min-height: 60px; line-height: 1.55;
+}
+.notes-area:focus { border-color: var(--accent); background: var(--white); }
+
+.action-bar {
+  position: sticky; bottom: 0; background: rgba(255,255,255,0.96);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid var(--border);
+  padding: 14px 20px; margin: 24px -20px 0;
+  display: flex; gap: 12px; align-items: center; justify-content: flex-end;
+}
+.action-bar .progress-info { margin-right: auto; font-size: 12.5px; color: var(--ink-3); }
+.action-bar .progress-info strong { color: var(--ink); }
+.btn { padding: 10px 22px; border: none; border-radius: 9px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; transition: transform 0.1s, background 0.15s; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dk); }
+.btn-secondary { background: #f3f4f6; color: var(--ink); border: 1px solid var(--border); }
+.btn-secondary:hover { background: #e5e7eb; }
+.btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: #fff; padding: 11px 22px; border-radius: 10px;
+  font-size: 13px; opacity: 0; transition: all 0.25s; pointer-events: none; z-index: 100;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.error { background: #dc2626; }
+
+.loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
+.access-denied { color: #991b1b; }
+.access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+</style>
+</head>
+<body style="display:none">
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="eyebrow">Principal Annual Appraisal · F1-F5 + F_LEAD</div>
+    <h1>Annual Leadership Review</h1>
+    <p>Principal-side annual cycle. F1 (Cadence) auto-aggregated from weekly_progress. F2 (Observation) summarises principal_observations evidence. F3 (360°) reads from principal_360. F4 + F5 + F_LEAD entered here. Composite weighted score → A-F predicate band.</p>
+  </div>
+
+  <div id="content"><div class="loading-state">Loading framework…</div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, doc, getDoc, setDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+// URL params: ?principalUid=X[&academicYear=2025-2026]
+const params = new URLSearchParams(window.location.search);
+const PRINCIPAL_UID = params.get('principalUid');
+const ACADEMIC_YEAR = params.get('academicYear') || '2025-2026';
+const DOC_ID = PRINCIPAL_UID ? `${PRINCIPAL_UID}_${ACADEMIC_YEAR}` : null;
+
+let framework = null;
+let principal = null;
+let observerProfile = null;
+let formData = {
+  scores: {},     // { 'F1-1': 3, 'F2-1': 4, ... }
+  narratives: {}, // { PNF1: '...', ... }
+  status: 'draft',
+};
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('principal-appraisal-entry', { user, profile });
+  }
+  observerProfile = profile;
+  document.body.style.display = '';
+
+  // Audience: HQ Director / Foundation Rep / academic_admin / central_admin.
+  // The Principal themselves can read but not edit (rule-level).
+  const ahSubs = profile?.ah_sub_roles || [];
+  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const eligible = isAdmin || ahSubs.includes('foundation_representative');
+  if (!eligible) {
+    showAccessDenied('This appraisal form is restricted to Foundation Representatives and Academic Admins.');
+    return;
+  }
+
+  if (!PRINCIPAL_UID) {
+    showAccessDenied('Missing principalUid in URL. Open this form from the principal\'s record or the appraisal cycle.');
+    return;
+  }
+
+  try {
+    // Fetch the framework cross-origin from CH /references-data
+    const fwRes = await fetch('https://centralhub.eduversal.org/references-data/frameworks/principal-appraisal-framework-v1.json');
+    if (!fwRes.ok) throw new Error('Could not load framework (HTTP ' + fwRes.status + ')');
+    framework = await fwRes.json();
+
+    // Fetch principal profile
+    const pSnap = await getDoc(doc(window.db, 'users', PRINCIPAL_UID));
+    if (pSnap.exists()) principal = pSnap.data();
+
+    // Load existing draft / submitted appraisal
+    const aSnap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID));
+    if (aSnap.exists()) {
+      const d = aSnap.data();
+      formData = { ...formData, ...d };
+      if (d.status === 'submitted') {
+        showAccessDenied('This appraisal is submitted and immutable. Open the next year cycle to record a new appraisal.');
+        return;
+      }
+    }
+
+    render();
+  } catch (err) {
+    console.error('boot', err);
+    document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown error')}</p></div>`;
+  }
+});
+
+function render() {
+  const root = document.getElementById('content');
+  root.innerHTML = `
+    <div class="context-card">
+      <div class="ctx-row">
+        <span class="ctx-label">Principal</span>
+        <span class="ctx-value">${escapeHtml(principal?.displayName || PRINCIPAL_UID)}</span>
+      </div>
+      <div class="ctx-row">
+        <span class="ctx-label">School</span>
+        <span class="ctx-value">${escapeHtml(principal?.school || '—')}</span>
+      </div>
+      <div class="ctx-row">
+        <span class="ctx-label">Academic year</span>
+        <span class="ctx-value">${escapeHtml(ACADEMIC_YEAR)}</span>
+      </div>
+      <div class="ctx-row">
+        <span class="ctx-label">Framework version</span>
+        <span class="ctx-value">${escapeHtml(framework.version || '1.0')}</span>
+      </div>
+    </div>
+
+    <div class="summary-card" id="summaryCard">
+      <div>
+        <div class="label">Composite</div>
+        <div class="value" id="compositeValue">—</div>
+      </div>
+      <div></div>
+      <div>
+        <div class="label">Percent</div>
+        <div class="pct" id="compositePct">—</div>
+      </div>
+      <div class="band" id="bandLetter">—</div>
+    </div>
+
+    ${(framework.frameworks || []).map(fw => renderFramework(fw)).join('')}
+    ${renderNarrativeSection()}
+
+    <div class="action-bar">
+      <div class="progress-info" id="progressInfo">—</div>
+      <button class="btn btn-secondary" id="btnSaveDraft">Save draft</button>
+      <button class="btn btn-primary" id="btnSubmit">Submit appraisal</button>
+    </div>
+  `;
+
+  // Wire framework items + score pills
+  (framework.frameworks || []).forEach(fw => wireFramework(fw));
+  (framework.narrative_fields || []).forEach(nf => {
+    const ta = document.getElementById('narr-' + nf.id);
+    if (ta) ta.addEventListener('input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
+  });
+  document.getElementById('btnSaveDraft').addEventListener('click', () => save('draft'));
+  document.getElementById('btnSubmit').addEventListener('click', () => save('submitted'));
+
+  updateProgress();
+}
+
+function renderFramework(fw) {
+  const itemsHtml = (fw.items || []).map(it => renderItem(it)).join('');
+  const cambridgeRefs = (fw.cambridge_school_leader_refs || []).map(r => {
+    // Cambridge School Leader Standards refs follow same pattern — use existing crossref hooks
+    const m = String(r).match(/CTS\s*(\d+\.\d+)/i);
+    return m ? `<span class="hb-tag cts" title="Cambridge School Leader Standards CTS ${m[1]}">CTS ${m[1]}</span>` : `<span class="hb-tag cts" title="${escapeAttr(r)}">${escapeHtml(r)}</span>`;
+  }).join(' ');
+
+  return `
+    <div class="framework-card">
+      <div class="fw-head">
+        <span class="fw-id">${escapeHtml(fw.id)}</span>
+        <h2 class="fw-title">${escapeHtml(fw.title || '')}</h2>
+        <span class="fw-weight">weight ${(fw.weight * 100).toFixed(0)}%</span>
+      </div>
+      ${fw.description ? `<div class="fw-desc">${escapeHtml(fw.description)}</div>` : ''}
+      ${cambridgeRefs ? `<div class="fw-cambridge"><strong style="color:var(--ink-2);">Cambridge anchors:</strong> ${cambridgeRefs}</div>` : ''}
+      ${itemsHtml || '<div class="item-source">No items defined for this framework yet.</div>'}
+    </div>
+  `;
+}
+
+function renderItem(it) {
+  const cur = formData.scores[it.id] || null;
+  const rubric = it.rubric || {};
+  const rubricRows = [4,3,2,1].map(n => `<div class="lvl"><strong>${n}</strong><span>${escapeHtml(rubric[n] || rubric[String(n)] || '')}</span></div>`).join('');
+
+  const pills = [4,3,2,1].map(n => {
+    const lbl = (framework.scoring_scale || []).find(s => s.value === n)?.label || `Level ${n}`;
+    return `<button class="score-pill s${n} ${cur === n ? 'active' : ''}" data-item="${escapeAttr(it.id)}" data-score="${n}" type="button">
+      <span class="num">${n}</span>
+      <span>${escapeHtml(lbl)}</span>
+    </button>`;
+  }).join('');
+
+  return `
+    <div class="item-row" id="item-${escapeAttr(it.id)}">
+      <div class="item-info">
+        <div class="item-title">${escapeHtml(it.title || it.id)}</div>
+        ${it.data_source ? `<div class="item-source">Source: ${escapeHtml(it.data_source)}</div>` : ''}
+        <button class="item-rubric-toggle" data-rubric-toggle="${escapeAttr(it.id)}" type="button">▸ Show rubric</button>
+        <div class="item-rubric" id="rubric-${escapeAttr(it.id)}">${rubricRows}</div>
+      </div>
+      <div class="score-row" style="flex-wrap:wrap;">${pills}</div>
+    </div>
+  `;
+}
+
+function wireFramework(fw) {
+  (fw.items || []).forEach(it => {
+    document.querySelectorAll(`[data-item="${cssEsc(it.id)}"]`).forEach(btn => {
+      btn.addEventListener('click', () => {
+        const score = Number(btn.dataset.score);
+        formData.scores[it.id] = score;
+        btn.parentElement.querySelectorAll('.score-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateProgress();
+      });
+    });
+    const rt = document.querySelector(`[data-rubric-toggle="${cssEsc(it.id)}"]`);
+    if (rt) rt.addEventListener('click', () => {
+      const r = document.getElementById('rubric-' + it.id);
+      if (!r) return;
+      const open = r.classList.toggle('show');
+      rt.textContent = (open ? '▾' : '▸') + ' ' + (open ? 'Hide rubric' : 'Show rubric');
+    });
+  });
+}
+
+function renderNarrativeSection() {
+  return `
+    <div class="narrative-card">
+      <h3>Narrative</h3>
+      ${(framework.narrative_fields || []).map(nf => `
+        <div class="narr-field">
+          <label for="narr-${escapeAttr(nf.id)}">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
+          ${nf.description ? `<div class="help">${escapeHtml(nf.description)}</div>` : ''}
+          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(formData.narratives[nf.id] || '')}</textarea>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function computeComposite() {
+  // Weighted average of framework means.
+  const weights = framework.weights || {};
+  let totalWeight = 0;
+  let weightedSum = 0;
+  let unscoredFw = [];
+  (framework.frameworks || []).forEach(fw => {
+    const items = fw.items || [];
+    const scored = items.filter(it => Number.isFinite(formData.scores[it.id]));
+    if (!items.length || !scored.length) {
+      unscoredFw.push(fw.id);
+      return;
+    }
+    const fwMean = scored.reduce((a, it) => a + formData.scores[it.id], 0) / scored.length;
+    const w = weights[fw.id] || 0;
+    weightedSum += fwMean * w;
+    totalWeight += w;
+  });
+  if (totalWeight === 0) return { composite: null, pct: null, band: null, unscoredFw };
+  const composite = weightedSum / totalWeight; // 1-4 scale
+  const pct = ((composite - 1) / 3) * 100;     // map 1->0%, 4->100%
+  const bands = framework.predicate_bands || [];
+  const band = bands.find(b => pct >= b.min && pct <= b.max);
+  return { composite, pct, band, unscoredFw };
+}
+
+function updateProgress() {
+  const r = computeComposite();
+  const totalItems = (framework.frameworks || []).reduce((a, fw) => a + (fw.items || []).length, 0);
+  const scoredItems = Object.keys(formData.scores).filter(k => Number.isFinite(formData.scores[k])).length;
+  const requiredNarr = (framework.narrative_fields || []).filter(n => n.required);
+  const filledNarr = requiredNarr.filter(n => (formData.narratives[n.id] || '').trim().length > 0).length;
+
+  document.getElementById('compositeValue').textContent = r.composite !== null ? r.composite.toFixed(2) : '—';
+  document.getElementById('compositePct').textContent   = r.pct !== null ? r.pct.toFixed(0) + '%' : '—';
+  document.getElementById('bandLetter').textContent     = r.band ? r.band.label : '—';
+
+  document.getElementById('progressInfo').innerHTML =
+    `<strong>${scoredItems}/${totalItems}</strong> items scored · <strong>${filledNarr}/${requiredNarr.length}</strong> required narratives` +
+    (r.unscoredFw.length ? ` · framework(s) without any score: ${r.unscoredFw.join(', ')}` : '');
+}
+
+async function save(targetStatus) {
+  if (targetStatus === 'submitted') {
+    const r = computeComposite();
+    const missing = [];
+    if (r.composite === null) missing.push('at least one item per framework');
+    const requiredNarr = (framework.narrative_fields || []).filter(n => n.required);
+    requiredNarr.forEach(n => { if (!(formData.narratives[n.id] || '').trim()) missing.push(`"${n.label}"`); });
+    if (missing.length) {
+      toast('Missing: ' + missing.join(', '), true);
+      return;
+    }
+    if (!confirm(`Submit annual appraisal for ${principal?.displayName || 'this principal'}? Composite ${r.composite.toFixed(2)} (band ${r.band ? r.band.label : '—'}). Submitted appraisals are immutable.`)) return;
+  }
+
+  const r = computeComposite();
+  const payload = {
+    principalUid: PRINCIPAL_UID,
+    schoolId: principal?.schoolId || null,
+    academicYear: ACADEMIC_YEAR,
+    appraiserUid: window.currentUser.uid,
+    appraiserName: observerProfile?.displayName || null,
+    appraiserRole: observerProfile?.ah_sub_roles?.includes('foundation_representative') ? 'foundation_representative'
+                 : (observerProfile?.role_academichub === 'academic_admin' ? 'academic_admin' : 'central_admin'),
+    scores: { ...formData.scores },
+    narratives: { ...formData.narratives },
+    composite: r.composite,
+    compositePercent: r.pct,
+    band: r.band ? r.band.label : null,
+    frameworkVersion: framework.version || '1.0',
+    status: targetStatus,
+    updatedAt: serverTimestamp(),
+  };
+  if (targetStatus === 'submitted') payload.submittedAt = serverTimestamp();
+
+  const btnSubmit = document.getElementById('btnSubmit');
+  const btnDraft  = document.getElementById('btnSaveDraft');
+  if (btnSubmit) btnSubmit.disabled = true;
+  if (btnDraft)  btnDraft.disabled  = true;
+
+  try {
+    await setDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID), payload, { merge: true });
+    toast(targetStatus === 'submitted' ? 'Appraisal submitted ✓' : 'Draft saved ✓');
+    if (targetStatus === 'submitted') setTimeout(() => { window.location.href = '/team-induction'; }, 1500);
+  } catch (err) {
+    console.error('save', err);
+    toast('Could not save: ' + (err.message || err.code), true);
+  } finally {
+    if (btnSubmit) btnSubmit.disabled = false;
+    if (btnDraft)  btnDraft.disabled  = false;
+  }
+}
+
+function showAccessDenied(msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open form</h2><p>${escapeHtml(msg)}</p></div>`;
+}
+
+function toast(msg, isErr) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.toggle('error', !!isErr);
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function escapeAttr(s) { return escapeHtml(s); }
+function cssEsc(s) { return String(s).replace(/[^A-Za-z0-9_-]/g, ''); }
+</script>
+</body>
+</html>
