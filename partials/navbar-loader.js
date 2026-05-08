@@ -709,6 +709,7 @@ const NAV_ITEMS = [
     { key: 'weekly-checklist',     href: '/weekly-checklist',      label: 'Weekly Checklist' },
     { key: 'cambridge-calendar',   href: '/cambridge-calendar',    label: 'Cambridge Calendar' },
     { key: 'cambridge-standards',  href: '/cambridge-standards',   label: 'Cambridge Standards' },
+    { key: 'references',           href: '/references',            label: 'References' },
     { key: 'library',              href: '/library',               label: 'Resource Library' },
     { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
   ]},

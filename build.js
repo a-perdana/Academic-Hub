@@ -81,6 +81,7 @@ const cleanUrls = {
   "ObservationEntry.html":          "observation-entry",
   "TeamInduction.html":             "team-induction",
   "handbook.html":                  "handbook",
+  "references.html":                "references",
   "TeacherAppraisalCalibration.html": "appraiser-calibration",
   "academic-services.html":          "academic-services",
   "SyllabusCoverage.html":           "syllabus-coverage",
@@ -166,6 +167,7 @@ const htmlFiles = [
   "ObservationEntry.html",
   "TeamInduction.html",
   "handbook.html",
+  "references.html",
   "TeacherAppraisalCalibration.html",
   "academic-services.html",
   "SyllabusCoverage.html",
@@ -259,6 +261,51 @@ if (fs.existsSync(researchSrcDir)) {
     }
   });
 }
+// References & Standards data tree (AH-narrowed subset).
+// The /references page loads these via fetch('/references-data/<path>').
+// Source of truth: monorepo-root docs/ + this hub's resources/.
+// Keep this list in sync with the MANIFEST in references.html.
+{
+  const refDestRoot = path.join("dist", "references-data");
+  fs.mkdirSync(refDestRoot, { recursive: true });
+  const refAssetMap = [
+    // Frameworks — AH leadership track (teacher appraisal scoring +
+    // school appraisal + principal Phase-2 set + leadership competency
+    // + AH-relevant weekly checklists).
+    ["frameworks/appraisal-framework-v2.json",                path.join("resources", "appraisal-framework-v2.json")],
+    ["frameworks/appraisal-levels.json",                      path.join("resources", "appraisal-levels.json")],
+    ["frameworks/walkthrough-rubric.json",                    path.join("resources", "walkthrough-rubric.json")],
+    ["frameworks/school-appraisal-framework.json",            path.join("resources", "school-appraisal-framework.json")],
+    ["frameworks/principal-appraisal-framework-v1.json",      path.join("resources", "principal-appraisal-framework-v1.json")],
+    ["frameworks/principal-observation-rubric.json",          path.join("resources", "principal-observation-rubric.json")],
+    ["frameworks/principal-operating-cadence.json",           path.join("resources", "principal-operating-cadence.json")],
+    ["frameworks/coaching-questions.json",                    path.join("resources", "coaching-questions.json")],
+    ["frameworks/leadership-competency-framework.json",       path.join("..", "Central Hub", "resources", "leadership-competency-framework.json")],
+    ["frameworks/weekly-checklists/_academic-year-arc.json",  path.join("..", "docs", "weekly-checklists", "_academic-year-arc.json")],
+    ["frameworks/weekly-checklists/school-principal.json",    path.join("..", "docs", "weekly-checklists", "school-principal.json")],
+    ["frameworks/weekly-checklists/academic-coordinator.json",      path.join("..", "docs", "weekly-checklists", "academic-coordinator.json")],
+    ["frameworks/weekly-checklists/cambridge-coordinator.json",     path.join("..", "docs", "weekly-checklists", "cambridge-coordinator.json")],
+    ["frameworks/weekly-checklists/foundation-representative.json", path.join("..", "docs", "weekly-checklists", "foundation-representative.json")],
+    // Cambridge verbatim (AH subset — School Leader Standards + Teacher
+    // Standards anchor for cross-reference + rationale).
+    ["cambridge/school-leader-standards-2023.json",           path.join("..", "docs", "research", "cambridge", "school-leader-standards-2023.json")],
+    ["cambridge/teacher-standards-2023.json",                 path.join("..", "docs", "research", "cambridge", "teacher-standards-2023.json")],
+    ["cambridge/teacher-standards-rationale.json",            path.join("..", "docs", "research", "cambridge", "teacher-standards-rationale.json")],
+    // Permendiknas verbatim
+    ["permendiknas/no-10-2025-skl.json",                      path.join("..", "docs", "research", "permendiknas", "no-10-2025-skl.json")],
+    ["permendiknas/no-27-2010-pigp.json",                     path.join("..", "docs", "research", "permendiknas", "no-27-2010-pigp.json")],
+    ["permendiknas/no-16-2007.json",                          path.join("..", "docs", "research", "permendiknas", "no-16-2007.json")],
+  ];
+  let refCopied = 0, refMissing = 0;
+  refAssetMap.forEach(([rel, src]) => {
+    const dest = path.join(refDestRoot, rel);
+    fs.mkdirSync(path.dirname(dest), { recursive: true });
+    if (fs.existsSync(src)) { fs.copyFileSync(src, dest); refCopied++; }
+    else { console.warn(`WARNING: AH references-data source missing: ${src}`); refMissing++; }
+  });
+  console.log(`Copied: dist/references-data/ (${refCopied} files, ${refMissing} missing)`);
+}
+
 if (fs.existsSync("favicon.svg")) {
   fs.copyFileSync("favicon.svg", "dist/favicon.svg");
   console.log("Copied: favicon.svg");
