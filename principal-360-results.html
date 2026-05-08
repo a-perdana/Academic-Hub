@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Principal 360° — Results — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
+  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
+  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+.page-wrap { max-width: 1080px; margin: 0 auto; padding: 28px 20px 80px; }
+
+.page-header {
+  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
+  color: #fff; padding: 32px 28px; border-radius: 16px; margin-bottom: 24px;
+  position: relative; overflow: hidden;
+}
+.page-header::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 700px; margin: 0; }
+
+.context-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 20px; box-shadow: var(--shadow-sm);
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;
+}
+.ctx-row { display: flex; flex-direction: column; gap: 2px; }
+.ctx-label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
+.ctx-value { font-size: 14px; color: var(--ink); font-weight: 500; }
+
+.cohort-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 24px; }
+.cohort-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 18px 22px; box-shadow: var(--shadow-sm);
+}
+.cohort-card .name { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; margin: 0 0 4px; }
+.cohort-card .count { font-size: 12px; color: var(--ink-3); margin: 0 0 12px; }
+.cohort-card.hidden .name { color: var(--ink-3); }
+.cohort-card .below-threshold {
+  background: #fef3c7; color: #92400e; padding: 10px 12px; border-radius: 8px;
+  font-size: 12px; line-height: 1.5;
+}
+
+.focus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.focus-bar {
+  background: var(--paper); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px 14px;
+}
+.focus-bar .head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.focus-bar .fid { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent-dk); font-weight: 700; }
+.focus-bar .val { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.focus-bar .bar-track { background: #e5e7eb; height: 6px; border-radius: 3px; overflow: hidden; }
+.focus-bar .bar-fill  { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dk)); transition: width 0.4s; }
+.focus-bar .bar-fill.warn { background: linear-gradient(90deg, #d97706, #92400e); }
+.focus-bar .bar-fill.poor { background: linear-gradient(90deg, #dc2626, #991b1b); }
+
+.composite-banner {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dk) 100%);
+  color: #fff; padding: 22px 28px; border-radius: 14px;
+  margin-bottom: 20px; display: grid; grid-template-columns: 1fr auto auto; gap: 24px; align-items: center;
+}
+.composite-banner .label { font-size: 11px; font-weight: 600; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.1em; }
+.composite-banner .value { font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
+.composite-banner .helper { font-size: 13px; color: rgba(255,255,255,0.85); max-width: 380px; line-height: 1.5; }
+
+.charter-banner {
+  background: linear-gradient(180deg, var(--accent-2) 0%, #fff 100%);
+  border: 1px solid var(--accent); border-radius: 12px;
+  padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #4c1d95; line-height: 1.55;
+}
+.charter-banner strong { display: block; font-weight: 700; margin-bottom: 3px; color: #3b0764; }
+
+.loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
+.access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+</style>
+</head>
+<body style="display:none">
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="eyebrow">Principal 360° · Aggregated results (anonymous)</div>
+    <h1>Annual Leadership Review — Cohort Insights</h1>
+    <p>Each cohort's results are shown only when 5 or more responses have been recorded (Charter NN5). Below-threshold cohorts are hidden until enough voices are present.</p>
+  </div>
+  <div id="content"><div class="loading-state">Loading…</div></div>
+</div>
+
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, doc, getDoc }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const params = new URLSearchParams(window.location.search);
+const CYCLE_ID = params.get('cycle');
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('principal-360-results', { user, profile });
+  }
+  document.body.style.display = '';
+
+  if (!CYCLE_ID) { showAccessDenied('Missing cycle parameter.'); return; }
+
+  try {
+    const aSnap = await getDoc(doc(window.db, 'principal_360_aggregates', CYCLE_ID));
+    const cSnap = await getDoc(doc(window.db, 'principal_360_cycles', CYCLE_ID));
+    if (!aSnap.exists()) {
+      showAccessDenied('No aggregate yet. Cloud Function compiles aggregates as responses arrive — check back later.');
+      return;
+    }
+    render(aSnap.data(), cSnap.exists() ? cSnap.data() : null);
+  } catch (err) {
+    console.error('boot', err);
+    showAccessDenied(err.message || 'Could not load results.');
+  }
+});
+
+function render(agg, cycle) {
+  const root = document.getElementById('content');
+  const cohorts = ['staff', 'parent', 'student'];
+  const cohortLabels = { staff: 'Teaching Staff', parent: 'Parents', student: 'Students' };
+
+  const compositeF3 = agg.composite?.F3_360_score;
+  const compositeStr = (typeof compositeF3 === 'number') ? compositeF3.toFixed(2) : '—';
+
+  root.innerHTML = `
+    <div class="charter-banner">
+      <strong>Charter NN5 in effect</strong>
+      Below-threshold cohorts (fewer than 5 respondents) are hidden until more voices come in. Aggregation is a Cloud Function output — no individual response is identifiable here or anywhere else.
+    </div>
+
+    <div class="composite-banner">
+      <div>
+        <div class="label">Composite F3 (360°) score</div>
+        <div class="value">${escapeHtml(compositeStr)}</div>
+      </div>
+      <div class="helper">Weighted across cohorts per framework. Feeds the F3 row of the principal annual appraisal.</div>
+    </div>
+
+    <div class="cohort-grid">
+      ${cohorts.map(c => renderCohort(c, cohortLabels[c], agg)).join('')}
+    </div>
+
+    ${cycle ? `
+      <div class="context-card">
+        <div class="ctx-row"><span class="ctx-label">Cycle</span><span class="ctx-value">${escapeHtml(cycle.window || CYCLE_ID)} · ${escapeHtml(cycle.academicYear || '')}</span></div>
+        <div class="ctx-row"><span class="ctx-label">Status</span><span class="ctx-value">${escapeHtml(cycle.status || '—')}</span></div>
+        <div class="ctx-row"><span class="ctx-label">Last aggregated</span><span class="ctx-value">${agg.lastAggregatedAt?.toDate ? new Date(agg.lastAggregatedAt.toDate()).toLocaleString('en-GB') : '—'}</span></div>
+      </div>
+    ` : ''}
+  `;
+}
+
+function renderCohort(cohortId, label, agg) {
+  const stats = agg.cohortStats?.[cohortId];
+  const above = agg.aboveThreshold?.[cohortId];
+  if (!stats || !above) {
+    return `
+      <div class="cohort-card hidden">
+        <div class="name">${escapeHtml(label)}</div>
+        <div class="count">—</div>
+        <div class="below-threshold">Below the minimum threshold of 5 respondents. Results hidden to protect anonymity. ${stats ? `(Currently ${stats.respondentCount} response${stats.respondentCount === 1 ? '' : 's'}.)` : ''}</div>
+      </div>
+    `;
+  }
+
+  const focusKeys = ['P1','P2','P3','P4','P5','P6','P7','P8'];
+  const bars = focusKeys.map(k => {
+    const v = stats.perFocusMean?.[k];
+    if (typeof v !== 'number') return '';
+    const pct = Math.max(0, Math.min(100, ((v - 1) / 3) * 100));
+    const cls = v >= 3 ? '' : (v >= 2 ? 'warn' : 'poor');
+    return `
+      <div class="focus-bar">
+        <div class="head"><span class="fid">${k}</span><span class="val">${v.toFixed(2)}</span></div>
+        <div class="bar-track"><div class="bar-fill ${cls}" style="width:${pct}%"></div></div>
+      </div>
+    `;
+  }).join('');
+
+  return `
+    <div class="cohort-card">
+      <div class="name">${escapeHtml(label)}</div>
+      <div class="count">${stats.respondentCount} respondents · ${stats.narrativesCount || 0} narratives</div>
+      <div class="focus-grid">${bars}</div>
+    </div>
+  `;
+}
+
+function showAccessDenied(msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>No results yet</h2><p>${escapeHtml(msg)}</p></div>`;
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+</script>
+</body>
+</html>
