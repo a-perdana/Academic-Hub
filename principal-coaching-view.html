@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Coaching — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<style>
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
+  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
+  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
+  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+.page-wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
+
+.page-header { background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%); color: #fff; padding: 32px 28px; border-radius: 16px; margin-bottom: 24px; position: relative; overflow: hidden; }
+.page-header::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
+.page-header > * { position: relative; z-index: 1; }
+.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
+.page-header p { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 700px; margin: 0; }
+
+.session-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm); position: relative; }
+.session-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 14px 0 0 14px; background: linear-gradient(180deg, var(--accent), var(--accent-dk)); }
+.session-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.session-date { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); }
+.session-mentor { font-size: 12px; color: var(--ink-3); }
+.session-mode { display: inline-block; padding: 3px 10px; background: var(--accent-2); color: var(--accent-dk); border-radius: 6px; font-size: 11px; font-weight: 600; font-family: 'DM Mono', monospace; margin-bottom: 8px; }
+
+.commitments-list { background: #faf5ff; border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 14px; }
+.commitments-list h4 { font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; margin: 0 0 8px; color: var(--accent-dk); }
+.commit-item { display: grid; grid-template-columns: 1fr 80px; gap: 12px; padding: 6px 0; align-items: baseline; font-size: 13px; color: var(--ink-2); border-top: 1px dashed var(--border); }
+.commit-item:first-of-type { border-top: none; padding-top: 0; }
+.commit-item .week { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent-dk); font-weight: 600; }
+
+.session-detail { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.session-detail .stage { margin: 12px 0; }
+.session-detail .stage-label { font-size: 11px; font-weight: 700; color: var(--accent-dk); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+.session-detail .stage-text { background: var(--paper); padding: 10px 14px; border-radius: 8px; white-space: pre-wrap; }
+.session-detail .stage.private .stage-text { background: #fef3c7; }
+
+.empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
+.loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
+.access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
+</style>
+</head>
+<body style="display:none">
+<div id="navbarMount"></div>
+
+<div class="page-wrap">
+  <div class="page-header">
+    <div class="eyebrow">Principal Coaching · Coachee view</div>
+    <h1>My Coaching</h1>
+    <p>Read-only view of your coaching sessions. Each session's mentor notes, commitments, and the next steps you agreed on. Personal check-in is visible only to you and your mentor.</p>
+  </div>
+  <div id="content"><div class="loading-state">Loading…</div></div>
+</div>
+
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import { collection, query, where, orderBy, getDocs }
+  from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('principal-coaching-view', { user, profile });
+  }
+  document.body.style.display = '';
+
+  const ahSubs = profile?.ah_sub_roles || [];
+  if (!ahSubs.includes('school_principal') && profile?.role_academichub !== 'academic_admin') {
+    showAccessDenied('This page is for school principals to read their own coaching sessions.');
+    return;
+  }
+
+  try {
+    const q = query(
+      collection(window.db, 'principal_coaching_sessions'),
+      where('principalUid', '==', user.uid)
+    );
+    const snap = await getDocs(q);
+    const sessions = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(s => s.status === 'logged')
+      .sort((a, b) => String(b.sessionDate || '').localeCompare(String(a.sessionDate || '')));
+    render(sessions);
+  } catch (err) {
+    console.error('boot', err);
+    document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown')}</p></div>`;
+  }
+});
+
+function render(sessions) {
+  const root = document.getElementById('content');
+  if (!sessions.length) {
+    root.innerHTML = `<div class="empty">No logged coaching sessions yet. Your first session will appear here once your HQ Director mentor logs it.</div>`;
+    return;
+  }
+  root.innerHTML = sessions.map(renderSession).join('');
+}
+
+function renderSession(s) {
+  const agenda = s.agenda || {};
+  const commitments = s.newCommitments || [];
+
+  return `
+    <div class="session-card">
+      <div class="session-head">
+        <div>
+          <div class="session-date">${escapeHtml(s.sessionDate || '—')}</div>
+          <div class="session-mentor">Mentor · ${escapeHtml(s.mentorName || s.mentorUid || '—')}</div>
+        </div>
+        <span class="session-mode">${escapeHtml(s.mode || 'year_2_plus')}</span>
+      </div>
+
+      <div class="session-detail">
+        ${renderStage(agenda['1_check_in'], 'Personal check-in', true)}
+        ${renderReview(agenda['2_review_commitments'])}
+        ${renderStage(agenda['3_focus_topic'], 'Focus topic')}
+        ${renderStage(agenda['4_strategic_horizon'], 'Strategic horizon')}
+        ${renderStage(agenda['5_close_and_log'], 'Close')}
+      </div>
+
+      ${commitments.length ? `
+        <div class="commitments-list">
+          <h4>Your commitments before next session</h4>
+          ${commitments.map(c => `
+            <div class="commit-item">
+              <div>${escapeHtml(c.text || '')}</div>
+              <div class="week">${escapeHtml(c.dueWeek || '—')}</div>
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+}
+
+function renderStage(stageData, label, isPrivate) {
+  if (!stageData || !(stageData.notes || '').trim()) return '';
+  return `
+    <div class="stage ${isPrivate ? 'private' : ''}">
+      <div class="stage-label">${escapeHtml(label)}${isPrivate ? ' · private' : ''}</div>
+      <div class="stage-text">${escapeHtml(stageData.notes)}</div>
+    </div>
+  `;
+}
+
+function renderReview(rev) {
+  if (!rev || !rev.commitment) return '';
+  return `
+    <div class="stage">
+      <div class="stage-label">Last commitment review</div>
+      <div class="stage-text">${escapeHtml(rev.commitment || '')}${rev.outcome ? `\n\nOutcome: ${rev.outcome}${rev.outcome_reason ? ' — ' + rev.outcome_reason : ''}` : ''}</div>
+    </div>
+  `;
+}
+
+function showAccessDenied(msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open</h2><p>${escapeHtml(msg)}</p></div>`;
+}
+
+function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+</script>
+</body>
+</html>
