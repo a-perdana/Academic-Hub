@@ -1362,7 +1362,7 @@ body { padding-top: 62px; }
   }
 
   function cardInnerHTML(id, d) {
-    const canEdit   = currentUser && (d.authorId === currentUser.uid || isAdmin);
+    const canEdit   = currentUser && (d.authorUid === currentUser.uid || isAdmin);
     const actionBtns = `
       <div class="ann-admin-btns">
         <button class="ann-admin-btn share" data-action="share" title="Copy link">
@@ -1566,7 +1566,7 @@ body { padding-top: 62px; }
         const item = document.createElement('div');
         item.className = 'comment-item';
         item.dataset.id = docSnap.id;
-        const canDelete = isAdmin || (currentUser && c.authorId === currentUser.uid);
+        const canDelete = isAdmin || (currentUser && c.authorUid === currentUser.uid);
         const avatarDiv = document.createElement('div');
         avatarDiv.className = 'comment-avatar';
         buildAvatarFromName(avatarDiv, c.authorName || '', c.authorPhotoURL || '');
