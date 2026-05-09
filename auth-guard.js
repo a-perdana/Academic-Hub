@@ -190,6 +190,38 @@ function ahProfileComplete(profile) {
 const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting', 'settings']);
 const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
 
+// ── Pilot-system gating (per-school enrolment) ─────────────────────
+// partner_schools/{schoolId}.enabled_systems[] ⊂ {kpi, appraisal,
+// competency, induction}. Missing field = all enabled (back-compat);
+// empty array = all explicitly disabled. Admins + HQ users (no
+// schoolId) always bypass.
+//
+// PILOT_SLUG_MAP gates pages whose route slug belongs to a pilot
+// system. Pilot-irrelevant slugs (EASE, Cambridge dashboards, surveys,
+// communications) are absent — they're always reachable.
+const PILOT_SLUG_MAP = {
+  // KPI track
+  'school-performance-kpi':  'kpi',
+  'teacher-kpi-evaluation':  'kpi',
+  // Appraisal track
+  'school-appraisals':         'appraisal',
+  'school-self-appraisal':     'appraisal',
+  'teacher-appraisal-entry':   'appraisal',
+  'teacher-walkthrough-entry': 'appraisal',
+  'appraiser-calibration':     'appraisal',
+  'my-observations':           'appraisal',
+  // Competency (leadership) track
+  'competency-framework': 'competency',
+  'learning-path':        'competency',
+  'my-portfolio':         'competency',
+  'my-certificates':      'competency',
+  // Induction track
+  'my-induction':       'induction',
+  'team-induction':     'induction',
+  'observation-entry':  'induction',
+  'handbook':           'induction',
+};
+
 // Convert window.location.pathname to a clean URL slug (the doc ID
 // in page_access_config). '/academic-calendar' -> 'academic-calendar';
 // '/academic-calendar.html' -> 'academic-calendar'; '/' -> ''.
@@ -372,6 +404,88 @@ function applyPageAccessGating(configs, userSubRoles) {
     if (any && allHidden) header.setAttribute('data-pa-hidden', '1');
     else                  header.removeAttribute('data-pa-hidden');
   });
+}
+
+// Pilot-system UI gating. Reuses data-pa-hidden so the existing
+// "hide empty column / dropdown / mobile-section-header" logic in
+// applyPageAccessGating composes — pilot-disabled items count as
+// hidden when checking whether a column went empty.
+//   - enabled === null  ⇒ field missing → all systems on (back-compat).
+//   - enabled === Set() ⇒ every system explicitly disabled.
+function applyPilotSystemGating(enabled) {
+  if (!enabled) return; // null = all enabled (back-compat) — nothing to do
+
+  const isPilotAllowed = (slug) => {
+    const sys = PILOT_SLUG_MAP[slug];
+    if (!sys) return true;
+    return enabled.has(sys);
+  };
+
+  // 1. Navbar items (desktop + mobile drawer clones).
+  document.querySelectorAll('[data-nav-key], [data-mobile-nav-key]').forEach(el => {
+    const key = (el.getAttribute('data-nav-key') || el.getAttribute('data-mobile-nav-key') || '').toLowerCase();
+    if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
+    if (!isPilotAllowed(key)) el.setAttribute('data-pa-hidden', '1');
+  });
+
+  // 2. Dashboard cards by href slug. Covers both hand-crafted
+  //    `<a class="card">` and auto-generated cards (data-theme="auto").
+  document.querySelectorAll('a.card[href]').forEach(el => {
+    const key = slugFromHref(el.getAttribute('href'));
+    if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
+    if (!isPilotAllowed(key)) el.setAttribute('data-pa-hidden', '1');
+  });
+
+  // 3. Re-evaluate empty wrappers / columns after pilot hides layered
+  //    on top of page-access hides. Mirrors the tail of applyPageAccessGating.
+  ['.nav-dropdown-wrap', '.mob-nav-section'].forEach(selector => {
+    document.querySelectorAll(selector).forEach(group => {
+      const items = group.querySelectorAll('[data-nav-key]');
+      if (!items.length) return;
+      const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
+      if (allHidden) group.setAttribute('data-pa-hidden', '1');
+      else            group.removeAttribute('data-pa-hidden');
+    });
+  });
+  document.querySelectorAll('.nav-dd-col').forEach(col => {
+    const items = col.querySelectorAll('[data-nav-key]');
+    if (!items.length) return;
+    const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
+    if (allHidden) col.setAttribute('data-pa-hidden', '1');
+    else            col.removeAttribute('data-pa-hidden');
+  });
+  // Mobile drawer section headers — sibling pattern.
+  document.querySelectorAll('.ah-mobile-section-header').forEach(header => {
+    let allHidden = true;
+    let any = false;
+    let n = header.nextElementSibling;
+    while (n && !n.classList.contains('ah-mobile-section-header') && !n.classList.contains('ah-mobile-divider')) {
+      if (n.hasAttribute('data-mobile-nav-key')) {
+        any = true;
+        if (n.getAttribute('data-pa-hidden') !== '1') { allHidden = false; break; }
+      }
+      n = n.nextElementSibling;
+    }
+    if (any && allHidden) header.setAttribute('data-pa-hidden', '1');
+    else                  header.removeAttribute('data-pa-hidden');
+  });
+}
+
+// Read partner_schools/{schoolId}.enabled_systems[]. Returns:
+//   null      → field absent / read failed → all systems enabled
+//   Set([…])  → explicit list (possibly empty)
+async function getEnabledSystemsForSchool(database, schoolId) {
+  if (!schoolId) return null;
+  try {
+    const snap = await getDoc(doc(database, 'partner_schools', schoolId));
+    if (!snap.exists()) return null;
+    const data = snap.data();
+    if (!Array.isArray(data.enabled_systems)) return null;
+    return new Set(data.enabled_systems);
+  } catch (err) {
+    console.warn('partner_schools read failed for pilot gating', err);
+    return null;
+  }
 }
 
 // Inject the CSS rule that actually hides flagged elements. Doing this in JS
@@ -760,6 +874,32 @@ onAuthStateChanged(auth, async (user) => {
     }
   }
 
+  // 8b. Pilot-system gate (per-school enrolment).
+  //     Direct-URL access to a KPI / Appraisal / Competency / Induction
+  //     page is rejected when the user's school has narrowed
+  //     partner_schools.enabled_systems[] to exclude that system.
+  //     Admins + HQ users (no schoolId) bypass; missing field = open.
+  if (platformRole !== 'academic_admin' && profile.schoolId) {
+    const pageKey = currentPageKey();
+    const requiredSystem = PILOT_SLUG_MAP[pageKey];
+    if (requiredSystem) {
+      const enabled = await getEnabledSystemsForSchool(db, profile.schoolId);
+      if (enabled && !enabled.has(requiredSystem)) {
+        try {
+          sessionStorage.setItem('ah_access_denied', JSON.stringify({
+            pageKey,
+            label:  pageKey,
+            reason: 'pilot',
+            system: requiredSystem,
+            at:     Date.now(),
+          }));
+        } catch (_) {}
+        window.location.replace('/?denied=' + encodeURIComponent(pageKey) + '&reason=pilot');
+        return;
+      }
+    }
+  }
+
   // 9. All checks passed — expose globals
   window.currentUser = user;
   window.userProfile = profile;
@@ -808,7 +948,12 @@ onAuthStateChanged(auth, async (user) => {
     ensurePageAccessStyles();
     const subRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
     const configs  = await getAllPageAccessConfigs(db);
-    const runGating = () => applyPageAccessGating(configs, subRoles);
+    // HQ users (no schoolId) bypass pilot gating entirely.
+    const enabledSystems = await getEnabledSystemsForSchool(db, profile.schoolId);
+    const runGating = () => {
+      applyPageAccessGating(configs, subRoles);
+      applyPilotSystemGating(enabledSystems);
+    };
     // Initial pass (covers cards already in DOM).
     runGating();
     // Re-run whenever new navbar links or cards are inserted (the navbar
