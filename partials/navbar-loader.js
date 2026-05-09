@@ -403,22 +403,28 @@ function ensureNavbarSharedStyles() {
       background: rgba(255,255,255,0.07);
       margin: 4px 0;
     }
-    /* Two-column wide panel */
-    #topNav .nav-dropdown-panel--wide {
-      min-width: 480px;
-    }
-    /* Three-column extra-wide panel (My Hub) */
-    #topNav .nav-dropdown-panel--xwide {
-      min-width: 720px;
-    }
+    /* Two-column wide panel — sticky width only when no columns gated. */
+    #topNav .nav-dropdown-panel--wide  { max-width: 95vw; }
+    #topNav .nav-dropdown-panel--xwide { max-width: 95vw; }
+    #topNav .nav-dropdown-panel--wide  .nav-dd-col-group:not(.has-hidden) { min-width: 480px; }
+    #topNav .nav-dropdown-panel--xwide .nav-dd-col-group:not(.has-hidden) { min-width: 720px; }
     #topNav .nav-dd-col-group {
       display: flex;
       gap: 0;
     }
     #topNav .nav-dd-col {
       flex: 1;
-      min-width: 0;
+      min-width: 220px;
     }
+    /* When pilot/page-access gating hides one or more columns, surviving
+       columns size to content rather than sharing the panel's full width. */
+    #topNav .nav-dd-col-group.has-hidden .nav-dd-col {
+      flex: 0 0 auto;
+      min-width: 220px;
+    }
+    /* Hide the divider that immediately follows a gated-out column —
+       leaves exactly one divider between any two surviving neighbours. */
+    #topNav .nav-dd-col[data-pa-hidden="1"] + .nav-dd-col-divider { display: none; }
     #topNav .nav-dd-col-header {
       padding: 6px 12px 4px;
       font-size: 10px;

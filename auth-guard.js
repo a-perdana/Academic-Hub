@@ -385,6 +385,16 @@ function applyPageAccessGating(configs, userSubRoles) {
     else            col.removeAttribute('data-pa-hidden');
   });
 
+  // 4b. Flag column groups that have at least one hidden column so the
+  //     panel CSS can drop its sticky min-width and shrink to content.
+  //     Runs AFTER step 4 so col-level data-pa-hidden is already set.
+  document.querySelectorAll('.nav-dd-col-group').forEach(group => {
+    const cols = group.querySelectorAll('.nav-dd-col');
+    if (!cols.length) return;
+    const anyHidden = [...cols].some(c => c.getAttribute('data-pa-hidden') === '1');
+    group.classList.toggle('has-hidden', anyHidden);
+  });
+
   // 5. Empty mobile section headers — mobile drawer uses sibling
   //    `<div class="ah-mobile-section-header">` followed by ah-mobile-menu-item
   //    siblings (no wrapper). Walk forward from each header until the next
@@ -453,6 +463,14 @@ function applyPilotSystemGating(enabled) {
     const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
     if (allHidden) col.setAttribute('data-pa-hidden', '1');
     else            col.removeAttribute('data-pa-hidden');
+  });
+  // Mirror the has-hidden flag refresh so panels shrink even when only
+  // pilot rules hid columns.
+  document.querySelectorAll('.nav-dd-col-group').forEach(group => {
+    const cols = group.querySelectorAll('.nav-dd-col');
+    if (!cols.length) return;
+    const anyHidden = [...cols].some(c => c.getAttribute('data-pa-hidden') === '1');
+    group.classList.toggle('has-hidden', anyHidden);
   });
   // Mobile drawer section headers — sibling pattern.
   document.querySelectorAll('.ah-mobile-section-header').forEach(header => {
