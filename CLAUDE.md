@@ -43,7 +43,7 @@ Steps (in order):
 1. Hide `document.body`
 2. Init Firebase (guarded against double-init)
 3. `onAuthStateChanged` — no user → `login.html`
-4. Fetch / create profile (auto-assigns `role_academichub: 'academic_user'` + `approval_status_academichub: 'pending'`)
+4. Fetch / create profile (auto-assigns `role_academichub: 'academic_user'` + `approval_status_academichub: 'pending'`). On first sign-in, `applyStaffBridge()` looks up `staff/{...}` by `emailLower`: a match prefills `schoolId` / `school` / `displayName` / `phone` / `title` and back-links the staff row; no match auto-creates a staff row keyed by `sha1(emailLower).slice(0,20)` with `source:'auth-guard-autocreate'`. Bridging is best-effort (try/catch/warn), never blocks signup. **Helper is shared with CH + TH — keep all three in sync.** See root CLAUDE.md "Staff Directory & ↔ users Bridge".
 5. **Domain check** — Google SSO email must be in `window.ACADEMIC_ALLOWED_DOMAINS` (15 entries). Email/password bypasses.
 6. **Role check** — `role_academichub ∈ ['academic_admin','academic_user']`
 7. **Name prompt** if `displayName` missing
