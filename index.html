@@ -4033,7 +4033,8 @@
         query, where, orderBy, onSnapshot, serverTimestamp, Timestamp,
       } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-      const _navReady = window.__loadAcademicNavbar(); // start loading; await in authReady
+      // Navbar is loaded inside the authReady handler with the profile in
+      // hand so nav-edit-simple.js can show the "Edit nav" button to admins.
 
       let currentUser = null;
       let db = null;   // assigned from window.db once authReady fires
@@ -4137,11 +4138,8 @@
         currentUser = user;
         db = window.db;
         auth = window.auth;
-        // Ensure navbar HTML is injected before populating profile
-        await _navReady;
-        // Use navbar-loader's populate (handles toggle, sign-out, edit form)
-        window.__ahPopulateNav?.(user, profile?.displayName || null, auth, profile);
-        window.__initNavbarCounters?.({ db: window.db, user });
+        // Load navbar with profile so nav-edit-simple.js sees admin context
+        await window.__loadAcademicNavbar('', { user, profile });
         if (profile.role_academichub === 'academic_admin') {
           document.body.classList.add('is-admin');
         }
