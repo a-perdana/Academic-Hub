@@ -3924,6 +3924,14 @@
           </div>
           <input class="manage-modal-search" id="manageCatSearch" type="search" placeholder="Search cards…">
           <div class="manage-modal-list" id="manageCatList"></div>
+          <div class="manage-modal-vt" id="manageCatPilot">
+            <span class="manage-modal-vt-label">Pilot systems</span>
+            <label class="cat-vt-check"><input type="checkbox" id="mmPilotKpi"        value="kpi"> KPI</label>
+            <label class="cat-vt-check"><input type="checkbox" id="mmPilotAppraisal"  value="appraisal"> Appraisal</label>
+            <label class="cat-vt-check"><input type="checkbox" id="mmPilotCompetency" value="competency"> Competency</label>
+            <label class="cat-vt-check"><input type="checkbox" id="mmPilotInduction"  value="induction"> Induction</label>
+            <span class="cat-vt-hint">Tick a system to hide this whole collection at schools where the system is opted out. Leave all unchecked = relies on individual card gating only.</span>
+          </div>
           <div class="manage-modal-vt" id="manageCatVt">
             <span class="manage-modal-vt-label">Visible to</span>
             <label class="cat-vt-check"><input type="checkbox" id="mmVtFoundation" value="foundation_representative"> Foundation Rep</label>
@@ -4138,10 +4146,12 @@
           document.body.classList.add('is-admin');
         }
 
-        // Phase 3 ops — pilot enrolment. Hide KPI / Appraisal / Competency
-        // cards (matched by data-theme) when the user's school has narrowed
+        // Phase 3 ops — pilot enrolment. Hide KPI / Appraisal / Competency /
+        // Induction cards when the user's school has narrowed
         // partner_schools.enabled_systems[]. Admins and HQ users (no
         // schoolId) keep full visibility. Missing field = all enabled.
+        // Publishes window.__pilotEnabledSystems + __pilotHiddenCardIds
+        // so the category renderer can apply collection-level pilot gates.
         if (profile.role_academichub !== 'academic_admin' && profile.schoolId) {
           try {
             const { doc: fsDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
@@ -4149,8 +4159,12 @@
             const arr = sSnap.exists() ? sSnap.data().enabled_systems : null;
             if (Array.isArray(arr)) {
               const enabled = new Set(arr);
+              window.__pilotEnabledSystems = enabled;
+              window.__pilotHiddenCardIds  = new Set();
               // data-theme → pilot system mapping. The data-theme="leadership-
               // framework" cards are the AH leadership competency track.
+              // Induction has no hand-crafted theme — slugs are matched via
+              // href below for auto-generated cards.
               const themeToSystem = {
                 'kpi': 'kpi',
                 'appraisal': 'appraisal',
@@ -4161,8 +4175,51 @@
                 document.querySelectorAll(`.card[data-theme="${theme}"]`).forEach(el => {
                   el.style.display = 'none';
                   el.dataset.pilotHidden = '1';
+                  const cid = el.getAttribute('data-card-id');
+                  if (cid) window.__pilotHiddenCardIds.add(cid);
                 });
               }
+              // Slug-based pass: matches auto-generated cards (data-theme="auto")
+              // for induction + any KPI/appraisal/competency slug whose card
+              // wasn't tagged with the matching data-theme.
+              const SLUG_TO_SYSTEM = {
+                'school-performance-kpi':  'kpi',
+                'teacher-kpi-evaluation':  'kpi',
+                'school-appraisals':         'appraisal',
+                'school-self-appraisal':     'appraisal',
+                'teacher-appraisal-entry':   'appraisal',
+                'teacher-walkthrough-entry': 'appraisal',
+                'appraiser-calibration':     'appraisal',
+                'my-observations':           'appraisal',
+                'competency-framework': 'competency',
+                'learning-path':        'competency',
+                'my-portfolio':         'competency',
+                'my-certificates':      'competency',
+                'my-induction':       'induction',
+                'team-induction':     'induction',
+                'observation-entry':  'induction',
+                'handbook':           'induction',
+              };
+              const slugFromCardHref = (a) => {
+                const href = a.getAttribute('href') || '';
+                try {
+                  const u = new URL(href, window.location.origin);
+                  if (u.origin !== window.location.origin) return '';
+                  let p = u.pathname.toLowerCase()
+                    .replace(/^\/+/, '').replace(/\/+$/, '').replace(/\.html$/, '');
+                  if (p.includes('/')) p = p.split('/').pop();
+                  return p;
+                } catch { return ''; }
+              };
+              document.querySelectorAll('a.card[href]').forEach(el => {
+                const slug = slugFromCardHref(el);
+                const sys = SLUG_TO_SYSTEM[slug];
+                if (!sys || enabled.has(sys)) return;
+                el.style.display = 'none';
+                el.dataset.pilotHidden = '1';
+                const cid = el.getAttribute('data-card-id');
+                if (cid) window.__pilotHiddenCardIds.add(cid);
+              });
             }
           } catch { /* fail open */ }
         }
@@ -4651,10 +4708,21 @@
         // that hides the entire accordion from every non-admin (cleaner
         // than listing every sub-role to exclude in visible_to[]).
         const userSubRoles = window.userProfile?.ah_sub_roles || [];
+        // Per-school pilot enrolment also gates whole collections.
+        // window.__pilotEnabledSystems is set above by the pilot pass
+        // (Set | null | undefined). null/undefined = back-compat all on.
+        const enabledSystems = window.__pilotEnabledSystems || null;
         const visibleCats = isAdmin ? cats : cats.filter(cat => {
           if (cat.hidden_for_users === true) return false;
           const vt = cat.visible_to || [];
-          return vt.length === 0 || userSubRoles.some(r => vt.includes(r));
+          if (vt.length > 0 && !userSubRoles.some(r => vt.includes(r))) return false;
+          // Hybrid pilot rule: if admin tagged the collection with one or
+          // more pilot systems, hide it whenever ANY of those systems is
+          // disabled at the user's school. Untagged collections rely on
+          // individual card gating only.
+          const ps = Array.isArray(cat.pilot_systems) ? cat.pilot_systems : [];
+          if (ps.length && enabledSystems && ps.some(s => !enabledSystems.has(s))) return false;
+          return true;
         });
 
         // Build map: cardId → card element (from cache, works regardless of current DOM position)
@@ -4676,7 +4744,18 @@
 
         container.innerHTML = '';
 
-        visibleCats.forEach((cat, idx) => {
+        // Auto-fallback for untagged collections: hide a collection when
+        // every one of its cards is pilot-gated out at this school.
+        // Admins still see it (so they can recover / re-tag).
+        const pilotHidden = window.__pilotHiddenCardIds || new Set();
+        const renderableCats = isAdmin ? visibleCats : visibleCats.filter(cat => {
+          const ids = cat.cardIds || [];
+          if (!ids.length) return true;
+          const allHidden = ids.every(id => pilotHidden.has(id));
+          return !allHidden;
+        });
+
+        renderableCats.forEach((cat, idx) => {
           const catCards = (cat.cardIds || [])
             .map(id => cardMap.get(id))
             .filter(Boolean);
@@ -4690,7 +4769,7 @@
           if (defaultCollapsed) sec.classList.add('collapsed');
 
           const isFirst = idx === 0;
-          const isLast  = idx === visibleCats.length - 1;
+          const isLast  = idx === renderableCats.length - 1;
 
           const hiddenForUsers = cat.hidden_for_users === true;
           const visToggleIcon = hiddenForUsers
@@ -4863,6 +4942,13 @@
         document.getElementById('mmVtPrincipal').checked    = currentVt.includes('school_principal');
         document.getElementById('mmVtCoordinator').checked  = currentVt.includes('academic_coordinator');
 
+        // Populate pilot_systems checkboxes
+        const currentPilot = Array.isArray(cat.pilot_systems) ? cat.pilot_systems : [];
+        document.getElementById('mmPilotKpi').checked        = currentPilot.includes('kpi');
+        document.getElementById('mmPilotAppraisal').checked  = currentPilot.includes('appraisal');
+        document.getElementById('mmPilotCompetency').checked = currentPilot.includes('competency');
+        document.getElementById('mmPilotInduction').checked  = currentPilot.includes('induction');
+
         // Ordered list of selected card IDs (preserves custom order)
         let selectedOrder = [...(cat.cardIds || [])];
 
@@ -4974,7 +5060,17 @@
               document.getElementById('mmVtPrincipal').checked    ? 'school_principal'          : null,
               document.getElementById('mmVtCoordinator').checked  ? 'academic_coordinator'      : null,
             ].filter(Boolean);
-            await setDoc(doc(db, 'ah_categories', cat.id), { cardIds: [...selectedOrder], visible_to: visibleTo }, { merge: true });
+            const pilotSystems = [
+              document.getElementById('mmPilotKpi').checked        ? 'kpi'        : null,
+              document.getElementById('mmPilotAppraisal').checked  ? 'appraisal'  : null,
+              document.getElementById('mmPilotCompetency').checked ? 'competency' : null,
+              document.getElementById('mmPilotInduction').checked  ? 'induction'  : null,
+            ].filter(Boolean);
+            await setDoc(doc(db, 'ah_categories', cat.id), {
+              cardIds:        [...selectedOrder],
+              visible_to:     visibleTo,
+              pilot_systems:  pilotSystems,
+            }, { merge: true });
             statusEl.textContent = 'Saved!';
             statusEl.className = 'manage-modal-status ok';
             setTimeout(closeModal, 700);
