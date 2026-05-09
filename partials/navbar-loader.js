@@ -156,12 +156,23 @@ function ensureNavbarSharedStyles() {
     #topNav .dd-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
     #topNav .dd-name { font-size: 14px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     #topNav .dd-email { font-size: 11.5px; color: rgba(255,255,255,0.45); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+    #topNav .dd-settings-link {
+      display: flex; align-items: center; gap: 9px;
+      padding: 9px 14px; border-radius: 9px;
+      background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.75);
+      font-size: 13px; font-weight: 500; font-family: "DM Sans", sans-serif;
+      text-decoration: none;
+      cursor: pointer; transition: all 0.18s; margin: 10px 12px 0;
+      width: calc(100% - 24px); box-sizing: border-box;
+    }
+    #topNav .dd-settings-link:hover { background: rgba(108,92,231,0.20); color: #fff; }
+    #topNav .dd-settings-link svg { width: 15px; height: 15px; }
     #topNav .dd-signout-btn {
       display: flex; align-items: center; gap: 9px;
       width: 100%; padding: 9px 14px; border-radius: 9px; border: none;
       background: rgba(231,76,60,0.10); color: rgba(231,76,60,0.9);
       font-size: 13px; font-weight: 500; font-family: "DM Sans", sans-serif;
-      cursor: pointer; transition: all 0.18s; margin: 8px 12px 12px;
+      cursor: pointer; transition: all 0.18s; margin: 6px 12px 12px;
       width: calc(100% - 24px);
     }
     #topNav .dd-signout-btn:hover { background: rgba(231,76,60,0.22); color: #e74c3c; }
@@ -767,6 +778,19 @@ function buildMobileMenu(activeKey) {
     a.addEventListener('click', () => closeMobileMenu());
     menu.appendChild(a);
   });
+
+  // Settings link — sits at the bottom of the mobile drawer, mirrors the
+  // profile dropdown's Settings link (only entry point on small screens
+  // where the desktop profile button is hidden).
+  const settingsDivider = document.createElement('div');
+  settingsDivider.className = 'ah-mobile-divider';
+  menu.appendChild(settingsDivider);
+  const settingsA = document.createElement('a');
+  settingsA.href = '/settings';
+  settingsA.className = 'ah-mobile-menu-item';
+  settingsA.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span>';
+  settingsA.addEventListener('click', () => closeMobileMenu());
+  menu.appendChild(settingsA);
 
   // Insert immediately after the navbarMount
   const mount = document.getElementById('navbarMount');

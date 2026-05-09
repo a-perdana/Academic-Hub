@@ -91,6 +91,7 @@ const cleanUrls = {
   "TeacherAppraisalCalibration.html": "appraiser-calibration",
   "academic-services.html":          "academic-services",
   "SyllabusCoverage.html":           "syllabus-coverage",
+  "settings.html":                   "settings",
 };
 
 // Rewrite all internal .html links to clean URLs inside a built file
@@ -183,6 +184,7 @@ const htmlFiles = [
   "TeacherAppraisalCalibration.html",
   "academic-services.html",
   "SyllabusCoverage.html",
+  "settings.html",
 ];
 
 // Pages skipped from base.css injection (login/waiting are auth-flow,

@@ -187,7 +187,7 @@ function ahProfileComplete(profile) {
 
 // ── Page-access helpers ──────────────────────────────────────────
 // Pages that never get gated (auth flow + dashboard itself).
-const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting']);
+const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting', 'settings']);
 const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
 
 // Convert window.location.pathname to a clean URL slug (the doc ID
