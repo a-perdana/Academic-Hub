@@ -22,21 +22,16 @@
       .orb { display:none; }
 
       /* ── Page Header ── */
-      .page-header { max-width:1200px; margin:0 auto; padding:5.5rem 2rem 1.5rem; }
-      .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--ink-3); font-size:13px; text-decoration:none; margin-bottom:1rem; transition:color .2s; }
-      .back-link:hover { color:var(--ink); }
-      .back-link svg { width:14px; height:14px; }
-      .page-header h1 { font-family:"Lora",serif; font-size:clamp(1.8rem,4vw,2.8rem); font-weight:700; color:var(--ink); margin-bottom:.35rem; }
-      .page-header .subtitle { font-size:.95rem; color:var(--ink-3); }
+      .page-header { max-width:1200px; margin:0 auto; padding:5rem 2rem 1.25rem; }
+      .page-header h1 { font-family:"Lora",serif; font-size:clamp(1.6rem,3.2vw,2.2rem); font-weight:700; color:var(--ink); margin:0; }
 
       /* ── Main ── */
       main { max-width:1200px; margin:0 auto; padding:0 2rem 4rem; }
 
-      /* ── View toggle ── */
-      .view-toggle-bar { display:flex; justify-content:flex-end; margin-bottom:1rem; }
+      /* ── View toggle (sits inside filter-bar's right cluster) ── */
       .view-toggle {
         display:inline-flex; background:var(--paper); border:1px solid var(--border);
-        border-radius:10px; padding:3px; gap:2px;
+        border-radius:10px; padding:3px; gap:2px; flex-shrink:0;
       }
       .view-toggle button {
         padding:6px 14px; border:none; background:transparent;
@@ -415,12 +410,7 @@
 
     <!-- ══ PAGE HEADER ══ -->
     <div class="page-header">
-      <a href="index.html" class="back-link">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Dashboard
-      </a>
-      <h1>📅 Event Calendar</h1>
-      <p class="subtitle">2025/26 Annual Activity Timeline · July 2025 – May 2026</p>
+      <h1>Event Calendar</h1>
     </div>
 
     <main>
@@ -457,18 +447,14 @@
         </div>
         <div class="filter-right">
           <input type="text" class="search-input" id="searchInput" placeholder="🔎 Search activities...">
+          <div class="view-toggle" id="viewToggle">
+            <button data-view="strip" class="active">🗓 2-Month</button>
+            <button data-view="timeline">📊 Timeline</button>
+          </div>
           <button class="add-btn" id="addActBtn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Add New Activity
           </button>
-        </div>
-      </div>
-
-      <!-- ══ VIEW TOGGLE ══ -->
-      <div class="view-toggle-bar">
-        <div class="view-toggle" id="viewToggle">
-          <button data-view="strip" class="active">🗓 2-Month</button>
-          <button data-view="timeline">📊 Timeline</button>
         </div>
       </div>
 
