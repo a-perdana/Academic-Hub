@@ -22,7 +22,7 @@
       .orb { display:none; }
 
       /* ── Page Header ── */
-      .page-header { padding:5.5rem 2rem 1.5rem; }
+      .page-header { max-width:1200px; margin:0 auto; padding:5.5rem 2rem 1.5rem; }
       .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--ink-3); font-size:13px; text-decoration:none; margin-bottom:1rem; transition:color .2s; }
       .back-link:hover { color:var(--ink); }
       .back-link svg { width:14px; height:14px; }
@@ -30,7 +30,136 @@
       .page-header .subtitle { font-size:.95rem; color:var(--ink-3); }
 
       /* ── Main ── */
-      main { max-width:1700px; margin:0 auto; padding:0 2rem 4rem; }
+      main { max-width:1200px; margin:0 auto; padding:0 2rem 4rem; }
+
+      /* ── View toggle ── */
+      .view-toggle-bar { display:flex; justify-content:flex-end; margin-bottom:1rem; }
+      .view-toggle {
+        display:inline-flex; background:var(--paper); border:1px solid var(--border);
+        border-radius:10px; padding:3px; gap:2px;
+      }
+      .view-toggle button {
+        padding:6px 14px; border:none; background:transparent;
+        font-family:"DM Sans",sans-serif; font-size:0.82rem; font-weight:600;
+        color:var(--ink-3); cursor:pointer; border-radius:7px;
+        display:inline-flex; align-items:center; gap:6px;
+        transition:all 0.15s;
+      }
+      .view-toggle button:hover { color:var(--ink); }
+      .view-toggle button.active { background:var(--white); color:var(--accent); box-shadow:var(--shadow-sm); }
+
+      /* ── 2-Month strip view ── */
+      .strip-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+      .strip-nav-btn {
+        padding:7px 16px; border:1px solid var(--border); background:var(--white); color:var(--ink-2);
+        border-radius:8px; cursor:pointer; font-weight:600; font-size:0.85rem;
+        font-family:"DM Sans",sans-serif; transition:all 0.15s;
+      }
+      .strip-nav-btn:hover { background:var(--paper); color:var(--ink); }
+      .strip-nav-label { font-size:0.9rem; font-weight:700; color:var(--ink); }
+
+      .strip-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+      @media(max-width:900px){ .strip-grid { grid-template-columns:1fr; gap:18px; } }
+
+      .strip-month {
+        background:var(--white); border:1px solid var(--border);
+        border-radius:14px; box-shadow:var(--shadow-sm); overflow:hidden;
+      }
+      .strip-month.current {
+        border-color:var(--accent);
+        box-shadow:0 0 0 2px rgba(108,92,231,0.15), var(--shadow-sm);
+      }
+      .strip-month-head {
+        background:linear-gradient(135deg,#f97316 0%,#ea580c 100%);
+        color:#fff; text-align:center; padding:10px 14px;
+        font-size:0.85rem; font-weight:700; letter-spacing:0.16em; text-transform:uppercase;
+      }
+      .strip-month.current .strip-month-head {
+        background:linear-gradient(135deg,var(--accent) 0%,#5a4bd1 100%);
+      }
+      .strip-cal-grid {
+        display:grid; grid-template-columns:repeat(7,minmax(0,1fr)); gap:2px;
+        padding:10px; background:var(--paper-2);
+      }
+      .strip-dow {
+        font-size:10px; font-weight:700; color:var(--ink-3);
+        text-transform:uppercase; letter-spacing:0.06em; text-align:center;
+        padding:6px 0 4px;
+      }
+      .strip-cell {
+        aspect-ratio:1/1; min-height:36px; background:var(--white);
+        border-radius:6px; display:flex; align-items:center; justify-content:center;
+        font-size:13px; font-weight:500; color:var(--ink); position:relative;
+      }
+      .strip-cell.empty { background:transparent; }
+      .strip-cell.today {
+        outline:2px solid var(--accent); outline-offset:-2px; font-weight:700;
+      }
+      .strip-cell[data-has-events="1"] { cursor:pointer; transition:transform 0.1s; }
+      .strip-cell[data-has-events="1"]:hover { transform:scale(1.06); z-index:2; }
+      /* Cells colored via inline background-color (per category from CATS) */
+      .strip-cell.has-fill { color:#fff; font-weight:700; }
+      .strip-cell.cont {
+        background:var(--white) !important; color:var(--ink) !important; font-weight:500 !important;
+      }
+      .strip-cell.cont::before {
+        content:''; position:absolute; inset:2px; border-radius:5px;
+        border:2px dashed currentColor; opacity:0.55;
+      }
+      .strip-cell[data-multi="1"]::after {
+        content:''; position:absolute; top:3px; right:3px;
+        width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.85);
+      }
+      .strip-cell.cont[data-multi="1"]::after {
+        background:var(--ink);
+      }
+      .strip-cell .num { position:relative; z-index:1; }
+
+      .strip-foot {
+        padding:12px 16px; border-top:1px solid var(--border);
+        max-height:240px; overflow-y:auto;
+      }
+      .strip-foot-item {
+        display:flex; gap:8px; align-items:flex-start;
+        font-size:0.8rem; line-height:1.4; padding:4px 0;
+      }
+      .strip-foot-item .day { font-weight:700; min-width:42px; flex-shrink:0; }
+      .strip-foot-item .body { flex:1; min-width:0; }
+      .strip-foot-item .title { color:var(--ink); }
+      .strip-foot-empty { font-size:0.78rem; color:var(--ink-3); font-style:italic; }
+
+      /* ── Day-detail popover ── */
+      .cal-day-detail {
+        position:fixed; inset:0; background:rgba(28,28,46,0.55);
+        backdrop-filter:blur(4px); z-index:9000;
+        display:none; align-items:center; justify-content:center; padding:20px;
+      }
+      .cal-day-detail.open { display:flex; }
+      .cal-day-box {
+        background:var(--white); border-radius:14px; width:100%; max-width:480px;
+        box-shadow:var(--shadow-lg); overflow:hidden;
+      }
+      .cal-day-head {
+        padding:16px 20px; border-bottom:1px solid var(--border);
+        display:flex; align-items:center; justify-content:space-between;
+      }
+      .cal-day-head h3 { font-size:1rem; font-weight:700; color:var(--ink); margin:0; }
+      .cal-day-close {
+        background:none; border:none; cursor:pointer; color:var(--ink-3);
+        font-size:1.4rem; line-height:1; padding:0 4px;
+      }
+      .cal-day-body { padding:16px 20px; max-height:60vh; overflow-y:auto; }
+      .cal-day-event {
+        padding:10px 12px; border:1px solid var(--paper-2); border-radius:8px;
+        margin-bottom:8px; cursor:pointer; transition:background 0.12s, border-color 0.12s;
+      }
+      .cal-day-event:last-child { margin-bottom:0; }
+      .cal-day-event:hover { background:var(--paper); }
+      .cal-day-event .title { font-size:0.9rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+      .cal-day-event .meta { font-size:0.75rem; color:var(--ink-3); display:flex; gap:10px; align-items:center; }
+      .cal-day-event .cat-pill {
+        font-size:11px; font-weight:700; padding:2px 8px; border-radius:5px;
+      }
 
       /* ── Stats Bar ── */
       .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:1.5rem; }
@@ -335,8 +464,26 @@
         </div>
       </div>
 
+      <!-- ══ VIEW TOGGLE ══ -->
+      <div class="view-toggle-bar">
+        <div class="view-toggle" id="viewToggle">
+          <button data-view="strip" class="active">🗓 2-Month</button>
+          <button data-view="timeline">📊 Timeline</button>
+        </div>
+      </div>
+
+      <!-- ══ 2-MONTH STRIP VIEW (default) ══ -->
+      <div id="stripWrap">
+        <div class="strip-nav">
+          <button class="strip-nav-btn" id="stripPrev">← Prev 2 months</button>
+          <span class="strip-nav-label" id="stripRangeLabel">—</span>
+          <button class="strip-nav-btn" id="stripNext">Next 2 months →</button>
+        </div>
+        <div class="strip-grid" id="stripGrid"></div>
+      </div>
+
       <!-- ══ TIMELINE ══ -->
-      <div class="timeline-outer" id="timelineOuter">
+      <div class="timeline-outer" id="timelineOuter" style="display:none">
         <div class="timeline-table" id="timelineTable">
           <!-- Built by JS -->
         </div>
@@ -558,6 +705,17 @@
       </div>
     </div>
 
+    <!-- ══ DAY DETAIL POPOVER (strip view) ══ -->
+    <div class="cal-day-detail" id="dayDetail">
+      <div class="cal-day-box">
+        <div class="cal-day-head">
+          <h3 id="dayDetailTitle">—</h3>
+          <button class="cal-day-close" id="dayDetailClose" aria-label="Close">×</button>
+        </div>
+        <div class="cal-day-body" id="dayDetailBody"></div>
+      </div>
+    </div>
+
     <!-- ══ LOADING ══ -->
     <div class="loading-overlay" id="loadingOverlay">
       <div class="spinner"></div>
@@ -713,7 +871,7 @@
         unsubActivities = onSnapshot(q, snap => {
           allActivities = snap.docs.map(d => ({id:d.id, ...d.data()}));
           if (allActivities.length === 0) seedDemo();
-          else { renderTimeline(); renderStats(); renderAdminList(); }
+          else { renderActivities(); renderStats(); renderAdminList(); }
           document.getElementById('loadingOverlay').style.display='none';
         }, err => {
           console.error('Firestore load error:', err);
@@ -805,7 +963,7 @@
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             const btn = document.querySelector(`.filter-btn[data-cat="${activeFilter}"]`);
             if (btn) { btn.classList.add('active'); applyFilterBtnStyle(btn, activeFilter); }
-            renderTimeline();
+            renderActivities();
           });
           laneRow.appendChild(label);
 
@@ -879,6 +1037,221 @@
         }
 
         renderLegend();
+      }
+
+      // ── 2-Month strip view ─────────────────────────────────────────
+      // Maps the academic-year (monthStart, weekStart) coordinates onto
+      // approximate ISO dates so activities can be drawn on a
+      // conventional Sun-Sat grid. weekN (1-4) → that month's Nth Monday;
+      // span runs Mon-Fri unless weekEnd is later.
+      const DOW_LABELS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      let stripAnchorIdx = 0; // index into MONTHS for the LEFT month
+
+      function nthMonday(year, monthNum, n) {
+        // monthNum is 1-12. Find first Monday, then add (n-1)*7.
+        const first = new Date(year, monthNum - 1, 1);
+        const dow = first.getDay();
+        const offsetToMon = (dow === 0) ? 1 : (8 - dow) % 7;
+        const firstMon = new Date(year, monthNum - 1, 1 + offsetToMon);
+        const target = new Date(firstMon);
+        target.setDate(firstMon.getDate() + (n - 1) * 7);
+        return target;
+      }
+      function ymd(d) {
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      }
+      function activityDateRange(act) {
+        const ms = MONTHS[act.monthStart], me = MONTHS[act.monthEnd];
+        const start = nthMonday(ms.year, ms.num, act.weekStart);
+        // weekEnd = N → that week's Friday; if N == weekStart and same month,
+        // span Mon-Fri; multi-week gets the proper Friday of weekEnd
+        const monEnd = nthMonday(me.year, me.num, act.weekEnd);
+        const friEnd = new Date(monEnd); friEnd.setDate(monEnd.getDate() + 4);
+        return { start, end: friEnd };
+      }
+
+      function buildStripDayIndex(activities) {
+        const byDay = {}, contByDay = {};
+        activities.forEach(act => {
+          if (act.monthStart == null) return;
+          const { start, end } = activityDateRange(act);
+          let cur = new Date(start), isFirst = true;
+          while (cur <= end) {
+            // Skip weekends — work-week only (Mon-Fri)
+            const dow = cur.getDay();
+            if (dow >= 1 && dow <= 5) {
+              const key = ymd(cur);
+              if (isFirst) { (byDay[key] = byDay[key] || []).push(act); isFirst = false; }
+              else         (contByDay[key] = contByDay[key] || []).push(act);
+            }
+            cur.setDate(cur.getDate() + 1);
+          }
+        });
+        return { byDay, contByDay };
+      }
+
+      function renderStrip() {
+        const wrap = document.getElementById('stripWrap');
+        if (!wrap || wrap.style.display === 'none') return;
+
+        // Clamp anchor — strip shows MONTHS[anchorIdx] + MONTHS[anchorIdx+1]
+        if (stripAnchorIdx < 0) stripAnchorIdx = 0;
+        if (stripAnchorIdx > MONTHS.length - 2) stripAnchorIdx = MONTHS.length - 2;
+
+        const filtered = filterActivities();
+        const { byDay, contByDay } = buildStripDayIndex(filtered);
+
+        const monthA = MONTHS[stripAnchorIdx];
+        const monthB = MONTHS[stripAnchorIdx + 1];
+        document.getElementById('stripRangeLabel').textContent =
+          `${monthA.name} ${monthA.year} – ${monthB.name} ${monthB.year}`;
+
+        // Disable nav buttons at edges
+        document.getElementById('stripPrev').disabled = (stripAnchorIdx <= 0);
+        document.getElementById('stripNext').disabled = (stripAnchorIdx >= MONTHS.length - 2);
+
+        const grid = document.getElementById('stripGrid');
+        grid.innerHTML = '';
+        grid.appendChild(buildStripMonthCard(monthA, byDay, contByDay));
+        grid.appendChild(buildStripMonthCard(monthB, byDay, contByDay));
+      }
+
+      function buildStripMonthCard(monthDef, byDay, contByDay) {
+        const today = new Date();
+        const isCurr = (today.getFullYear() === monthDef.year && today.getMonth() + 1 === monthDef.num);
+
+        const card = document.createElement('div');
+        card.className = 'strip-month' + (isCurr ? ' current' : '');
+
+        const head = document.createElement('div');
+        head.className = 'strip-month-head';
+        head.textContent = monthDef.name;
+        card.appendChild(head);
+
+        const cal = document.createElement('div');
+        cal.className = 'strip-cal-grid';
+        DOW_LABELS.forEach(d => {
+          const dow = document.createElement('div');
+          dow.className = 'strip-dow';
+          dow.textContent = d;
+          cal.appendChild(dow);
+        });
+        const firstDay = new Date(monthDef.year, monthDef.num - 1, 1).getDay();
+        for (let i = 0; i < firstDay; i++) {
+          const empty = document.createElement('div');
+          empty.className = 'strip-cell empty';
+          cal.appendChild(empty);
+        }
+        const lastDate = new Date(monthDef.year, monthDef.num, 0).getDate();
+        const dayList = []; // for foot panel
+        for (let d = 1; d <= lastDate; d++) {
+          const cell = document.createElement('div');
+          cell.className = 'strip-cell';
+          const num = document.createElement('span');
+          num.className = 'num';
+          num.textContent = String(d);
+          cell.appendChild(num);
+
+          const key = `${monthDef.year}-${String(monthDef.num).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          const isToday = (today.getFullYear() === monthDef.year && today.getMonth() + 1 === monthDef.num && today.getDate() === d);
+          if (isToday) cell.classList.add('today');
+
+          const startEvts = byDay[key] || [];
+          const contEvts  = contByDay[key] || [];
+          const allEvts   = [...startEvts, ...contEvts];
+
+          if (allEvts.length > 0) {
+            const dominant = startEvts[0] || contEvts[0];
+            const cat = CATS[dominant.category] || CATS.event;
+            const isContOnly = startEvts.length === 0 && contEvts.length > 0;
+            if (isContOnly) {
+              cell.classList.add('cont');
+              cell.style.color = cat.color;
+            } else {
+              cell.classList.add('has-fill');
+              cell.style.background = cat.color;
+            }
+            if (allEvts.length > 1) cell.dataset.multi = '1';
+            cell.dataset.hasEvents = '1';
+            cell.title = allEvts.map(a => a.title).join(' · ');
+            cell.addEventListener('click', () => openStripDayDetail(key, allEvts));
+          }
+
+          cal.appendChild(cell);
+          if (startEvts.length > 0) startEvts.forEach(act => dayList.push({ day: d, act }));
+        }
+        card.appendChild(cal);
+
+        const foot = document.createElement('div');
+        foot.className = 'strip-foot';
+        if (dayList.length === 0) {
+          foot.innerHTML = '<div class="strip-foot-empty">No activities this month.</div>';
+        } else {
+          dayList.forEach(({ day, act }) => {
+            const item = document.createElement('div');
+            item.className = 'strip-foot-item';
+            const cat = CATS[act.category] || CATS.event;
+            // Day label: end-of-span if same month, else just start day
+            const { end } = activityDateRange(act);
+            let dayLabel = String(day);
+            const sameMonthEnd = (end.getFullYear() === monthDef.year && end.getMonth() + 1 === monthDef.num);
+            if (sameMonthEnd && end.getDate() !== day) {
+              dayLabel = `${day}-${end.getDate()}`;
+            }
+            item.innerHTML = `
+              <span class="day" style="color:${cat.color}">${escHtml(dayLabel)}:</span>
+              <div class="body"><span class="title">${escHtml(act.title)}</span></div>
+            `;
+            item.style.cursor = 'pointer';
+            item.addEventListener('click', () => openDetailModal(act.id));
+            foot.appendChild(item);
+          });
+        }
+        card.appendChild(foot);
+
+        return card;
+      }
+
+      function openStripDayDetail(dateKey, events) {
+        const [y, m, d] = dateKey.split('-').map(Number);
+        const dt = new Date(y, m - 1, d);
+        const dowName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dt.getDay()];
+        const monthName = MONTHS.find(mo => mo.year === y && mo.num === m);
+        const monthLbl = monthName ? monthName.name : ['January','February','March','April','May','June','July','August','September','October','November','December'][m - 1];
+        document.getElementById('dayDetailTitle').textContent = `${dowName}, ${d} ${monthLbl} ${y}`;
+        const body = document.getElementById('dayDetailBody');
+        body.innerHTML = '';
+        events.forEach(act => {
+          const cat = CATS[act.category] || CATS.event;
+          const el = document.createElement('div');
+          el.className = 'cal-day-event';
+          el.innerHTML = `
+            <div class="title">${escHtml(act.title)}</div>
+            <div class="meta">
+              <span class="cat-pill" style="background:${cat.bg};color:${cat.color}">${cat.icon} ${escHtml(cat.label)}</span>
+            </div>
+          `;
+          el.addEventListener('click', () => {
+            closeStripDayDetail();
+            openDetailModal(act.id);
+          });
+          body.appendChild(el);
+        });
+        document.getElementById('dayDetail').classList.add('open');
+      }
+      function closeStripDayDetail() {
+        document.getElementById('dayDetail').classList.remove('open');
+      }
+
+      function escHtml(s) {
+        return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      // Combined dispatcher — call this anywhere instead of renderTimeline()
+      // alone so both views stay in sync with filter/search changes.
+      function renderActivities() {
+        renderTimeline();
+        renderStrip();
       }
 
       // ── Stats ──────────────────────────────────────────────────────
@@ -1019,7 +1392,7 @@
           updatedAt: serverTimestamp()
         }, {merge:true});
         myCompletions[currentDetailId] = { activityId:currentDetailId, completed:isDone, notes };
-        renderTimeline(); renderStats();
+        renderActivities(); renderStats();
         await loadCompletionData(currentDetailId);
       });
 
@@ -1356,22 +1729,77 @@
         document.querySelectorAll('.filter-btn').forEach(b => { b.classList.remove('active'); b.style.background=''; b.style.borderColor=''; b.style.color=''; });
         btn.classList.add('active');
         applyFilterBtnStyle(btn, activeFilter);
-        renderTimeline();
+        renderActivities();
       });
 
       let _timelineSearchTimer = null;
       document.getElementById('searchInput').addEventListener('input', e => {
         searchTerm = e.target.value;
         clearTimeout(_timelineSearchTimer);
-        _timelineSearchTimer = setTimeout(() => renderTimeline(), 300);
+        _timelineSearchTimer = setTimeout(() => renderActivities(), 300);
       });
 
       // ── Scroll to today ────────────────────────────────────────────
       document.getElementById('todayBtn').addEventListener('click', () => {
-        const outer = document.getElementById('timelineOuter');
-        const wi = getTodayWeekIdx();
-        if (wi>=0) outer.scrollTo({ left: 210 + wi*WEEK_W - outer.clientWidth/2 + WEEK_W/2, behavior:'smooth' });
+        if (currentView === 'strip') {
+          // Strip view: jump anchor to today's month (or as close as possible)
+          const today = new Date();
+          const idx = MONTHS.findIndex(m => m.year === today.getFullYear() && m.num === today.getMonth() + 1);
+          if (idx >= 0) {
+            stripAnchorIdx = Math.min(idx, MONTHS.length - 2);
+            renderStrip();
+          }
+        } else {
+          const outer = document.getElementById('timelineOuter');
+          const wi = getTodayWeekIdx();
+          if (wi>=0) outer.scrollTo({ left: 210 + wi*WEEK_W - outer.clientWidth/2 + WEEK_W/2, behavior:'smooth' });
+        }
       });
+
+      // ── View toggle (2-Month strip | Timeline) ─────────────────────
+      const VIEW_KEY = 'ahAcadCalView';
+      let currentView = 'strip';
+      try { currentView = localStorage.getItem(VIEW_KEY) || 'strip'; } catch(_) {}
+
+      function applyViewState() {
+        document.querySelectorAll('#viewToggle button').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.view === currentView);
+        });
+        document.getElementById('stripWrap').style.display      = currentView === 'strip'    ? '' : 'none';
+        document.getElementById('timelineOuter').style.display  = currentView === 'timeline' ? '' : 'none';
+        // Re-render the active view so it picks up filter/search changes
+        // made while it was hidden.
+        renderActivities();
+      }
+
+      document.querySelectorAll('#viewToggle button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentView = btn.dataset.view;
+          try { localStorage.setItem(VIEW_KEY, currentView); } catch(_) {}
+          applyViewState();
+        });
+      });
+
+      // Strip nav (prev / next 2 months)
+      document.getElementById('stripPrev').addEventListener('click', () => { stripAnchorIdx -= 2; renderStrip(); });
+      document.getElementById('stripNext').addEventListener('click', () => { stripAnchorIdx += 2; renderStrip(); });
+
+      // Day-detail popover close
+      document.getElementById('dayDetailClose').addEventListener('click', closeStripDayDetail);
+      document.getElementById('dayDetail').addEventListener('click', e => {
+        if (e.target === document.getElementById('dayDetail')) closeStripDayDetail();
+      });
+
+      // Default the strip anchor to the month containing today (or the
+      // first month if today is outside the academic year window).
+      (function initStripAnchor() {
+        const today = new Date();
+        const idx = MONTHS.findIndex(m => m.year === today.getFullYear() && m.num === today.getMonth() + 1);
+        stripAnchorIdx = (idx >= 0) ? Math.min(idx, MONTHS.length - 2) : 0;
+      })();
+
+      // Apply initial view state once the DOM is ready.
+      applyViewState();
 
       // ── Nav scroll effect ──────────────────────────────────────────
       (function () {
