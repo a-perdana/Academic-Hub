@@ -92,6 +92,8 @@ const cleanUrls = {
   "TeacherAppraisalCalibration.html": "appraiser-calibration",
   "academic-services.html":          "academic-services",
   "SyllabusCoverage.html":           "syllabus-coverage",
+  "StudentRoster.html":              "student-roster",
+  "SchoolAssessment.html":           "school-assessment",
   "settings.html":                   "settings",
 };
 
@@ -186,6 +188,8 @@ const htmlFiles = [
   "TeacherAppraisalCalibration.html",
   "academic-services.html",
   "SyllabusCoverage.html",
+  "StudentRoster.html",
+  "SchoolAssessment.html",
   "settings.html",
 ];
 

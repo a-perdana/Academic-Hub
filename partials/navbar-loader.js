@@ -730,6 +730,8 @@ const NAV_ITEMS = [
     { key: 'references',           href: '/references',            label: 'References' },
     { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
+    { key: 'student-roster',       href: '/student-roster',        label: 'Student Roster' },
+    { key: 'school-assessment',    href: '/school-assessment',     label: 'School Assessment' },
     { key: 'library',              href: '/library',               label: 'Resource Library' },
     { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
   ]},

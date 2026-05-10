@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Assessment — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%236c5ce7'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); margin: 0; color: var(--ink); }
+  .hero { background: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #6c5ce7 100%); color: #fff; padding: 32px 40px; }
+  .hero-inner { max-width: 1180px; margin: 0 auto; }
+  .hero h1 { font-family: 'Lora', serif; font-size: 1.7rem; margin: 6px 0 4px; }
+  .hero p { color: rgba(255,255,255,.78); font-size: .9rem; max-width: 620px; }
+  .page-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; }
+
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 22px; }
+  .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .stat-num { font-family: 'Lora', serif; font-size: 1.7rem; line-height: 1; }
+  .stat-lbl { font-size: 11.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+
+  .toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+  .toolbar select { padding: 8px 12px; font-family: inherit; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+
+  .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+  .class-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
+  .class-name { font-weight: 600; font-size: 1rem; }
+  .class-meta { font-size: 11.5px; color: var(--ink-3); margin: 4px 0 12px; }
+  .bar { height: 8px; background: #f3f4f6; border-radius: 99px; overflow: hidden; margin: 10px 0; }
+  .bar > div { height: 100%; background: linear-gradient(90deg, #6c5ce7, #0891b2); }
+  .row-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 12px; }
+  .row-stats > div { background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: center; }
+  .row-stats > div strong { display: block; font-family: 'Lora', serif; font-size: 1.05rem; }
+
+  .empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
+  .empty-title { font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+  .access-warn { padding: 14px 18px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; border-radius: 10px; margin-bottom: 18px; font-size: 13px; }
+</style>
+</head>
+<body>
+  <script src="firebase-config.js"></script>
+  <script type="module" src="auth-guard.js"></script>
+  <div id="navbarMount"></div>
+  <script src="partials/navbar-loader.js"></script>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div style="font-size:.7rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:8px;">School-wide insights</div>
+      <h1>School Assessment</h1>
+      <p>Chapter mastery + EASE growth roll-up across every Year 7–8 class in your school. Spot under-performing classes early and direct the right intervention.</p>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div id="accessWarn" class="access-warn" hidden></div>
+
+    <div class="stat-row" id="statRow"></div>
+
+    <div class="toolbar">
+      <select id="fSubject">
+        <option value="">All subjects</option>
+        <option value="math">Mathematics</option>
+        <option value="english">English</option>
+        <option value="science">Science</option>
+        <option value="biology">Biology</option>
+        <option value="chemistry">Chemistry</option>
+        <option value="physics">Physics</option>
+      </select>
+      <select id="fGrade">
+        <option value="">All grades</option>
+        <option value="7">Year 7</option>
+        <option value="8">Year 8</option>
+        <option value="9">Year 9</option>
+        <option value="10">Year 10</option>
+      </select>
+    </div>
+
+    <div id="classGrid" class="class-grid"></div>
+  </main>
+
+  <script type="module">
+    import {
+      collection, query, where, onSnapshot, getDocs
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    let classes = [];
+    let attempts = [];
+    let students = [];
+
+    document.addEventListener('authReady', async ({ detail: { user, profile } } = { detail: window.__authReadyDetail || {} }) => {
+      if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('school-assessment', { user, profile });
+      if (!profile) return;
+      const isAdmin = profile.role_academichub === 'academic_admin';
+      if (!profile.schoolId && !isAdmin) {
+        document.getElementById('accessWarn').hidden = false;
+        document.getElementById('accessWarn').textContent = 'Set your school in your profile first.';
+        return;
+      }
+
+      // Load classes
+      if (profile.schoolId) {
+        const csnap = await getDocs(collection(window.db, 'partner_schools', profile.schoolId, 'classes'));
+        classes = csnap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (Number(a.grade) - Number(b.grade)) || (a.name || '').localeCompare(b.name || ''));
+
+        // Active students
+        const ssnap = await getDocs(query(
+          collection(window.db, 'students'),
+          where('schoolId', '==', profile.schoolId),
+          where('status', '==', 'active')
+        ));
+        students = ssnap.docs.map(d => ({ id: d.id, ...d.data() }));
+      }
+
+      // Live attempts
+      if (profile.schoolId) {
+        onSnapshot(
+          query(collection(window.db, 'chapter_test_attempts'),
+                where('schoolId', '==', profile.schoolId)),
+          snap => { attempts = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+          err => console.error('[school-assessment] error', err)
+        );
+      }
+    });
+
+    document.getElementById('fSubject').addEventListener('change', render);
+    document.getElementById('fGrade').addEventListener('change', render);
+
+    function render() {
+      const subjectFilter = document.getElementById('fSubject').value;
+      const gradeFilter = document.getElementById('fGrade').value;
+
+      const submitted = attempts.filter(a => ['scored','submitted','flagged'].includes(a.status));
+      const matchSubject = a => !subjectFilter || (a.testId || '').split('_')[0] === subjectFilter;
+
+      const allScored = submitted.filter(matchSubject).filter(a => typeof a.rawScorePct === 'number');
+      const networkAvg = allScored.length ? Math.round(allScored.reduce((s, n) => s + n.rawScorePct, 0) / allScored.length) : null;
+      const networkPass = allScored.length ? Math.round(allScored.filter(a => a.passed).length / allScored.length * 100) : null;
+
+      document.getElementById('statRow').innerHTML = `
+        <div class="stat-card"><div class="stat-num">${classes.length}</div><div class="stat-lbl">Classes</div></div>
+        <div class="stat-card"><div class="stat-num">${students.length}</div><div class="stat-lbl">Active students</div></div>
+        <div class="stat-card"><div class="stat-num">${allScored.length}</div><div class="stat-lbl">Tests submitted</div></div>
+        <div class="stat-card"><div class="stat-num">${networkAvg == null ? '—' : networkAvg + '%'}</div><div class="stat-lbl">School average</div></div>
+        <div class="stat-card"><div class="stat-num">${networkPass == null ? '—' : networkPass + '%'}</div><div class="stat-lbl">Pass rate</div></div>
+      `;
+
+      // Per-class roll-up
+      const filteredClasses = classes.filter(c => !gradeFilter || Number(c.grade) === Number(gradeFilter));
+      const grid = document.getElementById('classGrid');
+      if (filteredClasses.length === 0) {
+        grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><div class="empty-title">No classes</div></div>';
+        return;
+      }
+
+      grid.innerHTML = filteredClasses.map(c => {
+        const classAttempts = submitted.filter(a => a.className === c.name).filter(matchSubject);
+        const classScored = classAttempts.filter(a => typeof a.rawScorePct === 'number');
+        const avg = classScored.length ? Math.round(classScored.reduce((s, n) => s + n.rawScorePct, 0) / classScored.length) : null;
+        const pass = classScored.length ? Math.round(classScored.filter(a => a.passed).length / classScored.length * 100) : null;
+        const lowCount = classScored.filter(a => a.rawScorePct < 40).length;
+        const classStudents = students.filter(s => s.className === c.name).length;
+
+        return `
+          <div class="class-card">
+            <div class="class-name">${escHtml(c.name)}</div>
+            <div class="class-meta">Year ${escHtml(c.grade)} · ${classStudents} student${classStudents === 1 ? '' : 's'} · ${classAttempts.length} submission${classAttempts.length === 1 ? '' : 's'}</div>
+            <div class="bar"><div style="width:${avg || 0}%"></div></div>
+            <div class="row-stats">
+              <div><strong>${avg == null ? '—' : avg + '%'}</strong><span>Average</span></div>
+              <div><strong style="color:#16a34a">${pass == null ? '—' : pass + '%'}</strong><span>Pass rate</span></div>
+              <div><strong style="color:${lowCount > 0 ? '#b91c1c' : 'var(--ink-3)'}">${lowCount}</strong><span>Need help</span></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function escHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  </script>
+</body>
+</html>

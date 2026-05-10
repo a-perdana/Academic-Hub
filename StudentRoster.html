@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Roster — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%236c5ce7'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="tokens.css">
+<style>
+  body { font-family: 'DM Sans', sans-serif; background: var(--paper); margin: 0; color: var(--ink); }
+  .hero { background: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #6c5ce7 100%); color: #fff; padding: 32px 40px; }
+  .hero-inner { max-width: 1180px; margin: 0 auto; }
+  .hero h1 { font-family: 'Lora', serif; font-size: 1.7rem; margin: 6px 0 4px; }
+  .hero p { color: rgba(255,255,255,.78); font-size: .9rem; max-width: 620px; }
+  .page-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; }
+
+  .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
+  .toolbar select, .toolbar input {
+    padding: 8px 12px; font-family: inherit; font-size: 13px;
+    border: 1px solid var(--border); border-radius: 8px; background: #fff;
+  }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 18px; }
+  .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
+  .stat-num { font-family: 'Lora', serif; font-size: 1.7rem; line-height: 1; }
+  .stat-lbl { font-size: 11.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+  table.roster { width: 100%; background: #fff; border: 1px solid var(--border); border-radius: 12px; border-collapse: separate; border-spacing: 0; overflow: hidden; }
+  table.roster th { padding: 11px 14px; text-align: left; font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; background: var(--paper); border-bottom: 1px solid var(--border); }
+  table.roster td { padding: 11px 14px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  table.roster tr:last-child td { border-bottom: none; }
+  .pill { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 99px; }
+  .pill-active { background: #dcfce7; color: #166534; }
+  .pill-pending { background: #fef3c7; color: #92400e; }
+  .pill-rejected, .pill-graduated { background: #f3f4f6; color: #4b5563; }
+  .pill-needs_class { background: #fee2e2; color: #b91c1c; }
+  .empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
+  .empty-title { font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+  .access-warn { padding: 14px 18px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; border-radius: 10px; margin-bottom: 18px; font-size: 13px; }
+  .btn { padding: 7px 14px; border: 1px solid var(--border); background: #fff; border-radius: 8px; font-family: inherit; font-size: 12.5px; cursor: pointer; }
+  .btn-primary { background: #6c5ce7; color: #fff; border-color: #6c5ce7; }
+  .btn-danger { background: #fef2f2; color: #b91c1c; border-color: #fca5a5; }
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); padding: 10px 18px; background: var(--ink); color: #fff; border-radius: 10px; font-size: 13px; opacity: 0; transition: opacity .2s; z-index: 999; }
+  .toast.is-visible { opacity: 1; }
+</style>
+</head>
+<body>
+  <script src="firebase-config.js"></script>
+  <script type="module" src="auth-guard.js"></script>
+  <div id="navbarMount"></div>
+  <script src="partials/navbar-loader.js"></script>
+
+  <header class="hero">
+    <div class="hero-inner">
+      <div style="font-size:.7rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:8px;">School Roster</div>
+      <h1>Student Roster</h1>
+      <p>Active Students-Hub roster for your school. Promote students at year-end, graduate Year 12 cohorts, or remove duplicates. Read-only for everyone except school principals + academic admins.</p>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div id="accessWarn" class="access-warn" hidden></div>
+
+    <div class="stat-row" id="statRow"></div>
+
+    <div class="toolbar">
+      <select id="fStatus">
+        <option value="active">Active</option>
+        <option value="pending_approval">Pending approval</option>
+        <option value="rejected">Rejected</option>
+        <option value="graduated">Graduated</option>
+        <option value="needs_class">Needs class</option>
+        <option value="">All statuses</option>
+      </select>
+      <select id="fGrade">
+        <option value="">All grades</option>
+        <option value="7">Year 7</option>
+        <option value="8">Year 8</option>
+        <option value="9">Year 9</option>
+        <option value="10">Year 10</option>
+        <option value="11">Year 11</option>
+        <option value="12">Year 12</option>
+      </select>
+      <input id="fSearch" placeholder="Search by name or email…">
+      <span style="margin-left:auto; font-size:12px; color:var(--ink-3)" id="resultCount">—</span>
+    </div>
+
+    <div id="rosterBox"></div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import {
+      collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    let students = [];
+    let unsub = null;
+    let canEdit = false;
+
+    document.addEventListener('authReady', ({ detail: { user, profile } } = { detail: window.__authReadyDetail || {} }) => {
+      if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('student-roster', { user, profile });
+      if (!profile) return;
+      const isAdmin = profile.role_academichub === 'academic_admin';
+      const sub = profile.ah_sub_roles || [];
+      canEdit = isAdmin || sub.includes('school_principal') || sub.includes('academic_coordinator');
+
+      if (!canEdit && !sub.includes('foundation_representative') && !sub.includes('cambridge_coordinator')) {
+        document.getElementById('accessWarn').hidden = false;
+        document.getElementById('accessWarn').textContent = 'Roster access limited to school leadership.';
+        return;
+      }
+
+      if (!profile.schoolId) {
+        document.getElementById('accessWarn').hidden = false;
+        document.getElementById('accessWarn').textContent = 'Set your school in your profile first.';
+        return;
+      }
+
+      const base = collection(window.db, 'students');
+      const q = isAdmin ? query(base) : query(base, where('schoolId', '==', profile.schoolId));
+      unsub = onSnapshot(q, snap => { students = snap.docs.map(d => ({ id: d.id, ...d.data() })); render(); },
+                          err => console.error('[student-roster] error', err));
+    });
+
+    document.getElementById('fStatus').addEventListener('change', render);
+    document.getElementById('fGrade').addEventListener('change', render);
+    document.getElementById('fSearch').addEventListener('input', render);
+
+    function render() {
+      const status = document.getElementById('fStatus').value;
+      const grade  = document.getElementById('fGrade').value;
+      const search = (document.getElementById('fSearch').value || '').trim().toLowerCase();
+
+      const counts = { active: 0, pending_approval: 0, rejected: 0, graduated: 0, needs_class: 0 };
+      students.forEach(s => { if (counts[s.status] != null) counts[s.status]++; });
+      document.getElementById('statRow').innerHTML = `
+        <div class="stat-card"><div class="stat-num">${students.length}</div><div class="stat-lbl">Total</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#16a34a">${counts.active}</div><div class="stat-lbl">Active</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:#92400e">${counts.pending_approval}</div><div class="stat-lbl">Pending</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--ink-3)">${counts.graduated}</div><div class="stat-lbl">Graduated</div></div>
+        <div class="stat-card"><div class="stat-num" style="color:var(--ink-3)">${counts.rejected + counts.needs_class}</div><div class="stat-lbl">Rejected / no class</div></div>
+      `;
+
+      const filtered = students.filter(s => {
+        if (status && s.status !== status) return false;
+        if (grade && Number(s.gradeLevel) !== Number(grade)) return false;
+        if (search) {
+          const blob = `${s.displayName || ''} ${s.email || ''}`.toLowerCase();
+          if (!blob.includes(search)) return false;
+        }
+        return true;
+      }).sort((a, b) => (a.displayName || '').localeCompare(b.displayName || ''));
+
+      document.getElementById('resultCount').textContent = filtered.length + ' result(s)';
+
+      const box = document.getElementById('rosterBox');
+      if (filtered.length === 0) {
+        box.innerHTML = '<div class="empty"><div class="empty-title">No students</div></div>';
+        return;
+      }
+
+      box.innerHTML = `
+        <table class="roster">
+          <thead><tr>
+            <th>Name</th><th>Email</th><th>Class</th><th>Grade</th><th>Status</th>
+            ${canEdit ? '<th style="text-align:right">Actions</th>' : ''}
+          </tr></thead>
+          <tbody>
+            ${filtered.map(s => `
+              <tr data-uid="${escAttr(s.id)}">
+                <td><strong>${escHtml(s.displayName || '—')}</strong></td>
+                <td style="color:var(--ink-3)">${escHtml(s.email || '')}</td>
+                <td>${escHtml(s.className || '')}</td>
+                <td>${s.gradeLevel ? 'Year ' + s.gradeLevel : ''}</td>
+                <td><span class="pill pill-${escAttr(s.status)}">${escHtml(s.status)}</span></td>
+                ${canEdit ? `<td style="text-align:right">
+                  ${s.status === 'pending_approval' ? `<button class="btn btn-primary" data-act="approve" data-uid="${escAttr(s.id)}">Approve</button>` : ''}
+                  ${s.status === 'active' && Number(s.gradeLevel) === 12 ? `<button class="btn" data-act="graduate" data-uid="${escAttr(s.id)}">Graduate</button>` : ''}
+                  ${s.status === 'active' ? `<button class="btn btn-danger" data-act="deactivate" data-uid="${escAttr(s.id)}">Remove</button>` : ''}
+                  ${s.status === 'graduated' ? `<button class="btn" data-act="reactivate" data-uid="${escAttr(s.id)}">Reactivate</button>` : ''}
+                </td>` : ''}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      `;
+      if (canEdit) {
+        box.querySelectorAll('button[data-act]').forEach(b => {
+          b.addEventListener('click', () => act(b.dataset.act, b.dataset.uid));
+        });
+      }
+    }
+
+    async function act(action, uid) {
+      const map = {
+        approve:    { status: 'active',     approvedAt: serverTimestamp(),  approvedBy: window.currentUser.uid },
+        graduate:   { status: 'graduated',  graduatedAt: serverTimestamp() },
+        deactivate: { status: 'rejected',   rejectedAt: serverTimestamp(),  rejectedBy: window.currentUser.uid },
+        reactivate: { status: 'active',     approvedAt: serverTimestamp(),  approvedBy: window.currentUser.uid },
+      };
+      try {
+        await updateDoc(doc(window.db, 'students', uid), map[action]);
+        toast('Updated.');
+      } catch (e) { toast('Failed: ' + (e.message || e.code)); }
+    }
+
+    function toast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('is-visible');
+      setTimeout(() => t.classList.remove('is-visible'), 1800);
+    }
+    function escHtml(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function escAttr(s) { return escHtml(s); }
+  </script>
+</body>
+</html>
