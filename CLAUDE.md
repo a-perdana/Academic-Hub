@@ -135,6 +135,8 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 | `principal_annual_appraisals/{principalUid}_{academicYear}` | F1-F5 + F_LEAD weighted composite + A-F band. Composite + percent + band persisted alongside raw scores. Submitted = immutable. | Foundation Rep (appraiser) |
 | `principal_360_cycles/{cycleId}` · `principal_360_responses/{respId}` · `principal_360_aggregates/{cycleId}` | Anonymous 360 cycle. Responses persist NO respondent uid (NN5). Aggregates threshold-gated (5+ per cohort). Cloud Function planned. | various — see root CLAUDE.md |
 | `principal_coaching_sessions/{principalUid}_{YYYY-MM-DD}` | Mentor session form lives in CH; AH `/principal-coaching-view` reads-only. Foundation Reps **excluded at rule level** for coaching confidentiality. | mentor (HQ Director — CH) |
+| `students/{uid}` | Read by AH `/student-roster` for own-school view. Update: status flips on approve/graduate/reject/reactivate. **Distinct from `users/{uid}`** — `students` is the Students-Hub user collection. Phase 1.5 (2026-05-10). | school_principal / academic_coordinator (status flips); central_admin (any field) |
+| `chapter_test_attempts/{attemptId}` | Read by AH `/school-assessment` (`where schoolId == own school`) for school-wide mastery roll-up. Phase 1.5. | TH teacher / admin (writes); AH leadership read |
 
 **Timestamp:** `createdAt` (serverTimestamp). NEVER `timestamp`.
 
@@ -183,6 +185,9 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
   - `principal-360-respond?cycle=X&cohort=staff|parent|student` — anonymous respondent form. Open to any auth user (cycle gating in rule). Idempotency via localStorage hint.
   - `principal-360-results?cycle=X` — aggregate read-only view (SP + FR). Threshold-gated (5+ respondents/cohort). Cloud Function `aggregatePrincipal360Responses` planned.
   - `principal-coaching-view` — coachee read-only view of own coaching sessions (school_principal only). Mentor session form lives in CH (`/principal-coaching-session`).
+- **Students Hub bridge (Phase 1.5, 2026-05-10):**
+  - `student-roster` (source: `StudentRoster.html`) — School-side counterpart to TH `/student-approvals`. Status filter (active / pending_approval / rejected / graduated / needs_class) + grade filter + search. Approve / Graduate / Remove / Reactivate actions write to `students/{uid}.status`. visible_to=[school_principal, academic_coordinator] (admin bypasses). Reads `students where schoolId == own school`.
+  - `school-assessment` (source: `SchoolAssessment.html`) — Network-uniform chapter-mastery roll-up across every Year 7-8 class. Per-class cards (avg score, pass rate, intervention count). Subject + grade filters. Pulls live `chapter_test_attempts where schoolId == own school`. Read-only for all leadership sub-roles (FR / SP / AC / CC).
 - Reference: `weekly-checklist`, `cambridge-calendar`, `cambridge-standards`, `library`, `academic-services`
 
 ---
