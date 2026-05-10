@@ -435,8 +435,8 @@
       .admin-date-cell { font-size:12px; color:var(--ink-2); white-space:nowrap; }
       .admin-schools-cell { font-size:12px; color:var(--ink-3); max-width:180px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .admin-actions { display:flex; gap:6px; }
-      .admin-action-btn { display:inline-flex; align-items:center; gap:5px; padding:6px 12px; border-radius:8px; font-size:12px; font-weight:600; cursor:pointer; transition:all .18s; white-space:nowrap; font-family:"DM Sans",sans-serif; }
-      .admin-action-btn svg { width:13px; height:13px; flex-shrink:0; }
+      .admin-action-btn { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0; border-radius:7px; cursor:pointer; transition:all .18s; font-family:"DM Sans",sans-serif; }
+      .admin-action-btn svg { width:14px; height:14px; flex-shrink:0; }
       .admin-action-edit { background:var(--accent-2); color:var(--accent); border:1px solid rgba(108,92,231,.25); }
       .admin-action-edit:hover { background:rgba(108,92,231,.2); transform:translateY(-1px); }
       .admin-action-delete { background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); }
@@ -1641,13 +1641,11 @@
               <td class="admin-schools-cell" title="${schoolsLabel}">${schoolsLabel}</td>
               <td>
                 ${isModerator ? `<div class="admin-actions">
-                  <button class="admin-action-btn admin-action-edit" data-id="${act.id}">
+                  <button class="admin-action-btn admin-action-edit" data-id="${act.id}" title="Edit" aria-label="Edit">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-                    Edit
                   </button>
-                  ${isAdmin ? `<button class="admin-action-btn admin-action-delete" data-id="${act.id}">
+                  ${isAdmin ? `<button class="admin-action-btn admin-action-delete" data-id="${act.id}" title="Delete" aria-label="Delete">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-                    Delete
                   </button>` : ''}
                 </div>` : '<span style="font-size:11px;color:rgba(255,255,255,.25);">View only</span>'}
               </td>`;
