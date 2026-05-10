@@ -514,6 +514,7 @@
           <div class="view-toggle" id="viewToggle">
             <button data-view="strip" class="active" data-tooltip="2-Month View">🗓</button>
             <button data-view="timeline" data-tooltip="Timeline View">📊</button>
+            <button data-view="list" data-tooltip="List View">📋</button>
           </div>
           <button class="add-btn" id="addActBtn" data-tooltip="Add New Activity" aria-label="Add New Activity">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1814,8 +1815,10 @@
         document.querySelectorAll('#viewToggle button').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.view === currentView);
         });
-        document.getElementById('stripWrap').style.display      = currentView === 'strip'    ? '' : 'none';
-        document.getElementById('timelineOuter').style.display  = currentView === 'timeline' ? '' : 'none';
+        document.getElementById('stripWrap').style.display        = currentView === 'strip'    ? '' : 'none';
+        document.getElementById('timelineOuter').style.display    = currentView === 'timeline' ? '' : 'none';
+        document.getElementById('legend').style.display           = currentView === 'list'     ? 'none' : '';
+        document.getElementById('adminListSection').style.display = currentView === 'list'     ? '' : 'none';
         // Re-render the active view so it picks up filter/search changes
         // made while it was hidden.
         renderActivities();
