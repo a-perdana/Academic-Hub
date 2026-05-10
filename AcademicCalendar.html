@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Eduversal Indonesia Event Calendar – interactive yearly activity timeline for partner schools" />
     <meta name="theme-color" content="#667eea" />
-    <title>Event Calendar | Eduversal Indonesia</title>
+    <title>Academic Calendar | Eduversal Indonesia</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
     <style>
       /* Page-specific accent override (mor) + page layout vars. Tokens,
@@ -34,14 +34,29 @@
         border-radius:10px; padding:3px; gap:2px; flex-shrink:0;
       }
       .view-toggle button {
-        padding:6px 14px; border:none; background:transparent;
-        font-family:"DM Sans",sans-serif; font-size:0.82rem; font-weight:600;
-        color:var(--ink-3); cursor:pointer; border-radius:7px;
-        display:inline-flex; align-items:center; gap:6px;
-        transition:all 0.15s;
+        position:relative;
+        width:34px; height:32px; padding:0; border:none; background:transparent;
+        font-size:15px; line-height:1; cursor:pointer; border-radius:7px;
+        display:inline-flex; align-items:center; justify-content:center;
+        transition:all 0.15s; font-family:"DM Sans",sans-serif;
       }
-      .view-toggle button:hover { color:var(--ink); }
-      .view-toggle button.active { background:var(--white); color:var(--accent); box-shadow:var(--shadow-sm); }
+      .view-toggle button:hover { background:var(--white); }
+      .view-toggle button.active { background:var(--white); box-shadow:var(--shadow-sm); }
+      /* Tooltip for view-toggle buttons */
+      .view-toggle button[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%);
+        background:var(--ink); color:#fff;
+        font-size:11px; font-weight:600; white-space:nowrap;
+        padding:4px 8px; border-radius:6px;
+        opacity:0; pointer-events:none; transition:opacity .15s; z-index:50;
+      }
+      .view-toggle button[data-tooltip]::before {
+        content:''; position:absolute; top:calc(100% + 4px); left:50%; transform:translateX(-50%);
+        border:5px solid transparent; border-bottom-color:var(--ink);
+        opacity:0; pointer-events:none; transition:opacity .15s; z-index:50;
+      }
+      .view-toggle button:hover::after, .view-toggle button:hover::before { opacity:1; }
 
       /* ── 2-Month strip view ── */
       .strip-nav { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
@@ -168,18 +183,67 @@
       @media(max-width:500px){ .stats-bar{grid-template-columns:1fr;} }
 
       /* ── Filter Bar ── */
-      .filter-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:1.25rem; flex-wrap:wrap; }
-      .filter-cats { display:flex; gap:8px; flex-wrap:wrap; }
-      .filter-btn { padding:7px 14px; border-radius:20px; border:1px solid var(--border); background:var(--white); color:var(--ink-2); font-size:13px; font-weight:500; cursor:pointer; transition:all .2s; white-space:nowrap; font-family:"DM Sans",sans-serif; box-shadow:var(--shadow-sm); }
-      .filter-btn:hover { border-color:var(--accent); color:var(--accent); background:var(--accent-2); }
-      .filter-btn.active { background:var(--accent-2); border-color:var(--accent); color:var(--accent); font-weight:600; }
+      .filter-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:1.25rem; flex-wrap:nowrap; }
+      .filter-cats { display:flex; gap:6px; flex-wrap:nowrap; }
+      .filter-btn {
+        position:relative;
+        width:38px; height:38px; padding:0; border-radius:10px;
+        border:1px solid var(--border); background:var(--white);
+        cursor:pointer; transition:all .15s;
+        font-family:"DM Sans",sans-serif; box-shadow:var(--shadow-sm);
+        display:inline-flex; align-items:center; justify-content:center;
+        flex-shrink:0;
+      }
+      .filter-btn .filter-icon { font-size:16px; line-height:1; }
+      .filter-btn:hover { border-color:var(--accent); background:var(--accent-2); transform:translateY(-1px); }
+      .filter-btn.active { background:var(--accent-2); border-color:var(--accent); }
+      /* Custom hover tooltip — appears below the button instantly */
+      .filter-btn::after {
+        content: attr(data-tooltip);
+        position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+        background:var(--ink); color:#fff;
+        font-size:11px; font-weight:600; white-space:nowrap;
+        padding:4px 8px; border-radius:6px;
+        opacity:0; pointer-events:none; transition:opacity .15s;
+        z-index:50;
+      }
+      .filter-btn::before {
+        content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+        border:5px solid transparent; border-bottom-color:var(--ink);
+        opacity:0; pointer-events:none; transition:opacity .15s;
+        z-index:50;
+      }
+      .filter-btn:hover::after, .filter-btn:hover::before { opacity:1; }
+      @media(max-width:760px){ .filter-bar { flex-wrap:wrap; } .filter-cats { flex-wrap:wrap; } }
       .filter-right { display:flex; gap:10px; align-items:center; }
       .search-input { padding:8px 14px; border-radius:10px; background:var(--white); border:1px solid var(--border); color:var(--ink); font-family:"DM Sans",sans-serif; font-size:13px; outline:none; width:220px; transition:all .2s; box-shadow:var(--shadow-sm); }
       .search-input::placeholder { color:var(--ink-3); }
       .search-input:focus { border-color:var(--accent); box-shadow:0 0 0 3px rgba(108,92,231,.12); }
-      .add-btn { display:none; align-items:center; gap:7px; padding:9px 18px; border-radius:10px; background:linear-gradient(135deg,#6c5ce7,#764ba2); border:none; color:#fff; font-size:13px; font-weight:600; cursor:pointer; transition:all .22s; white-space:nowrap; font-family:"DM Sans",sans-serif; box-shadow:0 4px 14px rgba(108,92,231,.35); }
+      .add-btn {
+        position:relative;
+        display:none; align-items:center; justify-content:center;
+        width:38px; height:38px; padding:0; border-radius:10px;
+        background:linear-gradient(135deg,#6c5ce7,#764ba2); border:none;
+        color:#fff; cursor:pointer; transition:all .22s; flex-shrink:0;
+        font-family:"DM Sans",sans-serif; box-shadow:0 4px 14px rgba(108,92,231,.35);
+      }
       .add-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(108,92,231,.5); }
-      .add-btn svg { width:15px; height:15px; }
+      .add-btn svg { width:18px; height:18px; }
+      /* Tooltip for the icon-only add button */
+      .add-btn[data-tooltip]::after {
+        content: attr(data-tooltip);
+        position:absolute; top:calc(100% + 6px); left:50%; transform:translateX(-50%);
+        background:var(--ink); color:#fff;
+        font-size:11px; font-weight:600; white-space:nowrap;
+        padding:4px 8px; border-radius:6px;
+        opacity:0; pointer-events:none; transition:opacity .15s; z-index:50;
+      }
+      .add-btn[data-tooltip]::before {
+        content:''; position:absolute; top:100%; left:50%; transform:translateX(-50%);
+        border:5px solid transparent; border-bottom-color:var(--ink);
+        opacity:0; pointer-events:none; transition:opacity .15s; z-index:50;
+      }
+      .add-btn:hover::after, .add-btn:hover::before { opacity:1; }
 
       /* ── Timeline Outer ── */
       .timeline-outer { overflow-x:auto; border-radius:16px; border:1px solid var(--border); background:var(--white); margin-bottom:1.5rem; box-shadow:var(--shadow-sm); }
@@ -410,7 +474,7 @@
 
     <!-- ══ PAGE HEADER ══ -->
     <div class="page-header">
-      <h1>Event Calendar</h1>
+      <h1>Academic Calendar</h1>
     </div>
 
     <main>
@@ -437,23 +501,22 @@
       <!-- ══ FILTER BAR ══ -->
       <div class="filter-bar">
         <div class="filter-cats" id="filterCats">
-          <button class="filter-btn active" data-cat="all" style="border-color:rgba(108,92,231,.4); background:rgba(108,92,231,.18); color:#fff;">🔍 All</button>
-          <button class="filter-btn" data-cat="assessment">📊 Assessment</button>
-          <button class="filter-btn" data-cat="training">🎓 Training &amp; PD</button>
-          <button class="filter-btn" data-cat="visit">🏫 School Visit</button>
-          <button class="filter-btn" data-cat="report">📋 Reporting</button>
-          <button class="filter-btn" data-cat="event">🎉 Events</button>
-          <button class="filter-btn" data-cat="parent">👨‍👩‍👧 Parent &amp; Student</button>
+          <button class="filter-btn active" data-cat="all" data-tooltip="All" style="border-color:rgba(108,92,231,.4); background:rgba(108,92,231,.18); color:#fff;"><span class="filter-icon">🔍</span></button>
+          <button class="filter-btn" data-cat="assessment" data-tooltip="Assessment"><span class="filter-icon">📊</span></button>
+          <button class="filter-btn" data-cat="training" data-tooltip="Training &amp; PD"><span class="filter-icon">🎓</span></button>
+          <button class="filter-btn" data-cat="visit" data-tooltip="School Visit"><span class="filter-icon">🏫</span></button>
+          <button class="filter-btn" data-cat="report" data-tooltip="Reporting"><span class="filter-icon">📋</span></button>
+          <button class="filter-btn" data-cat="event" data-tooltip="Events"><span class="filter-icon">🎉</span></button>
+          <button class="filter-btn" data-cat="parent" data-tooltip="Parent &amp; Student"><span class="filter-icon">👨‍👩‍👧</span></button>
         </div>
         <div class="filter-right">
           <input type="text" class="search-input" id="searchInput" placeholder="🔎 Search activities...">
           <div class="view-toggle" id="viewToggle">
-            <button data-view="strip" class="active">🗓 2-Month</button>
-            <button data-view="timeline">📊 Timeline</button>
+            <button data-view="strip" class="active" data-tooltip="2-Month View">🗓</button>
+            <button data-view="timeline" data-tooltip="Timeline View">📊</button>
           </div>
-          <button class="add-btn" id="addActBtn">
+          <button class="add-btn" id="addActBtn" data-tooltip="Add New Activity" aria-label="Add New Activity">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Add New Activity
           </button>
         </div>
       </div>
