@@ -313,6 +313,21 @@ if (navEditSrc) {
   console.warn("WARNING: nav-edit-simple.js not found locally or in shared-design/");
 }
 
+// references-viewer schema-aware modal renderer — same local-then-shared
+// fallback pattern as nav-edit-simple. Loaded by references.html for the
+// JSON document modal.
+["references-viewer.js", "references-viewer.css"].forEach(name => {
+  const local  = name;
+  const shared = path.join("..", "shared-design", name);
+  const src    = fs.existsSync(local) ? local : (fs.existsSync(shared) ? shared : null);
+  if (src) {
+    fs.copyFileSync(src, path.join("dist", name));
+    console.log(`Copied: ${src} -> dist/${name}`);
+  } else {
+    console.warn(`WARNING: ${name} not found locally or in shared-design/`);
+  }
+});
+
 // -- Copy static assets
 if (fs.existsSync("images")) {
   copyDirRecursive("images", "dist/images");
