@@ -680,6 +680,9 @@ const NAV_ITEMS = [
     { key: 'ease-archive',         href: '/ease-archive',          label: 'EASE Archive' },
     { key: 'cambridge-exams',      href: '/cambridge-exams',       label: 'Cambridge Exams' },
     { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
+    // Students Hub bridge — Phase 1.5
+    { key: 'student-roster',       href: '/student-roster',        label: 'Student Roster' },
+    { key: 'school-assessment',    href: '/school-assessment',     label: 'School Assessment' },
   ]},
   { group: 'school', label: 'School', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Curriculum
@@ -730,8 +733,6 @@ const NAV_ITEMS = [
     { key: 'references',           href: '/references',            label: 'References' },
     { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
-    { key: 'student-roster',       href: '/student-roster',        label: 'Student Roster' },
-    { key: 'school-assessment',    href: '/school-assessment',     label: 'School Assessment' },
     { key: 'library',              href: '/library',               label: 'Resource Library' },
     { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
   ]},
