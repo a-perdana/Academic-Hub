@@ -28,7 +28,7 @@ Key features: EASE assessment dashboards (4 cycles/year), Cambridge exam perform
 cd "Central Hub" && firebase deploy --only firestore:rules --project centralhub-8727b
 ```
 
-For full schema + collection catalogue, see [`docs/FIRESTORE_SCHEMA.md`](../docs/FIRESTORE_SCHEMA.md) and the root `CLAUDE.md`. This file documents only AH-touching aspects.
+For full schema + collection catalogue, see [`docs/architecture/FIRESTORE_SCHEMA.md`](../docs/architecture/FIRESTORE_SCHEMA.md) and the root `CLAUDE.md`. This file documents only AH-touching aspects.
 
 ---
 
