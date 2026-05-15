@@ -38,25 +38,20 @@ function ensureNavbarSharedStyles() {
       display: flex; align-items: center; gap: 11px;
       text-decoration: none; flex-shrink: 0;
     }
-    #topNav .nav-brand-icon {
-      width: 36px; height: 36px; flex-shrink: 0;
-      background: linear-gradient(135deg, #5b21b6, #7c3aed);
-      border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 14px rgba(109, 40, 217, 0.55);
+    #topNav .nav-brand-img {
+      height: 28px; width: auto; display: block; flex-shrink: 0;
+      filter: drop-shadow(0 2px 10px rgba(109, 40, 217, 0.45));
     }
-    #topNav .nav-brand-icon svg { width: 22px; height: 22px; fill: none; }
+    #topNav .nav-brand-divider {
+      width: 1px; height: 22px;
+      background: rgba(255,255,255,0.18);
+      flex-shrink: 0;
+    }
     #topNav .nav-brand-name {
       font-family: "DM Sans", sans-serif;
-      font-size: 15px; font-weight: 700;
-      color: #fff; white-space: nowrap;
+      font-size: 14px; font-weight: 600;
+      color: rgba(255,255,255,0.92); white-space: nowrap;
       letter-spacing: -0.01em;
-    }
-    #topNav .nav-brand-sub {
-      font-family: "DM Sans", sans-serif;
-      font-size: 10px; font-weight: 500;
-      color: rgba(255,255,255,0.4);
-      display: block; letter-spacing: 0.02em;
     }
     #topNav .nav-actions {
       display: flex; align-items: center; gap: 6px;
@@ -444,7 +439,7 @@ function ensureNavbarSharedStyles() {
     /* Stage 1 — 1100px: hide brand name */
     @media (max-width: 1100px) {
       #topNav { padding: 0 18px; }
-      #topNav .nav-brand-name { display: none; }
+      #topNav .nav-brand-divider, #topNav .nav-brand-name { display: none; }
     }
 
     /* Stage 2 — 900px: hide button labels, icon-only buttons */
