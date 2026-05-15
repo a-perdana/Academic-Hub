@@ -682,9 +682,10 @@
     const subStages = Array.isArray(stage.subStages) ? stage.subStages : [];
     const cycle = stage.observationCycle || stage.walkthroughCycle;
     const num = (typeof idx === 'number' ? idx + 1 : '');
+    const stageId = (typeof idx === 'number') ? `hb-sec-stage-${idx}` : '';
 
     return `
-      <div class="hb-stage">
+      <div class="hb-stage"${stageId ? ` id="${stageId}"` : ''}>
         <div class="hb-stage-head">
           ${num ? `<div class="hb-stage-num">${num}</div>` : ''}
           <div class="hb-stage-name">${escapeHtml(stage.label || stage.stageId)}</div>
