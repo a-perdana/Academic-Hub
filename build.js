@@ -290,11 +290,23 @@ if (fs.existsSync(researchSrcDir)) {
 // Eduversal Academic Standards manifest + blurbs — fetched at runtime by
 // cambridge-crossref.js when the user clicks an ES chip. Full section
 // JSONs are hosted by CH (/references reader); AH only needs the lookup
-// files for popover content. Source built by
-// scripts/eduversal-standards/build-academic-standards.js --apply.
-// Same local-vs-Vercel caveat as the permendiknas block above.
-const eduStdSrcDir  = path.join("..", "docs", "research", "eduversal", "academic-standards");
-const eduStdDestDir = path.join("dist", "research", "eduversal", "academic-standards");
+// files for popover content.
+//
+// Prefer the local AH copy (committed under resources/research/eduversal/
+// academic-standards/) because Vercel only checks out the AH repo — the
+// monorepo's docs/research folder isn't available at build time.
+// Fall back to the monorepo path when running build locally from the
+// parent directory. Same local-first/monorepo-fallback pattern used by
+// TH's cambridge research-archive block.
+//
+// Source-of-truth lives in monorepo docs/research/eduversal/academic-
+// standards/ (built by scripts/eduversal-standards/build-academic-
+// standards.js --apply). Re-run that script and then re-copy into
+// resources/research/eduversal/ after every change.
+const eduStdSrcLocal    = path.join(__dirname, "resources", "research", "eduversal", "academic-standards");
+const eduStdSrcMonorepo = path.join("..", "docs", "research", "eduversal", "academic-standards");
+const eduStdSrcDir      = fs.existsSync(eduStdSrcLocal) ? eduStdSrcLocal : eduStdSrcMonorepo;
+const eduStdDestDir     = path.join("dist", "research", "eduversal", "academic-standards");
 if (fs.existsSync(eduStdSrcDir)) {
   fs.mkdirSync(eduStdDestDir, { recursive: true });
   ["manifest.json", "search-blurbs.json"].forEach(name => {
@@ -303,7 +315,7 @@ if (fs.existsSync(eduStdSrcDir)) {
       fs.copyFileSync(src, path.join(eduStdDestDir, name));
       console.log(`Copied: dist/research/eduversal/academic-standards/${name}`);
     } else {
-      console.warn(`WARNING: ${name} not found in docs/research/eduversal/academic-standards/ — run build-academic-standards.js --apply first.`);
+      console.warn(`WARNING: ${name} not found in ${eduStdSrcDir} — run build-academic-standards.js --apply first.`);
     }
   });
 }
