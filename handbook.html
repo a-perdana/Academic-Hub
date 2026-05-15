@@ -69,11 +69,16 @@
       position: sticky; top: 130px;   /* 62 fixed navbar + ~52 sticky toolbar + breathing */
       max-height: calc(100vh - 150px);
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 4px 4px 12px;
-      scrollbar-width: thin;
+      /* No visible scrollbar — TOC is short enough on desktop that scrolling
+         only kicks in for very long handbooks, and the chrome bar was
+         distracting per user feedback. Scrollbar-gutter keeps the layout
+         stable when it does scroll. */
+      scrollbar-width: none;
+      scrollbar-gutter: stable;
     }
-    .hb-toc::-webkit-scrollbar { width: 6px; }
-    .hb-toc::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    .hb-toc::-webkit-scrollbar { width: 0; height: 0; display: none; }
     @media (max-width: 960px) {
       .hb-toc {
         position: sticky; top: 110px;
@@ -84,7 +89,9 @@
       .hb-toc ul {
         display: flex; gap: 4px; overflow-x: auto; padding: 4px 16px;
         scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
       }
+      .hb-toc ul::-webkit-scrollbar { height: 0; display: none; }
       .hb-toc li { flex: 0 0 auto; scroll-snap-align: start; }
       .hb-toc li.toc-sub { display: none; }   /* hide stage sub-links on mobile strip */
       .hb-toc-title { display: none; }
