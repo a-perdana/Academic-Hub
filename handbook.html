@@ -446,7 +446,12 @@
        chip with the inferred window glyph. Companion to the per-task
        checkbox feature. Hidden on mobile. */
     .hb-progress {
-      position: sticky; top: 110px; z-index: 39;
+      /* Sticky strip that sits BELOW the toolbar (which is sticky at
+         top: 62px, ~60px tall → its bottom edge sits around viewport
+         122px). 130px gives a small gap so the toolbar can't overlap
+         the progress bar visually. z-index lower than .toolbar (50)
+         so the toolbar stays on top during sticky transitions. */
+      position: sticky; top: 130px; z-index: 45;
       background: linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.94) 100%);
       backdrop-filter: saturate(160%) blur(8px);
       border-bottom: 1px solid var(--border);
@@ -569,8 +574,9 @@
     /* TOC sidebar — sticky list of anchors, mobile becomes horizontal
        scroll-strip so 7-stage handbooks stay scannable on phones. */
     .hb-toc {
-      position: sticky; top: 130px;   /* 62 fixed navbar + ~52 sticky toolbar + breathing */
-      max-height: calc(100vh - 150px);
+      /* 62 navbar + ~60 toolbar + ~42 progress bar + breathing → 175px. */
+      position: sticky; top: 175px;
+      max-height: calc(100vh - 195px);
       overflow-y: auto;
       overflow-x: hidden;
       padding: 4px 4px 12px;
@@ -633,7 +639,7 @@
     .hb-toc a.active .hb-toc-num { background: var(--accent); color: #fff; }
 
     /* scroll-margin so anchors don't slip under the fixed navbar + sticky toolbar */
-    .hb-section, .hb-stage, .hb-charter-box { scroll-margin-top: 130px; }
+    .hb-section, .hb-stage, .hb-charter-box { scroll-margin-top: 185px; }
 
     /* (Sprint 5: legacy boxed .hb-hero/.hb-hero-kpi-* rules removed.
        The new full-width hero band is defined at top of this <style>;
