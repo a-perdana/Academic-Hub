@@ -281,6 +281,27 @@ if (fs.existsSync(researchSrcDir)) {
     }
   });
 }
+
+// Eduversal Academic Standards manifest + blurbs — fetched at runtime by
+// cambridge-crossref.js when the user clicks an ES chip. Full section
+// JSONs are hosted by CH (/references reader); AH only needs the lookup
+// files for popover content. Source built by
+// scripts/eduversal-standards/build-academic-standards.js --apply.
+// Same local-vs-Vercel caveat as the permendiknas block above.
+const eduStdSrcDir  = path.join("..", "docs", "research", "eduversal", "academic-standards");
+const eduStdDestDir = path.join("dist", "research", "eduversal", "academic-standards");
+if (fs.existsSync(eduStdSrcDir)) {
+  fs.mkdirSync(eduStdDestDir, { recursive: true });
+  ["manifest.json", "search-blurbs.json"].forEach(name => {
+    const src = path.join(eduStdSrcDir, name);
+    if (fs.existsSync(src)) {
+      fs.copyFileSync(src, path.join(eduStdDestDir, name));
+      console.log(`Copied: dist/research/eduversal/academic-standards/${name}`);
+    } else {
+      console.warn(`WARNING: ${name} not found in docs/research/eduversal/academic-standards/ — run build-academic-standards.js --apply first.`);
+    }
+  });
+}
 // References & Standards data — AH does NOT mirror references-data
 // locally. The /references viewer fetches from
 // https://centralhub.eduversal.org/references-data/* (CORS-open) so
