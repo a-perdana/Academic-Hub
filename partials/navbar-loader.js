@@ -722,6 +722,11 @@ const NAV_ITEMS = [
     { key: 'my-induction',         href: '/my-induction',          label: 'My Induction' },
     { key: 'team-induction',       href: '/team-induction',        label: 'Team Induction' },
     { key: 'handbook',             href: '/handbook',              label: 'Induction Handbook' },
+    // School-facing handbooks (seeded 2026-05-17)
+    { key: 'school-handbook-teacher',   href: '/handbook?id=eduversal_teacher_handbook_v1',        label: 'Teacher Handbook' },
+    { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
+    { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
+    { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
     { key: 'weekly-checklist',     href: '/weekly-checklist',      label: 'Weekly Checklist' },
     { key: 'cambridge-calendar',   href: '/cambridge-calendar',    label: 'Cambridge Calendar' },
     { key: 'cambridge-standards',  href: '/cambridge-standards',   label: 'Cambridge Standards' },
