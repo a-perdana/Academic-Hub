@@ -41,7 +41,7 @@ const cleanUrls = {
   "library.html":                    "library",
   "documents.html":                  "documents",
   "messageboard.html":               "message-board",
-  "AcademicCalendar.html":           "academic-calendar",
+  "academic-calendar.html":          "academic-calendar",
   "SchoolEvents.html":               "school-events",
   "AcademicStandards.html":          "academic-standards",
   "AcademicStandardsDynamic.html":   "academic-standards-public",
@@ -153,7 +153,7 @@ const htmlFiles = [
   "EASE-II-AssessmentResults.html",
   "EASE-III-AssessmentResults.html",
   "A-EASE-I-AssessmentResults.html",
-  "AcademicCalendar.html",
+  "academic-calendar.html",
   "SchoolEvents.html",
   "AccreditationDashboard.html",
   "AIPrompts.html",
@@ -267,6 +267,23 @@ if (fs.existsSync("schools_compact.js")) {
 if (fs.existsSync("cambridge-crossref.js")) {
   fs.copyFileSync("cambridge-crossref.js", "dist/cambridge-crossref.js");
   console.log("Copied: cambridge-crossref.js");
+}
+
+// Read-only Academic Calendar viewer — single source of truth lives in
+// monorepo /shared-design/. Prefer local committed copy; fall back to
+// monorepo when developing from the parent directory. Mirrors the
+// nav-edit-simple.js + cambridge-crossref.js distribution pattern.
+// Run `node scripts/design/sync-tokens.js --apply` from monorepo root
+// when the master changes.
+const localAcadCal  = "academic-calendar-readonly.js";
+const sharedAcadCal = path.join("..", "shared-design", "academic-calendar-readonly.js");
+const acadCalSrc    = fs.existsSync(localAcadCal) ? localAcadCal
+                    : (fs.existsSync(sharedAcadCal) ? sharedAcadCal : null);
+if (acadCalSrc) {
+  fs.copyFileSync(acadCalSrc, "dist/academic-calendar-readonly.js");
+  console.log(`Copied: academic-calendar-readonly.js (from ${acadCalSrc})`);
+} else {
+  console.warn("WARNING: academic-calendar-readonly.js not found in local or shared-design/");
 }
 
 // Indonesian statutory references (PIGP + SKL) — fetched at runtime by
