@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validate Teacher AI Self-Assessments — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/></svg>">
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #e67e22;
+  --accent-dk: #d35400;
+  --accent-2: #fef3e2;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+.hero {
+  background: linear-gradient(135deg, #2b1e10 0%, #d35400 60%, #f39c12 100%);
+  color: #fff; padding: 36px 40px 44px; position: relative; overflow: hidden;
+}
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 86% 20%, rgba(255,255,255,0.12) 0%, transparent 48%); }
+.hero-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+.hero-title { font-family: 'Lora', serif; font-size: 30px; font-weight: 600; margin-bottom: 6px; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 760px; line-height: 1.55; }
+
+.page-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
+
+.filter-bar {
+  display: flex; gap: 12px; align-items: center; margin-bottom: 20px;
+  padding: 14px 18px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+}
+.filter-bar label { font-size: 12px; font-weight: 600; color: #475569; }
+.filter-bar select, .filter-bar input {
+  padding: 7px 11px; border: 1px solid #cbd5e1; border-radius: 6px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif; background: #fff;
+}
+.filter-bar .stats { margin-left: auto; font-size: 12.5px; color: #64748b; }
+
+.list-table { background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
+.list-row {
+  display: grid; grid-template-columns: 1.5fr 1fr 130px 110px 100px;
+  gap: 14px; padding: 14px 20px; border-bottom: 1px solid #f1f5f9;
+  align-items: center; transition: background 0.15s;
+}
+.list-row:last-child { border-bottom: none; }
+.list-row:hover { background: #fdf6ee; cursor: pointer; }
+.list-row.head { background: #f8fafc; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; cursor: default; }
+.list-row.head:hover { background: #f8fafc; }
+.list-row .name { font-size: 14px; font-weight: 600; color: #1e293b; }
+.list-row .name small { display: block; font-weight: 400; color: #64748b; font-size: 11.5px; margin-top: 1px; }
+.list-row .submitted { font-size: 12.5px; color: #475569; }
+.list-row .level-chip {
+  display: inline-block; padding: 3px 9px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.level-chip.foundation    { background: #fef3c7; color: #92400e; }
+.level-chip.practitioner  { background: #dbeafe; color: #1e40af; }
+.level-chip.leader        { background: #ede9fe; color: #5b21b6; }
+.list-row .status-chip {
+  display: inline-block; padding: 3px 9px; border-radius: 4px;
+  font-size: 11px; font-weight: 600;
+}
+.status-chip.submitted  { background: #dbeafe; color: #1e40af; }
+.status-chip.validated  { background: #dcfce7; color: #166534; }
+
+.empty-state { padding: 60px 20px; text-align: center; color: #64748b; font-size: 14px; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(15,23,42,0.55);
+  display: none; align-items: center; justify-content: center; z-index: 200;
+  padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff; border-radius: 14px; max-width: 880px; width: 100%;
+  max-height: 90vh; display: flex; flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+}
+.modal-head {
+  padding: 20px 26px 14px; border-bottom: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+}
+.modal-title { font-family: 'Lora', serif; font-size: 20px; font-weight: 600; color: #1e293b; }
+.modal-sub { font-size: 12.5px; color: #64748b; margin-top: 3px; }
+.modal-close {
+  background: none; border: 1px solid #cbd5e1; border-radius: 6px;
+  padding: 5px 10px; cursor: pointer; font-size: 13px; color: #475569;
+}
+.modal-body { padding: 22px 26px; overflow-y: auto; flex: 1; }
+.modal-footer {
+  padding: 14px 26px; border-top: 1px solid #e2e8f0;
+  display: flex; justify-content: space-between; gap: 12px; align-items: center;
+  background: #f8fafc;
+}
+
+.detail-section { margin-bottom: 22px; }
+.detail-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-dk); margin-bottom: 8px; }
+
+.rating-matrix-readonly {
+  display: grid; grid-template-columns: 160px repeat(3, 1fr);
+  gap: 1px; background: #e2e8f0; border: 1px solid #e2e8f0; border-radius: 8px;
+  overflow: hidden;
+}
+.rm-h { background: #fdf6ee; padding: 10px 12px; font-size: 12px; font-weight: 600; color: #1e293b; text-align: center; }
+.rm-row-label { background: #fdf6ee; padding: 10px 12px; font-size: 12.5px; font-weight: 600; color: #1e293b; }
+.rm-cell { background: #fff; padding: 8px 10px; text-align: center; font-size: 11.5px; }
+.rm-cell.not_yet    { background: #fee2e2; color: #991b1b; font-weight: 600; }
+.rm-cell.developing { background: #fef3c7; color: #92400e; font-weight: 600; }
+.rm-cell.achieved   { background: #dcfce7; color: #166534; font-weight: 600; }
+.rm-cell.empty      { color: #cbd5e1; }
+
+.reflection-readonly ul { margin-left: 18px; }
+.reflection-readonly li { font-size: 13.5px; color: #1e293b; line-height: 1.5; margin-bottom: 4px; }
+
+.validation-form { background: #fdf6ee; border: 1px solid var(--accent); border-radius: 10px; padding: 18px 22px; }
+.validation-form label { display: block; font-size: 13px; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
+.validation-form select {
+  padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif; width: 100%; max-width: 320px;
+  margin-bottom: 14px; background: #fff;
+}
+.validation-form textarea {
+  width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px;
+  font-size: 13px; font-family: 'DM Sans', sans-serif; min-height: 90px;
+  background: #fff; resize: vertical;
+}
+.validation-form .hint { font-size: 11.5px; color: #64748b; margin-top: 4px; }
+
+.btn-primary {
+  padding: 10px 22px; border-radius: 8px; border: none;
+  background: var(--accent); color: #fff; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+.btn-primary:hover { background: var(--accent-dk); }
+.btn-primary[disabled] { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  padding: 10px 18px; border-radius: 8px; border: 1px solid #cbd5e1;
+  background: #fff; color: #1e293b; font-size: 13.5px; font-weight: 600;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+}
+
+.loading-msg { padding: 30px; text-align: center; color: #64748b; }
+</style>
+</head>
+<body>
+<div id="navContainer"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">AI Competency Framework v1.0 · Line-Manager Review</div>
+    <h1 class="hero-title">Validate Teacher AI Self-Assessments</h1>
+    <p class="hero-sub">
+      Review each teacher's annual self-assessment honestly. Adjust the agreed level if the
+      evidence doesn't match the self-rating. Notes you leave become the line-manager record.
+    </p>
+  </div>
+</header>
+
+<main class="page-wrap">
+  <div class="filter-bar">
+    <label>Academic year</label>
+    <select id="yearFilter">
+      <option value="2026-2027" selected>2026-2027</option>
+      <option value="2025-2026">2025-2026</option>
+    </select>
+    <label>Status</label>
+    <select id="statusFilter">
+      <option value="all" selected>All</option>
+      <option value="submitted">Awaiting my review</option>
+      <option value="validated">Validated</option>
+    </select>
+    <div class="stats" id="stats">—</div>
+  </div>
+
+  <div id="listContainer" class="list-table">
+    <div class="loading-msg">Loading assessments…</div>
+  </div>
+</main>
+
+<!-- Detail / validate modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="modal-title" id="modalTitle">—</div>
+        <div class="modal-sub" id="modalSub">—</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div class="loading-msg">Loading…</div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal()">Close</button>
+      <button class="btn-primary" id="btnValidate" onclick="submitValidation()" style="display:none;">Save validation</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const DOMAIN_LABELS = {
+  domainA: 'Knowledge', domainB: 'Application', domainC: 'Pedagogical', domainD: 'Critical Eval', domainE: 'Professional'
+};
+const RATING_LABELS = { not_yet: 'Not Yet', developing: 'Developing', achieved: 'Achieved' };
+const LEVEL_LABELS = { foundation: 'Foundation', practitioner: 'Practitioner', leader: 'Leader' };
+
+let state = {
+  userId: null, schoolId: null, role: null, subRoles: [],
+  rows: [],
+  filterYear: '2026-2027', filterStatus: 'all',
+  openDoc: null,
+};
+
+// AH dispatches authReady on document, not window (mirrors TH + CH)
+document.addEventListener('authReady', async () => {
+  state.userId = window.currentUser?.uid;
+  state.schoolId = window.userProfile?.schoolId || null;
+  state.role = window.userProfile?.role_academichub || null;
+  state.subRoles = Array.isArray(window.userProfile?.ah_sub_roles) ? window.userProfile.ah_sub_roles : [];
+  const isLineManager = state.role === 'academic_admin' || state.subRoles.includes('school_principal');
+  if (!isLineManager) {
+    document.getElementById('listContainer').innerHTML = '<div class="empty-state">You need to be a School Principal or Academic Admin to view this page.</div>';
+    return;
+  }
+  if (!state.schoolId) {
+    document.getElementById('listContainer').innerHTML = '<div class="empty-state">Your account is not linked to a school yet. Contact the Eduversal Academic Directorate.</div>';
+    return;
+  }
+  await loadRows();
+  document.getElementById('yearFilter').onchange = (e) => { state.filterYear = e.target.value; loadRows(); };
+  document.getElementById('statusFilter').onchange = (e) => { state.filterStatus = e.target.value; renderList(); };
+});
+
+async function loadRows() {
+  const container = document.getElementById('listContainer');
+  container.innerHTML = '<div class="loading-msg">Loading assessments…</div>';
+  try {
+    const q = query(
+      collection(window.db, 'ai_competency_self_assessments'),
+      where('schoolId', '==', state.schoolId),
+      where('academicYear', '==', state.filterYear)
+    );
+    const snap = await getDocs(q);
+    state.rows = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(r => r.status === 'submitted' || r.status === 'validated')
+      .sort((a, b) => {
+        if (a.status === b.status) return (a.displayName || '').localeCompare(b.displayName || '');
+        return a.status === 'submitted' ? -1 : 1;
+      });
+    renderList();
+  } catch (err) {
+    console.error('[ai-validate] load failed', err);
+    container.innerHTML = `<div class="empty-state">Failed to load. ${escapeHtml(err.message)}</div>`;
+  }
+}
+
+function renderList() {
+  const container = document.getElementById('listContainer');
+  const rows = state.rows.filter(r => state.filterStatus === 'all' || r.status === state.filterStatus);
+  const submittedCount = state.rows.filter(r => r.status === 'submitted').length;
+  const validatedCount = state.rows.filter(r => r.status === 'validated').length;
+  document.getElementById('stats').textContent = `${submittedCount} awaiting · ${validatedCount} validated`;
+
+  if (rows.length === 0) {
+    container.innerHTML = '<div class="empty-state">No assessments match the current filters.</div>';
+    return;
+  }
+
+  const head = `<div class="list-row head">
+    <div>Teacher</div>
+    <div>Submitted</div>
+    <div>Self-declared</div>
+    <div>Status</div>
+    <div></div>
+  </div>`;
+
+  const html = rows.map(r => {
+    const submittedDate = r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString('en-GB') : '—';
+    const level = r.selfDeclaredLevel || 'foundation';
+    return `<div class="list-row" data-id="${r.id}" onclick="window.openRow('${r.id}')">
+      <div class="name">${escapeHtml(r.displayName || r.userEmail || '—')}<small>${escapeHtml(r.userEmail || '')}</small></div>
+      <div class="submitted">${submittedDate}</div>
+      <div><span class="level-chip ${level}">${LEVEL_LABELS[level] || level}</span></div>
+      <div><span class="status-chip ${r.status}">${r.status === 'submitted' ? 'Awaiting review' : 'Validated'}</span></div>
+      <div style="text-align:right;color:#94a3b8;font-size:18px;">›</div>
+    </div>`;
+  }).join('');
+
+  container.innerHTML = head + html;
+}
+
+window.openRow = async function(docId) {
+  const row = state.rows.find(r => r.id === docId);
+  if (!row) return;
+  state.openDoc = row;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modalTitle').textContent = row.displayName || row.userEmail || '—';
+  document.getElementById('modalSub').textContent = `${row.userEmail || ''} · Submitted ${row.submittedAt?.toDate ? row.submittedAt.toDate().toLocaleDateString('en-GB') : '—'}`;
+
+  const ratings = row.ratings?.teacher || {};
+  const renderMatrix = () => {
+    const rows = ['domainA', 'domainB', 'domainC', 'domainD', 'domainE'].map(domain => {
+      const cells = ['foundation', 'practitioner', 'leader'].map(level => {
+        const rating = ratings[level]?.[domain];
+        if (!rating) return `<div class="rm-cell empty">—</div>`;
+        return `<div class="rm-cell ${rating}">${RATING_LABELS[rating]}</div>`;
+      }).join('');
+      return `<div class="rm-row-label">${DOMAIN_LABELS[domain]}</div>${cells}`;
+    }).join('');
+    return `<div class="rating-matrix-readonly">
+      <div class="rm-h"></div><div class="rm-h">Foundation</div><div class="rm-h">Practitioner</div><div class="rm-h">Leader</div>
+      ${rows}
+    </div>`;
+  };
+
+  const list = (items) => items && items.length ? `<ul>${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>` : '<em style="color:#94a3b8;">None provided.</em>';
+
+  const alreadyValidated = row.status === 'validated';
+  const existingValidation = row.validation || {};
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-label">Self-declared level</div>
+      <div><span class="level-chip ${row.selfDeclaredLevel || 'foundation'}">${LEVEL_LABELS[row.selfDeclaredLevel] || row.selfDeclaredLevel}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">Self-ratings (5 domains × 3 levels)</div>
+      ${renderMatrix()}
+    </div>
+    <div class="detail-section reflection-readonly">
+      <div class="detail-label">Strengths</div>
+      ${list(row.strengths)}
+    </div>
+    <div class="detail-section reflection-readonly">
+      <div class="detail-label">Growth areas</div>
+      ${list(row.growthAreas)}
+    </div>
+    <div class="detail-section reflection-readonly">
+      <div class="detail-label">Professional learning goals</div>
+      ${list(row.professionalLearningGoals)}
+    </div>
+    <div class="detail-section">
+      <div class="detail-label">Line-manager validation</div>
+      <div class="validation-form">
+        <label>Agreed level</label>
+        <select id="agreedLevel" ${alreadyValidated ? 'disabled' : ''}>
+          <option value="foundation"   ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'foundation' ? 'selected' : ''}>Foundation</option>
+          <option value="practitioner" ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'practitioner' ? 'selected' : ''}>Practitioner</option>
+          <option value="leader"       ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'leader' ? 'selected' : ''}>Leader</option>
+        </select>
+        <label>Notes</label>
+        <textarea id="managerNotes" placeholder="What you discussed, what you agreed, what they'll focus on next year." ${alreadyValidated ? 'disabled' : ''}>${escapeHtml(existingValidation.managerNotes || '')}</textarea>
+        <div class="hint">Max 1000 characters. Notes are visible to the teacher and to CH appraisers.</div>
+        ${alreadyValidated ? `<div style="margin-top:12px;font-size:12px;color:#166534;">✓ Already validated on ${existingValidation.validatedAt?.toDate ? existingValidation.validatedAt.toDate().toLocaleDateString('en-GB') : '—'}.</div>` : ''}
+      </div>
+    </div>
+  `;
+  const btn = document.getElementById('btnValidate');
+  btn.style.display = alreadyValidated ? 'none' : 'inline-block';
+};
+
+window.closeModal = function() {
+  document.getElementById('modal').classList.remove('open');
+  state.openDoc = null;
+};
+
+window.submitValidation = async function() {
+  if (!state.openDoc) return;
+  const agreedLevel = document.getElementById('agreedLevel').value;
+  const managerNotes = (document.getElementById('managerNotes').value || '').trim().slice(0, 1000);
+  if (!confirm(`Validate ${state.openDoc.displayName || 'this teacher'}'s self-assessment with agreed level: ${LEVEL_LABELS[agreedLevel]}?`)) return;
+
+  try {
+    const ref = doc(window.db, 'ai_competency_self_assessments', state.openDoc.id);
+    await updateDoc(ref, {
+      status: 'validated',
+      validation: {
+        validatedBy: state.userId,
+        validatedAt: serverTimestamp(),
+        agreedLevel: agreedLevel,
+        managerNotes: managerNotes,
+      },
+    });
+    closeModal();
+    await loadRows();
+  } catch (err) {
+    console.error('[ai-validate] save failed', err);
+    alert('Validation failed: ' + err.message);
+  }
+};
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+</script>
+</body>
+</html>

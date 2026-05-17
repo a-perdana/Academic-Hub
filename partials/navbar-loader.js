@@ -690,6 +690,7 @@ const NAV_ITEMS = [
     { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
     { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
     { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
     // Other school-level pages still surfaced via Dashboards / direct nav
     { key: 'school-appraisals',       href: '/school-appraisals',       label: 'School Appraisals' },
     { key: 'school-self-appraisal',   href: '/school-self-appraisal',   label: 'School Self-Appraisal' },
