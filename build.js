@@ -363,6 +363,22 @@ if (fs.existsSync("base.css")) {
   console.log("Copied: base.css");
 }
 
+// Handbook reader — shared CSS + JS modules for the /handbook page (browser
+// + reader modes). Source-of-truth lives in monorepo /shared-design/ and is
+// synced into this repo via `npm run sync:handbook`. Same local-first /
+// monorepo-fallback pattern as nav-edit-simple.js + cambridge-crossref.js.
+["handbook-reader.css", "handbook-reader.js"].forEach(name => {
+  const local  = name;
+  const shared = path.join("..", "shared-design", name);
+  const src    = fs.existsSync(local) ? local : (fs.existsSync(shared) ? shared : null);
+  if (src) {
+    fs.copyFileSync(src, path.join("dist", name));
+    console.log(`Copied: ${src} -> dist/${name}`);
+  } else {
+    console.warn(`WARNING: ${name} not found locally or in shared-design/`);
+  }
+});
+
 // Simple nav editor module — local copy lives in this repo (committed) so
 // Vercel builds don't depend on the monorepo-root /shared-design/ folder.
 // Source of truth is monorepo-root /shared-design/nav-edit-simple.js;
