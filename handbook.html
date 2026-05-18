@@ -180,14 +180,17 @@
   </script>
   <script src="handbook-reader.js"></script>
   <script>
+    // Paint the AH navbar directly off the authReady event so we get
+    // the {user, profile} detail payload. HandbookReader's onAuthReady
+    // opt is no-arg and would yield undefined on destructure.
+    document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+      if (typeof window.__loadAcademicNavbar === 'function') {
+        window.__loadAcademicNavbar('handbook', { user, profile });
+      }
+    });
     window.HandbookReader.init({
       hub: 'ah',
       charterUrl: 'https://centralhub.eduversal.org/references-data/schemas/INDUCTION_CHARTER.json',
-      onAuthReady: ({ user, profile }) => {
-        if (typeof window.__loadAcademicNavbar === 'function') {
-          window.__loadAcademicNavbar('handbook', { user, profile });
-        }
-      },
     });
   </script>
 </body>
