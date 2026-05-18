@@ -376,6 +376,17 @@
     .hb-browser-card.is-school .hb-browser-card-icon {
       background: #e0f2fe; color: #075985;
     }
+    /* Policy-topic handbook variant — amber accent (parchment/policy vibe).
+       4th handbookKind; distinct from induction (mor), role-operational (pink),
+       school-facing (cyan). */
+    .hb-browser-card.is-policy-topic { box-shadow: inset 4px 0 0 #b45309; }
+    .hb-browser-card.is-policy-topic:hover {
+      background: #fffbeb; border-color: #fde68a;
+      box-shadow: inset 4px 0 0 #b45309, 0 6px 18px -10px rgba(180,83,9,0.32);
+    }
+    .hb-browser-card.is-policy-topic .hb-browser-card-icon {
+      background: #fef3c7; color: #92400e;
+    }
 
     /* ── SCHOOL-FACING SECTION RENDERER (reader mode) ──
        Distinct styling layer that piggybacks on .hb-stage but tunes the
@@ -1301,13 +1312,15 @@
     try {
       const snap = await getDocs(query(collection(db, 'induction_programs'), limit(50)));
       const all = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      // AH viewer surfaces academichub-platform handbook(s) AND school-facing
-      // handbooks (audience.platform = 'partner-school'). Subject Teacher and
-      // HQ Specialist hub-targeted handbooks live in their own hubs; CH
-      // /references is the cross-hub superset.
+      // AH viewer surfaces academichub-platform handbook(s) PLUS school-facing
+      // and policy-topic handbooks (both target partner-school audiences with
+      // staff/leadership applicability). Subject Teacher and HQ Specialist
+      // hub-targeted handbooks live in their own hubs; CH /references is the
+      // cross-hub superset.
       allHandbooks = all.filter(hb =>
         hb.audience?.platform === 'academichub'
         || hb.handbookKind === 'school-facing'
+        || hb.handbookKind === 'policy-topic'
       );
 
       // Dual-mode dispatcher (CH parity): ?id=X → reader; otherwise
@@ -1370,14 +1383,19 @@
   let _bwActiveFacet = 'all';
 
   function bootBrowserMode() {
-    // 3-way partition by handbookKind: induction (default), role-operational, school-facing.
+    // 4-way partition by handbookKind: induction, role-operational,
+    // school-facing, policy-topic. The 'school' bucket collects BOTH
+    // school-facing and policy-topic (partner-school audience kinds).
     const partition = (kind) => allHandbooks.filter(hb => {
       const k = hb.handbookKind || 'induction';
       return k === kind;
     });
     const induction = partition('induction');
     const role = partition('role-operational');
-    const school = partition('school-facing');
+    const school = allHandbooks.filter(hb => {
+      const k = hb.handbookKind || 'induction';
+      return k === 'school-facing' || k === 'policy-topic';
+    });
 
     document.getElementById('bwKpiTotal').textContent = allHandbooks.length;
     document.getElementById('bwKpiInduction').textContent = induction.length;
@@ -1456,13 +1474,17 @@
       const kind = hb.handbookKind || 'induction';
       const isRoleOps = kind === 'role-operational';
       const isSchoolFacing = kind === 'school-facing';
-      // Card icon: 📕 induction, 🛡 role-operational, 🧭 school-facing.
-      const icon = isSchoolFacing ? '🧭' : (isRoleOps ? '🛡' : '📕');
-      const cardCls = isSchoolFacing
-        ? 'hb-browser-card is-school'
-        : (isRoleOps ? 'hb-browser-card is-role' : 'hb-browser-card');
-      // Counts pill: stages for induction + role-operational; sections for school-facing.
-      const countsPill = isSchoolFacing
+      const isPolicyTopic = kind === 'policy-topic';
+      const hasSections = isSchoolFacing || isPolicyTopic;
+      // Card icon: 📕 induction, 🛡 role-operational, 🧭 school-facing, 📜 policy-topic.
+      const icon = isPolicyTopic ? '📜' : (isSchoolFacing ? '🧭' : (isRoleOps ? '🛡' : '📕'));
+      const cardCls = isPolicyTopic
+        ? 'hb-browser-card is-policy-topic'
+        : (isSchoolFacing
+          ? 'hb-browser-card is-school'
+          : (isRoleOps ? 'hb-browser-card is-role' : 'hb-browser-card'));
+      // Counts pill: stages for induction + role-operational; sections for school-facing + policy-topic.
+      const countsPill = hasSections
         ? (sections ? `<span class="pill">${sections} sections</span>` : '')
         : (stages ? `<span class="pill">${stages} stages</span>` : '');
       return `
@@ -1567,12 +1589,12 @@
       document.getElementById('hbContent').innerHTML = '<div class="hb-loading">Pick a handbook from the dropdown.</div>';
       return;
     }
-    // School-facing handbooks use sections[] (topic chapters); induction +
-    // role-operational use stages[] (time-windowed phases). Reader treats
-    // both as an ordered list of content blocks — renderStage and
+    // School-facing + policy-topic handbooks use sections[] (topic chapters);
+    // induction + role-operational use stages[] (time-windowed phases). Reader
+    // treats both as an ordered list of content blocks — renderStage and
     // renderSection produce compatible HTML hooks (hb-sec-stage-{index}).
     const handbookKind = hb.handbookKind || 'induction';
-    const isSchoolFacing = handbookKind === 'school-facing';
+    const isSchoolFacing = handbookKind === 'school-facing' || handbookKind === 'policy-topic';
     const stagesArr = isSchoolFacing
       ? (Array.isArray(hb.sections) ? hb.sections : [])
       : (Array.isArray(hb.stages) ? hb.stages : []);
@@ -1592,9 +1614,11 @@
     const hasRoles = !!hb.rolesAndResponsibilities;
     const hasOpen = !!(hb.openItems?.length);
 
-    const eyebrowLabel = isSchoolFacing
-      ? 'Eduversal School-Facing Handbook'
-      : (handbookKind === 'role-operational' ? 'Eduversal Operational Handbook' : 'Eduversal Induction Handbook');
+    const eyebrowLabel = handbookKind === 'policy-topic'
+      ? 'Eduversal Policy Handbook'
+      : (handbookKind === 'school-facing'
+        ? 'Eduversal School-Facing Handbook'
+        : (handbookKind === 'role-operational' ? 'Eduversal Operational Handbook' : 'Eduversal Induction Handbook'));
 
     // Hero band — full-width mor gradient above the sticky toolbar.
     document.getElementById('hbHeroMount').innerHTML = `
