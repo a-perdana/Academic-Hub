@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Maturity Self-Assessment — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/></svg>">
+<script src="firebase-config.js"></script>
+<script>
+  if (!window.ENV) window.ENV = {
+    FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+    FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+    FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+    FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+    FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+    FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+  };
+</script>
+<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #e67e22;
+  --accent-dk: #d35400;
+  --accent-2: #fef3e2;
+  --watchout: #b91c1c;
+  --watchout-bg: #fef2f2;
+  --grow: #047857;
+  --grow-bg: #ecfdf5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
+
+.hero {
+  background: linear-gradient(135deg, #0a0a1a 0%, #2b1e10 55%, #0c1028 100%);
+  color: #fff; padding: 36px 40px 44px; position: relative; overflow: hidden;
+}
+.hero::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 12% 80%, rgba(230,126,34,0.22) 0%, transparent 48%),
+              radial-gradient(circle at 86% 20%, rgba(108,92,231,0.16) 0%, transparent 48%); }
+.hero-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
+.hero-eyebrow { font-size: 11.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-bottom: 8px; }
+.hero-title { font-family: 'Lora', serif; font-size: 30px; font-weight: 600; margin-bottom: 6px; line-height: 1.15; }
+.hero-sub { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 760px; line-height: 1.55; margin-bottom: 12px; }
+.hero-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 6px; background: rgba(255,255,255,0.1);
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9);
+}
+.hero-status.draft     { background: rgba(245,158,11,0.2); color: #fde68a; }
+.hero-status.submitted { background: rgba(59,130,246,0.2); color: #bfdbfe; }
+.hero-status.appraised { background: rgba(16,185,129,0.2); color: #a7f3d0; }
+
+.page-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
+
+.intro-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; }
+.intro-card h2 { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
+.intro-card p { font-size: 13.5px; line-height: 1.6; color: #475569; margin-bottom: 6px; }
+.intro-card .pillrow { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.intro-card .pill { padding: 4px 10px; border-radius: 12px; background: #fef3e2; color: #d35400; font-size: 11.5px; font-weight: 600; }
+
+/* Year + status bar */
+.year-bar {
+  display: flex; gap: 16px; align-items: center; margin-bottom: 24px;
+  padding: 14px 20px; background: #fff; border: 1px solid #e2e8f0; border-radius: 10px;
+}
+.year-bar label { font-size: 12px; font-weight: 600; color: #475569; }
+.year-bar select { padding: 7px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 13px; font-family: inherit; }
+.year-bar .stat { margin-left: auto; font-size: 12.5px; color: #64748b; }
+.year-bar .stat strong { color: #1e293b; }
+
+/* Domain card */
+.domain-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 22px 26px; margin-bottom: 18px; }
+.domain-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
+.domain-num {
+  width: 36px; height: 36px; border-radius: 8px;
+  background: #fef3e2; color: #d35400;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Lora', serif; font-size: 17px; font-weight: 600;
+}
+.domain-info { flex: 1; }
+.domain-title { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: #1e293b; }
+.domain-scope { font-size: 12.5px; color: #64748b; margin-top: 2px; }
+.domain-summary {
+  font-size: 11.5px; color: #475569; line-height: 1.55;
+  padding: 12px 14px; background: #fef3e2; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0;
+  margin-bottom: 16px;
+}
+
+/* Level selector — pill row */
+.level-row-label { font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.level-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
+.level-pill {
+  padding: 12px 10px; border: 2px solid #e2e8f0; border-radius: 8px;
+  background: #fff; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  text-align: center;
+}
+.level-pill:hover { border-color: var(--accent); background: var(--accent-2); }
+.level-pill.selected { border-color: var(--accent); background: var(--accent-2); }
+.level-pill.disabled { cursor: default; opacity: 0.55; }
+.level-pill .lp-num { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: var(--accent-dk); }
+.level-pill .lp-name { font-size: 11px; font-weight: 600; color: #1e293b; margin-top: 3px; }
+.level-pill .lp-mini { font-size: 10.5px; color: #64748b; margin-top: 4px; line-height: 1.4; }
+
+/* Target picker — smaller pills inline */
+.target-row-label { font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin: 12px 0 8px 0; }
+.target-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.target-mini {
+  padding: 6px 12px; border: 1.5px solid #e2e8f0; border-radius: 6px;
+  font-size: 12px; font-weight: 600; color: #475569;
+  background: #fff; cursor: pointer; transition: border-color 0.15s;
+}
+.target-mini:hover { border-color: var(--grow); color: var(--grow); }
+.target-mini.selected { border-color: var(--grow); background: var(--grow-bg); color: var(--grow); }
+.target-mini.disabled { cursor: default; opacity: 0.55; }
+
+/* Sub-section labels */
+.sub-label { font-size: 12px; font-weight: 600; color: #475569; text-transform: uppercase; letter-spacing: 0.08em; margin: 16px 0 8px 0; }
+.sub-hint { font-size: 11.5px; color: #94a3b8; font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 6px; }
+
+/* List input */
+.list-input-row { display: flex; gap: 8px; margin-bottom: 8px; }
+.list-input-row textarea {
+  flex: 1; padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px;
+  font-size: 13px; font-family: inherit; resize: vertical; min-height: 36px; line-height: 1.5;
+}
+.list-input-row textarea:disabled { background: #f8fafc; color: #64748b; cursor: not-allowed; }
+.list-input-row .btn-remove {
+  width: 32px; flex-shrink: 0; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c;
+  border-radius: 6px; cursor: pointer; font-size: 14px;
+}
+.list-input-row .btn-remove:hover { background: #fee2e2; }
+.list-add-btn {
+  padding: 6px 14px; border: 1px dashed #cbd5e1; border-radius: 6px;
+  background: #fff; cursor: pointer; font-size: 12px; color: #475569; font-family: inherit;
+}
+.list-add-btn:hover { border-color: var(--accent); color: var(--accent-dk); }
+.list-add-btn:disabled { cursor: not-allowed; opacity: 0.5; }
+.list-counter { font-size: 11px; color: #94a3b8; margin-left: 6px; }
+.list-counter.over { color: #b91c1c; font-weight: 600; }
+
+/* Appraisal callout */
+.appraisal-block {
+  background: var(--grow-bg); border: 1px solid var(--grow); border-radius: 10px;
+  padding: 16px 18px; margin-top: 18px;
+}
+.appraisal-block h4 { font-family: 'Lora', serif; font-size: 15px; color: var(--grow); margin-bottom: 8px; }
+.appraisal-block p { font-size: 13px; line-height: 1.55; color: #1e293b; margin-bottom: 6px; }
+.appraisal-block .av-row { display: flex; gap: 14px; margin-top: 8px; font-size: 12.5px; }
+.appraisal-block .av-row .av-label { font-weight: 600; color: var(--grow); }
+
+/* Priority actions card */
+.priority-card {
+  background: #fff; border: 1px solid var(--accent); border-radius: 12px;
+  padding: 22px 26px; margin-bottom: 18px;
+}
+.priority-card h3 { font-family: 'Lora', serif; font-size: 18px; color: #1e293b; margin-bottom: 6px; }
+.priority-card p { font-size: 13px; color: #475569; line-height: 1.55; margin-bottom: 14px; }
+
+/* Submit bar */
+.submit-bar {
+  position: sticky; bottom: 0;
+  background: #fff; border-top: 1px solid #e2e8f0; padding: 14px 28px;
+  display: flex; gap: 12px; align-items: center; justify-content: space-between;
+  margin: 24px -40px -80px -40px;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.05);
+}
+.submit-bar .save-status { font-size: 12.5px; color: #64748b; }
+.submit-bar .save-status.dirty { color: #d97706; font-weight: 600; }
+.submit-bar .save-status.saved { color: #047857; }
+.submit-bar .submit-btns { display: flex; gap: 10px; }
+.btn-save, .btn-submit {
+  padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600;
+  cursor: pointer; border: none; font-family: inherit;
+}
+.btn-save { background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; }
+.btn-save:hover { background: #e2e8f0; }
+.btn-submit { background: var(--accent); color: #fff; }
+.btn-submit:hover { background: var(--accent-dk); }
+.btn-save:disabled, .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.toast {
+  position: fixed; top: 80px; right: 24px; z-index: 500;
+  padding: 12px 18px; border-radius: 8px; font-size: 13px; font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12); opacity: 0; transform: translateY(-10px);
+  transition: opacity 0.2s, transform 0.2s; pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.toast.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+
+.empty-state, .loading-state {
+  padding: 60px 30px; text-align: center; color: #94a3b8; font-size: 14px;
+}
+.empty-state h3 { font-family: 'Lora', serif; font-size: 18px; color: #1e293b; margin-bottom: 6px; }
+
+.no-access {
+  background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
+  padding: 16px 20px; border-radius: 10px; margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .level-row { grid-template-columns: repeat(2, 1fr); }
+  .page-wrap { padding: 18px 16px 80px; }
+  .submit-bar { margin: 24px -16px -80px -16px; padding: 12px 16px; }
+}
+</style>
+</head>
+<body>
+<div id="navbarMount"></div>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">AI Competency Framework v1.0 · Part 3</div>
+    <h1 class="hero-title">AI Maturity Self-Assessment</h1>
+    <p class="hero-sub">
+      How well your school is doing with AI, looked at across six areas of school life.
+      Honest ratings only — the Eduversal team checks during the appraisal visit. Pick two
+      areas to grow by one step each year. Not all six.
+    </p>
+    <div id="heroStatusChip" class="hero-status" style="display:none;">—</div>
+  </div>
+</header>
+
+<main class="page-wrap">
+  <div id="noAccessMsg" class="no-access" style="display:none;">
+    Only the School Principal, Academic Coordinator, or Foundation Representative can fill in this
+    self-assessment. Read access is open to all school leadership.
+  </div>
+
+  <section class="intro-card">
+    <h2>How this works</h2>
+    <p>
+      Rate where the school is now on each of the 6 areas. Then pick a target level for
+      next year. Add 2-4 pieces of evidence per area. List strengths and improvement areas.
+      Save anytime. Submit when ready. After submission, ratings lock until the appraisal team
+      visits.
+    </p>
+    <p>
+      Most Eduversal schools in 2026 are honestly at Step 1 or 2 on most areas. That is normal.
+      Inflated self-assessment is a network-wide red line — the Eduversal team will see it,
+      and the school will set goals it cannot reach.
+    </p>
+    <div class="pillrow">
+      <span class="pill">5 Steps · Emerging → Leading</span>
+      <span class="pill">6 Areas</span>
+      <span class="pill">Annual</span>
+      <span class="pill">Validated by Eduversal HQ</span>
+    </div>
+  </section>
+
+  <div class="year-bar">
+    <label for="yearSelect">Academic year</label>
+    <select id="yearSelect">
+      <option value="2026-2027">2026-2027</option>
+      <option value="2025-2026">2025-2026</option>
+    </select>
+    <div class="stat" id="docStat">—</div>
+  </div>
+
+  <div id="loadingState" class="loading-state">Loading the framework and your school's draft…</div>
+
+  <div id="assessmentForm" style="display:none;">
+    <!-- Six domain cards injected here -->
+    <div id="domainsContainer"></div>
+
+    <!-- Priority actions -->
+    <div class="priority-card">
+      <h3>Priority Actions for Next Year</h3>
+      <p>
+        Two-area rule from the Eduversal Leader Playbook: pick a small number (1-4) of specific
+        actions your school will take. Each should be plain, doable, and tied to one of the two
+        areas you are growing. Up to 6 items, each up to 280 characters.
+      </p>
+      <div id="priorityList"></div>
+      <button class="list-add-btn" id="btnAddPriority">+ Add priority action</button>
+      <span class="list-counter" id="priorityCounter">0 / 6</span>
+    </div>
+  </div>
+
+  <div class="submit-bar" id="submitBar" style="display:none;">
+    <div class="save-status" id="saveStatus">—</div>
+    <div class="submit-btns">
+      <button class="btn-save" id="btnSave">Save draft</button>
+      <button class="btn-submit" id="btnSubmit">Submit for appraisal</button>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import {
+  getFirestore, doc, getDoc, setDoc, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const ACADEMIC_YEAR_DEFAULT = '2026-2027';
+const REF_BASE = '/research/eduversal/ai-competency-framework';
+
+const DOMAINS = [
+  { id: 'strategy_leadership',     title: 'Strategy and Leadership',     scope: 'Strategic planning, leadership commitment, governance.' },
+  { id: 'policy_compliance',       title: 'Policy and Compliance',       scope: 'AI policies, UU PDP data privacy, academic integrity, responsible use.' },
+  { id: 'staff_capability',        title: 'Staff Capability',            scope: 'Staff AI competency levels and quality of professional development.' },
+  { id: 'teaching_learning',       title: 'Teaching and Learning',       scope: 'Quality and consistency of AI integration in classroom practice.' },
+  { id: 'student_outcomes',        title: 'Student Outcomes',            scope: 'Student AI literacy and the impact of AI on learning outcomes.' },
+  { id: 'infrastructure_resources',title: 'Infrastructure and Resources',scope: 'Technical infrastructure, approved tools, budget, technical support.' }
+];
+
+const LEVELS = [
+  { num: 1, name: 'Emerging',    short: 'Beginning. Awareness limited.' },
+  { num: 2, name: 'Developing',  short: 'Basic policies. Inconsistent.' },
+  { num: 3, name: 'Established', short: 'Coherent. Majority engagement.' },
+  { num: 4, name: 'Advanced',    short: 'Sophisticated. Strong impact.' },
+  { num: 5, name: 'Leading',     short: 'Network model. Outstanding.' }
+];
+
+const MAX_EVIDENCE = 8;
+const MAX_BULLETS  = 5;     // strengths & improvements
+const MAX_PRIORITY = 6;
+const MAX_TXT      = 280;
+const MAX_EVIDENCE_TXT = 500;
+
+// ----- State -----
+const state = {
+  user: null,
+  profile: null,
+  schoolId: null,
+  schoolName: null,
+  academicYear: ACADEMIC_YEAR_DEFAULT,
+  doc: null,           // full Firestore doc
+  status: null,        // 'draft' | 'submitted' | 'appraised' | null
+  dirty: false,
+  loadedRef: null,
+  reference: null,     // PDF verbatim — for popovers
+  canEdit: false,
+  canRead: false
+};
+
+let saveTimer = null;
+
+// ----- Toast helper -----
+function showToast(msg, kind = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + kind;
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ----- Permission helpers -----
+function computePermissions(profile) {
+  if (!profile) return { canRead: false, canEdit: false };
+  const isAdmin = profile.role_academichub === 'academic_admin';
+  const subs = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+  // Read: any AH leadership at this school
+  const canRead = isAdmin || subs.some(r => ['school_principal','academic_coordinator','foundation_representative','cambridge_coordinator'].includes(r));
+  // Edit: only school_principal + academic_admin per Firestore rule
+  const canEdit = isAdmin || subs.includes('school_principal');
+  return { canRead, canEdit };
+}
+
+// ----- Reference loader (verbatim PDF text for popovers — lazy) -----
+async function loadReference() {
+  if (state.reference) return state.reference;
+  try {
+    const res = await fetch(`${REF_BASE}/reference/eduversal-v1-part3-institutional.json`, { cache: 'force-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    state.reference = await res.json();
+  } catch (err) {
+    console.warn('[ai-maturity] reference load failed', err);
+  }
+  return state.reference;
+}
+
+// ----- Firestore load -----
+async function loadAssessment() {
+  if (!state.schoolId) return;
+  const docId = `${state.schoolId}_${state.academicYear}`;
+  state.loadedRef = docId;
+  const ref = doc(window.db, 'ai_maturity_assessments', docId);
+  try {
+    const snap = await getDoc(ref);
+    if (snap.exists()) {
+      state.doc = snap.data();
+      state.status = state.doc.status || 'draft';
+    } else {
+      state.doc = blankDoc();
+      state.status = null;     // not created yet
+    }
+  } catch (err) {
+    console.error('[ai-maturity] load failed', err);
+    state.doc = blankDoc();
+    state.status = null;
+  }
+  state.dirty = false;
+  renderAll();
+}
+
+function blankDoc() {
+  const domainRatings = {};
+  for (const d of DOMAINS) {
+    domainRatings[d.id] = {
+      currentLevel: null,
+      targetLevel: null,
+      evidence: [],
+      strengths: [],
+      improvementAreas: []
+    };
+  }
+  return {
+    schoolId: state.schoolId,
+    schoolName: state.schoolName,
+    academicYear: state.academicYear,
+    submittedBy: state.user.uid,
+    status: 'draft',
+    domainRatings,
+    overallLevel: null,
+    priorityActions: []
+  };
+}
+
+// ----- Render: hero status chip -----
+function renderHeroStatus() {
+  const el = document.getElementById('heroStatusChip');
+  if (!state.status) {
+    el.style.display = 'none';
+    return;
+  }
+  const map = {
+    draft:     { label: '○ Draft — not yet submitted', cls: 'draft' },
+    submitted: { label: '◐ Submitted — waiting for the Eduversal appraisal visit', cls: 'submitted' },
+    appraised: { label: '✓ Validated by the Eduversal team', cls: 'appraised' }
+  };
+  const m = map[state.status] || { label: state.status, cls: '' };
+  el.className = 'hero-status ' + m.cls;
+  el.textContent = m.label;
+  el.style.display = 'inline-flex';
+}
+
+// ----- Render: domain cards -----
+function renderDomains() {
+  const container = document.getElementById('domainsContainer');
+  container.innerHTML = '';
+  const locked = state.status === 'submitted' || state.status === 'appraised' || !state.canEdit;
+
+  DOMAINS.forEach((d, idx) => {
+    const r = state.doc.domainRatings[d.id] || { currentLevel: null, targetLevel: null, evidence: [], strengths: [], improvementAreas: [] };
+    const appraised = state.status === 'appraised' && state.doc.appraisal && state.doc.appraisal.validatedDomainRatings;
+    const appraiserView = appraised ? state.doc.appraisal.validatedDomainRatings[d.id] : null;
+
+    const card = document.createElement('div');
+    card.className = 'domain-card';
+    card.dataset.domainId = d.id;
+    card.innerHTML = `
+      <div class="domain-head">
+        <div class="domain-num">${idx + 1}</div>
+        <div class="domain-info">
+          <div class="domain-title">${d.title}</div>
+          <div class="domain-scope">${d.scope}</div>
+        </div>
+      </div>
+
+      <div class="level-row-label">Current step (where the school is now)</div>
+      <div class="level-row" data-target="currentLevel"></div>
+
+      <div class="target-row-label">Target step for next year</div>
+      <div class="target-row" data-target="targetLevel"></div>
+
+      <div class="sub-label">Evidence <span class="sub-hint">(2-4 short sentences — what we can show the appraisal team)</span></div>
+      <div class="evidence-list"></div>
+      <button class="list-add-btn" data-add="evidence" ${locked || r.evidence.length >= MAX_EVIDENCE ? 'disabled' : ''}>+ Add evidence</button>
+      <span class="list-counter ${r.evidence.length > MAX_EVIDENCE ? 'over' : ''}">${r.evidence.length} / ${MAX_EVIDENCE}</span>
+
+      <div class="sub-label">Strengths <span class="sub-hint">(what is going well, up to 5)</span></div>
+      <div class="strengths-list"></div>
+      <button class="list-add-btn" data-add="strengths" ${locked || r.strengths.length >= MAX_BULLETS ? 'disabled' : ''}>+ Add strength</button>
+      <span class="list-counter ${r.strengths.length > MAX_BULLETS ? 'over' : ''}">${r.strengths.length} / ${MAX_BULLETS}</span>
+
+      <div class="sub-label">Improvement areas <span class="sub-hint">(what to work on, up to 5)</span></div>
+      <div class="improvements-list"></div>
+      <button class="list-add-btn" data-add="improvementAreas" ${locked || r.improvementAreas.length >= MAX_BULLETS ? 'disabled' : ''}>+ Add improvement area</button>
+      <span class="list-counter ${r.improvementAreas.length > MAX_BULLETS ? 'over' : ''}">${r.improvementAreas.length} / ${MAX_BULLETS}</span>
+
+      ${appraiserView ? renderAppraisalBlock(appraiserView, d.id) : ''}
+    `;
+
+    // Inject level pills
+    const lr = card.querySelector('.level-row');
+    LEVELS.forEach(lv => {
+      const pill = document.createElement('button');
+      pill.type = 'button';
+      pill.className = 'level-pill' + (r.currentLevel === lv.num ? ' selected' : '') + (locked ? ' disabled' : '');
+      pill.dataset.lvl = lv.num;
+      pill.innerHTML = `<div class="lp-num">${lv.num}</div><div class="lp-name">${lv.name}</div><div class="lp-mini">${lv.short}</div>`;
+      if (!locked) pill.addEventListener('click', () => onLevelClick(d.id, 'currentLevel', lv.num));
+      lr.appendChild(pill);
+    });
+
+    // Target row
+    const tr = card.querySelector('.target-row');
+    LEVELS.forEach(lv => {
+      const m = document.createElement('button');
+      m.type = 'button';
+      m.className = 'target-mini' + (r.targetLevel === lv.num ? ' selected' : '') + (locked ? ' disabled' : '');
+      m.dataset.lvl = lv.num;
+      m.textContent = `${lv.num} · ${lv.name}`;
+      if (!locked) m.addEventListener('click', () => onLevelClick(d.id, 'targetLevel', lv.num));
+      tr.appendChild(m);
+    });
+
+    // Inject list rows
+    renderListInto(card.querySelector('.evidence-list'),     d.id, 'evidence',         r.evidence, locked, MAX_EVIDENCE_TXT);
+    renderListInto(card.querySelector('.strengths-list'),    d.id, 'strengths',        r.strengths, locked, MAX_TXT);
+    renderListInto(card.querySelector('.improvements-list'), d.id, 'improvementAreas', r.improvementAreas, locked, MAX_TXT);
+
+    // List add buttons
+    card.querySelectorAll('button.list-add-btn[data-add]').forEach(btn => {
+      btn.addEventListener('click', () => onAddItem(d.id, btn.dataset.add));
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function renderListInto(target, domainId, field, items, locked, maxLen) {
+  target.innerHTML = '';
+  items.forEach((txt, i) => {
+    const row = document.createElement('div');
+    row.className = 'list-input-row';
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.placeholder = field === 'evidence' ? 'Plain sentence the team can verify…' : 'One short line…';
+    ta.maxLength = maxLen;
+    ta.disabled = locked;
+    ta.addEventListener('input', () => onItemChange(domainId, field, i, ta.value));
+    row.appendChild(ta);
+    if (!locked) {
+      const rm = document.createElement('button');
+      rm.className = 'btn-remove';
+      rm.type = 'button';
+      rm.textContent = '✕';
+      rm.title = 'Remove';
+      rm.addEventListener('click', () => onRemoveItem(domainId, field, i));
+      row.appendChild(rm);
+    }
+    target.appendChild(row);
+  });
+}
+
+function renderAppraisalBlock(av, domainId) {
+  // av: { currentLevel, evidence[], strengths[], improvementAreas[], targetLevel }
+  const evi = Array.isArray(av.evidence) ? av.evidence : [];
+  const str = Array.isArray(av.strengths) ? av.strengths : [];
+  const imp = Array.isArray(av.improvementAreas) ? av.improvementAreas : [];
+  const myCur = state.doc.domainRatings[domainId]?.currentLevel;
+  const adjustNote = (av.currentLevel != null && myCur != null && av.currentLevel !== myCur)
+    ? `<p><strong>Adjusted:</strong> Your team marked ${myCur}, Eduversal validated as ${av.currentLevel}.</p>` : '';
+  return `
+    <div class="appraisal-block">
+      <h4>✓ Validated by Eduversal team</h4>
+      ${adjustNote}
+      <div class="av-row">
+        <div><span class="av-label">Validated current step:</span> ${av.currentLevel ?? '—'}</div>
+        <div><span class="av-label">Validated target:</span> ${av.targetLevel ?? '—'}</div>
+      </div>
+      ${evi.length ? `<p style="margin-top:8px;"><strong>Evidence observed:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${evi.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
+      ${str.length ? `<p style="margin-top:8px;"><strong>Validated strengths:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${str.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
+      ${imp.length ? `<p style="margin-top:8px;"><strong>Improvement areas:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${imp.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
+    </div>
+  `;
+}
+
+// ----- Render: priority actions -----
+function renderPriority() {
+  const list = document.getElementById('priorityList');
+  const items = Array.isArray(state.doc.priorityActions) ? state.doc.priorityActions : [];
+  const locked = state.status === 'submitted' || state.status === 'appraised' || !state.canEdit;
+  list.innerHTML = '';
+  items.forEach((txt, i) => {
+    const row = document.createElement('div');
+    row.className = 'list-input-row';
+    const ta = document.createElement('textarea');
+    ta.value = txt;
+    ta.maxLength = MAX_TXT;
+    ta.placeholder = 'One specific thing your school will do this year…';
+    ta.disabled = locked;
+    ta.addEventListener('input', () => {
+      state.doc.priorityActions[i] = ta.value;
+      markDirty();
+    });
+    row.appendChild(ta);
+    if (!locked) {
+      const rm = document.createElement('button');
+      rm.className = 'btn-remove';
+      rm.type = 'button';
+      rm.textContent = '✕';
+      rm.addEventListener('click', () => {
+        state.doc.priorityActions.splice(i, 1);
+        markDirty();
+        renderPriority();
+      });
+      row.appendChild(rm);
+    }
+    list.appendChild(row);
+  });
+  const btn = document.getElementById('btnAddPriority');
+  btn.disabled = locked || items.length >= MAX_PRIORITY;
+  const counter = document.getElementById('priorityCounter');
+  counter.textContent = `${items.length} / ${MAX_PRIORITY}`;
+  counter.className = items.length > MAX_PRIORITY ? 'list-counter over' : 'list-counter';
+}
+
+// ----- Event handlers -----
+function onLevelClick(domainId, field, lvl) {
+  if (!state.doc.domainRatings[domainId]) state.doc.domainRatings[domainId] = {};
+  state.doc.domainRatings[domainId][field] = lvl;
+  markDirty();
+  renderDomains();
+}
+
+function onAddItem(domainId, field) {
+  if (!state.doc.domainRatings[domainId]) return;
+  const arr = state.doc.domainRatings[domainId][field] || [];
+  const max = field === 'evidence' ? MAX_EVIDENCE : MAX_BULLETS;
+  if (arr.length >= max) return;
+  arr.push('');
+  state.doc.domainRatings[domainId][field] = arr;
+  markDirty();
+  renderDomains();
+  // Focus the newly added textarea
+  const list = document.querySelector(`.domain-card[data-domain-id="${domainId}"] .${field === 'evidence' ? 'evidence-list' : field === 'strengths' ? 'strengths-list' : 'improvements-list'}`);
+  const tas = list.querySelectorAll('textarea');
+  if (tas.length) tas[tas.length - 1].focus();
+}
+
+function onItemChange(domainId, field, idx, value) {
+  if (!state.doc.domainRatings[domainId] || !Array.isArray(state.doc.domainRatings[domainId][field])) return;
+  state.doc.domainRatings[domainId][field][idx] = value;
+  markDirty();
+}
+
+function onRemoveItem(domainId, field, idx) {
+  state.doc.domainRatings[domainId][field].splice(idx, 1);
+  markDirty();
+  renderDomains();
+}
+
+function markDirty() {
+  state.dirty = true;
+  renderSaveStatus();
+  // Autosave debounce
+  clearTimeout(saveTimer);
+  if (state.canEdit && state.status !== 'submitted' && state.status !== 'appraised') {
+    saveTimer = setTimeout(() => saveDraft(true), 1800);
+  }
+}
+
+function renderSaveStatus() {
+  const el = document.getElementById('saveStatus');
+  if (!state.canEdit) {
+    el.className = 'save-status';
+    el.textContent = 'View-only — only the School Principal can edit.';
+    return;
+  }
+  if (state.status === 'submitted') {
+    el.className = 'save-status';
+    el.textContent = 'Submitted — waiting for the Eduversal appraisal visit. Locked.';
+    return;
+  }
+  if (state.status === 'appraised') {
+    el.className = 'save-status';
+    el.textContent = 'Validated by the Eduversal team. Read-only.';
+    return;
+  }
+  if (state.dirty) {
+    el.className = 'save-status dirty';
+    el.textContent = '● Unsaved changes';
+  } else {
+    el.className = 'save-status saved';
+    el.textContent = '✓ Saved';
+  }
+}
+
+function renderAll() {
+  computeOverallLevel();
+  renderHeroStatus();
+  renderDomains();
+  renderPriority();
+  renderSaveStatus();
+  // Form vs locked
+  const locked = state.status === 'submitted' || state.status === 'appraised' || !state.canEdit;
+  document.getElementById('btnSave').disabled = locked;
+  document.getElementById('btnSubmit').disabled = locked || !canSubmit();
+  // Doc stat
+  const stat = document.getElementById('docStat');
+  if (state.status === 'appraised') stat.innerHTML = '<strong>Validated</strong> by Eduversal HQ';
+  else if (state.status === 'submitted') stat.innerHTML = '<strong>Submitted</strong> — awaiting validation';
+  else if (state.status === 'draft') stat.innerHTML = '<strong>Draft</strong> in progress';
+  else stat.innerHTML = '<strong>Not started</strong>';
+}
+
+function computeOverallLevel() {
+  const vals = DOMAINS
+    .map(d => state.doc.domainRatings[d.id]?.currentLevel)
+    .filter(v => typeof v === 'number');
+  if (!vals.length) {
+    state.doc.overallLevel = null;
+  } else {
+    state.doc.overallLevel = Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
+  }
+}
+
+function canSubmit() {
+  // All 6 domains must have currentLevel + targetLevel + ≥1 evidence + ≥1 strength + ≥1 improvement
+  for (const d of DOMAINS) {
+    const r = state.doc.domainRatings[d.id];
+    if (!r) return false;
+    if (!r.currentLevel || !r.targetLevel) return false;
+    if (!(Array.isArray(r.evidence) && r.evidence.some(e => e && e.trim()))) return false;
+    if (!(Array.isArray(r.strengths) && r.strengths.some(e => e && e.trim()))) return false;
+    if (!(Array.isArray(r.improvementAreas) && r.improvementAreas.some(e => e && e.trim()))) return false;
+  }
+  // At least one priority action
+  if (!(Array.isArray(state.doc.priorityActions) && state.doc.priorityActions.some(a => a && a.trim()))) return false;
+  return true;
+}
+
+// ----- Save / Submit -----
+async function saveDraft(silent = false) {
+  if (!state.canEdit) return;
+  if (state.status === 'submitted' || state.status === 'appraised') return;
+  computeOverallLevel();
+  const docId = `${state.schoolId}_${state.academicYear}`;
+  const ref = doc(window.db, 'ai_maturity_assessments', docId);
+  // Trim empty strings out of lists before writing
+  const cleanedDomains = {};
+  for (const d of DOMAINS) {
+    const r = state.doc.domainRatings[d.id] || {};
+    cleanedDomains[d.id] = {
+      currentLevel: r.currentLevel ?? null,
+      targetLevel:  r.targetLevel  ?? null,
+      evidence:         (r.evidence         || []).map(s => String(s).trim()).filter(Boolean),
+      strengths:        (r.strengths        || []).map(s => String(s).trim()).filter(Boolean),
+      improvementAreas: (r.improvementAreas || []).map(s => String(s).trim()).filter(Boolean)
+    };
+  }
+  const cleanedPriorities = (state.doc.priorityActions || []).map(s => String(s).trim()).filter(Boolean);
+
+  const payload = {
+    schoolId: state.schoolId,
+    schoolName: state.schoolName,
+    academicYear: state.academicYear,
+    submittedBy: state.user.uid,
+    status: state.status === null ? 'draft' : state.status,
+    domainRatings: cleanedDomains,
+    overallLevel: state.doc.overallLevel,
+    priorityActions: cleanedPriorities,
+    updatedAt: serverTimestamp()
+  };
+  if (state.status === null) {
+    payload.createdAt = serverTimestamp();
+  }
+
+  try {
+    await setDoc(ref, payload, { merge: true });
+    state.status = payload.status;
+    state.dirty = false;
+    renderSaveStatus();
+    renderAll();
+    if (!silent) showToast('Draft saved.', 'success');
+  } catch (err) {
+    console.error('[ai-maturity] save failed', err);
+    showToast('Save failed: ' + (err.code || err.message), 'error');
+  }
+}
+
+async function submitForAppraisal() {
+  if (!canSubmit()) {
+    showToast('Some areas are missing required information.', 'error');
+    return;
+  }
+  if (!confirm('Submit for the Eduversal appraisal visit?\n\nAfter submitting, the ratings lock. Only the Eduversal team can change them.')) return;
+  // Save first to lock current state, then flip status
+  await saveDraft(true);
+  const docId = `${state.schoolId}_${state.academicYear}`;
+  const ref = doc(window.db, 'ai_maturity_assessments', docId);
+  try {
+    await setDoc(ref, { status: 'submitted', submittedAt: serverTimestamp() }, { merge: true });
+    state.status = 'submitted';
+    renderAll();
+    showToast('Submitted. The Eduversal team will be notified at the next appraisal cycle.', 'success');
+  } catch (err) {
+    console.error('[ai-maturity] submit failed', err);
+    showToast('Submit failed: ' + (err.code || err.message), 'error');
+  }
+}
+
+// ----- Misc -----
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+
+// ----- Init -----
+document.addEventListener('authReady', async ({ detail }) => {
+  state.user = detail.user;
+  state.profile = detail.profile;
+  state.schoolId = state.profile?.schoolId || null;
+  state.schoolName = state.profile?.school || state.profile?.schoolName || null;
+
+  window.__loadAcademicNavbar('ai-maturity-self-assessment', { user: state.user, profile: state.profile });
+
+  const perms = computePermissions(state.profile);
+  state.canRead = perms.canRead;
+  state.canEdit = perms.canEdit;
+
+  if (!state.canRead) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('noAccessMsg').style.display = 'block';
+    return;
+  }
+  if (!state.canEdit) {
+    document.getElementById('noAccessMsg').style.display = 'block';
+    document.getElementById('noAccessMsg').textContent =
+      'You can read this assessment but you cannot edit it. Editing is restricted to the School Principal at your school.';
+  }
+  if (!state.schoolId) {
+    document.getElementById('loadingState').textContent =
+      'Your profile does not have a school yet. Ask Eduversal HQ to set your school in /console.';
+    return;
+  }
+
+  await loadReference();
+  await loadAssessment();
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('assessmentForm').style.display = 'block';
+  document.getElementById('submitBar').style.display = 'flex';
+});
+
+document.getElementById('yearSelect').addEventListener('change', async (e) => {
+  state.academicYear = e.target.value;
+  document.getElementById('loadingState').style.display = 'block';
+  document.getElementById('assessmentForm').style.display = 'none';
+  document.getElementById('submitBar').style.display = 'none';
+  await loadAssessment();
+  document.getElementById('loadingState').style.display = 'none';
+  document.getElementById('assessmentForm').style.display = 'block';
+  document.getElementById('submitBar').style.display = 'flex';
+});
+
+document.getElementById('btnSave').addEventListener('click', () => saveDraft(false));
+document.getElementById('btnSubmit').addEventListener('click', submitForAppraisal);
+document.getElementById('btnAddPriority').addEventListener('click', () => {
+  if (!Array.isArray(state.doc.priorityActions)) state.doc.priorityActions = [];
+  if (state.doc.priorityActions.length >= MAX_PRIORITY) return;
+  state.doc.priorityActions.push('');
+  markDirty();
+  renderPriority();
+});
+
+// Warn on leave with unsaved changes
+window.addEventListener('beforeunload', (e) => {
+  if (state.dirty) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+</script>
+</body>
+</html>
