@@ -9,6 +9,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Mono:wght@400;500;700&family=Lora:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="handbook-reader.css">
+  <style>
+    /* AH fixed-navbar reserves 62px at top — same pattern every other
+       AH protected page uses (MyInduction.html, ObservationEntry.html,
+       etc.). Without this the hero overlaps the navbar. */
+    body { padding-top: 62px; }
+  </style>
 </head>
 <body>
   <div id="navbarMount"></div>
