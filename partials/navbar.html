@@ -140,33 +140,66 @@
       </div>
     </div>
 
-    <!-- School dropdown (dynamic pages only) -->
+    <!-- School dropdown (Curriculum only — Appraisal moved to PD) -->
     <div class="nav-dropdown-wrap" id="ddWrap-school">
       <button class="nav-dropdown-trigger" id="ddTrigger-school" aria-haspopup="true" aria-expanded="false" data-dd="school">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>School</span>
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <div class="nav-dropdown-panel nav-dropdown-panel--wide" id="ddPanel-school">
+      <div class="nav-dropdown-panel" id="ddPanel-school">
+        <div class="nav-dd-col-header">Curriculum</div>
+        <a href="/curriculum-map" class="nav-dropdown-item" data-nav-key="curriculum-map">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
+          Curriculum Map
+        </a>
+        <a href="/syllabus-coverage" class="nav-dropdown-item" data-nav-key="syllabus-coverage">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+          Syllabus Coverage
+        </a>
+      </div>
+    </div>
+
+    <!-- Professional Development dropdown (consolidated: Standards · Appraisals · CPD · Induction & Handbooks) -->
+    <div class="nav-dropdown-wrap" id="ddWrap-pd">
+      <button class="nav-dropdown-trigger" id="ddTrigger-pd" aria-haspopup="true" aria-expanded="false" data-dd="pd">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        <span>Professional Development</span>
+        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-panel nav-dropdown-panel--wide nav-dropdown-panel--xwide" id="ddPanel-pd">
         <div class="nav-dd-col-group">
+
+          <!-- Column 1 — Standards & Frameworks -->
           <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Curriculum</div>
+            <div class="nav-dd-col-header">Standards &amp; Frameworks</div>
             <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Academic Standards
             </a>
-            <a href="/curriculum-map" class="nav-dropdown-item" data-nav-key="curriculum-map">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
-              Curriculum Map
+            <a href="/cambridge-standards" class="nav-dropdown-item" data-nav-key="cambridge-standards">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              Cambridge Standards
             </a>
-            <a href="/syllabus-coverage" class="nav-dropdown-item" data-nav-key="syllabus-coverage">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
-              Syllabus Coverage
+            <a href="/competency-framework" class="nav-dropdown-item" data-nav-key="competency-framework">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              Competency Framework
+            </a>
+            <a href="/references" class="nav-dropdown-item" data-nav-key="references">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              References
+            </a>
+            <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Cambridge Calendar
             </a>
           </div>
+
           <div class="nav-dd-col-divider"></div>
+
+          <!-- Column 2 — Appraisals & Evaluation -->
           <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Appraisal</div>
+            <div class="nav-dd-col-header">Appraisals &amp; Evaluation</div>
             <a href="/teacher-appraisal-entry" class="nav-dropdown-item" data-nav-key="teacher-appraisal-entry">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
               Teacher Appraisal Entry
@@ -195,53 +228,23 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg>
               AI Maturity Self-Assessment
             </a>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- My Hub dropdown (Coordinator + Calendar + Announcements + Messages + Documents) -->
-    <div class="nav-dropdown-wrap" id="ddWrap-myhub">
-      <button class="nav-dropdown-trigger" id="ddTrigger-myhub" aria-haspopup="true" aria-expanded="false" data-dd="myhub">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-        <span>My Hub</span>
-        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </button>
-      <div class="nav-dropdown-panel nav-dropdown-panel--wide nav-dropdown-panel--xwide" id="ddPanel-myhub">
-        <div class="nav-dd-col-group">
-          <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Communications</div>
-            <a href="/academic-calendar" class="nav-dropdown-item" data-nav-key="academic-calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Academic Calendar
+            <div class="nav-dd-divider"></div>
+            <div class="nav-dd-col-header" style="padding:4px 12px;">Principal Evaluation</div>
+            <a href="/principal-evaluation" class="nav-dropdown-item" data-nav-key="principal-evaluation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              Evaluation Hub
             </a>
-            <a href="/school-events" class="nav-dropdown-item" data-nav-key="school-events">
+            <a href="/principal-coaching-view" class="nav-dropdown-item" data-nav-key="principal-coaching-view">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-              School Events
-            </a>
-            <a href="/announcements" class="nav-dropdown-item" data-nav-key="announcements" id="navAnnBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/></svg>
-              Announcements
-              <span class="nav-badge" id="annBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
-            </a>
-            <a href="/message-board" class="nav-dropdown-item" data-nav-key="message-board" id="navMsgBtn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-              Message Board
-              <span class="nav-badge" id="msgBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
-            </a>
-            <a href="/documents" class="nav-dropdown-item" data-nav-key="documents">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Documents
-              <span class="nav-badge nav-badge--count" id="docBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
+              My Coaching
             </a>
           </div>
+
           <div class="nav-dd-col-divider"></div>
+
+          <!-- Column 3 — My CPD -->
           <div class="nav-dd-col">
-            <div class="nav-dd-col-header">CPD</div>
-            <a href="/competency-framework" class="nav-dropdown-item" data-nav-key="competency-framework">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Competency Framework
-            </a>
+            <div class="nav-dd-col-header">My CPD</div>
             <a href="/learning-path" class="nav-dropdown-item" data-nav-key="learning-path">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Learning Path
@@ -254,8 +257,23 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
               My Certificates
             </a>
+            <a href="/weekly-checklist" class="nav-dropdown-item" data-nav-key="weekly-checklist">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+              Weekly Checklist
+            </a>
+            <a href="/academic-services" class="nav-dropdown-item" data-nav-key="academic-services">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+              Academic Services
+            </a>
+            <a href="/library" class="nav-dropdown-item" data-nav-key="library">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              Resource Library
+            </a>
           </div>
+
           <div class="nav-dd-col-divider"></div>
+
+          <!-- Column 4 — Induction & Handbooks -->
           <div class="nav-dd-col">
             <div class="nav-dd-col-header">Induction</div>
             <a href="/my-induction" class="nav-dropdown-item" data-nav-key="my-induction">
@@ -268,10 +286,10 @@
             </a>
             <a href="/handbook" class="nav-dropdown-item" data-nav-key="handbook">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-              Induction Handbook
+              Handbooks Browser
             </a>
-
-            <div class="nav-dd-col-header" style="padding:8px 12px 4px;">School-facing handbooks</div>
+            <div class="nav-dd-divider"></div>
+            <div class="nav-dd-col-header" style="padding:4px 12px;">School-facing handbooks</div>
             <a href="/handbook?id=eduversal_teacher_handbook_v1" class="nav-dropdown-item" data-nav-key="school-handbook-teacher">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
               Teacher Handbook
@@ -288,45 +306,43 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
               Parent Handbook
             </a>
-
-            <a href="/weekly-checklist" class="nav-dropdown-item" data-nav-key="weekly-checklist">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-              Weekly Checklist
-            </a>
-
-            <div class="nav-dd-col-header" style="padding:8px 12px 4px;">Principal Evaluation</div>
-            <a href="/principal-evaluation" class="nav-dropdown-item" data-nav-key="principal-evaluation">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-              Evaluation Hub
-            </a>
-            <a href="/principal-coaching-view" class="nav-dropdown-item" data-nav-key="principal-coaching-view">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-              My Coaching
-            </a>
-
-            <div class="nav-dd-col-header" style="padding:8px 12px 4px;">Reference</div>
-            <a href="/references" class="nav-dropdown-item" data-nav-key="references">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-              References
-            </a>
-            <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Cambridge Calendar
-            </a>
-            <a href="/cambridge-standards" class="nav-dropdown-item" data-nav-key="cambridge-standards">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              Cambridge Standards
-            </a>
-            <a href="/library" class="nav-dropdown-item" data-nav-key="library">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
-              Resource Library
-            </a>
-            <a href="/academic-services" class="nav-dropdown-item" data-nav-key="academic-services">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-              Academic Services
-            </a>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- My Hub dropdown (Communications only — CPD/Induction/Reference moved to PD) -->
+    <div class="nav-dropdown-wrap" id="ddWrap-myhub">
+      <button class="nav-dropdown-trigger" id="ddTrigger-myhub" aria-haspopup="true" aria-expanded="false" data-dd="myhub">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <span>My Hub</span>
+        <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown-panel" id="ddPanel-myhub">
+        <div class="nav-dd-col-header">Communications</div>
+        <a href="/academic-calendar" class="nav-dropdown-item" data-nav-key="academic-calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Academic Calendar
+        </a>
+        <a href="/school-events" class="nav-dropdown-item" data-nav-key="school-events">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          School Events
+        </a>
+        <a href="/announcements" class="nav-dropdown-item" data-nav-key="announcements" id="navAnnBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 3L9.218 10.083M11.698 20.334C12.573 21.209 14 20.561 14 19.307V4.693C14 3.439 12.573 2.791 11.698 3.666L7 8H4C2.895 8 2 8.895 2 10v4c0 1.105.895 2 2 2h3l4.698 4.334z"/></svg>
+          Announcements
+          <span class="nav-badge" id="annBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
+        </a>
+        <a href="/message-board" class="nav-dropdown-item" data-nav-key="message-board" id="navMsgBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Message Board
+          <span class="nav-badge" id="msgBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
+        </a>
+        <a href="/documents" class="nav-dropdown-item" data-nav-key="documents">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Documents
+          <span class="nav-badge nav-badge--count" id="docBadge" style="position:relative;top:auto;right:auto;margin-left:auto;"></span>
+        </a>
       </div>
     </div>
 

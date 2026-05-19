@@ -681,17 +681,8 @@ const NAV_ITEMS = [
   ]},
   { group: 'school', label: 'School', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Curriculum
-    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
     { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
     { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
-    // Appraisal
-    { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
-    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
-    { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
-    { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
-    { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
-    { key: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', label: 'AI Maturity Self-Assessment' },
     // Other school-level pages still surfaced via Dashboards / direct nav
     { key: 'school-appraisals',       href: '/school-appraisals',       label: 'School Appraisals' },
     { key: 'school-self-appraisal',   href: '/school-self-appraisal',   label: 'School Self-Appraisal' },
@@ -708,35 +699,47 @@ const NAV_ITEMS = [
     { key: 'staff-survey',            href: '/staff-survey',            label: 'Staff Survey' },
     { key: 'parent-survey',           href: '/parent-survey',           label: 'Parent Survey' },
   ]},
-  { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
-    // Communications
-    { key: 'academic-calendar',    href: '/academic-calendar',     label: 'Academic Calendar' },
-    { key: 'school-events',        href: '/school-events',         label: 'School Events' },
-    { key: 'announcements',        href: '/announcements',         label: 'Announcements', badgeId: 'annBadge' },
-    { key: 'message-board',        href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
-    { key: 'documents',            href: '/documents',             label: 'Documents', badgeId: 'docBadge', badgeCount: true },
-    // CPD
-    { key: 'competency-framework', href: '/competency-framework',  label: 'Competency Framework' },
-    { key: 'learning-path',        href: '/learning-path',         label: 'Learning Path' },
-    { key: 'my-portfolio',         href: '/my-portfolio',          label: 'My Portfolio' },
-    { key: 'my-certificates',      href: '/my-certificates',       label: 'My Certificates' },
-    // Induction & Reference
-    { key: 'my-induction',         href: '/my-induction',          label: 'My Induction' },
-    { key: 'team-induction',       href: '/team-induction',        label: 'Team Induction' },
-    { key: 'handbook',             href: '/handbook',              label: 'Induction Handbook' },
+  { group: 'pd', label: 'Professional Development', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
+    // Standards & Frameworks
+    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
+    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
+    { key: 'competency-framework',    href: '/competency-framework',    label: 'Competency Framework' },
+    { key: 'references',              href: '/references',              label: 'References' },
+    { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
+    // Appraisals & Evaluation
+    { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
+    { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
+    { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
+    { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
+    { key: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', label: 'AI Maturity Self-Assessment' },
+    { key: 'principal-evaluation',    href: '/principal-evaluation',    label: 'Principal Evaluation' },
+    { key: 'principal-coaching-view', href: '/principal-coaching-view', label: 'My Coaching' },
+    // My CPD
+    { key: 'learning-path',           href: '/learning-path',           label: 'Learning Path' },
+    { key: 'my-portfolio',            href: '/my-portfolio',            label: 'My Portfolio' },
+    { key: 'my-certificates',         href: '/my-certificates',         label: 'My Certificates' },
+    { key: 'weekly-checklist',        href: '/weekly-checklist',        label: 'Weekly Checklist' },
+    { key: 'academic-services',       href: '/academic-services',       label: 'Academic Services' },
+    { key: 'library',                 href: '/library',                 label: 'Resource Library' },
+    // Induction & Handbooks
+    { key: 'my-induction',            href: '/my-induction',            label: 'My Induction' },
+    { key: 'team-induction',          href: '/team-induction',          label: 'Team Induction' },
+    { key: 'handbook',                href: '/handbook',                label: 'Handbooks Browser' },
     // School-facing handbooks (seeded 2026-05-17)
     { key: 'school-handbook-teacher',   href: '/handbook?id=eduversal_teacher_handbook_v1',        label: 'Teacher Handbook' },
     { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
     { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
-    { key: 'weekly-checklist',     href: '/weekly-checklist',      label: 'Weekly Checklist' },
-    { key: 'cambridge-calendar',   href: '/cambridge-calendar',    label: 'Cambridge Calendar' },
-    { key: 'cambridge-standards',  href: '/cambridge-standards',   label: 'Cambridge Standards' },
-    { key: 'references',           href: '/references',            label: 'References' },
-    { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
-    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
-    { key: 'library',              href: '/library',               label: 'Resource Library' },
-    { key: 'academic-services',    href: '/academic-services',     label: 'Academic Services' },
+  ]},
+  { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
+    // Communications only — PD content moved out
+    { key: 'academic-calendar',    href: '/academic-calendar',     label: 'Academic Calendar' },
+    { key: 'school-events',        href: '/school-events',         label: 'School Events' },
+    { key: 'announcements',        href: '/announcements',         label: 'Announcements', badgeId: 'annBadge' },
+    { key: 'message-board',        href: '/message-board',         label: 'Message Board', badgeId: 'msgBadge' },
+    { key: 'documents',            href: '/documents',             label: 'Documents', badgeId: 'docBadge', badgeCount: true },
   ]},
 ];
 
