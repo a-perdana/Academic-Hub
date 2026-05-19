@@ -728,6 +728,16 @@ const NAV_ITEMS = [
     { key: 'my-induction',            href: '/my-induction',            label: 'My Induction' },
     { key: 'team-induction',          href: '/team-induction',          label: 'Team Induction' },
     { key: 'handbook',                href: '/handbook',                label: 'Handbooks Browser' },
+    // Featured for Leadership (2026-05-19)
+    { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                        label: 'Principal Induction' },
+    { key: 'handbook-fr-90d',              href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',     label: 'Foundation Rep 90 Days' },
+    { key: 'handbook-ac-90d',              href: '/handbook?id=eduversal_academic_coordinator_first_90_days_v1', label: 'Academic Coord 90 Days' },
+    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                       label: 'Leader AI Playbook' },
+    // Policy & AI (2026-05-19)
+    { key: 'handbook-safeguarding',     href: '/handbook?id=eduversal_safeguarding_and_child_protection_v1',     label: 'Safeguarding & CP' },
+    { key: 'handbook-ai-use',           href: '/handbook?id=eduversal_ai_use_policy_v1',                         label: 'AI Use Policy' },
+    { key: 'handbook-behaviour',        href: '/handbook?id=eduversal_behaviour_and_restorative_practice_v1',   label: 'Behaviour & Restorative' },
+    { key: 'handbook-assessment-guide', href: '/handbook?id=eduversal_assessment_guide_v1',                      label: 'Assessment Guide' },
     // School-facing handbooks (seeded 2026-05-17)
     { key: 'school-handbook-teacher',   href: '/handbook?id=eduversal_teacher_handbook_v1',        label: 'Teacher Handbook' },
     { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
