@@ -717,6 +717,7 @@ const NAV_ITEMS = [
     { key: 'principal-evaluation',    href: '/principal-evaluation',    label: 'Principal Evaluation' },
     { key: 'principal-coaching-view', href: '/principal-coaching-view', label: 'My Coaching' },
     // My CPD
+    { key: 'welcome',                 href: '/welcome',                 label: 'Welcome & Orientation' },
     { key: 'learning-path',           href: '/learning-path',           label: 'Learning Path' },
     { key: 'my-portfolio',            href: '/my-portfolio',            label: 'My Portfolio' },
     { key: 'my-certificates',         href: '/my-certificates',         label: 'My Certificates' },

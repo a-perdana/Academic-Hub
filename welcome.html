@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Welcome & Orientation — Academic Hub</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="firebase-config.js"></script>
+<style>
+:root {
+  --ink: #1c1c2e; --ink-2: #44445a; --ink-3: #8888a8;
+  --paper: #f7f6f3; --paper-2: #efede8;
+  --white: #ffffff; --border: #e0ddd6;
+  --accent: #6c5ce7; --accent-dk: #5a4bd1; --accent-2: #ede9fe;
+  --shadow-sm: 0 1px 4px rgba(28,28,46,.07);
+  --shadow: 0 3px 14px rgba(28,28,46,.10);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+
+.hero {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a1438 55%, #0c1028 100%);
+  padding: 44px 40px 40px; position: relative; overflow: hidden;
+}
+.hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 12% 80%, rgba(108,92,231,0.22) 0%, transparent 48%); pointer-events: none; }
+.hero-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; }
+.hero-eyebrow { font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.55); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+.hero-title { font-family: 'Lora', serif; font-size: 1.95rem; font-weight: 600; color: #fff; margin-bottom: 8px; line-height: 1.25; }
+.hero-sub { font-size: 0.98rem; color: rgba(255,255,255,0.7); max-width: 720px; line-height: 1.55; }
+.hero-role-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 14px; padding: 6px 14px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px; font-size: 12px; color: rgba(255,255,255,0.9);
+}
+.hero-role-chip .role-dot { width: 8px; height: 8px; border-radius: 50%; background: #34d399; }
+
+.page-wrap { max-width: 1100px; margin: 0 auto; padding: 28px 40px 80px; }
+
+.layout { display: grid; grid-template-columns: 1fr 240px; gap: 36px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+.toc {
+  position: sticky; top: 80px;
+  background: #fff; border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px 14px; box-shadow: var(--shadow-sm);
+}
+.toc-title { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; padding-left: 6px; }
+.toc-list { list-style: none; padding: 0; margin: 0; }
+.toc-list a {
+  display: block; padding: 7px 10px; border-radius: 7px;
+  font-size: 12.5px; color: var(--ink-2); text-decoration: none;
+  border-left: 2px solid transparent; transition: all 0.15s;
+}
+.toc-list a:hover { background: var(--accent-2); color: var(--accent-dk); }
+.toc-list a.active { background: var(--accent-2); color: var(--accent-dk); border-left-color: var(--accent); font-weight: 600; }
+
+.sec { margin-bottom: 40px; scroll-margin-top: 80px; }
+.sec-eyebrow { font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-dk); margin-bottom: 6px; }
+.sec-title { font-family: 'Lora', serif; font-size: 1.55rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.3; }
+.sec-lead { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; margin-bottom: 18px; max-width: 720px; }
+
+.welcome-banner {
+  background: linear-gradient(135deg, #ede9fe 0%, #e0f2fe 100%);
+  border: 1px solid #c4b5fd; border-radius: 16px;
+  padding: 22px 26px; margin-bottom: 28px;
+}
+.welcome-banner-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--accent-dk); margin-bottom: 6px; }
+.welcome-banner-text { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+.welcome-banner-text strong { color: var(--accent-dk); }
+
+.intro-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
+@media (max-width: 720px) { .intro-grid { grid-template-columns: 1fr; } }
+.intro-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow-sm); }
+.intro-card-icon { font-size: 22px; margin-bottom: 6px; }
+.intro-card-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.intro-card-title a { color: inherit; text-decoration: none; }
+.intro-card-title a:hover { color: var(--accent); }
+.intro-card-text { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.intro-card-text code { font-family: 'DM Mono', monospace; font-size: 11.5px; padding: 1px 5px; background: var(--paper-2); border-radius: 4px; color: var(--accent-dk); }
+
+.flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 22px; box-shadow: var(--shadow-sm); }
+@media (max-width: 800px) { .flow { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .flow { grid-template-columns: 1fr; } }
+.flow-step { position: relative; padding: 14px 12px; background: var(--paper); border-radius: 10px; border: 1px solid var(--border); }
+.flow-step::after {
+  content: '→'; position: absolute; right: -10px; top: 50%; transform: translateY(-50%);
+  font-size: 18px; font-weight: 700; color: var(--accent);
+  background: #fff; border-radius: 50%; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08); z-index: 2;
+}
+.flow-step:last-child::after { display: none; }
+@media (max-width: 800px) { .flow-step:nth-child(2)::after { display: none; } }
+@media (max-width: 480px) { .flow-step::after { display: none !important; } }
+.flow-step-num { font-size: 10px; font-weight: 700; color: var(--accent-dk); letter-spacing: 0.08em; }
+.flow-step-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin: 4px 0 6px; }
+.flow-step-text { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+.flow-step-link { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--accent); text-decoration: none; }
+.flow-step-link:hover { text-decoration: underline; }
+
+.page-detail { background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
+.page-detail-head { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.page-detail-icon { width: 44px; height: 44px; border-radius: 11px; background: linear-gradient(135deg, var(--accent-2) 0%, #e0f2fe 100%); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+.page-detail-head-text { flex: 1; min-width: 0; }
+.page-detail-name { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.page-detail-slug { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-3); }
+.page-detail-open { padding: 7px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; background: var(--accent); color: #fff; text-decoration: none; flex-shrink: 0; }
+.page-detail-open:hover { background: var(--accent-dk); }
+
+.kv-grid { display: grid; grid-template-columns: 130px 1fr; gap: 12px 16px; }
+.kv-key { font-size: 11.5px; font-weight: 700; color: var(--ink-3); letter-spacing: 0.04em; text-transform: uppercase; padding-top: 1px; }
+.kv-val { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.kv-val ul { margin: 4px 0 0 16px; padding: 0; }
+.kv-val li { margin-bottom: 3px; }
+.kv-val code { font-family: 'DM Mono', monospace; font-size: 11.5px; padding: 1px 5px; background: var(--paper-2); border-radius: 4px; color: var(--accent-dk); }
+.kv-val strong { color: var(--ink); }
+
+.glossary { background: #fff; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+.gloss-row { display: grid; grid-template-columns: 180px 1fr; gap: 16px; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+.gloss-row:last-child { border: none; }
+.gloss-term { font-size: 13px; font-weight: 700; color: var(--ink); }
+.gloss-term-sub { display: block; font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-3); font-weight: 400; margin-top: 2px; }
+.gloss-def { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.gloss-def code { font-family: 'DM Mono', monospace; font-size: 11.5px; padding: 1px 5px; background: var(--paper-2); border-radius: 4px; color: var(--accent-dk); }
+
+.checklist { background: linear-gradient(180deg, #fff 0%, #faf9ff 100%); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; box-shadow: var(--shadow-sm); }
+.check-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px dashed var(--border); }
+.check-row:last-child { border: none; }
+.check-num { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: var(--accent-2); color: var(--accent-dk); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+.check-body { flex: 1; min-width: 0; }
+.check-title { font-size: 13.5px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.check-text { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.check-text a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.check-text a:hover { text-decoration: underline; }
+
+.role-block { background: #fff; border: 2px solid var(--accent-2); border-radius: 14px; padding: 20px 22px; margin-bottom: 18px; }
+.role-block.is-admin { border-color: #fde68a; background: #fffbeb; }
+.role-block.is-fr { border-color: #fca5a5; background: #fef2f2; }
+.role-block.is-sp { border-color: #93c5fd; background: #eff6ff; }
+.role-block-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-dk); margin-bottom: 4px; }
+.role-block.is-admin .role-block-eyebrow { color: #92400e; }
+.role-block.is-fr .role-block-eyebrow { color: #991b1b; }
+.role-block.is-sp .role-block-eyebrow { color: #1e40af; }
+.role-block-title { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.role-block-text { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.role-block-text ul { margin: 6px 0 0 18px; padding: 0; }
+.role-block-text li { margin-bottom: 4px; }
+.role-block-text code { font-family: 'DM Mono', monospace; font-size: 11.5px; padding: 1px 5px; background: var(--paper-2); border-radius: 4px; color: var(--accent-dk); }
+
+.tip { background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 12px 16px; margin: 14px 0; font-size: 12.5px; color: #78350f; line-height: 1.55; }
+.tip strong { color: #92400e; }
+.note { background: var(--accent-2); border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin: 14px 0; font-size: 12.5px; color: var(--accent-dk); line-height: 1.55; }
+.note strong { color: #4c1d95; }
+
+.help-footer { background: linear-gradient(135deg, #1a1438 0%, #0c1028 100%); color: #fff; border-radius: 16px; padding: 28px 30px; margin-top: 32px; }
+.help-footer-title { font-family: 'Lora', serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 6px; }
+.help-footer-text { font-size: 13.5px; color: rgba(255,255,255,0.75); line-height: 1.6; margin-bottom: 14px; }
+.help-footer-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.help-btn { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 9px; background: rgba(255,255,255,0.12); color: #fff; text-decoration: none; border: 1px solid rgba(255,255,255,0.2); font-size: 12.5px; font-weight: 600; transition: all 0.15s; }
+.help-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
+
+@media (max-width: 720px) {
+  .hero { padding: 32px 22px 28px; }
+  .hero-title { font-size: 1.4rem; }
+  .page-wrap { padding: 22px 18px 60px; }
+  .sec-title { font-size: 1.2rem; }
+  .page-detail { padding: 18px; }
+  .kv-grid { grid-template-columns: 1fr; gap: 4px 0; }
+  .kv-key { padding-top: 8px; }
+  .gloss-row { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
+<script type="module" src="auth-guard.js"></script>
+</head>
+<body>
+
+<div id="navbarMount"></div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Eduversal · Academic Hub · Welcome</p>
+    <h1 class="hero-title">Welcome to Academic Hub</h1>
+    <p class="hero-sub">This page is for new partner-school leadership users. It explains what each page in your <strong style="color:#fff;">My Hub</strong> does, the order to use them in, and the words you will see along the way. Read it once. Come back any time you need a reminder.</p>
+    <div class="hero-role-chip" id="roleChip"><span class="role-dot"></span><span id="roleChipText">Loading your role…</span></div>
+  </div>
+</div>
+
+<div class="page-wrap">
+  <div class="layout">
+    <main>
+
+      <!-- 1. Welcome -->
+      <section class="sec" id="sec-welcome">
+        <div class="sec-eyebrow">Section 1</div>
+        <h2 class="sec-title">Why this page exists</h2>
+        <p class="sec-lead">Academic Hub has many pages. On your first day, this can feel like a lot. We made this page to help you get comfortable, step by step. We will keep the language simple. If a word looks new, you will find it in <a href="#sec-glossary" style="color:var(--accent);text-decoration:none;font-weight:600;">Section 7 — Glossary</a>.</p>
+
+        <div class="welcome-banner">
+          <div class="welcome-banner-title">A short promise</div>
+          <div class="welcome-banner-text">You do not need to memorise anything today. Pick the part you need. Click the link. Come back here if you get stuck. Your work in <strong>My Hub</strong> takes months — not minutes — so there is no rush.</div>
+        </div>
+
+        <div class="intro-grid">
+          <div class="intro-card">
+            <div class="intro-card-icon">🏫</div>
+            <div class="intro-card-title">What is Academic Hub?</div>
+            <div class="intro-card-text">The portal for partner-school leadership: Foundation Representatives, School Principals, Academic Coordinators, and Cambridge Coordinators. You use it to track school performance, manage appraisals, and grow your own leadership skills.</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-icon">🎯</div>
+            <div class="intro-card-title">What is My Hub?</div>
+            <div class="intro-card-text">A small group of <strong>6 pages</strong> inside Academic Hub that is <strong>just for you</strong>. It tracks what you are learning, what evidence you have submitted, what you have earned, and (if you are a new School Principal) your year-1 induction journey.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. The flow -->
+      <section class="sec" id="sec-flow">
+        <div class="sec-eyebrow">Section 2</div>
+        <h2 class="sec-title">The My Hub flow — in four steps</h2>
+        <p class="sec-lead">These four steps work as one journey. Read this small map first, then read each page in detail below.</p>
+
+        <div class="flow">
+          <div class="flow-step">
+            <div class="flow-step-num">STEP 1 · LEARN</div>
+            <div class="flow-step-title">Competency Framework + Learning Path</div>
+            <div class="flow-step-text">See the 24 leadership skills we want you to grow. Click any skill to read its short lesson at 4 stages.</div>
+            <a class="flow-step-link" href="/learning-path">Open →</a>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">STEP 2 · DO</div>
+            <div class="flow-step-title">My Portfolio</div>
+            <div class="flow-step-text">Try the skill at school. Then submit a short story (and a file if you have one) as proof.</div>
+            <a class="flow-step-link" href="/my-portfolio">Open →</a>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">STEP 3 · TRACK</div>
+            <div class="flow-step-title">My Certificates</div>
+            <div class="flow-step-text">See what you have earned. When all skills in a domain are at the top stage, you get a certificate.</div>
+            <a class="flow-step-link" href="/my-certificates">Open →</a>
+          </div>
+          <div class="flow-step">
+            <div class="flow-step-num">STEP 4 · GUIDE</div>
+            <div class="flow-step-title">My Induction</div>
+            <div class="flow-step-text">If you are a new School Principal (year 1), this is your day-by-day guide with a mentor.</div>
+            <a class="flow-step-link" href="/my-induction">Open →</a>
+          </div>
+        </div>
+
+        <div class="note">
+          <strong>One important note.</strong> Steps 1 → 2 → 3 are <strong>for every leadership user</strong>. Step 4 (My Induction) is <strong>only for first-year School Principals</strong>. If you are not in your first year as a Principal, the page will say "You don't have an active induction" — that is normal.
+        </div>
+      </section>
+
+      <!-- 3. Page-by-page -->
+      <section class="sec" id="sec-pages">
+        <div class="sec-eyebrow">Section 3</div>
+        <h2 class="sec-title">Each My Hub page, explained simply</h2>
+        <p class="sec-lead">Each card below tells you four things: what the page is, why we built it, what you will see on day 1, and what to do.</p>
+
+        <!-- Competency Framework -->
+        <div class="page-detail" id="page-framework">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">🗺️</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">Competency Framework</div>
+              <div class="page-detail-slug">/competency-framework</div>
+            </div>
+            <a href="/competency-framework" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">A map of the <strong>24 leadership skills</strong> we want every partner-school leader to grow. The 24 skills are grouped into 6 areas (we call them <strong>domains</strong>).</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">So you know — clearly and in one place — what good school leadership looks like. The 24 skills come from the Cambridge School Leader Standards (2023) plus the Indonesian Permendiknas regulations.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">You will see the framework structure with all 6 domains and all 24 skills. No green ticks yet — that is normal. This is the "What does good look like?" page.</div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">Read the 6 domain names. Pick one that feels close to your current focus. Then move to Learning Path below to read the actual lessons.</div>
+          </div>
+        </div>
+
+        <!-- Learning Path -->
+        <div class="page-detail" id="page-learning-path">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">📈</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">Learning Path</div>
+              <div class="page-detail-slug">/learning-path</div>
+            </div>
+            <a href="/learning-path" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">The same 24 skills, but here each one is <strong>clickable</strong>. You click a skill to read short lessons at 4 stages: Awareness, Practitioner, Advanced, and Lead.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">Reading the framework alone is too abstract. Here you get concrete lessons + a practice task you can try this month at your school.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">You see all 24 skills, all 4 stage chips per skill. No earned stages yet. Click any chip to read the lesson — even before you "claim" the stage.</div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">Pick <strong>one</strong> skill. Read its Awareness lesson. That is enough for day 1.</div>
+          </div>
+        </div>
+
+        <!-- My Portfolio -->
+        <div class="page-detail" id="page-portfolio">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">📁</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">My Portfolio</div>
+              <div class="page-detail-slug">/my-portfolio</div>
+            </div>
+            <a href="/my-portfolio" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">The page where you <strong>submit proof</strong> of a skill at a stage. Pick the skill, pick the stage, describe what you did, and (optionally) attach a file.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">Growth is not a tick-box. Showing real work — a leadership decision, a coaching note, a teacher walkthrough summary — is the only honest way to claim a stage. A reviewer reads your submission and decides if the stage is granted.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">Empty submission form at the top and an empty "My Submissions" list below. Both are normal for a new user.</div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">
+              Do <strong>not</strong> submit on day 1. First, do the work in your real role. Then come back here, pick the skill, write 4-6 honest sentences about what you did, and attach a file if it helps.
+              <ul>
+                <li>The description must be at least <strong>80 characters</strong> (about 2 sentences).</li>
+                <li>Files up to <strong>25 MB</strong> — PDF, Word, image, or a short video.</li>
+                <li>After you submit, the status shows <strong>Pending</strong>. The HQ admin team reviews it.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- My Certificates -->
+        <div class="page-detail" id="page-certificates">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">🏆</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">My Certificates</div>
+              <div class="page-detail-slug">/my-certificates</div>
+            </div>
+            <a href="/my-certificates" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">A dashboard of what you have earned. You see your certificates and a progress bar for each of the 6 domains.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">So you can see your growth in one glance. When every skill in a domain reaches the top stage (Lead), the central admin issues your domain certificate.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">All progress bars are empty. There is a friendly empty state with a button back to My Portfolio.</div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">Nothing on day 1 — there is nothing here yet. Come back after a reviewer has approved one or two skills.</div>
+          </div>
+        </div>
+
+        <!-- My Observations -->
+        <div class="page-detail" id="page-observations">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">👀</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">My Observations</div>
+              <div class="page-detail-slug">/my-observations</div>
+            </div>
+            <a href="/my-observations" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">A list of <strong>formal appraisals and classroom walkthroughs</strong> you have already submitted as a leader. This includes teacher appraisals you wrote and walkthroughs you logged.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">So you have one place to find every observation note you have written. Useful when an Eduversal Subject Specialist visits your school or for your own end-of-year reflection.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">Empty list, with a hint pointing you to the right entry pages (Teacher Appraisal Entry, Teacher Walkthrough Entry).</div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">Nothing on day 1 — observations land here automatically after you submit them from the Appraisal pages.</div>
+          </div>
+        </div>
+
+        <!-- My Induction -->
+        <div class="page-detail" id="page-induction">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">🌱</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">My Induction</div>
+              <div class="page-detail-slug">/my-induction</div>
+            </div>
+            <a href="/my-induction" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">A guide for <strong>first-year School Principals</strong>. It splits the year into 4 windows (Listen → Diagnose → Act → Anchor). Each window has tasks for today, this week, plus a mentor and a journal.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">Becoming a Principal is one of the hardest job changes in education. The first 30 days should be spent listening, not acting. The induction structure protects new Principals from rushing into changes before they understand the school.</div>
+            <div class="kv-key">Day 1 view</div>
+            <div class="kv-val">
+              Two possible cases:
+              <ul>
+                <li><strong>If you are a new School Principal (year 1)</strong> — you will see your mentor's name, the 4 windows, and your first tasks.</li>
+                <li><strong>If you are not a year-1 Principal</strong> — you will see "You don't have an active induction". That is correct. This page is only for first-year Principals.</li>
+              </ul>
+            </div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">If you have an active induction, read the welcome message at the top, meet your mentor, and look at the Today list. If not, you can skip this page.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Your first week -->
+      <section class="sec" id="sec-week1">
+        <div class="sec-eyebrow">Section 4</div>
+        <h2 class="sec-title">Your first week — a simple checklist</h2>
+        <p class="sec-lead">This is a soft list, not a test. Tick them off in your head — or your own notes — over the first 5 working days.</p>
+
+        <div class="checklist">
+          <div class="check-row">
+            <div class="check-num">1</div>
+            <div class="check-body">
+              <div class="check-title">Sign in and check your profile</div>
+              <div class="check-text">Click your avatar (top right). Make sure your name, school, and sub-roles look correct. If something is wrong, contact <a href="mailto:tech@eduversal.org">tech@eduversal.org</a>. You cannot edit role or school yourself.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-num">2</div>
+            <div class="check-body">
+              <div class="check-title">Read this orientation page once, slowly</div>
+              <div class="check-text">Sections 1, 2, and 7 are the most important. You do not need to remember every word — just know where things are.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-num">3</div>
+            <div class="check-body">
+              <div class="check-title">Open the <a href="/handbook">Handbook</a> for your role</div>
+              <div class="check-text">The handbook explains "why this role exists" and "how to ramp up in your first 90 days". Pair it with your <a href="/weekly-checklist">Weekly Checklist</a> — together they answer "what to do this week" vs "why I am doing it".</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-num">4</div>
+            <div class="check-body">
+              <div class="check-title">Glance at <a href="/competency-framework">Competency Framework</a></div>
+              <div class="check-text">Just glance. Read the 6 domain names. No need to dive deep yet — the framework will grow into your work over the year.</div>
+            </div>
+          </div>
+          <div class="check-row">
+            <div class="check-num">5</div>
+            <div class="check-body">
+              <div class="check-title">Bookmark this page</div>
+              <div class="check-text">When something feels confusing, come back here. The glossary in <a href="#sec-glossary">Section 7</a> covers the words you will see most often.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Role-specific blocks -->
+      <section class="sec" id="sec-role">
+        <div class="sec-eyebrow">Section 5</div>
+        <h2 class="sec-title">Notes for your role</h2>
+        <p class="sec-lead">Academic Hub adapts to who you are. The boxes below show only the ones that apply to your role today. They may change later if a central admin updates your sub-role.</p>
+
+        <!-- Plain academic_user (no sub-role yet) -->
+        <div class="role-block" id="role-plain" style="display:none;">
+          <div class="role-block-eyebrow">For: Academic User (no sub-role yet)</div>
+          <div class="role-block-title">You can browse, but most pages need a sub-role</div>
+          <div class="role-block-text">
+            Right now you have the basic <code>academic_user</code> role with no sub-role assigned. Most Academic Hub pages need <strong>at least one sub-role</strong> to access.
+            <ul>
+              <li>Sub-roles are: <strong>Foundation Representative</strong>, <strong>School Principal</strong>, <strong>Academic Coordinator</strong>, <strong>Cambridge Coordinator</strong>.</li>
+              <li>Your profile may already have one — check the profile dropdown (top right).</li>
+              <li>If a page redirects you to the dashboard with <code>?denied=...</code> in the address, that is a sub-role gate. It is not a bug.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Foundation Representative -->
+        <div class="role-block is-fr" id="role-fr" style="display:none;">
+          <div class="role-block-eyebrow">For: Foundation Representative</div>
+          <div class="role-block-title">You appraise your school's Principal</div>
+          <div class="role-block-text">
+            As a Foundation Representative, you sit above the Principal in the school hierarchy. Your main tools in Academic Hub:
+            <ul>
+              <li><a href="/principal-observation-entry">Principal Observation Entry</a> — log 8-foci E/D/N observations.</li>
+              <li><a href="/principal-appraisal-entry">Principal Annual Appraisal</a> — once-a-year F1-F5 + F_LEAD composite + A-F band.</li>
+              <li><a href="/principal-360-results">Principal 360 Results</a> — read the anonymous staff/parent/student feedback for each cycle.</li>
+              <li>You are <strong>excluded by design</strong> from the Principal Coaching pages — coaching is confidential between mentor and coachee.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- School Principal -->
+        <div class="role-block is-sp" id="role-sp" style="display:none;">
+          <div class="role-block-eyebrow">For: School Principal</div>
+          <div class="role-block-title">You lead your school and appraise your teachers</div>
+          <div class="role-block-text">
+            As a School Principal, your main pages are:
+            <ul>
+              <li><a href="/teacher-appraisal-entry">Teacher Appraisal Entry</a> + <a href="/teacher-walkthrough-entry">Walkthrough Entry</a> — write evaluations for your teachers.</li>
+              <li><a href="/team-induction">Team Induction</a> — see how new Subject Teachers in your school are doing in their first year.</li>
+              <li><a href="/student-roster">Student Roster</a> — approve new Year 7-8 students who joined your school's pilot.</li>
+              <li><a href="/principal-coaching-view">My Coaching</a> — read-only view of your own coaching sessions with your HQ Director mentor.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Academic / Cambridge Coordinator -->
+        <div class="role-block" id="role-coord" style="display:none;">
+          <div class="role-block-eyebrow">For: Academic / Cambridge Coordinator</div>
+          <div class="role-block-title">You coordinate teaching and curriculum across the school</div>
+          <div class="role-block-text">
+            As a Coordinator, you focus on curriculum and academic operations rather than teacher appraisal:
+            <ul>
+              <li><a href="/curriculum-map">Curriculum Map</a> + <a href="/syllabus-coverage">Syllabus Coverage</a> — see what is being taught where.</li>
+              <li><a href="/school-assessment">School Assessment</a> — class-by-class roll-up of chapter test results.</li>
+              <li><a href="/student-roster">Student Roster</a> — manage active students in your school.</li>
+              <li>Cambridge Coordinators also handle exam-cycle work via the Cambridge dashboards.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Academic admin -->
+        <div class="role-block is-admin" id="role-admin" style="display:none;">
+          <div class="role-block-eyebrow">For: Academic Admin</div>
+          <div class="role-block-title">You manage your school's leadership users</div>
+          <div class="role-block-text">
+            You bypass every gate in Academic Hub. You also manage the dashboard categories on the home page. For network-wide changes (sub-role assignments, school directory), the actions still happen in Central Hub <code>/console</code> — your scope is your own school.
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Beyond My Hub -->
+      <section class="sec" id="sec-beyond">
+        <div class="sec-eyebrow">Section 6</div>
+        <h2 class="sec-title">A few other places to know about</h2>
+        <p class="sec-lead">Academic Hub has many other pages. You do not need them all now, but it helps to know they exist.</p>
+
+        <div class="intro-grid">
+          <div class="intro-card">
+            <div class="intro-card-icon">📚</div>
+            <div class="intro-card-title"><a href="/handbook">Handbook</a></div>
+            <div class="intro-card-text">A small library of role guides. Each one explains a role in plain language and a 90-day ramp plan.</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-icon">📖</div>
+            <div class="intro-card-title"><a href="/references">References</a></div>
+            <div class="intro-card-text">Every framework, every Cambridge standard, every Indonesian regulation we use — searchable. Use it when you want the source behind a code like <code>CSLS 4.1</code>.</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-icon">📅</div>
+            <div class="intro-card-title"><a href="/academic-calendar">Academic Calendar</a></div>
+            <div class="intro-card-text">Term dates, exam windows, and Cambridge series. Used by other pages — do not store dates anywhere else.</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-icon">✅</div>
+            <div class="intro-card-title"><a href="/weekly-checklist">Weekly Checklist</a></div>
+            <div class="intro-card-text">Your role-specific checklist for the current week. Pairs with the Handbook to answer "what should I be doing now?".</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Glossary -->
+      <section class="sec" id="sec-glossary">
+        <div class="sec-eyebrow">Section 7</div>
+        <h2 class="sec-title">Glossary — words you will see</h2>
+        <p class="sec-lead">Short, plain meanings for the terms that show up most often in Academic Hub.</p>
+
+        <div class="glossary">
+          <div class="gloss-row">
+            <div class="gloss-term">Competency<span class="gloss-term-sub">also: skill</span></div>
+            <div class="gloss-def">A specific leadership skill we expect you to grow. Example: "Build a learning-focused school culture". Each competency has 4 stages.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Domain<span class="gloss-term-sub">also: area</span></div>
+            <div class="gloss-def">A group of related competencies. There are 6 in the Leaders track. A certificate is given per domain.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Level / Stage<span class="gloss-term-sub">4 steps of growth</span></div>
+            <div class="gloss-def"><strong>Awareness</strong> — you know it exists. <strong>Practitioner</strong> — you can do it with help. <strong>Advanced</strong> — you do it well on your own. <strong>Lead</strong> — you can teach or mentor others to do it.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Evidence<span class="gloss-term-sub">in My Portfolio</span></div>
+            <div class="gloss-def">A short written description (+ optional file) that proves you have practised a competency at a stage. A reviewer reads it before granting the stage.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">CSLS<span class="gloss-term-sub">Cambridge School Leader Standards 2023</span></div>
+            <div class="gloss-def">The Cambridge document our leadership framework anchors to. Example: <code>CSLS 4.1</code> means standard 4.1 from that document. Click the chip to read the source text.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">CTS<span class="gloss-term-sub">Cambridge Teacher Standards 2023</span></div>
+            <div class="gloss-def">A separate Cambridge document for teachers. You will see CTS chips on Teacher Appraisal Entry pages — they show which teacher standard a rubric item is anchored to.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Permendiknas<span class="gloss-term-sub">Indonesian regulation</span></div>
+            <div class="gloss-def">Indonesian Ministry of Education regulations (e.g. No.16/2007 for teacher standards, No.27/2010 for induction). Cited alongside Cambridge standards where both apply.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Mentor<span class="gloss-term-sub">in My Induction</span></div>
+            <div class="gloss-def">A senior leader (usually an Eduversal Director) who guides a first-year Principal through year 1.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Window<span class="gloss-term-sub">in My Induction</span></div>
+            <div class="gloss-def">A phase of year-1 Principal induction. The 4 windows are <strong>Listen → Diagnose → Act → Anchor</strong>. The first 30 days are deliberately listen-only.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Sub-role<span class="gloss-term-sub">on your profile</span></div>
+            <div class="gloss-def">An extra label beyond your basic role. AH sub-roles are <code>foundation_representative</code>, <code>school_principal</code>, <code>academic_coordinator</code>, <code>cambridge_coordinator</code>. They unlock different pages.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">EASE<span class="gloss-term-sub">Eduversal Adaptive Student Evaluation</span></div>
+            <div class="gloss-def">A growth assessment (Math / English / Science) running 3 windows per year. EASE dashboards in the Dashboards dropdown show your school's results.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Chapter Test<span class="gloss-term-sub">network-uniform unit test</span></div>
+            <div class="gloss-def">A short test authored by HQ Subject Specialists for one Cambridge unit. Results feed the School Assessment roll-up you read as a leader.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Help -->
+      <section class="sec" id="sec-help">
+        <div class="help-footer">
+          <div class="help-footer-title">Stuck? That is okay.</div>
+          <div class="help-footer-text">Academic Hub has many pages, and you cannot know all of them on day 1. If something feels broken or confusing — or if a page redirects you when you think you should have access — please tell us. We fix it for everyone.</div>
+          <div class="help-footer-actions">
+            <a class="help-btn" href="mailto:tech@eduversal.org">📧 Email tech@eduversal.org</a>
+            <a class="help-btn" href="/handbook">📖 Open Handbook</a>
+            <a class="help-btn" href="/references">📚 Open References</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <aside class="toc" aria-label="Table of contents">
+      <div class="toc-title">On this page</div>
+      <ul class="toc-list" id="tocList">
+        <li><a href="#sec-welcome" data-toc>Why this page exists</a></li>
+        <li><a href="#sec-flow" data-toc>The My Hub flow</a></li>
+        <li><a href="#sec-pages" data-toc>Each page explained</a></li>
+        <li><a href="#sec-week1" data-toc>Your first week</a></li>
+        <li><a href="#sec-role" data-toc>Notes for your role</a></li>
+        <li><a href="#sec-beyond" data-toc>Beyond My Hub</a></li>
+        <li><a href="#sec-glossary" data-toc>Glossary</a></li>
+        <li><a href="#sec-help" data-toc>Stuck?</a></li>
+      </ul>
+    </aside>
+  </div>
+</div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+document.addEventListener('authReady', ({ detail }) => {
+  const profile = detail?.profile || window.userProfile || {};
+  const user = detail?.user || window.currentUser || {};
+  const isAdmin = profile.role_academichub === 'academic_admin';
+  const subs = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+  const isFR = subs.includes('foundation_representative');
+  const isSP = subs.includes('school_principal');
+  const isAC = subs.includes('academic_coordinator');
+  const isCC = subs.includes('cambridge_coordinator');
+
+  // Role chip
+  const chipText = document.getElementById('roleChipText');
+  if (chipText) {
+    const name = profile.displayName || (user.email || '').split('@')[0] || 'there';
+    let roleLabel = 'Academic User';
+    if (isAdmin) roleLabel = 'Academic Admin';
+    else if (isFR) roleLabel = 'Foundation Representative';
+    else if (isSP) roleLabel = 'School Principal';
+    else if (isAC) roleLabel = 'Academic Coordinator';
+    else if (isCC) roleLabel = 'Cambridge Coordinator';
+    chipText.textContent = `Hello, ${name} · Signed in as ${roleLabel}`;
+  }
+
+  // Show the right role blocks (can stack — admin + FR is valid).
+  if (isAdmin) document.getElementById('role-admin').style.display = '';
+  if (isFR) document.getElementById('role-fr').style.display = '';
+  if (isSP) document.getElementById('role-sp').style.display = '';
+  if (isAC || isCC) document.getElementById('role-coord').style.display = '';
+  if (!isAdmin && !isFR && !isSP && !isAC && !isCC) {
+    document.getElementById('role-plain').style.display = '';
+  }
+
+  // Mount navbar with active key 'welcome'
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('welcome', { user, profile });
+  }
+});
+
+// Scroll-spy for TOC
+const tocLinks = document.querySelectorAll('.toc-list a[data-toc]');
+const sections = [...tocLinks].map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+function onScroll() {
+  let active = sections[0];
+  for (const s of sections) {
+    if (s.getBoundingClientRect().top - 100 <= 0) active = s;
+  }
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${active.id}`));
+}
+window.addEventListener('scroll', onScroll, { passive: true });
+onScroll();
+</script>
+</body>
+</html>
