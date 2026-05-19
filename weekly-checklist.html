@@ -721,6 +721,14 @@ body { padding-top: 62px; }
     Loading tasks…
   </div>
 
+  <!-- Skipped-week banner (EASE exam · Leadership Camp · Public Holiday) -->
+  <div id="skippedWeekBanner" style="display:none;background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #f59e0b;border-radius:14px;padding:22px 24px;margin:0 0 18px;">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#92400e;margin-bottom:6px;">This Week</div>
+    <h3 id="skippedWeekTitle" style="margin:0 0 6px;font-family:Lora,serif;font-size:1.4rem;color:#78350f;">—</h3>
+    <p id="skippedWeekDates" style="margin:0 0 10px;color:#78350f;font-size:0.95rem;"></p>
+    <p style="margin:0;color:#78350f;font-size:0.9rem;line-height:1.5;">No teaching-week checklist this week. Routine tasks resume on the next teaching week — use Next → to preview.</p>
+  </div>
+
   <!-- Empty state -->
   <div class="empty-state" id="emptyState" style="display:none">
     <h3 id="emptyTitle">No tasks for this week</h3>
@@ -812,14 +820,15 @@ import {
   collection, getDocs, query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ── Constants ─────────────────────────────────────────────────────
-const ACADEMIC_YEAR = '2025-2026';
-const TOTAL_WEEKS   = 40;
-const WEEK1_START   = new Date(2025, 6, 21); // July 21 2025
-
-// teaching_schedule cache: weekNo (1..40) → { semLabel, semWeekNo, mon, fri }
+// ── Schedule state ────────────────────────────────────────────────
+// Single source of truth: `calendar_settings/current` (academicYearStart)
+// + `teaching_schedule/main` (weeks[] + skippedWeeks[]).
+// Computed at loadWeekSchedule() boot — never hardcoded.
+let ACADEMIC_YEAR     = '';
+let TOTAL_WEEKS       = 0;
 let _weekScheduleByNo = null;
 let _teachingWeeks    = [];
+let _skippedWeeks     = [];
 
 // Event caches — fetched once per session
 let _academicEventsPromise = null;
@@ -948,12 +957,16 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     document.getElementById('emptyAddBtn').style.display = '';
   }
 
-  // Load teaching_schedule first so week labels can show "Semester II · Week 15"
+  // Load teaching_schedule first so week labels + skipped-week detection both work.
   loadWeekSchedule().then(() => {
+    if (!_teachingWeeks.length) {
+      document.getElementById('loadingState').style.display = 'none';
+      document.getElementById('emptyState').style.display = '';
+      document.getElementById('emptyTitle').textContent = 'Academic calendar not configured';
+      document.getElementById('emptyMsg').textContent = 'Ask central_admin to open CH /academic-calendar → ⚙ Year Settings → Sync Teaching Weeks.';
+      return;
+    }
     currentWeek = getCurrentWeekNumber();
-    if (currentWeek < 1) currentWeek = 1;
-    if (currentWeek > TOTAL_WEEKS) currentWeek = TOTAL_WEEKS;
-
     updateHeroLabels();
     setupWeekNav();
     loadWeek(currentWeek);
@@ -963,19 +976,36 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 
 function updateHeroLabels() {
   const label = PLATFORM_LABELS[currentPlatform] || currentPlatform;
-  document.getElementById('heroEyebrow').textContent = `Academic Hub · ${label} · 2025–2026`;
-  document.getElementById('heroTitle').textContent   = `${getWeekLabel(currentWeek)} — ${label} Checklist`;
+  const yearLabel = (ACADEMIC_YEAR || '').replace('-', '–');
+  document.getElementById('heroEyebrow').textContent = yearLabel
+    ? `Academic Hub · ${label} · ${yearLabel}`
+    : `Academic Hub · ${label}`;
+  const skip = isOnSkippedWeek() && currentWeek === getCurrentWeekNumber() ? getCurrentSkippedWeek() : null;
+  const weekText = skip ? skip.reason : getWeekLabel(currentWeek);
+  document.getElementById('heroTitle').textContent = `${weekText} — ${label} Checklist`;
 }
 
 // ── Week helpers ──────────────────────────────────────────────────
+function _academicYearLabelFromIso(iso) {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso)) return '';
+  const y = Number(iso.slice(0, 4));
+  const m = Number(iso.slice(5, 7));
+  return m >= 7 ? `${y}-${y + 1}` : `${y - 1}-${y}`;
+}
+
 async function loadWeekSchedule() {
   if (_weekScheduleByNo) return;
+  _weekScheduleByNo = {};
+  _teachingWeeks = [];
+  _skippedWeeks  = [];
   try {
-    const snap = await getDoc(doc(window.db, 'teaching_schedule', 'main'));
-    _weekScheduleByNo = {};
-    _teachingWeeks = [];
-    if (snap.exists()) {
-      _teachingWeeks = (snap.data().weeks || []).map(w => ({
+    const [schedSnap, calSnap] = await Promise.all([
+      getDoc(doc(window.db, 'teaching_schedule', 'main')),
+      getDoc(doc(window.db, 'calendar_settings', 'current')),
+    ]);
+    if (schedSnap.exists()) {
+      const d = schedSnap.data();
+      _teachingWeeks = (d.weeks || []).map(w => ({
         weekNo:    w.weekNo,
         semLabel:  w.semLabel  || '',
         semWeekNo: w.semWeekNo || w.weekNo,
@@ -983,30 +1013,40 @@ async function loadWeekSchedule() {
         fri: new Date(w.fri + 'T23:59:59'),
       }));
       _teachingWeeks.forEach(w => { if (w.weekNo) _weekScheduleByNo[w.weekNo] = w; });
+      _skippedWeeks = (d.skippedWeeks || []).map(w => ({
+        reason:   w.reason   || 'Holiday',
+        semLabel: w.semLabel || '',
+        mon: new Date(w.mon + 'T00:00:00'),
+        fri: new Date(w.fri + 'T23:59:59'),
+      }));
     }
+    TOTAL_WEEKS = _teachingWeeks.length;
+    const startIso = (calSnap.exists() && calSnap.data().academicYearStart)
+      || (schedSnap.exists() && schedSnap.data().academicYearStart)
+      || (_teachingWeeks[0] && _teachingWeeks[0].mon.toISOString().slice(0, 10))
+      || '';
+    ACADEMIC_YEAR = _academicYearLabelFromIso(startIso);
   } catch (e) {
-    console.warn('loadWeekSchedule failed; falling back to date math', e);
-    _weekScheduleByNo = {};
+    console.warn('loadWeekSchedule failed', e);
   }
 }
 
-function getWeekNumber(date) {
-  const diff = date - WEEK1_START;
-  const week = Math.floor(diff / (7 * 24 * 60 * 60 * 1000)) + 1;
-  return Math.max(1, Math.min(TOTAL_WEEKS, week));
+function _findSkippedWeek(date) {
+  return _skippedWeeks.find(w => date >= w.mon && date <= w.fri) || null;
 }
 
-// Prefer teaching_schedule when available (handles holiday gaps), fall back to date math
 function getCurrentWeekNumber() {
-  if (_teachingWeeks.length) {
-    const now = new Date();
-    const hit = _teachingWeeks.find(w => now >= w.mon && now <= w.fri);
-    if (hit?.weekNo) return hit.weekNo;
-    const nextW = _teachingWeeks.find(w => w.mon > now);
-    if (nextW?.weekNo) return nextW.weekNo;
-  }
-  return getWeekNumber(new Date());
+  if (!_teachingWeeks.length) return 1;
+  const now = new Date();
+  const hit = _teachingWeeks.find(w => now >= w.mon && now <= w.fri);
+  if (hit?.weekNo) return hit.weekNo;
+  const past = _teachingWeeks.filter(w => w.fri < now);
+  if (past.length) return past[past.length - 1].weekNo;
+  return _teachingWeeks[0].weekNo;
 }
+
+function isOnSkippedWeek()         { return _findSkippedWeek(new Date()) !== null; }
+function getCurrentSkippedWeek()   { return _findSkippedWeek(new Date()); }
 
 // Semester-relative label: "Semester II · Week 15". Falls back to "Week N".
 function getWeekLabel(weekNum) {
@@ -1026,13 +1066,9 @@ function getWeekLabelShort(weekNum) {
 
 function getWeekDates(weekNum) {
   const w = _weekScheduleByNo?.[weekNum];
+  if (!w?.mon || !w?.fri) return '';
   const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-  if (w?.mon && w?.fri) return `${fmt(w.mon)} – ${fmt(w.fri)}`;
-  const start = new Date(WEEK1_START);
-  start.setDate(start.getDate() + (weekNum - 1) * 7);
-  const end = new Date(start);
-  end.setDate(end.getDate() + 4);
-  return `${fmt(start)} – ${fmt(end)}`;
+  return `${fmt(w.mon)} – ${fmt(w.fri)}`;
 }
 
 function isCurrentWeek(w) { return w === getCurrentWeekNumber(); }
@@ -1135,15 +1171,9 @@ async function loadCambridgeEvents() {
 
 function _getWeekRange(weekNum) {
   const w = _weekScheduleByNo?.[weekNum];
-  let mon, sun;
-  if (w?.mon && w?.fri) {
-    mon = new Date(w.mon);
-    sun = new Date(w.mon); sun.setDate(sun.getDate() + 6);
-  } else {
-    mon = new Date(WEEK1_START);
-    mon.setDate(mon.getDate() + (weekNum - 1) * 7);
-    sun = new Date(mon); sun.setDate(sun.getDate() + 6);
-  }
+  if (!w?.mon || !w?.fri) return null;
+  const mon = new Date(w.mon);
+  const sun = new Date(w.mon); sun.setDate(sun.getDate() + 6);
   const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   return { startIso: iso(mon), endIso: iso(sun) };
 }
@@ -1181,10 +1211,14 @@ function renderEventsBand() {
   _cambPage.this = 0;
   _cambPage.next = 0;
 
-  const thisRange = _getWeekRange(currentWeek);
+  const skip = isOnSkippedWeek() && currentWeek === getCurrentWeekNumber() ? getCurrentSkippedWeek() : null;
+  const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const thisRange = skip
+    ? { startIso: iso(skip.mon), endIso: iso(new Date(skip.mon.getTime() + 6*86400000)) }
+    : _getWeekRange(currentWeek);
   const nextRange = currentWeek < TOTAL_WEEKS ? _getWeekRange(currentWeek + 1) : null;
 
-  document.getElementById('evThisWeekTag').textContent = getWeekLabelShort(currentWeek);
+  document.getElementById('evThisWeekTag').textContent = skip ? skip.reason : getWeekLabelShort(currentWeek);
   document.getElementById('evNextWeekTag').textContent = nextRange ? getWeekLabelShort(currentWeek + 1) : '—';
 
   const renderAcadSection = (items) => {
@@ -1262,23 +1296,43 @@ function setupWeekNav() {
     if (currentWeek < TOTAL_WEEKS) loadWeek(currentWeek + 1);
   });
   const jumpSel = document.getElementById('weekJumpSelect');
-  for (let w = 1; w <= TOTAL_WEEKS; w++) {
+  _teachingWeeks.forEach(tw => {
     const opt = document.createElement('option');
-    opt.value = w;
-    opt.textContent = `${getWeekLabelShort(w)}  (${getWeekDates(w)})`;
+    opt.value = tw.weekNo;
+    opt.textContent = `${getWeekLabelShort(tw.weekNo)}  (${getWeekDates(tw.weekNo)})`;
     jumpSel.appendChild(opt);
-  }
+  });
   jumpSel.addEventListener('change', () => loadWeek(Number(jumpSel.value)));
 }
 
 function updateWeekUI() {
-  document.getElementById('weekLabel').textContent = getWeekLabel(currentWeek);
-  document.getElementById('weekDates').textContent  = getWeekDates(currentWeek);
+  const onSkipped = isOnSkippedWeek() && currentWeek === getCurrentWeekNumber();
+  const skip = onSkipped ? getCurrentSkippedWeek() : null;
+
+  document.getElementById('weekLabel').textContent = skip ? skip.reason : getWeekLabel(currentWeek);
+  if (skip) {
+    const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    document.getElementById('weekDates').textContent = `${fmt(skip.mon)} – ${fmt(skip.fri)}`;
+  } else {
+    document.getElementById('weekDates').textContent = getWeekDates(currentWeek);
+  }
   updateHeroLabels();
   document.getElementById('prevWeekBtn').disabled   = currentWeek <= 1;
   document.getElementById('nextWeekBtn').disabled   = currentWeek >= TOTAL_WEEKS;
   const ind = document.getElementById('weekThisIndicator');
-  ind.style.display = isCurrentWeek(currentWeek) ? '' : 'none';
+  ind.style.display = (!onSkipped && isCurrentWeek(currentWeek)) ? '' : 'none';
+
+  const banner = document.getElementById('skippedWeekBanner');
+  if (banner) {
+    if (onSkipped) {
+      banner.style.display = '';
+      document.getElementById('skippedWeekTitle').textContent = skip.reason;
+      const fmt = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+      document.getElementById('skippedWeekDates').textContent = `${fmt(skip.mon)} → ${fmt(skip.fri)}`;
+    } else {
+      banner.style.display = 'none';
+    }
+  }
   const jumpSel = document.getElementById('weekJumpSelect');
   if (jumpSel) jumpSel.value = currentWeek;
   renderEventsBand();
