@@ -283,7 +283,17 @@ async function getAllPageAccessConfigs(db) {
     snap.forEach(d => {
       const data = d.data() || {};
       // Only entries for this platform.
-      if (data.platform && data.platform !== 'academichub') return;
+      // Shared slugs (handbook, my-induction, observation-entry, references)
+      // carry platforms:[…] with this platform listed; per-hub `platform`
+      // singular may point at another hub (e.g. CH wrote handbook with
+      // platform:'centralhub') but the slug still applies here via the
+      // platforms[] union. Honour both.
+      const platforms = Array.isArray(data.platforms) ? data.platforms : [];
+      if (platforms.length) {
+        if (!platforms.includes('academichub')) return;
+      } else if (data.platform && data.platform !== 'academichub') {
+        return;
+      }
       map.set(d.id, data);
     });
     sessionStorage.setItem('pac:__all__', JSON.stringify({
@@ -395,6 +405,28 @@ function applyPageAccessGating(configs, userSubRoles) {
     group.classList.toggle('has-hidden', anyHidden);
   });
 
+  // 4c. Empty INLINE desktop section headers — multi-section .nav-dd-col
+  //     panels carry secondary .nav-dd-col-header divs as siblings of the
+  //     anchors they group (PD column with "INDUCTION" + "SCHOOL-FACING
+  //     HANDBOOKS" sub-headers is the canonical example). Walk forward
+  //     from each header until the next header or divider; if every
+  //     interactive sibling is hidden, hide the header itself + the
+  //     trailing divider that introduced the next section.
+  document.querySelectorAll('.nav-dd-col-header').forEach(header => {
+    let allHidden = true;
+    let any = false;
+    let n = header.nextElementSibling;
+    while (n && !n.classList.contains('nav-dd-col-header')) {
+      if (n.matches?.('[data-nav-key]')) {
+        any = true;
+        if (n.getAttribute('data-pa-hidden') !== '1') { allHidden = false; break; }
+      }
+      n = n.nextElementSibling;
+    }
+    if (any && allHidden) header.setAttribute('data-pa-hidden', '1');
+    else                  header.removeAttribute('data-pa-hidden');
+  });
+
   // 5. Empty mobile section headers — mobile drawer uses sibling
   //    `<div class="ah-mobile-section-header">` followed by ah-mobile-menu-item
   //    siblings (no wrapper). Walk forward from each header until the next
@@ -463,6 +495,21 @@ function applyPilotSystemGating(enabled) {
     const allHidden = [...items].every(it => it.getAttribute('data-pa-hidden') === '1');
     if (allHidden) col.setAttribute('data-pa-hidden', '1');
     else            col.removeAttribute('data-pa-hidden');
+  });
+  // Re-collapse inline desktop section headers now that pilot may have hidden more.
+  document.querySelectorAll('.nav-dd-col-header').forEach(header => {
+    let allHidden = true;
+    let any = false;
+    let n = header.nextElementSibling;
+    while (n && !n.classList.contains('nav-dd-col-header')) {
+      if (n.matches?.('[data-nav-key]')) {
+        any = true;
+        if (n.getAttribute('data-pa-hidden') !== '1') { allHidden = false; break; }
+      }
+      n = n.nextElementSibling;
+    }
+    if (any && allHidden) header.setAttribute('data-pa-hidden', '1');
+    else                  header.removeAttribute('data-pa-hidden');
   });
   // Mirror the has-hidden flag refresh so panels shrink even when only
   // pilot rules hid columns.
