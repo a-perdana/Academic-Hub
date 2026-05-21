@@ -159,7 +159,10 @@ body { padding-top: 62px; }
 .admin-bar-actions { display: flex; gap: 8px; }
 
 /* ─── CATEGORY FILTER ────────────────────────── */
-.cat-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; }
+.cat-filter {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;
+  align-items: center;
+}
 .cat-btn {
   padding: 5px 14px; border-radius: 20px; border: 1.5px solid var(--border);
   background: var(--white); font-size: 12px; font-weight: 600; color: var(--ink-3);
@@ -167,6 +170,15 @@ body { padding-top: 62px; }
 }
 .cat-btn:hover { border-color: var(--accent); color: var(--accent); }
 .cat-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+/* Task list pager, sits inline on the right of the category filter row.
+   Reuses the same .ess-pager visual language so the page reads
+   consistently with Weekly Essentials. */
+.task-pager {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 6px;
+}
+.task-pager .ess-pager-btn { /* defined alongside essentials CSS below */ }
 
 /* ─── TASK GROUPS ────────────────────────────── */
 .task-group { margin-bottom: 28px; }
@@ -864,6 +876,11 @@ let activeFilter    = 'All';
 let essentials      = [];      // [{id, title}]
 let essPage         = 0;
 const ESS_PAGE_SIZE = 5;
+
+// Task list pagination (mirrors essentials pager pattern).
+// Resets to 0 on: tab change, week change, filter change.
+let taskPage         = 0;
+const TASK_PAGE_SIZE = 5;
 let unsubEssentials = null;
 let myEssProgress   = {};      // { essentialId: { checked: bool } }
 
@@ -1340,6 +1357,7 @@ function loadWeek(week) {
   myProgress    = {};
   myEssProgress = {};
   openNoteId    = null;
+  taskPage      = 0;          // reset task-list pagination on tab/week change
 
   document.getElementById('loadingState').style.display = '';
   document.getElementById('emptyState').style.display   = 'none';
@@ -1432,19 +1450,23 @@ function render() {
   const taskArea = document.getElementById('taskArea');
   taskArea.innerHTML = '';
 
-  // Cat filter
+  // Cat filter (pager appended on the right by renderCatFilter)
   const filterDiv = document.createElement('div');
   filterDiv.id = 'catFilterRow';
   filterDiv.className = 'cat-filter';
   taskArea.appendChild(filterDiv);
-  renderCatFilter();
+  renderCatFilter(filtered.length);
 
-  // Flat task list
+  // Flat task list — slice to current page only
+  const totalPages = Math.max(1, Math.ceil(filtered.length / TASK_PAGE_SIZE));
+  taskPage = Math.min(taskPage, totalPages - 1);
+  const pageItems = filtered.slice(taskPage * TASK_PAGE_SIZE, (taskPage + 1) * TASK_PAGE_SIZE);
+
   const listEl = document.createElement('div');
   listEl.className = 'task-list';
   taskArea.appendChild(listEl);
 
-  filtered.forEach(task => {
+  pageItems.forEach(task => {
     const catColor = CAT_COLORS[task.category] || CAT_COLORS['Other'];
     listEl.appendChild(buildTaskCard(task, catColor));
   });
@@ -1621,19 +1643,43 @@ function buildTaskCard(task, _catColor) {
   return card;
 }
 
-function renderCatFilter() {
+function renderCatFilter(filteredCount) {
   const row = document.getElementById('catFilterRow');
   if (!row) return;
   // Dynamic — derive from the actual categories used by this week's tasks.
   const usedCats = Array.from(new Set(tasks.map(t => t.category).filter(Boolean))).sort();
   const cats = ['All', ...usedCats];
   const labelFor = (c) => c === 'All' ? 'All' : (window._taskCategories?.[c] || c);
-  row.innerHTML = cats.map(c => `
+
+  const catBtnsHtml = cats.map(c => `
     <button class="cat-btn${activeFilter === c ? ' active' : ''}" data-cat="${escAttr(c)}">${escHtml(labelFor(c))}</button>
   `).join('');
+
+  // Pager — only when there's more than one page of tasks after filtering.
+  const count = Number.isFinite(filteredCount) ? filteredCount : tasks.length;
+  const totalPages = Math.max(1, Math.ceil(count / TASK_PAGE_SIZE));
+  taskPage = Math.min(taskPage, totalPages - 1);
+  const pagerHtml = totalPages > 1 ? `
+    <div class="task-pager">
+      <button class="ess-pager-btn" id="taskPagerPrev" ${taskPage === 0 ? 'disabled' : ''}>&#8592;</button>
+      <span class="ess-pager-info" id="taskPagerInfo">${taskPage + 1} / ${totalPages}</span>
+      <button class="ess-pager-btn" id="taskPagerNext" ${taskPage >= totalPages - 1 ? 'disabled' : ''}>&#8594;</button>
+    </div>
+  ` : '';
+
+  row.innerHTML = catBtnsHtml + pagerHtml;
+
   row.querySelectorAll('.cat-btn').forEach(btn => {
-    btn.addEventListener('click', () => { activeFilter = btn.dataset.cat; render(); });
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.cat;
+      taskPage = 0;           // reset to first page on filter change
+      render();
+    });
   });
+  const prevBtn = row.querySelector('#taskPagerPrev');
+  const nextBtn = row.querySelector('#taskPagerNext');
+  if (prevBtn) prevBtn.addEventListener('click', () => { if (taskPage > 0) { taskPage--; render(); } });
+  if (nextBtn) nextBtn.addEventListener('click', () => { taskPage++; render(); });
 }
 
 function updateProgressRing() {
