@@ -332,39 +332,42 @@ function ensureNavbarSharedStyles() {
     #topNav .nav-dropdown-wrap {
       position: relative;
     }
+    /* Minimal text-button trigger (CH-parallel). Border + gradient removed —
+       brand + profile keep their gradients as identity / context anchors. */
     #topNav .nav-dropdown-trigger {
-      display: flex; align-items: center; gap: 7px;
-      padding: 9px 14px; border-radius: 10px;
-      background: linear-gradient(135deg, rgba(108,92,231,0.20), rgba(0,217,255,0.10));
-      border: 1px solid rgba(108,92,231,0.45);
-      color: rgba(255,255,255,0.85);
+      display: flex; align-items: center; gap: 6px;
+      padding: 7px 11px; border-radius: 8px;
+      background: transparent;
+      border: 1px solid transparent;
+      color: rgba(255,255,255,0.60);
       font-family: "DM Sans", sans-serif;
       font-size: 13px; font-weight: 500;
       cursor: pointer; white-space: nowrap;
-      transition: all 0.22s ease;
+      transition: color 0.18s ease, background 0.18s ease;
       user-select: none;
     }
-    #topNav .nav-dropdown-trigger svg { width: 15px; height: 15px; flex-shrink: 0; }
+    #topNav .nav-dropdown-trigger svg { width: 14px; height: 14px; flex-shrink: 0; color: rgba(255,255,255,0.5); transition: color 0.18s ease; }
     #topNav .nav-dropdown-trigger .dd-caret {
       width: 12px; height: 12px; flex-shrink: 0;
-      transition: transform 0.22s ease;
-      margin-left: 2px;
+      transition: transform 0.18s ease;
+      margin-left: 1px;
     }
-    #topNav .nav-dropdown-wrap.open .nav-dropdown-trigger {
-      background: linear-gradient(135deg, rgba(108,92,231,0.45), rgba(0,217,255,0.25));
-      border-color: rgba(108,92,231,0.7); color: #fff;
-      box-shadow: 0 0 16px rgba(108,92,231,0.40);
-    }
-    #topNav .nav-dropdown-wrap.open .dd-caret { transform: rotate(180deg); }
     #topNav .nav-dropdown-trigger:hover {
-      background: linear-gradient(135deg, rgba(108,92,231,0.35), rgba(0,217,255,0.20));
-      border-color: rgba(108,92,231,0.65); color: #fff;
+      color: #fff;
+      background: rgba(255,255,255,0.07);
     }
+    #topNav .nav-dropdown-trigger:hover svg { color: rgba(255,255,255,0.85); }
+    #topNav .nav-dropdown-wrap.open .nav-dropdown-trigger {
+      color: #fff;
+      background: rgba(255,255,255,0.07);
+    }
+    #topNav .nav-dropdown-wrap.open .nav-dropdown-trigger svg { color: rgba(255,255,255,0.85); }
+    #topNav .nav-dropdown-wrap.open .dd-caret { transform: rotate(180deg); }
     #topNav .nav-dropdown-trigger.active {
-      background: linear-gradient(135deg, rgba(108,92,231,0.50), rgba(0,217,255,0.30));
-      border-color: rgba(108,92,231,0.80); color: #fff;
-      box-shadow: 0 0 16px rgba(108,92,231,0.35);
+      color: #fff;
+      background: rgba(255,255,255,0.10);
     }
+    #topNav .nav-dropdown-trigger.active svg { color: #a78bfa; }
     #topNav .nav-dropdown-panel {
       display: none;
       position: absolute;
