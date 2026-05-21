@@ -736,31 +736,38 @@ const NAV_ITEMS = [
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
   ]},
   { group: 'admin', label: 'Admin', adminOnly: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', items: [
-    // Cross-hub shortcuts (academic_admin only)
+    // Principal Evaluation suite (moved from School Leaders 2026-05-21)
+    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
+    { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
+    { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
+    { key: 'principal-360-results',       href: '/principal-360-results',       label: '360° Results' },
+    { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
+    { key: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', label: 'AI Maturity Self-Assessment' },
+    // Cross-hub shortcuts
     { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
     { key: 'admin-pageacc-ext',   href: 'https://centralhub.eduversal.org/page-access', label: 'Page Access ↗' },
     { key: 'admin-ch-ext',        href: 'https://centralhub.eduversal.org',             label: 'Central Hub ↗' },
     { key: 'settings',            href: '/settings',                                    label: 'Settings' },
   ]},
   { group: 'principal', label: 'School Leaders', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
-    // Evaluation Cycle (FR + SP — FR-only for entry pages, SP-only for coaching)
-    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
-    { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
-    { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
-    { key: 'principal-360-results',       href: '/principal-360-results',       label: '360° Results' },
-    { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
-    // School-level AI (SP/AC/FR)
-    { key: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', label: 'AI Maturity Self-Assessment' },
+    // School leadership team workspace (mirrors CH Coordinators) — school-scoped via schoolId
+    { key: 'school-leadership-read-me',          href: '/school-leadership-read-me',          label: 'Read Me First' },
+    { key: 'school-leadership-operational-guide',href: '/school-leadership-operational-guide',label: 'Operational Guide' },
+    { key: 'school-leadership-meetings',         href: '/school-leadership-meetings',         label: 'Meetings' },
+    { key: 'school-leadership-decisions',        href: '/school-leadership-decisions',        label: 'Decisions' },
+    { key: 'school-leadership-directory',        href: '/school-leadership-directory',        label: 'Directory' },
+    { key: 'school-artifacts',                   href: '/school-artifacts',                   label: 'Artifacts' },
+    { key: 'school-activities',                  href: '/school-activities',                  label: 'Activities' },
+    { key: 'my-observations',                    href: '/my-observations',                    label: 'My Observations' },
+    { key: 'weekly-checklist',                   href: '/weekly-checklist',                   label: 'Weekly Checklist' },
+    { key: 'team-induction',                     href: '/team-induction',                     label: 'Team Induction' },
   ]},
   { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
-    // My CPD
+    // My CPD + Induction (weekly-checklist + team-induction moved to School Leaders 2026-05-21)
     { key: 'learning-path',        href: '/learning-path',        label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',         label: 'My Portfolio' },
     { key: 'my-certificates',      href: '/my-certificates',      label: 'My Certificates' },
-    { key: 'weekly-checklist',     href: '/weekly-checklist',     label: 'Weekly Checklist' },
-    // Induction
     { key: 'my-induction',         href: '/my-induction',         label: 'My Induction' },
-    { key: 'team-induction',       href: '/team-induction',       label: 'Team Induction' },
   ]},
 ];
 

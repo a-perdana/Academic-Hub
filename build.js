@@ -98,6 +98,14 @@ const cleanUrls = {
   "StudentRoster.html":              "student-roster",
   "SchoolAssessment.html":           "school-assessment",
   "settings.html":                   "settings",
+  // School Leadership Workspace (2026-05-21) — 7 new pages
+  "school-leadership-read-me.html":           "school-leadership-read-me",
+  "school-leadership-operational-guide.html": "school-leadership-operational-guide",
+  "school-leadership-meetings.html":          "school-leadership-meetings",
+  "school-leadership-decisions.html":         "school-leadership-decisions",
+  "school-leadership-directory.html":         "school-leadership-directory",
+  "school-artifacts.html":                    "school-artifacts",
+  "school-activities.html":                   "school-activities",
 };
 
 // Rewrite all internal .html links to clean URLs inside a built file
@@ -197,6 +205,14 @@ const htmlFiles = [
   "StudentRoster.html",
   "SchoolAssessment.html",
   "settings.html",
+  // School Leadership Workspace (2026-05-21)
+  "school-leadership-read-me.html",
+  "school-leadership-operational-guide.html",
+  "school-leadership-meetings.html",
+  "school-leadership-decisions.html",
+  "school-leadership-directory.html",
+  "school-artifacts.html",
+  "school-activities.html",
 ];
 
 // Pages skipped from base.css injection (login/waiting are auth-flow,

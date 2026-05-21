@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decisions - Academic Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="tokens.css">
+  <style>
+    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
+    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
+    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
+    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
+    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
+    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
+    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
+    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
+    .sl-card p + p { margin-top: 10px; }
+    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
+    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
+    .sl-back:hover { background: rgba(108,92,231,0.28); }
+    .sl-back svg { width: 14px; height: 14px; }
+  </style>
+</head>
+<body style="display:none">
+  <div id="navbarMount"></div>
+
+  <main class="sl-wrap">
+    <div class="sl-eyebrow">School Leaders Workspace</div>
+    <h1 class="sl-title"><span class="accent">Decisions</span></h1>
+    <p class="sl-desc">Binding school-level policies surfaced from meetings or authored directly. Draft → active → superseded lifecycle. Auditable across academic years.</p>
+
+    <div class="sl-card">
+      <h3>Coming soon <span class="pill">Phase 2</span></h3>
+      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_leadership_decisions</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
+      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+    </div>
+
+    <div class="sl-card">
+      <h3>What this page will do</h3>
+      <p>Filter by status (draft / active / superseded), category (pedagogy / safeguarding / admin / conduct / communications / parent_relations / staff_welfare), scope (school_wide / per_subject / per_grade). Active decisions are immutable in-place — supersede with a new decision via supersededByDecisionId chain. Each decision back-links to its source meeting + agenda item when applicable.</p>
+    </div>
+
+    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
+  </main>
+
+  <script src="partials/navbar-loader.js"></script>
+  <script>
+    document.addEventListener('authReady', (e) => {
+      window.__loadAcademicNavbar?.('school-leadership-decisions', { user: e.detail?.user, profile: e.detail?.profile });
+    });
+  </script>
+</body>
+</html>
