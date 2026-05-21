@@ -482,7 +482,13 @@ body { padding-top: 62px; }
   text-shadow: 0 1px 6px rgba(0,0,0,0.18);
 }
 .essentials-list {
-  display: flex; flex-direction: column; gap: 6px; padding: 12px 18px 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 10px;
+  padding: 12px 18px 14px;
+}
+@media (max-width: 640px) {
+  .essentials-list { grid-template-columns: 1fr; }
 }
 /* Essentials pager nestled into the gradient header — flip its
    colours so the buttons read on the dark green band. */
@@ -947,7 +953,7 @@ let activeFilter    = 'All';
 
 let essentials      = [];      // [{id, title}]
 let essPage         = 0;
-const ESS_PAGE_SIZE = 5;
+const ESS_PAGE_SIZE = 6;       // 6 per page balances a 3×2 grid on the 2-column list
 
 // Task list pagination (mirrors essentials pager pattern).
 // Resets to 0 on: tab change, week change, filter change.
