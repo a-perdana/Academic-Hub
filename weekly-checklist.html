@@ -6,117 +6,113 @@
 <title>Weekly Checklist — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <style>
-/* Page-specific accent override (amber). Tokens, reset, and base
-   typography come from /base.css (injected by build.js). */
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base
+   typography, AND canonical .page-hero* chrome come from /base.css
+   (injected by build.js). Page-local styles below MUST NOT override
+   .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 :root {
-  --accent:   #d97706;
-  --accent-2: #fef3c7;
+  --accent:   #6c5ce7;   /* brand mor — My Work family accent */
+  --accent-2: #ede9fe;
 }
 
 /* ─── NAVBAR OFFSET ──────────────────────────── */
 body { padding-top: 62px; }
 
-/* ─── HERO ───────────────────────────────────── */
-.hero {
-  background: linear-gradient(130deg, #1a0800 0%, #5c2800 40%, #92400e 72%, #d97706 100%);
-  padding: 36px 40px 0;
-  position: relative; overflow: hidden;
+/* ─── HERO LAYOUT EXTRAS ─────────────────────────
+   The canonical .page-hero__inner is `display:flex; flex-wrap:wrap`
+   with the text block as the first child. For weekly-checklist we
+   want a 2-line layout:
+     row 1: [text]    [progress ring]
+     row 2: [tabs spanning full width]
+     row 3: [paired handbook link]
+   We achieve this by sliding the tabs + paired-handbook link to
+   width:100% so the wrap pushes them to a new row. */
+.page-hero__inner.wc-hero-inner {
+  align-items: center;
+  row-gap: var(--space-5);
 }
-.hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 8% 80%, rgba(217,119,6,0.22) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.04) 0%, transparent 45%),
-    radial-gradient(ellipse at 55% 50%, rgba(0,0,0,0.15) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.10) 30%, rgba(217,119,6,0.5) 55%, rgba(255,255,255,0.10) 80%, transparent 100%);
-}
-.hero-inner {
-  position: relative; z-index: 1;
-  max-width: 900px; margin: 0 auto;
-}
-.hero-top {
-  display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
-  padding-bottom: 28px;
-}
-.hero-text { flex: 1; min-width: 0; }
-.hero-text .eyebrow {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em;
-  text-transform: uppercase; color: rgba(255,255,255,0.42); margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
-}
-.hero-text .eyebrow::before {
-  content: ''; display: inline-block; width: 18px; height: 1.5px;
-  background: rgba(217,119,6,0.8); border-radius: 2px; flex-shrink: 0;
-}
-.hero-text h1 {
-  font-family: 'Lora', serif;
-  font-size: 1.9rem; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 8px;
-  text-shadow: 0 1px 20px rgba(0,0,0,0.3); letter-spacing: -0.01em;
-}
-.hero-text .sub { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
 
-/* ─── HERO TABS ──────────────────────────────── */
-.hero-tabs {
+/* ─── PROGRESS RING (page-local) ───────────────── */
+.wc-progress {
+  flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  margin-left: auto;
+}
+.wc-progress .ring-label {
+  font-size: 11px; font-weight: 700; color: var(--hero-eyebrow);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+.ring-svg { transform: rotate(-90deg); }
+.ring-bg   { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 6; }
+.ring-fill { fill: none; stroke: #a78bfa; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+.ring-text { font-size: 18px; font-weight: 800; fill: #fff; dominant-baseline: middle; text-anchor: middle; }
+.ring-sub  { font-size: 9px; font-weight: 600; fill: rgba(255,255,255,0.55); dominant-baseline: middle; text-anchor: middle; }
+
+/* ─── HERO TABS (page-local) ─────────────────────
+   Sub-role tabs live inside the hero. Per-tab colour tokens keep
+   the existing Foundation/Principal/Coordinator/Cambridge visual
+   distinction. Layout: full-width row that wraps below the
+   text + ring. */
+.wc-tabs {
+  flex: 0 0 100%;
   display: flex; gap: 0; position: relative; z-index: 2;
   overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: var(--space-3);
 }
-.hero-tabs::-webkit-scrollbar { display: none; }
-/* Per-tab colour tokens */
-.hero-tabs [data-tab="foundation_representative"] { --tc: #fb7185; --tc-bg: rgba(251,113,133,0.12); }
-.hero-tabs [data-tab="school_principal"]          { --tc: #fbbf24; --tc-bg: rgba(251,191,36,0.12); }
-.hero-tabs [data-tab="academic_coordinator"]      { --tc: #34d399; --tc-bg: rgba(52,211,153,0.12); }
-.hero-tabs [data-tab="cambridge_coordinator"]     { --tc: #2dd4bf; --tc-bg: rgba(45,212,191,0.12); }
-.hero-tabs .checklist-tab {
+.wc-tabs::-webkit-scrollbar { display: none; }
+.wc-tabs [data-tab="foundation_representative"] { --tc: #fb7185; --tc-bg: rgba(251,113,133,0.12); }
+.wc-tabs [data-tab="school_principal"]          { --tc: #fbbf24; --tc-bg: rgba(251,191,36,0.12); }
+.wc-tabs [data-tab="academic_coordinator"]      { --tc: #34d399; --tc-bg: rgba(52,211,153,0.12); }
+.wc-tabs [data-tab="cambridge_coordinator"]     { --tc: #2dd4bf; --tc-bg: rgba(45,212,191,0.12); }
+.wc-tabs .checklist-tab {
   padding: 12px 22px; border: none; background: transparent;
   font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
-  color: color-mix(in srgb, var(--tc) 65%, transparent);
+  color: color-mix(in srgb, var(--tc) 70%, transparent);
   cursor: pointer; border-radius: 10px 10px 0 0;
   transition: color 0.2s, background 0.2s;
   position: relative; white-space: nowrap; letter-spacing: 0.01em;
 }
-.hero-tabs .checklist-tab::after {
+.wc-tabs .checklist-tab::after {
   content: ''; position: absolute; bottom: 0; left: 14px; right: 14px; height: 2.5px;
   background: color-mix(in srgb, var(--tc) 40%, transparent);
   border-radius: 2px 2px 0 0;
   transition: background 0.2s, left 0.2s, right 0.2s;
 }
-.hero-tabs .checklist-tab:hover {
+.wc-tabs .checklist-tab:hover {
   color: var(--tc); background: var(--tc-bg);
 }
-.hero-tabs .checklist-tab:hover::after {
+.wc-tabs .checklist-tab:hover::after {
   background: var(--tc); left: 10px; right: 10px;
 }
-.hero-tabs .checklist-tab.active {
+.wc-tabs .checklist-tab.active {
   color: var(--tc); background: var(--tc-bg); font-weight: 700;
 }
-.hero-tabs .checklist-tab.active::after {
+.wc-tabs .checklist-tab.active::after {
   background: var(--tc); left: 10px; right: 10px;
 }
 
-/* hide old pill tabs */
-.checklist-tabs:not(.hero-tabs) { display: none !important; }
-
-/* Progress ring */
-.progress-ring-wrap {
-  flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;
+/* ─── PAIRED HANDBOOK LINK (page-local) ────────── */
+.wc-paired-handbook {
+  flex: 0 0 100%;
+  display: none;          /* JS flips to inline-flex when a handbook is mapped */
+  align-self: flex-start;
+  padding: 6px 12px; border-radius: 8px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.88);
+  font-size: 12.5px; font-weight: 600;
+  text-decoration: none; line-height: 1.3;
+  align-items: center; gap: 6px; width: max-content;
+  transition: background .12s, border-color .12s;
 }
-.progress-ring-wrap .ring-label {
-  font-size: 11px; font-weight: 700; color: rgba(255,255,255,0.55);
-  text-transform: uppercase; letter-spacing: 0.08em;
+.wc-paired-handbook:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.28);
 }
-.ring-svg { transform: rotate(-90deg); }
-.ring-bg   { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 6; }
-.ring-fill { fill: none; stroke: #fcd34d; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
-.ring-text { font-size: 18px; font-weight: 800; fill: #fff; dominant-baseline: middle; text-anchor: middle; }
-.ring-sub  { font-size: 9px; font-weight: 600; fill: rgba(255,255,255,0.55); dominant-baseline: middle; text-anchor: middle; }
 
 /* ─── PAGE WRAP ──────────────────────────────── */
-.page-wrap { max-width: 900px; margin: 0 auto; padding: 28px 40px 72px; }
+.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 40px 72px; }
 
 /* ─── WEEK NAV ───────────────────────────────── */
 .week-nav {
@@ -347,11 +343,11 @@ body { padding-top: 62px; }
 .task-note-textarea:focus { border-color: var(--accent); }
 .note-save-btn {
   margin-top: 6px; padding: 5px 14px;
-  background: var(--accent-2); color: #92400e; border: 1px solid #fde68a;
+  background: var(--accent-2); color: #4c1d95; border: 1px solid #c4b5fd;
   border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
   font-family: 'DM Sans', sans-serif; transition: all 0.15s;
 }
-.note-save-btn:hover { background: #fde68a; }
+.note-save-btn:hover { background: #ddd6fe; }
 
 /* ─── EMPTY STATE ────────────────────────────── */
 .empty-state {
@@ -422,26 +418,11 @@ body { padding-top: 62px; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.error { background: #dc2626; }
 
-/* ─── CHECKLIST TABS ─────────────────────────── */
-.checklist-tabs {
-  display: flex; gap: 6px; flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-.checklist-tab {
-  padding: 7px 18px; border-radius: 20px;
-  border: 1.5px solid var(--border); background: var(--white);
-  font-size: 12.5px; font-weight: 600; color: var(--ink-3);
-  cursor: pointer; transition: all 0.15s; font-family: 'DM Sans', sans-serif;
-}
-.checklist-tab:hover { border-color: var(--accent); color: var(--accent); }
-.checklist-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
-
 /* ─── RESPONSIVE ─────────────────────────────── */
 @media (max-width: 640px) {
-  .hero { padding: 28px 20px; }
-  .hero-inner { flex-direction: column; align-items: flex-start; }
   .page-wrap { padding: 20px 16px 56px; }
-.week-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .week-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
+  .wc-progress { margin-left: 0; }
 }
 
 /* ─── WEEKLY ESSENTIALS ───────────────────────── */
@@ -609,51 +590,44 @@ body { padding-top: 62px; }
 
 <div id="navbarMount"></div>
 
-<!-- ─── HERO ─────────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-top">
-      <div class="hero-text">
-        <p class="eyebrow" id="heroEyebrow">Academic Hub · 2025–2026</p>
-        <h1 id="heroTitle">Week — Checklist</h1>
-        <p class="sub" id="heroSub">Track weekly leadership tasks, meetings, and observations.</p>
-      </div>
-      <div class="progress-ring-wrap">
-        <svg class="ring-svg" width="84" height="84" viewBox="0 0 84 84">
-          <circle class="ring-bg"   cx="42" cy="42" r="36"/>
-          <circle class="ring-fill" id="ringFill" cx="42" cy="42" r="36"
-            stroke-dasharray="226.2" stroke-dashoffset="226.2"/>
-          <text class="ring-text" x="42" y="40" transform="rotate(90 42 42)" id="ringPct">0%</text>
-          <text class="ring-sub"  x="42" y="52" transform="rotate(90 42 42)" id="ringFrac">0/0</text>
-        </svg>
-        <span class="ring-label">Progress</span>
-      </div>
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner wc-hero-inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · 2025–2026</p>
+      <h1 class="page-hero__title" id="heroTitle">Week — Checklist</h1>
+      <p class="page-hero__desc" id="heroSub">Track weekly leadership tasks, meetings, and observations.</p>
     </div>
-    <!-- Tabs inside hero (hidden until auth) -->
-    <nav class="hero-tabs checklist-tabs" id="checklistTabs" style="display:none">
+    <div class="wc-progress">
+      <svg class="ring-svg" width="84" height="84" viewBox="0 0 84 84">
+        <circle class="ring-bg"   cx="42" cy="42" r="36"/>
+        <circle class="ring-fill" id="ringFill" cx="42" cy="42" r="36"
+          stroke-dasharray="226.2" stroke-dashoffset="226.2"/>
+        <text class="ring-text" x="42" y="40" transform="rotate(90 42 42)" id="ringPct">0%</text>
+        <text class="ring-sub"  x="42" y="52" transform="rotate(90 42 42)" id="ringFrac">0/0</text>
+      </svg>
+      <span class="ring-label">Progress</span>
+    </div>
+    <!-- Sub-role tabs (hidden until auth resolves multi-role users). -->
+    <nav class="wc-tabs" id="checklistTabs" style="display:none">
       <button class="checklist-tab active" data-tab="foundation_representative" id="tabFoundation">Foundation Representative</button>
       <button class="checklist-tab" data-tab="school_principal" id="tabPrincipal" style="display:none">School Principal</button>
       <button class="checklist-tab" data-tab="academic_coordinator" id="tabCoordinator" style="display:none">Academic Coordinator</button>
       <button class="checklist-tab" data-tab="cambridge_coordinator" id="tabCambridge" style="display:none">Cambridge Coordinator</button>
     </nav>
     <!-- Cross-link to the matching 90-day handbook for the active tab.
-         Updated by JS whenever currentPlatform changes; hidden when no
-         handbook exists for the active platform. Handbook lives on CH
-         (centralhub.eduversal.org/handbook) so this is a cross-hub link. -->
-    <a id="pairedHandbookLink" href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener"
-       style="display:none;margin-top:14px;align-self:flex-start;
-              padding:6px 12px;border-radius:8px;
-              background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);
-              color:rgba(255,255,255,0.88);font-size:12.5px;font-weight:600;
-              text-decoration:none;line-height:1.3;
-              align-items:center;gap:6px;
-              transition:background .12s, border-color .12s;">
+         Updated by JS whenever currentPlatform changes; CSS keeps it
+         hidden until updatePairedHandbookLink() flips display. Handbook
+         lives on CH (centralhub.eduversal.org/handbook) so this is a
+         cross-hub link. -->
+    <a id="pairedHandbookLink" class="wc-paired-handbook"
+       href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener">
       <span aria-hidden="true">📕</span>
       <span id="pairedHandbookLabel">Open paired 90-day handbook</span>
       <span aria-hidden="true" style="opacity:.7;">↗</span>
     </a>
   </div>
-</section>
+</header>
 
 <!-- ─── MAIN ──────────────────────────────────────────────────────── -->
 <div class="page-wrap">
