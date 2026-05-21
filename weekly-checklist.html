@@ -447,23 +447,52 @@ body { padding-top: 62px; }
   .wc-progress { margin-left: 0; }
 }
 
-/* ─── WEEKLY ESSENTIALS ───────────────────────── */
+/* ─── WEEKLY ESSENTIALS (green accent — habit / cyclic) ─────────
+   "Weekly Essentials" is the recurring-cadence panel — habits that
+   apply every week, never one-off. Green reads as "growth / steady",
+   which matches the panel's semantics. The card carries:
+     · 3px green left-edge stripe (governance signal),
+     · soft green-tinted background (#f0fdf4 family),
+     · gradient header bar (green → emerald) with white uppercase
+       label so it pops above the page-wrap neutral.
+   Header → list keeps the same content rhythm as before; only the
+   chrome is wowed up. */
 .essentials-section {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 38%);
+  border: 1px solid #bbf7d0;
+  border-left: 3px solid #10b981;
+  border-radius: var(--radius);
+  box-shadow: 0 4px 14px -8px rgba(16,185,129,0.35), var(--shadow-sm);
   margin-bottom: 16px; overflow: hidden;
 }
 .essentials-header {
-  padding: 12px 18px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 8px;
+  padding: 12px 18px; display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 65%, #047857 100%);
+  position: relative;
+  color: #fff;
+}
+.essentials-header::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 110px;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.18) 0%, transparent 65%);
+  pointer-events: none;
 }
 .essentials-header h4 {
   font-size: 0.82rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.06em; color: var(--ink-3); margin: 0;
+  letter-spacing: 0.1em; color: #fff; margin: 0;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.18);
 }
 .essentials-list {
-  display: flex; flex-direction: column; gap: 6px; padding: 12px 18px;
+  display: flex; flex-direction: column; gap: 6px; padding: 12px 18px 14px;
 }
+/* Essentials pager nestled into the gradient header — flip its
+   colours so the buttons read on the dark green band. */
+.essentials-header .ess-pager-btn {
+  background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.32); color: #fff;
+}
+.essentials-header .ess-pager-btn:hover:not(:disabled) {
+  background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.5); color: #fff;
+}
+.essentials-header .ess-pager-info { color: rgba(255,255,255,0.85); }
 .ess-pager { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .ess-pager-btn {
   width: 26px; height: 26px; border-radius: 6px; border: 1.5px solid var(--border);
@@ -522,27 +551,70 @@ body { padding-top: 62px; }
 .journal-editor b, .journal-editor strong { font-weight: 700; }
 .journal-editor i, .journal-editor em { font-style: italic; }
 .journal-editor u { text-decoration: underline; }
-/* ─── EVENTS BAND (This Week / Next Week) ────── */
+/* ─── EVENTS BAND (This Week cyan + Next Week mor) ─────────────
+   Two-column band sits directly under the optional skipped-week
+   amber banner. Each column carries its own colour family so the
+   eye separates "right now" (cyan = active / live) from "coming
+   up" (mor = hero family = preview). Chrome pattern mirrors
+   .essentials-section: 3px coloured left edge, soft tinted bg,
+   gradient header bar with white uppercase label + tinted week-tag
+   chip living inside the band so it always pops above the gradient. */
 .events-band {
   display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
   margin-bottom: 20px;
 }
 .events-col {
-  background: var(--white); border: 1px solid var(--border);
-  border-radius: var(--radius); box-shadow: var(--shadow-sm);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
+  position: relative;
 }
 .events-col-head {
   padding: 10px 16px; display: flex; align-items: center; gap: 8px;
-  border-bottom: 1px solid var(--border); background: var(--paper);
+  position: relative; color: #fff;
+}
+.events-col-head::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 110px;
+  background: radial-gradient(circle at top right, rgba(255,255,255,0.18) 0%, transparent 65%);
+  pointer-events: none;
 }
 .events-col-head h4 {
   font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--ink-3); margin: 0; flex: 1;
+  letter-spacing: 0.12em; color: #fff; margin: 0; flex: 1;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.18);
+  position: relative; z-index: 1;
 }
 .events-col-head .ev-week-tag {
-  font-size: 10px; font-weight: 700; color: var(--ink-3);
-  background: var(--paper-2); padding: 2px 7px; border-radius: 8px;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 8px;
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.32);
+  position: relative; z-index: 1;
+}
+
+/* This Week — cyan family (live / active). */
+.events-col--this-week {
+  background: linear-gradient(180deg, #ecfeff 0%, #ffffff 38%);
+  border-color: #a5f3fc;
+  border-left: 3px solid #0891b2;
+  box-shadow: 0 4px 14px -8px rgba(8,145,178,0.35), var(--shadow-sm);
+}
+.events-col--this-week .events-col-head {
+  background: linear-gradient(135deg, #0891b2 0%, #0e7490 60%, #155e75 100%);
+}
+
+/* Next Week — mor family (preview, matches hero My Work accent). */
+.events-col--next-week {
+  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 38%);
+  border-color: #ddd6fe;
+  border-left: 3px solid #6c5ce7;
+  box-shadow: 0 4px 14px -8px rgba(108,92,231,0.35), var(--shadow-sm);
+}
+.events-col--next-week .events-col-head {
+  background: linear-gradient(135deg, #6c5ce7 0%, #5b4dd1 60%, #4e3db8 100%);
 }
 .events-col-body { padding: 8px 0; }
 .ev-group { padding: 0 14px 6px; }
@@ -680,7 +752,7 @@ body { padding-top: 62px; }
 
   <!-- Events band (This Week / Next Week) -->
   <div class="events-band" id="eventsBand" style="display:none">
-    <div class="events-col">
+    <div class="events-col events-col--this-week">
       <div class="events-col-head">
         <h4 id="evThisWeekTitle">This Week</h4>
         <span class="ev-week-tag" id="evThisWeekTag"></span>
@@ -689,7 +761,7 @@ body { padding-top: 62px; }
         <div class="ev-loading">Loading events…</div>
       </div>
     </div>
-    <div class="events-col">
+    <div class="events-col events-col--next-week">
       <div class="events-col-head">
         <h4 id="evNextWeekTitle">Next Week</h4>
         <span class="ev-week-tag" id="evNextWeekTag"></span>
