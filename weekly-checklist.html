@@ -897,40 +897,6 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   // Set initial platform to first visible tab
   currentPlatform = activePlatforms[0];
 
-  // Show/hide tab buttons
-  const tabsEl = document.getElementById('checklistTabs');
-  if (activePlatforms.length > 1) {
-    // Show tab bar only when user has multiple roles (or is admin)
-    tabsEl.style.display = '';
-    document.getElementById('tabFoundation').style.display = activePlatforms.includes('foundation_representative') ? '' : 'none';
-    document.getElementById('tabPrincipal').style.display  = activePlatforms.includes('school_principal')          ? '' : 'none';
-    document.getElementById('tabCoordinator').style.display= activePlatforms.includes('academic_coordinator')      ? '' : 'none';
-    document.getElementById('tabCambridge').style.display  = activePlatforms.includes('cambridge_coordinator')     ? '' : 'none';
-    // Set initial active tab
-    document.querySelectorAll('.checklist-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.tab === currentPlatform);
-    });
-    updatePairedHandbookLink(currentPlatform);
-    // Tab click handler
-    document.querySelectorAll('.checklist-tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        if (tab.dataset.tab === currentPlatform) return;
-        document.querySelectorAll('.checklist-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        currentPlatform = tab.dataset.tab;
-        activeFilter = 'All';
-        updateHeroLabels();
-        updatePairedHandbookLink(currentPlatform);
-        if (isAdmin) {
-          document.getElementById('adminBar').style.display = 'flex';
-          document.getElementById('emptyAddBtn').style.display = '';
-        }
-        loadWeek(currentWeek);
-        loadEssentials();
-      });
-    });
-  }
-
   // Paired-handbook mapping. Each weekly-checklist sub-role (data-tab
   // value) maps to its paired handbook on CH. Cross-hub link — opens in
   // new tab (target=_blank). Handbook host hardcoded to
@@ -951,6 +917,42 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     labelEl.textContent = m.label;
     link.style.display = 'inline-flex';
   }
+
+  // Show/hide tab buttons
+  const tabsEl = document.getElementById('checklistTabs');
+  if (activePlatforms.length > 1) {
+    // Show tab bar only when user has multiple roles (or is admin)
+    tabsEl.style.display = '';
+    document.getElementById('tabFoundation').style.display = activePlatforms.includes('foundation_representative') ? '' : 'none';
+    document.getElementById('tabPrincipal').style.display  = activePlatforms.includes('school_principal')          ? '' : 'none';
+    document.getElementById('tabCoordinator').style.display= activePlatforms.includes('academic_coordinator')      ? '' : 'none';
+    document.getElementById('tabCambridge').style.display  = activePlatforms.includes('cambridge_coordinator')     ? '' : 'none';
+    // Set initial active tab
+    document.querySelectorAll('.checklist-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === currentPlatform);
+    });
+    // Tab click handler
+    document.querySelectorAll('.checklist-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        if (tab.dataset.tab === currentPlatform) return;
+        document.querySelectorAll('.checklist-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentPlatform = tab.dataset.tab;
+        activeFilter = 'All';
+        updateHeroLabels();
+        updatePairedHandbookLink(currentPlatform);
+        if (isAdmin) {
+          document.getElementById('adminBar').style.display = 'flex';
+          document.getElementById('emptyAddBtn').style.display = '';
+        }
+        loadWeek(currentWeek);
+        loadEssentials();
+      });
+    });
+  }
+
+  // Always reflect the active platform's paired-handbook link (single-tab + multi-tab).
+  updatePairedHandbookLink(currentPlatform);
 
   if (isAdmin) {
     document.getElementById('adminBar').style.display = 'flex';
