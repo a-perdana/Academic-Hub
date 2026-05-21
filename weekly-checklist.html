@@ -111,8 +111,18 @@ body { padding-top: 62px; }
   border-color: rgba(255,255,255,0.28);
 }
 
-/* ─── PAGE WRAP ──────────────────────────────── */
-.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 40px 72px; }
+/* ─── PAGE WRAP ──────────────────────────────────
+   Hero's .page-hero__inner clamps content to 1200px AFTER its 40px
+   outer padding; page-wrap clamps THEN pads. To make both content
+   columns share the same left edge, page-wrap's clamp = container
+   max + 2·padding (1200 + 80 = 1280). After padding subtracts, the
+   inner content column is exactly 1200px — aligned with the hero.
+   See root CLAUDE.md Common Mistake #52 (hero ↔ page-wrap alignment). */
+.page-wrap {
+  max-width: calc(var(--container-max) + 80px);
+  margin: 0 auto;
+  padding: 28px 40px 72px;
+}
 
 /* ─── WEEK NAV ───────────────────────────────── */
 .week-nav {
