@@ -55,8 +55,12 @@ function ensureNavbarSharedStyles() {
     }
     #topNav .nav-actions {
       display: flex; align-items: center; gap: 6px;
-      flex: 1; min-width: 0; justify-content: flex-end;
+      flex: 1; min-width: 0;
     }
+    /* Flexible gap that pushes the right-hand dropdowns (School Leaders + My Hub) next to profile */
+    #topNav .ah-nav-spacer { flex: 1 1 auto; min-width: 0; }
+    /* Admin-only dropdown is hidden by default; navbar-loader unhides for academic_admin */
+    #topNav [data-admin-only="1"]:not(.ah-admin-visible) { display: none; }
     #topNav .nav-btn {
       display: flex; align-items: center; gap: 7px;
       padding: 9px 18px; border-radius: 10px;
@@ -679,6 +683,17 @@ const NAV_ITEMS = [
     { key: 'student-roster',       href: '/student-roster',        label: 'Student Roster' },
     { key: 'school-assessment',    href: '/school-assessment',     label: 'School Assessment' },
   ]},
+  { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
+    // Calendar
+    { key: 'academic-calendar',    href: '/academic-calendar',    label: 'Academic Calendar' },
+    { key: 'school-events',        href: '/school-events',        label: 'School Events' },
+    // Messaging
+    { key: 'announcements',        href: '/announcements',        label: 'Announcements', badgeId: 'annBadge' },
+    { key: 'message-board',        href: '/message-board',        label: 'Message Board', badgeId: 'msgBadge' },
+    // Documents
+    { key: 'documents',            href: '/documents',            label: 'Documents', badgeId: 'docBadge', badgeCount: true },
+    { key: 'library',              href: '/library',              label: 'Resource Library' },
+  ]},
   { group: 'curriculum', label: 'Curriculum', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Mapping & Coverage
     { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
@@ -688,7 +703,7 @@ const NAV_ITEMS = [
     { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
   ]},
-  { group: 'pd', label: 'Professional Development', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
+  { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
     // Appraisals & Evaluation (audience: SP + AC + CC)
     { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
     { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
@@ -717,9 +732,16 @@ const NAV_ITEMS = [
     { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
   ]},
-  { group: 'principal', label: 'Principal Office', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
+  { group: 'admin', label: 'Admin', adminOnly: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', items: [
+    // Cross-hub shortcuts (academic_admin only)
+    { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
+    { key: 'admin-pageacc-ext',   href: 'https://centralhub.eduversal.org/page-access', label: 'Page Access ↗' },
+    { key: 'admin-ch-ext',        href: 'https://centralhub.eduversal.org',             label: 'Central Hub ↗' },
+    { key: 'settings',            href: '/settings',                                    label: 'Settings' },
+  ]},
+  { group: 'principal', label: 'School Leaders', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
     // Evaluation Cycle (FR + SP — FR-only for entry pages, SP-only for coaching)
-    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Evaluation Hub' },
+    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
     { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
     { key: 'principal-360-results',       href: '/principal-360-results',       label: '360° Results' },
@@ -737,20 +759,9 @@ const NAV_ITEMS = [
     { key: 'my-induction',         href: '/my-induction',         label: 'My Induction' },
     { key: 'team-induction',       href: '/team-induction',       label: 'Team Induction' },
   ]},
-  { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
-    // Calendar
-    { key: 'academic-calendar',    href: '/academic-calendar',    label: 'Academic Calendar' },
-    { key: 'school-events',        href: '/school-events',        label: 'School Events' },
-    // Messaging
-    { key: 'announcements',        href: '/announcements',        label: 'Announcements', badgeId: 'annBadge' },
-    { key: 'message-board',        href: '/message-board',        label: 'Message Board', badgeId: 'msgBadge' },
-    // Documents
-    { key: 'documents',            href: '/documents',            label: 'Documents', badgeId: 'docBadge', badgeCount: true },
-    { key: 'library',              href: '/library',              label: 'Resource Library' },
-  ]},
 ];
 
-function buildMobileMenu(activeKey) {
+function buildMobileMenu(activeKey, isAcademicAdmin) {
   if (document.getElementById('ahMobileMenu')) return;
 
   const menu = document.createElement('div');
@@ -768,6 +779,9 @@ function buildMobileMenu(activeKey) {
     }
 
     if (item.group) {
+      // Admin-only groups (Admin dropdown) hidden in mobile drawer for non-admins
+      if (item.adminOnly && !isAcademicAdmin) return;
+
       const header = document.createElement('div');
       header.className = 'ah-mobile-section-header';
       header.textContent = item.label;
@@ -1059,8 +1073,16 @@ window.__loadAcademicNavbar = async function(activeKey, authCtx) {
     link.classList.toggle('active', link.dataset.navKey === activeKey);
   });
 
+  // Reveal admin-only items (Admin dropdown) for academic_admin
+  const isAcademicAdmin = authCtx?.profile?.role_academichub === 'academic_admin';
+  if (isAcademicAdmin) {
+    mount.querySelectorAll('[data-admin-only="1"]').forEach(el => {
+      el.classList.add('ah-admin-visible');
+    });
+  }
+
   // Build and wire mobile menu + desktop dropdowns
-  buildMobileMenu(activeKey);
+  buildMobileMenu(activeKey, isAcademicAdmin);
   initDropdowns(activeKey);
   initHamburger();
   syncMobileBadges();
