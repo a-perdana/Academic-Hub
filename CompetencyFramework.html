@@ -15,7 +15,24 @@
   --accent-dk: #0f766e;
   --accent-2: #ccfbf1;
 }
-body { padding-top: 62px; }
+body {
+  padding-top: 62px;
+  background: #f3f7f6;
+  position: relative;
+}
+/* Artistic teal-mint atmosphere — radial wash that echoes the hero accent
+   under the page without competing with card surfaces. Fixed so it follows
+   the viewport, behind everything, never intercepts pointer events
+   (Root CLAUDE.md Common Mistake #22). */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 8% 12%, rgba(13,148,136,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 92% 88%, rgba(20,184,166,0.09) 0%, transparent 62%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(204,251,241,0.45) 0%, transparent 70%),
+    linear-gradient(180deg, #f3f7f6 0%, #f6f9f8 100%);
+}
 
 .page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 100px; }
 @media (max-width: 768px) { .page-wrap { padding: 20px 20px 80px; } }
