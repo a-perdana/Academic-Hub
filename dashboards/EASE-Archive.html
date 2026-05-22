@@ -401,8 +401,12 @@
       .stats-row { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* ── FAB ── */
-    .fab-container {
+    /* ── FAB ── (hidden 2026-05-22 — dashboards are chrome-less, FAB feedback
+       is an AH-specific surface that visiting TH/CH users shouldn't see.
+       Markup + script left intact in case auth-aware re-enable is wanted later.) */
+    .fab-container { display: none !important; }
+    .feedback-overlay { display: none !important; }
+    .fab-container-was {
       position: fixed; bottom: 24px; right: 24px;
       display: flex; flex-direction: column; align-items: flex-end;
       gap: 10px; z-index: 999;
@@ -514,10 +518,6 @@
   <header class="header">
     <div class="header-top">
       <span class="badge">EASE ARCHIVE</span>
-      <a href="index.html" class="back-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Academic Hub
-      </a>
       <span class="live-badge"><span class="live-dot"></span>Live API</span>
     </div>
     <h1 class="header-title">EASE Assessment Archive</h1>

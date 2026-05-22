@@ -171,7 +171,7 @@ const htmlFiles = [
   "academic-calendar.html",
   "SchoolEvents.html",
   "dashboards/AccreditationDashboard.html",
-  "AIPrompts.html",
+  "dashboards/AIPrompts.html",
   "dashboards/SchoolPerformanceKPI.html",
   "dashboards/EASE-Analytics.html",
   "dashboards/SchoolNetworkAudit.html",
