@@ -300,8 +300,8 @@ body { padding-top: 62px; }
     </div>
     <div style="display:grid;gap:8px;">
       <div style="font-size:12px;color:#475569;padding:10px 12px;background:#fff;border-radius:10px;border:1px solid #e2e8f0;">
-        <span style="font-weight:700;">Cambridge School Leader Standards 2019</span> — University of Cambridge Local Examinations Syndicate (UCLES). Five domains for school leadership excellence. Primary structure for all six leadership domains in this framework.
-        <a href="https://www.cambridge.org/elt/blog/2019/10/cambridge-school-leader-standards/" target="_blank" rel="noopener" style="color:#0d9488;font-weight:600;margin-left:4px;">↗ cambridge.org</a>
+        <span style="font-weight:700;">Cambridge School Leader Standards 2023</span> — University of Cambridge Local Examinations Syndicate (UCLES). Five domains for school leadership excellence. Primary structure for all six leadership domains in this framework.
+        <a href="https://www.cambridgeinternational.org/Images/690745-cambridge-school-leader-standards.pdf" target="_blank" rel="noopener" style="color:#0d9488;font-weight:600;margin-left:4px;">↗ Official PDF</a>
       </div>
       <div style="font-size:12px;color:#475569;padding:10px 12px;background:#fff;border-radius:10px;border:1px solid #e2e8f0;">
         <span style="font-weight:700;">Professional Standards for Educational Leaders (PSEL) 2015</span> — National Policy Board for Educational Administration (NPBEA), USA. Ten standards for school leadership. Supplementary reference for People Development and Equity domains.
@@ -978,19 +978,21 @@ const CONTENT_DATA = {
   },
 };
 
-// Grounded in: Cambridge School Leader Standards 2019 (UCLES),
+// Grounded in: Cambridge School Leader Standards 2023 (UCLES),
 // PSEL 2015 (NPBEA), and Permendiknas No. 16/2007.
 const FRAMEWORK = [
   { id: 'evsi', name: 'Educational Vision & School Improvement', icon: '🎯', color: '#0d9488', bg: '#ccfbf1',
     competencies: [
       { id: 'evsi-1', name: 'Articulating & Communicating School Vision', levels: ['awareness','practitioner','advanced','lead'],
-        materials: { awareness:[{id:'evsi1-aw-1',type:'reading',name:'Cambridge School Leader Standards 2019 — Vision & Direction',duration:'25 min'},{id:'evsi1-aw-2',type:'video',name:'What Makes a Compelling School Vision?',duration:'12 min'}], practitioner:[{id:'evsi1-pr-1',type:'activity',name:'Draft a vision statement for your school aligned to Cambridge values',duration:'45 min'}], advanced:[{id:'evsi1-ad-1',type:'activity',name:'Present the school vision to a staff or parent audience and gather feedback',duration:'60 min'}], lead:[{id:'evsi1-ld-1',type:'activity',name:'Lead a whole-school vision review and renewal process',duration:'1 term'}] }},
+        materials: { awareness:[{id:'evsi1-aw-1',type:'reading',name:'Read & Reflect: Articulating Your School Vision',duration:'1-2 weeks'}], practitioner:[{id:'evsi1-pr-1',type:'activity',name:'Run a 12-week Vision Embedding Pilot in your remit',duration:'1 term'}], advanced:[{id:'evsi1-ad-1',type:'activity',name:'Lead a Vision Coherence Audit across 3+ departments',duration:'8-10 weeks'}], lead:[{id:'evsi1-ld-1',type:'activity',name:'Design a multi-year Vision Review Cycle policy',duration:'6-9 months'}] }},
       { id: 'evsi-2', name: 'School Improvement Planning & Monitoring', levels: ['awareness','practitioner','advanced','lead'],
         materials: { awareness:[{id:'evsi2-aw-1',type:'reading',name:'School Development Planning: A Practical Guide',duration:'20 min'}], practitioner:[{id:'evsi2-pr-1',type:'activity',name:'Contribute to writing one section of the School Development Plan',duration:'60 min'}], advanced:[{id:'evsi2-ad-1',type:'activity',name:'Design a monitoring cycle for one SDP priority and report progress',duration:'45 min'}], lead:[{id:'evsi2-ld-1',type:'activity',name:'Lead the full SDP cycle from drafting to mid-year review',duration:'1 term'}] }},
       { id: 'evsi-3', name: 'Cambridge School Evaluation & Self-Review', levels: ['practitioner','advanced','lead'],
         materials: { practitioner:[{id:'evsi3-pr-1',type:'reading',name:'Cambridge Self-Evaluation Framework for Schools',duration:'30 min'},{id:'evsi3-pr-2',type:'activity',name:'Complete a self-review using Cambridge Centre requirements checklist',duration:'90 min'}], advanced:[{id:'evsi3-ad-1',type:'activity',name:'Write a school self-evaluation report with improvement priorities',duration:'2 hours'}], lead:[{id:'evsi3-ld-1',type:'activity',name:'Lead the school through a Cambridge re-accreditation process',duration:'1 term'}] }},
       { id: 'evsi-4', name: 'Leading Change & Sustaining Improvement', levels: ['advanced','lead'],
-        materials: { advanced:[{id:'evsi4-ad-1',type:'reading',name:'Leading Change in Complex Organisations',duration:'35 min'}], lead:[{id:'evsi4-ld-1',type:'activity',name:'Lead implementation of a significant school improvement initiative through a full cycle',duration:'1 term'}] }},
+        materials: { advanced:[{id:'evsi4-ad-1',type:'activity',name:'Lead one significant change initiative through 4 EEF stages',duration:'1 academic year'}], lead:[{id:'evsi4-ld-1',type:'activity',name:'Design + run a school-wide Change Portfolio system',duration:'1 academic year'}] }},
+      { id: 'evsi-5', name: 'AI-Era Strategic Planning & Institutional Maturity', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'evsi5-pr-1',type:'activity',name:'Complete AICF Part 3 Institutional Maturity self-assessment',duration:'2-3 weeks'}], advanced:[{id:'evsi5-ad-1',type:'activity',name:'Draft + launch a 3-4 page School AI Strategy',duration:'6-8 weeks'}], lead:[{id:'evsi5-ld-1',type:'activity',name:'Publish annual AI Integration Report + mentor 2 peer principals',duration:'1 academic year'}] }},
     ]},
   { id: 'cial', name: 'Curriculum, Instruction & Assessment Leadership', icon: '📚', color: '#2563eb', bg: '#dbeafe',
     competencies: [
@@ -1000,8 +1002,10 @@ const FRAMEWORK = [
         materials: { practitioner:[{id:'cial2-pr-1',type:'reading',name:'Effective Lesson Observation Frameworks',duration:'20 min'},{id:'cial2-pr-2',type:'activity',name:'Conduct 3 structured lesson observations using an evidence tool',duration:'3 lessons'}], advanced:[{id:'cial2-ad-1',type:'activity',name:'Deliver post-observation coaching feedback to 3 teachers',duration:'3 sessions'}], lead:[{id:'cial2-ld-1',type:'activity',name:'Train coordinators on observation and feedback quality',duration:'90 min'}] }},
       { id: 'cial-3', name: 'Assessment Data Analysis & Use', levels: ['awareness','practitioner','advanced','lead'],
         materials: { awareness:[{id:'cial3-aw-1',type:'reading',name:'Introduction to School Data Analysis',duration:'25 min'}], practitioner:[{id:'cial3-pr-1',type:'activity',name:'Analyse your school\'s EASE results and write a 1-page summary',duration:'45 min'}], advanced:[{id:'cial3-ad-1',type:'activity',name:'Write a Cambridge results analysis report with improvement recommendations',duration:'60 min'}], lead:[{id:'cial3-ld-1',type:'activity',name:'Facilitate a whole-staff data review session and agree next steps',duration:'90 min'}] }},
-      { id: 'cial-4', name: 'Value-Added Measurement & Impact Evaluation', levels: ['advanced','lead'],
-        materials: { advanced:[{id:'cial4-ad-1',type:'reading',name:'Value-Added Measures in Education',duration:'30 min'},{id:'cial4-ad-2',type:'activity',name:'Build a termly data review protocol for your academic team',duration:'60 min'}], lead:[{id:'cial4-ld-1',type:'activity',name:'Calculate and present value-added scores to senior leadership',duration:'90 min'}] }},
+      { id: 'cial-4', name: 'Assessment Systems & Moderation Leadership', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'cial4-ad-1',type:'activity',name:'Build internal assessment moderation system (kappa 0.7+)',duration:'1 academic year'}], lead:[{id:'cial4-ld-1',type:'activity',name:'Contribute to Eduversal network EASE moderation calibration',duration:'1 academic year'}] }},
+      { id: 'cial-5', name: 'Coursework Integrity & GenAI Assessment Policy', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'cial5-pr-1',type:'activity',name:'Brief coursework supervisors on Cambridge GenAI Policy 2024',duration:'6-8 weeks'}], advanced:[{id:'cial5-ad-1',type:'activity',name:'Publish unified Assessment Integrity Policy + redesign AI-resistant task',duration:'1 academic year'}], lead:[{id:'cial5-ld-1',type:'activity',name:'Publish annual Coursework Integrity Report + mentor 2 peers',duration:'1 academic year'}] }},
     ]},
   { id: 'pdpc', name: 'People Development & Professional Capacity', icon: '🌱', color: '#16a34a', bg: '#dcfce7',
     competencies: [
@@ -1012,7 +1016,9 @@ const FRAMEWORK = [
       { id: 'pdpc-3', name: 'Coaching & Mentoring Teachers', levels: ['advanced','lead'],
         materials: { advanced:[{id:'pdpc3-ad-1',type:'reading',name:'Coaching Models for Instructional Leaders',duration:'30 min'},{id:'pdpc3-ad-2',type:'activity',name:'Conduct 4 coaching conversations with developing teachers',duration:'4 sessions'}], lead:[{id:'pdpc3-ld-1',type:'activity',name:'Formally mentor a new coordinator over one full term',duration:'1 term'}] }},
       { id: 'pdpc-4', name: 'Building a Professional Learning Culture', levels: ['advanced','lead'],
-        materials: { advanced:[{id:'pdpc4-ad-1',type:'reflection',name:'Evaluate your school\'s professional learning culture and identify 3 gaps',duration:'45 min'}], lead:[{id:'pdpc4-ld-1',type:'activity',name:'Lead a school-wide initiative to strengthen professional learning culture',duration:'1 term'}] }},
+        materials: { advanced:[{id:'pdpc4-ad-1',type:'activity',name:'Build PLC architecture + psychological safety + recognise 4-6 CoPs',duration:'1 academic year'}], lead:[{id:'pdpc4-ld-1',type:'activity',name:'Contribute Indonesian-context culture playbook to network',duration:'1 academic year'}] }},
+      { id: 'pdpc-5', name: 'AI-Literacy CPD & Staff Capability Building', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'pdpc5-pr-1',type:'activity',name:'Map staff on AICF Teacher Tier + design 6-month strand',duration:'1 term'}], advanced:[{id:'pdpc5-ad-1',type:'activity',name:'Run differentiated AI-literacy CPD across subject + role groups',duration:'1 academic year'}], lead:[{id:'pdpc5-ld-1',type:'activity',name:'Host cross-network AI-literacy CPD + UNESCO case study',duration:'1 academic year'}] }},
     ]},
   { id: 'ewsc', name: 'Equity, Wellbeing & School Culture', icon: '🤝', color: '#d97706', bg: '#fef3c7',
     competencies: [
@@ -1022,8 +1028,10 @@ const FRAMEWORK = [
         materials: { awareness:[{id:'ewsc2-aw-1',type:'reading',name:'Student Wellbeing in Schools: Evidence Guide',duration:'25 min'}], practitioner:[{id:'ewsc2-pr-1',type:'activity',name:'Conduct a student wellbeing survey and write a summary report',duration:'2 hours'}], advanced:[{id:'ewsc2-ad-1',type:'activity',name:'Design a school wellbeing strategy with measurable outcomes',duration:'90 min'}], lead:[{id:'ewsc2-ld-1',type:'activity',name:'Lead the annual review and update of the school wellbeing strategy',duration:'1 term'}] }},
       { id: 'ewsc-3', name: 'Safeguarding & Student Safety Governance', levels: ['awareness','practitioner','advanced','lead'],
         materials: { awareness:[{id:'ewsc3-aw-1',type:'reading',name:'Safeguarding in International Schools: Key Responsibilities',duration:'25 min'}], practitioner:[{id:'ewsc3-pr-1',type:'activity',name:'Complete designated safeguarding lead training',duration:'1 day'}], advanced:[{id:'ewsc3-ad-1',type:'activity',name:'Conduct a safeguarding audit and produce an action plan',duration:'2 hours'}], lead:[{id:'ewsc3-ld-1',type:'activity',name:'Lead school safeguarding review and reporting to governance',duration:'ongoing'}] }},
-      { id: 'ewsc-4', name: 'Positive School Culture & Climate', levels: ['practitioner','advanced','lead'],
-        materials: { practitioner:[{id:'ewsc4-pr-1',type:'reading',name:'Positive Behaviour for Learning: School-Wide Frameworks',duration:'20 min'}], advanced:[{id:'ewsc4-ad-1',type:'activity',name:'Design a positive behaviour policy and implementation plan',duration:'60 min'}], lead:[{id:'ewsc4-ld-1',type:'activity',name:'Lead a school-wide culture review and community engagement process',duration:'1 term'}] }},
+      { id: 'ewsc-4', name: 'School Climate, Values & Community Identity', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'ewsc4-pr-1',type:'activity',name:'Embed values into 2-3 routines + use IIRP restorative practice',duration:'1 academic year'}], advanced:[{id:'ewsc4-ad-1',type:'activity',name:'Build school-wide climate architecture (training + measurement)',duration:'1 academic year'}], lead:[{id:'ewsc4-ld-1',type:'activity',name:'Publish Indonesian-context climate playbook + mentor 2 peers',duration:'1 academic year'}] }},
+      { id: 'ewsc-5', name: 'Anti-Bullying, Safeguarding & SKB 7 Menteri Compliance', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'ewsc5-pr-1',type:'activity',name:'Rebuild TPPK team + brief SKB 7 Menteri 2026 + 5Rights AI Code',duration:'1 academic year'}], advanced:[{id:'ewsc5-ad-1',type:'activity',name:'Publish unified Safeguarding Policy + independent audit',duration:'1 academic year'}], lead:[{id:'ewsc5-ld-1',type:'activity',name:'Network anti-bullying contribution + Indonesian-context playbook',duration:'1 academic year'}] }},
     ]},
   { id: 'eao', name: 'Ethics, Accountability & Operations', icon: '⚖️', color: '#7c3aed', bg: '#ede9fe',
     competencies: [
@@ -1033,8 +1041,10 @@ const FRAMEWORK = [
         materials: { practitioner:[{id:'eao2-pr-1',type:'reading',name:'Preparing for External Inspections: BAN-S/M & Cambridge',duration:'30 min'}], advanced:[{id:'eao2-ad-1',type:'activity',name:'Conduct a mock inspection and produce a readiness report',duration:'half day'}], lead:[{id:'eao2-ld-1',type:'activity',name:'Lead school preparation for and through a formal inspection',duration:'1 term'}] }},
       { id: 'eao-3', name: 'Financial & Resource Stewardship', levels: ['awareness','practitioner','advanced'],
         materials: { awareness:[{id:'eao3-aw-1',type:'reading',name:'School Resource Management Principles',duration:'20 min'}], practitioner:[{id:'eao3-pr-1',type:'activity',name:'Manage a departmental budget for one term and report on variances',duration:'1 term'}], advanced:[{id:'eao3-ad-1',type:'activity',name:'Lead a school budget planning cycle and present to leadership',duration:'60 min'}] }},
-      { id: 'eao-4', name: 'Ethical Leadership & Professional Integrity', levels: ['awareness','practitioner','advanced','lead'],
-        materials: { awareness:[{id:'eao4-aw-1',type:'reading',name:'Permendiknas No.16/2007 — Kompetensi Kepribadian & Sosial Kepala Sekolah',duration:'25 min'}], practitioner:[{id:'eao4-pr-1',type:'reflection',name:'Self-assess against ethical leadership competencies and write a development plan',duration:'30 min'}], advanced:[{id:'eao4-ad-1',type:'activity',name:'Lead a staff conversation on professional ethics and accountability',duration:'60 min'}], lead:[{id:'eao4-ld-1',type:'activity',name:'Model ethical decision-making in a complex school scenario and debrief with team',duration:'ongoing'}] }},
+      { id: 'eao-4', name: 'Operational Management & Resource Stewardship', levels: ['practitioner','advanced','lead'],
+        materials: { practitioner:[{id:'eao4-pr-1',type:'activity',name:'Run reliable operational management aligned to SIP priorities',duration:'1 academic year'}], advanced:[{id:'eao4-ad-1',type:'activity',name:'Build operational architecture (budget + risk + ISO 27001 baseline)',duration:'1 academic year'}], lead:[{id:'eao4-ld-1',type:'activity',name:'Contribute operational playbook to Eduversal network',duration:'1 academic year'}] }},
+      { id: 'eao-5', name: 'CIS/WASC Self-Study & Accreditation Cycle Leadership', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'eao5-ad-1',type:'activity',name:'Build self-study team + write one full CIS Standard / WASC Section',duration:'12-16 weeks'}], lead:[{id:'eao5-ld-1',type:'activity',name:'Lead full accreditation cycle stage + serve as peer reviewer',duration:'12-18 months'}] }},
     ]},
   { id: 'fcep', name: 'Family, Community & External Partnerships', icon: '🌐', color: '#e11d48', bg: '#ffe4e6',
     competencies: [
@@ -1044,8 +1054,8 @@ const FRAMEWORK = [
         materials: { practitioner:[{id:'fcep2-pr-1',type:'activity',name:'Identify and contact one community or industry partner for a school project',duration:'45 min'}], advanced:[{id:'fcep2-ad-1',type:'activity',name:'Design and lead a community partnership programme',duration:'1 term'}], lead:[{id:'fcep2-ld-1',type:'activity',name:'Build and maintain 3 strategic external partnerships aligned to school vision',duration:'ongoing'}] }},
       { id: 'fcep-3', name: 'Cambridge Network & Inter-school Collaboration', levels: ['practitioner','advanced','lead'],
         materials: { practitioner:[{id:'fcep3-pr-1',type:'activity',name:'Participate in a Cambridge Network event or inter-school professional sharing session',duration:'3 hours'}], advanced:[{id:'fcep3-ad-1',type:'activity',name:'Co-design a cross-school professional learning initiative',duration:'1 term'}], lead:[{id:'fcep3-ld-1',type:'activity',name:'Lead an inter-school collaboration project and document impact',duration:'1 term'}] }},
-      { id: 'fcep-4', name: 'Local Regulatory Relationships (Dinas Pendidikan)', levels: ['awareness','practitioner','advanced'],
-        materials: { awareness:[{id:'fcep4-aw-1',type:'reading',name:'Navigating Indonesian Education Regulatory Requirements for International Schools',duration:'25 min'}], practitioner:[{id:'fcep4-pr-1',type:'activity',name:'Complete required regulatory reporting for one reporting period',duration:'1 day'}], advanced:[{id:'fcep4-ad-1',type:'activity',name:'Build a working relationship with Dinas Pendidikan representatives and document outcomes',duration:'ongoing'}] }},
+      { id: 'fcep-4', name: 'University Articulation & Student Pathway Partnerships', levels: ['advanced','lead'],
+        materials: { advanced:[{id:'fcep4-ad-1',type:'activity',name:'Build university articulation portfolio across 4 destination tiers',duration:'1 academic year'}], lead:[{id:'fcep4-ld-1',type:'activity',name:'Co-lead network-level university partnership + mentor 2 peers',duration:'1 academic year'}] }},
     ]},
 ];
 
