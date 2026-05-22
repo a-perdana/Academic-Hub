@@ -433,9 +433,7 @@
       transition: all 0.22s cubic-bezier(0.16,1,0.3,1);
       backdrop-filter: blur(12px); box-shadow: 0 4px 16px rgba(0,0,0,0.4); flex-shrink: 0;
     }
-    .fab-action-btn:hover { transform: scale(1.1); }
-    .fab-home:hover { background: #0d9488; border-color: #0d9488; box-shadow: 0 6px 22px rgba(13,148,136,0.55); color: #fff; }
-    .fab-feedback-btn { background: rgba(18,18,40,0.92); }
+    .fab-action-btn:hover { transform: scale(1.1); }.fab-feedback-btn { background: rgba(18,18,40,0.92); }
     .fab-feedback-btn:hover { background: #6c5ce7; border-color: #6c5ce7; box-shadow: 0 6px 22px rgba(108,92,231,0.55); color: #fff; }
     .fab-main {
       width: 54px; height: 54px; border-radius: 50%;
@@ -609,14 +607,6 @@
 <!-- FAB -->
 <div class="fab-container" id="fabContainer">
   <div class="fab-items">
-    <div class="fab-item">
-      <span class="fab-label">Back to Hub</span>
-      <a href="index.html" class="fab-action-btn fab-home" title="Back to Hub" aria-label="Back to Hub">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
-      </a>
-    </div>
     <div class="fab-item">
       <span class="fab-label">Feedback</span>
       <button class="fab-action-btn fab-feedback-btn" id="fabFeedbackBtn" aria-label="Send Feedback">

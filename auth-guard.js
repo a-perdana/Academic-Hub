@@ -188,6 +188,32 @@ function ahProfileComplete(profile) {
 // ── Page-access helpers ──────────────────────────────────────────
 // Pages that never get gated (auth flow + dashboard itself).
 const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting', 'settings']);
+
+// Dashboard slugs (2026-05-22) — read-only network panels surfaced cross-hub
+// from CH/TH navbars. AH-side gating relaxes here so non-AH users (TH-only
+// teachers, CH director/coordinator without an AH approval) can land on the
+// panel they were sent to, WITHOUT being prompted for an AH school + sub-role
+// or being shunted to /waiting. They still must clear the upstream gates:
+//   - Firebase Auth signed in
+//   - Email domain matches ACADEMIC_ALLOWED_DOMAINS (partner school or @eduversal.org)
+//   - users/{uid} doc readable
+// Approval (approval_status_academichub == 'approved') is required ONLY to
+// reach any non-dashboard AH surface. A TH-only teacher trying to load
+// academichub.eduversal.org/ ends up at /waiting just like before — the
+// approval gate still kicks in for the root index. The whitelist is
+// narrowly the 22 dashboard slugs and nothing else.
+const DASHBOARD_SLUGS = new Set([
+  'ease-1', 'ease-2', 'ease-3', 'a-ease-1', 'ease-analytics', 'ease-archive',
+  'cambridge-exams', 'cambridge-pathway', 'cambridge-school-quality',
+  'school-appraisals', 'school-self-appraisal', 'school-performance-kpi',
+  'accreditation-dashboard', 'network-audit', 'partner-schools', 'islamic-schools',
+  'student-survey', 'staff-survey', 'parent-survey',
+  'rapor-pendidikan-2025', 'ai-prompts',
+  'academic-standards', 'academic-standards-public',
+]);
+function onDashboardSlug() {
+  return DASHBOARD_SLUGS.has(currentPageKey());
+}
 const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
 
 // ── Pilot-system gating (per-school enrolment) ─────────────────────
@@ -886,7 +912,10 @@ onAuthStateChanged(auth, async (user) => {
   // the user's school and role declarations when reviewing pending
   // signups in console.html. Step 1.A migration (2026-05-02) made
   // schoolId required so same-school Firestore rules can scope reads.
-  if (!ahProfileComplete(profile)) {
+  //
+  // Skipped on dashboard slugs (2026-05-22) — visiting TH/CH user has no
+  // reason to declare an AH school/sub-role just to view a network panel.
+  if (!ahProfileComplete(profile) && !onDashboardSlug()) {
     const { schoolId, school, ah_sub_roles } = await promptForAhProfile(user, profile);
     await setDoc(userRef, { schoolId, school, ah_sub_roles }, { merge: true });
     profile.schoolId = schoolId;
@@ -895,9 +924,16 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // 7. Approval check (academic_admin bypasses — always approved)
+  //
+  // Dashboard exception (2026-05-22): if the current page is a whitelisted
+  // dashboard slug, skip the approval gate. TH-only teachers + CH HQ users
+  // without an AH approval reach the panel they were deeplinked to from
+  // their own hub's navbar, but cannot walk anywhere else in AH. The root
+  // index '/' is NOT in DASHBOARD_SLUGS, so loading academichub.eduversal.org/
+  // still funnels non-approved users to /waiting.
   const approvalStatus = profile[APPROVAL_KEY];
   const isAdminRole    = platformRole === 'academic_admin';
-  if (!isAdminRole && approvalStatus !== 'approved') {
+  if (!isAdminRole && approvalStatus !== 'approved' && !onDashboardSlug()) {
     const pathname  = window.location.pathname;
     const isWaiting = pathname === '/waiting' || pathname.endsWith('/waiting.html');
     if (!isWaiting) {
@@ -910,11 +946,15 @@ onAuthStateChanged(auth, async (user) => {
   // 8. Page-access check (sub-role gate via page_access_config)
   //    - admin bypasses
   //    - root '/' and explicit allow-list pages skip the check
+  //    - dashboard slugs (2026-05-22) skip the check too — see DASHBOARD_SLUGS
+  //      above for the rationale. TH-only visitors carry no ah_sub_roles, so
+  //      any non-empty visible_to[] on the dashboard page_access_config doc
+  //      would lock them out of the panel they were deeplinked to.
   //    - missing config doc => allow (back-compat)
   //    - cfg.hidden === true => deny (page hidden from every sub-role)
   //    - empty visible_to  => allow (open to every AH sub-role)
   //    - else: user must hold at least one matching ah_sub_role
-  if (platformRole !== 'academic_admin') {
+  if (platformRole !== 'academic_admin' && !onDashboardSlug()) {
     const pageKey = currentPageKey();
     if (pageKey && !PAGE_ACCESS_BYPASS.has(pageKey)) {
       const cfg = await getPageAccessConfig(db, pageKey);
