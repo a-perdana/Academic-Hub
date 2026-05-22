@@ -445,10 +445,17 @@ async function loadContent(compId, lvl) {
     if (snap.exists()) {
       const d = snap.data();
       _contentCache[key] = {
-        reading:        d.reading || '',
-        keyTakeaways:   Array.isArray(d.keyTakeaways) ? d.keyTakeaways : [],
-        selfAssessment: Array.isArray(d.selfAssessment) ? d.selfAssessment : [],
-        activity:       d.activity || null,
+        reading:           d.reading || '',
+        keyTakeaways:      Array.isArray(d.keyTakeaways) ? d.keyTakeaways : [],
+        selfAssessment:    Array.isArray(d.selfAssessment) ? d.selfAssessment : [],
+        activity:          d.activity || null,
+        // v3 enriched blocks — pass through if present
+        caseStudy:         d.caseStudy || null,
+        commonPitfalls:    Array.isArray(d.commonPitfalls) ? d.commonPitfalls : [],
+        reflectionPrompts: Array.isArray(d.reflectionPrompts) ? d.reflectionPrompts : [],
+        glossary:          Array.isArray(d.glossary) ? d.glossary : [],
+        relatedComps:      Array.isArray(d.relatedComps) ? d.relatedComps : [],
+        schemaVersion:     d.schemaVersion || 'v1',
       };
       return _contentCache[key];
     }
