@@ -276,6 +276,8 @@ body { padding-top: 62px; }
 @media (max-width: 768px) {
   .sf-toolbar { position: static; flex-wrap: wrap; }
   .sf-search { flex: 1 1 100%; }
+  .sf-level-chips { flex-wrap: wrap; }
+  .sf-divider { display: none; }
   .sf-count { margin-left: auto; }
 }
 
@@ -287,16 +289,25 @@ body { padding-top: 62px; }
 }
 .sf-empty.is-visible { display: block; }
 
-/* ─── LEVEL FILTER (kept from v1 — visual pills) ─── */
-.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; align-items: center; }
-.filter-label { font-size: 12px; font-weight: 600; color: var(--ink-3); }
+/* ─── LEVEL FILTER (icon-only pills, toolbar-embedded) ─── */
+.sf-level-chips { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
 .level-pill {
-  display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 50px;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; padding: 0; border-radius: 999px;
   border: 1.5px solid var(--border); background: var(--white);
-  font-size: 12px; font-weight: 600; color: var(--ink-2); cursor: pointer; transition: all .16s;
+  cursor: pointer; transition: all .16s; flex-shrink: 0;
+  font-family: 'DM Sans', sans-serif;
 }
-.level-pill .dot { width: 8px; height: 8px; border-radius: 50%; }
-.level-pill:hover, .level-pill.active { border-color: var(--accent); background: var(--accent-2); color: var(--accent); }
+.level-pill[data-filter="all"] {
+  width: auto; padding: 0 14px; font-size: 12px; font-weight: 600; color: var(--ink-2); height: 34px;
+}
+.level-pill .dot { width: 10px; height: 10px; border-radius: 50%; }
+.level-pill[data-filter="all"] .dot { width: 8px; height: 8px; }
+.level-pill:hover { border-color: var(--accent); background: var(--accent-2); }
+.level-pill.active { border-color: var(--accent); background: var(--accent-2); color: var(--accent); }
+.sf-divider {
+  width: 1px; height: 22px; background: var(--border); margin: 0 4px; flex-shrink: 0;
+}
 
 /* ─── DOMAIN GRID ───────────────────────────── */
 .domain-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
@@ -605,24 +616,22 @@ body { padding-top: 62px; }
     </div>
   </div>
 
-  <!-- FILTER TOOLBAR (search + domain chip) -->
+  <!-- FILTER TOOLBAR (single-line: search · level pills · domain icons · count) -->
   <div class="sf-toolbar" id="sfToolbar" hidden>
     <div class="sf-search">
       <span aria-hidden="true">🔎</span>
       <input id="sfSearch" type="search" placeholder="Search competency name, id or intent…" autocomplete="off" />
     </div>
+    <div class="sf-level-chips" role="group" aria-label="Filter by level">
+      <button class="level-pill active" data-filter="all" onclick="setLevelFilter('all',this)" title="All levels" aria-label="All levels"><span class="dot" style="background:#94a3b8;"></span> All</button>
+      <button class="level-pill" data-filter="awareness" onclick="setLevelFilter('awareness',this)" title="Awareness" aria-label="Awareness"><span class="dot" style="background:#0ea5e9;"></span></button>
+      <button class="level-pill" data-filter="practitioner" onclick="setLevelFilter('practitioner',this)" title="Practitioner" aria-label="Practitioner"><span class="dot" style="background:#f59e0b;"></span></button>
+      <button class="level-pill" data-filter="advanced" onclick="setLevelFilter('advanced',this)" title="Advanced" aria-label="Advanced"><span class="dot" style="background:#0d9488;"></span></button>
+      <button class="level-pill" data-filter="lead" onclick="setLevelFilter('lead',this)" title="Lead / Mentor" aria-label="Lead / Mentor"><span class="dot" style="background:#22c55e;"></span></button>
+    </div>
+    <span class="sf-divider" aria-hidden="true"></span>
     <div class="sf-chips" id="sfChips"></div>
     <div class="sf-count" id="sfCount"></div>
-  </div>
-
-  <!-- LEVEL FILTER (kept from v1 — visual pills) -->
-  <div class="filter-bar">
-    <span class="filter-label">Filter by level:</span>
-    <button class="level-pill active" data-filter="all" onclick="setLevelFilter('all',this)"><span class="dot" style="background:#94a3b8;"></span> All Levels</button>
-    <button class="level-pill" data-filter="awareness" onclick="setLevelFilter('awareness',this)"><span class="dot" style="background:#0ea5e9;"></span> Awareness</button>
-    <button class="level-pill" data-filter="practitioner" onclick="setLevelFilter('practitioner',this)"><span class="dot" style="background:#f59e0b;"></span> Practitioner</button>
-    <button class="level-pill" data-filter="advanced" onclick="setLevelFilter('advanced',this)"><span class="dot" style="background:#0d9488;"></span> Advanced</button>
-    <button class="level-pill" data-filter="lead" onclick="setLevelFilter('lead',this)"><span class="dot" style="background:#22c55e;"></span> Lead / Mentor</button>
   </div>
 
   <div class="section-title">
