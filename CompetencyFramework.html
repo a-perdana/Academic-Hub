@@ -121,7 +121,9 @@ body { padding-top: 62px; }
 }
 .section-title svg { width: 18px; height: 18px; color: var(--accent); }
 
-.levels-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+.levels-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+@media (max-width: 900px) { .levels-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .levels-grid { grid-template-columns: 1fr; } }
 .level-card { padding: 14px 16px; border-radius: 12px; border: 1.5px solid transparent; }
 .level-card.awareness { background: #f0f9ff; border-color: #bae6fd; }
 .level-card.practitioner { background: #fffbeb; border-color: #fde68a; }
