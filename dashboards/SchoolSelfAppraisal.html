@@ -8,8 +8,7 @@
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <script type="module" src="auth-guard.js"></script>
-<script src="dashboards/dashboard-header.js"></script>
-<style>
+    <style>
 /* Page-specific accent override (amber) + 5 domain colors used by the
    appraisal sidebar pills. Tokens, reset, base typography come from
    /base.css. */
@@ -23,7 +22,7 @@
   --d4:#4338ca; --d4-bg:#ede9fe; --d4-border:#c4b5fd;
   --d5:#0f766e; --d5-bg:#ccfbf1; --d5-border:#99f6e4;
 }
-body { padding-top: 62px; }
+body { }
 
 /* ===== LAYOUT ===== */
 .page-body { display:flex; min-height:calc(100vh - 62px); }
@@ -519,8 +518,6 @@ body { padding-top: 62px; }
 </style>
 </head>
 <body>
-<div id="navbarMount"></div>
-
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar">
     <div class="sidebar-section-label">Navigation</div>
@@ -1314,7 +1311,7 @@ function buildSidebar() {
 // ===== INIT =====
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   isAdmin = profile?.role_academichub === 'academic_admin';
-  /* navbar removed for dashboards — see dashboards/dashboard-header.js */
+
   await loadFramework();
   const appraisal = await findOrCreateAppraisal(profile);
   document.getElementById('pageLoading').style.display = 'none';

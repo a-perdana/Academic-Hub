@@ -16,8 +16,7 @@
         background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
         min-height: 100vh;
         padding: 20px;
-        padding-top: 62px;
-      }
+        }
       .container {
         max-width: 800px;
         margin: 0 auto;
@@ -495,11 +494,9 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
-  <script src="dashboards/dashboard-header.js"></script>
-  </head>
+    </head>
   <body>
-    <div id="navbarMount"></div>
-    <div class="container">
+<div class="container">
       <div class="header">
         <div class="logo">🔒</div>
         <h1>Network Security Assessment</h1>
@@ -667,7 +664,6 @@
     <script>
       // Shared navbar
       document.addEventListener("authReady", ({ detail: { user, profile } }) => {
-        /* navbar removed for dashboards — see dashboards/dashboard-header.js */
       });
 
       // Auth integration — show user badge once auth-guard.js fires authReady

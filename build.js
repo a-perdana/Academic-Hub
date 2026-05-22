@@ -294,21 +294,6 @@ if (fs.existsSync("schools_compact.js")) {
   fs.copyFileSync("schools_compact.js", "dist/schools_compact.js");
   console.log("Copied: schools_compact.js");
 }
-
-// Minimal standalone header for dashboards/ pages (2026-05-22). 22 dashboard
-// HTMLs reference this file instead of partials/navbar-loader.js — they're
-// read-only network panels surfaced cross-hub (CH/TH navbar deeplinks), so
-// the full AH navbar is hidden in favour of a logo + Sign-out bar.
-if (fs.existsSync(path.join("dashboards", "dashboard-header.js"))) {
-  if (!fs.existsSync(path.join("dist", "dashboards"))) {
-    fs.mkdirSync(path.join("dist", "dashboards"), { recursive: true });
-  }
-  fs.copyFileSync(
-    path.join("dashboards", "dashboard-header.js"),
-    path.join("dist", "dashboards", "dashboard-header.js")
-  );
-  console.log("Copied: dashboards/dashboard-header.js");
-}
 if (fs.existsSync("cambridge-crossref.js")) {
   fs.copyFileSync("cambridge-crossref.js", "dist/cambridge-crossref.js");
   console.log("Copied: cambridge-crossref.js");

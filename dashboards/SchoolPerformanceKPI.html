@@ -21,9 +21,7 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
-  <script src="dashboards/dashboard-header.js"></script>
-
-  <style>
+    <style>
     :root {
       --primary: #1a2332;
       --secondary: #2d4263;
@@ -55,8 +53,7 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       color: var(--primary);
-      padding-top: 62px;
-    }
+      }
 
     /* ── TOAST ── */
     #toastContainer { position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; }
@@ -413,8 +410,6 @@
   </style>
 </head>
 <body>
-<div id="navbarMount"></div>
-
 <!-- ─────────── TOAST ─────────── -->
 <div id="toastContainer"></div>
 
@@ -687,7 +682,7 @@ function sectionIcon(sec) {
 
 // ─── Auth Ready ───────────────────────────────────────────────
 document.addEventListener('authReady', async (e) => {
-  /* navbar removed for dashboards — see dashboards/dashboard-header.js */
+
   db          = window.db;
   currentUser = window.currentUser;
   userProfile = window.userProfile;

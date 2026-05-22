@@ -57,8 +57,7 @@
       min-height: 100vh;
       font-size: 14px;
       line-height: 1.6;
-      padding-top: 62px;
-    }
+      }
 
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -672,11 +671,8 @@
     }
   </style>
   <script type="module" src="auth-guard.js"></script>
-  <script src="dashboards/dashboard-header.js"></script>
-</head>
+    </head>
 <body>
-<div id="navbarMount"></div>
-
 <div id="app" style="display:none">
 
   <!-- Header -->
@@ -2033,7 +2029,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 // ─── Auth ──────────────────────────────────────────────────────────────────
 
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-  /* navbar removed for dashboards — see dashboards/dashboard-header.js */
+
   document.getElementById('app').style.display = 'block';
   document.getElementById('user-name').textContent = user.displayName || user.email;
 
