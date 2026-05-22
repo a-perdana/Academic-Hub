@@ -145,13 +145,15 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 ## Build & Deployment
 
 `node build.js` → `dist/`. What it does:
-1. Reads source `.html` files
+1. Reads source `.html` files (some live under `dashboards/` — see below)
 2. Substitutes `__FIREBASE_*__` + `__CLAUDE_API_KEY__` placeholders
 3. Strips `<script src="firebase-config.js">`
 4. Rewrites internal `.html` href → clean URLs (`AcademicCalendar.html` → `/academic-calendar`). **NB:** `rewriteLinks()` only handles `href="..."` and `window.location.href = "..."` string literals — template literals like `` `/learning-path?comp=${id}` `` must use the absolute clean URL path directly.
-5. Writes `dist/<slug>.html`
+5. Writes `dist/<slug>.html` (flat — output is always at dist root regardless of source subfolder)
 6. Copies `auth-guard.js`, `schools_compact.js`, `images/`, `Sections/`
 7. Generates `dist/_redirects` for Vercel routing
+
+**Source organisation (2026-05-22):** 22 dashboard HTML files live under `dashboards/` for IDE clarity (EASE results, Cambridge dashboards, KPI/appraisal/survey panels, accreditation/network audit, Rapor Pendidikan, AcademicStandards). URLs + clean slugs + `page_access_config` doc IDs **UNCHANGED** — `cleanUrls` and `BASE_CSS_SKIP` are keyed by basename so the folder prefix is invisible to the build pipeline downstream. `htmlFiles` entries carry the `dashboards/<File>.html` prefix; `fileBase = path.basename(file)` is used for the lookups.
 
 **Vercel env vars:** `FIREBASE_API_KEY`, `FIREBASE_AUTH_DOMAIN`, `FIREBASE_PROJECT_ID`, `FIREBASE_STORAGE_BUCKET`, `FIREBASE_MESSAGING_SENDER_ID`, `FIREBASE_APP_ID`, `CLAUDE_API_KEY` (for AIPrompts.html).
 

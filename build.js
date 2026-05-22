@@ -139,6 +139,10 @@ if (!fs.existsSync("dist")) {
 }
 
 // -- HTML files to process
+// Dashboard pages live in dashboards/ for source-code organisation (22 files,
+// 2026-05-22). URLs / slugs / page_access_config doc IDs UNCHANGED — only the
+// source path differs. cleanUrls + BASE_CSS_SKIP are keyed by basename so the
+// folder prefix is invisible to the build pipeline downstream.
 const htmlFiles = [
   "index.html",
   "login.html",
@@ -148,31 +152,31 @@ const htmlFiles = [
   "library.html",
   "documents.html",
   "messageboard.html",
-  "AcademicStandards.html",
-  "AcademicStandardsDynamic.html",
-  "CambridgeExamsDashboard.html",
-  "CambridgePathwaySimulator.html",
-  "IslamicSchoolsPerformance.html",
-  "PartnerSchoolsPerformance.html",
-  "SchoolAppraisalsDashboard.html",
-  "SchoolSelfAppraisal.html",
-  "StaffSatisfactionSurvey.html",
-  "StudentSatisfactionSurvey.html",
-  "ParentSatisfactionSurvey.html",
-  "EASE-Archive.html",
-  "EASE-I-AssessmentResults.html",
-  "EASE-II-AssessmentResults.html",
-  "EASE-III-AssessmentResults.html",
-  "A-EASE-I-AssessmentResults.html",
+  "dashboards/AcademicStandards.html",
+  "dashboards/AcademicStandardsDynamic.html",
+  "dashboards/CambridgeExamsDashboard.html",
+  "dashboards/CambridgePathwaySimulator.html",
+  "dashboards/IslamicSchoolsPerformance.html",
+  "dashboards/PartnerSchoolsPerformance.html",
+  "dashboards/SchoolAppraisalsDashboard.html",
+  "dashboards/SchoolSelfAppraisal.html",
+  "dashboards/StaffSatisfactionSurvey.html",
+  "dashboards/StudentSatisfactionSurvey.html",
+  "dashboards/ParentSatisfactionSurvey.html",
+  "dashboards/EASE-Archive.html",
+  "dashboards/EASE-I-AssessmentResults.html",
+  "dashboards/EASE-II-AssessmentResults.html",
+  "dashboards/EASE-III-AssessmentResults.html",
+  "dashboards/A-EASE-I-AssessmentResults.html",
   "academic-calendar.html",
   "SchoolEvents.html",
-  "AccreditationDashboard.html",
+  "dashboards/AccreditationDashboard.html",
   "AIPrompts.html",
-  "SchoolPerformanceKPI.html",
-  "EASE-Analytics.html",
-  "SchoolNetworkAudit.html",
-  "CambridgeSchoolQuality.html",
-  "RaporPendidikan2025.html",
+  "dashboards/SchoolPerformanceKPI.html",
+  "dashboards/EASE-Analytics.html",
+  "dashboards/SchoolNetworkAudit.html",
+  "dashboards/CambridgeSchoolQuality.html",
+  "dashboards/RaporPendidikan2025.html",
   "weekly-checklist.html",
   "CurriculumMap.html",
   "teacher-kpi-evaluation.html",
@@ -221,6 +225,10 @@ const BASE_CSS_SKIP = new Set(["login.html", "waiting.html"]);
 
 htmlFiles.forEach((file) => {
   if (!fs.existsSync(file)) return;
+  // Source path may carry a folder prefix (e.g. "dashboards/Foo.html").
+  // cleanUrls + BASE_CSS_SKIP are keyed by basename — strip the prefix
+  // for those lookups while keeping `file` itself for fs.readFileSync.
+  const fileBase = path.basename(file);
   let html = fs.readFileSync(file, "utf8");
 
   // 1. Replace Firebase placeholders
@@ -234,7 +242,7 @@ htmlFiles.forEach((file) => {
   // 1b. Inject /base.css before the first <style> tag (or before </head>).
   //     Absolute path — relative paths fail from clean URL routes like
   //     /school-performance-kpi. Skip if already linked or auth-flow page.
-  if (!BASE_CSS_SKIP.has(file) && !html.includes('href="/base.css"') && !html.includes("href='/base.css'")) {
+  if (!BASE_CSS_SKIP.has(fileBase) && !html.includes('href="/base.css"') && !html.includes("href='/base.css'")) {
     const baseLink = '  <link rel="stylesheet" href="/base.css">\n';
     if (/<style[\s>]/.test(html)) {
       html = html.replace(/(\s*<style[\s>])/, `\n${baseLink}$1`);
@@ -255,7 +263,7 @@ htmlFiles.forEach((file) => {
   // a plain substring of the filename. Mirrors the CH 1200d81 fix —
   // CSS/JS comments referencing the filename fool a loose substring
   // check, leaving chips rendered but unclickable.
-  if (file !== 'index.html' && file !== 'login.html' && file !== 'waiting.html' &&
+  if (fileBase !== 'index.html' && fileBase !== 'login.html' && fileBase !== 'waiting.html' &&
       !/<script\s[^>]*src=["']\/?cambridge-crossref\.js["']/.test(html)) {
     const closeIdx = html.lastIndexOf('</body>');
     if (closeIdx >= 0) {
@@ -269,7 +277,7 @@ htmlFiles.forEach((file) => {
   //    correct path (e.g. cambridge-pathway.html -> /cambridge-pathway).
   //    Files whose slug matches their base name (e.g. announcements.html)
   //    are unaffected; index.html stays index.html.
-  const slug = cleanUrls[file];
+  const slug = cleanUrls[fileBase];
   const destName = slug === "" ? "index.html" : `${slug}.html`;
   fs.writeFileSync(path.join("dist", destName), html);
   console.log(`Processed: ${file} -> dist/${destName}`);
