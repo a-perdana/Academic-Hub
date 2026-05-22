@@ -21,7 +21,7 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
-  <script src="partials/navbar-loader.js"></script>
+  <script src="dashboards/dashboard-header.js"></script>
 
   <style>
     :root {
@@ -687,7 +687,7 @@ function sectionIcon(sec) {
 
 // ─── Auth Ready ───────────────────────────────────────────────
 document.addEventListener('authReady', async (e) => {
-  window.__loadAcademicNavbar('', { user: e.detail.user, profile: e.detail.profile });
+  /* navbar removed for dashboards — see dashboards/dashboard-header.js */
   db          = window.db;
   currentUser = window.currentUser;
   userProfile = window.userProfile;

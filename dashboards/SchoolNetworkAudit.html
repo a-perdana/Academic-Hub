@@ -495,7 +495,7 @@
     };
   </script>
   <script type="module" src="auth-guard.js"></script>
-  <script src="partials/navbar-loader.js"></script>
+  <script src="dashboards/dashboard-header.js"></script>
   </head>
   <body>
     <div id="navbarMount"></div>
@@ -667,7 +667,7 @@
     <script>
       // Shared navbar
       document.addEventListener("authReady", ({ detail: { user, profile } }) => {
-        window.__loadAcademicNavbar('', { user, profile });
+        /* navbar removed for dashboards — see dashboards/dashboard-header.js */
       });
 
       // Auth integration — show user badge once auth-guard.js fires authReady

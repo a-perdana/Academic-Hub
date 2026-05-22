@@ -18,7 +18,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
-    <script src="partials/navbar-loader.js"></script>
+    <script src="dashboards/dashboard-header.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
@@ -739,7 +739,7 @@
     <div id="navbarMount"></div>
     <script>
       document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-        window.__loadAcademicNavbar('', { user, profile });
+        /* navbar removed for dashboards — see dashboards/dashboard-header.js */
       });
     </script>
     <div class="dashboard-header">

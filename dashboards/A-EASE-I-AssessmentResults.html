@@ -16,7 +16,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
-  <script src="partials/navbar-loader.js"></script>
+  <script src="dashboards/dashboard-header.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -31,7 +31,7 @@
   <div id="root"></div>
   <script>
     document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-      window.__loadAcademicNavbar('', { user, profile });
+      /* navbar removed for dashboards — see dashboards/dashboard-header.js */
     });
   </script>
 

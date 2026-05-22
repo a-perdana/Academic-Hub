@@ -18,7 +18,7 @@
       };
     </script>
     <script type="module" src="auth-guard.js"></script>
-    <script src="partials/navbar-loader.js"></script>
+    <script src="dashboards/dashboard-header.js"></script>
     <!-- Public page: Firebase initialised inline below for Firestore writes. -->
     <script type="module">
       import { initializeApp, getApps }
@@ -54,7 +54,7 @@
     <div id="root"></div>
     <script>
       document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-        window.__loadAcademicNavbar('', { user, profile });
+        /* navbar removed for dashboards — see dashboards/dashboard-header.js */
       });
     </script>
     <script type="text/babel">
