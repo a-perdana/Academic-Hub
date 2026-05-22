@@ -233,14 +233,15 @@ body { padding-top: 62px; }
 .level-card.lead .level-card-name { color: #15803d; }
 .level-card-desc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
 
-/* ─── FILTER TOOLBAR (CH-parallel: search + domain chips) ─── */
+/* ─── FILTER TOOLBAR (CH-parallel: sticky · search + icon-only domain chips) ─── */
 .sf-toolbar {
-  display: flex; flex-wrap: nowrap; gap: 12px; align-items: center;
+  display: flex; flex-wrap: nowrap; gap: 10px; align-items: center;
   background: var(--white); border: 1px solid var(--border); border-radius: 12px;
   padding: 10px 14px; margin-bottom: 16px; box-shadow: var(--shadow-sm);
+  position: sticky; top: 70px; z-index: 50;
 }
 .sf-search {
-  flex: 0 0 240px; display: flex; align-items: center; gap: 8px;
+  flex: 1 1 0; min-width: 200px; display: flex; align-items: center; gap: 8px;
   border: 1px solid var(--border); border-radius: 8px; padding: 7px 12px;
   background: var(--paper);
 }
@@ -250,15 +251,18 @@ body { padding-top: 62px; }
 }
 .sf-chips {
   display: flex; flex-wrap: nowrap; gap: 6px;
-  flex: 1 1 0; min-width: 0; overflow-x: auto; scrollbar-width: thin;
+  flex: 0 0 auto;
 }
-.sf-chips::-webkit-scrollbar { height: 4px; }
-.sf-chips::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+/* Icon-only domain chips — 32px squares; "All" stays as a text pill */
 .sf-chip {
-  font-size: 12px; padding: 6px 11px; border-radius: 999px;
+  font-size: 12px; padding: 6px 12px; border-radius: 999px;
   border: 1px solid var(--border); background: var(--white); color: var(--ink-2);
-  cursor: pointer; font-weight: 500; transition: all .15s ease;
+  cursor: pointer; font-weight: 600; transition: all .15s ease;
   font-family: 'DM Sans', sans-serif; white-space: nowrap; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.sf-chip[data-domain]:not([data-domain="all"]) {
+  width: 34px; height: 34px; padding: 0; font-size: 15px; line-height: 1;
 }
 .sf-chip:hover { background: var(--accent-2); color: var(--accent-dk); border-color: var(--accent-2); }
 .sf-chip.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -268,10 +272,11 @@ body { padding-top: 62px; }
 .sf-chip[data-color="dom-amber"].is-active  { background: #d97706; border-color: #d97706; }
 .sf-chip[data-color="dom-rose"].is-active   { background: #e11d48; border-color: #e11d48; }
 .sf-chip[data-color="dom-teal"].is-active   { background: #0d9488; border-color: #0d9488; }
-.sf-count { font-size: 11px; color: var(--ink-3); margin-left: auto; flex-shrink: 0; }
+.sf-count { font-size: 11px; color: var(--ink-3); margin-left: 4px; flex-shrink: 0; white-space: nowrap; }
 @media (max-width: 768px) {
-  .sf-toolbar { flex-wrap: wrap; }
+  .sf-toolbar { position: static; flex-wrap: wrap; }
   .sf-search { flex: 1 1 100%; }
+  .sf-count { margin-left: auto; }
 }
 
 .sf-empty {
@@ -804,8 +809,8 @@ function renderFilters(fw) {
   if (!chipsEl || !toolbar) return;
   const domains = Array.isArray(fw.domains) ? fw.domains : [];
   chipsEl.innerHTML =
-    `<button type="button" class="sf-chip is-active" data-domain="all">All</button>` +
-    domains.map(d => `<button type="button" class="sf-chip" data-domain="${escAttr(d.id)}" data-color="${escAttr(d.color || '')}">${escHtml(d.icon || '')} ${escHtml(d.name)}</button>`).join('');
+    `<button type="button" class="sf-chip is-active" data-domain="all" title="Show all domains">All</button>` +
+    domains.map(d => `<button type="button" class="sf-chip" data-domain="${escAttr(d.id)}" data-color="${escAttr(d.color || '')}" title="${escAttr(d.name)}" aria-label="${escAttr(d.name)}">${escHtml(d.icon || '•')}</button>`).join('');
   chipsEl.addEventListener('click', e => {
     const btn = e.target.closest('.sf-chip');
     if (!btn) return;
