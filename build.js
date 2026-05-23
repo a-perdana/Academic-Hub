@@ -490,6 +490,25 @@ if (navEditSrc) {
   }
 });
 
+// competency-framework.css — 3-hub byte-identical CSS partial (cf-legend
+// popover + domain-takeaways accordion). Source-of-truth lives in
+// monorepo-root /shared-design/competency-framework.css. Same local-then-
+// shared fallback as references-viewer. Linked from CompetencyFramework.html
+// at dist root (build.js's link rewrite maps PascalCase to kebab-case URL,
+// so the dist file lands at /competency-framework.css and the HTML links it).
+{
+  const name   = "competency-framework.css";
+  const local  = name;
+  const shared = path.join("..", "shared-design", name);
+  const src    = fs.existsSync(local) ? local : (fs.existsSync(shared) ? shared : null);
+  if (src) {
+    fs.copyFileSync(src, path.join("dist", name));
+    console.log(`Copied: ${src} -> dist/${name}`);
+  } else {
+    console.warn(`WARNING: ${name} not found locally or in shared-design/`);
+  }
+}
+
 // -- Copy static assets
 if (fs.existsSync("images")) {
   copyDirRecursive("images", "dist/images");
