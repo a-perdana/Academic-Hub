@@ -661,7 +661,7 @@ body::before {
 
   <div class="section-title">
     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM14 11a1 1 0 011 1v1h1a1 1 0 110 2h-1v1a1 1 0 11-2 0v-1h-1a1 1 0 110-2h1v-1a1 1 0 011-1z"/></svg>
-    The Six Domains
+    <span id="domainsTitle">The Six Domains</span>
   </div>
 
   <!-- EMPTY STATE -->
@@ -879,7 +879,18 @@ function renderDomains(fw) {
   }
   const colorMap = { 'dom-teal':'#0d9488','dom-blue':'#2563eb','dom-green':'#16a34a','dom-amber':'#d97706','dom-purple':'#7c3aed','dom-rose':'#e11d48' };
 
-  grid.innerHTML = (fw.domains || []).map((d, idx) => {
+  // Dynamic section title — domain count drives "The Six/Seven Domains"
+  // (3-hub parity with CH + TH).
+  const dList = fw.domains || [];
+  const titleEl = document.getElementById('domainsTitle');
+  if (titleEl) {
+    const wordMap = { 6: 'Six', 7: 'Seven', 8: 'Eight', 9: 'Nine', 10: 'Ten' };
+    titleEl.textContent = wordMap[dList.length]
+      ? `The ${wordMap[dList.length]} Domains`
+      : 'Competency Domains';
+  }
+
+  grid.innerHTML = dList.map((d, idx) => {
     const comps = compsByDomain[d.id] || [];
     const earnedInDomain = comps.filter(c => earned[c.id]?.level).length;
     const pct = comps.length ? Math.round((earnedInDomain / comps.length) * 100) : 0;
@@ -978,7 +989,7 @@ function renderDomains(fw) {
         <div class="domain-card-header">
           <div class="domain-icon">${escHtml(d.icon || '•')}</div>
           <div class="domain-info">
-            <div class="domain-label">Domain ${idx + 1}</div>
+            <div class="domain-label">Domain ${idx + 1} · ${escHtml(d.id.toUpperCase())}</div>
             <div class="domain-name">${escHtml(d.name)}</div>
           </div>
         </div>
