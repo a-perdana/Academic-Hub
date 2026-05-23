@@ -316,22 +316,77 @@ if (acadCalSrc) {
   console.warn("WARNING: academic-calendar-readonly.js not found in local or shared-design/");
 }
 
-// Indonesian statutory references (PIGP + SKL) — fetched at runtime by
-// cambridge-crossref.js when the user clicks an SKL or PIGP chip. Source
-// JSONs live in monorepo-root docs/research/permendiknas/.
-const researchSrcDir  = path.join("..", "docs", "research", "permendiknas");
-const researchDestDir = path.join("dist", "research", "permendiknas");
+// Indonesian statutory references — fetched at runtime by
+// cambridge-crossref.js when the user clicks a PIGP / SKL / PMD chip.
+// Local-first / monorepo-fallback (Vercel only checks out the AH repo so
+// the monorepo's docs/research is unreachable from there — local mirror
+// under resources/research/permendiknas/ has to exist for production).
+const researchSrcLocal    = path.join(__dirname, "resources", "research", "permendiknas");
+const researchSrcMonorepo = path.join("..", "docs", "research", "permendiknas");
+const researchSrcDir      = fs.existsSync(researchSrcLocal) ? researchSrcLocal : researchSrcMonorepo;
+const researchDestDir     = path.join("dist", "research", "permendiknas");
 if (fs.existsSync(researchSrcDir)) {
   fs.mkdirSync(researchDestDir, { recursive: true });
-  ["no-27-2010-pigp.json", "no-10-2025-skl.json"].forEach(name => {
-    const src = path.join(researchSrcDir, name);
-    if (fs.existsSync(src)) {
+  ["no-27-2010-pigp.json", "no-10-2025-skl.json", "no-16-2007.json"].forEach(name => {
+    // Try chosen src first, then the other path as per-file fallback
+    const tryPaths = [path.join(researchSrcDir, name)];
+    if (researchSrcDir !== researchSrcMonorepo) tryPaths.push(path.join(researchSrcMonorepo, name));
+    if (researchSrcDir !== researchSrcLocal)    tryPaths.push(path.join(researchSrcLocal, name));
+    const src = tryPaths.find(p => fs.existsSync(p));
+    if (src) {
       fs.copyFileSync(src, path.join(researchDestDir, name));
       console.log(`Copied: dist/research/permendiknas/${name}`);
     } else {
-      console.warn(`WARNING: ${name} not found in docs/research/permendiknas/`);
+      console.warn(`WARNING: ${name} not found in docs/research/permendiknas/ or local mirror`);
     }
   });
+}
+
+// Cambridge research archive (CSLS chip popovers in CompetencyFramework
+// + AppraisalEntry) — same local-first / monorepo-fallback pattern.
+const cambridgeSrcLocal    = path.join(__dirname, "resources", "research", "cambridge");
+const cambridgeSrcMonorepo = path.join("..", "docs", "research", "cambridge");
+const cambridgeSrcDir      = fs.existsSync(cambridgeSrcLocal) ? cambridgeSrcLocal : cambridgeSrcMonorepo;
+const cambridgeDestDir     = path.join("dist", "research", "cambridge");
+if (fs.existsSync(cambridgeSrcDir)) {
+  fs.mkdirSync(cambridgeDestDir, { recursive: true });
+  ["school-leader-standards-2023.json"].forEach(name => {
+    const tryPaths = [path.join(cambridgeSrcDir, name)];
+    if (cambridgeSrcDir !== cambridgeSrcMonorepo) tryPaths.push(path.join(cambridgeSrcMonorepo, name));
+    if (cambridgeSrcDir !== cambridgeSrcLocal)    tryPaths.push(path.join(cambridgeSrcLocal, name));
+    const src = tryPaths.find(p => fs.existsSync(p));
+    if (src) {
+      fs.copyFileSync(src, path.join(cambridgeDestDir, name));
+      console.log(`Copied: dist/research/cambridge/${name}`);
+    } else {
+      console.warn(`WARNING: ${name} not found in docs/research/cambridge/ or local mirror`);
+    }
+  });
+}
+
+// AICF reference layer (chip popovers + reader pages). Same pattern.
+const aicfSrcLocal    = path.join(__dirname, "resources", "research", "eduversal", "ai-competency-framework");
+const aicfSrcMonorepo = path.join("..", "docs", "research", "eduversal", "ai-competency-framework");
+const aicfSrcDir      = fs.existsSync(aicfSrcLocal) ? aicfSrcLocal : aicfSrcMonorepo;
+const aicfDestDir     = path.join("dist", "research", "eduversal", "ai-competency-framework");
+if (fs.existsSync(aicfSrcDir)) {
+  fs.mkdirSync(aicfDestDir, { recursive: true });
+  const manifestSrc = path.join(aicfSrcDir, "manifest.json");
+  if (fs.existsSync(manifestSrc)) {
+    fs.copyFileSync(manifestSrc, path.join(aicfDestDir, "manifest.json"));
+    console.log(`Copied: dist/research/eduversal/ai-competency-framework/manifest.json`);
+  }
+  const aicfReferenceSrc  = path.join(aicfSrcDir,  "reference");
+  const aicfReferenceDest = path.join(aicfDestDir, "reference");
+  if (fs.existsSync(aicfReferenceSrc)) {
+    fs.mkdirSync(aicfReferenceDest, { recursive: true });
+    fs.readdirSync(aicfReferenceSrc).filter(n => n.endsWith(".json")).forEach(name => {
+      fs.copyFileSync(path.join(aicfReferenceSrc, name), path.join(aicfReferenceDest, name));
+      console.log(`Copied: dist/research/eduversal/ai-competency-framework/reference/${name}`);
+    });
+  } else {
+    console.warn(`WARNING: reference/ subdir not found in ${aicfSrcDir} — AICF chip popovers will degrade gracefully.`);
+  }
 }
 
 // Eduversal Academic Standards manifest + blurbs — fetched at runtime by

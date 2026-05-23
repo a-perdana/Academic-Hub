@@ -911,15 +911,26 @@ function renderDomains(fw) {
         const text = ((c.cambridgeStandardTexts || []).find(t => t.ref === r) || {}).text || '';
         return `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)}${text ? ' — ' + escAttr(text) : ''}">CSLS ${escHtml(r)}</span>`;
       }).join('');
+      // Capitalize PMD + prettify AICF for chip display.
+      const capPmd = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
+      const prettyAicf = (s) => {
+        const parts = String(s).split('.');
+        return parts.map(part => {
+          const m = part.match(/^domain([A-Z])$/i);
+          if (m) return 'Domain ' + m[1].toUpperCase();
+          return part.charAt(0).toUpperCase() + part.slice(1).replace(/_/g, ' ');
+        }).join(' · ');
+      };
       const permChips = (c.permendiknasRefs || []).map(p => {
         const t = ((c.permendiknasTexts || []).find(x => x.pillar === p) || {});
-        return `<span class="perm-pill" title="Permendiknas No.16/2007 pillar — ${escAttr(t.label || p)}">${escHtml(t.label || p)}</span>`;
+        const display = t.label || `Kompetensi ${capPmd(p)}`;
+        return `<span class="perm-pill" data-pmd-ref="${escAttr(p)}" title="Permendiknas No.16/2007 — ${escAttr(display)}">${escHtml(display)}</span>`;
       }).join('');
       const esChips = (c.eduversalStandardRefs || []).slice(0, 5).map(e =>
         `<span class="es-pill" data-es-ref="${escAttr(e)}" title="Eduversal Academic Standards madde ${escAttr(e)}">ES ${escHtml(e)}</span>`
       ).join('');
       const aicfChips = (c.aicfRefs || []).slice(0, 4).map(a =>
-        `<span class="aicf-pill" data-aicf-ref="${escAttr(a)}" title="AI Competency Framework block ${escAttr(a)}">AICF</span>`
+        `<span class="aicf-pill" data-aicf-ref="${escAttr(a)}" title="AICF · ${escAttr(a)}">AICF · ${escHtml(prettyAicf(a))}</span>`
       ).join('');
       const pedChips = (c.pedagogyRefs || []).slice(0, 3).map(p =>
         `<span class="ped-pill" title="${escAttr(p)}">📖 ${escHtml(shortPed(p))}</span>`
