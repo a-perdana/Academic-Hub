@@ -382,6 +382,7 @@ body::before {
   cursor: pointer; transition: all .15s;
 }
 .comp-item:hover { border-color: var(--dc, var(--accent)); background: var(--dc-soft, var(--accent-2)); }
+.comp-item:focus-visible { outline: 2px solid var(--dc, var(--accent)); outline-offset: 2px; }
 .comp-item[hidden] { display: none !important; }
 .comp-check { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid var(--border); background: #fff; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
 .comp-check.earned { background: #22c55e; border-color: #22c55e; }
@@ -884,6 +885,18 @@ window.setLevelFilter = (f, btn) => {
   applyFilter();
 };
 window.goToPath = (id) => { window.location.href = `/learning-path?comp=${id}`; };
+
+// Keyboard accessibility for comp-item — Tab to focus + Enter/Space to open
+// the Learning Path reader. Ports the CH commit de25898 a11y pattern so all
+// 3 hubs are WCAG 2.1 Level A keyboard-operable on the framework grid.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const row = e.target.closest?.('.comp-item');
+  if (!row) return;
+  e.preventDefault();
+  const id = row.dataset.compId;
+  if (id) window.goToPath(id);
+});
 window.toggleTakeaways = (toggleEl) => { toggleEl.closest('.domain-card').classList.toggle('tk-open'); };
 
 // ─── Domain + competency render ────────────────────────────
@@ -938,7 +951,8 @@ function renderDomains(fw) {
              data-domain-id="${escAttr(c.domainId)}"
              data-levels="${escAttr(levelsStr)}"
              data-search="${escAttr(searchBlob)}"
-             onclick="goToPath('${escAttr(c.id)}')">
+             onclick="goToPath('${escAttr(c.id)}')"
+             role="link" tabindex="0" title="Open in Learning Path">
           <div class="comp-check ${isEarned ? 'earned' : ''}">
             <svg viewBox="0 0 12 12" fill="currentColor"><path d="M10 3L5 9 2 6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </div>
