@@ -283,6 +283,12 @@ The `leaders` track of the 3-track Cambridge competency system (root CLAUDE.md "
 
 ## Important Conventions
 
+- **AH source filenames are PascalCase, NOT kebab-case** (legacy AH convention — CH + TH ship kebab-case). Every dashboard / CPD / appraisal page is `PascalCaseName.html` (e.g. `CompetencyFramework.html`, `LearningPath.html`, `MyPortfolio.html`, `CambridgeExamsDashboard.html`, `TeacherAppraisalEntry.html`, `SchoolAppraisalsDashboard.html`, `EASE-I-AssessmentResults.html`, `SyllabusCoverage.html`, `RaporPendidikan2025.html`). `build.js`'s `cleanUrls` map translates the PascalCase basename to a kebab-case URL slug (`CompetencyFramework.html → /competency-framework`) so public URLs + `page_access_config` doc IDs + cross-hub links stay kebab-case + identical across hubs. **Implications:**
+  - When adding a new AH page, **use PascalCase** for the source file (matches the 22+ existing dashboards under `dashboards/` + the 4 CPD pages at root). Don't create `learning-path.html` — file is `LearningPath.html`.
+  - When `grep`/find-style searching, use the PascalCase form (`grep -l "..." CompetencyFramework.html`) — `competency-framework.html` will not match.
+  - Cross-hub diff between AH and CH/TH won't auto-rename-track because filenames differ. Trust the URL slug as the cross-hub identity, not the filename.
+  - `cleanUrls` map must list every new file — without an entry, the URL will fall back to `/FileName` instead of `/file-name`. Always pair source-file creation with a `cleanUrls` entry.
+  - There are a handful of legacy kebab-case files in AH (`teacher-kpi-evaluation.html`, `principal-observation-entry.html`, `principal-360-respond.html`, etc.) — these are intentional exceptions, mostly pages added later when the PascalCase convention was already starting to feel like baggage. New code should still default to PascalCase for parity with the surrounding 22+ files.
 - **Modular SDK v10 only.** Never compat (`firebase.firestore()`).
 - **`createdAt` not `timestamp`.**
 - **Never commit `firebase-config.js`** — gitignored.
