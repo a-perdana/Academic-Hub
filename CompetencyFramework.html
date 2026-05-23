@@ -391,7 +391,7 @@ body::before {
 .comp-body { flex: 1; min-width: 0; }
 .comp-name { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.35; }
 .comp-intent { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; margin-top: 2px; }
-.comp-meta-row { display: flex; align-items: center; gap: 6px; margin-top: 4px; flex-wrap: wrap; }
+.comp-meta-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; margin-bottom: 2px; flex-wrap: wrap; }
 .comp-level-badge { display: inline-flex; padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 700; }
 .comp-arrow { color: var(--ink-3); flex-shrink: 0; padding-top: 4px; }
 .comp-arrow svg { width: 14px; height: 14px; }
@@ -401,19 +401,26 @@ body::before {
 .lvl-advanced { background: #ccfbf1; color: #0f766e; }
 .lvl-lead { background: #dcfce7; color: #15803d; }
 
-/* ─── 4 reference-system chips per competency + pedagogy ─── */
-.comp-chips { display: flex; flex-wrap: wrap; gap: 4px 5px; margin-top: 5px; }
-.csls-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 6px; background: #ccfbf1; color: #0f766e; border-radius: 4px; font-weight: 600; white-space: nowrap; cursor: help; }
+/* ─── 4 reference-system chips per competency + pedagogy (3-group org 2026-05-23) ─── */
+.comp-chips { display: flex; flex-wrap: wrap; gap: 6px 0; margin-top: 5px; }
+.chip-group { display: inline-flex; flex-wrap: wrap; gap: 4px 5px; align-items: center; }
+.chip-group-divider {
+  padding-right: 10px; margin-right: 6px;
+  border-right: 1px dashed #e2e8f0;
+}
+/* Group A — Cambridge anchor (primary, bold, solid) */
+.csls-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 7px; background: #ccfbf1; color: #0f766e; border-radius: 4px; font-weight: 700; white-space: nowrap; cursor: help; }
+/* Group B — Indonesian + Eduversal + AI (secondary, normal weight) */
 .perm-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 6px; background: #fef3c7; color: #92400e; border-radius: 4px; font-weight: 600; white-space: nowrap; cursor: help; }
 .es-pill   { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 6px; background: #cffafe; color: #0e7490; border-radius: 4px; font-weight: 600; white-space: nowrap; cursor: help; }
 .aicf-pill { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 6px; background: #ffedd5; color: #c2410c; border-radius: 4px; font-weight: 600; white-space: nowrap; cursor: help; }
+/* Group C — Research bibliography (tertiary, outlined/ghost) */
 .ped-pill  {
-  font-size: 10px; padding: 2px 6px; background: #e2e8f0; color: #475569;
-  border-radius: 4px; font-weight: 500;
-  max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  cursor: help;
+  font-size: 10px; padding: 2px 6px; background: transparent; color: #64748b;
+  border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 500;
+  white-space: nowrap; cursor: help;
 }
-.ped-pill:hover { max-width: none; }
+.ped-pill:hover { background: #f1f5f9; color: #334155; border-color: #94a3b8; }
 
 /* ─── DOMAIN TAKEAWAYS (kept from v1) ──── */
 .domain-takeaways { padding: 0 20px 16px; border-top: 1px solid var(--border); margin-top: 4px; }
@@ -923,24 +930,44 @@ function renderDomains(fw) {
       const displayLevel = lvl ? LEVEL_LABEL[lvl] : LEVEL_LABEL[(c.levels || [])[0] || 'awareness'];
       const levelClass = lvl ? `lvl-${lvl}` : `lvl-${(c.levels || [])[0] || 'awareness'}`;
 
-      const csls = (c.cambridgeStandardRefs || []).slice(0, 4).map(r => {
+      // Pedagogy chip short-form: "Robinson 2008 — Student-Centred Leadership"
+      // → "Robinson 2008". Long titles trimmed to ≤22 chars + ellipsis. Full
+      // text preserved in the title attribute (hover reveals).
+      const shortPed = (s) => {
+        const cleaned = String(s).split(/[—–-]\s/)[0].trim();
+        return cleaned.length > 22 ? cleaned.slice(0, 20) + '…' : cleaned;
+      };
+
+      // 3-group chip organisation (2026-05-23 redesign):
+      //   Group A — Cambridge anchor (primary, bold)
+      //   Group B — Indonesian + Eduversal + AI (secondary)
+      //   Group C — Research bibliography (tertiary, outlined, short-form)
+      // Visual separator between groups via .chip-group + .chip-group-divider.
+      const cslsChips = (c.cambridgeStandardRefs || []).slice(0, 4).map(r => {
         const text = ((c.cambridgeStandardTexts || []).find(t => t.ref === r) || {}).text || '';
         return `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)}${text ? ' — ' + escAttr(text) : ''}">CSLS ${escHtml(r)}</span>`;
       }).join('');
-      const perms = (c.permendiknasRefs || []).map(p => {
+      const permChips = (c.permendiknasRefs || []).map(p => {
         const t = ((c.permendiknasTexts || []).find(x => x.pillar === p) || {});
         return `<span class="perm-pill" title="Permendiknas No.16/2007 pillar — ${escAttr(t.label || p)}">${escHtml(t.label || p)}</span>`;
       }).join('');
-      const esRefs = (c.eduversalStandardRefs || []).slice(0, 5).map(e =>
+      const esChips = (c.eduversalStandardRefs || []).slice(0, 5).map(e =>
         `<span class="es-pill" data-es-ref="${escAttr(e)}" title="Eduversal Academic Standards madde ${escAttr(e)}">ES ${escHtml(e)}</span>`
       ).join('');
-      const aicfRefs = (c.aicfRefs || []).slice(0, 4).map(a =>
+      const aicfChips = (c.aicfRefs || []).slice(0, 4).map(a =>
         `<span class="aicf-pill" data-aicf-ref="${escAttr(a)}" title="AI Competency Framework block ${escAttr(a)}">AICF</span>`
       ).join('');
-      const pedRefs = (c.pedagogyRefs || []).slice(0, 3).map(p =>
-        `<span class="ped-pill" title="${escAttr(p)}">📖 ${escHtml(p)}</span>`
+      const pedChips = (c.pedagogyRefs || []).slice(0, 3).map(p =>
+        `<span class="ped-pill" title="${escAttr(p)}">📖 ${escHtml(shortPed(p))}</span>`
       ).join('');
-      const chips = csls + perms + esRefs + aicfRefs + pedRefs;
+
+      const groupA = cslsChips;
+      const groupB = permChips + esChips + aicfChips;
+      const groupC = pedChips;
+      const groups = [groupA, groupB, groupC].filter(Boolean);
+      const chips = groups
+        .map((g, i) => `<span class="chip-group${i < groups.length - 1 ? ' chip-group-divider' : ''}">${g}</span>`)
+        .join('');
 
       const searchBlob = (c.id + ' ' + c.name + ' ' + (c.intent || '')).toLowerCase();
       const levelsStr = (c.levels || []).join(',');
