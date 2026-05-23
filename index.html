@@ -4132,7 +4132,7 @@
         // schoolId) keep full visibility. Missing field = all enabled.
         // Publishes window.__pilotEnabledSystems + __pilotHiddenCardIds
         // so the category renderer can apply collection-level pilot gates.
-        if (profile.role_academichub !== 'academic_admin' && profile.schoolId) {
+        if (profile.role_academichub !== 'academic_admin' && profile.schoolId && profile.schoolId !== 'eduversal_hq') {
           try {
             const { doc: fsDoc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
             const sSnap = await getDoc(fsDoc(db, 'partner_schools', profile.schoolId));
