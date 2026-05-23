@@ -905,11 +905,14 @@ function renderDomains(fw) {
       const displayLevel = lvl ? LEVEL_LABEL[lvl] : LEVEL_LABEL[(c.levels || [])[0] || 'awareness'];
       const levelClass = lvl ? `lvl-${lvl}` : `lvl-${(c.levels || [])[0] || 'awareness'}`;
 
-      // Pedagogy chip short-form: "Robinson 2008 — Student-Centred Leadership"
-      // → "Robinson 2008". Long titles trimmed to ≤22 chars + ellipsis. Full
-      // text preserved in the title attribute (hover reveals).
+      // Pedagogy chip short-form: smart truncation.
+      //   "Robinson 2008 — Student-Centred Leadership"     → "Robinson 2008"
+      //   "EASE growth model (Rasch-lite scoring)"          → "EASE growth model"
+      //   "Cambridge candidate-tracker authentication 2024" → "Cambridge candidate-tracker…"
+      // Strip em/en-dash suffix, strip trailing parenthetical, then ellipsize ≥22 chars.
       const shortPed = (s) => {
-        const cleaned = String(s).split(/[—–-]\s/)[0].trim();
+        let cleaned = String(s).split(/[—–]\s/)[0].trim();
+        cleaned = cleaned.replace(/\s*\([^)]*\)\s*$/, '').trim();
         return cleaned.length > 22 ? cleaned.slice(0, 20) + '…' : cleaned;
       };
 
@@ -922,15 +925,24 @@ function renderDomains(fw) {
         const text = ((c.cambridgeStandardTexts || []).find(t => t.ref === r) || {}).text || '';
         return `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)}${text ? ' — ' + escAttr(text) : ''}">CSLS ${escHtml(r)}</span>`;
       }).join('');
-      // Capitalize PMD + prettify AICF for chip display.
       const capPmd = (s) => String(s).charAt(0).toUpperCase() + String(s).slice(1);
-      const prettyAicf = (s) => {
+      // AICF compact display: refId "teacher.foundation.domainA" → "Domain A"
+      //   (audience + level demoted to title attribute to keep chip width
+      //   manageable — full breakdown still surfaces on hover/popover).
+      const prettyAicfFull = (s) => {
         const parts = String(s).split('.');
         return parts.map(part => {
           const m = part.match(/^domain([A-Z])$/i);
           if (m) return 'Domain ' + m[1].toUpperCase();
           return part.charAt(0).toUpperCase() + part.slice(1).replace(/_/g, ' ');
         }).join(' · ');
+      };
+      const compactAicf = (s) => {
+        const parts = String(s).split('.');
+        const last = parts[parts.length - 1] || '';
+        const domainMatch = last.match(/^domain([A-Z])$/i);
+        if (domainMatch) return 'Domain ' + domainMatch[1].toUpperCase();
+        return last.charAt(0).toUpperCase() + last.slice(1).replace(/_/g, ' ');
       };
       const permChips = (c.permendiknasRefs || []).map(p => {
         const t = ((c.permendiknasTexts || []).find(x => x.pillar === p) || {});
@@ -941,7 +953,7 @@ function renderDomains(fw) {
         `<span class="es-pill" data-es-ref="${escAttr(e)}" title="Eduversal Academic Standards madde ${escAttr(e)}">ES ${escHtml(e)}</span>`
       ).join('');
       const aicfChips = (c.aicfRefs || []).slice(0, 4).map(a =>
-        `<span class="aicf-pill" data-aicf-ref="${escAttr(a)}" title="AICF · ${escAttr(a)}">AICF · ${escHtml(prettyAicf(a))}</span>`
+        `<span class="aicf-pill" data-aicf-ref="${escAttr(a)}" title="AICF · ${escAttr(prettyAicfFull(a))} (${escAttr(a)})">AICF · ${escHtml(compactAicf(a))}</span>`
       ).join('');
       const pedChips = (c.pedagogyRefs || []).slice(0, 3).map(p =>
         `<span class="ped-pill" title="${escAttr(p)}">📖 ${escHtml(shortPed(p))}</span>`
