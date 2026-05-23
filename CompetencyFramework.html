@@ -693,46 +693,10 @@ const LEVEL_LABEL = {
   lead: 'Lead / Mentor',
 };
 
-// Per-domain key takeaways (page-local — ESL B1-B2, written for AH leadership audience).
-// Used by the takeaways accordion at the bottom of each domain card.
-const DOMAIN_TAKEAWAYS = {
-  evsi: [
-    "Communicate the school vision consistently so every teacher connects daily work to strategic direction.",
-    "Lead evidence-informed improvement planning with goals, indicators, and monitoring cycles.",
-    "Use Cambridge SEF + CIS/WASC self-study as a continuous improvement engine, not a one-time review.",
-    "Position your school on the AICF Institutional Maturity ladder and act on the lowest two domains.",
-  ],
-  cial: [
-    "Ensure curriculum coherence across year groups; close vertical-alignment gaps.",
-    "Run lesson observation + structured feedback that produces measurable teaching-quality improvement.",
-    "Analyse Cambridge results data against benchmarks; turn findings into named teaching interventions.",
-    "Govern the Cambridge GenAI Coursework Policy 2024 — undeclared substantive AI use voids qualifications.",
-  ],
-  pdpc: [
-    "Run development-focused appraisal that produces measurable teacher growth, not a compliance ritual.",
-    "Build a strategic CPD programme anchored to EEF Effective PD 2024 mechanisms — not one-off workshops.",
-    "Embed peer coaching (Kraft 2018: +0.49 SD instruction, +0.18 SD achievement).",
-    "Move staff up the AICF Teacher Tier (Foundation → Practitioner → Leader) with differentiated AI-literacy CPD.",
-  ],
-  ewsc: [
-    "Embed inclusive education practices that respect Indonesia's cultural and linguistic diversity.",
-    "Establish proactive student wellbeing monitoring and clear safeguarding governance.",
-    "Run TPPK team + 24-hour reporting routine to the Permendikdasmen 46/2023 + 6/2026 standard.",
-    "Align Cambridge SL 1.2 + PPKSP + SKB 7 Menteri 2026 + international benchmark in one Safeguarding Policy.",
-  ],
-  eao: [
-    "Maintain Cambridge centre compliance; lead accreditation with documented evidence.",
-    "Navigate the 2026 Indonesian regulatory wave — Permendikdasmen 1/2026, 9/2026, SKB 7 Menteri 2026.",
-    "Model ethical decision-making and distributed accountability at every leadership level.",
-    "Lead the CIS/WASC self-study cycle as continuous improvement, not a one-off certification chase.",
-  ],
-  fcep: [
-    "Build consistent, two-way communication with families as genuine partners in learning.",
-    "Develop community + external partnerships that expand student opportunities.",
-    "Represent the school credibly in Cambridge networks; contribute to wider professional community.",
-    "Build university articulation + pathway partnerships that broaden student outcomes.",
-  ],
-};
+// Per-domain key takeaways moved into Firestore 2026-05-23 for 3-hub
+// parity with CH + TH. Read from framework.domainTakeaways[d.id] in
+// renderDomains() — the canonical source-of-truth is the seed at
+// scripts/competency/seed-ah-competency-framework.js.
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   if (window.__loadAcademicNavbar) {
@@ -995,7 +959,7 @@ function renderDomains(fw) {
         </div>`;
     }).join('');
 
-    const takeaways = DOMAIN_TAKEAWAYS[d.id] || [];
+    const takeaways = (fw.domainTakeaways && fw.domainTakeaways[d.id]) || [];
     const tkHtml = takeaways.map(t => `<div class="domain-tk-item">${escHtml(t)}</div>`).join('');
 
     return `
