@@ -19,12 +19,13 @@
       background: var(--paper);  /* canonical page bg */
       color: #1f2937;
     }
-    /* Canonical 1200px container so the read-only calendar mount
-       aligns with the canonical hero + footer above and below. */
+    /* Canonical body container: max 1200px + 40px lateral padding
+       (matches .page-hero__inner so hero text + calendar mount
+       share the same left edge). */
     #academic-calendar-mount {
-      max-width: 1200px;
+      max-width: var(--container-max, 1200px);
       margin: 0 auto;
-      padding: 28px 20px 80px;
+      padding: 28px 40px 80px;
     }
   </style>
 </head>

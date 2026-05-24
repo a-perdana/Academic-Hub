@@ -20,9 +20,13 @@ body {
 }
 
 /* ─── LAYOUT ──────────────────────────────────── */
+/* Canonical body container: max 1200px + 40px lateral padding
+   (matches .page-hero__inner so hero text + sidebar share the
+   same left edge). */
 .lib-layout {
-  max-width: 1200px; margin: 0 auto;
-  padding: 28px 20px 80px;
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
   display: grid; grid-template-columns: 220px minmax(0, 1fr);
   gap: 22px; align-items: start;
 }

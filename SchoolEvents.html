@@ -20,77 +20,69 @@
       background: var(--paper);
     }
 
-    .hero {
-      background: linear-gradient(130deg, #1a0a2e 0%, #2d1b4e 40%, #4a2d6e 72%, #6c5ce7 100%);
-      padding: 36px 40px 0; position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse at 8% 80%, rgba(108,92,231,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.04) 0%, transparent 45%);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 30%, rgba(108,92,231,0.4) 55%, rgba(255,255,255,0.12) 80%, transparent 100%);
-    }
-    .hero-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding-bottom: 28px; }
-    .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; margin-bottom: 8px; }
-    .hero-text .eyebrow {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
-      color: rgba(255,255,255,0.42); margin-bottom: 10px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .hero-text .eyebrow::before {
-      content: ''; display: inline-block; width: 18px; height: 1.5px;
-      background: rgba(108,92,231,0.7); border-radius: 2px; flex-shrink: 0;
-    }
-    .hero-text h1 {
-      font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 600;
-      color: #fff; line-height: 1.2; margin-bottom: 8px; letter-spacing: -0.01em;
-    }
-    .hero-text .sub { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
+    /* School pill sits in the hero (white-on-cyan) — readable on
+       both the canonical .page-hero cyan band and any future
+       accent. Inherits its own contrast palette. */
     .school-pill {
       display: inline-flex; align-items: center; gap: 6px;
       padding: 5px 12px; border-radius: 20px;
-      background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.32);
       font-size: 0.78rem; font-weight: 600; color: #fff; margin-top: 12px;
+      backdrop-filter: blur(2px);
     }
     .school-pill::before {
-      content: ''; width: 7px; height: 7px; border-radius: 50%; background: #a78bfa;
+      content: ''; width: 7px; height: 7px; border-radius: 50%; background: #ffffff;
     }
 
+    /* Year selector sits at the right end of the hero. */
     .year-select-wrap { display: flex; align-items: center; gap: 8px; }
-    .year-select-wrap label { font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+    .year-select-wrap label { font-size: 0.8rem; color: rgba(255,255,255,0.78); font-weight: 600; }
     .year-select {
-      padding: 6px 10px; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;
-      background: rgba(255,255,255,0.1); color: #fff;
+      padding: 6px 10px; border: 1px solid rgba(255,255,255,0.32); border-radius: 8px;
+      background: rgba(255,255,255,0.18); color: #fff;
       font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; outline: none;
+      backdrop-filter: blur(2px);
     }
-    .year-select option { background: #2d1b4e; color: #fff; }
+    .year-select option { background: #0e7490; color: #fff; }
 
+    /* Category filter bar — light surface, sits directly under the
+       hero. Canonical container width (1200px + 40px padding) so it
+       aligns with the body content below. */
+    .cat-tab-bar {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
     .cat-tabs {
+      max-width: var(--container-max, 1200px);
+      margin: 0 auto;
+      padding: 0 40px;
       display: flex; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; position: relative; z-index: 2;
+      scrollbar-width: none;
     }
     .cat-tabs::-webkit-scrollbar { display: none; }
     .cat-tab {
-      padding: 11px 22px; border: none; background: transparent;
+      padding: 12px 18px; border: none; background: transparent;
       font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
-      color: rgba(255,255,255,0.5); cursor: pointer;
-      border-radius: 10px 10px 0 0; transition: color 0.2s, background 0.2s;
+      color: var(--ink-3); cursor: pointer;
+      transition: color 0.16s, background 0.16s;
       position: relative; white-space: nowrap;
     }
     .cat-tab::after {
-      content: ''; position: absolute; bottom: 0; left: 14px; right: 14px; height: 2.5px;
-      background: rgba(255,255,255,0.2); border-radius: 2px 2px 0 0; transition: background 0.2s;
+      content: ''; position: absolute; bottom: 0; left: 12px; right: 12px; height: 2.5px;
+      background: transparent; border-radius: 2px 2px 0 0; transition: background 0.16s;
     }
-    .cat-tab:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
-    .cat-tab.active { color: #fff; background: rgba(255,255,255,0.1); font-weight: 700; }
-    .cat-tab.active::after { background: #a78bfa; }
+    .cat-tab:hover { color: var(--ink); background: var(--paper); }
+    .cat-tab.active { color: var(--accent); font-weight: 700; background: transparent; }
+    .cat-tab.active::after { background: var(--accent); }
 
-    .page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 72px; }
+    /* Canonical body container: max 1200px + 40px lateral padding
+       (matches .page-hero__inner so hero text + body content share
+       the same left edge). */
+    .page-wrap {
+      max-width: var(--container-max, 1200px);
+      margin: 0 auto;
+      padding: 28px 40px 72px;
+    }
 
     .filter-bar-ev {
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
@@ -447,37 +439,38 @@
 
 <div id="navbarMount"></div>
 
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-top">
-      <div class="hero-text">
-        <div class="eyebrow">My School</div>
-        <h1>School Events</h1>
-        <p class="sub">Activities and events at your school. Add what you have planned and HQ + your leadership team can monitor at a glance.</p>
-        <div class="school-pill" id="schoolPill" style="display:none"></div>
-      </div>
-      <div class="year-select-wrap" id="yearSelectWrap" style="display:none">
-        <label for="yearSelect">Year</label>
-        <select class="year-select" id="yearSelect">
-          <option value="2025">2025</option>
-          <option value="2026" selected>2026</option>
-          <option value="2027">2027</option>
-        </select>
-      </div>
+<header class="page-hero" data-accent="cyan" aria-label="School Events header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My School</div>
+      <h1 class="page-hero__title">School Events</h1>
+      <p class="page-hero__desc">Activities and events at your school. Add what you have planned and HQ + your leadership team can monitor at a glance.</p>
+      <div class="school-pill" id="schoolPill" style="display:none"></div>
     </div>
-    <nav class="cat-tabs" id="catTabs">
-      <button class="cat-tab active" data-cat="all">All Events</button>
-      <button class="cat-tab" data-cat="workshop">Workshop</button>
-      <button class="cat-tab" data-cat="open_day">Open Day</button>
-      <button class="cat-tab" data-cat="fair">Fair</button>
-      <button class="cat-tab" data-cat="sports">Sports</button>
-      <button class="cat-tab" data-cat="cultural">Cultural</button>
-      <button class="cat-tab" data-cat="academic">Academic</button>
-      <button class="cat-tab" data-cat="ceremony">Ceremony</button>
-      <button class="cat-tab" data-cat="other">Other</button>
-    </nav>
+    <div class="year-select-wrap" id="yearSelectWrap" style="display:none">
+      <label for="yearSelect">Year</label>
+      <select class="year-select" id="yearSelect">
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+    </div>
   </div>
-</section>
+</header>
+
+<div class="cat-tab-bar">
+  <nav class="cat-tabs" id="catTabs" aria-label="Event category filter">
+    <button class="cat-tab active" data-cat="all">All Events</button>
+    <button class="cat-tab" data-cat="workshop">Workshop</button>
+    <button class="cat-tab" data-cat="open_day">Open Day</button>
+    <button class="cat-tab" data-cat="fair">Fair</button>
+    <button class="cat-tab" data-cat="sports">Sports</button>
+    <button class="cat-tab" data-cat="cultural">Cultural</button>
+    <button class="cat-tab" data-cat="academic">Academic</button>
+    <button class="cat-tab" data-cat="ceremony">Ceremony</button>
+    <button class="cat-tab" data-cat="other">Other</button>
+  </nav>
+</div>
 
 <div class="page-wrap">
 
