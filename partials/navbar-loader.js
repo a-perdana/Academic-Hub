@@ -763,6 +763,8 @@ const NAV_ITEMS = [
     { key: 'team-induction',                     href: '/team-induction',                     label: 'Team Induction' },
   ]},
   { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
+    // Start here — orientation page
+    { key: 'my-hub-read-me',       href: '/my-hub-read-me',       label: 'Read Me First' },
     // My CPD + Induction (weekly-checklist + team-induction moved to School Leaders 2026-05-21)
     { key: 'learning-path',        href: '/learning-path',        label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',         label: 'My Portfolio' },
