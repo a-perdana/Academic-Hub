@@ -8,11 +8,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/base.css">
   <link rel="stylesheet" href="references-viewer.css">
   <script src="firebase-config.js"></script>
   <script src="references-viewer.js" defer></script>
   <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
   <style>
+    /* References belongs to Knowledge family — mor accent.
+       Hero markup is <header class="page-hero" data-accent="mor">.
+       Canonical hero CSS lives in base.css; tokens in tokens.css.
+       See docs/architecture/DESIGN_SYSTEM.md "Page families". */
     :root {
       --accent: #6c5ce7; --accent-dk: #4e3db8; --accent-2: #ddd6fe;
       --cyan: #0891b2;
@@ -21,35 +26,17 @@
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
-    body { padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+    body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
 
-    .ref-hero {
-      max-width: 1180px; margin: 28px auto 0; padding: 36px 32px 28px;
-      background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
-      color: #fff; border-radius: 18px; position: relative; overflow: hidden;
-      box-shadow: 0 18px 40px -22px rgba(15,23,42,0.5);
+    /* Page-specific helper: <code> inline in hero description stays tinted */
+    .page-hero p code, .page-hero__desc code {
+      background: rgba(255,255,255,.12); padding: 1px 6px;
+      border-radius: 3px; color: #ddd6fe;
+      font-family: 'DM Mono', monospace; font-size: 11.5px;
     }
-    .ref-hero::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 88% 18%, rgba(108,92,231,0.32) 0%, transparent 55%),
-        radial-gradient(circle at 12% 92%, rgba(8,145,178,0.18) 0%, transparent 55%);
-      pointer-events: none;
-    }
-    .ref-hero > * { position: relative; z-index: 1; }
-    .ref-eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.62);
-      letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px;
-    }
-    .ref-eyebrow::before { content: ''; width: 22px; height: 2px; background: var(--accent); border-radius: 2px; }
-    .ref-title { font-family: 'Lora', serif; font-size: 2.1rem; font-weight: 600; line-height: 1.2; margin: 0 0 8px; }
-    .ref-subtitle { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 720px; line-height: 1.55; }
-    .ref-meta { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 18px; font-size: 12px; color: rgba(255,255,255,0.62); }
-    .ref-meta strong { color: rgba(255,255,255,0.92); font-weight: 600; }
 
     .ref-tabs {
-      max-width: 1180px; margin: 18px auto 0; padding: 0 8px;
+      max-width: 1200px; margin: 18px auto 0; padding: 0 40px;
       display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--border);
     }
     .ref-tab {
@@ -62,7 +49,7 @@
     .ref-tab.active { color: var(--accent-dk); border-bottom-color: var(--accent); }
     .ref-tab .count { display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px; font-size: 11px; font-weight: 700; background: var(--accent-2); color: var(--accent-dk); }
 
-    .ref-panel { max-width: 1180px; margin: 0 auto; padding: 24px 24px 80px; }
+    .ref-panel { max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
     .ref-panel:not(.active) { display: none; }
     .ref-intro { font-size: 13px; color: var(--ink-2); margin-bottom: 22px; max-width: 880px; line-height: 1.6; }
     .ref-intro code { background: #f3f4f6; padding: 1px 6px; border-radius: 4px; font-size: 12px; font-family: 'DM Mono', monospace; }
@@ -159,7 +146,6 @@
     .doc-error { background: #fee2e2; color: #991b1b; padding: 14px 18px; border-radius: 10px; font-size: 13px; }
 
     @media (max-width: 720px) {
-      .ref-hero { margin: 16px 12px 0; padding: 24px 20px 22px; }
       .ref-tabs { padding: 0 12px; }
       .ref-panel { padding: 20px 14px 60px; }
       .ref-grid { grid-template-columns: 1fr; }
@@ -169,15 +155,30 @@
 <body style="display:none">
   <div id="navbarMount"></div>
 
-  <header class="ref-hero">
-    <div class="ref-eyebrow">Academic Hub · Frameworks &amp; standards reference</div>
-    <h1 class="ref-title">References</h1>
-    <p class="ref-subtitle">
-      The frameworks, Cambridge standards and Indonesian regulations that anchor school leadership at Eduversal partner schools — appraisal, principal coaching, leadership competency and weekly checklists. Read-only.
-    </p>
-    <div class="ref-meta">
-      <span><strong>Audience</strong> School Principal · Foundation Rep · Academic Coordinator · Cambridge Coordinator</span>
-      <span id="metaTotalDocs"><strong>Indexed</strong> —</span>
+  <header class="page-hero" data-accent="mor">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <div class="page-hero__eyebrow">Academic Hub · Frameworks &amp; standards reference</div>
+        <h1 class="page-hero__title">References</h1>
+        <p class="page-hero__desc">
+          The frameworks, Cambridge standards and Indonesian regulations that anchor school leadership at Eduversal partner schools — appraisal, principal coaching, leadership competency and weekly checklists. Read-only.
+        </p>
+      </div>
+      <div class="page-hero__kpis">
+        <div class="page-hero__kpi page-hero__kpi--primary">
+          <div class="page-hero__kpi-num" id="kpiTotalDocs">—</div>
+          <div class="page-hero__kpi-lbl">Indexed</div>
+          <div class="page-hero__kpi-sub">documents</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiFrameworks">—</div>
+          <div class="page-hero__kpi-lbl">Frameworks</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiCambridge">—</div>
+          <div class="page-hero__kpi-lbl">Cambridge + Permen</div>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -306,8 +307,12 @@
       renderGrid('cambridge',  MANIFEST.cambridge);
       renderGrid('permen',     MANIFEST.permen);
 
-      const total = MANIFEST.frameworks.length + MANIFEST.cambridge.length + MANIFEST.permen.length;
-      document.getElementById('metaTotalDocs').innerHTML = `<strong>Indexed</strong> ${total} documents`;
+      const fwCount   = MANIFEST.frameworks.length;
+      const cambCount = MANIFEST.cambridge.length;
+      const permCount = MANIFEST.permen.length;
+      document.getElementById('kpiTotalDocs').textContent  = fwCount + cambCount + permCount;
+      document.getElementById('kpiFrameworks').textContent = fwCount;
+      document.getElementById('kpiCambridge').textContent  = cambCount + permCount;
     }
 
     function renderGrid(panel, items) {

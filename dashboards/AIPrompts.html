@@ -5,9 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Prompt Library — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<link rel="stylesheet" href="/base.css">
 <style>
-/* Page-specific accent override (cyan). Tokens, reset, and base
-   typography come from /base.css (injected by build.js). */
+/* AI Prompts belongs to Communication family — cyan accent.
+   Hero markup is <header class="page-hero" data-accent="cyan">.
+   Canonical hero CSS lives in base.css; tokens in tokens.css.
+   See docs/architecture/DESIGN_SYSTEM.md "Page families". */
 :root {
   --accent:      #0891b2;
   --accent-dark: #0e7490;
@@ -38,15 +41,31 @@
 .sort-select:focus { border-color: var(--accent); }
 .prompt-count { font-size: 12px; color: var(--ink-3); white-space: nowrap; }
 
+/* ─── HERO ACTIONS (Add Prompt button slot) ───── */
+.page-hero__actions { display: flex; align-items: center; gap: 8px; }
+.page-hero__actions .nav-add-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 18px; border-radius: 10px;
+  background: rgba(255,255,255,0.16);
+  border: 1px solid rgba(255,255,255,0.32);
+  color: #fff; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .18s ease;
+  font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+.page-hero__actions .nav-add-btn:hover {
+  background: rgba(255,255,255,0.24); border-color: rgba(255,255,255,0.5);
+  transform: translateY(-1px);
+}
+.page-hero__actions .nav-add-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
 /* ─── PAGE LAYOUT ───────────────────────────────── */
 .page-layout {
   display: grid;
   grid-template-columns: 220px 1fr;
-  gap: 0;
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 28px 28px 80px;
-  gap: 24px;
+  padding: 28px 40px 80px;
   align-items: start;
 }
 
@@ -57,30 +76,11 @@
   border-radius: var(--radius); overflow: hidden;
   box-shadow: var(--shadow-sm);
 }
-.nav-add-btn {
-  display: none; align-items: center; gap: 7px;
-  padding: 8px 16px; border-radius: 10px;
-  background: var(--accent); border: none;
-  color: #fff; font-size: 13px; font-weight: 600;
-  cursor: pointer; transition: all .18s ease; font-family: 'DM Sans', sans-serif;
-  white-space: nowrap;
-}
-.nav-add-btn:hover { background: var(--accent-dark); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(8,145,178,.4); }
-.nav-add-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 .sidebar-card-title {
   padding: 12px 16px; font-size: 11px; font-weight: 700;
   text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3);
   border-bottom: 1px solid var(--border);
 }
-.stats-grid { display: grid; grid-template-columns: 1fr 1fr; }
-.stat-cell {
-  padding: 14px 16px; border-bottom: 1px solid var(--border);
-  border-right: 1px solid var(--border);
-}
-.stat-cell:nth-child(2n) { border-right: none; }
-.stat-cell:nth-last-child(-n+2) { border-bottom: none; }
-.stat-num { font-size: 22px; font-weight: 700; color: var(--ink); line-height: 1; }
-.stat-label { font-size: 11px; color: var(--ink-3); margin-top: 2px; }
 .cat-list { padding: 6px 0; }
 .cat-item {
   display: flex; align-items: center; justify-content: space-between;
@@ -377,20 +377,47 @@
 </head>
 <body>
 
+<div id="navbarMount"></div>
 <div id="errorMsg"></div>
 <div class="toast" id="toast"></div>
+
+  <header class="page-hero" data-accent="cyan">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <div class="page-hero__eyebrow">Academic Hub · Reusable prompts for school leaders</div>
+        <h1 class="page-hero__title">AI Prompt Library</h1>
+        <p class="page-hero__desc">
+          Curated prompts for the LLMs school leaders use day-to-day — appraisal feedback, parent letters, lesson observation notes, board reports. Copy, fill the placeholders, and run in any chat model.
+        </p>
+        <div class="page-hero__actions" style="margin-top:18px;">
+          <button class="nav-add-btn" id="addPromptBtn" style="display:none;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Prompt
+          </button>
+        </div>
+      </div>
+      <div class="page-hero__kpis">
+        <div class="page-hero__kpi page-hero__kpi--primary">
+          <div class="page-hero__kpi-num" id="statTotal">—</div>
+          <div class="page-hero__kpi-lbl">Total prompts</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="statUses">—</div>
+          <div class="page-hero__kpi-lbl">Total uses</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="statNew">—</div>
+          <div class="page-hero__kpi-lbl">This week</div>
+        </div>
+      </div>
+    </div>
+  </header>
 
   <!-- Page Layout -->
   <div class="page-layout">
 
     <!-- Sidebar -->
     <aside class="sidebar">
-
-      <!-- Add Prompt -->
-      <button class="nav-add-btn" id="addPromptBtn" style="display:none; width:100%; justify-content:center;">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Add Prompt
-      </button>
 
       <!-- Search & Sort -->
       <div class="sidebar-card">
@@ -409,27 +436,6 @@
         </div>
       </div>
 
-      <div class="sidebar-card">
-        <div class="sidebar-card-title">Library Stats</div>
-        <div class="stats-grid">
-          <div class="stat-cell">
-            <div class="stat-num" id="statTotal">—</div>
-            <div class="stat-label">Total Prompts</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-num" id="statCategories">8</div>
-            <div class="stat-label">Categories</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-num" id="statUses">—</div>
-            <div class="stat-label">Total Uses</div>
-          </div>
-          <div class="stat-cell">
-            <div class="stat-num" id="statNew">—</div>
-            <div class="stat-label">This Week</div>
-          </div>
-        </div>
-      </div>
       <div class="sidebar-card">
         <div class="sidebar-card-title">Categories</div>
         <div class="cat-list" id="catList">
@@ -560,6 +566,7 @@
   };
 </script>
 <script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
 <script type="module">
 import {
   collection, doc, addDoc, updateDoc, deleteDoc,
@@ -616,11 +623,14 @@ function extractPlaceholders(text) {
 
 // ── Auth ──────────────────────────────────────────
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('ai-prompts', { user, profile });
+  }
   db = window.db;
   currentUser = user;
   isAdmin = profile.role_academichub === 'academic_admin';
   if (isAdmin) {
-    document.getElementById('addPromptBtn').style.display = 'flex';
+    document.getElementById('addPromptBtn').style.display = 'inline-flex';
     await seedDefaultPrompts();
   }
   initPrompts();
