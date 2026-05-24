@@ -19,13 +19,22 @@
       background: var(--paper);  /* canonical page bg */
       color: #1f2937;
     }
-    /* Canonical body container: max 1200px + 40px lateral padding
-       (matches .page-hero__inner so hero text + calendar mount
-       share the same left edge). */
+    /* The calendar widget (academic-calendar-readonly.js) ships
+       its own 1200px wrapper (.ec-strip-wrap) with 24px lateral
+       padding. Wrapping it in our canonical 1200px+40px container
+       would double-clamp + double-pad and crush the calendar to
+       ~800px wide. Instead we give the mount a vertical-only
+       spacer and let the widget's own 1200px wrapper handle
+       horizontal centering. The widget's left edge then lands at
+       roughly the same x as our hero text (1200px center, 24px
+       padding ≈ same visual column as 1200px center, 40px padding
+       within rounding).
+
+       Bumped horizontal padding to 16px so on narrow viewports
+       the calendar still gets a little breathing room without
+       breaking the widget's internal grid. */
     #academic-calendar-mount {
-      max-width: var(--container-max, 1200px);
-      margin: 0 auto;
-      padding: 28px 40px 80px;
+      padding: 28px 16px 80px;
     }
   </style>
 </head>
