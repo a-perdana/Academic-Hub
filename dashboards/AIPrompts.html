@@ -17,6 +17,16 @@
   --accent-2:    #e0f2fe;
 }
 
+/* Reserve space for the fixed navbar (62px) so the hero sits below it
+   instead of being clipped. Matches other AH canonical-hero pages
+   (MyInduction / CompetencyFramework). */
+body { padding-top: 62px; }
+
+/* AI Prompts uses Communication family (cyan); override the canonical
+   page-footer__cta-btn mor gradient so the CTA picks up the page accent. */
+.page-footer__cta-btn { background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%); box-shadow: 0 4px 14px rgba(8,145,178,0.35); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(8,145,178,0.45); }
+
 /* ─── MAIN CONTENT ─────────────────────────────── */
 
 /* ─── SEARCH (in sidebar) ───────────────────────── */
@@ -1252,6 +1262,38 @@ The PDP should include:
 }
 
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">AI Prompt Library</span>
+      <h2 class="page-footer__cta-title">Reuse what works. Share what you learn.</h2>
+      <p class="page-footer__cta-desc">Every prompt here was written by a school leader for school-leader work — appraisal feedback, parent letters, board reports. Copy, fill the <code style="background:rgba(255,255,255,.12);padding:1px 6px;border-radius:3px;color:#a5f3fc;font-family:'DM Mono',monospace;font-size:11.5px;">[placeholders]</code>, run in any LLM. Admins add new prompts from the hero button.</p>
+      <a href="/references" class="page-footer__cta-btn">Browse References <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="AI Prompts footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Communications</span>
+        <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+        <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/documents" class="page-footer__nav-link">Documents</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+        <a href="/weekly-checklist" class="page-footer__nav-link">Weekly Checklist</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Prompts are reusable across any LLM (Claude, ChatGPT, Gemini)</span>
+  </div>
+</footer>
+
 </body>
 </html>
 
