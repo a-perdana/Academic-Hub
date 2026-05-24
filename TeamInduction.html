@@ -95,9 +95,9 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Principal · Foundation Representative</p>
+      <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
       <h1 class="page-hero__title">Team Induction</h1>
-      <p class="page-hero__desc">The first-year inductions at your school. As school principal you have read access to your team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
+      <p class="page-hero__desc">The first-year inductions at your school. School leaders have read access to their team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
     </div>
     <div class="page-hero__kpis" id="heroKpis" style="display:none;">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -153,15 +153,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     window.__loadAcademicNavbar('team-induction', { user, profile });
   }
 
-  // Authorisation: only AH school_principal / academic_admin can see all-school view.
+  // Authorisation handled upstream by auth-guard.js (page-access intersection with page_access_config/team-induction).
+  // Charter NN2: this page reads pulse + observation aggregates only — never named journal entries.
   const isAhAdmin = profile?.role_academichub === 'academic_admin'
                  || profile?.role_centralhub === 'central_admin';
-  const isPrincipal = (profile?.ah_sub_roles || []).includes('school_principal');
-  const isFoundationRep = (profile?.ah_sub_roles || []).includes('foundation_representative');
-  if (!isAhAdmin && !isPrincipal && !isFoundationRep) {
-    document.getElementById('loadingState').innerHTML = `<div class="empty-state"><h3>Not authorised</h3><p>This page is for school principals, foundation representatives, and admins.</p></div>`;
-    return;
-  }
 
   const schoolId = profile?.schoolId;
   if (!schoolId && !isAhAdmin) {
