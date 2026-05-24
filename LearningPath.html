@@ -32,9 +32,71 @@ body::before {
     linear-gradient(180deg, #f3f7f6 0%, #f6f9f8 100%);
 }
 
-/* TOPBAR */
+/* ─── HERO (CH-canonical .page-hero ported page-local, teal accent for CPD parity with /competency-framework) ─── */
+.page-hero {
+  position: relative; overflow: hidden;
+  padding: 52px 0;
+  color: #fff;
+  background: linear-gradient(135deg, #0f1e1a 0%, #0e3530 55%, #071814 100%);
+}
+.page-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 80%, rgba(13,148,136,0.22) 0%, transparent 48%),
+    radial-gradient(circle at 86% 20%, rgba(20,184,166,0.14) 0%, transparent 48%);
+}
+.page-hero__inner {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto; padding: 0 40px;
+  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+}
+.page-hero__text { flex: 1 1 0; min-width: 320px; }
+.page-hero__eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  margin-bottom: 12px;
+}
+.page-hero__title {
+  font-family: 'Lora', serif; font-size: 2.1rem; font-weight: 600;
+  color: #fff; line-height: 1.2; margin-bottom: 12px;
+}
+.page-hero__desc {
+  font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.6;
+  max-width: none;
+}
+.page-hero__kpis {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px; flex: 0 0 auto; width: 520px; margin-left: auto;
+}
+.page-hero__kpi {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 14px; padding: 16px 18px; min-width: 0;
+}
+.page-hero__kpi--primary {
+  background: rgba(13,148,136,0.20); border-color: rgba(13,148,136,0.4);
+}
+.page-hero__kpi-num {
+  font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
+  font-weight: 600; color: #fff;
+}
+.page-hero__kpi--primary .page-hero__kpi-num { font-size: 2.5rem; }
+.page-hero__kpi-lbl {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.6);
+  margin-top: 8px;
+}
+.page-hero__kpi-sub {
+  font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .page-hero { padding: 36px 0; }
+  .page-hero__inner { padding: 0 20px; flex-direction: column; gap: 20px; }
+  .page-hero__title { font-size: 1.7rem; }
+  .page-hero__kpis { width: 100%; margin-left: 0; grid-template-columns: repeat(3, 1fr); }
+}
 
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 32px 20px 100px; }
+.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 100px; }
+@media (max-width: 768px) { .page-wrap { padding: 20px 20px 80px; } }
 
 /* LAYOUT */
 .lp-layout { display: grid; grid-template-columns: 270px 1fr; gap: 24px; align-items: start; }
@@ -536,6 +598,32 @@ body::before {
 
 <div id="navbarMount"></div>
 
+<header class="page-hero" data-accent="teal">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
+      <h1 class="page-hero__title">Learning Path</h1>
+      <p class="page-hero__desc">Twenty-four leadership competencies across six domains, each with a four-stage growth ladder — Awareness → Practitioner → Advanced → Lead. Read the short lesson, do the practice task, advance one stage at a time.</p>
+    </div>
+    <div class="page-hero__kpis">
+      <div class="page-hero__kpi page-hero__kpi--primary">
+        <div class="page-hero__kpi-num" id="heroKpiPct">0%</div>
+        <div class="page-hero__kpi-lbl">Overall</div>
+        <div class="page-hero__kpi-sub" id="heroKpiEarned">0 of 24 earned</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num">6</div>
+        <div class="page-hero__kpi-lbl">Domains</div>
+        <div class="page-hero__kpi-sub">leadership pillars</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num">24</div>
+        <div class="page-hero__kpi-lbl">Competencies</div>
+        <div class="page-hero__kpi-sub">4 stages each</div>
+      </div>
+    </div>
+  </div>
+</header>
 
 <div class="page-wrap">
   <div class="page-intro" data-intro-key="learning-path">
@@ -1500,6 +1588,10 @@ function renderAll() {
   document.getElementById('overallBar').style.width = pct + '%';
   document.getElementById('overallEarned').textContent = earnedCount + ' earned';
   document.getElementById('overallPct').textContent = pct + '%';
+  const heroPct = document.getElementById('heroKpiPct');
+  const heroEarned = document.getElementById('heroKpiEarned');
+  if (heroPct) heroPct.textContent = pct + '%';
+  if (heroEarned) heroEarned.textContent = earnedCount + ' of ' + total + ' earned';
   document.getElementById('domainNav').innerHTML = FRAMEWORK.map(d => {
     const de = d.competencies.filter(c => getHighest(c.id)).length;
     return `<a class="lp-domain-item" href="#dom-${d.id}"><span class="di-icon">${d.icon}</span><span class="di-name">${d.name}</span><span class="di-pct">${Math.round(de/d.competencies.length*100)}%</span></a>`;

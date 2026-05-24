@@ -12,18 +12,72 @@
 :root{--ink:#1c1c2e;--ink-2:#44445a;--ink-3:#8888a8;--paper:#f7f6f3;--white:#fff;--border:#e0ddd6;--accent:#0d9488;--accent-2:#ccfbf1;--shadow-sm:0 1px 4px rgba(28,28,46,.07);--shadow:0 3px 14px rgba(28,28,46,.10);--shadow-lg:0 10px 40px rgba(28,28,46,.16);--radius:10px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:14px;padding-top:62px;}
-.page-topbar{background:#0f1e1a;border-bottom:2px solid var(--accent);position:sticky;top:62px;z-index:90;height:54px;display:flex;align-items:center;padding:0 24px;gap:14px;}
-.topbar-back{display:flex;align-items:center;gap:6px;font-size:12px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s;}
-.topbar-back:hover{color:#fff;}
-.topbar-back svg{width:14px;height:14px;}
-.topbar-sep{color:rgba(255,255,255,.25);}
-.topbar-title{font-size:14px;font-weight:700;color:#fff;}
-.page-wrap{max-width:1000px;margin:0 auto;padding:32px 20px 100px;}
-.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:28px;}
-.stat-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:var(--shadow-sm);transition:box-shadow .2s,transform .2s;}
-.stat-card:hover{box-shadow:var(--shadow);transform:translateY(-2px);}
-.stat-num{font-size:28px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px;}
-.stat-label{font-size:12px;color:var(--ink-3);}
+
+/* ─── HERO (CH-canonical .page-hero ported page-local, teal accent for CPD parity with /competency-framework) ─── */
+.page-hero {
+  position: relative; overflow: hidden;
+  padding: 52px 0;
+  color: #fff;
+  background: linear-gradient(135deg, #0f1e1a 0%, #0e3530 55%, #071814 100%);
+}
+.page-hero::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(circle at 12% 80%, rgba(13,148,136,0.22) 0%, transparent 48%),
+    radial-gradient(circle at 86% 20%, rgba(20,184,166,0.14) 0%, transparent 48%);
+}
+.page-hero__inner {
+  position: relative; z-index: 1;
+  max-width: 1200px; margin: 0 auto; padding: 0 40px;
+  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
+}
+.page-hero__text { flex: 1 1 0; min-width: 320px; }
+.page-hero__eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.45);
+  margin-bottom: 12px;
+}
+.page-hero__title {
+  font-family: 'Lora', serif; font-size: 2.1rem; font-weight: 600;
+  color: #fff; line-height: 1.2; margin-bottom: 12px;
+}
+.page-hero__desc {
+  font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.6;
+  max-width: none;
+}
+.page-hero__kpis {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px; flex: 0 0 auto; width: 520px; margin-left: auto;
+}
+.page-hero__kpi {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 14px; padding: 16px 18px; min-width: 0;
+}
+.page-hero__kpi--primary {
+  background: rgba(13,148,136,0.20); border-color: rgba(13,148,136,0.4);
+}
+.page-hero__kpi-num {
+  font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
+  font-weight: 600; color: #fff;
+}
+.page-hero__kpi--primary .page-hero__kpi-num { font-size: 2.5rem; }
+.page-hero__kpi-lbl {
+  font-size: 11px; font-weight: 600; letter-spacing: .12em;
+  text-transform: uppercase; color: rgba(255,255,255,.6);
+  margin-top: 8px;
+}
+.page-hero__kpi-sub {
+  font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px;
+}
+@media (max-width: 768px) {
+  .page-hero { padding: 36px 0; }
+  .page-hero__inner { padding: 0 20px; flex-direction: column; gap: 20px; }
+  .page-hero__title { font-size: 1.7rem; }
+  .page-hero__kpis { width: 100%; margin-left: 0; grid-template-columns: repeat(3, 1fr); }
+}
+
+.page-wrap{max-width:1200px;margin:0 auto;padding:28px 40px 100px;}
+@media (max-width: 768px) { .page-wrap { padding: 20px 20px 80px; } }
 .section-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
 .section-title svg{width:18px;height:18px;color:var(--accent);}
 .cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;margin-bottom:40px;}
@@ -116,14 +170,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 })();
 </script>
 <div id="navbarMount"></div>
-<div class="page-topbar">
-  <a href="/competency-framework" class="topbar-back">
-    <svg viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
-    Framework
-  </a>
-  <span class="topbar-sep">/</span>
-  <span class="topbar-title">My Certificates</span>
-</div>
+
+<header class="page-hero" data-accent="teal">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
+      <h1 class="page-hero__title">My Certificates</h1>
+      <p class="page-hero__desc">Earned certificates and per-domain progress towards certification. A certificate is awarded when every competency in a domain reaches the top stage (Lead). Open the <a href="/competency-framework" style="color:rgba(255,255,255,.95);text-decoration:underline;">framework</a> for the full criteria.</p>
+    </div>
+    <div class="page-hero__kpis">
+      <div class="page-hero__kpi page-hero__kpi--primary">
+        <div class="page-hero__kpi-num" id="heroKpiCerts">—</div>
+        <div class="page-hero__kpi-lbl">Certificates</div>
+        <div class="page-hero__kpi-sub">issued</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="heroKpiEarnedComps">—</div>
+        <div class="page-hero__kpi-lbl">Competencies</div>
+        <div class="page-hero__kpi-sub">earned</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="heroKpiDomains">—</div>
+        <div class="page-hero__kpi-lbl">Domains Lead</div>
+        <div class="page-hero__kpi-sub">of 6 complete</div>
+      </div>
+    </div>
+  </div>
+</header>
+
 <div class="page-wrap">
   <div class="page-intro" data-intro-key="my-certificates">
     <div class="page-intro-icon">🏆</div>
@@ -137,11 +211,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
     <button class="page-intro-dismiss" type="button" aria-label="Dismiss intro" onclick="window.__dismissIntro('my-certificates')">✕</button>
   </div>
 
-  <div class="stats-row" id="statsRow">
-    <div class="stat-card"><div class="skel" style="height:40px;"></div></div>
-    <div class="stat-card"><div class="skel" style="height:40px;"></div></div>
-    <div class="stat-card"><div class="skel" style="height:40px;"></div></div>
-  </div>
   <div class="section-title">
     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm2 10H7v-1.5l3-1.5V7h2v3.5l-1 .5V12z"/></svg>
     Earned Certificates
@@ -209,11 +278,12 @@ function render(){
   let total=0,earnedCount=0;
   FRAMEWORK.forEach(d=>{d.comps.forEach(c=>{total++;if(earned[c]?.level)earnedCount++;});});
   const domainsComplete=FRAMEWORK.filter(d=>isLeadOnAll(d.comps)).length;
-  document.getElementById('statsRow').innerHTML=`
-    <div class="stat-card"><div class="stat-num">${totalCerts}</div><div class="stat-label">Certificates Issued</div></div>
-    <div class="stat-card"><div class="stat-num">${earnedCount}</div><div class="stat-label">Competencies Earned</div></div>
-    <div class="stat-card"><div class="stat-num">${domainsComplete}</div><div class="stat-label">Domains Mastered</div></div>
-    <div class="stat-card"><div class="stat-num">${total-earnedCount}</div><div class="stat-label">Still to Earn</div></div>`;
+  const elCerts=document.getElementById('heroKpiCerts');
+  const elEarnedComps=document.getElementById('heroKpiEarnedComps');
+  const elDomains=document.getElementById('heroKpiDomains');
+  if(elCerts)elCerts.textContent=totalCerts;
+  if(elEarnedComps)elEarnedComps.textContent=`${earnedCount} / ${total}`;
+  if(elDomains)elDomains.textContent=domainsComplete;
   const grid=document.getElementById('certGrid');
   if(!myCerts.length){
     grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎓</div><div class="empty-title">No certificates yet</div><div class="empty-sub">Complete all competencies in a domain at Lead level to earn your certificate.</div><a href="/learning-path" class="empty-cta">Start My Learning Path</a></div>`;
