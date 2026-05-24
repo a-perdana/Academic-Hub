@@ -32,18 +32,16 @@ body::before {
     linear-gradient(180deg, #f3f7f6 0%, #f6f9f8 100%);
 }
 
-/* ─── HERO (CH-canonical .page-hero ported page-local, teal accent for CPD parity with /competency-framework) ─── */
+/* ─── HERO (canonical .page-hero, learning-teal accent — tokens from base.css/tokens.css) ─── */
 .page-hero {
   position: relative; overflow: hidden;
   padding: 52px 0;
   color: #fff;
-  background: linear-gradient(135deg, #0f1e1a 0%, #0e3530 55%, #071814 100%);
+  background: var(--hero-grad-learning);
 }
 .page-hero::before {
   content: ''; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(circle at 12% 80%, rgba(13,148,136,0.22) 0%, transparent 48%),
-    radial-gradient(circle at 86% 20%, rgba(20,184,166,0.14) 0%, transparent 48%);
+  background: var(--hero-radial-learning-a), var(--hero-radial-learning-b);
 }
 .page-hero__inner {
   position: relative; z-index: 1;
@@ -73,8 +71,13 @@ body::before {
   border-radius: 14px; padding: 16px 18px; min-width: 0;
 }
 .page-hero__kpi--primary {
-  background: rgba(13,148,136,0.20); border-color: rgba(13,148,136,0.4);
+  background: var(--hero-kpi-primary-learning); border-color: var(--hero-kpi-primary-learning-border);
 }
+/* Footer accent override — learning-teal */
+.page-footer { background: var(--footer-grad-learning); }
+.page-footer::before { background: var(--footer-radial-learning-a), var(--footer-radial-learning-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-learning); box-shadow: var(--footer-cta-shadow-learning); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(13,148,136,0.50); }
 .page-hero__kpi-num {
   font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
   font-weight: 600; color: #fff;
