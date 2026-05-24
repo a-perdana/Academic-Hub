@@ -19,7 +19,10 @@
 }
 
 /* ─── MAIN CONTENT ────────────────────────────── */
-body { padding-top: 62px; }
+body {
+  padding-top: 62px;
+  background: var(--paper);   /* canonical page bg */
+}
 
 /* ─── FORUM LAYOUT ────────────────────────────── */
 .forum-wrap {
@@ -596,6 +599,16 @@ body { padding-top: 62px; }
 <body>
 
 <div id="navbarMount"></div>
+
+<header class="page-hero" data-accent="cyan" aria-label="Message Board header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <h1 class="page-hero__title">Message Board</h1>
+      <p class="page-hero__desc">Cross-network discussion threads — pedagogy, operations, partner-school exchange. Pin replies, mention colleagues, and keep the long-form conversations searchable.</p>
+    </div>
+  </div>
+</header>
 
   <!-- Forum Layout -->
   <div class="forum-wrap">
@@ -1469,6 +1482,38 @@ body { padding-top: 62px; }
   });
 
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">My Hub · Communications</span>
+      <h2 class="page-footer__cta-title">Long-form conversations, kept findable.</h2>
+      <p class="page-footer__cta-desc">Threaded discussion across the partner-school network. Pin replies, mention colleagues, search the archive — the message board is where pedagogy + operations talk things through.</p>
+      <a href="/announcements" class="page-footer__cta-btn">Open Announcements <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Message Board footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Communications</span>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+        <a href="/documents" class="page-footer__nav-link">Policy &amp; Documents</a>
+        <a href="/library" class="page-footer__nav-link">Resource Library</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Pin replies and mention colleagues to keep threads searchable.</span>
+  </div>
+</footer>
+
 </body>
 </html>
 

@@ -14,7 +14,10 @@
 }
 
 /* ─── MAIN CONTENT ────────────────────────────── */
-body { padding-top: 62px; }
+body {
+  padding-top: 62px;
+  background: var(--paper);   /* canonical page bg */
+}
 
 /* ─── LAYOUT ──────────────────────────────────── */
 .lib-layout {
@@ -348,6 +351,16 @@ body { padding-top: 62px; }
 
 <!-- Loading screen -->
 <div id="navbarMount"></div>
+
+<header class="page-hero" data-accent="mor" aria-label="Resource Library header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <h1 class="page-hero__title">Resource Library</h1>
+      <p class="page-hero__desc">Curated teaching resources, exemplars, scheme-of-work supplements, and references shared across the partner-school network. Filter by category or subject to find what you need fast.</p>
+    </div>
+  </div>
+</header>
 
   <!-- 2-column layout -->
   <div class="lib-layout">
@@ -779,6 +792,38 @@ body { padding-top: 62px; }
     confirmCb = null;
   });
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">My Hub · Communications</span>
+      <h2 class="page-footer__cta-title">Resources shared across the network.</h2>
+      <p class="page-footer__cta-desc">Teaching resources, exemplars, scheme-of-work supplements. Filter by category + subject; admins curate the catalogue from this page.</p>
+      <a href="/documents" class="page-footer__cta-btn">Open Policy &amp; Documents <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Library footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Communications</span>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+        <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+        <a href="/documents" class="page-footer__nav-link">Policy &amp; Documents</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Filter by category and subject — admins manage the catalogue.</span>
+  </div>
+</footer>
+
 </body>
 </html>
 

@@ -15,7 +15,10 @@
       --accent-dk: #5a4bd1;
       --accent-2:  #ede9fe;
     }
-    body { padding-top: 62px; }
+    body {
+      padding-top: 62px;
+      background: var(--paper);
+    }
 
     .hero {
       background: linear-gradient(130deg, #1a0a2e 0%, #2d1b4e 40%, #4a2d6e 72%, #6c5ce7 100%);
@@ -440,7 +443,7 @@
     }
   </style>
 </head>
-<body style="display:none">
+<body>
 
 <div id="navbarMount"></div>
 
@@ -711,7 +714,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     if (e.target === document.getElementById('dayDetail')) closeDayDetail();
   });
 
-  document.body.style.display = '';
+  // body is plain <body>; auth-guard manages visibility, no display flip needed.
   loadAndRender();
 });
 
@@ -1238,5 +1241,37 @@ function escHtml(s) {
 </script>
 
 <script src="partials/navbar-loader.js"></script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">My School · Communications</span>
+      <h2 class="page-footer__cta-title">Your school's calendar, network-visible.</h2>
+      <p class="page-footer__cta-desc">Workshops, open days, fairs, ceremonies — what's happening at your school stays at HQ's fingertips. Tag categories so leadership can monitor at a glance.</p>
+      <a href="/academic-calendar" class="page-footer__cta-btn">Open Academic Calendar <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="School Events footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Communications</span>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+        <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+        <a href="/documents" class="page-footer__nav-link">Policy &amp; Documents</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/library" class="page-footer__nav-link">Resource Library</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Tag events by category so leadership can monitor at a glance.</span>
+  </div>
+</footer>
+
 </body>
 </html>

@@ -13,12 +13,35 @@
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
-    body { padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: #fafafa; color: #1f2937; }
+    body {
+      padding-top: 62px;
+      font-family: 'DM Sans', system-ui, sans-serif;
+      background: var(--paper);  /* canonical page bg */
+      color: #1f2937;
+    }
+    /* Canonical 1200px container so the read-only calendar mount
+       aligns with the canonical hero + footer above and below. */
+    #academic-calendar-mount {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 28px 20px 80px;
+    }
   </style>
 </head>
 
 <body>
   <div id="navbarMount"></div>
+
+  <header class="page-hero" data-accent="mor" aria-label="Academic Calendar header">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+        <h1 class="page-hero__title">Academic Calendar</h1>
+        <p class="page-hero__desc">Network-wide academic year: term windows, assessment cycles, exam dates, school-events overlay. Read-only — authored by HQ in Central Hub.</p>
+      </div>
+    </div>
+  </header>
+
   <div id="academic-calendar-mount"></div>
 
   <script type="module" src="auth-guard.js"></script>
@@ -31,5 +54,36 @@
       }
     });
   </script>
+
+  <footer class="page-footer" role="contentinfo">
+    <div class="page-footer__inner">
+      <div class="page-footer__cta">
+        <span class="page-footer__cta-eyebrow">My Hub · Communications</span>
+        <h2 class="page-footer__cta-title">One calendar, one network.</h2>
+        <p class="page-footer__cta-desc">Term windows, assessment cycles, exam dates — all in one read-only view, authored centrally by HQ. School-events overlay your own school's activities on top.</p>
+        <a href="/school-events" class="page-footer__cta-btn">Open School Events <span aria-hidden="true">→</span></a>
+      </div>
+      <nav class="page-footer__nav" aria-label="Academic Calendar footer navigation">
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">Communications</span>
+          <a href="/school-events" class="page-footer__nav-link">School Events</a>
+          <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+          <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+          <a href="/documents" class="page-footer__nav-link">Policy &amp; Documents</a>
+        </div>
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">My Hub</span>
+          <a href="/library" class="page-footer__nav-link">Resource Library</a>
+          <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+          <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+          <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+        </div>
+      </nav>
+    </div>
+    <div class="page-footer__meta">
+      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+      <span class="page-footer__meta-right">Calendar authored by HQ in Central Hub — read-only here.</span>
+    </div>
+  </footer>
 </body>
 </html>
