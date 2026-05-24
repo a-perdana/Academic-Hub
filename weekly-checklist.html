@@ -679,6 +679,15 @@ body { padding-top: 62px; }
 .ess-item.checked .ess-checkbox svg { display: block; }
 .ess-title { font-size: 0.82rem; font-weight: 500; color: var(--ink); }
 .ess-item.checked .ess-title { color: var(--green); }
+
+/* ─── PAGE FOOTER TOKEN OVERRIDES (learning tint, teal) ─────────
+   Canonical .page-footer chrome lives in /base.css. Token bundle
+   selected for semantic pairing with LearningPath — the weekly
+   checklist is the leader's year-round CPD operating rhythm. */
+.page-footer { background: var(--footer-grad-learning); }
+.page-footer::before { background: var(--footer-radial-learning-a), var(--footer-radial-learning-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-learning); box-shadow: var(--footer-cta-shadow-learning); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(13,148,136,0.50); }
 </style>
 </head>
 <body>
@@ -1979,5 +1988,39 @@ document.addEventListener('keydown', e => {
   });
 })();
 </script>
+
+<!-- ─── PAGE FOOTER (canonical .page-footer · learning tint) ──────
+     MUST be a direct child of <body> for the sticky-via-:has() rule
+     in base.css to fire. -->
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Leadership CPD · Year-round</span>
+      <h2 class="page-footer__cta-title">Finish the week on the right thing.</h2>
+      <p class="page-footer__cta-desc">The checklist is the operating rhythm; the handbook is the why. If a week feels heavy, open the paired 90-day handbook for your sub-role and skim the stage you are in — most "too much to do" weeks are really "wrong order" weeks.</p>
+      <a href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener" class="page-footer__cta-btn">Open the paired 90-day handbook <span aria-hidden="true">↗</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Weekly Checklist footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">CPD</span>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Framework Map</a>
+        <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+        <a href="/my-certificates" class="page-footer__nav-link">My Certificates</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+        <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+        <a href="/academic-standards" class="page-footer__nav-link">Eduversal Standards</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Four sub-roles · Foundation · Principal · Academic · Cambridge</span>
+  </div>
+</footer>
 </body>
 </html>
