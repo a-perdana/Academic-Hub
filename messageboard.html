@@ -25,13 +25,16 @@ body {
 }
 
 /* ─── FORUM LAYOUT ────────────────────────────── */
-/* Canonical body container: max 1200px + 40px lateral padding
-   (matches .page-hero__inner exactly, so the hero text and the
-   forum sidebar/main share the same left edge). */
+/* Canonical body container: max 1200px + 40px lateral padding +
+   width:100% so the grid container actually FILLS the clamp on
+   wide viewports (without width:100%, a grid in block flow can
+   shrink to content-width and leave a phantom left margin). */
 .forum-wrap {
+  width: 100%;
   max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 28px 40px 80px;
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: 220px 1fr;
   gap: 24px;

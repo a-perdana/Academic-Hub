@@ -36,13 +36,16 @@ body {
   background: var(--paper);   /* canonical page bg */
 }
 
-/* Canonical body container: max 1200px + 40px lateral padding
-   (matches .page-hero__inner so hero text + body content share the
-   same left edge). */
+/* Canonical body container: max 1200px + 40px lateral padding +
+   width:100% so the wrapper actually FILLS the clamp on wide
+   viewports (otherwise nested grid/flex children leave a phantom
+   left margin). */
 .page-wrap {
+  width: 100%;
   max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 28px 40px 80px;
+  box-sizing: border-box;
 }
 
 .ann-workspace {

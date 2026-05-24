@@ -19,22 +19,31 @@
       background: var(--paper);  /* canonical page bg */
       color: #1f2937;
     }
-    /* The calendar widget (academic-calendar-readonly.js) ships
-       its own 1200px wrapper (.ec-strip-wrap) with 24px lateral
-       padding. Wrapping it in our canonical 1200px+40px container
-       would double-clamp + double-pad and crush the calendar to
-       ~800px wide. Instead we give the mount a vertical-only
-       spacer and let the widget's own 1200px wrapper handle
-       horizontal centering. The widget's left edge then lands at
-       roughly the same x as our hero text (1200px center, 24px
-       padding ≈ same visual column as 1200px center, 40px padding
-       within rounding).
+    /* Canonical body container: max 1200px + 40px lateral padding +
+       width:100% to fill the clamp. The calendar widget's own
+       .ec-strip-wrap inside academic-calendar-readonly.js ships
+       max-width:1200px too — we override the widget's 24px
+       padding so the calendar grid actually fills our 1120px
+       usable column edge-to-edge (instead of clamping a second
+       time and leaving phantom gutters).
 
-       Bumped horizontal padding to 16px so on narrow viewports
-       the calendar still gets a little breathing room without
-       breaking the widget's internal grid. */
+       Same canonical container rule as documents / library /
+       message-board so the calendar grid + page hero share the
+       same left edge. */
     #academic-calendar-mount {
-      padding: 28px 16px 80px;
+      width: 100%;
+      max-width: var(--container-max, 1200px);
+      margin: 0 auto;
+      padding: 28px 40px 80px;
+      box-sizing: border-box;
+    }
+    /* Cancel the widget's internal max-width + padding so the calendar
+       fills our canonical container instead of double-clamping. */
+    #academic-calendar-mount .ec-strip-wrap,
+    #academic-calendar-mount .ec-toolbar {
+      max-width: none;
+      padding-left: 0;
+      padding-right: 0;
     }
   </style>
 </head>

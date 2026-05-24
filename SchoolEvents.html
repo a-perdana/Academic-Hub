@@ -75,13 +75,16 @@
     .cat-tab.active { color: var(--accent); font-weight: 700; background: transparent; }
     .cat-tab.active::after { background: var(--accent); }
 
-    /* Canonical body container: max 1200px + 40px lateral padding
-       (matches .page-hero__inner so hero text + body content share
-       the same left edge). */
+    /* Canonical body container: max 1200px + 40px lateral padding +
+       width:100% so the wrapper actually FILLS the clamp on wide
+       viewports (otherwise block-level child layouts can leave a
+       phantom left margin). */
     .page-wrap {
+      width: 100%;
       max-width: var(--container-max, 1200px);
       margin: 0 auto;
       padding: 28px 40px 72px;
+      box-sizing: border-box;
     }
     /* Force the mount + loading wrappers to fill the page-wrap so
        no nested block silently shrinks to its content width. */
@@ -105,10 +108,15 @@
       width: 100%;
     }
     .view-toggle { margin-left: auto; }
+    /* Search takes the leftover space in the bar (no max-width cap)
+       so the bar fills edge-to-edge of the 1200px container — same
+       reason as the filter-bar-ev width:100%. Previously capped at
+       300px which left a wide phantom blank on viewports > 1200px. */
     .search-ev {
       padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px;
       font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--ink);
-      background: var(--white); outline: none; flex: 1; min-width: 160px; max-width: 300px;
+      background: var(--white); outline: none;
+      flex: 1; min-width: 160px;
     }
     .search-ev:focus { border-color: var(--accent); }
     .btn-add-ev {
