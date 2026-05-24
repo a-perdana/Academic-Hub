@@ -26,7 +26,8 @@
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
-    body { padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
+    /* background comes from body[data-page-accent="mor"] in base.css */
+    body { padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; color: var(--ink); }
 
     /* Page-specific helper: <code> inline in hero description stays tinted */
     .page-hero p code, .page-hero__desc code {
@@ -152,7 +153,7 @@
     }
   </style>
 </head>
-<body style="display:none">
+<body style="display:none" data-page-accent="mor">
   <div id="navbarMount"></div>
 
   <header class="page-hero" data-accent="mor">
