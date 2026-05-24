@@ -18,7 +18,10 @@
 }
 
 /* ─── MAIN CONTENT ────────────────────────────── */
-body { padding-top: 62px; }
+body {
+  padding-top: 62px;
+  background: var(--paper);   /* canonical page bg — gray-toned, not raw white */
+}
 
 /* ─── LEFT SIDEBAR ────────────────────────────── */
 .docs-sidebar {
@@ -457,6 +460,16 @@ body { padding-top: 62px; }
 
 <!-- Loading screen -->
 <div id="navbarMount"></div>
+
+<header class="page-hero" data-accent="mor" aria-label="Policy & Documents header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <h1 class="page-hero__title">Policy &amp; Documents</h1>
+      <p class="page-hero__desc">Network-wide policies, guidelines, handbooks, circulars, reports, and forms — searchable, filterable, and version-tracked. Star a document to pin it to your Focused list.</p>
+    </div>
+  </div>
+</header>
 
   <!-- 3-column layout -->
   <div class="docs-layout">
@@ -1241,6 +1254,38 @@ body { padding-top: 62px; }
     if (confirmCb) await confirmCb(); confirmCb = null;
   });
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">My Hub · Communications</span>
+      <h2 class="page-footer__cta-title">All your network policies in one place.</h2>
+      <p class="page-footer__cta-desc">Searchable, filterable, version-tracked. Star the ones you reference most — they pin to your Focused panel and follow you across sessions.</p>
+      <a href="/library" class="page-footer__cta-btn">Open Resource Library <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Documents footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Communications</span>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+        <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+        <a href="/library" class="page-footer__nav-link">Resource Library</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Policies stay current — old versions remain in the version history.</span>
+  </div>
+</footer>
+
 </body>
 </html>
 
