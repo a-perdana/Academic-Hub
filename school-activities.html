@@ -19,10 +19,18 @@
 body { padding-top: 62px; }
 
 .page-wrap {
+  width: 100%;
   max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 28px 40px 80px;
+  box-sizing: border-box;
 }
+
+/* Body content fills the full 1200px clamp even when the kanban is empty —
+   without width:100% on the inner grid, the empty-state right column shrinks
+   to content-fit and the whole layout reads as a narrow centered box.
+   Same defensive width on the mtg-layout twin in school-leadership-meetings. */
+.act-layout { width: 100%; }
 
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }

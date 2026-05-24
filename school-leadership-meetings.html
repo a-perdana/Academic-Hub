@@ -20,10 +20,16 @@
 body { padding-top: 62px; }
 
 .page-wrap {
+  width: 100%;
   max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 28px 40px 80px;
+  box-sizing: border-box;
 }
+
+/* Fill full 1200px clamp even when no meeting is picked yet — twin of the
+   act-layout fix in school-activities.html. */
+.mtg-layout { width: 100%; }
 
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
