@@ -11,7 +11,8 @@
 <style>
 :root{--ink:#1c1c2e;--ink-2:#44445a;--ink-3:#8888a8;--paper:#f7f6f3;--white:#fff;--border:#e0ddd6;--accent:#0d9488;--accent-2:#ccfbf1;--shadow-sm:0 1px 4px rgba(28,28,46,.07);--shadow:0 3px 14px rgba(28,28,46,.10);--shadow-lg:0 10px 40px rgba(28,28,46,.16);--radius:10px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;font-size:14px;padding-top:62px;}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-size:14px;padding-top:62px;}
+/* Body background comes from base.css via body[data-page-accent="certificates"] */
 
 /* ─── HERO (canonical .page-hero, certificates-green accent — tokens from base.css/tokens.css) ─── */
 .page-hero {
@@ -152,7 +153,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-page-accent="certificates">
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
 (function() {
@@ -174,7 +175,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink);m
 </script>
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="teal">
+<header class="page-hero" data-accent="certificates">
   <div class="page-hero__inner">
     <div class="page-hero__text">
       <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>

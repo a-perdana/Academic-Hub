@@ -483,12 +483,22 @@ body {
 .page-hero[data-accent="cyan"]::after { background: var(--hero-fade-cyan); }
 .page-hero[data-accent="mor"]::after  { background: var(--hero-fade-mor); }
 .page-hero[data-accent="dark"]::after { background: var(--hero-fade-dark); }
+/* My CPD per-page accent fades (2026-05-24) */
+.page-hero[data-accent="learning"]::after     { background: var(--hero-fade-learning); }
+.page-hero[data-accent="portfolio"]::after    { background: var(--hero-fade-portfolio); }
+.page-hero[data-accent="certificates"]::after { background: var(--hero-fade-certificates); }
+.page-hero[data-accent="induction"]::after    { background: var(--hero-fade-induction); }
 
-/* Family-tinted body background — opt-in via <body data-page-accent="cyan|mor|dark">.
-   3-4% saturated off-white so content cards (var(--white)) still read as elevated. */
+/* Family-tinted body background — opt-in via <body data-page-accent="cyan|mor|dark|learning|portfolio|certificates|induction">.
+   3-10% saturated off-white so content cards (var(--white)) still read as elevated. */
 body[data-page-accent="cyan"] { background: var(--paper-tinted-cyan); }
 body[data-page-accent="mor"]  { background: var(--paper-tinted-mor); }
 body[data-page-accent="dark"] { background: var(--paper-tinted-dark); }
+/* My CPD per-page tints (2026-05-24) */
+body[data-page-accent="learning"]    { background: var(--paper-tinted-learning); }
+body[data-page-accent="portfolio"]   { background: var(--paper-tinted-portfolio); }
+body[data-page-accent="certificates"]{ background: var(--paper-tinted-certificates); }
+body[data-page-accent="induction"]   { background: var(--paper-tinted-induction); }
 
 .page-hero__inner {
   position: relative;
