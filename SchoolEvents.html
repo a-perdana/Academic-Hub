@@ -83,11 +83,28 @@
       margin: 0 auto;
       padding: 28px 40px 72px;
     }
+    /* Force the mount + loading wrappers to fill the page-wrap so
+       no nested block silently shrinks to its content width. */
+    #loadingState,
+    #mainContent {
+      width: 100%;
+    }
+    #calendarViewWrap,
+    #listViewWrap {
+      width: 100%;
+    }
 
+    /* Force full-width inside the 1200px .page-wrap so the bar
+       stretches edge-to-edge of the container instead of shrinking
+       to its content. Search input is allowed to flex:1 up to 300px;
+       view-toggle + Add-Event sit on the right via margin-left:auto
+       on the toggle. */
     .filter-bar-ev {
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
       margin-bottom: 20px;
+      width: 100%;
     }
+    .view-toggle { margin-left: auto; }
     .search-ev {
       padding: 7px 12px; border: 1px solid var(--border); border-radius: 8px;
       font-family: 'DM Sans', sans-serif; font-size: 0.82rem; color: var(--ink);
