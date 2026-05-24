@@ -29,7 +29,9 @@ body { padding-top: 62px; }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
-.act-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+/* minmax(0, 1fr) prevents the 1fr column from collapsing to its
+   content-fit width when no project is picked yet. */
+.act-layout { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 20px; }
 @media (max-width: 980px) { .act-layout { grid-template-columns: 1fr; } }
 
 /* Project picker */
