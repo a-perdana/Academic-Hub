@@ -1,72 +1,616 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Activities - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Activities — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Ported from CH /activities (2026-05-24), schoolId-scoped.
+   AH simplification: 4-column status board, status flip via dropdown
+   (no drag-drop in v1). Project picker on left, kanban on right. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+.act-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+@media (max-width: 980px) { .act-layout { grid-template-columns: 1fr; } }
+
+/* Project picker */
+.proj-col { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.proj-col h3 { font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.proj-btn-add { padding: 5px 11px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 6px; font-size: 0.74rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.proj-btn-add:hover { opacity: 0.9; }
+.proj-list { display: flex; flex-direction: column; gap: 5px; }
+.proj-item { padding: 8px 11px; border-radius: 7px; cursor: pointer; font-size: 0.85rem; color: var(--ink-2); border: 1px solid transparent; transition: all .12s; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.proj-item:hover { background: var(--paper); }
+.proj-item.active { background: var(--accent-2); border-color: var(--accent); color: var(--accent-dk); font-weight: 600; }
+.proj-item-meta { font-size: 0.7rem; color: var(--ink-3); background: var(--paper-2); padding: 1px 7px; border-radius: 999px; flex-shrink: 0; }
+.proj-item.active .proj-item-meta { background: var(--white); color: var(--accent-dk); }
+
+/* Kanban */
+.kanban-col { display: flex; flex-direction: column; gap: 14px; }
+.kanban-head {
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
+  gap: 14px; flex-wrap: wrap;
+}
+.kanban-head h2 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.kanban-head .desc { font-size: 0.78rem; color: var(--ink-3); margin-top: 3px; }
+.kanban-task-add { padding: 7px 13px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 7px; font-size: 0.82rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.kanban-task-add:hover { opacity: 0.9; }
+.kanban-task-add:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.kanban-board { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+@media (max-width: 1080px) { .kanban-board { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 720px) { .kanban-board { grid-template-columns: 1fr; } }
+.kanban-lane {
+  background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+  padding: 12px; min-height: 200px;
+}
+.kanban-lane-head {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+.kanban-lane[data-status="backlog"]  .kanban-lane-head { color: #475569; }
+.kanban-lane[data-status="doing"]    .kanban-lane-head { color: #d97706; }
+.kanban-lane[data-status="blocked"]  .kanban-lane-head { color: #dc2626; }
+.kanban-lane[data-status="done"]     .kanban-lane-head { color: #15803d; }
+.kanban-count { background: var(--paper-2); padding: 1px 7px; border-radius: 999px; font-size: 0.66rem; font-weight: 600; color: var(--ink-3); }
+
+.task-card { background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 9px 11px; margin-bottom: 7px; cursor: pointer; transition: all .12s; }
+.task-card:hover { border-color: var(--accent); background: var(--white); }
+.task-title { font-size: 0.85rem; font-weight: 500; color: var(--ink); line-height: 1.4; margin-bottom: 5px; }
+.task-meta { display: flex; gap: 6px; font-size: 0.66rem; color: var(--ink-3); align-items: center; flex-wrap: wrap; }
+.task-meta .pill-tiny { background: var(--paper-2); padding: 1px 6px; border-radius: 999px; font-weight: 600; }
+.task-meta .due { color: var(--ink-2); }
+.task-meta .due.overdue { color: #dc2626; font-weight: 600; }
+.task-meta .assignee { background: var(--accent-2); color: var(--accent-dk); padding: 1px 6px; border-radius: 999px; font-weight: 600; }
+
+.empty-lane { padding: 30px 10px; text-align: center; font-size: 0.78rem; color: var(--ink-3); }
+.empty-board { padding: 60px 24px; text-align: center; color: var(--ink-3); background: var(--white); border: 1px dashed var(--border); border-radius: 10px; }
+.empty-board h3 { font-family: 'Lora', serif; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 540px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-head h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; background: var(--paper); align-items: center; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--ink); background: var(--white); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 80px; line-height: 1.55; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn-cancel, .btn-save, .btn-del { padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none; }
+.btn-cancel { background: var(--paper-2); color: var(--ink-2); }
+.btn-cancel:hover { background: #e2e8f0; }
+.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save:hover { opacity: 0.92; }
+.btn-del { background: #fff1f2; color: #dc2626; border: 1px solid #fecaca; }
+.btn-del:hover { background: #fee2e2; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.86rem; font-weight: 500; z-index: 9999; opacity: 0; transition: all .25s; pointer-events: none; max-width: 460px; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Activities</span></h1>
-    <p class="sl-desc">School-scoped kanban board for tracking school improvement initiatives, sub-committee work, parent council projects, and meeting action items.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_activity_projects + school_activity_tasks</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders · Workspace</p>
+      <h1 class="page-hero__title">School Activities</h1>
+      <p class="page-hero__desc">School-scoped kanban for the leadership team. Each project is a thread of work (an audit, a curriculum review, a parent-engagement push); tasks ladder under projects with status backlog / doing / blocked / done.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Project grouping + kanban columns (To Do / In Progress / Review / Done). Tasks carry assignees, due dates, and link back to source meeting items when spawned from agenda. Mirrors network-scoped /activities but per-school — your kanban is invisible to other partner schools.</p>
+<main class="page-wrap" id="mainRoot" style="display:none">
+  <div class="act-layout">
+    <aside class="proj-col">
+      <h3>Projects <button class="proj-btn-add" id="btnAddProject">+ New</button></h3>
+      <div class="proj-list" id="projList"></div>
+    </aside>
+
+    <section class="kanban-col" id="kanbanCol">
+      <div class="empty-board">
+        <h3>Pick a project to see its tasks</h3>
+        <p>Or hit <strong>+ New</strong> on the left to start one.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Project modal -->
+<div class="modal-overlay" id="modalProject">
+  <div class="modal">
+    <div class="modal-head"><h3 id="projModalTitle">New project</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="pTitle" placeholder="e.g. Q3 Year-7 Math intervention rollout">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description</label>
+        <textarea class="form-textarea" id="pDesc" rows="3" placeholder="What's the goal, what does done look like, who's involved?"></textarea>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="pStatus">
+            <option value="active">Active</option>
+            <option value="archived">Archived</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Owner (free text)</label>
+          <input type="text" class="form-input" id="pOwner" placeholder="e.g. Academic Coordinator">
+        </div>
+      </div>
     </div>
+    <div class="modal-foot">
+      <button class="btn-del" id="projModalDelete" style="display:none;">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn-cancel" id="projModalCancel">Cancel</button>
+        <button class="btn-save" id="projModalSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+<!-- Task modal -->
+<div class="modal-overlay" id="modalTask">
+  <div class="modal">
+    <div class="modal-head"><h3 id="taskModalTitle">New task</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="tTitle" placeholder="e.g. Draft the Y8 SoW revision">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Description / notes</label>
+        <textarea class="form-textarea" id="tDesc" rows="3" placeholder="Any context for the next person who picks this up."></textarea>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-select" id="tStatus">
+            <option value="backlog">Backlog</option>
+            <option value="doing">Doing</option>
+            <option value="blocked">Blocked</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Assignee (free text)</label>
+          <input type="text" class="form-input" id="tAssignee" placeholder="e.g. Principal">
+        </div>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Due date</label>
+          <input type="date" class="form-input" id="tDue">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Priority</label>
+          <select class="form-select" id="tPriority">
+            <option value="normal">Normal</option>
+            <option value="high">High</option>
+            <option value="urgent">Urgent</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-del" id="taskModalDelete" style="display:none;">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn-cancel" id="taskModalCancel">Cancel</button>
+        <button class="btn-save" id="taskModalSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-activities', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+<div class="toast" id="toast"></div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, addDoc, updateDoc, deleteDoc, serverTimestamp, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const STATUSES = ['backlog','doing','blocked','done'];
+const STATUS_LABELS = { backlog:'Backlog', doing:'Doing', blocked:'Blocked', done:'Done' };
+
+let db, currentUser, userProfile;
+let isAdmin = false;
+let schoolId = null;
+let allProjects = [];
+let allTasks = [];
+let activeProjectId = null;
+let editingProjectId = null;
+let editingTaskId = null;
+let tasksUnsub = null;
+
+const $ = (id) => document.getElementById(id);
+const escHtml = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+document.addEventListener('authReady', ({ detail }) => {
+  currentUser = detail?.user || window.currentUser;
+  userProfile = detail?.profile || window.userProfile || {};
+  db = window.db;
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-activities', { user: currentUser, profile: userProfile });
+  }
+
+  isAdmin = userProfile.role_academichub === 'academic_admin'
+         || userProfile.role_centralhub === 'central_admin';
+  schoolId = userProfile.schoolId || null;
+
+  if (!schoolId && !isAdmin) {
+    $('mainRoot').style.display = 'block';
+    $('projList').innerHTML = `<div style="font-size:0.82rem;color:var(--ink-3);padding:14px;text-align:center;">Your profile is missing a <code>schoolId</code>. Ask an admin to update your profile.</div>`;
+    return;
+  }
+
+  $('mainRoot').style.display = 'block';
+  wireUI();
+  subscribeProjects();
+});
+
+function wireUI() {
+  $('btnAddProject').addEventListener('click', () => openProjectModal(null));
+  $('projModalCancel').addEventListener('click', () => $('modalProject').classList.remove('open'));
+  $('projModalSave').addEventListener('click', saveProject);
+  $('projModalDelete').addEventListener('click', deleteProject);
+  $('taskModalCancel').addEventListener('click', () => $('modalTask').classList.remove('open'));
+  $('taskModalSave').addEventListener('click', saveTask);
+  $('taskModalDelete').addEventListener('click', deleteTask);
+}
+
+function subscribeProjects() {
+  const constraints = [orderBy('createdAt', 'desc'), limit(200)];
+  if (!isAdmin && schoolId) constraints.unshift(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_activity_projects'), ...constraints);
+  onSnapshot(q, (snap) => {
+    allProjects = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderProjects();
+    if (!activeProjectId && allProjects.length) {
+      selectProject(allProjects[0].id);
+    } else if (activeProjectId && !allProjects.some(p => p.id === activeProjectId)) {
+      activeProjectId = null;
+      renderBoard();
+    }
+  }, (err) => {
+    console.error('[subscribeProjects]', err);
+    $('projList').innerHTML = `<div style="font-size:0.78rem;color:#dc2626;padding:12px;">${escHtml(err.code || err.message)}</div>`;
+  });
+}
+
+function renderProjects() {
+  const list = $('projList');
+  if (!allProjects.length) {
+    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No projects yet — hit <strong>+ New</strong> above.</div>`;
+    return;
+  }
+  list.innerHTML = allProjects.map(p => {
+    const taskCount = allTasks.filter(t => t.projectId === p.id).length;
+    return `<div class="proj-item ${p.id === activeProjectId ? 'active' : ''}" data-project="${p.id}">
+      <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escHtml(p.title || 'Untitled')}</span>
+      ${taskCount ? `<span class="proj-item-meta">${taskCount}</span>` : ''}
+    </div>`;
+  }).join('');
+  list.querySelectorAll('[data-project]').forEach(el => {
+    el.addEventListener('click', () => selectProject(el.dataset.project));
+  });
+}
+
+function selectProject(projectId) {
+  activeProjectId = projectId;
+  renderProjects();
+  if (tasksUnsub) tasksUnsub();
+  tasksUnsub = subscribeTasks(projectId);
+}
+
+function subscribeTasks(projectId) {
+  const constraints = [where('projectId', '==', projectId), orderBy('createdAt', 'asc'), limit(500)];
+  if (!isAdmin && schoolId) constraints.push(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_activity_tasks'), ...constraints);
+  return onSnapshot(q, (snap) => {
+    allTasks = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderBoard();
+    renderProjects();
+  }, (err) => {
+    console.error('[subscribeTasks]', err);
+    $('kanbanCol').innerHTML = `<div class="empty-board"><h3>Could not load tasks</h3><p>${escHtml(err.code || err.message)}</p></div>`;
+  });
+}
+
+function renderBoard() {
+  const wrap = $('kanbanCol');
+  const proj = allProjects.find(p => p.id === activeProjectId);
+  if (!proj) {
+    wrap.innerHTML = `<div class="empty-board"><h3>Pick a project to see its tasks</h3><p>Or hit <strong>+ New</strong> on the left to start one.</p></div>`;
+    return;
+  }
+
+  const projTasks = allTasks.filter(t => t.projectId === proj.id);
+  wrap.innerHTML = `
+    <div class="kanban-head">
+      <div>
+        <h2>${escHtml(proj.title || 'Untitled')}</h2>
+        ${proj.description ? `<div class="desc">${escHtml(proj.description)}</div>` : ''}
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="kanban-task-add" id="btnEditProject">✎ Edit project</button>
+        <button class="kanban-task-add" id="btnAddTask">+ New task</button>
+      </div>
+    </div>
+    <div class="kanban-board">
+      ${STATUSES.map(s => renderLane(s, projTasks.filter(t => (t.status || 'backlog') === s))).join('')}
+    </div>
+  `;
+
+  $('btnEditProject').addEventListener('click', () => openProjectModal(proj.id));
+  $('btnAddTask').addEventListener('click', () => openTaskModal(null));
+  wrap.querySelectorAll('[data-task]').forEach(el => {
+    el.addEventListener('click', () => openTaskModal(el.dataset.task));
+  });
+}
+
+function renderLane(status, tasks) {
+  return `
+    <div class="kanban-lane" data-status="${status}">
+      <div class="kanban-lane-head">
+        ${STATUS_LABELS[status]}
+        <span class="kanban-count">${tasks.length}</span>
+      </div>
+      ${tasks.length ? tasks.map(renderTaskCard).join('') : '<div class="empty-lane">No tasks</div>'}
+    </div>
+  `;
+}
+
+function renderTaskCard(t) {
+  const due = t.dueDate?.toDate ? t.dueDate.toDate() : (t.dueDate ? new Date(t.dueDate) : null);
+  const overdue = due && due < new Date() && (t.status || 'backlog') !== 'done';
+  const dueStr = due ? due.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : '';
+  return `
+    <div class="task-card" data-task="${t.id}">
+      <div class="task-title">${escHtml(t.title || 'Untitled')}</div>
+      <div class="task-meta">
+        ${t.priority && t.priority !== 'normal' ? `<span class="pill-tiny" style="background:${t.priority === 'urgent' ? '#fee2e2' : '#fef3c7'};color:${t.priority === 'urgent' ? '#991b1b' : '#92400e'};">${t.priority}</span>` : ''}
+        ${t.assignee ? `<span class="assignee">${escHtml(t.assignee)}</span>` : ''}
+        ${dueStr ? `<span class="due ${overdue ? 'overdue' : ''}">📅 ${dueStr}</span>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+/* Project CRUD */
+function openProjectModal(projectId) {
+  editingProjectId = projectId;
+  if (projectId) {
+    const p = allProjects.find(x => x.id === projectId);
+    if (!p) { showToast('Not found.'); return; }
+    $('projModalTitle').textContent = 'Edit project';
+    $('pTitle').value = p.title || '';
+    $('pDesc').value = p.description || '';
+    $('pStatus').value = p.status || 'active';
+    $('pOwner').value = p.owner || '';
+    $('projModalDelete').style.display = isAdmin ? '' : 'none';
+  } else {
+    $('projModalTitle').textContent = 'New project';
+    $('pTitle').value = '';
+    $('pDesc').value = '';
+    $('pStatus').value = 'active';
+    $('pOwner').value = '';
+    $('projModalDelete').style.display = 'none';
+  }
+  $('modalProject').classList.add('open');
+}
+
+async function saveProject() {
+  const title = $('pTitle').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+
+  const payload = {
+    title,
+    description: $('pDesc').value.trim(),
+    status: $('pStatus').value,
+    owner: $('pOwner').value.trim(),
+    schoolId: schoolId || (editingProjectId ? (allProjects.find(x => x.id === editingProjectId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingProjectId) {
+      await updateDoc(doc(db, 'school_activity_projects', editingProjectId), payload);
+      showToast('Project updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      const ref = await addDoc(collection(db, 'school_activity_projects'), payload);
+      activeProjectId = ref.id;
+      showToast('Project created.');
+    }
+    $('modalProject').classList.remove('open');
+  } catch (err) {
+    console.error('[saveProject]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function deleteProject() {
+  if (!editingProjectId || !isAdmin) return;
+  if (!confirmDanger()) return;
+  try {
+    await deleteDoc(doc(db, 'school_activity_projects', editingProjectId));
+    showToast('Project deleted.');
+    $('modalProject').classList.remove('open');
+    if (activeProjectId === editingProjectId) activeProjectId = null;
+  } catch (err) {
+    console.error('[deleteProject]', err);
+    showToast(`Delete failed: ${err.code || err.message}`);
+  }
+}
+
+/* Task CRUD */
+function openTaskModal(taskId) {
+  editingTaskId = taskId;
+  if (taskId) {
+    const t = allTasks.find(x => x.id === taskId);
+    if (!t) { showToast('Not found.'); return; }
+    $('taskModalTitle').textContent = 'Edit task';
+    $('tTitle').value = t.title || '';
+    $('tDesc').value = t.description || '';
+    $('tStatus').value = t.status || 'backlog';
+    $('tAssignee').value = t.assignee || '';
+    $('tPriority').value = t.priority || 'normal';
+    const due = t.dueDate?.toDate ? t.dueDate.toDate() : (t.dueDate ? new Date(t.dueDate) : null);
+    $('tDue').value = due ? `${due.getFullYear()}-${String(due.getMonth()+1).padStart(2,'0')}-${String(due.getDate()).padStart(2,'0')}` : '';
+    $('taskModalDelete').style.display = '';
+  } else {
+    $('taskModalTitle').textContent = 'New task';
+    $('tTitle').value = '';
+    $('tDesc').value = '';
+    $('tStatus').value = 'backlog';
+    $('tAssignee').value = '';
+    $('tPriority').value = 'normal';
+    $('tDue').value = '';
+    $('taskModalDelete').style.display = 'none';
+  }
+  $('modalTask').classList.add('open');
+}
+
+async function saveTask() {
+  const title = $('tTitle').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!activeProjectId) { showToast('No project selected.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile.'); return; }
+
+  const payload = {
+    projectId: activeProjectId,
+    title,
+    description: $('tDesc').value.trim(),
+    status: $('tStatus').value,
+    assignee: $('tAssignee').value.trim(),
+    priority: $('tPriority').value,
+    dueDate: $('tDue').value ? new Date($('tDue').value) : null,
+    schoolId: schoolId || (editingTaskId ? (allTasks.find(x => x.id === editingTaskId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingTaskId) {
+      await updateDoc(doc(db, 'school_activity_tasks', editingTaskId), payload);
+      showToast('Task updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'school_activity_tasks'), payload);
+      showToast('Task created.');
+    }
+    $('modalTask').classList.remove('open');
+  } catch (err) {
+    console.error('[saveTask]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function deleteTask() {
+  if (!editingTaskId) return;
+  const t = allTasks.find(x => x.id === editingTaskId);
+  if (!t) return;
+  // Rule allows creator OR admin to delete
+  const canDelete = isAdmin || t.createdBy === currentUser.uid;
+  if (!canDelete) { showToast('Only the creator or an admin can delete this task.'); return; }
+  if (!confirmDanger()) return;
+  try {
+    await deleteDoc(doc(db, 'school_activity_tasks', editingTaskId));
+    showToast('Task deleted.');
+    $('modalTask').classList.remove('open');
+  } catch (err) {
+    console.error('[deleteTask]', err);
+    showToast(`Delete failed: ${err.code || err.message}`);
+  }
+}
+
+let _confirming = null;
+function confirmDanger() {
+  // Single-tap → set timer; second tap within 3s → proceed
+  if (_confirming) { clearTimeout(_confirming); _confirming = null; return true; }
+  showToast('Tap delete again within 3s to confirm.');
+  _confirming = setTimeout(() => { _confirming = null; }, 3000);
+  return false;
+}
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Activities</span>
+      <h2 class="page-footer__cta-title">Kanban is where decisions become work.</h2>
+      <p class="page-footer__cta-desc">A decision without a task is a wish. Use this board to ladder the action-tagged items from your meetings into named work — owner, due date, status. Friday afternoon: tick what's done, leave the rest for next week.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to surface a decision <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Activities footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+        <a href="/school-artifacts" class="page-footer__nav-link">Artifacts</a>
+        <a href="/weekly-checklist" class="page-footer__nav-link">Weekly Checklist</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <a href="/school-leadership-operational-guide" class="page-footer__nav-link">Operational Guide</a>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Same-school visibility · only your school's leaders see this board</span>
+  </div>
+</footer>
 </body>
 </html>

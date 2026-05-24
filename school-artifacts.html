@@ -1,72 +1,480 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Artifacts - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Artifacts — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Ported from CH /department-artifacts (2026-05-24), schoolId-scoped.
+   AH simplification: per-subject card grid; each card lists artifacts
+   the school has uploaded for that subject in this academic year. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+.da-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 18px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; align-items: center; }
+.da-filter { padding: 7px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; color: var(--ink); background: var(--paper); cursor: pointer; }
+.da-filter:focus { outline: none; border-color: var(--accent); background: var(--white); }
+.da-btn-add { padding: 8px 16px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .12s; }
+.da-btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.subject-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; box-shadow: var(--shadow-sm); transition: box-shadow .15s; }
+.subject-card:hover { box-shadow: var(--shadow); }
+.subject-card h3 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.subject-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: #fff; flex-shrink: 0; }
+.subject-icon.math { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
+.subject-icon.biology { background: linear-gradient(135deg,#10b981,#047857); }
+.subject-icon.chemistry { background: linear-gradient(135deg,#f59e0b,#b45309); }
+.subject-icon.physics { background: linear-gradient(135deg,#8b5cf6,#5b21b6); }
+.subject-icon.science { background: linear-gradient(135deg,#06b6d4,#0e7490); }
+.subject-icon.english { background: linear-gradient(135deg,#ec4899,#9d174d); }
+.subject-icon.bahasa { background: linear-gradient(135deg,#f43f5e,#9f1239); }
+.subject-icon.religion { background: linear-gradient(135deg,#6366f1,#3730a3); }
+.subject-icon.arts { background: linear-gradient(135deg,#a855f7,#7e22ce); }
+.subject-icon.sport { background: linear-gradient(135deg,#22c55e,#15803d); }
+.subject-icon.ict { background: linear-gradient(135deg,#0ea5e9,#0369a1); }
+.subject-icon.humanities { background: linear-gradient(135deg,#d97706,#92400e); }
+
+.artifact-row-list { display: flex; flex-direction: column; gap: 8px; }
+.artifact-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 9px 12px; background: var(--paper); border: 1px solid var(--border); border-radius: 7px; font-size: 0.82rem; transition: background .12s; }
+.artifact-row:hover { background: #fff; border-color: var(--accent); }
+.ar-text { flex: 1; min-width: 0; }
+.ar-type { font-size: 0.66rem; font-weight: 700; color: #5b21b6; background: #ede9fe; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.ar-title { color: var(--ink); font-weight: 500; }
+.ar-title a { color: var(--accent); text-decoration: none; }
+.ar-title a:hover { text-decoration: underline; }
+.ar-meta { font-size: 0.72rem; color: var(--ink-3); margin-top: 2px; }
+.ar-actions { display: flex; gap: 4px; flex-shrink: 0; opacity: 0; transition: opacity .12s; }
+.artifact-row:hover .ar-actions { opacity: 1; }
+.ar-btn { padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 500; border: 1px solid var(--border); background: var(--white); cursor: pointer; color: var(--ink-2); font-family: 'DM Sans', sans-serif; }
+.ar-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ar-btn.danger:hover { border-color: #dc2626; color: #dc2626; background: #fff1f2; }
+
+.empty-subject { font-size: 0.78rem; color: var(--ink-3); padding: 14px; text-align: center; background: var(--paper); border: 1px dashed var(--border); border-radius: 7px; }
+
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 540px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.modal-head h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; background: var(--paper); }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--ink); background: var(--white); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 70px; line-height: 1.55; }
+.form-hint { font-size: 0.74rem; color: var(--ink-3); margin-top: 4px; }
+.btn-cancel, .btn-save { padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none; }
+.btn-cancel { background: var(--paper-2); color: var(--ink-2); }
+.btn-cancel:hover { background: #e2e8f0; }
+.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save:hover { opacity: 0.92; }
+
+.empty-state { text-align: center; padding: 48px 24px; color: var(--ink-3); background: var(--white); border: 1px dashed var(--border); border-radius: 10px; }
+.empty-state h3 { font-family: 'Lora', serif; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.86rem; font-weight: 500; z-index: 9999; opacity: 0; transition: all .25s; pointer-events: none; max-width: 460px; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Artifacts</span></h1>
-    <p class="sl-desc">Per-(school, subject) living documents — Annual Plan, Department Handbook, Subject Policy, Lesson Plan templates. Versioned; supports uploaded files + external Google Doc links.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_artifacts</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders · School Resources</p>
+      <h1 class="page-hero__title">School Artifacts</h1>
+      <p class="page-hero__desc">Per-subject living documents this school maintains — Annual Plan, Scheme of Work, lesson plans, internal assessments, intervention plans. Each subject card collects what's current; superseded versions stay archived for audit.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Grid layout: subject filter chips + artifact type filter. Each artifact card shows title, version, owner, last edited. Versioning via previousVersionId chain — uploading a new version archives the old one (only one status:'current' per subject/type/year). Storage uploads go to school_artifacts/{schoolId}/{subjectId}/{ts}_{filename} (≤25 MB; PDF/Word/image).</p>
+<main class="page-wrap" id="mainRoot" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
+    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by subject, type, status, or year — or upload a new artifact.</div>
+    <button class="da-btn-add" id="btnAddArtifact">+ New artifact</button>
+  </div>
+
+  <div class="da-filter-bar">
+    <select class="da-filter" id="filterSubject">
+      <option value="">All subjects</option>
+    </select>
+    <select class="da-filter" id="filterType">
+      <option value="">All types</option>
+      <option value="annual_plan">Annual Plan</option>
+      <option value="sow">Scheme of Work</option>
+      <option value="lesson_plans">Lesson Plans</option>
+      <option value="assessments">Assessments</option>
+      <option value="intervention_plan">Intervention Plan</option>
+      <option value="other">Other</option>
+    </select>
+    <select class="da-filter" id="filterStatus">
+      <option value="current">Current only</option>
+      <option value="archived">Archived</option>
+      <option value="">All</option>
+    </select>
+    <select class="da-filter" id="filterYear">
+      <option value="">All years</option>
+      <option value="2025/2026">2025/2026</option>
+      <option value="2026/2027">2026/2027</option>
+    </select>
+  </div>
+
+  <div class="subjects-grid" id="subjectsGrid"></div>
+</main>
+
+<div class="modal-overlay" id="modalArtifact">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">New artifact</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select class="form-select" id="aSubject"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="aType">
+          <option value="annual_plan">Annual Plan</option>
+          <option value="sow">Scheme of Work</option>
+          <option value="lesson_plans">Lesson Plans</option>
+          <option value="assessments">Assessments</option>
+          <option value="intervention_plan">Intervention Plan</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="aTitle" placeholder="e.g. Year 8 Math Annual Plan 2026/2027">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Link (Google Drive / SharePoint / external)</label>
+        <input type="url" class="form-input" id="aUrl" placeholder="https://docs.google.com/…">
+        <div class="form-hint">Files live in your school's drive — paste a link here. Eduversal does not host the file.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Academic year</label>
+        <select class="form-select" id="aYear">
+          <option value="2025/2026">2025/2026</option>
+          <option value="2026/2027">2026/2027</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <textarea class="form-textarea" id="aNotes" rows="2" placeholder="What changed from last year? Who curates this?"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="aStatus">
+          <option value="current">Current (live)</option>
+          <option value="archived">Archived</option>
+        </select>
+        <div class="form-hint">Mark old versions as archived rather than deleting — keeps the trail.</div>
+      </div>
     </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-save" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+<div class="toast" id="toast"></div>
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-artifacts', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, addDoc, updateDoc, deleteDoc, serverTimestamp, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
+const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
+const SUBJECT_ICONS = { math:'M', biology:'Bi', chemistry:'Ch', physics:'Ph', science:'Sc', english:'En', bahasa:'Bh', religion:'Re', arts:'Ar', sport:'Sp', ict:'IT', humanities:'Hu' };
+const TYPE_LABELS = { annual_plan:'Annual Plan', sow:'Scheme of Work', lesson_plans:'Lesson Plans', assessments:'Assessments', intervention_plan:'Intervention Plan', other:'Other' };
+
+let db, currentUser, userProfile;
+let isAdmin = false;
+let schoolId = null;
+let allArtifacts = [];
+let editingId = null;
+
+const $ = (id) => document.getElementById(id);
+const escHtml = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function safeUrl(url) { return /^https?:\/\//i.test(url || '') ? url : '#'; }
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function fmtDate(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+document.addEventListener('authReady', ({ detail }) => {
+  currentUser = detail?.user || window.currentUser;
+  userProfile = detail?.profile || window.userProfile || {};
+  db = window.db;
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-artifacts', { user: currentUser, profile: userProfile });
+  }
+
+  isAdmin = userProfile.role_academichub === 'academic_admin'
+         || userProfile.role_centralhub === 'central_admin';
+  schoolId = userProfile.schoolId || null;
+
+  if (!schoolId && !isAdmin) {
+    $('mainRoot').style.display = 'block';
+    $('subjectsGrid').innerHTML = `<div class="empty-state"><h3>No school assigned</h3><p>Your profile is missing a <code>schoolId</code>. Sign in again to set it, or ask an admin to update your profile.</p></div>`;
+    return;
+  }
+
+  $('mainRoot').style.display = 'block';
+  populateSubjectControls();
+  wireUI();
+  subscribeArtifacts();
+});
+
+function populateSubjectControls() {
+  const fS = $('filterSubject');
+  fS.innerHTML = '<option value="">All subjects</option>' + SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
+  const aS = $('aSubject');
+  aS.innerHTML = SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
+}
+
+function wireUI() {
+  $('btnAddArtifact').addEventListener('click', () => openModal(null));
+  $('modalCancel').addEventListener('click', closeModal);
+  $('modalSave').addEventListener('click', saveArtifact);
+  ['filterSubject','filterType','filterStatus','filterYear'].forEach(id => {
+    $(id).addEventListener('change', render);
+  });
+}
+
+function subscribeArtifacts() {
+  const constraints = [orderBy('updatedAt', 'desc'), limit(500)];
+  if (!isAdmin && schoolId) constraints.unshift(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_artifacts'), ...constraints);
+  onSnapshot(q, (snap) => {
+    allArtifacts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+  }, (err) => {
+    console.error('[subscribeArtifacts]', err);
+    $('subjectsGrid').innerHTML = `<div class="empty-state"><h3>Could not load</h3><p>${escHtml(err.code || err.message)}</p></div>`;
+  });
+}
+
+function render() {
+  const subF = $('filterSubject').value;
+  const typeF = $('filterType').value;
+  const statusF = $('filterStatus').value || '';
+  const yearF = $('filterYear').value;
+
+  const filtered = allArtifacts.filter(a => {
+    if (subF && a.subjectId !== subF) return false;
+    if (typeF && a.artifactType !== typeF) return false;
+    if (statusF && (a.status || 'current') !== statusF) return false;
+    if (yearF && a.academicYear !== yearF) return false;
+    return true;
+  });
+
+  const subjectsToShow = subF ? [subF] : SUBJECTS.filter(s => filtered.some(a => a.subjectId === s));
+  const wrap = $('subjectsGrid');
+
+  if (!filtered.length && !subjectsToShow.length) {
+    wrap.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>No artifacts yet</h3><p>Hit <strong>+ New artifact</strong> to add the first row, or clear the filters.</p></div>`;
+    return;
+  }
+  if (!subjectsToShow.length) {
+    wrap.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><h3>No matches</h3><p>Try clearing one of the filters.</p></div>`;
+    return;
+  }
+
+  wrap.innerHTML = subjectsToShow.map(subj => {
+    const rows = filtered.filter(a => a.subjectId === subj);
+    return `
+      <div class="subject-card">
+        <h3><span class="subject-icon ${subj}">${SUBJECT_ICONS[subj] || '·'}</span> ${SUBJECT_LABELS[subj]}</h3>
+        ${rows.length ? `
+          <div class="artifact-row-list">
+            ${rows.map(renderRow).join('')}
+          </div>
+        ` : `<div class="empty-subject">No artifacts yet for ${SUBJECT_LABELS[subj]}.</div>`}
+      </div>
+    `;
+  }).join('');
+
+  wrap.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.edit)));
+  wrap.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => confirmDelete(b.dataset.delete, b)));
+}
+
+function renderRow(a) {
+  const status = a.status || 'current';
+  return `
+    <div class="artifact-row">
+      <div class="ar-text">
+        <span class="ar-type">${escHtml(TYPE_LABELS[a.artifactType] || a.artifactType || 'Other')}</span>
+        <div class="ar-title">${a.url
+          ? `<a href="${escHtml(safeUrl(a.url))}" target="_blank" rel="noopener">${escHtml(a.title || 'Untitled')} ↗</a>`
+          : escHtml(a.title || 'Untitled')}</div>
+        <div class="ar-meta">${escHtml(a.academicYear || '—')} · ${status === 'archived' ? '<span style="color:#92400e;">archived</span> · ' : ''}updated ${fmtDate(a.updatedAt)}</div>
+        ${a.notes ? `<div class="ar-meta" style="font-style:italic;margin-top:4px;">${escHtml(a.notes)}</div>` : ''}
+      </div>
+      <div class="ar-actions">
+        <button class="ar-btn" data-edit="${a.id}">✎</button>
+        ${isAdmin ? `<button class="ar-btn danger" data-delete="${a.id}" data-confirming="false">×</button>` : ''}
+      </div>
+    </div>
+  `;
+}
+
+function openModal(artifactId) {
+  editingId = artifactId;
+  if (artifactId) {
+    const a = allArtifacts.find(x => x.id === artifactId);
+    if (!a) { showToast('Not found.'); return; }
+    $('modalTitle').textContent = 'Edit artifact';
+    $('aSubject').value = a.subjectId || 'math';
+    $('aType').value = a.artifactType || 'annual_plan';
+    $('aTitle').value = a.title || '';
+    $('aUrl').value = a.url || '';
+    $('aYear').value = a.academicYear || '2025/2026';
+    $('aNotes').value = a.notes || '';
+    $('aStatus').value = a.status || 'current';
+  } else {
+    $('modalTitle').textContent = 'New artifact';
+    $('aSubject').value = 'math';
+    $('aType').value = 'annual_plan';
+    $('aTitle').value = '';
+    $('aUrl').value = '';
+    $('aYear').value = '2025/2026';
+    $('aNotes').value = '';
+    $('aStatus').value = 'current';
+  }
+  $('modalArtifact').classList.add('open');
+}
+
+function closeModal() {
+  $('modalArtifact').classList.remove('open');
+  editingId = null;
+}
+
+async function saveArtifact() {
+  const title = $('aTitle').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+
+  const payload = {
+    subjectId: $('aSubject').value,
+    artifactType: $('aType').value,
+    title,
+    url: $('aUrl').value.trim(),
+    academicYear: $('aYear').value,
+    notes: $('aNotes').value.trim(),
+    status: $('aStatus').value,
+    schoolId: schoolId || (editingId ? (allArtifacts.find(x => x.id === editingId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'school_artifacts', editingId), payload);
+      showToast('Artifact updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      payload.previousVersionId = null;
+      await addDoc(collection(db, 'school_artifacts'), payload);
+      showToast('Artifact added.');
+    }
+    closeModal();
+  } catch (err) {
+    console.error('[saveArtifact]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function confirmDelete(id, btn) {
+  if (!isAdmin) { showToast('Only admin can delete.'); return; }
+  if (btn.dataset.confirming === 'true') {
+    btn.dataset.confirming = 'false';
+    btn.textContent = '×';
+    try {
+      await deleteDoc(doc(db, 'school_artifacts', id));
+      showToast('Deleted.');
+    } catch (err) {
+      console.error('[deleteArtifact]', err);
+      showToast(`Delete failed: ${err.code || err.message}`);
+    }
+    return;
+  }
+  btn.dataset.confirming = 'true';
+  btn.textContent = '✓ confirm';
+  setTimeout(() => {
+    if (btn.dataset.confirming === 'true') {
+      btn.dataset.confirming = 'false';
+      btn.textContent = '×';
+    }
+  }, 3000);
+}
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Resources · Artifacts</span>
+      <h2 class="page-footer__cta-title">The annual plan only counts if the team can find it.</h2>
+      <p class="page-footer__cta-desc">Per-subject annual plans, schemes of work, and intervention plans are the living spine of the academic year. Link them here once and the whole leadership team — and HQ on review visits — knows where to look.</p>
+      <a href="/curriculum-map" class="page-footer__cta-btn">Cross-check with the Curriculum Map <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Artifacts footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+        <a href="/school-activities" class="page-footer__nav-link">Activities</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Curriculum</span>
+        <a href="/academic-standards" class="page-footer__nav-link">Eduversal Standards</a>
+        <a href="/curriculum-map" class="page-footer__nav-link">Curriculum Map</a>
+        <a href="/syllabus-coverage" class="page-footer__nav-link">Syllabus Coverage</a>
+        <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Files live in your school's drive — Eduversal stores the index, not the file</span>
+  </div>
+</footer>
 </body>
 </html>

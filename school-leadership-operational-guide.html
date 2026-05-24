@@ -1,72 +1,294 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Operational Guide - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operational Guide — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Operational Guide landing for AH School Leaders — 4 sub-role
+   first-90-days handbooks live in the docs/handbooks/ JSONs and are
+   served by /handbook?id=<programId>. This page is the audience-aware
+   launcher: cards highlight the user's sub-roles, sibling cards stay
+   accessible as cross-reference. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+.intro-banner {
+  background: linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%);
+  border: 1px solid #c4b5fd; border-radius: 14px;
+  padding: 18px 22px; margin-bottom: 24px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.intro-banner .icon { font-size: 24px; }
+.intro-banner h2 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; color: #5b21b6; margin-bottom: 4px; }
+.intro-banner p { font-size: 13.5px; color: var(--ink-2); line-height: 1.6; }
+
+.role-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px; margin-bottom: 28px;
+}
+.role-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 14px; padding: 0; overflow: hidden;
+  box-shadow: var(--shadow-sm); transition: transform .18s ease, box-shadow .18s ease;
+  display: flex; flex-direction: column;
+}
+.role-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,23,42,0.08); }
+.role-card[data-active="true"] {
+  border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,92,231,0.15), var(--shadow);
+}
+.role-card .strip { height: 6px; background: var(--role-grad); }
+.role-card[data-role="foundation_representative"] { --role-grad: linear-gradient(90deg,#1e3a8a,#0c4a6e); }
+.role-card[data-role="school_principal"]          { --role-grad: linear-gradient(90deg,#7c3aed,#5b21b6); }
+.role-card[data-role="academic_coordinator"]      { --role-grad: linear-gradient(90deg,#0e7490,#0891b2); }
+.role-card[data-role="cambridge_coordinator"]     { --role-grad: linear-gradient(90deg,#0d9488,#0f766e); }
+.role-card .body { padding: 18px 22px 16px; flex: 1; display: flex; flex-direction: column; }
+.role-card .eyebrow {
+  font-size: 0.7rem; font-weight: 700; color: var(--ink-3);
+  letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px;
+}
+.role-card[data-active="true"] .eyebrow { color: var(--accent); }
+.role-card h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.role-card .desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); margin-bottom: 14px; flex: 1; }
+.role-card .stats {
+  display: flex; gap: 12px; font-size: 0.74rem; color: var(--ink-3);
+  margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px dashed var(--border);
+}
+.role-card .stats strong { color: var(--ink-2); font-family: 'DM Mono', monospace; }
+.role-card .cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 8px 14px; background: linear-gradient(135deg,#7c3aed,#0891b2);
+  color: #fff; text-decoration: none; border-radius: 8px;
+  font-size: 0.84rem; font-weight: 600;
+  transition: transform .12s, box-shadow .12s;
+}
+.role-card .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108,92,231,0.3); }
+.role-card .your-badge {
+  display: inline-block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: #fff; background: var(--accent);
+  padding: 3px 9px; border-radius: 999px; margin-left: 6px; vertical-align: middle;
+}
+
+.section-divider {
+  font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; color: var(--ink-2);
+  margin: 28px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+
+.cross-ref-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+.cross-ref-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 18px;
+  text-decoration: none; color: inherit;
+  transition: border-color .15s, transform .12s, box-shadow .15s;
+}
+.cross-ref-card:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: var(--shadow); }
+.cross-ref-card h4 {
+  font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600;
+  color: var(--ink); margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+.cross-ref-card .icon-pill {
+  font-size: 1.1rem; width: 28px; height: 28px; display: inline-flex;
+  align-items: center; justify-content: center; border-radius: 8px;
+  background: var(--paper-2);
+}
+.cross-ref-card p { font-size: 0.82rem; line-height: 1.5; color: var(--ink-2); }
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Operational Guide</span></h1>
-    <p class="sl-desc">How a school leadership team uses the workspace day-to-day — meeting cadence guidance, ownership boundaries between FR / Principal / AC / CC, and the decision-promotion flow.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>(static reference)</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <h1 class="page-hero__title">Operational Guide</h1>
+      <p class="page-hero__desc">First-90-days operational handbooks for the four school leadership sub-roles. Open the one matching your role — or pull a sibling card when a meeting touches that lane. These complement the Year-1 induction handbook (mentor-led), which is at <a href="/my-induction" style="color:#a78bfa;text-decoration:underline;">My Induction</a>.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Sections covering: meeting cadence rhythms (weekly leadership / monthly foundation / termly review), agenda templates per meeting type, how to tag items (decision / action / discussion / announcement / red_text), promoting red-text items into binding Decisions, FR/Principal/AC/CC ownership matrix, and escalation paths to Eduversal HQ for cross-school policies.</p>
+<main class="page-wrap">
+  <div class="intro-banner" id="introBanner" style="display:none;">
+    <div class="icon">📕</div>
+    <div>
+      <h2 id="introTitle">Welcome — your handbook is highlighted below.</h2>
+      <p id="introDesc">Your active sub-role(s) are pinned to the top of the role grid. Sibling handbooks remain available for cross-reference — every meeting touches more than one lane.</p>
     </div>
+  </div>
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+  <div class="role-grid" id="roleGrid">
+    <!-- Cards injected by JS so we can pin user's sub-role(s) first. -->
+  </div>
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-leadership-operational-guide', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+  <h2 class="section-divider">Related references</h2>
+  <div class="cross-ref-grid">
+    <a class="cross-ref-card" href="/my-induction">
+      <h4><span class="icon-pill">🌱</span> Year-1 Induction</h4>
+      <p>If you joined this school in the last 12 months, the mentor-led induction handbook is your primary surface — it covers the 4-window arc + observation + journal.</p>
+    </a>
+    <a class="cross-ref-card" href="/weekly-checklist">
+      <h4><span class="icon-pill">📋</span> Weekly Checklist</h4>
+      <p>The handbook tells you WHY the function exists; the weekly checklist tells you WHAT to do this week. Pair the two: open the handbook stage you're in, then the checklist for the live week.</p>
+    </a>
+    <a class="cross-ref-card" href="/competency-framework">
+      <h4><span class="icon-pill">🎯</span> Competency Framework</h4>
+      <p>Six leadership domains × 24 competencies, anchored in Cambridge School Leader Standards 2023. The handbooks point into specific competencies — track your evidence over time here.</p>
+    </a>
+    <a class="cross-ref-card" href="/references">
+      <h4><span class="icon-pill">📚</span> References &amp; Standards</h4>
+      <p>The verbatim source archive — Cambridge standards, Eduversal Academic Standards (the §1-§23 manual), AICF, Indonesian regulations. Handbook chips deep-link into this surface.</p>
+    </a>
+    <a class="cross-ref-card" href="/handbook">
+      <h4><span class="icon-pill">📖</span> Handbook Browser</h4>
+      <p>The full handbook catalogue — induction handbooks, role-operational handbooks (all four sub-roles), policy-topic handbooks (Safeguarding / Behaviour / etc.), and AICF companion handbooks.</p>
+    </a>
+    <a class="cross-ref-card" href="/school-leadership-meetings">
+      <h4><span class="icon-pill">💬</span> Meetings</h4>
+      <p>The operational guides become real here — each agenda item ladders to a handbook stage. When uncertain who owns an item, open the relevant sub-role handbook's "key contacts" section.</p>
+    </a>
+  </div>
+</main>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+const ROLES = [
+  {
+    id: 'foundation_representative',
+    label: 'Foundation Representative',
+    eyebrow: 'Governance · Strategic oversight',
+    handbookId: 'eduversal_foundation_rep_first_90_days_v1',
+    desc: 'The owner\'s voice at the school. Translates Foundation-level direction into school-level decisions, holds the Principal accountable for academic outcomes, and chairs the cycle of school appraisals.',
+    stages: '4 stages',
+    weeks: '12 weeks',
+  },
+  {
+    id: 'school_principal',
+    label: 'School Principal',
+    eyebrow: 'Day-to-day leadership',
+    handbookId: 'eduversal_principal_v1',
+    desc: 'Operational lead of the school. Sets the academic tone, runs the leadership rhythm, owns teacher appraisal calibration, and is the first responder for any cross-functional issue.',
+    stages: 'Listen → Diagnose → Act → Anchor',
+    weeks: 'Year-1 induction (separate)',
+  },
+  {
+    id: 'academic_coordinator',
+    label: 'Academic Coordinator',
+    eyebrow: 'Curriculum + assessment delivery',
+    handbookId: 'eduversal_academic_coordinator_first_90_days_v1',
+    desc: 'The engine room of curriculum delivery. Owns scheme-of-work coverage, pacing across all subjects, internal assessment cycles, and the day-to-day pulse of academic operations.',
+    stages: '4 stages',
+    weeks: '12 weeks',
+  },
+  {
+    id: 'cambridge_coordinator',
+    label: 'Cambridge Coordinator',
+    eyebrow: 'Cambridge programme stewardship',
+    handbookId: 'eduversal_cambridge_coordinator_first_90_days_v1',
+    desc: 'The Cambridge International liaison. Owns entries, candidate registration, exam logistics, AS/A-Level pathway decisions, and the Cambridge quality assurance trail — works closely with HQ Subject Specialists.',
+    stages: '4 stages',
+    weeks: '12 weeks',
+  },
+];
+
+document.addEventListener('authReady', ({ detail }) => {
+  const user = detail?.user || window.currentUser;
+  const profile = detail?.profile || window.userProfile || {};
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-leadership-operational-guide', { user, profile });
+  }
+
+  const subRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+  const hasAnyMatch = subRoles.some(s => ROLES.some(r => r.id === s));
+
+  const intro = document.getElementById('introBanner');
+  const introTitle = document.getElementById('introTitle');
+  const introDesc = document.getElementById('introDesc');
+
+  if (hasAnyMatch) {
+    intro.style.display = 'flex';
+    const matched = ROLES.filter(r => subRoles.includes(r.id)).map(r => r.label).join(' + ');
+    introTitle.textContent = `Welcome — your handbook${subRoles.length > 1 ? 's are' : ' is'} highlighted below.`;
+    introDesc.innerHTML = `You sit in <strong>${matched}</strong>. The matching card${subRoles.length > 1 ? 's are' : ' is'} pinned first; sibling handbooks remain available for cross-reference — every meeting touches more than one lane.`;
+  }
+
+  // Sort: user's sub-roles first, then the rest in canonical order.
+  const ordered = [
+    ...ROLES.filter(r => subRoles.includes(r.id)),
+    ...ROLES.filter(r => !subRoles.includes(r.id)),
+  ];
+
+  const grid = document.getElementById('roleGrid');
+  grid.innerHTML = ordered.map(r => {
+    const isActive = subRoles.includes(r.id);
+    return `
+      <article class="role-card" data-role="${r.id}" data-active="${isActive}">
+        <div class="strip"></div>
+        <div class="body">
+          <div class="eyebrow">${r.eyebrow}</div>
+          <h3>${r.label}${isActive ? '<span class="your-badge">Your role</span>' : ''}</h3>
+          <p class="desc">${r.desc}</p>
+          <div class="stats"><span><strong>${r.stages}</strong></span><span><strong>${r.weeks}</strong></span></div>
+          <a class="cta" href="/handbook?id=${r.handbookId}">Open handbook <span style="margin-left:6px;">→</span></a>
+        </div>
+      </article>
+    `;
+  }).join('');
+});
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">First 90 days · Leadership ramp</span>
+      <h2 class="page-footer__cta-title">Handbook tells the WHY. Checklist tells the WHEN.</h2>
+      <p class="page-footer__cta-desc">Operational guides explain why the role exists and how to ramp in 90 days. Weekly checklists tell you what to do this week. Pair them: read the handbook stage you're in, then run the matching weekly checklist.</p>
+      <a href="/weekly-checklist" class="page-footer__cta-btn">Open this week's checklist <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Operational Guide footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">CPD</span>
+        <a href="/my-induction" class="page-footer__nav-link">Year-1 Induction</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbook Browser</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Four sub-roles · Foundation · Principal · Academic · Cambridge</span>
+  </div>
+</footer>
 </body>
 </html>

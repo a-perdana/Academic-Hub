@@ -1,72 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Read Me First - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Read Me First — School Leaders — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+}
+@media (max-width: 900px) { .page-wrap { grid-template-columns: 1fr; gap: 18px; } }
+
+/* Footer override */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+/* Sticky TOC */
+.toc {
+  position: sticky; top: 78px; align-self: start;
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; max-height: calc(100vh - 100px); overflow-y: auto;
+}
+.toc h4 { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-3); margin-bottom: 10px; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc li { margin-bottom: 3px; }
+.toc a { display: block; padding: 6px 10px; font-size: 0.82rem; color: var(--ink-2); text-decoration: none; border-radius: 6px; border-left: 2px solid transparent; transition: all .12s; }
+.toc a:hover { background: var(--paper); color: var(--ink); }
+.toc a.active { background: var(--accent-2); color: var(--accent-dk); border-left-color: var(--accent); font-weight: 600; }
+@media (max-width: 900px) { .toc { position: static; max-height: none; } }
+
+.content-col section {
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px 28px; margin-bottom: 18px; scroll-margin-top: 80px;
+}
+.content-col h2 {
+  font-family: 'Lora', serif; font-size: 1.4rem; font-weight: 600; color: var(--ink);
+  margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+}
+.content-col h2 .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg,#7c3aed,#0891b2);
+  color: #fff; font-size: 0.78rem; font-weight: 700; font-family: 'DM Mono', monospace;
+}
+.content-col h3 { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); margin: 18px 0 8px; }
+.content-col p { font-size: 0.92rem; line-height: 1.65; color: var(--ink-2); margin-bottom: 12px; }
+.content-col p strong { color: var(--ink); }
+.content-col code { font-family: 'DM Mono', monospace; background: var(--paper-2); padding: 1px 6px; border-radius: 4px; font-size: 0.86rem; color: var(--accent-dk); }
+.content-col ul, .content-col ol { padding-left: 22px; margin-bottom: 12px; }
+.content-col li { font-size: 0.92rem; line-height: 1.65; color: var(--ink-2); margin-bottom: 6px; }
+
+.callout {
+  background: linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%);
+  border: 1px solid #c4b5fd; border-radius: 10px;
+  padding: 14px 18px; margin: 14px 0; font-size: 0.88rem; line-height: 1.6;
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.callout-icon { font-size: 18px; flex-shrink: 0; }
+.callout strong { color: #5b21b6; }
+
+.callout.warn { background: #fef9ee; border-color: #fde68a; color: #92400e; }
+.callout.warn strong { color: #92400e; }
+
+.page-card {
+  display: flex; gap: 12px; align-items: flex-start;
+  padding: 12px 14px; background: var(--paper); border: 1px solid var(--border);
+  border-radius: 9px; margin-bottom: 8px; transition: border-color .12s;
+}
+.page-card:hover { border-color: var(--accent); }
+.page-card-icon { font-size: 1.2rem; flex-shrink: 0; }
+.page-card-text { flex: 1; }
+.page-card-title { font-weight: 600; color: var(--ink); font-size: 0.92rem; margin-bottom: 2px; }
+.page-card-title a { color: var(--accent); text-decoration: none; }
+.page-card-title a:hover { text-decoration: underline; }
+.page-card-desc { font-size: 0.8rem; color: var(--ink-3); line-height: 1.5; }
+
+.glossary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap: 12px; }
+.glossary-card { background: var(--paper); border: 1px solid var(--border); border-radius: 9px; padding: 12px 14px; }
+.glossary-term { font-family: 'DM Mono', monospace; font-size: 0.78rem; font-weight: 700; color: var(--accent-dk); margin-bottom: 4px; }
+.glossary-def { font-size: 0.84rem; color: var(--ink-2); line-height: 1.5; }
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Read Me First</span></h1>
-    <p class="sl-desc">ESL-friendly first-time-user guide to the School Leaders workspace — explains the Meetings → Decisions → Activities flow, how school-scoped data isolation works, and includes a glossary of common terms.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>(static reference)</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <h1 class="page-hero__title">Read Me First — School Leaders</h1>
+      <p class="page-hero__desc">A 5-minute orientation to this workspace. What every page does, the data flow between them, and how this surface sits next to the Cambridge School Leader Standards (CSLS) + Eduversal Academic Standards (ES) you already know.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Six accordion sections covering the workspace overview, page-by-page tour (Meetings / Decisions / Directory / Artifacts / Activities / Weekly Checklist), role-aware blocks (what FR/Principal/AC/CC each see), how same-school data scoping protects each school's records, a glossary, and a Contact Eduversal-side liaison footer.</p>
+<div class="page-wrap">
+  <aside class="toc">
+    <h4>On this page</h4>
+    <ul>
+      <li><a href="#welcome" class="active">1. Welcome</a></li>
+      <li><a href="#flow">2. The flow</a></li>
+      <li><a href="#pages">3. Each page explained</a></li>
+      <li><a href="#first-week">4. Your first week</a></li>
+      <li><a href="#by-role">5. Notes by sub-role</a></li>
+      <li><a href="#beyond">6. Beyond this workspace</a></li>
+      <li><a href="#glossary">7. Glossary</a></li>
+      <li><a href="#stuck">8. Stuck?</a></li>
+    </ul>
+  </aside>
+
+  <div class="content-col">
+    <section id="welcome">
+      <h2><span class="num">1</span> Welcome</h2>
+      <p>This is the <strong>School Leaders Workspace</strong> for your partner school. It's where the leadership team — Foundation Reps, the School Principal, Academic + Cambridge Coordinators — runs the operational week together.</p>
+      <p>It's the school-scoped counterpart to the HQ <strong>Coordinators</strong> workspace at Central Hub. Same shape, same discipline; just narrowed to the people at this school instead of the whole network.</p>
+      <div class="callout">
+        <div class="callout-icon">🔒</div>
+        <div><strong>Same-school visibility.</strong> Every row you create here carries a <code>schoolId</code>. Only the leadership team at this school can read it. Other partner schools cannot. HQ admin can — but that's an audit path, not a daily one.</div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <h2><span class="num">2</span> The flow</h2>
+      <p>The 7 pages in this workspace tell one story: <strong>meetings produce decisions, decisions become activities, activities anchor against artifacts</strong>. The directory keeps track of who's in the room.</p>
+      <ol>
+        <li><strong>Meetings</strong> capture what was discussed. Each agenda item can be tagged decision / action / discussion.</li>
+        <li><strong>Decisions</strong> surface the binding rules from those meetings. Auditable across academic years; supersede rather than edit.</li>
+        <li><strong>Activities</strong> capture the kanban work that flows out of those decisions. Action-tagged items spawn cards here.</li>
+        <li><strong>Artifacts</strong> are the living documents (Annual Plan, SoW, intervention plan) the decisions and activities point to.</li>
+        <li><strong>Directory</strong> tells everyone who owns what — the people side of the workspace.</li>
+        <li><strong>My Observations</strong> + <strong>Team Induction</strong> + <strong>Weekly Checklist</strong> are personal lenses on the same school context.</li>
+      </ol>
+    </section>
+
+    <section id="pages">
+      <h2><span class="num">3</span> Each page explained</h2>
+
+      <h3>Read Me First (you are here)</h3>
+      <p>5-minute orientation. Read once, then come back when you forget which page does what.</p>
+
+      <h3>Operational Guide</h3>
+      <p>First-90-days handbooks for the four sub-roles. Tells you <em>why</em> your role exists and <em>how</em> to ramp. Pairs with Weekly Checklist (which tells you <em>what to do this week</em>).</p>
+
+      <h3>Meetings</h3>
+      <p>Leadership team meeting minutes. Each meeting carries agenda items; items can be tagged decision / action / discussion / announcement / red-text. Red-text items promote into Decisions; action items spawn cards in Activities.</p>
+
+      <h3>Decisions</h3>
+      <p>The auditable register of binding school-level rules — "the dress code is X", "Year 7-8 observation feedback rooms have a third person present". Status: active / draft / superseded. Supersede rather than edit, so the trail stays intact.</p>
+
+      <h3>Directory</h3>
+      <p>The leadership team at this school. Curated — not auto-synced from the user database — so departures and transitions can be reflected immediately. Search by name / subject / role.</p>
+
+      <h3>Artifacts (School Resources)</h3>
+      <p>Per-subject living documents — Annual Plan, Scheme of Work, lesson plans, internal assessments, intervention plans. Each subject card collects what's current; superseded versions stay archived.</p>
+
+      <h3>Activities</h3>
+      <p>School-scoped kanban. Mirrors the network-wide /activities surface but constrained to this school. Action-tagged meeting items can spawn cards here automatically; you can also create direct projects + tasks.</p>
+
+      <h3>My Observations</h3>
+      <p>Personal lens — formal appraisals + walkthroughs you've submitted as a leader. Empty on day 1; observations land here automatically after you submit them from the Teacher Appraisal / Walkthrough Entry pages.</p>
+
+      <h3>Weekly Checklist</h3>
+      <p>Personal lens — your own operational rhythm for this week, scoped to your active sub-role. Pairs with the Operational Guide handbook for your role.</p>
+
+      <h3>Team Induction</h3>
+      <p>The first-year inductions at your school. As school principal you have read access to the team's progress, observation cycles, and pulse roll-up. Charter NN2 applies: aggregate signals visible, named journal entries are not.</p>
+    </section>
+
+    <section id="first-week">
+      <h2><span class="num">4</span> Your first week</h2>
+      <ol>
+        <li><strong>Day 1.</strong> Open the <a href="/school-leadership-operational-guide">Operational Guide</a> and read the handbook for your sub-role (foundation rep / principal / academic coord / cambridge coord). Skim the 4-stage timeline.</li>
+        <li><strong>Day 2.</strong> Open the <a href="/school-leadership-directory">Directory</a>. Add yourself if not present. Glance at the other leaders.</li>
+        <li><strong>Day 3.</strong> Open <a href="/school-leadership-meetings">Meetings</a>. Find the most recent minute. Read the agenda items — context for what's live.</li>
+        <li><strong>Day 4.</strong> Open <a href="/school-leadership-decisions">Decisions</a>. Filter by Active. These are the binding rules at this school. Know them.</li>
+        <li><strong>Day 5.</strong> Open <a href="/school-artifacts">Artifacts</a>. Check that the Annual Plan + SoW links work for the subjects in scope.</li>
+        <li><strong>Ongoing.</strong> Friday afternoon → open <a href="/weekly-checklist">Weekly Checklist</a>, tick what's done, leave the rest for next week.</li>
+      </ol>
+    </section>
+
+    <section id="by-role">
+      <h2><span class="num">5</span> Notes by sub-role</h2>
+
+      <h3>Foundation Representative</h3>
+      <p>You're the owner's voice. Decisions tagged <code>governance</code> typically go through you. You run the cycle of school appraisals (separate suite, lives in Admin) — but the leadership decisions register is where you confirm year-on-year direction.</p>
+
+      <h3>School Principal</h3>
+      <p>You chair Meetings. Most binding Decisions originate from your meetings. Your <a href="/my-observations">My Observations</a> page is where calibration anchors. <a href="/team-induction">Team Induction</a> is your low-pulse early warning system — Charter NN2 says watch pulses, not journals.</p>
+
+      <h3>Academic Coordinator</h3>
+      <p>You own pacing + scheme-of-work coverage. <a href="/school-artifacts">Artifacts</a> is your primary surface — keep the Annual Plan + SoW links current. <a href="/school-activities">Activities</a> kanban tracks the curriculum delivery work.</p>
+
+      <h3>Cambridge Coordinator</h3>
+      <p>You're the Cambridge International liaison. Cambridge-tagged decisions (entries / pathway / QA) sit alongside the broader leadership register. HQ Subject Specialists visit your school 1-2 times per year — their walkthrough findings surface in <a href="/my-observations">My Observations</a>.</p>
+    </section>
+
+    <section id="beyond">
+      <h2><span class="num">6</span> Beyond this workspace</h2>
+      <p>This is not the whole hub. Other surfaces you'll touch:</p>
+      <ul>
+        <li><strong>Assessments</strong> (EASE I/II/III, Cambridge dashboards, school appraisals, KPI) — the dashboard suite under the Dashboards dropdown.</li>
+        <li><strong>School</strong> (Curriculum + Appraisal) — Annual Plan + scheme-of-work view + teacher appraisal entry.</li>
+        <li><strong>My Hub</strong> — your personal CPD surface (Learning Path, Portfolio, Certificates, My Induction).</li>
+        <li><strong>References &amp; Standards</strong> — the verbatim source archive (Cambridge / Eduversal / AICF / Indonesian regulations). Handbook chips deep-link into this.</li>
+      </ul>
+    </section>
+
+    <section id="glossary">
+      <h2><span class="num">7</span> Glossary</h2>
+      <div class="glossary-grid">
+        <div class="glossary-card">
+          <div class="glossary-term">CSLS</div>
+          <div class="glossary-def">Cambridge School Leader Standards 2023. The 6-domain × 25-competency framework that anchors leadership development. Visible as mor chips throughout the hub.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">ES</div>
+          <div class="glossary-def">Eduversal Academic Standards — the 23-section, 393-madde network policy manual. Cyan chips. Verbatim source in /references.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">AICF</div>
+          <div class="glossary-def">AI Competency Framework v1.0. Orange chips. Sits alongside CSLS/ES as a 3rd reference family for AI literacy.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">schoolId</div>
+          <div class="glossary-def">Your school's identifier in Firestore. Every row this workspace creates carries it; the rule layer uses it to enforce same-school visibility.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">Sub-role</div>
+          <div class="glossary-def">Your specific leadership lane: foundation_representative, school_principal, academic_coordinator, or cambridge_coordinator. You can hold more than one.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">Supersede</div>
+          <div class="glossary-def">When a Decision changes, you create a NEW row that supersedes the old one — the old stays visible (marked superseded). Audit trail discipline: never edit a published decision in place.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">NN2</div>
+          <div class="glossary-def">Charter Non-Negotiable 2: HQ never reads named induction journal entries. Aggregate signals (pulse, low-pulse alarm) are read; individual entries are private.</div>
+        </div>
+        <div class="glossary-card">
+          <div class="glossary-term">Action vs Decision</div>
+          <div class="glossary-def">A meeting item tagged "action" spawns a kanban card in Activities. A meeting item tagged "decision" (or red-text) promotes into the binding Decisions register.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="stuck">
+      <h2><span class="num">8</span> Stuck?</h2>
+      <p>If something doesn't behave the way this page describes, you have three options:</p>
+      <ol>
+        <li><strong>Check the Operational Guide</strong> — your sub-role handbook often answers the "who owns this" question.</li>
+        <li><strong>Send feedback</strong> — there's a feedback button on every page. Choose "Bug" or "Idea" and explain what you expected vs what happened.</li>
+        <li><strong>Email <a href="mailto:tech@eduversal.org">tech@eduversal.org</a></strong> — for blocking issues (can't sign in, page won't load, data missing). HQ tech team responds within 1 business day.</li>
+      </ol>
+      <div class="callout warn">
+        <div class="callout-icon">⚠</div>
+        <div><strong>Don't share screenshots of student data in feedback.</strong> If a bug involves student records, describe the structure of the issue ("attempt N for student M in class X shows wrong score band") without pasting names or IDs. The feedback collection is admin-readable.</div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script src="partials/navbar-loader.js"></script>
+<script>
+document.addEventListener('authReady', ({ detail }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-leadership-read-me', { user: detail?.user, profile: detail?.profile });
+  }
+
+  // Scroll-spy for the sticky TOC
+  const links = Array.from(document.querySelectorAll('.toc a'));
+  const sections = links.map(a => document.querySelector(a.getAttribute('href')));
+  const setActive = (id) => {
+    links.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+  };
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      const visible = entries.filter(e => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) setActive(visible[0].target.id);
+    }, { rootMargin: '-78px 0px -55% 0px', threshold: 0 });
+    sections.forEach(s => s && io.observe(s));
+  }
+});
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Orientation · Read once, return when stuck</span>
+      <h2 class="page-footer__cta-title">You've got the map. Now open Meetings.</h2>
+      <p class="page-footer__cta-desc">The flow is meeting → decision → activity → artifact. Start where the live work is — usually the most recent meeting minute on the leadership rhythm. Come back to this page whenever a page's purpose feels foggy.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings <span aria-hidden="true">→</span></a>
     </div>
-
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
-
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-leadership-read-me', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+    <nav class="page-footer__nav" aria-label="Read Me First footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-operational-guide" class="page-footer__nav-link">Operational Guide</a>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+        <a href="/school-artifacts" class="page-footer__nav-link">Artifacts</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+        <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+        <a href="/academic-standards" class="page-footer__nav-link">Eduversal Standards</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">5-minute orientation · grounded in CSLS 2023 + Eduversal Academic Standards</span>
+  </div>
+</footer>
 </body>
 </html>

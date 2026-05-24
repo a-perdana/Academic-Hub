@@ -1,72 +1,502 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Directory - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Leadership Directory — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Ported from CH /coordinators-directory (2026-05-24), schoolId-scoped.
+   Page-family: My Work (data-accent="dark"). Sub-role grouping: FR /
+   School Principal / Academic Coordinator / Cambridge Coordinator. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+/* Page footer — induction tint */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+/* Filter bar */
+.cd-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 18px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; align-items: center; }
+.cd-filter { padding: 7px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; color: var(--ink); background: var(--paper); cursor: pointer; }
+.cd-filter:focus { outline: none; border-color: var(--accent); background: var(--white); }
+.cd-search-wrap { position: relative; flex: 1; min-width: 200px; }
+.cd-search { width: 100%; padding: 7px 12px 7px 32px; border: 1px solid var(--border); border-radius: 7px; font-size: 0.84rem; color: var(--ink); background: var(--paper); font-family: 'DM Sans', sans-serif; }
+.cd-search:focus { outline: none; border-color: var(--accent); background: var(--white); }
+.cd-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+.cd-btn-add { padding: 8px 16px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .12s; }
+.cd-btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* Kind sections */
+.entries-wrap { display: flex; flex-direction: column; gap: 28px; }
+.kind-section { display: flex; flex-direction: column; gap: 14px; }
+.kind-section-head { display: flex; align-items: center; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.kind-section-rank { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: var(--kind-grad); color: #fff; font-size: 0.7rem; font-weight: 700; box-shadow: 0 2px 4px rgba(15,23,42,0.10); font-family: 'DM Mono', monospace; }
+.kind-section-label { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; color: var(--ink); }
+.kind-section-count { background: var(--paper-2); padding: 1px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 600; color: var(--ink-3); }
+.kind-section-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+
+.kind-section[data-kind="foundation_representative"] { --kind-grad: linear-gradient(135deg,#1e3a8a,#0c4a6e); }
+.kind-section[data-kind="school_principal"]          { --kind-grad: linear-gradient(135deg,#7c3aed,#5b21b6); }
+.kind-section[data-kind="academic_coordinator"]      { --kind-grad: linear-gradient(135deg,#0e7490,#0891b2); }
+.kind-section[data-kind="cambridge_coordinator"]     { --kind-grad: linear-gradient(135deg,#0d9488,#0f766e); }
+.kind-section[data-kind="other"]                     { --kind-grad: linear-gradient(135deg,#64748b,#475569); }
+
+/* Entry card */
+.entry-card {
+  --kind-grad: linear-gradient(135deg,#7c3aed,#0891b2);
+  background: var(--white);
+  border: 1px solid #e8e9ee;
+  border-radius: 14px;
+  padding: 0;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 2px 6px rgba(15,23,42,0.04);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  overflow: hidden;
+}
+.entry-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(15,23,42,0.08); border-color: #d6d7df; }
+.entry-card[data-kind="foundation_representative"] { --kind-grad: linear-gradient(135deg,#1e3a8a,#0c4a6e); }
+.entry-card[data-kind="school_principal"]          { --kind-grad: linear-gradient(135deg,#7c3aed,#5b21b6); }
+.entry-card[data-kind="academic_coordinator"]      { --kind-grad: linear-gradient(135deg,#0e7490,#0891b2); }
+.entry-card[data-kind="cambridge_coordinator"]     { --kind-grad: linear-gradient(135deg,#0d9488,#0f766e); }
+.entry-card[data-kind="other"]                     { --kind-grad: linear-gradient(135deg,#64748b,#475569); }
+.ec-header { height: 56px; background: var(--kind-grad); position: relative; overflow: hidden; }
+.ec-header::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 100% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 55%); pointer-events:none; }
+.ec-body { padding: 14px 18px 16px; position: relative; }
+.ec-name { font-family: 'Lora', serif; font-size: 1.05rem; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 4px; }
+.ec-title { font-size: 0.82rem; color: var(--ink-2); margin-bottom: 10px; }
+.ec-detail { font-size: 0.78rem; color: var(--ink-3); display: flex; flex-direction: column; gap: 4px; }
+.ec-detail a { color: var(--accent); text-decoration: none; }
+.ec-detail a:hover { text-decoration: underline; }
+.ec-pill-row { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px; }
+.ec-pill { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--paper-2); color: var(--ink-2); }
+.ec-pill.subject { background: #ede9fe; color: #5b21b6; }
+.ec-actions { display: flex; gap: 6px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.ec-btn { padding: 4px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 500; border: 1px solid var(--border); background: var(--white); cursor: pointer; color: var(--ink-2); font-family: 'DM Sans', sans-serif; }
+.ec-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ec-btn.danger:hover { border-color: #dc2626; color: #dc2626; background: #fff1f2; }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.modal-head h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; background: var(--paper); }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--ink); background: var(--white); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 80px; line-height: 1.55; }
+.btn-cancel, .btn-save { padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none; }
+.btn-cancel { background: var(--paper-2); color: var(--ink-2); }
+.btn-cancel:hover { background: #e2e8f0; }
+.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save:hover { opacity: 0.92; }
+
+.empty-state { text-align: center; padding: 48px 24px; color: var(--ink-3); background: var(--white); border: 1px dashed var(--border); border-radius: 10px; }
+.empty-state h3 { font-family: 'Lora', serif; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.86rem; font-weight: 500; z-index: 9999; opacity: 0; transition: all .25s; pointer-events: none; max-width: 460px; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media print {
+  .navbar, .cd-filter-bar, .ec-actions, .cd-btn-add { display: none !important; }
+  .entry-card { box-shadow: none; page-break-inside: avoid; }
+}
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Directory</span></h1>
-    <p class="sl-desc">Per-school leadership team phone-book — principals, ACs, CCs, subject leaders, grade leaders, parent council reps, and Eduversal-side liaison contacts.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_leadership_directory_entries</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <h1 class="page-hero__title">School Leadership Directory</h1>
+      <p class="page-hero__desc">The leadership team at this school — Foundation Reps, School Principal, Academic + Cambridge Coordinators. Curated entries, not auto-synced from the user database, so departures + transitions can be reflected immediately.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Searchable directory grouped by entryKind (school_leader / subject_leader / grade_leader / parent_council / eduversal_liaison). Links to users when onboarded; supports external contacts (e.g. parent council chair who isn't a platform user). Any school leader can add/edit/delete entries — these are routine HR-style records.</p>
+<main class="page-wrap" id="mainRoot" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
+    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Search by name / role / subject. Entries are grouped by sub-role rank.</div>
+    <button class="cd-btn-add" id="btnAddEntry">+ New entry</button>
+  </div>
+
+  <div class="cd-filter-bar">
+    <div class="cd-search-wrap">
+      <svg class="cd-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="cd-search" id="filterSearch" placeholder="Search name, email, title…">
     </div>
+    <select class="cd-filter" id="filterKind">
+      <option value="">All roles</option>
+      <option value="foundation_representative">Foundation Representative</option>
+      <option value="school_principal">School Principal</option>
+      <option value="academic_coordinator">Academic Coordinator</option>
+      <option value="cambridge_coordinator">Cambridge Coordinator</option>
+      <option value="other">Other</option>
+    </select>
+    <select class="cd-filter" id="filterSubject">
+      <option value="">All subjects</option>
+    </select>
+  </div>
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+  <div class="entries-wrap" id="entriesWrap"></div>
+</main>
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-leadership-directory', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+<!-- Add / Edit modal -->
+<div class="modal-overlay" id="modalEntry">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">New directory entry</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Full name</label>
+        <input type="text" class="form-input" id="eName" placeholder="e.g. Siti Aisyah">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role</label>
+        <select class="form-select" id="eKind">
+          <option value="foundation_representative">Foundation Representative</option>
+          <option value="school_principal">School Principal</option>
+          <option value="academic_coordinator">Academic Coordinator</option>
+          <option value="cambridge_coordinator">Cambridge Coordinator</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title / position (free-form)</label>
+        <input type="text" class="form-input" id="eTitle" placeholder="e.g. Head of Academic Affairs">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subjects (optional, comma-separated)</label>
+        <input type="text" class="form-input" id="eSubjects" placeholder="e.g. math, physics">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="eEmail" placeholder="name@partner-school.sch.id">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone (optional)</label>
+        <input type="text" class="form-input" id="ePhone" placeholder="+62 …">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Notes (optional)</label>
+        <textarea class="form-textarea" id="eNotes" rows="3" placeholder="Anything peers should know — office hours, on leave until X, etc."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-save" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, addDoc, updateDoc, deleteDoc, serverTimestamp, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const KIND_LABELS = {
+  foundation_representative: 'Foundation Representative',
+  school_principal: 'School Principal',
+  academic_coordinator: 'Academic Coordinator',
+  cambridge_coordinator: 'Cambridge Coordinator',
+  other: 'Other',
+};
+const KIND_RANK = {
+  foundation_representative: 1,
+  school_principal: 2,
+  academic_coordinator: 3,
+  cambridge_coordinator: 4,
+  other: 5,
+};
+const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
+const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
+
+let db, currentUser, userProfile;
+let isAdmin = false;
+let schoolId = null;
+let allEntries = [];
+let editingId = null;
+
+const $ = (id) => document.getElementById(id);
+const escHtml = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+document.addEventListener('authReady', ({ detail }) => {
+  currentUser = detail?.user || window.currentUser;
+  userProfile = detail?.profile || window.userProfile || {};
+  db = window.db;
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-leadership-directory', { user: currentUser, profile: userProfile });
+  }
+
+  isAdmin = userProfile.role_academichub === 'academic_admin'
+         || userProfile.role_centralhub === 'central_admin';
+  schoolId = userProfile.schoolId || null;
+
+  if (!schoolId && !isAdmin) {
+    $('mainRoot').style.display = 'block';
+    $('entriesWrap').innerHTML = `<div class="empty-state"><h3>No school assigned</h3><p>Your profile is missing a <code>schoolId</code>. Sign in again to set it, or ask an admin to update your profile.</p></div>`;
+    return;
+  }
+
+  $('mainRoot').style.display = 'block';
+  populateSubjectFilter();
+  wireUI();
+  subscribeEntries();
+});
+
+function populateSubjectFilter() {
+  const sel = $('filterSubject');
+  sel.innerHTML = '<option value="">All subjects</option>' +
+    SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
+}
+
+function wireUI() {
+  $('btnAddEntry').addEventListener('click', () => openModal(null));
+  $('modalCancel').addEventListener('click', closeModal);
+  $('modalSave').addEventListener('click', saveEntry);
+
+  ['filterSearch','filterKind','filterSubject'].forEach(id => {
+    $(id).addEventListener(id === 'filterSearch' ? 'input' : 'change', render);
+  });
+}
+
+function subscribeEntries() {
+  const constraints = [orderBy('createdAt', 'desc'), limit(500)];
+  if (!isAdmin && schoolId) constraints.unshift(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_leadership_directory_entries'), ...constraints);
+  onSnapshot(q, (snap) => {
+    allEntries = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    render();
+  }, (err) => {
+    console.error('[subscribeEntries]', err);
+    $('entriesWrap').innerHTML = `<div class="empty-state"><h3>Could not load</h3><p>${escHtml(err.code || err.message)}</p></div>`;
+  });
+}
+
+function render() {
+  const search = ($('filterSearch').value || '').trim().toLowerCase();
+  const kindF = $('filterKind').value;
+  const subF = $('filterSubject').value;
+
+  const filtered = allEntries.filter(e => {
+    if (kindF && e.kind !== kindF) return false;
+    if (subF && (!Array.isArray(e.subjectIds) || !e.subjectIds.includes(subF))) return false;
+    if (search) {
+      const hay = `${e.name || ''} ${e.title || ''} ${e.email || ''} ${(e.subjectIds || []).join(' ')}`.toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const wrap = $('entriesWrap');
+  if (!filtered.length) {
+    wrap.innerHTML = `<div class="empty-state"><h3>No entries yet</h3><p>Hit <strong>+ New entry</strong> to add the first row. Any school leader at this school can curate.</p></div>`;
+    return;
+  }
+
+  // Group by kind, ordered by KIND_RANK
+  const groups = {};
+  for (const e of filtered) {
+    const k = e.kind || 'other';
+    if (!groups[k]) groups[k] = [];
+    groups[k].push(e);
+  }
+  const sortedKinds = Object.keys(groups).sort((a, b) => (KIND_RANK[a] || 99) - (KIND_RANK[b] || 99));
+
+  wrap.innerHTML = sortedKinds.map(kind => `
+    <section class="kind-section" data-kind="${kind}">
+      <header class="kind-section-head">
+        <span class="kind-section-rank">${KIND_RANK[kind] || '·'}</span>
+        <span class="kind-section-label">${KIND_LABELS[kind] || kind}</span>
+        <span class="kind-section-count">${groups[kind].length}</span>
+      </header>
+      <div class="kind-section-grid">
+        ${groups[kind].map(renderCard).join('')}
+      </div>
+    </section>
+  `).join('');
+
+  wrap.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.edit)));
+  wrap.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => confirmDelete(b.dataset.delete, b)));
+}
+
+function renderCard(e) {
+  const subjects = Array.isArray(e.subjectIds) ? e.subjectIds : [];
+  const subjectPills = subjects.map(s => `<span class="ec-pill subject">${SUBJECT_LABELS[s] || s}</span>`).join('');
+  return `
+    <article class="entry-card" data-kind="${e.kind || 'other'}">
+      <div class="ec-header"></div>
+      <div class="ec-body">
+        <div class="ec-name">${escHtml(e.name || '—')}</div>
+        ${e.title ? `<div class="ec-title">${escHtml(e.title)}</div>` : ''}
+        <div class="ec-detail">
+          ${e.email ? `<span>✉ <a href="mailto:${escHtml(e.email)}">${escHtml(e.email)}</a></span>` : ''}
+          ${e.phone ? `<span>☎ ${escHtml(e.phone)}</span>` : ''}
+          ${e.notes ? `<span style="font-style:italic;margin-top:4px;">${escHtml(e.notes)}</span>` : ''}
+        </div>
+        ${subjectPills ? `<div class="ec-pill-row">${subjectPills}</div>` : ''}
+        <div class="ec-actions">
+          <button class="ec-btn" data-edit="${e.id}">✎ Edit</button>
+          <button class="ec-btn danger" data-delete="${e.id}" data-confirming="false">Delete</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function openModal(entryId) {
+  editingId = entryId;
+  if (entryId) {
+    const e = allEntries.find(x => x.id === entryId);
+    if (!e) { showToast('Not found.'); return; }
+    $('modalTitle').textContent = 'Edit directory entry';
+    $('eName').value = e.name || '';
+    $('eKind').value = e.kind || 'foundation_representative';
+    $('eTitle').value = e.title || '';
+    $('eSubjects').value = Array.isArray(e.subjectIds) ? e.subjectIds.join(', ') : '';
+    $('eEmail').value = e.email || '';
+    $('ePhone').value = e.phone || '';
+    $('eNotes').value = e.notes || '';
+  } else {
+    $('modalTitle').textContent = 'New directory entry';
+    $('eName').value = '';
+    $('eKind').value = 'foundation_representative';
+    $('eTitle').value = '';
+    $('eSubjects').value = '';
+    $('eEmail').value = '';
+    $('ePhone').value = '';
+    $('eNotes').value = '';
+  }
+  $('modalEntry').classList.add('open');
+}
+
+function closeModal() {
+  $('modalEntry').classList.remove('open');
+  editingId = null;
+}
+
+async function saveEntry() {
+  const name = $('eName').value.trim();
+  if (!name) { showToast('Name required.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+
+  const subjectIds = $('eSubjects').value
+    .split(',').map(s => s.trim().toLowerCase()).filter(s => SUBJECTS.includes(s));
+
+  const payload = {
+    name,
+    kind: $('eKind').value,
+    title: $('eTitle').value.trim(),
+    subjectIds,
+    email: $('eEmail').value.trim(),
+    phone: $('ePhone').value.trim(),
+    notes: $('eNotes').value.trim(),
+    schoolId: schoolId || (editingId ? (allEntries.find(x => x.id === editingId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'school_leadership_directory_entries', editingId), payload);
+      showToast('Entry updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'school_leadership_directory_entries'), payload);
+      showToast('Entry added.');
+    }
+    closeModal();
+  } catch (err) {
+    console.error('[saveEntry]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function confirmDelete(id, btn) {
+  if (btn.dataset.confirming === 'true') {
+    btn.dataset.confirming = 'false';
+    btn.textContent = 'Delete';
+    try {
+      await deleteDoc(doc(db, 'school_leadership_directory_entries', id));
+      showToast('Entry deleted.');
+    } catch (err) {
+      console.error('[deleteEntry]', err);
+      showToast(`Delete failed: ${err.code || err.message}`);
+    }
+    return;
+  }
+  btn.dataset.confirming = 'true';
+  btn.textContent = 'Confirm';
+  setTimeout(() => {
+    if (btn.dataset.confirming === 'true') {
+      btn.dataset.confirming = 'false';
+      btn.textContent = 'Delete';
+    }
+  }, 3000);
+}
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Directory</span>
+      <h2 class="page-footer__cta-title">Know who's in the room before the meeting starts.</h2>
+      <p class="page-footer__cta-desc">A leadership directory only stays useful if it's curated — entries here are hand-maintained, not auto-synced from the user database. Update on the day someone joins or leaves the team, not at year-end.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to schedule the next one <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Directory footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-artifacts" class="page-footer__nav-link">Artifacts</a>
+        <a href="/school-activities" class="page-footer__nav-link">Activities</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <a href="/school-leadership-operational-guide" class="page-footer__nav-link">Operational Guide</a>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Curated · not auto-synced · update on the day someone joins or leaves the team</span>
+  </div>
+</footer>
 </body>
 </html>

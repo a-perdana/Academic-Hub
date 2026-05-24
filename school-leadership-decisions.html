@@ -1,72 +1,732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Decisions - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decisions & Policies — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base
+   typography, AND canonical .page-hero* + .page-footer* chrome
+   come from /base.css. Page-local styles below MUST NOT override
+   .page-hero* selectors. Ported from CH /decisions-register
+   (2026-05-24), schoolId-scoped via isAHSchoolLeader() rule. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+/* ─── Page footer override (induction tint, mor) ───────────────── */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+/* ─── Filter bar ─────────────────────────────────────────────── */
+.dr-filter-bar {
+  display: flex; gap: 10px; flex-wrap: wrap;
+  padding: 14px 18px; background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; margin-bottom: 16px; align-items: center;
+}
+.dr-filter {
+  padding: 7px 12px; border: 1px solid var(--border); border-radius: 7px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.84rem; color: var(--ink);
+  background: var(--paper); cursor: pointer;
+}
+.dr-filter:focus { outline: none; border-color: var(--accent); background: var(--white); }
+.dr-search-wrap { position: relative; flex: 1; min-width: 200px; }
+.dr-search {
+  width: 100%; padding: 7px 12px 7px 32px; border: 1px solid var(--border);
+  border-radius: 7px; font-size: 0.84rem; color: var(--ink); background: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+}
+.dr-search:focus { outline: none; border-color: var(--accent); background: var(--white); }
+.dr-search-icon { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
+.dr-btn-add {
+  padding: 8px 16px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff;
+  border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem; font-weight: 600; cursor: pointer;
+  transition: opacity .15s, transform .12s;
+}
+.dr-btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
+
+/* ─── Status tabs ────────────────────────────────────────────── */
+.dr-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.dr-tab {
+  padding: 9px 14px; background: none; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.86rem; color: var(--ink-3);
+  cursor: pointer; border-bottom: 2px solid transparent; transition: all .12s; font-weight: 500;
+}
+.dr-tab:hover { color: var(--ink-2); }
+.dr-tab.active { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.dr-tab-count { background: var(--paper-2); padding: 1px 7px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-left: 5px; color: var(--ink-3); }
+.dr-tab.active .dr-tab-count { background: #ede9fe; color: var(--accent); }
+
+/* ─── Decision cards ─────────────────────────────────────────── */
+.dr-list { display: flex; flex-direction: column; gap: 12px; }
+.decision-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 22px;
+  box-shadow: var(--shadow-sm); transition: box-shadow .15s;
+}
+.decision-card:hover { box-shadow: var(--shadow); }
+.decision-card.superseded { opacity: 0.7; border-style: dashed; }
+.decision-card.draft { border-left: 4px solid #f59e0b; }
+.decision-card.active { border-left: 4px solid #10b981; }
+.dc-row1 { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 8px; flex-wrap: wrap; }
+.dc-title { font-family: 'Lora', serif; font-size: 1.08rem; font-weight: 600; color: var(--ink); flex: 1; min-width: 200px; }
+.dc-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.pill { padding: 2px 9px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
+.pill.status-active { background: #d1fae5; color: #065f46; }
+.pill.status-draft { background: #fef3c7; color: #92400e; }
+.pill.status-superseded { background: #e5e7eb; color: #4b5563; }
+.pill.cat { background: #ede9fe; color: #5b21b6; }
+.pill.scope-school_wide { background: #cffafe; color: #164e63; }
+.pill.scope-per_subject { background: #fce7f3; color: #831843; }
+.dc-body { font-size: 0.88rem; line-height: 1.6; color: var(--ink-2); margin-bottom: 12px; white-space: pre-wrap; }
+.dc-meta { display: flex; gap: 14px; font-size: 0.78rem; color: var(--ink-3); flex-wrap: wrap; align-items: center; }
+.dc-meta a { color: var(--accent); text-decoration: none; }
+.dc-meta a:hover { text-decoration: underline; }
+.dc-actions { display: flex; gap: 6px; margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.dc-btn {
+  padding: 5px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 500;
+  border: 1px solid var(--border); background: var(--white); cursor: pointer;
+  color: var(--ink-2); font-family: 'DM Sans', sans-serif;
+}
+.dc-btn:hover { border-color: var(--accent); color: var(--accent); }
+.dc-btn.danger:hover { border-color: #dc2626; color: #dc2626; background: #fff1f2; }
+.dc-supersede-chain { margin-top: 8px; font-size: 0.78rem; color: var(--ink-3); }
+.dc-supersede-chain strong { color: var(--ink-2); }
+
+/* ─── Modal ──────────────────────────────────────────────────── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.modal-head h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; background: var(--paper); }
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--ink); background: var(--white);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 100px; line-height: 1.55; }
+.form-hint { font-size: 0.74rem; color: var(--ink-3); margin-top: 4px; }
+.btn-cancel, .btn-save {
+  padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif;
+  font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none;
+}
+.btn-cancel { background: var(--paper-2); color: var(--ink-2); }
+.btn-cancel:hover { background: #e2e8f0; }
+.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save:hover { opacity: 0.92; }
+
+/* ─── Empty state + toast ────────────────────────────────────── */
+.empty-state {
+  text-align: center; padding: 48px 24px; color: var(--ink-3);
+  background: var(--white); border: 1px dashed var(--border); border-radius: 10px;
+}
+.empty-state h3 { font-family: 'Lora', serif; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+.toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px;
+  font-size: 0.86rem; font-weight: 500; z-index: 9999; opacity: 0;
+  transition: all .25s; pointer-events: none; max-width: 460px;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+@media print {
+  .navbar, .dr-filter-bar, .dr-tabs, .dc-actions, .dr-btn-add { display: none !important; }
+  .decision-card { box-shadow: none; page-break-inside: avoid; }
+}
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Decisions</span></h1>
-    <p class="sl-desc">Binding school-level policies surfaced from meetings or authored directly. Draft → active → superseded lifecycle. Auditable across academic years.</p>
-
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_leadership_decisions</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <h1 class="page-hero__title">Decisions &amp; Policies</h1>
+      <p class="page-hero__desc">Binding school-level rules surfaced from leadership meetings — or authored directly. Auditable across academic years; supersede rather than edit in place so the institutional memory stays intact.</p>
     </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Filter by status (draft / active / superseded), category (pedagogy / safeguarding / admin / conduct / communications / parent_relations / staff_welfare), scope (school_wide / per_subject / per_grade). Active decisions are immutable in-place — supersede with a new decision via supersededByDecisionId chain. Each decision back-links to its source meeting + agenda item when applicable.</p>
+<main class="page-wrap" id="mainRoot" style="display:none">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
+    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by status / category / subject — or open a row to edit.</div>
+    <button class="dr-btn-add" id="btnAddDecision">+ New decision</button>
+  </div>
+
+  <div class="dr-filter-bar">
+    <div class="dr-search-wrap">
+      <svg class="dr-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" class="dr-search" id="filterSearch" placeholder="Search title or body…">
     </div>
+    <select class="dr-filter" id="filterCategory">
+      <option value="">All categories</option>
+      <option value="pedagogy">Pedagogy</option>
+      <option value="appraisal">Appraisal</option>
+      <option value="communications">Communications</option>
+      <option value="conduct">Conduct</option>
+      <option value="safeguarding">Safeguarding</option>
+      <option value="admin">Admin</option>
+      <option value="other">Other</option>
+    </select>
+    <select class="dr-filter" id="filterScope">
+      <option value="">All scopes</option>
+      <option value="school_wide">School-wide</option>
+      <option value="per_subject">Per subject</option>
+    </select>
+    <select class="dr-filter" id="filterSubject">
+      <option value="">All subjects</option>
+    </select>
+  </div>
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+  <div class="dr-tabs">
+    <button class="dr-tab active" data-tab="active">Active <span class="dr-tab-count" id="cntActive">0</span></button>
+    <button class="dr-tab" data-tab="draft">Drafts <span class="dr-tab-count" id="cntDraft">0</span></button>
+    <button class="dr-tab" data-tab="superseded">Superseded <span class="dr-tab-count" id="cntSuperseded">0</span></button>
+    <button class="dr-tab" data-tab="all">All <span class="dr-tab-count" id="cntAll">0</span></button>
+  </div>
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-leadership-decisions', { user: e.detail?.user, profile: e.detail?.profile });
+  <div class="dr-list" id="decisionsList"></div>
+</main>
+
+<!-- Add / Edit modal -->
+<div class="modal-overlay" id="modalDecision">
+  <div class="modal">
+    <div class="modal-head"><h3 id="modalTitle">New decision</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="dTitle" placeholder="e.g. Year 7-8 phones stay in lockers from 07:30 to 15:00">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Body</label>
+        <textarea class="form-textarea" id="dBody" rows="5" placeholder="Full text — explain the rule, why it exists, who it binds. Plain prose stays printable."></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Category</label>
+        <select class="form-select" id="dCategory">
+          <option value="pedagogy">Pedagogy</option>
+          <option value="appraisal">Appraisal</option>
+          <option value="communications">Communications</option>
+          <option value="conduct">Conduct</option>
+          <option value="safeguarding">Safeguarding</option>
+          <option value="admin">Admin</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Scope</label>
+        <select class="form-select" id="dScope">
+          <option value="school_wide">School-wide (all classes / subjects at this school)</option>
+          <option value="per_subject">Per subject</option>
+        </select>
+      </div>
+      <div class="form-group" id="dSubjectGroup" style="display:none">
+        <label class="form-label">Subjects (per-subject scope)</label>
+        <div id="dSubjectChips" style="display:flex; gap:6px; flex-wrap:wrap;"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Effective from</label>
+        <input type="date" class="form-input" id="dEffectiveFrom">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Effective until (optional)</label>
+        <input type="date" class="form-input" id="dEffectiveUntil">
+        <div class="form-hint">Leave blank for open-ended.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Status</label>
+        <select class="form-select" id="dStatus">
+          <option value="draft">Draft (not yet enforced)</option>
+          <option value="active" selected>Active (binding)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-save" id="modalSave">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, addDoc, updateDoc, deleteDoc, serverTimestamp, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
+const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
+const CATEGORY_LABELS = { pedagogy:'Pedagogy', appraisal:'Appraisal', communications:'Communications', conduct:'Conduct', safeguarding:'Safeguarding', admin:'Admin', other:'Other' };
+const SCOPE_LABELS = { school_wide:'School-wide', per_subject:'Per subject' };
+
+let db, currentUser, userProfile;
+let isAdmin = false;
+let schoolId = null;
+let allDecisions = [];
+let activeTab = 'active';
+let editingId = null;
+
+const $ = (id) => document.getElementById(id);
+const escHtml = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+document.addEventListener('authReady', ({ detail }) => {
+  currentUser = detail?.user || window.currentUser;
+  userProfile = detail?.profile || window.userProfile || {};
+  db = window.db;
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-leadership-decisions', { user: currentUser, profile: userProfile });
+  }
+
+  isAdmin = userProfile.role_academichub === 'academic_admin'
+         || userProfile.role_centralhub === 'central_admin';
+  schoolId = userProfile.schoolId || null;
+
+  if (!schoolId && !isAdmin) {
+    $('mainRoot').style.display = 'block';
+    $('decisionsList').innerHTML = `<div class="empty-state"><h3>No school assigned</h3><p>Your profile is missing a <code>schoolId</code>. Sign in again to set it, or ask an admin to update your profile.</p></div>`;
+    return;
+  }
+
+  $('mainRoot').style.display = 'block';
+  populateSubjectFilter();
+  wireUI();
+  subscribeDecisions();
+});
+
+function populateSubjectFilter() {
+  const sel = $('filterSubject');
+  sel.innerHTML = '<option value="">All subjects</option>' +
+    SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
+}
+
+function wireUI() {
+  $('btnAddDecision').addEventListener('click', () => openModal(null));
+  $('modalCancel').addEventListener('click', closeModal);
+  $('modalSave').addEventListener('click', saveDecision);
+
+  document.querySelectorAll('.dr-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.dr-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      activeTab = t.dataset.tab;
+      renderList();
     });
-  </script>
+  });
+
+  ['filterSearch','filterCategory','filterScope','filterSubject'].forEach(id => {
+    $(id).addEventListener(id === 'filterSearch' ? 'input' : 'change', renderList);
+  });
+
+  $('dScope').addEventListener('change', () => {
+    const scope = $('dScope').value;
+    $('dSubjectGroup').style.display = scope === 'per_subject' ? 'block' : 'none';
+  });
+}
+
+function subscribeDecisions() {
+  // School-scoped query — every doc carries schoolId, rule blocks cross-school reads.
+  // Admin sees all schools (no where-clause).
+  const constraints = [orderBy('effectiveFrom', 'desc'), limit(500)];
+  if (!isAdmin && schoolId) {
+    constraints.unshift(where('schoolId', '==', schoolId));
+  }
+  const q = query(collection(db, 'school_leadership_decisions'), ...constraints);
+  onSnapshot(q, (snap) => {
+    allDecisions = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderList();
+  }, (err) => {
+    console.error('[subscribeDecisions]', err);
+    $('decisionsList').innerHTML = `<div class="empty-state"><h3>Could not load</h3><p>${escHtml(err.code || err.message)}</p></div>`;
+  });
+}
+
+function renderList() {
+  const search = ($('filterSearch').value || '').trim().toLowerCase();
+  const catF = $('filterCategory').value;
+  const scopeF = $('filterScope').value;
+  const subF = $('filterSubject').value;
+
+  const counts = { active: 0, draft: 0, superseded: 0, all: allDecisions.length };
+  for (const d of allDecisions) {
+    const s = d.status || 'draft';
+    if (counts.hasOwnProperty(s)) counts[s] += 1;
+  }
+  $('cntActive').textContent = counts.active;
+  $('cntDraft').textContent = counts.draft;
+  $('cntSuperseded').textContent = counts.superseded;
+  $('cntAll').textContent = counts.all;
+
+  const filtered = allDecisions.filter(d => {
+    if (activeTab !== 'all' && (d.status || 'draft') !== activeTab) return false;
+    if (catF && d.category !== catF) return false;
+    if (scopeF && d.scope !== scopeF) return false;
+    if (subF) {
+      if (!Array.isArray(d.subjectIds) || !d.subjectIds.includes(subF)) return false;
+    }
+    if (search) {
+      const hay = `${d.title || ''} ${d.body || ''}`.toLowerCase();
+      if (!hay.includes(search)) return false;
+    }
+    return true;
+  });
+
+  const wrap = $('decisionsList');
+  if (!filtered.length) {
+    wrap.innerHTML = `<div class="empty-state"><h3>No decisions match</h3><p>Try clearing filters, or hit <strong>+ New decision</strong> to author one directly.</p></div>`;
+    return;
+  }
+  wrap.innerHTML = filtered.map(renderCard).join('');
+
+  wrap.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.edit)));
+  wrap.querySelectorAll('[data-supersede]').forEach(b => b.addEventListener('click', () => openSupersedeModal(b.dataset.supersede)));
+  wrap.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => confirmDelete(b.dataset.delete, b)));
+  wrap.querySelectorAll('[data-promote-draft]').forEach(b => b.addEventListener('click', () => promoteDraft(b.dataset.promoteDraft)));
+}
+
+function renderCard(d) {
+  const status = d.status || 'draft';
+  const subjects = Array.isArray(d.subjectIds) ? d.subjectIds : [];
+  const sourceMeetingLink = d.sourceMeetingId
+    ? `<span>From meeting: <a href="/school-leadership-meetings" target="_blank" rel="noopener">${escHtml(d.sourceMeetingId.slice(0, 8))} ↗</a></span>`
+    : '<span style="color:var(--ink-3);font-style:italic">Authored directly</span>';
+
+  let supersedeChain = '';
+  if (d.supersededByDecisionId) {
+    const next = allDecisions.find(x => x.id === d.supersededByDecisionId);
+    if (next) {
+      supersedeChain = `<div class="dc-supersede-chain"><strong>Superseded by:</strong> ${escHtml(next.title || 'Untitled')}</div>`;
+    }
+  }
+  const supersedesPrev = allDecisions.find(x => x.supersededByDecisionId === d.id);
+  if (supersedesPrev) {
+    supersedeChain += `<div class="dc-supersede-chain"><strong>Supersedes:</strong> ${escHtml(supersedesPrev.title || 'Untitled')}</div>`;
+  }
+
+  const subjectChips = subjects.length
+    ? subjects.map(s => `<span class="pill cat">${SUBJECT_LABELS[s] || s}</span>`).join('')
+    : '';
+
+  let actions = '';
+  if (status === 'active') {
+    actions = `
+      <button class="dc-btn" data-edit="${d.id}">✎ Edit</button>
+      <button class="dc-btn" data-supersede="${d.id}">↗ Supersede with new</button>
+      ${isAdmin ? `<button class="dc-btn danger" data-delete="${d.id}" data-confirming="false">Delete</button>` : ''}
+    `;
+  } else if (status === 'draft') {
+    actions = `
+      <button class="dc-btn" data-edit="${d.id}">✎ Edit</button>
+      <button class="dc-btn" data-promote-draft="${d.id}">Activate (publish)</button>
+      ${isAdmin ? `<button class="dc-btn danger" data-delete="${d.id}" data-confirming="false">Delete</button>` : ''}
+    `;
+  } else if (status === 'superseded') {
+    actions = `
+      <button class="dc-btn" data-edit="${d.id}">View</button>
+      ${isAdmin ? `<button class="dc-btn danger" data-delete="${d.id}" data-confirming="false">Delete</button>` : ''}
+    `;
+  }
+
+  return `
+    <div class="decision-card ${status}">
+      <div class="dc-row1">
+        <div class="dc-title">${escHtml(d.title || 'Untitled decision')}</div>
+        <div class="dc-pills">
+          <span class="pill status-${status}">${status}</span>
+          ${d.category ? `<span class="pill cat">${CATEGORY_LABELS[d.category] || d.category}</span>` : ''}
+          ${d.scope ? `<span class="pill scope-${d.scope}">${SCOPE_LABELS[d.scope] || d.scope}</span>` : ''}
+        </div>
+      </div>
+      <div class="dc-body">${escHtml(d.body || '')}</div>
+      ${subjectChips ? `<div class="dc-pills" style="margin-bottom:10px;">${subjectChips}</div>` : ''}
+      <div class="dc-meta">
+        <span>Effective: ${fmtDate(d.effectiveFrom)}${d.effectiveUntil ? ' → ' + fmtDate(d.effectiveUntil) : ''}</span>
+        ${sourceMeetingLink}
+      </div>
+      ${supersedeChain}
+      <div class="dc-actions">${actions}</div>
+    </div>
+  `;
+}
+
+/* ───── Modal ───────────────────────────────────────────────────── */
+function openModal(decisionId) {
+  editingId = decisionId;
+  if (decisionId) {
+    const d = allDecisions.find(x => x.id === decisionId);
+    if (!d) { showToast('Not found.'); return; }
+    $('modalTitle').textContent = 'Edit decision';
+    $('dTitle').value = d.title || '';
+    $('dBody').value = d.body || '';
+    $('dCategory').value = d.category || 'pedagogy';
+    $('dScope').value = d.scope || 'school_wide';
+    $('dEffectiveFrom').value = toDateInput(d.effectiveFrom);
+    $('dEffectiveUntil').value = toDateInput(d.effectiveUntil);
+    $('dStatus').value = d.status || 'draft';
+    paintScopeWidgets(d.subjectIds || []);
+  } else {
+    $('modalTitle').textContent = 'New decision';
+    $('dTitle').value = '';
+    $('dBody').value = '';
+    $('dCategory').value = 'pedagogy';
+    $('dScope').value = 'school_wide';
+    const today = new Date();
+    $('dEffectiveFrom').value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    $('dEffectiveUntil').value = '';
+    $('dStatus').value = 'active';
+    paintScopeWidgets([]);
+  }
+  $('modalDecision').classList.add('open');
+}
+
+function toDateInput(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function paintScopeWidgets(selectedSubjects) {
+  $('dSubjectChips').innerHTML = SUBJECTS.map(s => `
+    <label style="display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border:1px solid var(--border);border-radius:16px;cursor:pointer;font-size:0.78rem;background:var(--paper);">
+      <input type="checkbox" data-subject="${s}" ${selectedSubjects.includes(s) ? 'checked' : ''} style="accent-color:var(--accent)">
+      ${SUBJECT_LABELS[s]}
+    </label>
+  `).join('');
+
+  const scope = $('dScope').value;
+  $('dSubjectGroup').style.display = scope === 'per_subject' ? 'block' : 'none';
+}
+
+function closeModal() {
+  $('modalDecision').classList.remove('open');
+  editingId = null;
+  // Re-attach the normal save handler (supersede flow swaps it temporarily).
+  $('modalSave').onclick = saveDecision;
+}
+
+async function saveDecision() {
+  const title = $('dTitle').value.trim();
+  const body = $('dBody').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!body) { showToast('Body required.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+
+  const scope = $('dScope').value;
+  const subjectIds = [...$('dSubjectChips').querySelectorAll('input:checked')].map(c => c.dataset.subject);
+
+  const effectiveFrom = $('dEffectiveFrom').value ? new Date($('dEffectiveFrom').value) : new Date();
+  const effectiveUntil = $('dEffectiveUntil').value ? new Date($('dEffectiveUntil').value) : null;
+
+  const payload = {
+    title,
+    body,
+    category: $('dCategory').value,
+    scope,
+    subjectIds: scope === 'per_subject' ? subjectIds : [],
+    status: $('dStatus').value,
+    effectiveFrom,
+    effectiveUntil,
+    schoolId: schoolId || (editingId ? (allDecisions.find(x => x.id === editingId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingId) {
+      await updateDoc(doc(db, 'school_leadership_decisions', editingId), payload);
+      showToast('Decision updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      payload.sourceMeetingId = null;
+      payload.sourceItemId = null;
+      payload.supersededByDecisionId = null;
+      await addDoc(collection(db, 'school_leadership_decisions'), payload);
+      showToast('Decision created.');
+    }
+    closeModal();
+  } catch (err) {
+    console.error('[saveDecision]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function promoteDraft(id) {
+  try {
+    await updateDoc(doc(db, 'school_leadership_decisions', id), {
+      status: 'active',
+      updatedAt: serverTimestamp(),
+      lastEditedBy: currentUser.uid,
+    });
+    showToast('Decision activated.');
+  } catch (err) {
+    console.error('[promoteDraft]', err);
+    showToast(`Activate failed: ${err.code || err.message}`);
+  }
+}
+
+/* ───── Supersede flow ──────────────────────────────────────────── */
+function openSupersedeModal(oldId) {
+  const old = allDecisions.find(x => x.id === oldId);
+  if (!old) { showToast('Original decision not found.'); return; }
+  editingId = null;
+  $('modalTitle').textContent = 'Supersede with new decision';
+  $('dTitle').value = old.title || '';
+  $('dBody').value = old.body || '';
+  $('dCategory').value = old.category || 'pedagogy';
+  $('dScope').value = old.scope || 'school_wide';
+  const today = new Date();
+  $('dEffectiveFrom').value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  $('dEffectiveUntil').value = '';
+  $('dStatus').value = 'active';
+  paintScopeWidgets(old.subjectIds || []);
+  $('modalDecision').classList.add('open');
+
+  // Swap save behaviour for this one open
+  const saveBtn = $('modalSave');
+  saveBtn.onclick = async () => {
+    await supersedeWithNew(oldId);
+  };
+}
+
+async function supersedeWithNew(oldId) {
+  const title = $('dTitle').value.trim();
+  const body = $('dBody').value.trim();
+  if (!title || !body) { showToast('Title + body required.'); return; }
+  const old = allDecisions.find(x => x.id === oldId);
+  const scope = $('dScope').value;
+  const subjectIds = [...$('dSubjectChips').querySelectorAll('input:checked')].map(c => c.dataset.subject);
+
+  try {
+    const ref = await addDoc(collection(db, 'school_leadership_decisions'), {
+      title,
+      body,
+      category: $('dCategory').value,
+      scope,
+      subjectIds: scope === 'per_subject' ? subjectIds : [],
+      status: $('dStatus').value,
+      effectiveFrom: $('dEffectiveFrom').value ? new Date($('dEffectiveFrom').value) : new Date(),
+      effectiveUntil: $('dEffectiveUntil').value ? new Date($('dEffectiveUntil').value) : null,
+      schoolId: schoolId || old?.schoolId || null,
+      sourceMeetingId: null,
+      sourceItemId: null,
+      supersededByDecisionId: null,
+      createdBy: currentUser.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+      lastEditedBy: currentUser.uid,
+    });
+    await updateDoc(doc(db, 'school_leadership_decisions', oldId), {
+      status: 'superseded',
+      supersededByDecisionId: ref.id,
+      supersededAt: serverTimestamp(),
+      supersededByUid: currentUser.uid,
+      updatedAt: serverTimestamp(),
+    });
+    closeModal();
+    showToast('Superseded — new decision active, original archived.');
+  } catch (err) {
+    console.error('[supersede]', err);
+    showToast(`Supersede failed: ${err.code || err.message}`);
+  }
+}
+
+async function confirmDelete(id, btn) {
+  if (!isAdmin) { showToast('Only admin can delete.'); return; }
+  if (btn.dataset.confirming === 'true') {
+    btn.dataset.confirming = 'false';
+    btn.textContent = 'Delete';
+    try {
+      await deleteDoc(doc(db, 'school_leadership_decisions', id));
+      showToast('Decision deleted.');
+    } catch (err) {
+      console.error('[deleteDecision]', err);
+      showToast(`Delete failed: ${err.code || err.message}`);
+    }
+    return;
+  }
+  btn.dataset.confirming = 'true';
+  btn.textContent = 'Confirm delete';
+  setTimeout(() => {
+    if (btn.dataset.confirming === 'true') {
+      btn.dataset.confirming = 'false';
+      btn.textContent = 'Delete';
+    }
+  }, 3000);
+}
+</script>
+
+<!-- ─── PAGE FOOTER (canonical · induction tint) ──────────────── -->
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Decisions</span>
+      <h2 class="page-footer__cta-title">Make the decision auditable, not invisible.</h2>
+      <p class="page-footer__cta-desc">Every binding call at this school belongs here — with the meeting it came from, who was in the room, and what it supersedes. The register is the school's institutional memory; supersede rather than edit.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to capture a decision <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Decisions footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+        <a href="/school-artifacts" class="page-footer__nav-link">Artifacts</a>
+        <a href="/school-activities" class="page-footer__nav-link">Activities</a>
+        <a href="/weekly-checklist" class="page-footer__nav-link">Weekly Checklist</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <a href="/school-leadership-operational-guide" class="page-footer__nav-link">Operational Guide</a>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+        <a href="/my-observations" class="page-footer__nav-link">My Observations</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Supersede a prior decision rather than deleting it — audit trail stays intact.</span>
+  </div>
+</footer>
 </body>
 </html>

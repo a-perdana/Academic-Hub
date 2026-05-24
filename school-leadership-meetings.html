@@ -1,72 +1,650 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Meetings - Academic Hub</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23050510'/><circle cx='50' cy='50' r='28' fill='%236c5ce7'/><text x='50' y='58' text-anchor='middle' font-family='DM Sans' font-size='28' font-weight='700' fill='%23fff'>SL</text></svg>">
-  <script src="firebase-config.js"></script>
-  <script>
-    if (!window.ENV) window.ENV = {
-      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
-      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
-      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
-      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
-      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
-      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
-    };
-  </script>
-  <script type="module" src="auth-guard.js"></script>
-  <link rel="stylesheet" href="base.css">
-  <link rel="stylesheet" href="tokens.css">
-  <style>
-    body { background: var(--ink, #050510); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
-    .sl-wrap { max-width: 880px; margin: 0 auto; padding: 60px 32px 80px; }
-    .sl-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #67e8f9; margin-bottom: 14px; }
-    .sl-title { font-family: 'Lora', serif; font-size: 2.4rem; font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0 0 14px; }
-    .sl-title .accent { background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .sl-desc { font-size: 1.02rem; color: rgba(255,255,255,0.7); max-width: 640px; line-height: 1.65; margin: 0 0 36px; }
-    .sl-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 28px 32px; backdrop-filter: blur(10px); margin-bottom: 18px; }
-    .sl-card h3 { margin: 0 0 10px; font-size: 1.05rem; color: #fff; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-    .sl-card h3 .pill { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(108,92,231,0.18); color: #a78bfa; border: 1px solid rgba(108,92,231,0.35); }
-    .sl-card p { margin: 0; color: rgba(255,255,255,0.66); font-size: 0.94rem; line-height: 1.6; }
-    .sl-card p + p { margin-top: 10px; }
-    .sl-card code { font-family: 'DM Mono', 'Courier New', monospace; background: rgba(255,255,255,0.06); padding: 1px 7px; border-radius: 4px; font-size: 0.86rem; color: #67e8f9; }
-    .sl-back { display: inline-flex; align-items: center; gap: 7px; padding: 9px 16px; border-radius: 10px; background: rgba(108,92,231,0.18); color: #fff; text-decoration: none; font-size: 0.88rem; border: 1px solid rgba(108,92,231,0.35); transition: background 0.18s; }
-    .sl-back:hover { background: rgba(108,92,231,0.28); }
-    .sl-back svg { width: 14px; height: 14px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Leadership Meetings — Academic Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
+<script src="firebase-config.js"></script>
+<script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
+<link rel="stylesheet" href="/tokens.css">
+<style>
+/* Ported from CH /coordinators-meetings (2026-05-24), schoolId-scoped.
+   Schema: school_leadership_meetings (envelope) + school_leadership_
+   meeting_items (top-level, FK by meetingId). Two-column layout —
+   meetings list on left, selected meeting's agenda items on right. */
+body { padding-top: 62px; }
+
+.page-wrap {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
+}
+
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+.mtg-layout { display: grid; grid-template-columns: 300px 1fr; gap: 20px; }
+@media (max-width: 980px) { .mtg-layout { grid-template-columns: 1fr; } }
+
+.mtg-list-col { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.mtg-list-col h3 { font-family: 'Lora', serif; font-size: 0.95rem; font-weight: 600; color: var(--ink); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+.mtg-btn-add { padding: 5px 11px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 6px; font-size: 0.74rem; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+.mtg-btn-add:hover { opacity: 0.9; }
+.mtg-list { display: flex; flex-direction: column; gap: 4px; max-height: 70vh; overflow-y: auto; }
+.mtg-item { padding: 9px 11px; border-radius: 7px; cursor: pointer; border: 1px solid transparent; transition: all .12s; }
+.mtg-item:hover { background: var(--paper); }
+.mtg-item.active { background: var(--accent-2); border-color: var(--accent); }
+.mtg-item-title { font-size: 0.86rem; font-weight: 500; color: var(--ink); margin-bottom: 2px; line-height: 1.3; }
+.mtg-item.active .mtg-item-title { color: var(--accent-dk); font-weight: 600; }
+.mtg-item-date { font-size: 0.7rem; color: var(--ink-3); }
+.mtg-item-counts { font-size: 0.66rem; color: var(--ink-3); margin-top: 3px; display: flex; gap: 6px; }
+.mtg-item-counts .pill-tiny { background: var(--paper-2); padding: 1px 6px; border-radius: 999px; font-weight: 600; }
+
+/* Detail column */
+.mtg-detail { display: flex; flex-direction: column; gap: 14px; }
+.mtg-head {
+  background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 22px; display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 14px; flex-wrap: wrap;
+}
+.mtg-head h2 { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.mtg-head .meta { font-size: 0.78rem; color: var(--ink-3); margin-bottom: 8px; }
+.mtg-head .desc { font-size: 0.86rem; color: var(--ink-2); line-height: 1.55; }
+.mtg-head .actions { display: flex; gap: 6px; }
+.mtg-head .actions button { padding: 6px 12px; border-radius: 6px; font-size: 0.78rem; font-weight: 600; border: 1px solid var(--border); background: var(--white); cursor: pointer; color: var(--ink-2); font-family: 'DM Sans', sans-serif; }
+.mtg-head .actions button:hover { border-color: var(--accent); color: var(--accent); }
+.mtg-head .actions button.primary { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; }
+.mtg-head .actions button.primary:hover { opacity: 0.9; }
+.mtg-head .actions button.danger:hover { border-color: #dc2626; color: #dc2626; background: #fff1f2; }
+
+.items-box { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; }
+.items-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.items-head h3 { font-family: 'Lora', serif; font-size: 1rem; font-weight: 600; color: var(--ink); }
+.items-list { display: flex; flex-direction: column; gap: 8px; }
+.item-card { background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 11px 14px; transition: border-color .12s, background .12s; cursor: pointer; }
+.item-card:hover { background: var(--white); border-color: var(--accent); }
+.item-row1 { display: flex; gap: 10px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; margin-bottom: 6px; }
+.item-title { font-size: 0.92rem; font-weight: 500; color: var(--ink); line-height: 1.4; flex: 1; min-width: 200px; }
+.item-tags { display: flex; gap: 5px; flex-shrink: 0; flex-wrap: wrap; }
+.item-tag { font-size: 0.66rem; font-weight: 700; padding: 2px 7px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+.item-tag.decision    { background: #fee2e2; color: #991b1b; }
+.item-tag.action      { background: #fef3c7; color: #92400e; }
+.item-tag.discussion  { background: #e0f2fe; color: #075985; }
+.item-tag.announcement{ background: #ede9fe; color: #5b21b6; }
+.item-tag.red_text    { background: #fce7f3; color: #831843; }
+.item-body { font-size: 0.84rem; color: var(--ink-2); line-height: 1.55; white-space: pre-wrap; }
+.item-meta { font-size: 0.7rem; color: var(--ink-3); margin-top: 5px; display: flex; gap: 8px; flex-wrap: wrap; }
+
+.empty-board { padding: 60px 24px; text-align: center; color: var(--ink-3); background: var(--white); border: 1px dashed var(--border); border-radius: 12px; }
+.empty-board h3 { font-family: 'Lora', serif; color: var(--ink); margin-bottom: 6px; font-size: 1.05rem; }
+.empty-items { padding: 28px 14px; text-align: center; font-size: 0.84rem; color: var(--ink-3); }
+
+/* Modals */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
+.modal-head { padding: 18px 22px 14px; border-bottom: 1px solid var(--border); }
+.modal-head h3 { font-family: 'Lora', serif; font-size: 1.1rem; font-weight: 600; color: var(--ink); }
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-foot { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 8px; background: var(--paper); align-items: center; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; color: var(--ink); background: var(--white); }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--accent); }
+.form-textarea { resize: vertical; min-height: 90px; line-height: 1.55; }
+.form-hint { font-size: 0.74rem; color: var(--ink-3); margin-top: 4px; }
+.form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn-cancel, .btn-save, .btn-del { padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none; }
+.btn-cancel { background: var(--paper-2); color: var(--ink-2); }
+.btn-cancel:hover { background: #e2e8f0; }
+.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save:hover { opacity: 0.92; }
+.btn-del { background: #fff1f2; color: #dc2626; border: 1px solid #fecaca; }
+.btn-del:hover { background: #fee2e2; }
+
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 8px; font-size: 0.86rem; font-weight: 500; z-index: 9999; opacity: 0; transition: all .25s; pointer-events: none; max-width: 460px; }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+</style>
+<script type="module" src="auth-guard.js"></script>
 </head>
 <body>
-  <div id="navbarMount"></div>
+<div id="navbarMount"></div>
 
-  <main class="sl-wrap">
-    <div class="sl-eyebrow">School Leaders Workspace</div>
-    <h1 class="sl-title"><span class="accent">Meetings</span></h1>
-    <p class="sl-desc">Weekly + ad-hoc school leadership team meeting minutes. Structured agenda items, attendee tracking, decision/action item promotion. Mirrors the Central Hub Coordinators Meetings page but school-scoped.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <h1 class="page-hero__title">School Leadership Meetings</h1>
+      <p class="page-hero__desc">Weekly + ad-hoc leadership team minutes. Each meeting carries agenda items tagged decision / action / discussion / announcement / red-text. Red-text items belong in the Decisions register; action items spawn cards in Activities.</p>
+    </div>
+  </div>
+</header>
 
-    <div class="sl-card">
-      <h3>Coming soon <span class="pill">Phase 2</span></h3>
-      <p>The backend for this page is <strong>already live</strong> — Firestore collection <code>school_leadership_meetings + school_leadership_meeting_items</code>, rules, storage paths, and page-access gating all in place since <strong>2026-05-21</strong>. Only the UI shell is still pending.</p>
-      <p>This page mirrors the Central Hub <strong>Coordinators</strong> workspace pattern but school-scoped: every record carries a required <code>schoolId</code> and the rules enforce same-school visibility via <code>isAHSchoolLeader(schoolId)</code>. Foundation Rep + School Principal + Academic Coordinator + Cambridge Coordinator at your school can read and write; <code>academic_admin</code> bypasses.</p>
+<main class="page-wrap" id="mainRoot" style="display:none">
+  <div class="mtg-layout">
+    <aside class="mtg-list-col">
+      <h3>Meetings <button class="mtg-btn-add" id="btnAddMeeting">+ New</button></h3>
+      <div class="mtg-list" id="mtgList"></div>
+    </aside>
+
+    <section class="mtg-detail" id="mtgDetail">
+      <div class="empty-board">
+        <h3>Pick a meeting to see its agenda</h3>
+        <p>Or hit <strong>+ New</strong> on the left to start one.</p>
+      </div>
+    </section>
+  </div>
+</main>
+
+<!-- Meeting modal -->
+<div class="modal-overlay" id="modalMeeting">
+  <div class="modal">
+    <div class="modal-head"><h3 id="meetingModalTitle">New meeting</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="mTitle" placeholder="e.g. Weekly leadership rhythm — week 12">
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-input" id="mDate">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Kind</label>
+          <select class="form-select" id="mKind">
+            <option value="weekly">Weekly rhythm</option>
+            <option value="ad_hoc">Ad-hoc</option>
+            <option value="appraisal_calibration">Appraisal calibration</option>
+            <option value="emergency">Emergency / urgent</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Attendees (free text, one per line)</label>
+        <textarea class="form-textarea" id="mAttendees" rows="3" placeholder="Principal Siti&#10;Academic Coord Budi&#10;Foundation Rep Andi"></textarea>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Summary / context (optional)</label>
+        <textarea class="form-textarea" id="mDesc" rows="2" placeholder="What's the agenda focus this meeting?"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-del" id="meetingModalDelete" style="display:none;">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn-cancel" id="meetingModalCancel">Cancel</button>
+        <button class="btn-save" id="meetingModalSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Agenda-item modal -->
+<div class="modal-overlay" id="modalItem">
+  <div class="modal">
+    <div class="modal-head"><h3 id="itemModalTitle">New agenda item</h3></div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="iTitle" placeholder="e.g. Year 8 SoW revision — sign-off needed">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tag</label>
+        <select class="form-select" id="iTag">
+          <option value="discussion">Discussion</option>
+          <option value="decision">Decision (binding rule)</option>
+          <option value="action">Action (spawns a task)</option>
+          <option value="announcement">Announcement</option>
+          <option value="red_text">Red-text (urgent / sensitive)</option>
+        </select>
+        <div class="form-hint">Decisions surface in the Decisions register; actions belong in Activities.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Body</label>
+        <textarea class="form-textarea" id="iBody" rows="5" placeholder="Plain prose. Who said what, what was concluded, what owner X is doing next."></textarea>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-group">
+          <label class="form-label">Subject (optional)</label>
+          <select class="form-select" id="iSubject">
+            <option value="">— Not subject-scoped —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Owner (free text)</label>
+          <input type="text" class="form-input" id="iOwner" placeholder="e.g. Principal">
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-del" id="itemModalDelete" style="display:none;">Delete</button>
+      <div style="display:flex;gap:8px;margin-left:auto;">
+        <button class="btn-cancel" id="itemModalCancel">Cancel</button>
+        <button class="btn-save" id="itemModalSave">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="partials/navbar-loader.js"></script>
+<script type="module">
+import {
+  collection, query, where, orderBy, onSnapshot,
+  doc, addDoc, updateDoc, deleteDoc, serverTimestamp, limit
+} from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
+const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
+const KIND_LABELS = { weekly:'Weekly', ad_hoc:'Ad-hoc', appraisal_calibration:'Appraisal calibration', emergency:'Emergency', other:'Other' };
+const TAG_LABELS = { discussion:'Discussion', decision:'Decision', action:'Action', announcement:'Announcement', red_text:'Red-text' };
+
+let db, currentUser, userProfile;
+let isAdmin = false;
+let schoolId = null;
+let allMeetings = [];
+let allItems = [];
+let activeMeetingId = null;
+let editingMeetingId = null;
+let editingItemId = null;
+let itemsUnsub = null;
+
+const $ = (id) => document.getElementById(id);
+const escHtml = (s) => String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function fmtDate(ts) {
+  if (!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+}
+
+document.addEventListener('authReady', ({ detail }) => {
+  currentUser = detail?.user || window.currentUser;
+  userProfile = detail?.profile || window.userProfile || {};
+  db = window.db;
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-leadership-meetings', { user: currentUser, profile: userProfile });
+  }
+
+  isAdmin = userProfile.role_academichub === 'academic_admin'
+         || userProfile.role_centralhub === 'central_admin';
+  schoolId = userProfile.schoolId || null;
+
+  if (!schoolId && !isAdmin) {
+    $('mainRoot').style.display = 'block';
+    $('mtgList').innerHTML = `<div style="font-size:0.82rem;color:var(--ink-3);padding:14px;text-align:center;">Your profile is missing a <code>schoolId</code>. Ask an admin to update your profile.</div>`;
+    return;
+  }
+
+  $('mainRoot').style.display = 'block';
+  populateSubjectFilter();
+  wireUI();
+  subscribeMeetings();
+});
+
+function populateSubjectFilter() {
+  const sel = $('iSubject');
+  sel.innerHTML = '<option value="">— Not subject-scoped —</option>' +
+    SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
+}
+
+function wireUI() {
+  $('btnAddMeeting').addEventListener('click', () => openMeetingModal(null));
+  $('meetingModalCancel').addEventListener('click', () => $('modalMeeting').classList.remove('open'));
+  $('meetingModalSave').addEventListener('click', saveMeeting);
+  $('meetingModalDelete').addEventListener('click', deleteMeeting);
+  $('itemModalCancel').addEventListener('click', () => $('modalItem').classList.remove('open'));
+  $('itemModalSave').addEventListener('click', saveItem);
+  $('itemModalDelete').addEventListener('click', deleteItem);
+}
+
+function subscribeMeetings() {
+  const constraints = [orderBy('meetingDate', 'desc'), limit(200)];
+  if (!isAdmin && schoolId) constraints.unshift(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_leadership_meetings'), ...constraints);
+  onSnapshot(q, (snap) => {
+    allMeetings = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderMeetings();
+    if (!activeMeetingId && allMeetings.length) {
+      selectMeeting(allMeetings[0].id);
+    } else if (activeMeetingId && !allMeetings.some(m => m.id === activeMeetingId)) {
+      activeMeetingId = null;
+      renderDetail();
+    }
+  }, (err) => {
+    console.error('[subscribeMeetings]', err);
+    $('mtgList').innerHTML = `<div style="color:#dc2626;font-size:0.78rem;padding:12px;">${escHtml(err.code || err.message)}</div>`;
+  });
+}
+
+function renderMeetings() {
+  const list = $('mtgList');
+  if (!allMeetings.length) {
+    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No meetings yet — hit <strong>+ New</strong> above.</div>`;
+    return;
+  }
+  list.innerHTML = allMeetings.map(m => {
+    const itemCount = allItems.filter(i => i.meetingId === m.id).length;
+    const decisionCount = allItems.filter(i => i.meetingId === m.id && i.tag === 'decision').length;
+    const actionCount = allItems.filter(i => i.meetingId === m.id && i.tag === 'action').length;
+    return `<div class="mtg-item ${m.id === activeMeetingId ? 'active' : ''}" data-meeting="${m.id}">
+      <div class="mtg-item-title">${escHtml(m.title || 'Untitled')}</div>
+      <div class="mtg-item-date">${fmtDate(m.meetingDate)} · ${KIND_LABELS[m.kind] || m.kind || ''}</div>
+      ${itemCount ? `<div class="mtg-item-counts">
+        <span class="pill-tiny">${itemCount} items</span>
+        ${decisionCount ? `<span class="pill-tiny" style="background:#fee2e2;color:#991b1b;">${decisionCount} dec</span>` : ''}
+        ${actionCount ? `<span class="pill-tiny" style="background:#fef3c7;color:#92400e;">${actionCount} act</span>` : ''}
+      </div>` : ''}
+    </div>`;
+  }).join('');
+  list.querySelectorAll('[data-meeting]').forEach(el => {
+    el.addEventListener('click', () => selectMeeting(el.dataset.meeting));
+  });
+}
+
+function selectMeeting(meetingId) {
+  activeMeetingId = meetingId;
+  renderMeetings();
+  if (itemsUnsub) itemsUnsub();
+  itemsUnsub = subscribeItems(meetingId);
+}
+
+function subscribeItems(meetingId) {
+  const constraints = [where('meetingId', '==', meetingId), orderBy('createdAt', 'asc'), limit(500)];
+  if (!isAdmin && schoolId) constraints.push(where('schoolId', '==', schoolId));
+  const q = query(collection(db, 'school_leadership_meeting_items'), ...constraints);
+  return onSnapshot(q, (snap) => {
+    allItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderDetail();
+    renderMeetings();
+  }, (err) => {
+    console.error('[subscribeItems]', err);
+    $('mtgDetail').innerHTML = `<div class="empty-board"><h3>Could not load agenda</h3><p>${escHtml(err.code || err.message)}</p></div>`;
+  });
+}
+
+function renderDetail() {
+  const wrap = $('mtgDetail');
+  const m = allMeetings.find(x => x.id === activeMeetingId);
+  if (!m) {
+    wrap.innerHTML = `<div class="empty-board"><h3>Pick a meeting to see its agenda</h3><p>Or hit <strong>+ New</strong> on the left to start one.</p></div>`;
+    return;
+  }
+
+  const mItems = allItems.filter(i => i.meetingId === m.id);
+
+  wrap.innerHTML = `
+    <div class="mtg-head">
+      <div style="flex:1;min-width:240px;">
+        <h2>${escHtml(m.title || 'Untitled')}</h2>
+        <div class="meta">${fmtDate(m.meetingDate)} · ${KIND_LABELS[m.kind] || m.kind || ''} · ${mItems.length} item${mItems.length === 1 ? '' : 's'}</div>
+        ${m.description ? `<div class="desc">${escHtml(m.description)}</div>` : ''}
+        ${m.attendees ? `<div class="meta" style="margin-top:6px;"><strong>Attendees:</strong> ${escHtml(m.attendees)}</div>` : ''}
+      </div>
+      <div class="actions">
+        <button id="btnEditMeeting">✎ Edit meeting</button>
+        ${isAdmin ? '<button class="danger" id="btnDeleteMeeting">Delete</button>' : ''}
+      </div>
     </div>
 
-    <div class="sl-card">
-      <h3>What this page will do</h3>
-      <p>Two-column layout: left sidebar lists meetings (filtered to your school by schoolId); right side is the active meeting's agenda-item editor. Agenda items support tags (decision/action/discussion/announcement/red_text), rich body, sub-items, subject scope. Red-text items promote into Decisions; action items spawn cards in school-scoped Activities. Collaborative editing — any school leader can amend; admin can delete.</p>
+    <div class="items-box">
+      <div class="items-head">
+        <h3>Agenda items</h3>
+        <button class="mtg-btn-add" id="btnAddItem">+ New item</button>
+      </div>
+      ${mItems.length ? `<div class="items-list">${mItems.map(renderItem).join('')}</div>` : '<div class="empty-items">No agenda items yet — hit <strong>+ New item</strong> to add the first.</div>'}
     </div>
+  `;
 
-    <p><a class="sl-back" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg> Back to dashboard</a></p>
-  </main>
+  $('btnEditMeeting').addEventListener('click', () => openMeetingModal(m.id));
+  $('btnAddItem').addEventListener('click', () => openItemModal(null));
+  const delBtn = document.getElementById('btnDeleteMeeting');
+  if (delBtn) delBtn.addEventListener('click', () => quickDeleteMeeting(m.id));
+  wrap.querySelectorAll('[data-item]').forEach(el => {
+    el.addEventListener('click', () => openItemModal(el.dataset.item));
+  });
+}
 
-  <script src="partials/navbar-loader.js"></script>
-  <script>
-    document.addEventListener('authReady', (e) => {
-      window.__loadAcademicNavbar?.('school-leadership-meetings', { user: e.detail?.user, profile: e.detail?.profile });
-    });
-  </script>
+function renderItem(i) {
+  const tag = i.tag || 'discussion';
+  return `
+    <div class="item-card" data-item="${i.id}">
+      <div class="item-row1">
+        <div class="item-title">${escHtml(i.title || 'Untitled')}</div>
+        <div class="item-tags">
+          <span class="item-tag ${tag}">${TAG_LABELS[tag] || tag}</span>
+          ${i.subjectId ? `<span class="item-tag" style="background:#ede9fe;color:#5b21b6;">${escHtml(SUBJECT_LABELS[i.subjectId] || i.subjectId)}</span>` : ''}
+        </div>
+      </div>
+      ${i.body ? `<div class="item-body">${escHtml(i.body)}</div>` : ''}
+      ${i.owner ? `<div class="item-meta"><strong>Owner:</strong> ${escHtml(i.owner)}</div>` : ''}
+    </div>
+  `;
+}
+
+/* Meeting CRUD */
+function openMeetingModal(meetingId) {
+  editingMeetingId = meetingId;
+  if (meetingId) {
+    const m = allMeetings.find(x => x.id === meetingId);
+    if (!m) { showToast('Not found.'); return; }
+    $('meetingModalTitle').textContent = 'Edit meeting';
+    $('mTitle').value = m.title || '';
+    const md = m.meetingDate?.toDate ? m.meetingDate.toDate() : (m.meetingDate ? new Date(m.meetingDate) : new Date());
+    $('mDate').value = `${md.getFullYear()}-${String(md.getMonth()+1).padStart(2,'0')}-${String(md.getDate()).padStart(2,'0')}`;
+    $('mKind').value = m.kind || 'weekly';
+    $('mAttendees').value = m.attendees || '';
+    $('mDesc').value = m.description || '';
+    $('meetingModalDelete').style.display = isAdmin ? '' : 'none';
+  } else {
+    $('meetingModalTitle').textContent = 'New meeting';
+    $('mTitle').value = '';
+    const today = new Date();
+    $('mDate').value = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+    $('mKind').value = 'weekly';
+    $('mAttendees').value = '';
+    $('mDesc').value = '';
+    $('meetingModalDelete').style.display = 'none';
+  }
+  $('modalMeeting').classList.add('open');
+}
+
+async function saveMeeting() {
+  const title = $('mTitle').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile.'); return; }
+
+  const payload = {
+    title,
+    meetingDate: $('mDate').value ? new Date($('mDate').value) : new Date(),
+    kind: $('mKind').value,
+    attendees: $('mAttendees').value.trim(),
+    description: $('mDesc').value.trim(),
+    schoolId: schoolId || (editingMeetingId ? (allMeetings.find(x => x.id === editingMeetingId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingMeetingId) {
+      await updateDoc(doc(db, 'school_leadership_meetings', editingMeetingId), payload);
+      showToast('Meeting updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      const ref = await addDoc(collection(db, 'school_leadership_meetings'), payload);
+      activeMeetingId = ref.id;
+      showToast('Meeting created.');
+    }
+    $('modalMeeting').classList.remove('open');
+  } catch (err) {
+    console.error('[saveMeeting]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function deleteMeeting() {
+  if (!editingMeetingId || !isAdmin) return;
+  if (!confirmDanger()) return;
+  try {
+    await deleteDoc(doc(db, 'school_leadership_meetings', editingMeetingId));
+    showToast('Meeting deleted.');
+    $('modalMeeting').classList.remove('open');
+    if (activeMeetingId === editingMeetingId) activeMeetingId = null;
+  } catch (err) {
+    console.error('[deleteMeeting]', err);
+    showToast(`Delete failed: ${err.code || err.message}`);
+  }
+}
+
+async function quickDeleteMeeting(id) {
+  if (!isAdmin) return;
+  if (!confirmDanger()) return;
+  try {
+    await deleteDoc(doc(db, 'school_leadership_meetings', id));
+    showToast('Meeting deleted.');
+    if (activeMeetingId === id) activeMeetingId = null;
+  } catch (err) {
+    console.error('[quickDeleteMeeting]', err);
+    showToast(`Delete failed: ${err.code || err.message}`);
+  }
+}
+
+/* Item CRUD */
+function openItemModal(itemId) {
+  editingItemId = itemId;
+  if (itemId) {
+    const i = allItems.find(x => x.id === itemId);
+    if (!i) { showToast('Not found.'); return; }
+    $('itemModalTitle').textContent = 'Edit agenda item';
+    $('iTitle').value = i.title || '';
+    $('iTag').value = i.tag || 'discussion';
+    $('iBody').value = i.body || '';
+    $('iSubject').value = i.subjectId || '';
+    $('iOwner').value = i.owner || '';
+    $('itemModalDelete').style.display = '';
+  } else {
+    $('itemModalTitle').textContent = 'New agenda item';
+    $('iTitle').value = '';
+    $('iTag').value = 'discussion';
+    $('iBody').value = '';
+    $('iSubject').value = '';
+    $('iOwner').value = '';
+    $('itemModalDelete').style.display = 'none';
+  }
+  $('modalItem').classList.add('open');
+}
+
+async function saveItem() {
+  const title = $('iTitle').value.trim();
+  if (!title) { showToast('Title required.'); return; }
+  if (!activeMeetingId) { showToast('No meeting selected.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile.'); return; }
+
+  const payload = {
+    meetingId: activeMeetingId,
+    title,
+    body: $('iBody').value.trim(),
+    tag: $('iTag').value,
+    subjectId: $('iSubject').value || null,
+    owner: $('iOwner').value.trim(),
+    schoolId: schoolId || (editingItemId ? (allItems.find(x => x.id === editingItemId)?.schoolId || null) : null),
+    updatedAt: serverTimestamp(),
+    lastEditedBy: currentUser.uid,
+  };
+
+  try {
+    if (editingItemId) {
+      await updateDoc(doc(db, 'school_leadership_meeting_items', editingItemId), payload);
+      showToast('Item updated.');
+    } else {
+      payload.createdBy = currentUser.uid;
+      payload.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'school_leadership_meeting_items'), payload);
+      showToast('Item added.');
+    }
+    $('modalItem').classList.remove('open');
+  } catch (err) {
+    console.error('[saveItem]', err);
+    showToast(`Save failed: ${err.code || err.message}`);
+  }
+}
+
+async function deleteItem() {
+  if (!editingItemId) return;
+  const i = allItems.find(x => x.id === editingItemId);
+  if (!i) return;
+  // Rule allows creator OR admin
+  const canDelete = isAdmin || i.createdBy === currentUser.uid;
+  if (!canDelete) { showToast('Only the creator or an admin can delete this item.'); return; }
+  if (!confirmDanger()) return;
+  try {
+    await deleteDoc(doc(db, 'school_leadership_meeting_items', editingItemId));
+    showToast('Item deleted.');
+    $('modalItem').classList.remove('open');
+  } catch (err) {
+    console.error('[deleteItem]', err);
+    showToast(`Delete failed: ${err.code || err.message}`);
+  }
+}
+
+let _confirming = null;
+function confirmDanger() {
+  if (_confirming) { clearTimeout(_confirming); _confirming = null; return true; }
+  showToast('Tap delete again within 3s to confirm.');
+  _confirming = setTimeout(() => { _confirming = null; }, 3000);
+  return false;
+}
+</script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Meetings</span>
+      <h2 class="page-footer__cta-title">The agenda item is the unit of leadership.</h2>
+      <p class="page-footer__cta-desc">Each row tagged decision belongs in the Decisions register; each action belongs in Activities. Tag them right at capture time and the rest of the workspace stays auditable.</p>
+      <a href="/school-leadership-decisions" class="page-footer__cta-btn">Open Decisions to surface a binding rule <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Meetings footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Workspace</span>
+        <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-activities" class="page-footer__nav-link">Activities</a>
+        <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
+        <a href="/school-artifacts" class="page-footer__nav-link">Artifacts</a>
+        <a href="/weekly-checklist" class="page-footer__nav-link">Weekly Checklist</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <a href="/school-leadership-operational-guide" class="page-footer__nav-link">Operational Guide</a>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Same-school visibility · minutes are an audit trail — admin-only delete</span>
+  </div>
+</footer>
 </body>
 </html>
