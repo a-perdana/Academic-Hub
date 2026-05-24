@@ -7,29 +7,24 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
 <style>
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base
+   typography, AND canonical .page-hero* chrome come from /base.css
+   (injected by build.js). Page-local styles below MUST NOT override
+   .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 :root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
-.page-wrap { max-width: 1100px; margin: 0 auto; padding: 24px 20px 80px; }
 
-.page-header {
-  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
-  color: #fff; padding: 30px 28px; border-radius: 16px;
-  margin-bottom: 24px; position: relative; overflow: hidden;
+/* Hero ↔ page-wrap horizontal alignment — see root CLAUDE.md Common
+   Mistake #52. page-hero__inner clamps to --container-max AFTER its
+   40px outer padding; page-wrap clamps THEN pads, so its max-width
+   needs +80px to share the same content-column edge. */
+.page-wrap {
+  max-width: calc(var(--container-max) + 80px);
+  margin: 0 auto;
+  padding: 28px 40px 80px;
 }
-.page-header::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
-.page-header > * { position: relative; z-index: 1; }
-.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
-.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin-bottom: 4px; }
-.page-header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 680px; }
-
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 24px; }
-.stat-card {
-  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
-  padding: 18px 20px; box-shadow: var(--shadow-sm);
-}
-.stat-num { font-size: 2rem; font-weight: 800; color: var(--ink); line-height: 1; margin-bottom: 4px; }
-.stat-label { font-size: 12px; color: var(--ink-3); font-weight: 500; }
 
 .section { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--shadow-sm); }
 .section h2 { font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 14px; }
@@ -96,12 +91,40 @@ body { padding-top: 62px; }
 <body>
 <div id="navbarMount"></div>
 
-<div class="page-wrap">
-  <div class="page-header">
-    <p class="eyebrow">Academic Hub · School Principal · Foundation Representative</p>
-    <h1>Team Induction</h1>
-    <p>The first-year inductions at your school. As school principal you have read access to your team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Principal · Foundation Representative</p>
+      <h1 class="page-hero__title">Team Induction</h1>
+      <p class="page-hero__desc">The first-year inductions at your school. As school principal you have read access to your team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
+    </div>
+    <div class="page-hero__kpis" id="heroKpis" style="display:none;">
+      <div class="page-hero__kpi page-hero__kpi--primary">
+        <div class="page-hero__kpi-num" id="kpiMentees">—</div>
+        <div class="page-hero__kpi-lbl">Mentees</div>
+        <div class="page-hero__kpi-sub">at your school</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="kpiActive">—</div>
+        <div class="page-hero__kpi-lbl">Active</div>
+        <div class="page-hero__kpi-sub">inductions</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="kpiCompleted">—</div>
+        <div class="page-hero__kpi-lbl">Completed</div>
+        <div class="page-hero__kpi-sub">Y1 cohort</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="kpiAlarms">—</div>
+        <div class="page-hero__kpi-lbl">Pulse alarms</div>
+        <div class="page-hero__kpi-sub">2-week low</div>
+      </div>
+    </div>
   </div>
+</header>
+
+<div class="page-wrap">
 
   <div class="charter-banner">
     <strong>Watch the pulses, not the journals.</strong> A pulse trend dropping for two consecutive weeks is the system's earliest warning that a new teacher is struggling. Aim for a 1:1 with the mentor pair within 7 days of an alarm — the Charter says induction is care, not surveillance.
@@ -232,14 +255,17 @@ function render() {
   const completed = assignments.filter(a => a.status === 'completed').length;
   const alarms = assignments.filter(a => lowPulseAlarm(a.uid)).length;
 
-  const stats = `
-    <div class="stats-row">
-      <div class="stat-card"><div class="stat-num">${totalMentees}</div><div class="stat-label">Mentees at your school</div></div>
-      <div class="stat-card"><div class="stat-num">${active}</div><div class="stat-label">Active inductions</div></div>
-      <div class="stat-card"><div class="stat-num">${completed}</div><div class="stat-label">Completed Y1</div></div>
-      <div class="stat-card"><div class="stat-num" style="color:${alarms > 0 ? '#dc2626' : 'inherit'};">${alarms}</div><div class="stat-label">Pulse alarms</div></div>
-    </div>
-  `;
+  // Populate hero KPI tiles (replaces the legacy .stats-row block).
+  const kpiHost = document.getElementById('heroKpis');
+  if (kpiHost) {
+    document.getElementById('kpiMentees').textContent   = totalMentees;
+    document.getElementById('kpiActive').textContent    = active;
+    document.getElementById('kpiCompleted').textContent = completed;
+    const alarmEl = document.getElementById('kpiAlarms');
+    alarmEl.textContent = alarms;
+    alarmEl.style.color = alarms > 0 ? '#fca5a5' : '';
+    kpiHost.style.display = '';
+  }
 
   // Alarms section first.
   let alarmHtml = '';
@@ -292,7 +318,7 @@ function render() {
     </div>`;
   }).join('');
 
-  document.getElementById('content').innerHTML = stats + alarmHtml + `<div class="section"><h2>All inductions at your school</h2>${cards}</div>`;
+  document.getElementById('content').innerHTML = alarmHtml + `<div class="section"><h2>All inductions at your school</h2>${cards}</div>`;
 }
 </script>
 </body>

@@ -19,34 +19,20 @@
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/base.css">
 <style>
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base
+   typography, AND canonical .page-hero* chrome come from /base.css
+   (injected by build.js). Page-local styles below MUST NOT override
+   .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-/* ── HERO ── */
-.hero {
-  background: linear-gradient(135deg, #1e1b4b 0%, #4c1d95 60%, #7c3aed 100%);
-  color: #fff; padding: 0; position: relative; overflow: hidden;
+/* ── HERO ACTIONS (page-local CTA slot — not yet in base.css) ── */
+.page-hero__actions {
+  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
+  position: relative; z-index: 1;
 }
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero-inner {
-  max-width: 1200px; margin: 0 auto; padding: 32px 32px 28px;
-  display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  position: relative; z-index: 1; flex-wrap: wrap;
-}
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
-  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
-  margin-bottom: 8px; letter-spacing: .02em;
-}
-.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
-.hero-sub { font-size: .85rem; opacity: .8; margin-top: 5px; }
-.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn-hero {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 9px 18px; border-radius: 10px; font-family: inherit;
@@ -58,8 +44,16 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .btn-hero-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
 .btn-hero-secondary:hover { background: rgba(255,255,255,.25); }
 
-/* ── LAYOUT ── */
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 32px 100px; }
+/* ── LAYOUT ──
+   Hero ↔ page-wrap alignment (root CLAUDE.md Common Mistake #52):
+   page-hero__inner clamps to --container-max AFTER its 40px outer
+   padding; page-wrap clamps THEN pads, so its max-width needs +80px
+   to share the same content-column edge. */
+.page-wrap {
+  max-width: calc(var(--container-max, 1200px) + 80px);
+  margin: 0 auto;
+  padding: 28px 40px 100px;
+}
 
 /* ── STATS ── */
 .stats-strip {
@@ -279,20 +273,20 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 </script>
 <div id="navbarMount"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-badge">&#x1F4CB; My Observations</div>
-      <h1>My Observation Records</h1>
-      <div class="hero-sub">Formal appraisals and classroom walkthroughs you have submitted.</div>
-    </div>
-    <div class="hero-actions">
-      <a href="TeacherAppraisalEntry.html" class="btn-hero btn-hero-primary">+ New Appraisal</a>
-      <a href="TeacherWalkthroughEntry.html" class="btn-hero btn-hero-secondary">+ New Walkthrough</a>
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders · Workspace</p>
+      <h1 class="page-hero__title">My Observation Records</h1>
+      <p class="page-hero__desc">Formal appraisals and classroom walkthroughs you have submitted.</p>
+      <div class="page-hero__actions">
+        <a href="TeacherAppraisalEntry.html" class="btn-hero btn-hero-primary">+ New Appraisal</a>
+        <a href="TeacherWalkthroughEntry.html" class="btn-hero btn-hero-secondary">+ New Walkthrough</a>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 <div class="page-wrap">
 
