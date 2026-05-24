@@ -313,6 +313,38 @@ window.showCert=function(cert,d){
 window.closeCertModal=function(){document.getElementById('certModal').classList.remove('open');};
 document.getElementById('certModal').addEventListener('click',e=>{if(e.target===document.getElementById('certModal'))closeCertModal();});
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Certification Pathway</span>
+      <h2 class="page-footer__cta-title">Close out the next domain.</h2>
+      <p class="page-footer__cta-desc">A certificate is awarded only when every competency in a domain reaches Lead. Use the progress bars to find your nearest domain, then push the remaining competencies up one stage at a time.</p>
+      <a href="/learning-path" class="page-footer__cta-btn">Continue Learning Path <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="My Certificates footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Framework Map</a>
+        <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+        <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+        <a href="/academic-standards" class="page-footer__nav-link">Eduversal Standards</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">6 domains · Lead-on-all-competencies = certificate · verify by id</span>
+  </div>
+</footer>
+
 <script src="partials/navbar-loader.js"></script>
 </body>
 </html>
