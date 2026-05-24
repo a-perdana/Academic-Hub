@@ -45,12 +45,14 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .btn-hero-secondary:hover { background: rgba(255,255,255,.25); }
 
 /* ── LAYOUT ──
-   Hero ↔ page-wrap alignment (root CLAUDE.md Common Mistake #52):
-   page-hero__inner clamps to --container-max AFTER its 40px outer
-   padding; page-wrap clamps THEN pads, so its max-width needs +80px
-   to share the same content-column edge. */
+   Hero ↔ page-wrap alignment: canonical .page-hero__inner clamps to
+   --container-max (1200px) AND pads 40px inside that clamp. Match by
+   giving page-wrap the same outer clamp + same inner padding, so the
+   inner content column is 1120px on both. (Common Mistake #52 +80px
+   rule applies to LEGACY 3-wrapper pages; the canonical 2-wrapper
+   .page-hero pattern is symmetric.) */
 .page-wrap {
-  max-width: calc(var(--container-max, 1200px) + 80px);
+  max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 28px 40px 100px;
 }

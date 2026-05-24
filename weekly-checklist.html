@@ -112,14 +112,13 @@ body { padding-top: 62px; }
 }
 
 /* ─── PAGE WRAP ──────────────────────────────────
-   Hero's .page-hero__inner clamps content to 1200px AFTER its 40px
-   outer padding; page-wrap clamps THEN pads. To make both content
-   columns share the same left edge, page-wrap's clamp = container
-   max + 2·padding (1200 + 80 = 1280). After padding subtracts, the
-   inner content column is exactly 1200px — aligned with the hero.
-   See root CLAUDE.md Common Mistake #52 (hero ↔ page-wrap alignment). */
+   Canonical .page-hero__inner clamps to --container-max (1200px) AND
+   pads 40px inside that clamp; matching .page-wrap with the same outer
+   clamp + same inner padding gives both blocks a 1120px content column.
+   (Common Mistake #52's +80px rule applies to LEGACY 3-wrapper pages
+   only; the canonical 2-wrapper .page-hero pattern is symmetric.) */
 .page-wrap {
-  max-width: calc(var(--container-max) + 80px);
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 28px 40px 72px;
 }

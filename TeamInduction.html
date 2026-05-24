@@ -16,12 +16,14 @@
 :root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
 
-/* Hero ↔ page-wrap horizontal alignment — see root CLAUDE.md Common
-   Mistake #52. page-hero__inner clamps to --container-max AFTER its
-   40px outer padding; page-wrap clamps THEN pads, so its max-width
-   needs +80px to share the same content-column edge. */
+/* Hero ↔ page-wrap alignment: canonical .page-hero__inner clamps to
+   --container-max (1200px) AND pads 40px inside that clamp. Match by
+   giving page-wrap the same outer clamp + same inner padding so the
+   inner content column is 1120px on both. (Common Mistake #52 +80px
+   rule applies to LEGACY 3-wrapper pages; the canonical 2-wrapper
+   .page-hero pattern is symmetric.) */
 .page-wrap {
-  max-width: calc(var(--container-max) + 80px);
+  max-width: var(--container-max);
   margin: 0 auto;
   padding: 28px 40px 80px;
 }
