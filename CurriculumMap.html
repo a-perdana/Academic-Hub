@@ -37,7 +37,7 @@
     .hero-inner {
       position: relative;
       z-index: 1;
-      max-width: 1200px;
+      max-width: calc(var(--container-max) + 80px);
       margin: 0 auto;
       padding: 0 40px;
     }
@@ -77,11 +77,11 @@
       margin-top: 12px;
     }
 
-    /* ── PAGE WRAP ── canonical 1200px clamp + 40px lateral padding,
-       so the content column shares a left edge with .hero-inner
-       (also 1200 + 40 padding). See Common Mistake #52. */
+    /* ── PAGE WRAP ── outer clamp 1280 (var(--container-max) + 80)
+       + 40px padding × 2 = 1200 content edge, matching .hero-inner.
+       See [[references-three-rails-1200]] + Common Mistake #52. */
     .page-wrap {
-      max-width: 1200px;
+      max-width: calc(var(--container-max) + 80px);
       margin: 0 auto;
       padding: 32px 40px 80px;
     }
@@ -706,6 +706,14 @@
       .hero { padding: 36px 20px; }
       .summary-row { grid-template-columns: repeat(2, 1fr); }
     }
+
+    /* Canonical .page-footer'ın iç clamp'i base.css'te
+       var(--container-max) = 1200 → 40px padding × 2 = 1120 content.
+       Bu sayfanın hero/body 1200 content rail'iyle hizalanması için
+       outer clamp'i 1280'e genişlet → footer content da 1200'de
+       biter. See [[references-three-rails-1200]]. */
+    .page-footer__inner,
+    .page-footer__meta { max-width: calc(var(--container-max) + 80px); }
   </style>
 </head>
 <body data-page-accent="mor">
