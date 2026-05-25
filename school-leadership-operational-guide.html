@@ -1185,6 +1185,23 @@ document.addEventListener('authReady', ({ detail }) => {
   const isAC = subs.includes('academic_coordinator');
   const isCC = subs.includes('cambridge_coordinator');
 
+  // ────────────────────────────────────────────────────────────────
+  // Smart redirect — single-role non-admin users skip the landing
+  // and go straight to their handbook. Multi-role users, admin, and
+  // no-role users stay on the landing (they need the picker view).
+  //
+  // Escape hatch: append `?stay=1` to the URL to suppress the redirect
+  // and view the landing even with a single sub-role (e.g. to browse
+  // siblings or read the §5 role-block).
+  // ────────────────────────────────────────────────────────────────
+  const url = new URL(window.location.href);
+  const stayParam = url.searchParams.get('stay');
+  const matchedRoles = ROLES.filter(r => subs.includes(r.id));
+  if (!isAdmin && !stayParam && matchedRoles.length === 1) {
+    window.location.replace(`/handbook?id=${matchedRoles[0].handbookId}`);
+    return;
+  }
+
   // Hero name (first name, gradient-painted)
   const name = profile.displayName || (user?.email || '').split('@')[0] || 'there';
   const firstName = String(name).trim().split(/\s+/)[0] || 'there';
