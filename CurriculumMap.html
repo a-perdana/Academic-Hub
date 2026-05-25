@@ -146,7 +146,7 @@
     }
     .icon-dropdown-menu {
       position: absolute; top: calc(100% + 4px); left: 0;
-      min-width: 200px; z-index: 50;
+      min-width: max-content; z-index: 50;
       background: var(--white); border: 1px solid var(--border);
       border-radius: 10px; box-shadow: 0 8px 24px rgba(15,23,42,0.12);
       padding: 4px; display: flex; flex-direction: column; gap: 2px;
@@ -160,6 +160,7 @@
       font-size: 0.82rem; color: var(--ink);
       cursor: pointer; text-align: left;
       transition: background 0.12s;
+      white-space: nowrap;
     }
     .icon-dropdown-item:hover { background: var(--paper); }
     .icon-dropdown-item.active { background: var(--paper); color: var(--accent); font-weight: 600; }
