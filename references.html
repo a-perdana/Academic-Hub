@@ -19,12 +19,13 @@
        every page using .page-hero must add it. See root CLAUDE.md
        "body padding-top:62px navbar clearance".) */
     body { padding-top: 62px; }
-    /* Hero content must hit 1200px content width to align visually
-       with the shell's toolbar/sections (which clamp to
-       calc(--container-max + 80px) outer + 40px padding → content at
-       exactly 1200px). Base.css clamps .page-hero__inner at 1200 +
-       40px padding → text at 1120; this override widens to match. */
-    .page-hero__inner { max-width: calc(var(--container-max) + 80px); }
+    /* Hero + footer content widen to match the shell's toolbar/section
+       content width (1200px). Base rules clamp __inner at 1200 + 40px
+       padding → content at 1120; these overrides widen to 1280 outer
+       so the inner 40px padding lands at content 1200. */
+    .page-hero__inner,
+    .page-footer__inner,
+    .page-footer__meta { max-width: calc(var(--container-max) + 80px); }
   </style>
 </head>
 <body data-page-accent="mor">
