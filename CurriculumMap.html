@@ -337,34 +337,27 @@
     .month-pager-btn:hover:not(.active) { background: var(--paper); border-color: var(--accent); color: var(--accent); }
     .month-pager-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 
-    /* ── Chapter view pagers ── */
+    /* ── Chapter view pagers ── single compact row: subject letter
+       dots + month chips. Labels dropped — buttons carry their
+       full name in title= for hover tooltip. */
     .chapter-pagers {
       display: none;
-      flex-direction: column;
-      gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
-    .chapter-pagers.visible { display: flex; }
+    .chapter-pagers.visible { display: block; }
     .subject-pager {
       display: flex;
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
     }
-    .subject-pager-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      min-width: 90px;
-    }
     .subject-pager-btn {
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 500;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 999px;
       background: var(--white);
       color: var(--ink-2);
       cursor: pointer;
@@ -373,6 +366,19 @@
     }
     .subject-pager-btn:hover:not(.active) { background: var(--paper); border-color: currentColor; }
     .subject-pager-btn.active { color: #fff; font-weight: 600; }
+    /* Subject icon = circular letter chip (initial of subject name).
+       Hover shows the full subject name via the title attribute. */
+    .subject-pager-dot {
+      width: 28px; height: 28px; padding: 0;
+      font-size: 0.8rem; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    /* Thin vertical separator between subject dots and month chips. */
+    .subject-pager-sep {
+      width: 1px; height: 20px;
+      background: var(--border);
+      margin: 0 4px;
+    }
 
     /* ── Month separator row ── */
     .month-separator-row td { padding: 0; border-bottom: none; }
@@ -1143,33 +1149,34 @@
       const activeMIdx = currentChapterMonth[cfg.key];
 
       // ── Build pagers ──
-      // Row 1: Subject buttons
-      const subjectRow = `<div class="subject-pager">
-        <span class="subject-pager-label" style="color:var(--ink-3)">Subject:</span>
-        ${validConfigs.map(c => {
-          const active = c.key === cfg.key;
-          return `<button class="subject-pager-btn${active ? ' active' : ''}"
-            data-subj="${c.key}"
-            style="${active ? `background:${c.color};border-color:${c.color}` : `border-color:${c.color};color:${c.color}`}"
-          >${esc(c.label)}</button>`;
-        }).join('')}
-      </div>`;
+      // One row: subject icon buttons (letter dot, hover for full
+      // name) + thin separator + month chips for active subject.
+      // Labels dropped — buttons carry their own colour + title.
+      const subjectBtns = validConfigs.map(c => {
+        const active = c.key === cfg.key;
+        const initial = (c.label || '?').charAt(0).toUpperCase();
+        return `<button class="subject-pager-btn subject-pager-dot${active ? ' active' : ''}"
+          data-subj="${c.key}"
+          title="${esc(c.label)}"
+          aria-label="${esc(c.label)}"
+          style="${active ? `background:${c.color};border-color:${c.color}` : `border-color:${c.color};color:${c.color}`}"
+        >${esc(initial)}</button>`;
+      }).join('');
 
-      // Row 2: Month buttons for active subject
-      const monthRow = sortedMonths.length > 1 ? `<div class="subject-pager">
-        <span class="subject-pager-label" style="color:${cfg.color}">${esc(cfg.label)}:</span>
-        ${sortedMonths.map(mIdx => {
-          const m = AC_MONTHS[mIdx];
-          const label = m ? m.short : `M${mIdx + 1}`;
-          const active = mIdx === activeMIdx;
-          return `<button class="subject-pager-btn${active ? ' active' : ''}"
-            data-mth="${mIdx}" data-key="${cfg.key}"
-            style="${active ? `background:${cfg.color};border-color:${cfg.color}` : `border-color:${cfg.color};color:${cfg.color}`}"
-          >${esc(label)}</button>`;
-        }).join('')}
-      </div>` : '';
+      const monthBtns = sortedMonths.length > 1 ? sortedMonths.map(mIdx => {
+        const m = AC_MONTHS[mIdx];
+        const label = m ? m.short : `M${mIdx + 1}`;
+        const fullLabel = m ? `${m.name} ${m.year}` : label;
+        const active = mIdx === activeMIdx;
+        return `<button class="subject-pager-btn${active ? ' active' : ''}"
+          data-mth="${mIdx}" data-key="${cfg.key}"
+          title="${esc(fullLabel)}"
+          style="${active ? `background:${cfg.color};border-color:${cfg.color}` : `border-color:${cfg.color};color:${cfg.color}`}"
+        >${esc(label)}</button>`;
+      }).join('') : '';
 
-      pagerEl.innerHTML = subjectRow + monthRow;
+      const sep = monthBtns ? '<span class="subject-pager-sep" aria-hidden="true"></span>' : '';
+      pagerEl.innerHTML = `<div class="subject-pager">${subjectBtns}${sep}${monthBtns}</div>`;
       pagerEl.classList.add('visible');
 
       // ── Render chapters for active subject + month ──
