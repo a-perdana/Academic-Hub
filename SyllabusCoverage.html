@@ -31,39 +31,10 @@
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── legacy 3-wrapper. Outer clamp var(--container-max)
-       (= 1200) + ZERO horizontal padding → measured content edge
-       exactly 1200. See [[references-three-rails-1200]] — the
-       calc(+80) + 40px-padding "math 1200" pattern measures 1022
-       in practice. Vertical padding stays on .hero. */
-    .hero {
-      width: 100%;
-      background: linear-gradient(140deg, #1e0a4e 0%, #3b1a8a 50%, #6c5ce7 100%);
-      padding: 44px 0 40px;
-      position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 8% 80%, rgba(108,92,231,0.22) 0%, transparent 55%),
-        radial-gradient(circle at 90% 12%, rgba(255,255,255,0.05) 0%, transparent 48%);
-      pointer-events: none;
-    }
-    .hero-inner {
-      position: relative; z-index: 1;
-      width: 100%;
-      max-width: var(--container-max); margin: 0 auto;
-      padding: 0;
-    }
-    .hero-eyebrow {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
-      text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 7px;
-    }
-    .hero-title {
-      font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 600;
-      color: #fff; margin-bottom: 6px; line-height: 1.2;
-    }
-    .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
+    /* Hero markup uses canonical .page-hero from base.css
+       (data-accent="mor"). No page-local hero CSS needed — the
+       shared rule handles gradient + padding + KPI tiles +
+       1200-rail alignment + body tint via data-page-accent. */
 
     /* ── TOOLBAR ── 1200 content rail. width:100% gerekli çünkü
        body flex-column (canonical .page-footer sticky pattern) ve
@@ -195,46 +166,63 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── SUMMARY BAR ── */
-    .summary-bar {
-      display: flex; gap: 20px; flex-wrap: wrap;
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 16px 24px;
-      margin-bottom: 24px; box-shadow: var(--shadow-sm);
-    }
-    .sum-stat { display: flex; flex-direction: column; }
-    .sum-val  { font-size: 1.5rem; font-weight: 700; color: var(--ink); font-family: 'DM Mono', monospace; }
-    .sum-lbl  { font-size: 0.72rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; }
-    .sum-divider { width: 1px; background: var(--border); align-self: stretch; }
+    /* Summary stats moved INTO hero as canonical .page-hero__kpis
+       tiles — see body markup below. No standalone .summary-bar
+       on the page anymore. */
 
     @media (max-width: 700px) {
-      .hero { padding: 32px 20px 28px; }
       .toolbar { padding: 16px 20px 0; }
       .content { padding: 20px 20px 48px; }
       .teacher-grid { grid-template-columns: 1fr; }
-      .summary-bar { gap: 12px; }
     }
 
-    /* Footer content 1200 rail'ine hizala: outer clamp
-       var(--container-max) (= 1200) + horizontal padding sıfır.
-       See [[references-three-rails-1200]] — bu pattern ölçüde
-       gerçekten 1200 verir, calc(+80) verisi 1022'ye düşer. */
+    /* 1200 content rail'i 3 canonical sayfa-genelinde paylaş
+       (hero + footer). base.css'in default 40px iç padding'ini
+       strip ediyoruz ki ölçü tam 1200'e otursun. See
+       [[references-three-rails-1200]]. */
+    .page-hero__inner,
     .page-footer__inner,
-    .page-footer__meta { max-width: var(--container-max); padding-left: 0; padding-right: 0; }
+    .page-footer__meta {
+      max-width: var(--container-max);
+      padding-left: 0;
+      padding-right: 0;
+    }
   </style>
 </head>
 <body data-page-accent="mor">
 <div id="navbarMount"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div>
-      <div class="hero-eyebrow">Academic Hub · Teaching Quality</div>
-      <h1 class="hero-title">Syllabus Coverage</h1>
-      <p class="hero-desc">Track how far each teacher has progressed through the Cambridge curriculum this term relative to the scheduled pacing guide.</p>
+<header class="page-hero" data-accent="mor" aria-label="Syllabus Coverage header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <div class="page-hero__eyebrow">Academic Hub · Teaching Quality</div>
+      <h1 class="page-hero__title">Syllabus Coverage</h1>
+      <p class="page-hero__desc">Track how far each teacher has progressed through the Cambridge curriculum this term relative to the scheduled pacing guide.</p>
+    </div>
+    <div class="page-hero__kpis">
+      <div class="page-hero__kpi page-hero__kpi--primary">
+        <div class="page-hero__kpi-num" id="sumTeachers">—</div>
+        <div class="page-hero__kpi-lbl">Teachers</div>
+        <div class="page-hero__kpi-sub">in your school</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="sumAvgCoverage">—</div>
+        <div class="page-hero__kpi-lbl">Avg Coverage</div>
+        <div class="page-hero__kpi-sub">across teachers</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="sumOnTrack">—</div>
+        <div class="page-hero__kpi-lbl">On Track / Ahead</div>
+        <div class="page-hero__kpi-sub">meeting pacing</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="sumBehind">—</div>
+        <div class="page-hero__kpi-lbl">Behind / Overdue</div>
+        <div class="page-hero__kpi-sub">need follow-up</div>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 <div class="toolbar">
   <span class="toolbar-label">Subject:</span>
@@ -268,18 +256,6 @@
 </div>
 
 <div class="content">
-  <div id="summaryBar" class="summary-bar" style="display:none">
-    <div class="sum-stat"><span class="sum-val" id="sumTeachers">—</span><span class="sum-lbl">Teachers</span></div>
-    <div class="sum-divider"></div>
-    <div class="sum-stat"><span class="sum-val" id="sumAvgCoverage">—</span><span class="sum-lbl">Avg Coverage</span></div>
-    <div class="sum-divider"></div>
-    <div class="sum-stat"><span class="sum-val" id="sumOnTrack">—</span><span class="sum-lbl">On Track / Ahead</span></div>
-    <div class="sum-divider"></div>
-    <div class="sum-stat"><span class="sum-val" id="sumBehind">—</span><span class="sum-lbl">Behind / Overdue</span></div>
-    <div class="sum-divider"></div>
-    <div class="sum-stat"><span class="sum-val" id="sumScheduled">—</span><span class="sum-lbl">Scheduled Topics (this week)</span></div>
-  </div>
-
   <div id="loadingState" class="state-box">
     <div class="spinner"></div>
     <h3>Loading coverage data…</h3>
@@ -586,15 +562,16 @@ function updateSummaryBar(teachers, progressData, subjectsToShow) {
   document.getElementById('sumAvgCoverage').textContent = `${avgCov}%`;
   document.getElementById('sumOnTrack').textContent     = onTrack;
   document.getElementById('sumBehind').textContent      = behind;
-  document.getElementById('sumScheduled').textContent   = Math.round(totalSched / Math.max(subjectsToShow.length, 1));
-  document.getElementById('summaryBar').style.display   = '';
+  // sumScheduled tile removed when stats moved into canonical
+  // .page-hero__kpis (3-4 tile sweet spot per design system).
 }
 
 async function loadAndRender() {
   document.getElementById('loadingState').style.display = '';
   document.getElementById('emptyState').style.display   = 'none';
   document.getElementById('mainContent').style.display  = 'none';
-  document.getElementById('summaryBar').style.display   = 'none';
+  // Hero KPI tiles stay visible during loading (they show "—"
+  // placeholders from markup until updated).
 
   const schoolId = userProfile?.schoolId;
   if (!schoolId) {
