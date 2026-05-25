@@ -37,9 +37,9 @@
     .hero-inner {
       position: relative;
       z-index: 1;
-      max-width: calc(var(--container-max) + 80px);
+      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 0 40px;
+      padding: 0;
     }
     .hero-eyebrow {
       font-size: 0.72rem;
@@ -77,13 +77,14 @@
       margin-top: 12px;
     }
 
-    /* ── PAGE WRAP ── outer clamp 1280 (var(--container-max) + 80)
-       + 40px padding × 2 = 1200 content edge, matching .hero-inner.
-       See [[references-three-rails-1200]] + Common Mistake #52. */
+    /* ── PAGE WRAP ── outer clamp var(--container-max) (= 1200) +
+       horizontal padding ZERO. Footer/hero/body üçü de bu pattern'i
+       kullanmalı (calc(+80) + 40px padding pattern math 1200 verir
+       ama ekranda 1022 ölçer — see [[references-three-rails-1200]]). */
     .page-wrap {
-      max-width: calc(var(--container-max) + 80px);
+      max-width: var(--container-max);
       margin: 0 auto;
-      padding: 32px 40px 80px;
+      padding: 32px 0 80px;
     }
 
     /* ── TOOLBAR ── single compact row holding: level + subject +
@@ -707,13 +708,11 @@
       .summary-row { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* Canonical .page-footer'ın iç clamp'i base.css'te
-       var(--container-max) = 1200 → 40px padding × 2 = 1120 content.
-       Bu sayfanın hero/body 1200 content rail'iyle hizalanması için
-       outer clamp'i 1280'e genişlet → footer content da 1200'de
-       biter. See [[references-three-rails-1200]]. */
+    /* Footer content 1200 rail'ine hizala: outer clamp
+       var(--container-max) (= 1200) + horizontal padding sıfır.
+       See [[references-three-rails-1200]]. */
     .page-footer__inner,
-    .page-footer__meta { max-width: calc(var(--container-max) + 80px); }
+    .page-footer__meta { max-width: var(--container-max); padding-left: 0; padding-right: 0; }
   </style>
 </head>
 <body data-page-accent="mor">

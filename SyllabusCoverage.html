@@ -31,13 +31,11 @@
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── legacy 3-wrapper pattern. Per Common Mistake #52,
-       horizontal padding lives on .hero-inner (NOT on .hero) so the
-       hero text shares a left edge with .toolbar + .content at
-       viewports > 1280px. CONTENT EDGE = 1200px → outer clamp
-       calc(var(--container-max) + 80px) = 1280, then 40px padding
-       × 2 = 1200 inner content. See [[references-three-rails-1200]]
-       + [[feedback-hero-pagewrap-alignment]] Rule 1. */
+    /* ── HERO ── legacy 3-wrapper. Outer clamp var(--container-max)
+       (= 1200) + ZERO horizontal padding → measured content edge
+       exactly 1200. See [[references-three-rails-1200]] — the
+       calc(+80) + 40px-padding "math 1200" pattern measures 1022
+       in practice. Vertical padding stays on .hero. */
     .hero {
       background: linear-gradient(140deg, #1e0a4e 0%, #3b1a8a 50%, #6c5ce7 100%);
       padding: 44px 0 40px;
@@ -52,8 +50,8 @@
     }
     .hero-inner {
       position: relative; z-index: 1;
-      max-width: calc(var(--container-max) + 80px); margin: 0 auto;
-      padding: 0 40px;
+      max-width: var(--container-max); margin: 0 auto;
+      padding: 0;
     }
     .hero-eyebrow {
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
@@ -65,13 +63,13 @@
     }
     .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
 
-    /* ── TOOLBAR ── outer clamp 1280 (var(--container-max) + 80)
-       + 40px padding × 2 = 1200 content edge, matching .hero-inner
-       + .content. Items sola yaslı; .btn-refresh'in margin-left:auto
-       onu sağa iter. */
+    /* ── TOOLBAR ── outer clamp var(--container-max) (= 1200) +
+       zero horizontal padding → 1200 content rail, matching
+       .hero-inner + .content. Items sola yaslı; .btn-refresh'in
+       margin-left:auto onu sağa iter. */
     .toolbar {
-      max-width: calc(var(--container-max) + 80px); margin: 0 auto;
-      padding: 20px 40px 0;
+      max-width: var(--container-max); margin: 0 auto;
+      padding: 20px 0 0;
       display: flex; align-items: center; justify-content: flex-start;
       gap: 12px; flex-wrap: wrap;
     }
@@ -91,12 +89,11 @@
     }
     .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── MAIN CONTENT ── outer clamp 1280 (var(--container-max) +
-       80) + 40px padding × 2 = 1200 content edge, matching
-       .hero-inner + .toolbar. */
+    /* ── MAIN CONTENT ── outer clamp var(--container-max) (= 1200)
+       + zero horizontal padding → 1200 content rail. */
     .content {
-      max-width: calc(var(--container-max) + 80px); margin: 0 auto;
-      padding: 24px 40px 60px;
+      max-width: var(--container-max); margin: 0 auto;
+      padding: 24px 0 60px;
     }
 
     /* ── SUBJECT SECTION ── */
@@ -213,13 +210,12 @@
       .summary-bar { gap: 12px; }
     }
 
-    /* Canonical .page-footer'ın iç clamp'i base.css'te
-       var(--container-max) = 1200 → 40px padding × 2 = 1120 content.
-       Bu sayfanın hero/body 1200 content rail'iyle hizalanması için
-       outer clamp'i 1280'e genişlet → footer content da 1200'de
-       biter. See [[references-three-rails-1200]]. */
+    /* Footer content 1200 rail'ine hizala: outer clamp
+       var(--container-max) (= 1200) + horizontal padding sıfır.
+       See [[references-three-rails-1200]] — bu pattern ölçüde
+       gerçekten 1200 verir, calc(+80) verisi 1022'ye düşer. */
     .page-footer__inner,
-    .page-footer__meta { max-width: calc(var(--container-max) + 80px); }
+    .page-footer__meta { max-width: var(--container-max); padding-left: 0; padding-right: 0; }
   </style>
 </head>
 <body data-page-accent="mor">
