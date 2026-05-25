@@ -271,11 +271,14 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .stats-row { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    /* Inline-rendered inside .filter-bar-ev (next to search + view
+       toggle + Add Event) — no standalone row. */
+    .stats-row { display: inline-flex; gap: 8px; flex-wrap: nowrap; }
     .stat-chip {
-      display: flex; align-items: center; gap: 8px;
-      padding: 8px 14px; background: var(--white); border: 1px solid var(--border);
-      border-radius: 10px; font-size: 0.78rem; color: var(--ink-2);
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; background: var(--white); border: 1px solid var(--border);
+      border-radius: 999px; font-size: 0.75rem; color: var(--ink-2);
+      white-space: nowrap;
     }
     .stat-chip strong { font-weight: 700; color: var(--ink); }
 
@@ -456,7 +459,7 @@
       .ev-item { flex-wrap: wrap; gap: 8px; padding: 12px 16px; }
       .ev-date-col { min-width: auto; }
       .ev-actions { opacity: 1; }
-      .stats-row { flex-direction: column; }
+      .stats-row { justify-content: center; }
     }
   </style>
 </head>
@@ -512,14 +515,13 @@
 
     <div class="filter-bar-ev">
       <input class="search-ev" id="searchInput" type="text" placeholder="Search events...">
+      <div class="stats-row" id="statsRow"></div>
       <div class="view-toggle" id="viewToggle">
         <button data-view="calendar" class="active" title="Calendar grid">🗓 Calendar</button>
         <button data-view="list" title="List by month">📋 List</button>
       </div>
       <button class="btn-add-ev" id="addEventBtn">+ Add Event</button>
     </div>
-
-    <div class="stats-row" id="statsRow"></div>
 
     <!-- Calendar view (default) — 2-month strip with prev/next nav -->
     <div id="calendarViewWrap">
