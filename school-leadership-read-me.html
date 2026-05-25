@@ -631,12 +631,12 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
           <div class="hero-metric-lbl">Same-school scope</div>
         </div>
         <div class="hero-metric">
-          <div class="hero-metric-val"><span id="metricPages">7</span></div>
+          <div class="hero-metric-val"><span id="metricPages">9</span></div>
           <div class="hero-metric-lbl">Pages in this workspace</div>
         </div>
         <div class="hero-metric">
-          <div class="hero-metric-val"><span id="metricFlow">4</span></div>
-          <div class="hero-metric-lbl">Steps in the flow</div>
+          <div class="hero-metric-val"><span id="metricFlow">4<span style="opacity:.55;font-size:0.8em;"> + 3</span></span></div>
+          <div class="hero-metric-lbl">Flow steps + lenses</div>
         </div>
       </div>
 
@@ -797,9 +797,9 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
             <div class="kv-key">Why we built it</div>
             <div class="kv-val">Leadership work is not a tick-box. The Operational Guide answers the "why this role exists" question; the Weekly Checklist answers the "what to do this week" question. Together they give you both the rationale and the rhythm.</div>
             <div class="kv-key">Day 1 view</div>
-            <div class="kv-val">You will see the handbook(s) matching your sub-role. Each handbook is structured by 4 stages (Stage 1: 0-30 days · Stage 2: 30-60 · Stage 3: 60-90 · Stage 4: ongoing).</div>
+            <div class="kv-val">If you hold a single sub-role, you go straight to your handbook (one click from the navbar). If you hold more than one — or you are an academic admin — you land on the picker page first, with all four cards visible and your active sub-role pinned at the top. Every handbook is 4 stages over 12 weeks: <strong>Stage 0 (pre-arrival)</strong> + 3 × 30-day windows. Foundation Rep / Academic Coord / Cambridge Coord use generic "Window 1-2-3" labels; the Principal handbook names them <strong>Stabilise → Diagnose → Steer</strong>.</div>
             <div class="kv-key">What to do</div>
-            <div class="kv-val">Read the Stage 1 section for your sub-role on day 1. Skim the 4-stage timeline. You do not need to finish anything — just get the shape of the role.</div>
+            <div class="kv-val">Read Stage 0 + Window 1 (or Stabilise) for your sub-role this week. Skim Windows 2-3. You do not need to finish anything — just get the shape of your first 90 days. Append <code>?stay=1</code> to the URL if you want to land on the picker even with a single sub-role (useful for browsing sibling handbooks).</div>
           </div>
         </div>
 
@@ -1086,13 +1086,15 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
           <div class="role-block-eyebrow">For: Foundation Representative</div>
           <div class="role-block-title">You are the foundation's voice in the leadership room</div>
           <div class="role-block-text">
-            Decisions tagged <code>governance</code> typically go through you. You run the cycle of school appraisals (the suite lives under the Admin dropdown) — but the leadership Decisions register here is where you confirm year-on-year direction. Your unique surfaces:
+            Decisions tagged <code>governance</code> typically go through you. You run the cycle of school appraisals (the suite lives under the Admin dropdown) — but the leadership Decisions register here is where you confirm year-on-year direction.
+            <p style="margin: 10px 0 0;"><strong>Principal Evaluation surfaces (Admin dropdown):</strong></p>
             <ul>
               <li><a href="/principal-observation-entry">Principal Observation Entry</a> — 8-foci E/D/N rubric for termly Principal visits.</li>
               <li><a href="/principal-appraisal-entry">Principal Annual Appraisal</a> — F1-F5 + F_LEAD composite + A-F band, one per Principal per academic year.</li>
               <li><a href="/principal-360-results">Principal 360 Results</a> — read-only view of cohort feedback (gated to 5+ respondents per cohort).</li>
             </ul>
-            In the leadership workspace your daily home is <a href="/school-leadership-decisions">Decisions</a> and <a href="/school-leadership-meetings">Meetings</a>.
+            <p style="margin: 10px 0 0;"><strong>When a new Principal joins your school</strong> — the <a href="/handbook?id=eduversal_principal_first_90_days_v1">Principal First 90 Days handbook</a> places you on three key touchpoints during their ramp: <strong>Day-1 welcome</strong> (signing the start of the operational ramp), <strong>monthly accountability meeting</strong> (90 min, push back on their 3 priority hypotheses), and <strong>30 / 60 / 90 day co-sign</strong> on their readiness reports. The handbook tells the Principal what to bring; this paragraph tells you what to receive.</p>
+            <p style="margin: 10px 0 0;">In the leadership workspace your daily home is <a href="/school-leadership-decisions">Decisions</a> and <a href="/school-leadership-meetings">Meetings</a>. The Principal coaching surface is intentionally <strong>excluded</strong> from your view (Charter <strong>NN5</strong> — coaching confidentiality between the Principal and their HQ Director mentor only).</p>
           </div>
         </div>
 
@@ -1181,14 +1183,24 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
             <div class="intro-card-text">EASE I/II/III, Cambridge dashboards, school appraisals, KPI, accreditation, network audit, satisfaction surveys, Rapor Pendidikan 2025 — the dashboard suite under the Dashboards dropdown.</div>
           </div>
           <div class="intro-card">
+            <div class="intro-card-icon">🌱</div>
+            <div class="intro-card-title"><a href="/my-induction">My Induction</a></div>
+            <div class="intro-card-text">If you joined this school in the last 12 months as a Principal, the mentor-led year-1 induction handbook lives here. <strong>Listen → Diagnose → Act → Anchor</strong> windows over 365 days with an HQ-assigned external mentor. Complements (does not replace) the Operational Guide's 90-day operational ramp.</div>
+          </div>
+          <div class="intro-card">
             <div class="intro-card-icon">🎯</div>
-            <div class="intro-card-title"><a href="/learning-path">My Hub</a></div>
-            <div class="intro-card-text">Your <strong>personal</strong> CPD surface — Learning Path (24 leadership skills × 4 stages), My Portfolio (submit evidence), My Certificates (track earned domains), and My Induction (year-1 Principals only).</div>
+            <div class="intro-card-title"><a href="/competency-framework">Competency Framework</a></div>
+            <div class="intro-card-text">6 leadership domains × 24 competencies anchored in Cambridge School Leader Standards 2023. The handbooks point into specific competencies; this is where you track your evidence over time via <a href="/my-portfolio">My Portfolio</a> + earn domain certificates.</div>
+          </div>
+          <div class="intro-card">
+            <div class="intro-card-icon">🎓</div>
+            <div class="intro-card-title"><a href="/learning-path">My Hub (Learning Path)</a></div>
+            <div class="intro-card-text">Your <strong>personal</strong> CPD surface — Learning Path (24 leadership skills × 4 stages), My Portfolio (submit evidence), My Certificates (track earned domains). Pair with the Competency Framework above.</div>
           </div>
           <div class="intro-card">
             <div class="intro-card-icon">📚</div>
-            <div class="intro-card-title"><a href="/handbook">Handbook</a></div>
-            <div class="intro-card-text">A library of role guides + policy-topic books + AI playbooks. Each one explains a role in plain language and a 90-day ramp plan. Pair with your Weekly Checklist.</div>
+            <div class="intro-card-title"><a href="/handbook">Handbook Browser</a></div>
+            <div class="intro-card-text">A library of all role guides + policy-topic books + AI playbooks. Each one explains a role in plain language and a 90-day ramp plan. Pair with your Weekly Checklist.</div>
           </div>
           <div class="intro-card">
             <div class="intro-card-icon">📖</div>
@@ -1234,6 +1246,26 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
           <div class="gloss-row">
             <div class="gloss-term">Sub-role<span class="gloss-term-sub">on your profile</span></div>
             <div class="gloss-def">Your specific leadership lane: <code>foundation_representative</code>, <code>school_principal</code>, <code>academic_coordinator</code>, or <code>cambridge_coordinator</code>. You can hold more than one.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Stage 0<span class="gloss-term-sub">in every Operational Guide handbook</span></div>
+            <div class="gloss-def">Pre-arrival phase. The two weeks before Day 1 — outgoing handover, data-pack read, calendar slots protected, safeguarding pre-read. Negative-day numbering: Day -14 to Day 0.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Window<span class="gloss-term-sub">in every Operational Guide handbook</span></div>
+            <div class="gloss-def">A 30-day phase of the 90-day ramp. Foundation Rep / Academic Coord / Cambridge Coord handbooks use generic <strong>Window 1 → 2 → 3</strong>. The Principal handbook names its three windows <strong>Stabilise → Diagnose → Steer</strong> — same length, more semantic labels for an operational leader.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Stabilise / Diagnose / Steer<span class="gloss-term-sub">Principal handbook windows</span></div>
+            <div class="gloss-def"><strong>Stabilise (Days 1-30)</strong> — inherit before you act; listening mode, no new policies. <strong>Diagnose (Days 31-60)</strong> — move from inheriting to interpreting; self-assess against the 8-foci Operating Cadence; surface 3 priority hypotheses. <strong>Steer (Days 61-90)</strong> — pick the one priority that moves first, anchor the other two in a 6-month plan, deliver the term-opening staff address.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">8-foci Operating Cadence<span class="gloss-term-sub">P1-P8 — Principal-only</span></div>
+            <div class="gloss-def">An 8-domain framework that anchors the Principal role: <strong>P1</strong> Strategic Vision · <strong>P2</strong> Teaching &amp; Learning · <strong>P3</strong> Culture &amp; Environment · <strong>P4</strong> People &amp; Leadership · <strong>P5</strong> Resources &amp; Operations · <strong>P6</strong> Community &amp; Stakeholders · <strong>P7</strong> Safeguarding &amp; Wellbeing · <strong>P8</strong> Quality Assurance &amp; Accountability. Source: <code>principal-operating-cadence.json</code>. The Diagnose window includes a self-assessment task against all 8.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Director-Network<span class="gloss-term-sub">HQ peer role</span></div>
+            <div class="gloss-def">The HQ Primary or Secondary Director (CH-side). Not your line manager (you report to the Foundation Rep), but the senior peer who runs the network cohort meetings, provides cross-school benchmarks, and co-signs Principal 90-day readiness reports. Welcomes new Principals during Window 1 and makes an informational in-school visit during Window 2.</div>
           </div>
           <div class="gloss-row">
             <div class="gloss-term">Supersede<span class="gloss-term-sub">audit-trail discipline</span></div>
