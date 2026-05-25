@@ -318,110 +318,81 @@ if (acadCalSrc) {
   console.warn("WARNING: academic-calendar-readonly.js not found in local or shared-design/");
 }
 
-// Indonesian statutory references — fetched at runtime by
-// cambridge-crossref.js when the user clicks a PIGP / SKL / PMD chip.
-// Local-first / monorepo-fallback (Vercel only checks out the AH repo so
-// the monorepo's docs/research is unreachable from there — local mirror
-// under resources/research/permendiknas/ has to exist for production).
-const researchSrcLocal    = path.join(__dirname, "resources", "research", "permendiknas");
-const researchSrcMonorepo = path.join("..", "docs", "research", "permendiknas");
-const researchSrcDir      = fs.existsSync(researchSrcLocal) ? researchSrcLocal : researchSrcMonorepo;
-const researchDestDir     = path.join("dist", "research", "permendiknas");
-if (fs.existsSync(researchSrcDir)) {
-  fs.mkdirSync(researchDestDir, { recursive: true });
-  ["no-27-2010-pigp.json", "no-10-2025-skl.json", "no-16-2007.json"].forEach(name => {
-    // Try chosen src first, then the other path as per-file fallback
-    const tryPaths = [path.join(researchSrcDir, name)];
-    if (researchSrcDir !== researchSrcMonorepo) tryPaths.push(path.join(researchSrcMonorepo, name));
-    if (researchSrcDir !== researchSrcLocal)    tryPaths.push(path.join(researchSrcLocal, name));
-    const src = tryPaths.find(p => fs.existsSync(p));
-    if (src) {
-      fs.copyFileSync(src, path.join(researchDestDir, name));
-      console.log(`Copied: dist/research/permendiknas/${name}`);
-    } else {
-      console.warn(`WARNING: ${name} not found in docs/research/permendiknas/ or local mirror`);
-    }
-  });
+// Research-archive copy blocks (Permendiknas / Cambridge / AICF / ES) —
+// drives the chip popovers in cambridge-crossref.js + AICF reader pages.
+// Source-of-truth lives in monorepo docs/research/ and is auto-mirrored
+// into resources/research/ by `npm run sync:research` (pre-commit drift
+// gate, see scripts/sync/mirror-research-to-hubs.js). Each block uses
+// the shared copy-tree helper for the boilerplate.
+//
+// Since 2026-05-25 (architecture pass step 6) — replaces ~80 lines of
+// near-identical "iterate-list-and-copyFileSync" boilerplate with one
+// declarative call per subtree.
+const { copyFiles, copyDir, resolveSrcDir } = require("./build-tools/copy-tree.js");
+
+// Permendiknas (PIGP / SKL / PMD chip popovers)
+{
+  const src = resolveSrcDir(
+    path.join(__dirname, "resources", "research", "permendiknas"),
+    path.join("..", "docs", "research", "permendiknas")
+  );
+  if (src) copyFiles(
+    src,
+    path.join("dist", "research", "permendiknas"),
+    ["no-27-2010-pigp.json", "no-10-2025-skl.json", "no-16-2007.json"],
+    "dist/research/permendiknas"
+  );
 }
 
-// Cambridge research archive (CSLS chip popovers in CompetencyFramework
-// + AppraisalEntry) — same local-first / monorepo-fallback pattern.
-const cambridgeSrcLocal    = path.join(__dirname, "resources", "research", "cambridge");
-const cambridgeSrcMonorepo = path.join("..", "docs", "research", "cambridge");
-const cambridgeSrcDir      = fs.existsSync(cambridgeSrcLocal) ? cambridgeSrcLocal : cambridgeSrcMonorepo;
-const cambridgeDestDir     = path.join("dist", "research", "cambridge");
-if (fs.existsSync(cambridgeSrcDir)) {
-  fs.mkdirSync(cambridgeDestDir, { recursive: true });
-  ["school-leader-standards-2023.json"].forEach(name => {
-    const tryPaths = [path.join(cambridgeSrcDir, name)];
-    if (cambridgeSrcDir !== cambridgeSrcMonorepo) tryPaths.push(path.join(cambridgeSrcMonorepo, name));
-    if (cambridgeSrcDir !== cambridgeSrcLocal)    tryPaths.push(path.join(cambridgeSrcLocal, name));
-    const src = tryPaths.find(p => fs.existsSync(p));
-    if (src) {
-      fs.copyFileSync(src, path.join(cambridgeDestDir, name));
-      console.log(`Copied: dist/research/cambridge/${name}`);
-    } else {
-      console.warn(`WARNING: ${name} not found in docs/research/cambridge/ or local mirror`);
-    }
-  });
+// Cambridge research archive (CSLS chip popovers)
+{
+  const src = resolveSrcDir(
+    path.join(__dirname, "resources", "research", "cambridge"),
+    path.join("..", "docs", "research", "cambridge")
+  );
+  if (src) copyFiles(
+    src,
+    path.join("dist", "research", "cambridge"),
+    ["school-leader-standards-2023.json"],
+    "dist/research/cambridge"
+  );
 }
 
-// AICF reference layer (chip popovers + reader pages). Same pattern.
-const aicfSrcLocal    = path.join(__dirname, "resources", "research", "eduversal", "ai-competency-framework");
-const aicfSrcMonorepo = path.join("..", "docs", "research", "eduversal", "ai-competency-framework");
-const aicfSrcDir      = fs.existsSync(aicfSrcLocal) ? aicfSrcLocal : aicfSrcMonorepo;
-const aicfDestDir     = path.join("dist", "research", "eduversal", "ai-competency-framework");
-if (fs.existsSync(aicfSrcDir)) {
-  fs.mkdirSync(aicfDestDir, { recursive: true });
-  const manifestSrc = path.join(aicfSrcDir, "manifest.json");
-  if (fs.existsSync(manifestSrc)) {
-    fs.copyFileSync(manifestSrc, path.join(aicfDestDir, "manifest.json"));
-    console.log(`Copied: dist/research/eduversal/ai-competency-framework/manifest.json`);
-  }
-  const aicfReferenceSrc  = path.join(aicfSrcDir,  "reference");
-  const aicfReferenceDest = path.join(aicfDestDir, "reference");
-  if (fs.existsSync(aicfReferenceSrc)) {
-    fs.mkdirSync(aicfReferenceDest, { recursive: true });
-    fs.readdirSync(aicfReferenceSrc).filter(n => n.endsWith(".json")).forEach(name => {
-      fs.copyFileSync(path.join(aicfReferenceSrc, name), path.join(aicfReferenceDest, name));
-      console.log(`Copied: dist/research/eduversal/ai-competency-framework/reference/${name}`);
-    });
-  } else {
-    console.warn(`WARNING: reference/ subdir not found in ${aicfSrcDir} — AICF chip popovers will degrade gracefully.`);
+// AICF reference layer (chip popovers + reader pages)
+{
+  const src = resolveSrcDir(
+    path.join(__dirname, "resources", "research", "eduversal", "ai-competency-framework"),
+    path.join("..", "docs", "research", "eduversal", "ai-competency-framework")
+  );
+  if (src) {
+    const destDir = path.join("dist", "research", "eduversal", "ai-competency-framework");
+    copyFiles(src, destDir, ["manifest.json"], "dist/research/eduversal/ai-competency-framework");
+    const referenceSrc = path.join(src, "reference");
+    if (fs.existsSync(referenceSrc)) {
+      copyDir(
+        referenceSrc,
+        path.join(destDir, "reference"),
+        "dist/research/eduversal/ai-competency-framework/reference"
+      );
+    } else {
+      console.warn(`WARNING: reference/ subdir not found in ${src} — AICF chip popovers will degrade gracefully.`);
+    }
   }
 }
 
-// Eduversal Academic Standards manifest + blurbs — fetched at runtime by
-// cambridge-crossref.js when the user clicks an ES chip. Full section
-// JSONs are hosted by CH (/references reader); AH only needs the lookup
-// files for popover content.
-//
-// Prefer the local AH copy (committed under resources/research/eduversal/
-// academic-standards/) because Vercel only checks out the AH repo — the
-// monorepo's docs/research folder isn't available at build time.
-// Fall back to the monorepo path when running build locally from the
-// parent directory. Same local-first/monorepo-fallback pattern used by
-// TH's cambridge research-archive block.
-//
-// Source-of-truth lives in monorepo docs/research/eduversal/academic-
-// standards/ (built by scripts/eduversal-standards/build-academic-
-// standards.js --apply). Re-run that script and then re-copy into
-// resources/research/eduversal/ after every change.
-const eduStdSrcLocal    = path.join(__dirname, "resources", "research", "eduversal", "academic-standards");
-const eduStdSrcMonorepo = path.join("..", "docs", "research", "eduversal", "academic-standards");
-const eduStdSrcDir      = fs.existsSync(eduStdSrcLocal) ? eduStdSrcLocal : eduStdSrcMonorepo;
-const eduStdDestDir     = path.join("dist", "research", "eduversal", "academic-standards");
-if (fs.existsSync(eduStdSrcDir)) {
-  fs.mkdirSync(eduStdDestDir, { recursive: true });
-  ["manifest.json", "search-blurbs.json"].forEach(name => {
-    const src = path.join(eduStdSrcDir, name);
-    if (fs.existsSync(src)) {
-      fs.copyFileSync(src, path.join(eduStdDestDir, name));
-      console.log(`Copied: dist/research/eduversal/academic-standards/${name}`);
-    } else {
-      console.warn(`WARNING: ${name} not found in ${eduStdSrcDir} — run build-academic-standards.js --apply first.`);
-    }
-  });
+// Eduversal Academic Standards (ES chip popovers — manifest + blurbs only;
+// full sections served from CH /references reader)
+{
+  const src = resolveSrcDir(
+    path.join(__dirname, "resources", "research", "eduversal", "academic-standards"),
+    path.join("..", "docs", "research", "eduversal", "academic-standards")
+  );
+  if (src) copyFiles(
+    src,
+    path.join("dist", "research", "eduversal", "academic-standards"),
+    ["manifest.json", "search-blurbs.json"],
+    "dist/research/eduversal/academic-standards"
+  );
 }
 // References & Standards data — AH now ships its OWN references-data
 // (since 2026-05-25 — step 4 of the system-architecture pass). The local
@@ -441,19 +412,8 @@ if (fs.existsSync(eduStdSrcDir)) {
 // entry in references.html.
 {
   const refSrc  = path.join(__dirname, "resources", "references-data");
-  const refDest = path.join("dist", "references-data");
   if (fs.existsSync(refSrc)) {
-    function copyDir(src, dest) {
-      fs.mkdirSync(dest, { recursive: true });
-      for (const ent of fs.readdirSync(src, { withFileTypes: true })) {
-        const s = path.join(src, ent.name);
-        const d = path.join(dest, ent.name);
-        if (ent.isDirectory()) copyDir(s, d);
-        else fs.copyFileSync(s, d);
-      }
-    }
-    copyDir(refSrc, refDest);
-    console.log(`Copied: dist/references-data/ (local mirror)`);
+    copyDir(refSrc, path.join("dist", "references-data"), "dist/references-data");
   } else {
     console.warn(`WARNING: resources/references-data/ missing — run \`npm run sync:research\` from monorepo root.`);
   }
