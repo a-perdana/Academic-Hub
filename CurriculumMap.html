@@ -77,11 +77,12 @@
       margin-top: 12px;
     }
 
-    /* ── PAGE WRAP ── outer clamp var(--container-max) (= 1200) +
-       horizontal padding ZERO. Footer/hero/body üçü de bu pattern'i
-       kullanmalı (calc(+80) + 40px padding pattern math 1200 verir
-       ama ekranda 1022 ölçer — see [[references-three-rails-1200]]). */
+    /* ── PAGE WRAP ── 1200 content rail. width:100% gerekli çünkü
+       body flex-column (canonical .page-footer sticky pattern) ve
+       block child'lar default'ta içerik genişliğine düşer — bu
+       yüzden summary-row + week-grid daralırdı. */
     .page-wrap {
+      width: 100%;
       max-width: var(--container-max);
       margin: 0 auto;
       padding: 32px 0 80px;

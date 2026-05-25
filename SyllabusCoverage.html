@@ -63,11 +63,11 @@
     }
     .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
 
-    /* ── TOOLBAR ── outer clamp var(--container-max) (= 1200) +
-       zero horizontal padding → 1200 content rail, matching
-       .hero-inner + .content. Items sola yaslı; .btn-refresh'in
-       margin-left:auto onu sağa iter. */
+    /* ── TOOLBAR ── 1200 content rail. width:100% gerekli çünkü
+       body flex-column (canonical .page-footer sticky pattern) ve
+       block child'lar default'ta içerik genişliğine düşer. */
     .toolbar {
+      width: 100%;
       max-width: var(--container-max); margin: 0 auto;
       padding: 20px 0 0;
       display: flex; align-items: center; justify-content: flex-start;
@@ -89,9 +89,12 @@
     }
     .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── MAIN CONTENT ── outer clamp var(--container-max) (= 1200)
-       + zero horizontal padding → 1200 content rail. */
+    /* ── MAIN CONTENT ── 1200 content rail. width:100% gerekli
+       çünkü body flex-column (canonical .page-footer sticky
+       pattern) ve block child'lar default'ta içerik genişliğine
+       düşer — bu yüzden summary-bar + teacher-grid daralırdı. */
     .content {
+      width: 100%;
       max-width: var(--container-max); margin: 0 auto;
       padding: 24px 0 60px;
     }
