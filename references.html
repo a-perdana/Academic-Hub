@@ -19,9 +19,9 @@
        every page using .page-hero must add it. See root CLAUDE.md
        "body padding-top:62px navbar clearance".) */
     body { padding-top: 62px; }
-    /* THREE RAILS = 1200px CONTENT (text + cards). Hero/footer/
-       toolbar OUTER wrappers (gradient/bg) MUST stay edge-to-edge —
-       only their INNER content wrappers clamp to 1200. */
+    /* THREE RAILS = 1200px CONTENT. Hero/footer/toolbar OUTER
+       wrappers (gradient/bg) stay edge-to-edge — only their INNER
+       content wrappers clamp to 1200. */
     .page-hero__inner,
     .page-footer__inner,
     .page-footer__meta,
@@ -29,11 +29,30 @@
     .ref-shelf,
     .ref-quick,
     .ref-results {
+      width: 100% !important;
       max-width: 1200px !important;
       padding-left: 0 !important;
       padding-right: 0 !important;
       margin-left: auto !important;
       margin-right: auto !important;
+    }
+
+    /* CRITICAL: base.css ships `body:has(> .page-footer) { display:
+       flex; flex-direction: column }` for sticky-footer behaviour.
+       That turns the body into a flex container; flex children
+       (header / toolbar / main / footer) shrink-to-fit by default,
+       so <main class="ref-results"> collapsed to ~945px (its
+       intrinsic content width) instead of the intended 1200.
+       Force align-self stretch + width 100% so the flex item fills
+       the body's full content width; then max-width: 1200 actually
+       takes effect. */
+    body:has(> .page-footer) > .ref-results,
+    body:has(> .page-footer) > .ref-toolbar,
+    body:has(> .page-footer) > .ref-shelf,
+    body:has(> .page-footer) > .ref-quick,
+    body:has(> .page-footer) > .page-hero {
+      width: 100% !important;
+      align-self: stretch !important;
     }
 
     body[data-page-accent="mor"] { background: var(--paper) !important; }
