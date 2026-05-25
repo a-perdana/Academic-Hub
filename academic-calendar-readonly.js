@@ -203,9 +203,7 @@
     // sits on the page's paper bg.
     return `
       <div class="ec-toolbar">
-        <div class="ec-toolbar-row">
-          <div class="ec-view-switch" role="tablist" aria-label="Calendar view">${viewBtns}</div>
-        </div>
+        <div class="ec-view-switch" role="tablist" aria-label="Calendar view">${viewBtns}</div>
         <div class="ec-filter-row" role="group" aria-label="Department filter">
           <span class="ec-filter-row-label">Filter:</span>
           ${filterChips}
@@ -565,24 +563,24 @@
        duplicated the page's canonical .page-hero). Sits inside the
        widget's own 1200px wrapper so it aligns with the calendar
        grid below it. ── */
+    /* Single-row toolbar — view switch (left) + Filter label + chips
+       (right). On narrow viewports the chip cluster wraps under the
+       view switch instead of dropping each chip to its own line. */
     .ec-toolbar {
       padding: 20px 0 16px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .ec-toolbar-row {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 14px 18px;
+      flex-wrap: wrap;
     }
     .ec-view-switch {
-      display: flex; gap: 4px;
+      display: inline-flex; gap: 4px; flex-shrink: 0;
       background: #f1f5f9;        /* slate-100 — sits well on paper bg */
       border: 1px solid #e2e8f0;
       border-radius: 10px; padding: 3px;
     }
     .ec-view-btn {
-      padding: 7px 16px; border: none; cursor: pointer;
+      padding: 6px 12px; border: none; cursor: pointer;
       background: transparent; color: #475569;
-      font-weight: 600; font-size: 13px; border-radius: 7px;
+      font-weight: 600; font-size: 12.5px; border-radius: 7px;
       font-family: inherit; transition: background 0.15s, color 0.15s, box-shadow 0.15s;
     }
     .ec-view-btn:hover:not(.is-active) { color: #0F172A; background: rgba(255,255,255,0.6); }
@@ -593,18 +591,28 @@
     }
 
     .ec-filter-row {
-      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
+      display: inline-flex; gap: 6px; align-items: center;
+      flex-wrap: nowrap; min-width: 0;
     }
     .ec-filter-row-label {
-      font-size: 12px; color: #64748b; font-weight: 600; margin-right: 4px;
+      font-size: 12px; color: #64748b; font-weight: 600; margin-right: 2px;
+      flex-shrink: 0;
     }
     /* Light-surface filter chips. Inactive = neutral; active fills
        with the department colour (--c is set inline per chip). */
     .ec-filter-chip {
-      padding: 6px 14px; border-radius: 999px; border: 1.5px solid #e2e8f0;
+      padding: 5px 11px; border-radius: 999px; border: 1.5px solid #e2e8f0;
       background: #fff; color: #475569;
-      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-size: 11.5px; font-weight: 700; cursor: pointer;
       font-family: inherit; transition: all 0.15s;
+      white-space: nowrap; flex-shrink: 0; line-height: 1.3;
+    }
+    /* Below ~1100px the 6-chip cluster wraps inside its own row instead
+       of pushing the strip out of bounds. The whole .ec-toolbar still
+       wraps to a second line if the viewport is narrower than the
+       view-switch + first chip combined. */
+    @media (max-width: 1100px) {
+      .ec-filter-row { flex-wrap: wrap; }
     }
     .ec-filter-chip:hover {
       border-color: var(--c, #94a3b8);
