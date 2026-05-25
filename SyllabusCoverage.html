@@ -31,10 +31,13 @@
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── */
+    /* ── HERO ── legacy 3-wrapper pattern. Per Common Mistake #52,
+       horizontal padding lives on .hero-inner (NOT on .hero) so the
+       hero text shares a left edge with .toolbar + .content at
+       viewports > 1280px. All three clamps are canonical 1200px. */
     .hero {
       background: linear-gradient(140deg, #1e0a4e 0%, #3b1a8a 50%, #6c5ce7 100%);
-      padding: 44px 40px 40px;
+      padding: 44px 0 40px;
       position: relative; overflow: hidden;
     }
     .hero::before {
@@ -46,14 +49,8 @@
     }
     .hero-inner {
       position: relative; z-index: 1;
-      max-width: 1280px; margin: 0 auto;
-      display: flex; align-items: flex-start; gap: 20px;
-    }
-    .hero-icon {
-      width: 56px; height: 56px; border-radius: 14px;
-      background: rgba(255,255,255,0.14);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; flex-shrink: 0; margin-top: 2px;
+      max-width: 1200px; margin: 0 auto;
+      padding: 0 40px;
     }
     .hero-eyebrow {
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.18em;
@@ -65,9 +62,10 @@
     }
     .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
 
-    /* ── TOOLBAR ── */
+    /* ── TOOLBAR ── canonical 1200px clamp + 40px lateral padding
+       so it shares a left edge with .hero-inner + .content. */
     .toolbar {
-      max-width: 1280px; margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: 20px 40px 0;
       display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
     }
@@ -87,9 +85,10 @@
     }
     .btn-refresh:hover { border-color: var(--accent); color: var(--accent); }
 
-    /* ── MAIN CONTENT ── */
+    /* ── MAIN CONTENT ── canonical 1200px clamp + 40px lateral
+       padding so it shares a left edge with .hero-inner + .toolbar. */
     .content {
-      max-width: 1280px; margin: 0 auto;
+      max-width: 1200px; margin: 0 auto;
       padding: 24px 40px 60px;
     }
 
@@ -208,17 +207,11 @@
     }
   </style>
 </head>
-<body>
+<body data-page-accent="mor">
 <div id="navbarMount"></div>
 
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-icon">
-      <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
-      </svg>
-    </div>
     <div>
       <div class="hero-eyebrow">Academic Hub · Teaching Quality</div>
       <h1 class="hero-title">Syllabus Coverage</h1>
@@ -671,5 +664,36 @@ document.getElementById('btnRefresh').addEventListener('click', () => {
   loadAndRender();
 });
 </script>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School · Curriculum</span>
+      <h2 class="page-footer__cta-title">Per-teacher progress, network-wide.</h2>
+      <p class="page-footer__cta-desc">Syllabus Coverage tracks each teacher's pacing against the Cambridge schedule. For the network-wide view across all subjects + weeks, jump to Curriculum Map.</p>
+      <a href="/curriculum-map" class="page-footer__cta-btn">Open Curriculum Map <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Syllabus Coverage footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Curriculum</span>
+        <a href="/curriculum-map" class="page-footer__nav-link">Curriculum Map</a>
+        <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
+        <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+        <a href="/cambridge-calendar" class="page-footer__nav-link">Cambridge Calendar</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+        <a href="/library" class="page-footer__nav-link">Resource Library</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Pacing authored by teachers in Teachers Hub — read-only here.</span>
+  </div>
+</footer>
 </body>
 </html>
