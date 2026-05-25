@@ -463,10 +463,19 @@ if (navEditSrc) {
   console.warn("WARNING: nav-edit-simple.js not found locally or in shared-design/");
 }
 
-// references-viewer schema-aware modal renderer — same local-then-shared
-// fallback pattern as nav-edit-simple. Loaded by references.html for the
-// JSON document modal.
-["references-viewer.js", "references-viewer.css"].forEach(name => {
+// references-viewer schema-aware modal renderer + references-shell
+// runtime (shared CSS + ES module) — same local-then-shared fallback
+// pattern as nav-edit-simple. Loaded by references.html. Local hub
+// copies are auto-synced from shared-design/ via `npm run sync:tokens
+// --apply`. NB: per memory/feedback_shared_assets_vercel_fallback,
+// the `..` shared fallback fails silently on Vercel because Vercel only
+// checks out the standalone AH subrepo — the local copy is what ships.
+[
+  "references-viewer.js",
+  "references-viewer.css",
+  "references-shell.js",
+  "references-shell.css",
+].forEach(name => {
   const local  = name;
   const shared = path.join("..", "shared-design", name);
   const src    = fs.existsSync(local) ? local : (fs.existsSync(shared) ? shared : null);
