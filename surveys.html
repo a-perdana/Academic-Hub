@@ -6,75 +6,21 @@
   <title>Surveys - Academic Hub</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
   <style>
-    /* Page-specific accent override (mor). Tokens, reset, and base
-       typography come from /base.css (injected by build.js). */
+    /* Canonical Communications-family page (cyan hero). Tokens, reset, base
+       typography, and .page-hero / .page-footer chrome come from base.css
+       (injected by build.js). Page-local accent override stays cyan so card
+       border-left + chip tints match the hero. */
     :root {
-      --accent:      #6c5ce7;
-      --accent-2:    #ece8ff;
-      --accent-dark: #4f46e5;
+      --accent:      #0891b2;
+      --accent-2:    #cffafe;
+      --accent-dark: #0e7490;
     }
-    .page-wrap {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 90px 20px 80px;
-    }
+    body { padding-top: 62px; }
 
-    /* ─── HERO ───────────────────────────────────────── */
-    .hero {
-      background: linear-gradient(135deg, #6c5ce7 0%, #4f46e5 50%, #7c3aed 100%);
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 8px 32px rgba(108,92,231,.35);
-      padding: 32px 28px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: "";
-      position: absolute;
-      top: -40px; right: -40px;
-      width: 180px; height: 180px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.06);
-      pointer-events: none;
-    }
-    .hero::after {
-      content: "";
-      position: absolute;
-      bottom: -60px; left: 40px;
-      width: 220px; height: 220px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.04);
-      pointer-events: none;
-    }
-    .hero h1 {
-      font-size: 1.8rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      color: #ffffff;
-      letter-spacing: -0.01em;
-      position: relative;
-    }
-    .hero p {
-      font-size: 0.95rem;
-      color: rgba(255,255,255,.82);
-      line-height: 1.65;
-      position: relative;
-    }
-    .hero-note {
-      display: inline-block;
-      margin-top: 16px;
-      background: rgba(255,255,255,.18);
-      backdrop-filter: blur(4px);
-      border: 1px solid rgba(255,255,255,.25);
-      color: #fff;
-      border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      position: relative;
+    .page-wrap {
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding: 28px 0 72px;
     }
 
     /* ─── CONTROLS BAR ───────────────────────────────── */
@@ -460,16 +406,34 @@
 
   </style>
 </head>
-<body>
+<body data-page-accent="cyan">
   <div id="navbarMount"></div>
 
-  <main class="page-wrap">
-    <section class="hero">
-      <h1>Shared Surveys</h1>
-      <p>Surveys created in CentralHub appear here when Academic Hub is selected during publishing.</p>
-      <div class="hero-note">Only surveys shared to Academic Hub are listed.</div>
-    </section>
+  <header class="page-hero" data-accent="cyan" aria-label="Surveys header">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <p class="page-hero__eyebrow">Eduversal · Academic Hub</p>
+        <h1 class="page-hero__title">Shared Surveys</h1>
+        <p class="page-hero__desc">Surveys created in CentralHub appear here when Academic Hub is selected during publishing. Only surveys shared to Academic Hub are listed.</p>
+      </div>
+      <div class="page-hero__kpis" id="heroKpis">
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiAwaiting">–</div>
+          <div class="page-hero__kpi-lbl">Awaiting you</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiResponded">–</div>
+          <div class="page-hero__kpi-lbl">Responded</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiTotal">–</div>
+          <div class="page-hero__kpi-lbl">Total shared</div>
+        </div>
+      </div>
+    </div>
+  </header>
 
+  <main class="page-wrap">
     <section class="controls" aria-label="Survey filters">
       <input id="searchInput" class="input" type="text" placeholder="Search surveys, descriptions, or questions...">
       <select id="statusFilter" class="select">
@@ -652,7 +616,25 @@
       }
     }
 
+    function updateHeroKpis() {
+      const total = allSurveys.length;
+      let awaiting = 0;
+      let responded = 0;
+      for (const s of allSurveys) {
+        const status = normalizeStatus(s.status);
+        const isOpen = status === "published" && s.allowResponses !== false;
+        const hasResponse = !!myResponses[s.id];
+        if (hasResponse) responded += 1;
+        else if (isOpen) awaiting += 1;
+      }
+      const setNum = (id, n) => { const el = document.getElementById(id); if (el) el.textContent = String(n); };
+      setNum("kpiTotal", total);
+      setNum("kpiAwaiting", awaiting);
+      setNum("kpiResponded", responded);
+    }
+
     function renderSurveys() {
+      updateHeroKpis();
       const listEl = document.getElementById("surveyList");
       const filtered = allSurveys.filter((s) => {
         const status = normalizeStatus(s.status);
@@ -885,5 +867,37 @@
         .replace(/"/g, "&quot;");
     }
   </script>
+
+  <footer class="page-footer" role="contentinfo">
+    <div class="page-footer__inner">
+      <div class="page-footer__cta">
+        <span class="page-footer__cta-eyebrow">My Hub · Communications</span>
+        <h2 class="page-footer__cta-title">Your voice shapes the network.</h2>
+        <p class="page-footer__cta-desc">Surveys shared from CentralHub appear here. Open the ones awaiting your response, save progress as you go, and keep the feedback loop with HQ tight.</p>
+        <a href="/announcements" class="page-footer__cta-btn">Open Announcements <span aria-hidden="true">→</span></a>
+      </div>
+      <nav class="page-footer__nav" aria-label="Surveys footer navigation">
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">Communications</span>
+          <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+          <a href="/announcements" class="page-footer__nav-link">Announcements</a>
+          <a href="/message-board" class="page-footer__nav-link">Message Board</a>
+          <a href="/library" class="page-footer__nav-link">Resource Library</a>
+        </div>
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">My Hub</span>
+          <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+          <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
+          <a href="/my-portfolio" class="page-footer__nav-link">My Portfolio</a>
+          <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+        </div>
+      </nav>
+    </div>
+    <div class="page-footer__meta">
+      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+      <span class="page-footer__meta-right">Only surveys shared to Academic Hub are listed.</span>
+    </div>
+  </footer>
+
 </body>
 </html>
