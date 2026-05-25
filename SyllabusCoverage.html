@@ -63,11 +63,14 @@
     .hero-desc { font-size: 0.875rem; color: rgba(255,255,255,0.62); max-width: 560px; line-height: 1.6; }
 
     /* ── TOOLBAR ── canonical 1200px clamp + 40px lateral padding
-       so it shares a left edge with .hero-inner + .content. */
+       so it shares a left edge with .hero-inner + .content. Items
+       sola yaslı (justify-content: flex-start); .btn-refresh'in
+       margin-left:auto'su onu sağa iter. */
     .toolbar {
       max-width: 1200px; margin: 0 auto;
       padding: 20px 40px 0;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: flex-start;
+      gap: 12px; flex-wrap: wrap;
     }
     .toolbar-label { font-size: 0.82rem; font-weight: 500; color: var(--ink-2); }
     .filter-select {
