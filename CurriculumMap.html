@@ -118,6 +118,60 @@
       transition: border-color 0.15s;
     }
     .map-toolbar select:focus { border-color: var(--accent); }
+
+    /* ── Icon-only dropdown — replaces native <select> visually.
+       Trigger shows the short code (IG / CP / AL · All / M / B / C /
+       P) + a chevron; click opens an absolute-positioned menu of
+       full-text options. The hidden native <select> stays as the
+       data store + change-event source so existing handlers still
+       fire. */
+    .icon-dropdown {
+      position: relative; display: inline-flex;
+    }
+    .icon-dropdown-trigger {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 6px 9px 6px 11px;
+      border: 1px solid var(--border); border-radius: 8px;
+      background: var(--white); color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.78rem; font-weight: 600;
+      cursor: pointer; transition: border-color 0.15s, background 0.15s;
+    }
+    .icon-dropdown-trigger:hover { border-color: var(--accent); }
+    .icon-dropdown-trigger[aria-expanded="true"] { border-color: var(--accent); background: var(--paper); }
+    .icon-dropdown-trigger svg { opacity: 0.55; }
+    .icon-dropdown-code {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; line-height: 1;
+    }
+    .icon-dropdown-menu {
+      position: absolute; top: calc(100% + 4px); left: 0;
+      min-width: 200px; z-index: 50;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+      padding: 4px; display: flex; flex-direction: column; gap: 2px;
+    }
+    .icon-dropdown-menu[hidden] { display: none; }
+    .icon-dropdown-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 7px 10px; border: none; background: transparent;
+      border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.82rem; color: var(--ink);
+      cursor: pointer; text-align: left;
+      transition: background 0.12s;
+    }
+    .icon-dropdown-item:hover { background: var(--paper); }
+    .icon-dropdown-item.active { background: var(--paper); color: var(--accent); font-weight: 600; }
+    .icon-dropdown-item .icon-dropdown-code {
+      min-width: 26px; padding: 2px 6px;
+      background: var(--paper); border-radius: 4px;
+      font-size: 0.72rem; font-weight: 700;
+      color: var(--ink-2);
+    }
+    .icon-dropdown-item.active .icon-dropdown-code { background: var(--accent); color: #fff; }
+    .icon-dropdown-item .icon-dropdown-label { flex: 1; }
+
     .view-toggle {
       display: flex;
       border: 1px solid var(--border);
@@ -127,31 +181,32 @@
     }
     .view-btn {
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 7px 14px;
+      padding: 6px 10px;
       border: none;
       background: var(--white);
       color: var(--ink-3);
       cursor: pointer;
       border-right: 1px solid var(--border);
       transition: background 0.15s, color 0.15s;
+      display: inline-flex; align-items: center; justify-content: center;
     }
     .view-btn:last-child { border-right: none; }
     .view-btn.active { background: var(--accent); color: #fff; }
-    .view-btn:hover:not(.active) { background: var(--paper); }
+    .view-btn:hover:not(.active) { background: var(--paper); color: var(--ink); }
 
-    /* ── LEGEND ── inline child of .map-toolbar (single-row layout) */
+    /* ── LEGEND ── inline child of .map-toolbar — icon-only swatches
+       (hover tooltip via title= carries the status name). */
     .legend {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      font-size: 0.75rem;
-      color: var(--ink-2);
+      gap: 6px;
     }
-    .legend-label { font-weight: 600; color: var(--ink-2); }
-    .legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+    .legend-item {
+      display: inline-flex; align-items: center;
+      padding: 4px; border-radius: 6px;
+      cursor: help;
+    }
+    .legend-item:hover { background: var(--paper); }
     .legend-dot {
       width: 12px;
       height: 12px;
@@ -313,14 +368,6 @@
       flex-wrap: wrap;
     }
     .month-pager.visible { display: inline-flex; }
-    .month-pager-label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--ink-3);
-      margin-right: 4px;
-    }
     .month-pager-btn {
       font-family: 'DM Sans', sans-serif;
       font-size: 0.75rem;
@@ -367,9 +414,12 @@
     }
     .subject-pager-btn:hover:not(.active) { background: var(--paper); border-color: currentColor; }
     .subject-pager-btn.active { color: #fff; font-weight: 600; }
-    /* Subject icon = circular letter chip (initial of subject name).
-       Hover shows the full subject name via the title attribute. */
-    .subject-pager-dot {
+    /* Icon-only circular letter chip (initial of subject name or
+       month). Hover shows the full label via title= attribute.
+       Used for subjects (M/B/C/P) AND months (J/A/S/O/N) so the
+       toolbar reads as one continuous strip of dots. */
+    .subject-pager-dot,
+    .pager-dot {
       width: 28px; height: 28px; padding: 0;
       font-size: 0.8rem; font-weight: 700;
       display: inline-flex; align-items: center; justify-content: center;
@@ -698,32 +748,64 @@
          dots + month chips + legend + view toggle. View-specific
          children flip via .visible class set by the render path. -->
     <div class="map-toolbar">
-      <select id="selLevel">
+      <!-- Hidden native <select>s are kept as the data store + event
+           source so existing change handlers and any external reader
+           of selLevel.value / selSubject.value keep working. The
+           visible UI is the custom .icon-dropdown built below; its
+           menu items dispatch a synthetic change event on submit. -->
+      <select id="selLevel" hidden aria-hidden="true">
         <option value="igcse">IGCSE (Year 9–10)</option>
         <option value="checkpoint">Checkpoint (Year 7–8)</option>
         <option value="asalevel">AS &amp; A Level (Year 11–12)</option>
       </select>
-      <select id="selSubject">
+      <select id="selSubject" hidden aria-hidden="true">
         <option value="all">All Subjects</option>
         <option value="math">Mathematics</option>
         <option value="biology">Biology</option>
         <option value="chemistry">Chemistry</option>
         <option value="physics">Physics</option>
       </select>
-      <div class="month-pager" id="monthPager">
-        <span class="month-pager-label">Month:</span>
+
+      <div class="icon-dropdown" data-for="selLevel">
+        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="IGCSE (Year 9–10)" aria-label="IGCSE (Year 9–10)">
+          <span class="icon-dropdown-code">IG</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="icon-dropdown-menu" role="listbox" hidden>
+          <button class="icon-dropdown-item active" type="button" role="option" data-value="igcse"><span class="icon-dropdown-code">IG</span><span class="icon-dropdown-label">IGCSE (Year 9–10)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="checkpoint"><span class="icon-dropdown-code">CP</span><span class="icon-dropdown-label">Checkpoint (Year 7–8)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="asalevel"><span class="icon-dropdown-code">AL</span><span class="icon-dropdown-label">AS &amp; A Level (Year 11–12)</span></button>
+        </div>
       </div>
+
+      <div class="icon-dropdown" data-for="selSubject">
+        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="All Subjects" aria-label="All Subjects">
+          <span class="icon-dropdown-code">All</span>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="icon-dropdown-menu" role="listbox" hidden>
+          <button class="icon-dropdown-item active" type="button" role="option" data-value="all"><span class="icon-dropdown-code">All</span><span class="icon-dropdown-label">All Subjects</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="math"><span class="icon-dropdown-code">M</span><span class="icon-dropdown-label">Mathematics</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="biology"><span class="icon-dropdown-code">B</span><span class="icon-dropdown-label">Biology</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="chemistry"><span class="icon-dropdown-code">C</span><span class="icon-dropdown-label">Chemistry</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="physics"><span class="icon-dropdown-code">P</span><span class="icon-dropdown-label">Physics</span></button>
+        </div>
+      </div>
+      <div class="month-pager" id="monthPager"></div>
       <div class="chapter-pagers" id="chapterPagers"></div>
-      <div class="legend">
-        <span class="legend-label">Status:</span>
-        <span class="legend-item"><span class="legend-dot ld-done"></span>Done</span>
-        <span class="legend-item"><span class="legend-dot ld-prog"></span>In Progress</span>
-        <span class="legend-item"><span class="legend-dot ld-pending"></span>Pending</span>
-        <span class="legend-item"><span class="legend-dot ld-gap"></span>Syllabus gap</span>
+      <div class="legend" aria-label="Status legend">
+        <span class="legend-item" title="Done" aria-label="Done"><span class="legend-dot ld-done"></span></span>
+        <span class="legend-item" title="In Progress" aria-label="In Progress"><span class="legend-dot ld-prog"></span></span>
+        <span class="legend-item" title="Pending" aria-label="Pending"><span class="legend-dot ld-pending"></span></span>
+        <span class="legend-item" title="Syllabus gap" aria-label="Syllabus gap"><span class="legend-dot ld-gap"></span></span>
       </div>
       <div class="view-toggle">
-        <button class="view-btn active" data-view="week">Week View</button>
-        <button class="view-btn" data-view="chapter">Chapter View</button>
+        <button class="view-btn active" data-view="week" title="Week View" aria-label="Week View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="4" x2="9" y2="22"/><line x1="15" y1="4" x2="15" y2="22"/></svg>
+        </button>
+        <button class="view-btn" data-view="chapter" title="Chapter View" aria-label="Chapter View">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3.5" cy="6" r="1.5"/><circle cx="3.5" cy="12" r="1.5"/><circle cx="3.5" cy="18" r="1.5"/></svg>
+        </button>
       </div>
     </div>
 
@@ -869,6 +951,53 @@
       document.getElementById('selSubject').addEventListener('change', e => {
         currentSubject = e.target.value;
         render();
+      });
+
+      // Wire the custom icon-only dropdowns that replaced the
+      // native <select>s. Click on a menu item → set hidden select
+      // value + dispatch a synthetic change so existing handlers
+      // fire. Outside click closes any open menu.
+      document.querySelectorAll('.icon-dropdown').forEach(dd => {
+        const trigger = dd.querySelector('.icon-dropdown-trigger');
+        const menu    = dd.querySelector('.icon-dropdown-menu');
+        const select  = document.getElementById(dd.dataset.for);
+        trigger.addEventListener('click', e => {
+          e.stopPropagation();
+          const open = !menu.hidden;
+          // Close every menu first
+          document.querySelectorAll('.icon-dropdown-menu').forEach(m => m.hidden = true);
+          document.querySelectorAll('.icon-dropdown-trigger').forEach(t => t.setAttribute('aria-expanded', 'false'));
+          if (!open) {
+            menu.hidden = false;
+            trigger.setAttribute('aria-expanded', 'true');
+          }
+        });
+        menu.addEventListener('click', e => {
+          const item = e.target.closest('.icon-dropdown-item');
+          if (!item) return;
+          const value = item.dataset.value;
+          const codeEl  = item.querySelector('.icon-dropdown-code');
+          const labelEl = item.querySelector('.icon-dropdown-label');
+          const code  = codeEl  ? codeEl.textContent  : value;
+          const label = labelEl ? labelEl.textContent : value;
+          // Update trigger visual + title
+          trigger.querySelector('.icon-dropdown-code').textContent = code;
+          trigger.setAttribute('title', label);
+          trigger.setAttribute('aria-label', label);
+          // Update active class on items
+          menu.querySelectorAll('.icon-dropdown-item').forEach(i => i.classList.toggle('active', i === item));
+          // Sync hidden <select> + fire change so existing handlers run
+          if (select && select.value !== value) {
+            select.value = value;
+            select.dispatchEvent(new Event('change', { bubbles: true }));
+          }
+          menu.hidden = true;
+          trigger.setAttribute('aria-expanded', 'false');
+        });
+      });
+      document.addEventListener('click', () => {
+        document.querySelectorAll('.icon-dropdown-menu').forEach(m => m.hidden = true);
+        document.querySelectorAll('.icon-dropdown-trigger').forEach(t => t.setAttribute('aria-expanded', 'false'));
       });
       document.querySelectorAll('.view-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1030,16 +1159,17 @@
         currentMonth = sortedMonths[0];
       }
 
-      // Build month pagination
+      // Build month pagination — icon-only (initial letter, hover
+      // tooltip shows full name + year via title attribute).
       const pager = document.getElementById('monthPager');
       pager.classList.add('visible');
-      pager.innerHTML = `<span class="month-pager-label">Month:</span>` +
-        sortedMonths.map(mIdx => {
-          const m = AC_MONTHS[mIdx];
-          const label = m ? m.short : `M${mIdx + 1}`;
-          const active = mIdx === currentMonth ? ' active' : '';
-          return `<button class="month-pager-btn${active}" data-mth="${mIdx}">${esc(label)}</button>`;
-        }).join('');
+      pager.innerHTML = sortedMonths.map(mIdx => {
+        const m = AC_MONTHS[mIdx];
+        const fullLabel = m ? `${m.name} ${m.year}` : `Month ${mIdx + 1}`;
+        const initial = m ? m.name.charAt(0) : `${mIdx + 1}`;
+        const active = mIdx === currentMonth ? ' active' : '';
+        return `<button class="month-pager-btn pager-dot${active}" data-mth="${mIdx}" title="${esc(fullLabel)}" aria-label="${esc(fullLabel)}">${esc(initial)}</button>`;
+      }).join('');
 
       // Render only the selected month's weeks
       const colCount = configs.length + 1;
@@ -1165,14 +1295,14 @@
 
       const monthBtns = sortedMonths.length > 1 ? sortedMonths.map(mIdx => {
         const m = AC_MONTHS[mIdx];
-        const label = m ? m.short : `M${mIdx + 1}`;
-        const fullLabel = m ? `${m.name} ${m.year}` : label;
+        const fullLabel = m ? `${m.name} ${m.year}` : `Month ${mIdx + 1}`;
+        const initial = m ? m.name.charAt(0) : `${mIdx + 1}`;
         const active = mIdx === activeMIdx;
-        return `<button class="subject-pager-btn${active ? ' active' : ''}"
+        return `<button class="subject-pager-btn pager-dot${active ? ' active' : ''}"
           data-mth="${mIdx}" data-key="${cfg.key}"
-          title="${esc(fullLabel)}"
+          title="${esc(fullLabel)}" aria-label="${esc(fullLabel)}"
           style="${active ? `background:${cfg.color};border-color:${cfg.color}` : `border-color:${cfg.color};color:${cfg.color}`}"
-        >${esc(label)}</button>`;
+        >${esc(initial)}</button>`;
       }).join('') : '';
 
       const sep = monthBtns ? '<span class="subject-pager-sep" aria-hidden="true"></span>' : '';
