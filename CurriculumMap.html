@@ -15,10 +15,14 @@
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── */
+    /* ── HERO ── legacy 3-wrapper pattern. Per Common Mistake #52,
+       horizontal padding lives on .hero-inner (NOT on .hero) so the
+       hero text shares a left edge with the .page-wrap content
+       column at viewports > 1280px. Both clamps are canonical
+       1200px. */
     .hero {
       background: linear-gradient(140deg, #2e1065 0%, #4c1d95 45%, #7c3aed 100%);
-      padding: 48px 40px;
+      padding: 48px 0;
       position: relative;
       overflow: hidden;
     }
@@ -33,23 +37,9 @@
     .hero-inner {
       position: relative;
       z-index: 1;
-      max-width: 1320px;
+      max-width: 1200px;
       margin: 0 auto;
-      display: flex;
-      align-items: flex-start;
-      gap: 24px;
-    }
-    .hero-icon {
-      width: 60px;
-      height: 60px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      flex-shrink: 0;
-      margin-top: 4px;
+      padding: 0 40px;
     }
     .hero-eyebrow {
       font-size: 0.72rem;
@@ -87,9 +77,11 @@
       margin-top: 12px;
     }
 
-    /* ── PAGE WRAP ── */
+    /* ── PAGE WRAP ── canonical 1200px clamp + 40px lateral padding,
+       so the content column shares a left edge with .hero-inner
+       (also 1200 + 40 padding). See Common Mistake #52. */
     .page-wrap {
-      max-width: 1320px;
+      max-width: 1200px;
       margin: 0 auto;
       padding: 32px 40px 80px;
     }
@@ -723,12 +715,6 @@
   <!-- ── HERO ── -->
   <section class="hero">
     <div class="hero-inner">
-      <div class="hero-icon">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
-          <rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/>
-        </svg>
-      </div>
       <div>
         <p class="hero-eyebrow">Academics · Cambridge</p>
         <h1 class="hero-title">Curriculum Map</h1>
