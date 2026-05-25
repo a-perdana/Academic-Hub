@@ -337,16 +337,17 @@
     .month-pager-btn:hover:not(.active) { background: var(--paper); border-color: var(--accent); color: var(--accent); }
     .month-pager-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 
-    /* ── Chapter view pagers ── single compact row: subject letter
-       dots + month chips. Labels dropped — buttons carry their
-       full name in title= for hover tooltip. */
+    /* ── Chapter view pagers ── inline child of .map-toolbar
+       (single-row layout across both views). Subject letter dots
+       + thin separator + month chips. Labels dropped — buttons
+       carry their full name in title= for hover tooltip. */
     .chapter-pagers {
       display: none;
-      margin-bottom: 18px;
+      align-items: center;
     }
-    .chapter-pagers.visible { display: block; }
+    .chapter-pagers.visible { display: inline-flex; }
     .subject-pager {
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       flex-wrap: wrap;
@@ -692,8 +693,10 @@
   <!-- ── PAGE WRAP ── -->
   <div class="page-wrap">
 
-    <!-- Toolbar — single compact row: level + subject + month pager
-         (week view only) + legend + view toggle (right-justified). -->
+    <!-- Toolbar — single compact row across BOTH views: level +
+         subject + (week view) month pager / (chapter view) subject
+         dots + month chips + legend + view toggle. View-specific
+         children flip via .visible class set by the render path. -->
     <div class="map-toolbar">
       <select id="selLevel">
         <option value="igcse">IGCSE (Year 9–10)</option>
@@ -710,6 +713,7 @@
       <div class="month-pager" id="monthPager">
         <span class="month-pager-label">Month:</span>
       </div>
+      <div class="chapter-pagers" id="chapterPagers"></div>
       <div class="legend">
         <span class="legend-label">Status:</span>
         <span class="legend-item"><span class="legend-dot ld-done"></span>Done</span>
@@ -722,10 +726,6 @@
         <button class="view-btn" data-view="chapter">Chapter View</button>
       </div>
     </div>
-
-    <!-- Chapter view subject+month pagers (stays in its own row — can
-         hold many subject + month buttons that legitimately wrap). -->
-    <div class="chapter-pagers" id="chapterPagers"></div>
 
     <!-- Summary cards -->
     <div class="summary-row">
