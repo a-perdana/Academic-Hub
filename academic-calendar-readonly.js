@@ -203,11 +203,10 @@
     // sits on the page's paper bg.
     return `
       <div class="ec-toolbar">
-        <div class="ec-view-switch" role="tablist" aria-label="Calendar view">${viewBtns}</div>
         <div class="ec-filter-row" role="group" aria-label="Department filter">
-          <span class="ec-filter-row-label">Filter:</span>
           ${filterChips}
         </div>
+        <div class="ec-view-switch" role="tablist" aria-label="Calendar view">${viewBtns}</div>
       </div>
     `;
   }
@@ -558,19 +557,19 @@
     .ec-empty-icon { font-size: 40px; margin-bottom: 12px; }
     .ec-empty-hint { font-size: 12px; margin-top: 6px; color: #94a3b8; }
 
-    /* ── Toolbar — light surface that holds the view switch +
-       filter chips. Replaces the legacy dark .ec-hero strip (which
-       duplicated the page's canonical .page-hero). Sits inside the
-       widget's own 1200px wrapper so it aligns with the calendar
-       grid below it. ── */
-    /* Single-row toolbar — view switch (left) + Filter label + chips
-       (right). On narrow viewports the chip cluster wraps under the
-       view switch instead of dropping each chip to its own line. */
+    /* ── Toolbar — light surface that holds the filter chips
+       (left, justified) + view switch (right, end-justified).
+       "Filter:" label dropped 2026-05-25 — chips are
+       self-descriptive. Hugs the page-hero band above (no top
+       padding) so the toolbar doesn't float in dead space. ── */
     .ec-toolbar {
-      padding: 20px 0 16px;
-      display: flex; align-items: center; gap: 14px 18px;
+      padding: 8px 0 14px;
+      display: flex; align-items: center; gap: 10px 18px;
       flex-wrap: wrap;
     }
+    /* Chip cluster left, view switch right — via auto margin on
+       the view-switch so any leftover space sits between them. */
+    .ec-toolbar .ec-view-switch { margin-left: auto; }
     .ec-view-switch {
       display: inline-flex; gap: 4px; flex-shrink: 0;
       background: #f1f5f9;        /* slate-100 — sits well on paper bg */
@@ -593,10 +592,6 @@
     .ec-filter-row {
       display: inline-flex; gap: 6px; align-items: center;
       flex-wrap: nowrap; min-width: 0;
-    }
-    .ec-filter-row-label {
-      font-size: 12px; color: #64748b; font-weight: 600; margin-right: 2px;
-      flex-shrink: 0;
     }
     /* Light-surface filter chips. Inactive = neutral; active fills
        with the department colour (--c is set inline per chip). */
