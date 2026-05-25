@@ -94,13 +94,16 @@
       padding: 32px 40px 80px;
     }
 
-    /* ── TOOLBAR ── */
+    /* ── TOOLBAR ── single compact row holding: level + subject +
+       (week view only) month pager + legend + view toggle. View
+       toggle pinned to far right via margin-left:auto. Flex wraps
+       cleanly when the viewport can't fit the full row. */
     .map-toolbar {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 10px 14px;
       flex-wrap: wrap;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
     .map-toolbar select {
       font-family: 'DM Sans', sans-serif;
@@ -115,12 +118,12 @@
       transition: border-color 0.15s;
     }
     .map-toolbar select:focus { border-color: var(--accent); }
-    .toolbar-sep { flex: 1; }
     .view-toggle {
       display: flex;
       border: 1px solid var(--border);
       border-radius: 8px;
       overflow: hidden;
+      margin-left: auto;
     }
     .view-btn {
       font-family: 'DM Sans', sans-serif;
@@ -138,17 +141,17 @@
     .view-btn.active { background: var(--accent); color: #fff; }
     .view-btn:hover:not(.active) { background: var(--paper); }
 
-    /* ── LEGEND ── */
+    /* ── LEGEND ── inline child of .map-toolbar (single-row layout) */
     .legend {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--ink-2);
     }
-    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .legend-label { font-weight: 600; color: var(--ink-2); }
+    .legend-item { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
     .legend-dot {
       width: 12px;
       height: 12px;
@@ -301,14 +304,15 @@
     .status-pending .tc-status-dot { background: #d1d5db; }
     .empty-week { color: var(--ink-3); font-size: 0.75rem; font-style: italic; }
 
-    /* ── Month pagination ── */
+    /* ── Month pagination ── inline child of .map-toolbar (single-row
+       layout). Hidden until the week-view renderer flips .visible. */
     .month-pager {
-      display: flex;
+      display: none;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
     }
+    .month-pager.visible { display: inline-flex; }
     .month-pager-label {
       font-size: 0.72rem;
       font-weight: 600;
@@ -319,11 +323,11 @@
     }
     .month-pager-btn {
       font-family: 'DM Sans', sans-serif;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 500;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border: 1px solid var(--border);
-      border-radius: 20px;
+      border-radius: 999px;
       background: var(--white);
       color: var(--ink-2);
       cursor: pointer;
@@ -332,8 +336,6 @@
     }
     .month-pager-btn:hover:not(.active) { background: var(--paper); border-color: var(--accent); color: var(--accent); }
     .month-pager-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
-    .month-pager { display: none; }
-    .month-pager.visible { display: flex; }
 
     /* ── Chapter view pagers ── */
     .chapter-pagers {
@@ -684,7 +686,8 @@
   <!-- ── PAGE WRAP ── -->
   <div class="page-wrap">
 
-    <!-- Toolbar -->
+    <!-- Toolbar — single compact row: level + subject + month pager
+         (week view only) + legend + view toggle (right-justified). -->
     <div class="map-toolbar">
       <select id="selLevel">
         <option value="igcse">IGCSE (Year 9–10)</option>
@@ -698,29 +701,25 @@
         <option value="chemistry">Chemistry</option>
         <option value="physics">Physics</option>
       </select>
-      <div class="toolbar-sep"></div>
+      <div class="month-pager" id="monthPager">
+        <span class="month-pager-label">Month:</span>
+      </div>
+      <div class="legend">
+        <span class="legend-label">Status:</span>
+        <span class="legend-item"><span class="legend-dot ld-done"></span>Done</span>
+        <span class="legend-item"><span class="legend-dot ld-prog"></span>In Progress</span>
+        <span class="legend-item"><span class="legend-dot ld-pending"></span>Pending</span>
+        <span class="legend-item"><span class="legend-dot ld-gap"></span>Syllabus gap</span>
+      </div>
       <div class="view-toggle">
         <button class="view-btn active" data-view="week">Week View</button>
         <button class="view-btn" data-view="chapter">Chapter View</button>
       </div>
     </div>
 
-    <!-- Month pagination (shown in week view only) -->
-    <div class="month-pager" id="monthPager">
-      <span class="month-pager-label">Month:</span>
-    </div>
-
-    <!-- Chapter view subject+month pagers -->
+    <!-- Chapter view subject+month pagers (stays in its own row — can
+         hold many subject + month buttons that legitimately wrap). -->
     <div class="chapter-pagers" id="chapterPagers"></div>
-
-    <!-- Legend -->
-    <div class="legend">
-      <span style="font-weight:600;color:var(--ink-2)">Status:</span>
-      <span class="legend-item"><span class="legend-dot ld-done"></span>Done</span>
-      <span class="legend-item"><span class="legend-dot ld-prog"></span>In Progress</span>
-      <span class="legend-item"><span class="legend-dot ld-pending"></span>Pending</span>
-      <span class="legend-item"><span class="legend-dot ld-gap"></span>Syllabus gap</span>
-    </div>
 
     <!-- Summary cards -->
     <div class="summary-row">
