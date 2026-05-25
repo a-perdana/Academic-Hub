@@ -513,6 +513,19 @@ if (fs.existsSync("partials")) {
 if (fs.existsSync("resources")) {
   copyDirRecursive("resources", "dist/resources");
   console.log("Copied: resources/");
+  // Strip dead subfolder duplicates (since 2026-05-25 — architecture pass
+  // step 7). research/ and references-data/ live under resources/ as the
+  // sync-research mirror's *write target*, but at runtime everything
+  // is fetched from /research/* and /references-data/* (root) — the
+  // dedicated copy blocks above mirror them into dist/research/ and
+  // dist/references-data/. The /resources/research and /resources/
+  // references-data copies are pure dead weight (~600 KB).
+  for (const stale of ["dist/resources/research", "dist/resources/references-data"]) {
+    if (fs.existsSync(stale)) {
+      fs.rmSync(stale, { recursive: true, force: true });
+      console.log(`Removed: ${stale}/ (dead duplicate of dist/${path.basename(stale)})`);
+    }
+  }
 }
 
 // -- Generate Netlify _redirects
