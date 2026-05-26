@@ -57,10 +57,11 @@ body { padding-top: 62px; }
 .page-hero__kpi--primary {
   background: var(--hero-kpi-primary-portfolio); border-color: var(--hero-kpi-primary-portfolio-border);
 }
-/* Footer accent override — portfolio-amber */
-.page-footer { background: var(--footer-grad-portfolio); }
-.page-footer::before { background: var(--footer-radial-portfolio-a), var(--footer-radial-portfolio-b); }
-.page-footer__cta-btn { background: var(--footer-cta-grad-portfolio); box-shadow: var(--footer-cta-shadow-portfolio); }
+/* Footer CTA override — amber (matches portfolio hero accent). Footer body keeps base.css dark default. */
+.page-footer__cta-btn {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 14px rgba(217,119,6,0.38);
+}
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(217,119,6,0.52); }
 .page-hero__kpi-num {
   font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
@@ -451,7 +452,7 @@ async function loadSubmissions(){
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Evidence-based growth</span>
+      <span class="page-footer__cta-eyebrow">Leadership · Evidence</span>
       <h2 class="page-footer__cta-title">Have you done the work?</h2>
       <p class="page-footer__cta-desc">Pick the competency, pick the stage, write 80+ characters about what you actually did, attach a file if it helps. A central reviewer reads each submission before granting the stage on your Learning Path.</p>
       <a href="/learning-path" class="page-footer__cta-btn">Open Learning Path <span aria-hidden="true">→</span></a>
