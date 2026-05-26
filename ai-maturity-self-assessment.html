@@ -33,6 +33,7 @@
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
 .hero {
+  width: 100%;
   background: linear-gradient(135deg, #0a0a1a 0%, #2b1e10 55%, #0c1028 100%);
   color: #fff; padding: 36px 40px 44px; position: relative; overflow: hidden;
 }
@@ -52,7 +53,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .hero-status.submitted { background: rgba(59,130,246,0.2); color: #bfdbfe; }
 .hero-status.appraised { background: rgba(16,185,129,0.2); color: #a7f3d0; }
 
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
+.page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 24px 40px 80px; }
 
 .intro-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 18px 22px; margin-bottom: 20px; }
 .intro-card h2 { font-family: 'Lora', serif; font-size: 17px; font-weight: 600; color: #1e293b; margin-bottom: 8px; }
@@ -200,6 +201,98 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   padding: 16px 20px; border-radius: 10px; margin-bottom: 20px;
 }
 
+/* ===== Info strip — lifecycle + role-aware guidance ===== */
+.info-strip {
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+  margin-bottom: 20px; overflow: hidden;
+}
+.info-strip__top {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+  background: #fafbfc; border-bottom: 1px solid #e2e8f0;
+}
+.info-step {
+  padding: 16px 18px; position: relative;
+  border-right: 1px solid #e2e8f0;
+}
+.info-step:last-child { border-right: none; }
+.info-step__num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #e2e8f0; color: #64748b;
+  font-family: 'Lora', serif; font-weight: 600; font-size: 13px;
+  margin-bottom: 8px;
+}
+.info-step__title {
+  font-size: 13px; font-weight: 600; color: #1e293b;
+  margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.info-step__title-actor {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 4px;
+  background: #f1f5f9; color: #64748b;
+}
+.info-step__desc {
+  font-size: 12px; color: #475569; line-height: 1.5;
+}
+.info-step.is-active { background: #fff7ed; }
+.info-step.is-active .info-step__num {
+  background: var(--accent); color: #fff;
+}
+.info-step.is-active .info-step__title-actor {
+  background: var(--accent-2); color: var(--accent-dk);
+}
+.info-step.is-done { background: #f0fdf4; }
+.info-step.is-done .info-step__num {
+  background: var(--grow); color: #fff;
+}
+.info-step.is-done .info-step__title-actor {
+  background: var(--grow-bg); color: var(--grow);
+}
+.info-step__pulse {
+  position: absolute; top: 16px; right: 14px;
+  font-size: 10.5px; font-weight: 600; color: var(--accent-dk);
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.info-strip__bottom {
+  padding: 14px 20px;
+  display: flex; gap: 14px; align-items: flex-start;
+  font-size: 12.5px; color: #475569; line-height: 1.55;
+}
+.info-strip__bottom-icon {
+  flex: 0 0 28px; height: 28px; border-radius: 6px;
+  background: var(--accent-2); color: var(--accent-dk);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700;
+}
+.info-strip__bottom-text strong { color: #1e293b; }
+.info-strip__bottom-text .info-meta {
+  display: block; margin-top: 4px;
+  font-size: 11.5px; color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .info-strip__top { grid-template-columns: 1fr; }
+  .info-step { border-right: none; border-bottom: 1px solid #e2e8f0; }
+  .info-step:last-child { border-bottom: none; }
+  .info-step__pulse { top: 14px; right: 14px; }
+}
+
+/* ===== Canonical footer — AICF orange CTA override ===== */
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max, 1200px);
+  padding-left: 0;
+  padding-right: 0;
+}
+.page-footer__cta-btn {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dk) 100%);
+  box-shadow: 0 4px 14px rgba(230,126,34,0.35);
+}
+.page-footer__cta-btn:hover {
+  box-shadow: 0 6px 18px rgba(230,126,34,0.45);
+}
+
 @media (max-width: 768px) {
   .level-row { grid-template-columns: repeat(2, 1fr); }
   .page-wrap { padding: 18px 16px 80px; }
@@ -229,24 +322,53 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     self-assessment. Read access is open to all school leadership.
   </div>
 
-  <section class="intro-card">
-    <h2>How this works</h2>
-    <p>
-      Rate where the school is now on each of the 6 areas. Then pick a target level for
-      next year. Add 2-4 pieces of evidence per area. List strengths and improvement areas.
-      Save anytime. Submit when ready. After submission, ratings lock until the appraisal team
-      visits.
-    </p>
-    <p>
-      Most Eduversal schools in 2026 are honestly at Step 1 or 2 on most areas. That is normal.
-      Inflated self-assessment is a network-wide red line — the Eduversal team will see it,
-      and the school will set goals it cannot reach.
-    </p>
-    <div class="pillrow">
-      <span class="pill">5 Steps · Emerging → Leading</span>
-      <span class="pill">6 Areas</span>
-      <span class="pill">Annual</span>
-      <span class="pill">Validated by Eduversal HQ</span>
+  <section class="info-strip" id="infoStrip">
+    <div class="info-strip__top">
+      <div class="info-step" data-step="draft" id="infoStepDraft">
+        <div class="info-step__num">1</div>
+        <div class="info-step__title">
+          You fill this in
+          <span class="info-step__title-actor">School Principal</span>
+        </div>
+        <div class="info-step__desc">
+          Rate the school across 6 areas, add evidence, name strengths and improvement areas.
+          Save anytime. Editable until you press Submit.
+        </div>
+      </div>
+      <div class="info-step" data-step="submitted" id="infoStepSubmitted">
+        <div class="info-step__num">2</div>
+        <div class="info-step__title">
+          Submit for the visit
+          <span class="info-step__title-actor">Locks for school</span>
+        </div>
+        <div class="info-step__desc">
+          Once submitted, ratings lock. Your submission goes into the Eduversal HQ queue.
+          The validation visit usually happens within the term.
+        </div>
+      </div>
+      <div class="info-step" data-step="appraised" id="infoStepAppraised">
+        <div class="info-step__num">3</div>
+        <div class="info-step__title">
+          Eduversal validates
+          <span class="info-step__title-actor">HQ Director</span>
+        </div>
+        <div class="info-step__desc">
+          The team compares your rating with what they observe, may adjust a step, writes
+          notes, and gives up to 8 concrete recommendations. You see all of it here.
+        </div>
+      </div>
+    </div>
+    <div class="info-strip__bottom">
+      <div class="info-strip__bottom-icon">i</div>
+      <div class="info-strip__bottom-text" id="infoStripBottomText">
+        <strong>Be honest.</strong> Most Eduversal schools in 2026 are at Step 1 or 2 on most
+        areas — that is normal. Inflated ratings are a network-wide red line: the HQ team will
+        see the gap during the visit, and the school will set goals it cannot reach.
+        <span class="info-meta">
+          5 steps (Emerging → Leading) · 6 areas · annual cycle · read access: School Principal,
+          Academic Coordinator, Foundation Rep, Cambridge Coordinator.
+        </span>
+      </div>
     </div>
   </section>
 
@@ -287,6 +409,42 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     </div>
   </div>
 </main>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">AICF · Institutional Track</span>
+      <h2 class="page-footer__cta-title">Once a year. Honestly. Across all six areas.</h2>
+      <p class="page-footer__cta-desc">
+        This is the school's annual conversation with Eduversal HQ about AI maturity. Save drafts
+        as the leadership team agrees, submit when the Principal signs off, see the validated
+        view after the appraisal visit.
+      </p>
+      <a href="/references?doc=aicf-v1-part3-institutional" class="page-footer__cta-btn">
+        Read the framework verbatim <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <nav class="page-footer__nav" aria-label="AI Maturity footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Related leadership tools</span>
+        <a href="/school-self-appraisal" class="page-footer__nav-link">School Self-Appraisal</a>
+        <a href="/principal-360-results" class="page-footer__nav-link">Principal 360° Results</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Leadership Competency Framework</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Reference</span>
+        <a href="/references" class="page-footer__nav-link">References & Standards</a>
+        <a href="/academic-standards" class="page-footer__nav-link">Academic Standards Manual</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbook Library</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">AI Competency Framework v1.0 · Part 3 — Institutional</span>
+  </div>
+</footer>
 
 <div class="toast" id="toast"></div>
 
@@ -435,6 +593,73 @@ function renderHeroStatus() {
   el.className = 'hero-status ' + m.cls;
   el.textContent = m.label;
   el.style.display = 'inline-flex';
+}
+
+// ----- Render: info-strip lifecycle highlight -----
+function renderInfoStrip() {
+  const steps = ['draft', 'submitted', 'appraised'];
+  const currentIdx = state.status ? steps.indexOf(state.status) : -1;
+  steps.forEach((s, i) => {
+    const el = document.getElementById('infoStep' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (!el) return;
+    el.classList.remove('is-active', 'is-done');
+    const pulse = el.querySelector('.info-step__pulse');
+    if (pulse) pulse.remove();
+    if (currentIdx < 0) {
+      // Not started — step 1 is active by default for first-time editors
+      if (i === 0 && state.canEdit) {
+        el.classList.add('is-active');
+        const p = document.createElement('div');
+        p.className = 'info-step__pulse';
+        p.textContent = 'Start here';
+        el.appendChild(p);
+      }
+      return;
+    }
+    if (i < currentIdx) {
+      el.classList.add('is-done');
+    } else if (i === currentIdx) {
+      el.classList.add('is-active');
+      const p = document.createElement('div');
+      p.className = 'info-step__pulse';
+      p.textContent = s === 'draft' ? 'In progress' : s === 'submitted' ? 'Waiting' : 'Done';
+      el.appendChild(p);
+    }
+  });
+
+  // Status-aware bottom note
+  const bottom = document.getElementById('infoStripBottomText');
+  if (!bottom) return;
+  if (state.status === 'submitted') {
+    bottom.innerHTML = `
+      <strong>Submitted on ${state.doc?.submittedAt?.toDate ? state.doc.submittedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
+      Your ratings are locked until the Eduversal appraisal visit. You can still read everything
+      here. The HQ team will validate during the next on-site visit; no action needed from your side.
+      <span class="info-meta">
+        Want to amend something before the visit? Email the HQ team and they can reopen the draft.
+      </span>
+    `;
+  } else if (state.status === 'appraised') {
+    bottom.innerHTML = `
+      <strong>Validated by Eduversal on ${state.doc?.appraisal?.appraisedAt?.toDate ? state.doc.appraisal.appraisedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
+      Scroll any area to see the validated step, observed evidence, and the team's notes.
+      The Eduversal recommendations card at the bottom lists the concrete actions HQ will support
+      the school with this year.
+      <span class="info-meta">
+        Next year you reopen a fresh assessment for the new academic year — this one stays as a record.
+      </span>
+    `;
+  } else {
+    bottom.innerHTML = `
+      <strong>Be honest.</strong> Most Eduversal schools in 2026 are at Step 1 or 2 on most
+      areas — that is normal. Inflated ratings are a network-wide red line: the HQ team will
+      see the gap during the visit, and the school will set goals it cannot reach.
+      <span class="info-meta">
+        5 steps (Emerging → Leading) · 6 areas · annual cycle · read access: School Principal,
+        Academic Coordinator, Foundation Rep, Cambridge Coordinator.
+      </span>
+    `;
+  }
 }
 
 // ----- Render: domain cards -----
@@ -684,6 +909,7 @@ function renderSaveStatus() {
 function renderAll() {
   computeOverallLevel();
   renderHeroStatus();
+  renderInfoStrip();
   renderDomains();
   renderPriority();
   renderSaveStatus();
