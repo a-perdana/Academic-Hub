@@ -23,24 +23,35 @@
 
 <style>
 /* ── Settings Layout ───────────────────────────────────────────── */
-/* Navbar is position:fixed at 62px tall — push the page content down */
+/* Page-family: My Work (data-accent="dark"). Canonical .page-hero chrome
+   comes from /base.css; page-local styles MUST NOT override .page-hero*
+   (root CLAUDE.md Common Mistake #50). Navbar is fixed at 62px. */
 body { padding-top: 62px; }
+
+/* Hero shares the 1200 content rail with the settings layout below. */
+.page-hero__inner { max-width: var(--container-max); margin: 0 auto; padding-left: 0; padding-right: 0; }
+@media (max-width: 760px) { .page-hero__inner { padding-left: 14px; padding-right: 14px; } }
+
+/* Settings shell — clamped to the 1200 rail, sits under the hero. The
+   sidebar is sticky so the tab list stays in view as the panel scrolls
+   with the page (replaces the old 100vh inner-scroll lock so the hero can
+   sit above it). */
 .settings-wrap {
-  display: flex;
-  height: calc(100vh - 62px);
-  background: #f5f4f0;
-  overflow: hidden;
+  display: flex; gap: 0;
+  max-width: var(--container-max); margin: 0 auto;
+  background: #fff; border: 1px solid #e8e6e0; border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 12px 30px rgba(15,23,42,0.05);
+  overflow: hidden; margin-top: 22px; margin-bottom: 40px;
 }
 
 /* Sidebar */
 .settings-sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: #ffffff;
+  background: #fbfafe;
   border-right: 1px solid #e8e6e0;
   padding: 28px 12px;
-  height: 100%;
-  overflow-y: auto;
+  align-self: stretch;
 }
 .settings-sidebar-title {
   font-size: 10px;
@@ -122,12 +133,10 @@ body { padding-top: 62px; }
 .settings-content {
   flex: 1;
   min-width: 0;
-  height: 100%;
-  overflow-y: auto;
 }
 .settings-content-inner {
-  padding: 36px 40px 80px;
-  max-width: 740px;
+  padding: 32px 40px 40px;
+  max-width: 760px;
 }
 .settings-panel { display: none; }
 .settings-panel.active { display: block; }
@@ -586,8 +595,18 @@ body { padding-top: 62px; }
 }
 </style>
 </head>
-<body>
+<body data-page-accent="dark">
 <div id="navbarMount"></div>
+
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · Your account</p>
+      <h1 class="page-hero__title">Settings</h1>
+      <p class="page-hero__desc">Manage your personal info, profile photo and CV, account security, and notification preferences. Your school and leadership sub-roles are managed by Eduversal.</p>
+    </div>
+  </div>
+</header>
 
 <div class="settings-wrap">
   <!-- Sidebar -->
