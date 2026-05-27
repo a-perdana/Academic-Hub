@@ -62,48 +62,51 @@ body:has(> .page-footer) > .page-body {
   padding: 0 40px; gap: 4px;
 }
 
-/* ===== HORIZONTAL NAV BAR =====
-   A full-width sticky strip directly under the info-strip. Holds: Overview
-   button · compact overall-progress · the 5 domain nav cards — all flowing
-   in a single horizontal row that wraps on narrow viewports. */
+/* ===== HORIZONTAL NAV =====
+   A responsive CARD GRID directly under the info-strip: Overview + the 5
+   domain cards as 6 equal cells. #sidebarDomainBtns uses display:contents
+   so the JS-rendered domain cards become direct grid items alongside the
+   static Overview card (one even grid, no JS change). Wraps from 6→…→1
+   columns as the viewport narrows. */
 .domain-sidebar {
-  display:flex; align-items:stretch; flex-wrap:wrap; gap:10px;
-  position:sticky; top:70px; z-index:20;
-  background:var(--white);
-  border:1px solid var(--border); border-radius:14px;
-  box-shadow:var(--shadow-sm);
-  padding:12px 14px; margin-top:22px;
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+  gap:12px; margin-top:22px;
 }
-/* The two "Navigation" / "Domains" section labels are redundant in the
-   horizontal bar — hide them (kept in DOM for the vertical mobile fallback). */
-.sidebar-section-label { display:none; }
-.overview-nav-btn {
-  flex:0 0 auto; padding:9px 14px; border-radius:10px;
-  font-size:13px; font-weight:600; cursor:pointer;
-  border:1.5px solid var(--border);
-  text-align:left; background:var(--white); color:var(--ink-2);
-  display:flex; align-items:center; gap:8px;
-  font-family:inherit; transition:all .15s; align-self:center;
+#sidebarDomainBtns { display:contents; }
+/* Section labels / old vertical widgets no longer used in the grid. */
+.sidebar-section-label, .nav-divider { display:none; }
+
+/* Overview card — matches the domain-card footprint. */
+.overview-nav-card {
+  display:flex; flex-direction:column; align-items:flex-start; gap:6px;
+  border:1.5px solid var(--border); background:var(--white);
+  border-radius:13px; padding:14px 14px 16px; min-height:104px;
+  cursor:pointer; text-align:left; font-family:inherit;
+  transition:all .2s;
 }
-.overview-nav-btn:hover { background:var(--paper); color:var(--ink); }
-.overview-nav-btn.active { background:var(--accent-2); color:var(--accent-dk); border-color:var(--accent-2); font-weight:700; }
-/* Vertical separator between the Overview/progress cluster and the domains. */
-.nav-divider { width:1px; align-self:stretch; background:var(--border); margin:2px 4px; }
+.overview-nav-card:hover { box-shadow:var(--shadow-sm); transform:translateY(-2px); }
+.overview-nav-card.active { border-color:var(--accent); background:var(--accent-2); box-shadow:var(--shadow-sm); }
+.onc-icon {
+  width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center;
+  background:var(--paper); color:var(--ink-3);
+}
+.overview-nav-card.active .onc-icon { background:#fff; color:var(--accent-dk); }
+.onc-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.25; }
+.overview-nav-card.active .onc-title { color:var(--accent-dk); }
+.onc-sub { font-size:11px; color:var(--ink-3); font-weight:500; }
 
-/* Domain nav cards flow as a horizontal, wrapping row. */
-#sidebarDomainBtns { display:flex; flex-wrap:wrap; gap:10px; flex:1; min-width:0; }
-
-/* Domain card — fixed-ish flex item in the horizontal bar. */
+/* Domain card — even grid cell (one of the 6). */
 .domain-nav-card {
-  flex:1 1 165px; min-width:155px; max-width:230px;
-  border-radius:11px;
+  display:flex; flex-direction:column; min-height:104px;
+  border-radius:13px;
   border:1.5px solid var(--border); background:var(--white);
   cursor:pointer; text-align:left; font-family:inherit;
-  padding:10px 12px; transition:all .2s; overflow:hidden;
-  position:relative; border-left-width:3px;
+  padding:12px 14px; transition:all .2s; overflow:hidden;
+  position:relative; border-left-width:4px;
 }
 .domain-nav-card:hover { box-shadow:var(--shadow-sm); transform:translateY(-2px); }
-.domain-nav-card.active { border-right-color:var(--border); box-shadow:var(--shadow-sm); }
+.domain-nav-card.active { box-shadow:var(--shadow-sm); }
+.domain-nav-card .dnc-progress { margin-top:auto; }
 .dnc-top { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
 .dnc-icon { font-size:15px; flex-shrink:0; }
 .dnc-code { font-size:8.5px; font-weight:800; text-transform:uppercase; letter-spacing:.1em; }
@@ -122,29 +125,26 @@ body:has(> .page-footer) > .page-body {
 .dnc-dot.done { transform:scaleY(1.2); }
 .dnc-completion-txt { font-size:10px; color:var(--ink-3); font-weight:600; white-space:nowrap; }
 
-/* Overall-progress — compact inline item in the horizontal bar. */
-.sidebar-overall {
-  flex:0 0 auto; align-self:center; min-width:150px;
-  padding:8px 14px;
-  background:var(--paper); border-radius:10px;
-  border:1px solid var(--border);
+/* Overall-progress now lives as a compact pill in the info-strip pills row
+   (sopFill / sopPct / sopCount IDs preserved for the JS updater). */
+.info-strip__pill--progress { gap:8px; }
+.info-strip__pill--progress .isp-bar {
+  width:64px; height:6px; border-radius:3px; overflow:hidden;
+  background:rgba(108,92,231,0.18); flex-shrink:0;
 }
-.sop-label { font-size:10px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
-.sop-bar { height:6px; background:var(--paper-2); border-radius:3px; overflow:hidden; margin-bottom:5px; }
-.sop-fill { height:100%; background:var(--accent); border-radius:3px; transition:width .4s ease; }
-.sop-row { display:flex; justify-content:space-between; font-size:11px; }
-.sop-pct { font-weight:700; color:var(--accent); }
-.sop-count { color:var(--ink-3); }
+.info-strip__pill--progress .isp-fill {
+  display:block; height:100%; border-radius:3px;
+  background:#6c5ce7; transition:width .4s ease;
+}
+.info-strip__pill--progress .isp-nums { color:#5a4bd1; }
+.info-strip__pill--progress .sop-pct { font-weight:800; color:#4c1d95; }
+.info-strip__pill--progress .sop-count { color:#5a4bd1; font-weight:600; }
 
-/* Horizontal nav bar wraps naturally; no need to hide it on tablet.
-   On phones, let the domain cards each take a full row for tappability and
-   drop the bar's sticky behaviour (it would eat too much vertical space). */
+/* The card grid reflows by itself (auto-fill). On phones tighten the rail
+   padding + drop the minimum so cards sit 2-up / 1-up cleanly. */
 @media (max-width:768px) {
   .page-body { padding:0 16px; }
-  .domain-sidebar { position:static; }
-  .domain-nav-card { flex:1 1 100%; max-width:none; }
-  .sidebar-overall { flex:1 1 100%; }
-  .nav-divider { display:none; }
+  .domain-sidebar { grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; }
 }
 
 /* ===== MAIN =====
@@ -719,30 +719,25 @@ body:has(> .page-footer) > .page-body {
         <span class="info-strip__pill"><b>For:</b> School Principal + Academic Coordinator</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school</span>
         <span class="info-strip__pill"><b>Anchor:</b> Eduversal Academic Standards</span>
+        <span class="info-strip__pill info-strip__pill--progress" id="sidebarOverall">
+          <b>Progress:</b>
+          <span class="isp-bar"><span class="isp-fill" id="sopFill" style="width:0%"></span></span>
+          <span class="isp-nums"><span class="sop-pct" id="sopPct">0%</span> · <span class="sop-count" id="sopCount">0/— aspects</span></span>
+        </span>
       </div>
     </div>
   </aside>
 </div>
 
 <div class="page-body">
-  <nav class="domain-sidebar" id="domainSidebar">
-    <div class="sidebar-section-label">Navigation</div>
-    <button class="overview-nav-btn active" id="overviewNavBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      Overview
-    </button>
-
-    <div class="sidebar-overall" id="sidebarOverall">
-      <div class="sop-label">Overall Progress</div>
-      <div class="sop-bar"><div class="sop-fill" id="sopFill" style="width:0%"></div></div>
-      <div class="sop-row">
-        <span class="sop-pct" id="sopPct">0%</span>
-        <span class="sop-count" id="sopCount">0/— aspects</span>
+  <nav class="domain-sidebar" id="domainSidebar" aria-label="Appraisal sections">
+    <button class="overview-nav-card active" id="overviewNavBtn">
+      <div class="onc-icon" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       </div>
-    </div>
-
-    <div class="nav-divider"></div>
-    <div class="sidebar-section-label">Domains</div>
+      <div class="onc-title">Overview</div>
+      <div class="onc-sub">All domains</div>
+    </button>
     <div id="sidebarDomainBtns"></div>
   </nav>
 
