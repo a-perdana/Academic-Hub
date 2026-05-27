@@ -205,7 +205,7 @@ const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting', 'settings']
 const DASHBOARD_SLUGS = new Set([
   'ease-1', 'ease-2', 'ease-3', 'a-ease-1', 'ease-analytics', 'ease-archive',
   'cambridge-exams', 'cambridge-pathway', 'cambridge-school-quality',
-  'school-appraisals', 'school-self-appraisal', 'school-performance-kpi',
+  'school-appraisals', 'school-performance-kpi',
   'accreditation-dashboard', 'network-audit', 'partner-schools', 'islamic-schools',
   'student-survey', 'staff-survey', 'parent-survey',
   'rapor-pendidikan-2025', 'ai-prompts',

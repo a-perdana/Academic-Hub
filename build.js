@@ -160,7 +160,7 @@ const htmlFiles = [
   "dashboards/IslamicSchoolsPerformance.html",
   "dashboards/PartnerSchoolsPerformance.html",
   "dashboards/SchoolAppraisalsDashboard.html",
-  "dashboards/SchoolSelfAppraisal.html",
+  "SchoolSelfAppraisal.html",
   "dashboards/StaffSatisfactionSurvey.html",
   "dashboards/StudentSatisfactionSurvey.html",
   "dashboards/ParentSatisfactionSurvey.html",

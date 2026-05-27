@@ -22,7 +22,7 @@
   --d4:#4338ca; --d4-bg:#ede9fe; --d4-border:#c4b5fd;
   --d5:#0f766e; --d5-bg:#ccfbf1; --d5-border:#99f6e4;
 }
-body { }
+body { padding-top: 62px; }
 
 /* ===== LAYOUT ===== */
 .page-body { display:flex; min-height:calc(100vh - 62px); }
@@ -584,6 +584,8 @@ body { }
 </style>
 </head>
 <body>
+<div id="navbarMount"></div>
+
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar">
     <div class="sidebar-section-label">Navigation</div>
@@ -623,8 +625,7 @@ body { }
 <input type="file" id="globalFileInput" style="display:none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
 <div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
 
-<script src="firebase-config.js"></script>
-<script type="module" src="auth-guard.js"></script>
+<script src="partials/navbar-loader.js"></script>
 <script type="module">
 import {
   collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp
@@ -1417,6 +1418,9 @@ function buildSidebar() {
 
 // ===== INIT =====
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-self-appraisal', { user, profile });
+  }
   isAdmin = profile?.role_academichub === 'academic_admin';
 
   await loadFramework();
