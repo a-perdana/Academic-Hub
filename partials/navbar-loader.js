@@ -741,13 +741,12 @@ const NAV_ITEMS = [
     { key: 'principal-360-results',       href: '/principal-360-results',       label: 'Principal 360 Results' },
     // For School Principal (school-level appraisal/KPI + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
     { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
-    { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
-    { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'My Coaching' },
-    { key: 'ai-maturity-self-assessment',     href: '/ai-maturity-self-assessment',     label: 'AI Maturity Self-Assessment' },
+    { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI Entry' },
+    { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'Principal Coaching' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'AI Validity Assessment' },
+    { key: 'ai-maturity-self-assessment',     href: '/ai-maturity-self-assessment',     label: 'AI Maturity Assessment' },
     { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
     { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
-    { key: 'surveys',                         href: '/surveys',                         label: 'My Surveys' },
     // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
     { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
     { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
@@ -758,6 +757,7 @@ const NAV_ITEMS = [
     { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
     { key: 'admin-pageacc-ext',   href: 'https://centralhub.eduversal.org/page-access', label: 'Page Access ↗' },
     { key: 'admin-ch-ext',        href: 'https://centralhub.eduversal.org',             label: 'Central Hub ↗' },
+    { key: 'surveys',             href: '/surveys',                                     label: 'Shared Surveys' },
     { key: 'settings',            href: '/settings',                                    label: 'Settings' },
   ]},
   { group: 'principal', label: 'School Leaders', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
