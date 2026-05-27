@@ -213,36 +213,65 @@ body { }
    Two rows: popover-active chips (CSLS/ES/PMD) + framework name tags.
    Chips render light-on-dark since domain header is a dark gradient.
    cambridge-crossref.js auto-wires .csls-pill / [data-es-ref] /
-   .perm-pill at runtime. */
-.dh-anchors { width:100%; display:flex; flex-direction:column; gap:6px; margin-top:8px; }
-.dh-anchor-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+   .perm-pill at runtime.
+
+   Layout matches .dh-bottom horizontal padding (28 px) so anchor stripe
+   aligns with the domain title + KPI stats above. Slightly darker bg
+   distinguishes anchor section from KPI bar visually. */
+.dh-anchors {
+  padding: 14px 28px 16px;
+  background: rgba(0,0,0,.18);
+  display: flex; flex-direction: column; gap: 8px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.dh-anchor-row {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+  align-items: start;
+}
 .dh-anchor-label {
-  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  color: rgba(255,255,255,.65); margin-right: 4px; white-space: nowrap;
+  font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(255,255,255,.78);
+  padding-top: 4px;
+  white-space: nowrap;
+}
+.dh-anchor-chips {
+  display: flex; flex-wrap: wrap; gap: 6px; min-width: 0;
 }
 .dh-anchors .csls-pill,
 .dh-anchors .es-pill,
 .dh-anchors .perm-pill {
-  display: inline-block; padding: 2px 8px; border-radius: 99px;
-  font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 600;
-  background: rgba(255,255,255,0.18); color: #fff;
-  border: 1px solid rgba(255,255,255,0.22);
+  display: inline-block; padding: 3px 10px; border-radius: 99px;
+  font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 700;
+  background: rgba(255,255,255,0.22); color: #fff;
+  border: 1px solid rgba(255,255,255,0.32);
   transition: background .12s, border-color .12s;
+  letter-spacing: .02em;
 }
 .dh-anchors .csls-pill:hover,
 .dh-anchors .es-pill:hover,
 .dh-anchors .perm-pill:hover {
-  background: rgba(255,255,255,0.32);
-  border-color: rgba(255,255,255,0.45);
+  background: rgba(255,255,255,0.36);
+  border-color: rgba(255,255,255,0.55);
 }
 .dh-fw-tag {
-  display: inline-flex; align-items: center; gap: 4px;
-  font-size: 10.5px; font-weight: 500; padding: 2px 8px; border-radius: 6px;
-  background: rgba(0,0,0,0.14); color: rgba(255,255,255,0.92);
-  border: 1px solid rgba(255,255,255,0.14);
+  display: inline-flex; align-items: baseline; gap: 5px;
+  font-size: 10.5px; font-weight: 500; padding: 2px 9px; border-radius: 5px;
+  background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.08);
 }
 .dh-fw-tag-edition {
-  font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.6); margin-left: 2px;
+  font-size: 9.5px; font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  font-style: italic;
+}
+
+/* Mobile: collapse to single column, label sits above its chip row. */
+@media (max-width: 600px) {
+  .dh-anchors { padding: 12px 18px 14px; }
+  .dh-anchor-row { grid-template-columns: 1fr; gap: 4px; }
+  .dh-anchor-label { padding-top: 0; }
 }
 
 /* ===== ASPECT CARD ===== */
@@ -1041,10 +1070,10 @@ function renderDomainAnchors(domain) {
   }).join('');
 
   const anchorRow = (cslsChips || esChips || pmdChips)
-    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Anchored to</span>${cslsChips}${esChips}${pmdChips}</div>`
+    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Anchored to</span><div class="dh-anchor-chips">${cslsChips}${esChips}${pmdChips}</div></div>`
     : '';
   const fwRow = fwTags
-    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Frameworks</span>${fwTags}</div>`
+    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Frameworks</span><div class="dh-anchor-chips">${fwTags}</div></div>`
     : '';
 
   return (anchorRow || fwRow) ? `<div class="dh-anchors">${anchorRow}${fwRow}</div>` : '';
