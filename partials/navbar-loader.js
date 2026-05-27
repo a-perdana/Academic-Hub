@@ -724,30 +724,32 @@ const NAV_ITEMS = [
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
   ]},
   { group: 'admin', label: 'Admin', adminOnly: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', items: [
-    // Dashboards (moved from Dashboards dropdown 2026-05-27 — admin-only surfaces)
-    { key: 'school-self-appraisal',       href: '/school-self-appraisal',       label: 'School Appraisal' },
-    { key: 'school-performance-kpi',      href: '/school-performance-kpi',      label: 'School KPI' },
-    { key: 'surveys',                     href: '/surveys',                     label: 'My Surveys' },
-    { key: 'ai-prompts',                  href: '/ai-prompts',                  label: 'AI Prompts' },
-    { key: 'student-roster',              href: '/student-roster',              label: 'Student Roster' },
-    { key: 'school-assessment',           href: '/school-assessment',           label: 'School Assessment' },
-    // Appraisals & Evaluation (moved from PD 2026-05-27 — appraiser tools)
-    { key: 'teacher-appraisal-entry',         href: '/teacher-appraisal-entry',         label: 'Teacher Appraisal Entry' },
-    { key: 'teacher-walkthrough-entry',       href: '/teacher-walkthrough-entry',       label: 'Teacher Walkthrough' },
-    { key: 'appraiser-calibration',           href: '/appraiser-calibration',           label: 'Appraisal Calibration' },
-    { key: 'my-observations',                 href: '/my-observations',                 label: 'My Observations' },
-    { key: 'teacher-kpi-evaluation',          href: '/teacher-kpi-evaluation',          label: 'Teacher KPI Evaluation' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
-    // Frameworks (moved from PD 2026-05-27)
-    { key: 'competency-framework',            href: '/competency-framework',            label: 'Competency Framework' },
-    // Principal Evaluation suite (moved from School Leaders 2026-05-21)
+    // Ordered to mirror the desktop Admin dropdown's semantic role-grouping
+    // (2026-05-27): FR-primary → SP-primary → AC-primary → Cross-hub & Settings.
+    //
+    // For Foundation Representative (Principal Evaluation suite — FR-only entry):
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
     { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
     { key: 'principal-360-results',       href: '/principal-360-results',       label: '360° Results' },
-    { key: 'principal-coaching-view',     href: '/principal-coaching-view',     label: 'My Coaching' },
-    { key: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', label: 'AI Maturity Self-Assessment' },
-    // Cross-hub shortcuts
+    // For School Principal (school-level appraisal/KPI + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
+    { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
+    { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
+    { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'My Coaching' },
+    { key: 'ai-maturity-self-assessment',     href: '/ai-maturity-self-assessment',     label: 'AI Maturity Self-Assessment' },
+    { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
+    { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
+    { key: 'surveys',                         href: '/surveys',                         label: 'My Surveys' },
+    { key: 'ai-prompts',                      href: '/ai-prompts',                      label: 'AI Prompts' },
+    // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
+    { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
+    { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
+    { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
+    { key: 'my-observations',             href: '/my-observations',             label: 'My Observations' },
+    { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
+    // Cross-hub shortcuts + Settings (academic_admin-only, no sub-role audience):
     { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
     { key: 'admin-pageacc-ext',   href: 'https://centralhub.eduversal.org/page-access', label: 'Page Access ↗' },
     { key: 'admin-ch-ext',        href: 'https://centralhub.eduversal.org',             label: 'Central Hub ↗' },
