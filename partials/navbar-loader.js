@@ -704,17 +704,8 @@ const NAV_ITEMS = [
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
   ]},
   { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
-    // Appraisals & Evaluation (audience: SP + AC + CC)
-    { key: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', label: 'Teacher Appraisal Entry' },
-    { key: 'teacher-walkthrough-entry',href: '/teacher-walkthrough-entry',label: 'Teacher Walkthrough' },
-    { key: 'appraiser-calibration',   href: '/appraiser-calibration',   label: 'Appraisal Calibration' },
-    { key: 'my-observations',         href: '/my-observations',         label: 'My Observations' },
-    { key: 'teacher-kpi-evaluation',  href: '/teacher-kpi-evaluation',  label: 'Teacher KPI Evaluation' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
-    // Frameworks & References (audience: everyone)
-    { key: 'competency-framework',    href: '/competency-framework',    label: 'Competency Framework' },
+    // Frameworks & References (audience: everyone — appraiser tools + Competency Framework moved to Admin 2026-05-27)
     { key: 'references',              href: '/references',              label: 'References' },
-    { key: 'ai-prompts',              href: '/ai-prompts',              label: 'AI Prompts' },
     { key: 'handbook',                href: '/handbook',                label: 'Handbooks Browser' },
     // Featured for Leadership (2026-05-19)
     { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                        label: 'Principal Induction' },
@@ -740,6 +731,15 @@ const NAV_ITEMS = [
     { key: 'ai-prompts',                  href: '/ai-prompts',                  label: 'AI Prompts' },
     { key: 'student-roster',              href: '/student-roster',              label: 'Student Roster' },
     { key: 'school-assessment',           href: '/school-assessment',           label: 'School Assessment' },
+    // Appraisals & Evaluation (moved from PD 2026-05-27 — appraiser tools)
+    { key: 'teacher-appraisal-entry',         href: '/teacher-appraisal-entry',         label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-walkthrough-entry',       href: '/teacher-walkthrough-entry',       label: 'Teacher Walkthrough' },
+    { key: 'appraiser-calibration',           href: '/appraiser-calibration',           label: 'Appraisal Calibration' },
+    { key: 'my-observations',                 href: '/my-observations',                 label: 'My Observations' },
+    { key: 'teacher-kpi-evaluation',          href: '/teacher-kpi-evaluation',          label: 'Teacher KPI Evaluation' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Validate AI Self-Assessments' },
+    // Frameworks (moved from PD 2026-05-27)
+    { key: 'competency-framework',            href: '/competency-framework',            label: 'Competency Framework' },
     // Principal Evaluation suite (moved from School Leaders 2026-05-21)
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
