@@ -693,6 +693,7 @@ const NAV_ITEMS = [
     // Documents
     { key: 'documents',            href: '/documents',            label: 'Documents', badgeId: 'docBadge', badgeCount: true },
     { key: 'library',              href: '/library',              label: 'Resource Library' },
+    { key: 'ai-prompts',           href: '/ai-prompts',           label: 'Prompt Library' },
   ]},
   { group: 'curriculum', label: 'Curriculum', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Mapping & Coverage
@@ -704,19 +705,25 @@ const NAV_ITEMS = [
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
   ]},
   { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
-    // Frameworks & References (audience: everyone — appraiser tools + Competency Framework moved to Admin 2026-05-27)
+    // Handbooks & References (audience: everyone — AI Prompts moved to Communications > Prompt Library 2026-05-27)
     { key: 'references',              href: '/references',              label: 'References' },
-    { key: 'handbook',                href: '/handbook',                label: 'Handbooks Browser' },
-    // Featured for Leadership (2026-05-19)
-    { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                        label: 'Principal Induction' },
-    { key: 'handbook-fr-90d',              href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',     label: 'Foundation Rep 90 Days' },
+    { key: 'handbook',                href: '/handbook',                label: 'Handbooks' },
+    // Featured for Leadership (2026-05-19; Cambridge Coord / Principal / DSL 90-day guides added 2026-05-27)
+    { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                          label: 'Principal Induction' },
+    { key: 'handbook-fr-90d',              href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',       label: 'Foundation Rep 90 Days' },
     { key: 'handbook-ac-90d',              href: '/handbook?id=eduversal_academic_coordinator_first_90_days_v1', label: 'Academic Coord 90 Days' },
-    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                       label: 'AI Playbook - Subject Leaders' },
-    // Policy & AI (2026-05-19)
-    { key: 'handbook-safeguarding',     href: '/handbook?id=eduversal_safeguarding_and_child_protection_v1',     label: 'Safeguarding & CP' },
-    { key: 'handbook-ai-use',           href: '/handbook?id=eduversal_ai_use_policy_v1',                         label: 'AI Use Policy' },
-    { key: 'handbook-behaviour',        href: '/handbook?id=eduversal_behaviour_and_restorative_practice_v1',   label: 'Behaviour & Restorative' },
-    { key: 'handbook-assessment-guide', href: '/handbook?id=eduversal_assessment_guide_v1',                      label: 'Assessment Guide' },
+    { key: 'handbook-cc-90d',              href: '/handbook?id=eduversal_cambridge_coordinator_first_90_days_v1', label: 'Cambridge Coord 90 Days' },
+    { key: 'handbook-principal-90d',       href: '/handbook?id=eduversal_principal_first_90_days_v1',            label: 'Principal 90 Days' },
+    { key: 'handbook-dsl-90d',             href: '/handbook?id=eduversal_dsl_first_90_days_v1',                  label: 'DSL 90 Days' },
+    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                         label: 'AI Playbook - Subject Leaders' },
+    // Policy & AI (2026-05-19; Digital Citizenship / Anti-Bullying / Attendance added 2026-05-27)
+    { key: 'handbook-safeguarding',        href: '/handbook?id=eduversal_safeguarding_and_child_protection_v1',  label: 'Safeguarding & CP' },
+    { key: 'handbook-ai-use',              href: '/handbook?id=eduversal_ai_use_policy_v1',                      label: 'AI Use Policy' },
+    { key: 'handbook-digital-citizenship', href: '/handbook?id=eduversal_digital_citizenship_policy_v1',         label: 'Digital Citizenship' },
+    { key: 'handbook-behaviour',           href: '/handbook?id=eduversal_behaviour_and_restorative_practice_v1', label: 'Behaviour & Restorative' },
+    { key: 'handbook-anti-bullying',       href: '/handbook?id=eduversal_anti_bullying_policy_v1',               label: 'Anti-Bullying' },
+    { key: 'handbook-assessment-guide',    href: '/handbook?id=eduversal_assessment_guide_v1',                   label: 'Assessment Guide' },
+    { key: 'handbook-attendance',          href: '/handbook?id=eduversal_attendance_policy_v1',                  label: 'Attendance Policy' },
     // School-facing handbooks (seeded 2026-05-17)
     { key: 'school-handbook-teacher',   href: '/handbook?id=eduversal_teacher_handbook_v1',        label: 'Teacher Handbook' },
     { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
@@ -731,7 +738,7 @@ const NAV_ITEMS = [
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
     { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
-    { key: 'principal-360-results',       href: '/principal-360-results',       label: '360° Results' },
+    { key: 'principal-360-results',       href: '/principal-360-results',       label: 'Principal 360 Results' },
     // For School Principal (school-level appraisal/KPI + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
     { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
     { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI' },
