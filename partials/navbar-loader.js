@@ -748,13 +748,11 @@ const NAV_ITEMS = [
     { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
     { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
     { key: 'surveys',                         href: '/surveys',                         label: 'My Surveys' },
-    { key: 'ai-prompts',                      href: '/ai-prompts',                      label: 'AI Prompts' },
     // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
     { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
     { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
     { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
     { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
-    { key: 'my-observations',             href: '/my-observations',             label: 'My Observations' },
     { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
     // Cross-hub shortcuts + Settings (academic_admin-only, no sub-role audience):
     { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
