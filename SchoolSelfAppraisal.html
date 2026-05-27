@@ -8,10 +8,13 @@
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <script type="module" src="auth-guard.js"></script>
+    <link rel="stylesheet" href="/base.css">
     <style>
-/* Page-specific accent override (amber) + 5 domain colors used by the
-   appraisal sidebar pills. Tokens, reset, base typography come from
-   /base.css. */
+/* Page-family: My Work (data-accent="dark"). Canonical .page-hero* /
+   .page-footer* chrome comes from /base.css. Page-local styles below
+   MUST NOT override .page-hero* selectors — root CLAUDE.md Common Mistake #50.
+   Page-specific accent override (amber) + 5 domain colors used by the
+   appraisal sidebar pills. */
 :root {
   --accent:    #b45309;
   --accent-2:  #fef3c7;
@@ -23,6 +26,30 @@
   --d5:#0f766e; --d5-bg:#ccfbf1; --d5-border:#99f6e4;
 }
 body { padding-top: 62px; }
+
+/* Canonical hero + body-as-flex-column (body:has(>.page-footer)). The
+   full-height sidebar layout (.page-body) must stay full width as a flex
+   item — without width:100% it shrinks to content. */
+body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .page-body {
+  width: 100%;
+  align-self: stretch;
+}
+.page-hero__inner,
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+/* Canonical .page-footer chrome lives in /base.css. Use induction-mor
+   tint to pair with the dark hero family. */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
 /* ===== LAYOUT ===== */
 .page-body { display:flex; min-height:calc(100vh - 62px); }
@@ -583,8 +610,18 @@ body { padding-top: 62px; }
 .toast-icon { font-size:15px; }
 </style>
 </head>
-<body>
+<body data-page-accent="dark">
 <div id="navbarMount"></div>
+
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · School Quality</p>
+      <h1 class="page-hero__title">School Self-Appraisal</h1>
+      <p class="page-hero__desc">An honest, whole-school review of your provision against the Eduversal Academic Standards. Complete this before an Eduversal quality visit — rate each aspect, attach evidence, and name your strengths and improvement areas.</p>
+    </div>
+  </div>
+</header>
 
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar">
@@ -613,6 +650,36 @@ body { padding-top: 62px; }
     <div id="pageContent" style="display:none;"></div>
   </main>
 </div>
+
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+     MUST be a direct child of <body> for the sticky-via-:has() rule
+     in base.css to fire. -->
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leadership · School Quality</span>
+      <h2 class="page-footer__cta-title">An honest self-appraisal makes the visit useful.</h2>
+      <p class="page-footer__cta-desc">Rate each aspect against the evidence, not the aspiration. The clearer your self-picture, the more focused the Eduversal quality visit — and the more the agreed actions actually move your school forward.</p>
+      <a href="/academic-standards" class="page-footer__cta-btn">Open Academic Standards <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="School Self-Appraisal footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">School Quality</span>
+        <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
+        <a href="/school-performance-kpi" class="page-footer__nav-link">School KPI</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Self-appraisal feeds the Eduversal quality visit · submitted ratings lock for review</span>
+  </div>
+</footer>
 
 <div class="action-bar" id="actionBar" style="display:none;">
   <span class="action-bar-left" id="actionStatus">Unsaved changes</span>

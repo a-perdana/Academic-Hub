@@ -7,6 +7,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%230a0a1a'/><polygon points='10,45 50,65 50,70 10,50' fill='%234e3db8'/><polygon points='90,45 50,65 50,70 90,50' fill='%235a4bd1'/><polygon points='50,25 90,45 50,65 10,45' fill='%236c5ce7'/><line x1='85' y1='46' x2='85' y2='68' stroke='%23ffd93d' stroke-width='4' stroke-linecap='round'/><circle cx='85' cy='72' r='3.5' fill='%23ffd93d'/></svg>">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+<link rel="stylesheet" href="/base.css">
 <link rel="stylesheet" href="competency-framework.css">
 <style>
 /* Page-specific accent override (teal — Knowledge-family). Tokens, reset,
@@ -18,25 +19,24 @@
 }
 body {
   padding-top: 62px;
-  background: #f3f7f6;
   position: relative;
 }
-/* Artistic teal-mint atmosphere — radial wash that echoes the hero accent
-   under the page without competing with card surfaces. Fixed so it follows
-   the viewport, behind everything, never intercepts pointer events
-   (Root CLAUDE.md Common Mistake #22). */
+/* Artistic mor-lavender atmosphere — radial wash that echoes the Knowledge
+   hero accent under the page without competing with card surfaces. Fixed so it
+   follows the viewport, behind everything, never intercepts pointer events
+   (Root CLAUDE.md Common Mistake #22). Canonical body tint (--paper-tinted-mor)
+   comes from base.css via data-page-accent="mor". */
 body::before {
   content: '';
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 55% at 8% 12%, rgba(13,148,136,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 92% 88%, rgba(20,184,166,0.09) 0%, transparent 62%),
-    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(204,251,241,0.45) 0%, transparent 70%),
-    linear-gradient(180deg, #f3f7f6 0%, #f6f9f8 100%);
+    radial-gradient(ellipse 70% 55% at 8% 12%, rgba(108,92,231,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 92% 88%, rgba(124,58,237,0.09) 0%, transparent 62%),
+    radial-gradient(ellipse 80% 70% at 50% 50%, rgba(236,229,246,0.45) 0%, transparent 70%);
 }
 
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 100px; }
-@media (max-width: 768px) { .page-wrap { padding: 20px 20px 80px; } }
+.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 100px; }
+@media (max-width: 760px) { .page-wrap { padding-left: 14px; padding-right: 14px; } }
 
 /* ─── INFO STRIP (hero-altı bilgilendirme — pattern parity with CH competency-admin) ─── */
 .info-strip {
@@ -117,65 +117,23 @@ body::before {
   background: #0d9488; color: #fff; border-color: #0d9488;
 }
 
-/* ─── HERO (CH-canonical .page-hero ported as page-local CSS, teal accent) ─── */
-.page-hero {
-  position: relative; overflow: hidden;
-  padding: 52px 0;
-  color: #fff;
-  background: linear-gradient(135deg, #0f1e1a 0%, #0e3530 55%, #071814 100%);
+/* ─── HERO — canonical .page-hero (mor / Knowledge family).
+   Gradient + KPI layout come from /base.css; page CSS MUST NOT override
+   .page-hero background or KPI layout (root CLAUDE.md Common Mistake #50).
+   Body content rail = 1200px (flex-trap fix: width:100% on every direct
+   body child so they stretch inside body:has(>.page-footer) flex column). ─── */
+body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .page-wrap {
+  width: 100%;
+  align-self: stretch;
 }
-.page-hero::before {
-  content: ''; position: absolute; inset: 0; pointer-events: none;
-  background:
-    radial-gradient(circle at 12% 80%, rgba(13,148,136,0.22) 0%, transparent 48%),
-    radial-gradient(circle at 86% 20%, rgba(20,184,166,0.14) 0%, transparent 48%);
-}
-.page-hero__inner {
-  position: relative; z-index: 1;
-  max-width: 1200px; margin: 0 auto; padding: 0 40px;
-  display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap;
-}
-.page-hero__text { flex: 1 1 0; min-width: 320px; }
-.page-hero__eyebrow {
-  font-size: 11px; font-weight: 600; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(255,255,255,.45);
-  margin-bottom: 12px;
-}
-.page-hero__title {
-  font-family: 'Lora', serif; font-size: 2.1rem; font-weight: 600;
-  color: #fff; line-height: 1.2; margin-bottom: 12px;
-}
-.page-hero__desc {
-  font-size: 14px; color: rgba(255,255,255,.7); line-height: 1.6;
-  max-width: none;
-}
-.page-hero__actions {
-  display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
-  position: relative; z-index: 1;
-}
-.page-hero__kpis {
-  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px; flex: 0 0 auto; width: 360px; margin-left: auto;
-}
-.page-hero__kpi {
-  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14);
-  border-radius: 14px; padding: 16px 20px; min-width: 0;
-}
-.page-hero__kpi--primary {
-  background: rgba(13,148,136,0.20); border-color: rgba(13,148,136,0.4);
-}
-.page-hero__kpi-num {
-  font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
-  font-weight: 600; color: #fff;
-}
-.page-hero__kpi--primary .page-hero__kpi-num { font-size: 2.5rem; }
-.page-hero__kpi-lbl {
-  font-size: 11px; font-weight: 600; letter-spacing: .12em;
-  text-transform: uppercase; color: rgba(255,255,255,.6);
-  margin-top: 8px;
-}
-.page-hero__kpi-sub {
-  font-size: 11px; color: rgba(255,255,255,.45); margin-top: 4px;
+.page-hero__inner,
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .btn-hero {
@@ -188,18 +146,17 @@ body::before {
 .btn-hero-secondary { background: rgba(255,255,255,.1); color: rgba(255,255,255,.92); border: 1px solid rgba(255,255,255,.22); }
 .btn-hero-secondary:hover { background: rgba(255,255,255,.18); }
 
-/* ─── PAGE FOOTER (canonical — teal CTA accent matches hero) ─── */
+/* ─── PAGE FOOTER (canonical — mor CTA accent matches Knowledge hero) ─── */
 .page-footer__cta-btn {
-  background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
-  box-shadow: 0 4px 14px rgba(13,148,136,0.35);
+  background: linear-gradient(135deg, #7c3aed 0%, #5a4bd1 100%);
+  box-shadow: 0 4px 14px rgba(108,92,231,0.35);
 }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(13,148,136,0.48); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.48); }
 
-@media (max-width: 768px) {
-  .page-hero { padding: 36px 0; }
-  .page-hero__inner { padding: 0 20px; flex-direction: column; gap: 20px; }
-  .page-hero__title { font-size: 1.7rem; }
-  .page-hero__kpis { width: 100%; margin-left: 0; }
+@media (max-width: 760px) {
+  .page-hero__inner,
+  .page-footer__inner,
+  .page-footer__meta { padding-left: 14px; padding-right: 14px; }
 }
 
 /* ─── GROUNDED-IN BAND (provenance — hero-continuation) ─── */
@@ -546,7 +503,7 @@ body::before {
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-page-accent="mor">
 
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
@@ -570,7 +527,7 @@ body::before {
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="teal">
+<header class="page-hero" data-accent="mor">
   <div class="page-hero__inner">
     <div class="page-hero__text">
       <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>

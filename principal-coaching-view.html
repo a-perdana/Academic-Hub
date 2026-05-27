@@ -8,24 +8,42 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/base.css">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <style>
-:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8;
-  --ink: #1f2937; --ink-2: #4b5563; --ink-3: #6b7280;
-  --border: #e5e7eb; --paper: #fafafa; --white: #ffffff;
-  --shadow-sm: 0 1px 2px rgba(15,23,42,0.04), 0 1px 3px rgba(15,23,42,0.06);
-}
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base typography,
+   AND canonical .page-hero* / .page-footer* chrome come from /base.css.
+   Page-local styles below MUST NOT override .page-hero* selectors —
+   root CLAUDE.md Common Mistake #50. */
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8; }
 * { box-sizing: border-box; }
-body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-serif; background: var(--paper); color: var(--ink); }
-.page-wrap { max-width: 980px; margin: 0 auto; padding: 28px 20px 80px; }
+body { padding-top: 62px; }
 
-.page-header { background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%); color: #fff; padding: 32px 28px; border-radius: 16px; margin-bottom: 24px; position: relative; overflow: hidden; }
-.page-header::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%); }
-.page-header > * { position: relative; z-index: 1; }
-.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
-.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin: 0 0 6px; }
-.page-header p { font-size: 14px; color: rgba(255,255,255,0.78); max-width: 700px; margin: 0; }
+/* Body content rail = 1200px (canonical). Flex-trap fix: width:100% on
+   every direct body child so they stretch instead of shrinking inside
+   body:has(>.page-footer) sticky-footer flex column. */
+body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .page-wrap {
+  width: 100%;
+  align-self: stretch;
+}
+.page-hero__inner,
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 80px; }
+
+/* Canonical .page-footer chrome lives in /base.css. Use induction-mor
+   tint to pair with the dark hero family. */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
 .session-card { background: var(--white); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 16px; box-shadow: var(--shadow-sm); position: relative; }
 .session-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 14px 0 0 14px; background: linear-gradient(180deg, var(--accent), var(--accent-dk)); }
@@ -49,25 +67,63 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
 .empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
 .loading-state, .access-denied { text-align: center; padding: 80px 20px; color: var(--ink-3); }
 .access-denied h2 { font-family: 'Lora', serif; color: #991b1b; margin-bottom: 8px; }
-@media (max-width: 720px) {
-  .page-header { padding: 22px 18px; }
+@media (max-width: 760px) {
+  .page-hero__inner,
+  .page-footer__inner,
+  .page-footer__meta,
+  .page-wrap { padding-left: 14px; padding-right: 14px; }
   .session-card { padding: 18px 16px; }
   .session-head { flex-direction: column; gap: 4px; align-items: flex-start; }
   .commit-item { grid-template-columns: 1fr; gap: 4px; }
 }
 </style>
 </head>
-<body style="display:none">
+<body data-page-accent="dark">
 <div id="navbarMount"></div>
 
-<div class="page-wrap">
-  <div class="page-header">
-    <div class="eyebrow">Principal Coaching · Coachee view</div>
-    <h1>My Coaching</h1>
-    <p>Read-only view of your coaching sessions. Each session's mentor notes, commitments, and the next steps you agreed on. Personal check-in is visible only to you and your mentor.</p>
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · Principal Coaching</p>
+      <h1 class="page-hero__title">My Coaching</h1>
+      <p class="page-hero__desc">Read-only view of the coaching sessions logged by your Eduversal Director mentor. Each session's notes, commitments, and agreed next steps are confidential — visible only to you and your mentor.</p>
+    </div>
   </div>
+</header>
+
+<main class="page-wrap">
   <div id="content"><div class="loading-state">Loading…</div></div>
-</div>
+</main>
+
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+     MUST be a direct child of <body> for the sticky-via-:has() rule
+     in base.css to fire. -->
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School Leadership · Principal Development</span>
+      <h2 class="page-footer__cta-title">Coaching is private space to think out loud.</h2>
+      <p class="page-footer__cta-desc">Revisit your commitments between sessions and track the next steps you agreed with your mentor. Pair coaching with your year-1 induction to keep the whole development arc in view.</p>
+      <a href="/my-induction" class="page-footer__cta-btn">Open My Induction <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="My Coaching footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">My Hub</span>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Coaching confidentiality (Charter NN5) · sessions logged by your Eduversal Director mentor</span>
+  </div>
+</footer>
 
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>

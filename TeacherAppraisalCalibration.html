@@ -20,38 +20,52 @@
 <script src="partials/navbar-loader.js"></script>
 <script src="schools_compact.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/base.css">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-.hero {
-  background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 60%, #1d4ed8 100%);
-  color: #fff; padding: 0; position: relative; overflow: hidden;
+/* ── HERO (canonical .page-hero from /base.css · dark family) ──
+   Page CSS MUST NOT override .page-hero background or KPI layout
+   (root CLAUDE.md Common Mistake #50). Body content rail = 1200px;
+   width:100% on direct body children avoids the body:has(>.page-footer)
+   flex-column shrink trap. ───────────────────────────────────── */
+body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .page-wrap {
+  width: 100%;
+  align-self: stretch;
 }
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 80% 50%, rgba(255,255,255,.07) 0%, transparent 60%);
-  pointer-events: none;
-}
-.hero-inner {
-  max-width: 960px; margin: 0 auto; padding: 32px 32px 28px;
-  position: relative; z-index: 1;
-}
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
-  border-radius: 20px; padding: 4px 12px; font-size: .72rem; font-weight: 600;
-  margin-bottom: 10px; letter-spacing: .02em;
-}
-.hero h1 { font-size: 1.6rem; font-weight: 800; line-height: 1.2; }
-.hero-sub { font-size: .85rem; opacity: .82; margin-top: 5px; max-width: 560px; }
-.hero-notice {
-  margin-top: 14px; display: inline-flex; align-items: center; gap: 8px;
-  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
-  border-radius: 8px; padding: 7px 14px; font-size: .77rem; font-weight: 600;
+.page-hero__inner,
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
 }
 
-.page-wrap { max-width: 960px; margin: 0 auto; padding: 28px 32px 100px; }
+/* Hero notice pill (page-local — target page-local class, never .page-hero*) */
+.hero-notice {
+  margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 8px; padding: 7px 14px; font-size: .77rem; font-weight: 600; color: #fff;
+}
+
+/* Canonical .page-footer chrome lives in /base.css. Induction-mor
+   tint pairs with the dark hero family. */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+@media (max-width: 760px) {
+  .page-hero__inner,
+  .page-footer__inner,
+  .page-footer__meta,
+  .page-wrap { padding-left: 14px; padding-right: 14px; }
+}
+
+.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 100px; }
 
 /* Mode switcher */
 .mode-tabs {
@@ -361,18 +375,21 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 </style>
 </head>
-<body>
+<body data-page-accent="dark">
 
 <div id="navbarMount"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">&#x1F3AF; Appraiser Calibration</div>
-    <h1>Inter-Rater Reliability<br>Calibration Session</h1>
-    <div class="hero-sub">Score each lesson vignette independently, compare with expert consensus, and track your calibration status. Complete all scenarios before conducting formal appraisals.</div>
-    <div class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</div>
+<!-- HERO (canonical .page-hero · My Work / dark family) -->
+<header class="page-hero" data-accent="dark">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
+      <h1 class="page-hero__title">Appraisal Calibration</h1>
+      <p class="page-hero__desc">Compare your scoring with other appraisers and expert consensus to keep appraisals fair across the network. Score each lesson vignette independently, then check your inter-rater agreement. Complete all scenarios before conducting formal appraisals.</p>
+      <span class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</span>
+    </div>
   </div>
-</div>
+</header>
 
 <div class="page-wrap">
 
@@ -405,6 +422,37 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   </div>
 
 </div>
+
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+     MUST be a direct child of <body> for the sticky-via-:has() rule
+     in base.css to fire. -->
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Appraisal · Calibration</span>
+      <h2 class="page-footer__cta-title">Calibrated appraisers score the same lesson the same way.</h2>
+      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through every vignette, compare with the expert consensus, and aim for ≥85% adjacent agreement before you run a formal appraisal.</p>
+      <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Appraisal Calibration footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Appraisal</span>
+        <a href="/teacher-appraisal-entry" class="page-footer__nav-link">Teacher Appraisal Entry</a>
+        <a href="/teacher-walkthrough-entry" class="page-footer__nav-link">Teacher Walkthrough</a>
+        <a href="/teacher-kpi-evaluation" class="page-footer__nav-link">Teacher KPI Evaluation</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">References</span>
+        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+        <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Calibration is formative — results saved to your profile only</span>
+  </div>
+</footer>
 
 <script type="module">
 import {
