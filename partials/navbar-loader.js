@@ -682,9 +682,6 @@ const NAV_ITEMS = [
     { key: 'ease-archive',         href: '/ease-archive',          label: 'EASE Archive' },
     { key: 'cambridge-exams',      href: '/cambridge-exams',       label: 'Cambridge Exams' },
     { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
-    // Students Hub bridge — Phase 1.5
-    { key: 'student-roster',       href: '/student-roster',        label: 'Student Roster' },
-    { key: 'school-assessment',    href: '/school-assessment',     label: 'School Assessment' },
   ]},
   { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
     // Calendar
@@ -723,7 +720,7 @@ const NAV_ITEMS = [
     { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                        label: 'Principal Induction' },
     { key: 'handbook-fr-90d',              href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',     label: 'Foundation Rep 90 Days' },
     { key: 'handbook-ac-90d',              href: '/handbook?id=eduversal_academic_coordinator_first_90_days_v1', label: 'Academic Coord 90 Days' },
-    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                       label: 'Leader AI Playbook' },
+    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                       label: 'AI Playbook - Subject Leaders' },
     // Policy & AI (2026-05-19)
     { key: 'handbook-safeguarding',     href: '/handbook?id=eduversal_safeguarding_and_child_protection_v1',     label: 'Safeguarding & CP' },
     { key: 'handbook-ai-use',           href: '/handbook?id=eduversal_ai_use_policy_v1',                         label: 'AI Use Policy' },
@@ -736,6 +733,13 @@ const NAV_ITEMS = [
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
   ]},
   { group: 'admin', label: 'Admin', adminOnly: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', items: [
+    // Dashboards (moved from Dashboards dropdown 2026-05-27 — admin-only surfaces)
+    { key: 'school-self-appraisal',       href: '/school-self-appraisal',       label: 'School Self-Appraisal' },
+    { key: 'school-performance-kpi',      href: '/school-performance-kpi',      label: 'School KPI' },
+    { key: 'surveys',                     href: '/surveys',                     label: 'My Surveys' },
+    { key: 'ai-prompts',                  href: '/ai-prompts',                  label: 'AI Prompts' },
+    { key: 'student-roster',              href: '/student-roster',              label: 'Student Roster' },
+    { key: 'school-assessment',           href: '/school-assessment',           label: 'School Assessment' },
     // Principal Evaluation suite (moved from School Leaders 2026-05-21)
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
