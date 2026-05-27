@@ -6,39 +6,72 @@
 <title>School Assessment — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%236c5ce7'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="/base.css">
 <style>
-  body { font-family: 'DM Sans', sans-serif; background: var(--paper); margin: 0; color: var(--ink); padding-top: 62px; }
-  .hero { background: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #6c5ce7 100%); color: #fff; padding: 32px 40px; }
-  .hero-inner { max-width: 1180px; margin: 0 auto; }
-  .hero h1 { font-family: 'Lora', serif; font-size: 1.7rem; margin: 6px 0 4px; }
-  .hero p { color: rgba(255,255,255,.78); font-size: .9rem; max-width: 620px; }
-  .page-wrap { max-width: 1180px; margin: 0 auto; padding: 28px 32px 80px; }
+/* Page-family: My Work (data-accent="dark"). Tokens, reset, base
+   typography, AND canonical .page-hero* / .page-footer* chrome come
+   from /base.css. Page-local styles below MUST NOT override
+   .page-hero* selectors — root CLAUDE.md Common Mistake #50. */
+:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
+body { padding-top: 62px; }
 
-  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 22px; }
-  .stat-card { background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 14px; }
-  .stat-num { font-family: 'Lora', serif; font-size: 1.7rem; line-height: 1; }
-  .stat-lbl { font-size: 11.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; margin-top: 6px; }
+/* Body content rail = 1200px (canonical). Flex-trap fix: width:100% on
+   every direct body child so they stretch instead of shrinking inside
+   body:has(>.page-footer) sticky-footer flex column. See memory
+   feedback_references_three_rails_1200. */
+body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .page-wrap {
+  width: 100%;
+  align-self: stretch;
+}
+.page-hero__inner,
+.page-footer__inner,
+.page-footer__meta {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+.page-wrap {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 28px 0 80px;
+}
 
-  .toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
-  .toolbar select { padding: 8px 12px; font-family: inherit; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: #fff; }
+.toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow-sm); }
+.toolbar select { padding: 8px 12px; font-family: inherit; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--paper); }
 
-  .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-  .class-card { background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 16px; }
-  .class-name { font-weight: 600; font-size: 1rem; }
-  .class-meta { font-size: 11.5px; color: var(--ink-3); margin: 4px 0 12px; }
-  .bar { height: 8px; background: #f3f4f6; border-radius: 99px; overflow: hidden; margin: 10px 0; }
-  .bar > div { height: 100%; background: linear-gradient(90deg, #6c5ce7, #0891b2); }
-  .row-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 12px; }
-  .row-stats > div { background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: center; }
-  .row-stats > div strong { display: block; font-family: 'Lora', serif; font-size: 1.05rem; }
+.class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+.class-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
+.class-card:hover { box-shadow: 0 8px 28px rgba(108,92,231,.14); transform: translateY(-2px); }
+.class-name { font-weight: 600; font-size: 1rem; }
+.class-meta { font-size: 11.5px; color: var(--ink-3); margin: 4px 0 12px; }
+.bar { height: 8px; background: #f3f4f6; border-radius: 99px; overflow: hidden; margin: 10px 0; }
+.bar > div { height: 100%; background: linear-gradient(90deg, #6c5ce7, #0891b2); }
+.row-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 12px; }
+.row-stats > div { background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: center; }
+.row-stats > div strong { display: block; font-family: 'Lora', serif; font-size: 1.05rem; }
 
-  .empty { text-align: center; padding: 60px 20px; color: var(--ink-3); }
-  .empty-title { font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
-  .access-warn { padding: 14px 18px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; border-radius: 10px; margin-bottom: 18px; font-size: 13px; }
+.empty { text-align: center; padding: 60px 20px; color: var(--ink-3); background: var(--white); border: 1px solid var(--border); border-radius: 12px; }
+.empty-title { font-weight: 600; color: var(--ink-2); margin-bottom: 6px; }
+.access-warn { padding: 14px 18px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; border-radius: 10px; margin-bottom: 18px; font-size: 13px; }
+
+/* Canonical .page-footer chrome lives in /base.css. Use induction-mor
+   tint to pair with the dark hero family. */
+.page-footer { background: var(--footer-grad-induction); }
+.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
+.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+
+@media (max-width: 760px) {
+  .page-hero__inner,
+  .page-footer__inner,
+  .page-footer__meta,
+  .page-wrap { padding-left: 14px; padding-right: 14px; }
+}
 </style>
 </head>
-<body>
+<body data-page-accent="dark">
   <script src="firebase-config.js"></script>
   <script>
     if (!window.ENV) window.ENV = {
@@ -54,18 +87,35 @@
   <div id="navbarMount"></div>
   <script src="partials/navbar-loader.js"></script>
 
-  <header class="hero">
-    <div class="hero-inner">
-      <div style="font-size:.7rem; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.45); margin-bottom:8px;">School-wide insights</div>
-      <h1>School Assessment</h1>
-      <p>Chapter mastery + EASE growth roll-up across every Year 7–8 class in your school. Spot under-performing classes early and direct the right intervention.</p>
+  <header class="page-hero" data-accent="dark">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
+        <h1 class="page-hero__title">School Assessment</h1>
+        <p class="page-hero__desc">Chapter mastery + EASE growth roll-up across every Year 7–8 class in your school. Spot under-performing classes early and direct the right intervention.</p>
+      </div>
+      <div class="page-hero__kpis" id="heroKpis">
+        <div class="page-hero__kpi page-hero__kpi--primary">
+          <div class="page-hero__kpi-num" id="kpiAvg">—</div>
+          <div class="page-hero__kpi-lbl">School average</div>
+          <div class="page-hero__kpi-sub">across all classes</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiPass">—</div>
+          <div class="page-hero__kpi-lbl">Pass rate</div>
+          <div class="page-hero__kpi-sub">of submissions</div>
+        </div>
+        <div class="page-hero__kpi">
+          <div class="page-hero__kpi-num" id="kpiSubmitted">—</div>
+          <div class="page-hero__kpi-lbl">Submissions</div>
+          <div class="page-hero__kpi-sub">tests scored</div>
+        </div>
+      </div>
     </div>
   </header>
 
   <main class="page-wrap">
     <div id="accessWarn" class="access-warn" hidden></div>
-
-    <div class="stat-row" id="statRow"></div>
 
     <div class="toolbar">
       <select id="fSubject">
@@ -88,6 +138,36 @@
 
     <div id="classGrid" class="class-grid"></div>
   </main>
+
+  <!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+       MUST be a direct child of <body> for the sticky-via-:has() rule
+       in base.css to fire. -->
+  <footer class="page-footer" role="contentinfo">
+    <div class="page-footer__inner">
+      <div class="page-footer__cta">
+        <span class="page-footer__cta-eyebrow">School Leadership · Students Hub</span>
+        <h2 class="page-footer__cta-title">Roll-ups guide where attention goes next.</h2>
+        <p class="page-footer__cta-desc">A class slipping below 40 % pass rate needs a conversation with the teacher and the subject leader — not another test. Walk the data into the next coordinators meeting and decide one concrete intervention.</p>
+        <a href="/coordinators-meetings" class="page-footer__cta-btn">Open Coordinators Meetings <span aria-hidden="true">→</span></a>
+      </div>
+      <nav class="page-footer__nav" aria-label="School Assessment footer navigation">
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">Students Hub</span>
+          <a href="/student-roster" class="page-footer__nav-link">Student Roster</a>
+          <a href="/student-survey" class="page-footer__nav-link">Student Surveys</a>
+        </div>
+        <div class="page-footer__nav-group">
+          <span class="page-footer__nav-heading">References</span>
+          <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
+          <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+        </div>
+      </nav>
+    </div>
+    <div class="page-footer__meta">
+      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+      <span class="page-footer__meta-right">Chapter-mastery + EASE growth aggregates · live updates from chapter_test_attempts</span>
+    </div>
+  </footer>
 
   <script type="module">
     import {
@@ -148,13 +228,9 @@
       const networkAvg = allScored.length ? Math.round(allScored.reduce((s, n) => s + n.rawScorePct, 0) / allScored.length) : null;
       const networkPass = allScored.length ? Math.round(allScored.filter(a => a.passed).length / allScored.length * 100) : null;
 
-      document.getElementById('statRow').innerHTML = `
-        <div class="stat-card"><div class="stat-num">${classes.length}</div><div class="stat-lbl">Classes</div></div>
-        <div class="stat-card"><div class="stat-num">${students.length}</div><div class="stat-lbl">Active students</div></div>
-        <div class="stat-card"><div class="stat-num">${allScored.length}</div><div class="stat-lbl">Tests submitted</div></div>
-        <div class="stat-card"><div class="stat-num">${networkAvg == null ? '—' : networkAvg + '%'}</div><div class="stat-lbl">School average</div></div>
-        <div class="stat-card"><div class="stat-num">${networkPass == null ? '—' : networkPass + '%'}</div><div class="stat-lbl">Pass rate</div></div>
-      `;
+      document.getElementById('kpiAvg').textContent = networkAvg == null ? '—' : networkAvg + '%';
+      document.getElementById('kpiPass').textContent = networkPass == null ? '—' : networkPass + '%';
+      document.getElementById('kpiSubmitted').textContent = allScored.length;
 
       // Per-class roll-up
       const filteredClasses = classes.filter(c => !gradeFilter || Number(c.grade) === Number(gradeFilter));

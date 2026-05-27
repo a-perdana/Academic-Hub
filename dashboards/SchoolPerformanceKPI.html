@@ -53,6 +53,7 @@
       background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
       min-height: 100vh;
       color: var(--primary);
+      padding-top: 62px;
       }
 
     /* ── TOAST ── */
@@ -410,6 +411,8 @@
   </style>
 </head>
 <body>
+<div id="navbarMount"></div>
+
 <!-- ─────────── TOAST ─────────── -->
 <div id="toastContainer"></div>
 
@@ -630,6 +633,7 @@
   </div><!-- /pageContent -->
 </div><!-- /page-wrap -->
 
+<script src="partials/navbar-loader.js"></script>
 <script type="module">
 import {
   collection, doc, getDocs, getDoc, setDoc, serverTimestamp, query, orderBy, where
@@ -682,6 +686,10 @@ function sectionIcon(sec) {
 
 // ─── Auth Ready ───────────────────────────────────────────────
 document.addEventListener('authReady', async (e) => {
+
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('school-performance-kpi', { user: window.currentUser, profile: window.userProfile });
+  }
 
   db          = window.db;
   currentUser = window.currentUser;
