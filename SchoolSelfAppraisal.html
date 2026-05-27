@@ -62,40 +62,24 @@ body:has(> .page-footer) > .page-body {
   padding: 0 40px; gap: 4px;
 }
 
-/* ===== HORIZONTAL NAV =====
-   A responsive CARD GRID directly under the info-strip: Overview + the 5
-   domain cards as 6 equal cells. #sidebarDomainBtns uses display:contents
-   so the JS-rendered domain cards become direct grid items alongside the
-   static Overview card (one even grid, no JS change). Wraps from 6→…→1
-   columns as the viewport narrows. */
+/* ===== DOMAIN CARD GRID =====
+   The 5 domain cards as an even row directly under the info-strip — one
+   line on desktop (5 equal columns), reflowing to 3 / 2 / 1 as the viewport
+   narrows. #sidebarDomainBtns uses display:contents so the JS-rendered
+   cards become direct grid items (no JS change). */
 .domain-sidebar {
-  display:grid; grid-template-columns:repeat(auto-fill, minmax(190px, 1fr));
+  display:grid; grid-template-columns:repeat(5, 1fr);
   gap:12px; margin-top:22px;
 }
 #sidebarDomainBtns { display:contents; }
-/* Section labels / old vertical widgets no longer used in the grid. */
+/* Old vertical-nav scaffolding no longer used. */
 .sidebar-section-label, .nav-divider { display:none; }
 
-/* Overview card — matches the domain-card footprint. */
-.overview-nav-card {
-  display:flex; flex-direction:column; align-items:flex-start; gap:6px;
-  border:1.5px solid var(--border); background:var(--white);
-  border-radius:13px; padding:14px 14px 16px; min-height:104px;
-  cursor:pointer; text-align:left; font-family:inherit;
-  transition:all .2s;
-}
-.overview-nav-card:hover { box-shadow:var(--shadow-sm); transform:translateY(-2px); }
-.overview-nav-card.active { border-color:var(--accent); background:var(--accent-2); box-shadow:var(--shadow-sm); }
-.onc-icon {
-  width:34px; height:34px; border-radius:9px; display:flex; align-items:center; justify-content:center;
-  background:var(--paper); color:var(--ink-3);
-}
-.overview-nav-card.active .onc-icon { background:#fff; color:var(--accent-dk); }
-.onc-title { font-size:14px; font-weight:700; color:var(--ink); line-height:1.25; }
-.overview-nav-card.active .onc-title { color:var(--accent-dk); }
-.onc-sub { font-size:11px; color:var(--ink-3); font-weight:500; }
+@media (max-width:1080px) { .domain-sidebar { grid-template-columns:repeat(3, 1fr); } }
+@media (max-width:760px)  { .domain-sidebar { grid-template-columns:repeat(2, 1fr); } }
+@media (max-width:460px)  { .domain-sidebar { grid-template-columns:1fr; } }
 
-/* Domain card — even grid cell (one of the 6). */
+/* Domain card — even grid cell. */
 .domain-nav-card {
   display:flex; flex-direction:column; min-height:104px;
   border-radius:13px;
@@ -140,11 +124,11 @@ body:has(> .page-footer) > .page-body {
 .info-strip__pill--progress .sop-pct { font-weight:800; color:#4c1d95; }
 .info-strip__pill--progress .sop-count { color:#5a4bd1; font-weight:600; }
 
-/* The card grid reflows by itself (auto-fill). On phones tighten the rail
-   padding + drop the minimum so cards sit 2-up / 1-up cleanly. */
+/* Rail padding tightens on phones (grid columns handled by the breakpoints
+   above the domain-card rules). */
 @media (max-width:768px) {
   .page-body { padding:0 16px; }
-  .domain-sidebar { grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:10px; }
+  .domain-sidebar { gap:10px; }
 }
 
 /* ===== MAIN =====
@@ -235,6 +219,14 @@ body:has(> .page-footer) > .page-body {
 .field-block textarea:disabled { opacity:.6; background:var(--paper); }
 
 /* ===== DOMAIN PANEL ===== */
+.back-to-overview {
+  display:inline-flex; align-items:center; gap:6px;
+  margin-bottom:14px; padding:7px 13px 7px 10px;
+  background:var(--white); border:1.5px solid var(--border); border-radius:9px;
+  font-family:inherit; font-size:12.5px; font-weight:600; color:var(--ink-2);
+  cursor:pointer; transition:all .15s;
+}
+.back-to-overview:hover { background:var(--accent-2); color:var(--accent-dk); border-color:var(--accent-2); transform:translateX(-2px); }
 .domain-header {
   border-radius:16px; margin-bottom:24px; overflow:hidden;
   box-shadow:var(--shadow);
@@ -730,14 +722,7 @@ body:has(> .page-footer) > .page-body {
 </div>
 
 <div class="page-body">
-  <nav class="domain-sidebar" id="domainSidebar" aria-label="Appraisal sections">
-    <button class="overview-nav-card active" id="overviewNavBtn">
-      <div class="onc-icon" aria-hidden="true">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-      </div>
-      <div class="onc-title">Overview</div>
-      <div class="onc-sub">All domains</div>
-    </button>
+  <nav class="domain-sidebar" id="domainSidebar" aria-label="Appraisal domains">
     <div id="sidebarDomainBtns"></div>
   </nav>
 
@@ -1411,6 +1396,10 @@ function renderDomain(domainId) {
   }).join('');
 
   return `
+    <button type="button" class="back-to-overview" onclick="window.__switchDomain('overview')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Back to overview
+    </button>
     <div class="domain-header" style="background:linear-gradient(135deg,${col},${col}dd);">
       <div class="dh-top">
         <div class="dh-icon" style="color:#fff;">${domain.icon}</div>
@@ -1599,7 +1588,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   isReviewed = appraisal.status === 'reviewed';
   buildSidebar();
 
-  document.getElementById('overviewNavBtn').addEventListener('click', () => switchView('overview'));
+  // Return-to-overview is provided by the "← Back to overview" link inside
+  // each domain panel (see renderDomain) — the standalone Overview tile was
+  // removed so the domain cards read as one even grid. Guard kept defensive.
+  document.getElementById('overviewNavBtn')?.addEventListener('click', () => switchView('overview'));
 
   const actionBar = document.getElementById('actionBar');
   if (!isReviewed && appraisal.status !== 'submitted') actionBar.style.display = 'flex';

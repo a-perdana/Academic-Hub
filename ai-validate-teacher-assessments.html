@@ -230,7 +230,7 @@ body:has(> .page-footer) > .page-wrap {
 </style>
 </head>
 <body data-page-accent="dark">
-<div id="navContainer"></div>
+<div id="navbarMount"></div>
 
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
@@ -344,7 +344,10 @@ let state = {
 };
 
 // AH dispatches authReady on document, not window (mirrors TH + CH)
-document.addEventListener('authReady', async () => {
+document.addEventListener('authReady', async ({ detail } = {}) => {
+  if (typeof window.__loadAcademicNavbar === 'function') {
+    window.__loadAcademicNavbar('ai-validate-teacher-assessments', { user: detail?.user, profile: detail?.profile });
+  }
   state.userId = window.currentUser?.uid;
   state.schoolId = window.userProfile?.schoolId || null;
   state.role = window.userProfile?.role_academichub || null;
