@@ -200,6 +200,7 @@ body { }
   background:rgba(0,0,0,.12); flex-wrap:wrap;
 }
 .dh-stat { font-size:12px; opacity:.8; display:flex; align-items:center; gap:6px; font-weight:500; }
+/* Legacy .dh-refs (single row, generic) — superseded by .dh-anchors. */
 .dh-refs { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
 .dh-ref-tag {
   font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px;
@@ -207,6 +208,42 @@ body { }
   text-decoration:none; transition:background .15s;
 }
 .dh-ref-tag:hover { background:rgba(255,255,255,.35); }
+
+/* Domain-level framework anchors (replaces .dh-refs in renderDomain).
+   Two rows: popover-active chips (CSLS/ES/PMD) + framework name tags.
+   Chips render light-on-dark since domain header is a dark gradient.
+   cambridge-crossref.js auto-wires .csls-pill / [data-es-ref] /
+   .perm-pill at runtime. */
+.dh-anchors { width:100%; display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+.dh-anchor-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.dh-anchor-label {
+  font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.65); margin-right: 4px; white-space: nowrap;
+}
+.dh-anchors .csls-pill,
+.dh-anchors .es-pill,
+.dh-anchors .perm-pill {
+  display: inline-block; padding: 2px 8px; border-radius: 99px;
+  font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 600;
+  background: rgba(255,255,255,0.18); color: #fff;
+  border: 1px solid rgba(255,255,255,0.22);
+  transition: background .12s, border-color .12s;
+}
+.dh-anchors .csls-pill:hover,
+.dh-anchors .es-pill:hover,
+.dh-anchors .perm-pill:hover {
+  background: rgba(255,255,255,0.32);
+  border-color: rgba(255,255,255,0.45);
+}
+.dh-fw-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10.5px; font-weight: 500; padding: 2px 8px; border-radius: 6px;
+  background: rgba(0,0,0,0.14); color: rgba(255,255,255,0.92);
+  border: 1px solid rgba(255,255,255,0.14);
+}
+.dh-fw-tag-edition {
+  font-size: 9.5px; font-weight: 400; color: rgba(255,255,255,0.6); margin-left: 2px;
+}
 
 /* ===== ASPECT CARD ===== */
 .aspect-card {
@@ -963,6 +1000,56 @@ function renderOverview() {
     </div>`;
 }
 
+// ===== ESCAPE HELPERS =====
+function escHtml(s) { return String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
+function escAttr(s) { return escHtml(s); }
+
+// ===== DOMAIN FRAMEWORK ANCHORS (per-domain chip strip) =====
+// Renders the structured cambridge_school_leader_refs / eduversal_standard_refs /
+// pmd_refs (popover-active via cambridge-crossref.js) plus the free-text
+// framework name tags (CIS, WASC, NEASC, Danielson, etc.) below the domain
+// header. Source: school-appraisal-framework.json → domain.frameworkAnchors.
+// Domain.references[] remains for back-compat consumers; if frameworkAnchors
+// is missing, fall back to the legacy single-row ref strip.
+function renderDomainAnchors(domain) {
+  const fa = domain.frameworkAnchors;
+  if (!fa) {
+    // Back-compat fallback — single row of generic references.
+    const refTags = (domain.references || []).slice(0, 4).map(r => {
+      const label = String(r).split(/[—:]/)[0].trim().slice(0, 40);
+      return `<span class="dh-fw-tag" title="${escAttr(r)}">${escHtml(label)}</span>`;
+    }).join('');
+    return refTags ? `<div class="dh-anchors"><div class="dh-anchor-row">${refTags}</div></div>` : '';
+  }
+
+  const cslsChips = (fa.cambridgeSchoolLeaderRefs || []).map(r =>
+    `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)} — click for verbatim text.">CSLS ${escHtml(r)}</span>`
+  ).join('');
+
+  const esChips = (fa.eduversalStandardRefs || []).map(r =>
+    `<span class="es-pill" data-es-ref="${escAttr(r)}" title="Eduversal Academic Standards — Section ${escAttr(r)}. Click for the verbatim madde.">ES ${escHtml(r)}</span>`
+  ).join('');
+
+  const pmdChips = (fa.pmdRefs || []).map(r =>
+    `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency — click for verbatim definition.">${escHtml(r)}</span>`
+  ).join('');
+
+  const fwTags = (fa.frameworks || []).map(f => {
+    const name = f.name || '';
+    const edition = f.edition || '';
+    return `<span class="dh-fw-tag" title="${escAttr(name + ' — ' + edition + (f.publisher ? ' · ' + f.publisher : ''))}">${escHtml(name)}${edition ? `<span class="dh-fw-tag-edition">${escHtml(edition)}</span>` : ''}</span>`;
+  }).join('');
+
+  const anchorRow = (cslsChips || esChips || pmdChips)
+    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Anchored to</span>${cslsChips}${esChips}${pmdChips}</div>`
+    : '';
+  const fwRow = fwTags
+    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Frameworks</span>${fwTags}</div>`
+    : '';
+
+  return (anchorRow || fwRow) ? `<div class="dh-anchors">${anchorRow}${fwRow}</div>` : '';
+}
+
 // ===== RENDER DOMAIN =====
 function renderDomain(domainId) {
   const domain = FRAMEWORK.domains.find(d => d.id === domainId);
@@ -1149,17 +1236,8 @@ function renderDomain(domainId) {
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
           ${davg ? `Avg ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
         </div>
-        <div class="dh-refs">
-          ${FRAMEWORK.meta.references.slice(0,3).map(r => {
-            const name = r.name || r;
-            const url = r.url || null;
-            const label = name.match(/\(([^)]+)\)/)?.[1] || name.split(' ')[0];
-            return url
-              ? `<a class="dh-ref-tag" href="${url}" target="_blank" rel="noopener" title="${name}" style="text-decoration:none;">${label}</a>`
-              : `<span class="dh-ref-tag" title="${name}">${label}</span>`;
-          }).join('')}
-        </div>
       </div>
+      ${renderDomainAnchors(domain)}
     </div>
     ${aspectsHtml}
     <div class="domain-score-bar-wrap" style="border-color:${border};border-left:4px solid ${col};">
