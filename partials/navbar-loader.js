@@ -735,11 +735,13 @@ const NAV_ITEMS = [
     // (2026-05-27): FR-primary → SP-primary → AC-primary → Cross-hub & Settings.
     //
     // For Foundation Representative (Principal Evaluation suite — FR-only entry):
+    { key: 'admin-read-me-foundation-rep', href: '/admin-read-me-foundation-rep', label: 'Read Me First' },
     { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
     { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
     { key: 'principal-360-results',       href: '/principal-360-results',       label: 'Principal 360 Results' },
     // For School Principal (school-level appraisal/KPI + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
+    { key: 'admin-read-me-school-principal',  href: '/admin-read-me-school-principal',  label: 'Read Me First' },
     { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
     { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI Entry' },
     { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'Principal Coaching' },
@@ -748,6 +750,7 @@ const NAV_ITEMS = [
     { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
     { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
     // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
+    { key: 'admin-read-me-academic-coord', href: '/admin-read-me-academic-coord', label: 'Read Me First' },
     { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
     { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
     { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },

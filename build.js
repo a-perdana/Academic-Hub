@@ -82,6 +82,10 @@ const cleanUrls = {
   "MyCertificates.html":            "my-certificates",
   "MyInduction.html":               "my-induction",
   "ReadMeMyHub.html":               "my-hub-read-me",
+  // Admin-dropdown section read-me pages (2026-05-27) — one per sub-role section
+  "ReadMeFoundationRep.html":       "admin-read-me-foundation-rep",
+  "ReadMeSchoolPrincipal.html":     "admin-read-me-school-principal",
+  "ReadMeAcademicCoord.html":       "admin-read-me-academic-coord",
   "welcome.html":                   "welcome",
   "ObservationEntry.html":          "observation-entry",
   "principal-observation-entry.html": "principal-observation-entry",
@@ -194,6 +198,10 @@ const htmlFiles = [
   "MyCertificates.html",
   "MyInduction.html",
   "ReadMeMyHub.html",
+  // Admin-dropdown section read-me pages (2026-05-27)
+  "ReadMeFoundationRep.html",
+  "ReadMeSchoolPrincipal.html",
+  "ReadMeAcademicCoord.html",
   "welcome.html",
   "ObservationEntry.html",
   "principal-observation-entry.html",
