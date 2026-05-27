@@ -86,8 +86,10 @@ body:has(> .page-footer) > .page-wrap {
   cursor: pointer;
 }
 
-/* ── LAYOUT ── */
-.page-wrap { max-width: 900px; margin: 0 auto; padding: 28px 32px 100px; }
+/* ── LAYOUT ──
+   Body content shares the canonical 1200px rail with the hero / info-strip /
+   footer (0 horizontal padding; inner cards carry their own insets). */
+.page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 100px; }
 
 /* ── CARD ── */
 .card {
