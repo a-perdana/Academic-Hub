@@ -608,6 +608,60 @@ body:has(> .page-footer) > .page-body {
 }
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 .toast-icon { font-size:15px; }
+
+/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ───
+   Standalone full-width block between the hero and the .page-body flex
+   row (a flex-row child would break the sidebar layout). Clamps to the
+   1200 rail with matching horizontal padding so it aligns with the hero. */
+.info-strip-rail {
+  max-width: var(--container-max);
+  margin: 22px auto 0;
+  padding: 0 40px;
+}
+.info-strip {
+  padding: 16px 18px;
+  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
+  border: 1px solid #ddd6fe;
+  border-left: 4px solid #6c5ce7;
+  border-radius: 12px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+@media (max-width:768px) { .info-strip-rail { padding: 0 16px; } }
+.info-strip__icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+.info-strip__body { flex: 1; min-width: 0; }
+.info-strip__title { font-size: 15px; font-weight: 700; color: #5a4bd1; margin: 0 0 4px; letter-spacing: -0.01em; }
+.info-strip__lede { font-size: 13px; color: #3730a3; line-height: 1.55; margin: 0 0 12px; }
+.info-strip__lede strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__flow { display: grid; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; counter-reset: flow-step; }
+.info-strip__flow > li {
+  position: relative; padding: 8px 12px 8px 38px;
+  background: rgba(255,255,255,0.7); border: 1px solid #e0e7ff; border-radius: 8px;
+  font-size: 12.5px; color: #3730a3; line-height: 1.5; counter-increment: flow-step;
+}
+.info-strip__flow > li::before {
+  content: counter(flow-step); position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px; border-radius: 50%; background: #6c5ce7; color: #fff;
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.info-strip__flow strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__flow a { color: #6c5ce7; font-weight: 600; text-decoration: none; }
+.info-strip__flow a:hover { text-decoration: underline; }
+.info-strip__callout {
+  display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px;
+  background: #fef3c7; border: 1px solid #fcd34d; border-left: 3px solid #f59e0b;
+  border-radius: 6px; font-size: 12.5px; color: #78350f; line-height: 1.5;
+}
+.info-strip__callout strong { color: #92400e; font-weight: 700; }
+.info-strip__callout-icon { font-size: 16px; flex-shrink: 0; line-height: 1.3; }
+.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(108,92,231,0.25); }
+.info-strip__pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; color: #5a4bd1;
+  background: rgba(255,255,255,0.75); border: 1px solid #ddd6fe;
+  padding: 4px 10px; border-radius: 999px;
+}
+.info-strip__pill b { color: #3730a3; font-weight: 700; }
+@media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
 </style>
 </head>
 <body data-page-accent="dark">
@@ -622,6 +676,23 @@ body:has(> .page-footer) > .page-body {
     </div>
   </div>
 </header>
+
+<div class="info-strip-rail">
+  <aside class="info-strip" role="note" aria-label="How this page works">
+    <div class="info-strip__icon" aria-hidden="true">🏫</div>
+    <div class="info-strip__body">
+      <h2 class="info-strip__title">An honest review of your whole school</h2>
+      <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes — this is the starting picture before a school-quality visit.</p>
+      <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> — be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
+      <div class="info-strip__pills">
+        <span class="info-strip__pill"><b>For:</b> School Principal + Academic Coordinator</span>
+        <span class="info-strip__pill"><b>Scope:</b> Your school</span>
+        <span class="info-strip__pill"><b>Anchor:</b> Eduversal Academic Standards</span>
+      </div>
+    </div>
+  </aside>
+</div>
 
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar">

@@ -373,6 +373,51 @@ body:has(> .page-footer) > .page-wrap {
   .rubric-anchor-grid { grid-template-columns: 1fr; }
   .gc-result-grid { grid-template-columns: 1fr; }
 }
+/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
+.info-strip {
+  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
+  border: 1px solid #ddd6fe;
+  border-left: 4px solid #6c5ce7;
+  border-radius: 12px;
+  padding: 16px 18px;
+  margin: 0 0 24px;
+  display: flex; gap: 14px; align-items: flex-start;
+}
+.info-strip__icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+.info-strip__body { flex: 1; min-width: 0; }
+.info-strip__title { font-size: 15px; font-weight: 700; color: #5a4bd1; margin: 0 0 4px; letter-spacing: -0.01em; }
+.info-strip__lede { font-size: 13px; color: #3730a3; line-height: 1.55; margin: 0 0 12px; }
+.info-strip__lede strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__flow { display: grid; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; counter-reset: flow-step; }
+.info-strip__flow > li {
+  position: relative; padding: 8px 12px 8px 38px;
+  background: rgba(255,255,255,0.7); border: 1px solid #e0e7ff; border-radius: 8px;
+  font-size: 12.5px; color: #3730a3; line-height: 1.5; counter-increment: flow-step;
+}
+.info-strip__flow > li::before {
+  content: counter(flow-step); position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px; border-radius: 50%; background: #6c5ce7; color: #fff;
+  font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+}
+.info-strip__flow strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__flow a { color: #6c5ce7; font-weight: 600; text-decoration: none; }
+.info-strip__flow a:hover { text-decoration: underline; }
+.info-strip__callout {
+  display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px;
+  background: #fef3c7; border: 1px solid #fcd34d; border-left: 3px solid #f59e0b;
+  border-radius: 6px; font-size: 12.5px; color: #78350f; line-height: 1.5;
+}
+.info-strip__callout strong { color: #92400e; font-weight: 700; }
+.info-strip__callout-icon { font-size: 16px; flex-shrink: 0; line-height: 1.3; }
+.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(108,92,231,0.25); }
+.info-strip__pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11.5px; font-weight: 600; color: #5a4bd1;
+  background: rgba(255,255,255,0.75); border: 1px solid #ddd6fe;
+  padding: 4px 10px; border-radius: 999px;
+}
+.info-strip__pill b { color: #3730a3; font-weight: 700; }
+@media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
 </style>
 </head>
 <body data-page-accent="dark">
@@ -392,6 +437,25 @@ body:has(> .page-footer) > .page-wrap {
 </header>
 
 <div class="page-wrap">
+
+  <aside class="info-strip" role="note" aria-label="How this page works">
+    <div class="info-strip__icon" aria-hidden="true">&#x2696;&#xFE0F;</div>
+    <div class="info-strip__body">
+      <h2 class="info-strip__title">Keep your scoring fair and consistent</h2>
+      <p class="info-strip__lede">Compare your scoring with other appraisers. This surfaces where you tend to score higher or lower than your peers, so you can adjust toward a shared standard &mdash; inter-rater reliability, in plain terms.</p>
+      <ol class="info-strip__flow">
+        <li><strong>See your scoring patterns</strong> against the calibrated standard</li>
+        <li><strong>Spot any drift</strong> &mdash; where you run high or low on certain items</li>
+        <li><strong>Adjust</strong> before you write the formal appraisals, not after</li>
+      </ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Calibration is not a competition.</strong> It is about fairness for teachers &mdash; so 'a 4' means the same thing for everyone, whoever the appraiser is.</span></div>
+      <div class="info-strip__pills">
+        <span class="info-strip__pill"><b>For:</b> Academic Coordinator (+ SP)</span>
+        <span class="info-strip__pill"><b>Scope:</b> Cross-appraiser</span>
+        <span class="info-strip__pill"><b>Goal:</b> Inter-rater fairness</span>
+      </div>
+    </div>
+  </aside>
 
   <div class="mode-tabs">
     <button class="mode-tab active" onclick="setMode('solo')">&#x1F464; Solo Calibration</button>
