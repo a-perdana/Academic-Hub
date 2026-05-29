@@ -245,7 +245,13 @@ const PILOT_SLUG_MAP = {
   'my-induction':       'induction',
   'team-induction':     'induction',
   'observation-entry':  'induction',
-  'handbook':           'induction',
+  // NB: 'handbook' is intentionally NOT pilot-gated. The /handbook surface is
+  // the network-wide knowledge base (school-facing handbooks, role-operational
+  // 90-day guides, policy docs, AICF playbooks) — it sits in the "Handbooks &
+  // References" column alongside /references and must stay reachable regardless
+  // of a school's induction-pilot enrolment. Tagging it 'induction' hid every
+  // handbook for any school with induction opted out (all schools currently
+  // have enabled_systems:[] = all off). Removed 2026-05-29.
 };
 
 // Convert window.location.pathname to a clean URL slug (the doc ID
