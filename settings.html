@@ -246,6 +246,28 @@ body:has(> .page-footer) > .settings-wrap {
 .photo-btn:hover { background: #f3f0e8; border-color: #6c5ce7; color: #6c5ce7; }
 .photo-btn.danger { color: #dc2626; }
 .photo-btn.danger:hover { background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.4); color: #dc2626; }
+
+/* Monogram fallback — a clean default avatar in the user's initials, with an
+   accent swatch picker. Ported from Central Hub /settings 2026-05-29. */
+.monogram-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 20px; flex-wrap: wrap; margin-top: 18px; padding-top: 18px;
+  border-top: 1px solid #efeee9;
+}
+.monogram-title { font-size: 13px; font-weight: 600; color: #3a3a4e; }
+.monogram-sub { font-size: 12px; color: #9b978f; margin-top: 2px; }
+.monogram-swatches { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; max-width: 320px; }
+@media (max-width: 560px) { .monogram-swatches { justify-content: flex-start; max-width: none; } }
+.monogram-swatch {
+  width: 40px; height: 40px; border-radius: 50%; border: 2px solid transparent;
+  padding: 0; background: transparent; cursor: pointer; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s, border-color .15s, box-shadow .15s;
+}
+.monogram-swatch:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(108, 92, 231, 0.18); }
+.monogram-swatch.is-selected { border-color: #6c5ce7; box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.18); }
+.monogram-swatch svg { width: 100%; height: 100%; display: block; }
+@media (max-width: 560px) { .monogram-row { flex-direction: column; align-items: flex-start; } }
 .photo-hint {
   font-size: 12px;
   color: #8b8b9e;
@@ -717,6 +739,13 @@ body:has(> .page-footer) > .settings-wrap {
             <div class="settings-msg" id="sPhotoMsg"></div>
           </div>
         </div>
+        <div class="monogram-row">
+          <div class="monogram-copy">
+            <div class="monogram-title">No photo? Use your monogram</div>
+            <div class="monogram-sub">A clean avatar in your initials. Pick an accent below.</div>
+          </div>
+          <div class="monogram-swatches" id="sPresetAvatars" role="radiogroup" aria-label="Monogram accent"></div>
+        </div>
       </div>
 
       <div class="settings-card">
@@ -1128,22 +1157,141 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   document.getElementById('sPhone').value       = profile.phone || '';
   document.getElementById('sLinkedin').value    = profile.linkedin_url || '';
 
+  // ── Monogram fallback (ported from Central Hub /settings) ─────
+  // A clean default avatar in the user's initials + an accent swatch picker.
+  // Each monogram is a full-bleed layered SVG stored as a data:image/svg+xml
+  // URL in photoURL, so it works everywhere a photo URL works.
+  const MONOGRAM_PALETTES = [
+    { id: 'brand',   from: '#7c3aed', mid: '#6c5ce7', to: '#0891b2' }, // mor → cyan (default)
+    { id: 'mor',     from: '#8b5cf6', mid: '#7c3aed', to: '#5b21b6' },
+    { id: 'cyan',    from: '#22d3ee', mid: '#06b6d4', to: '#0e7490' },
+    { id: 'violet',  from: '#a78bfa', mid: '#8b5cf6', to: '#6d28d9' },
+    { id: 'teal',    from: '#2dd4bf', mid: '#14b8a6', to: '#0d9488' },
+    { id: 'amber',   from: '#fbbf24', mid: '#f59e0b', to: '#d97706' },
+    { id: 'rose',    from: '#fb7185', mid: '#f43f5e', to: '#e11d48' },
+    { id: 'slate',   from: '#94a3b8', mid: '#64748b', to: '#334155' },
+    { id: 'emerald', from: '#34d399', mid: '#10b981', to: '#059669' },
+    { id: 'indigo',  from: '#818cf8', mid: '#6366f1', to: '#4338ca' },
+    { id: 'fuchsia', from: '#f0abfc', mid: '#d946ef', to: '#a21caf' },
+    { id: 'sky',     from: '#38bdf8', mid: '#0ea5e9', to: '#0369a1' },
+  ];
+  function initialsFor(name, email) {
+    const n = (name || '').trim();
+    if (n) {
+      const parts = n.split(/\s+/).filter(Boolean);
+      if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      return parts[0].slice(0, 2).toUpperCase();
+    }
+    const local = (email || '').split('@')[0];
+    return (local ? local[0] : '?').toUpperCase();
+  }
+  function monogramSvg(pal, initials) {
+    const len = initials.length;
+    const fontSize = len >= 2 ? 25 : 31;
+    const g = `mg_${pal.id}`;
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">` +
+      `<defs>` +
+        `<linearGradient id="${g}_bg" x1="0" y1="0" x2="1" y2="1">` +
+          `<stop offset="0" stop-color="${pal.from}"/>` +
+          `<stop offset="0.55" stop-color="${pal.mid}"/>` +
+          `<stop offset="1" stop-color="${pal.to}"/>` +
+        `</linearGradient>` +
+        `<radialGradient id="${g}_lt" cx="32" cy="14" r="46" gradientUnits="userSpaceOnUse">` +
+          `<stop offset="0" stop-color="#ffffff" stop-opacity="0.26"/>` +
+          `<stop offset="1" stop-color="#ffffff" stop-opacity="0"/>` +
+        `</radialGradient>` +
+        `<pattern id="${g}_dot" width="7" height="7" patternUnits="userSpaceOnUse">` +
+          `<circle cx="1.4" cy="1.4" r="1.1" fill="#ffffff" fill-opacity="0.06"/>` +
+        `</pattern>` +
+      `</defs>` +
+      `<rect width="64" height="64" fill="url(#${g}_bg)"/>` +
+      `<rect width="64" height="64" fill="url(#${g}_dot)"/>` +
+      `<rect width="64" height="64" fill="url(#${g}_lt)"/>` +
+      `<rect x="1" y="1" width="62" height="62" rx="15" fill="none" stroke="#ffffff" stroke-opacity="0.20" stroke-width="1.2"/>` +
+      `<text x="32" y="${(32 + fontSize * 0.34).toFixed(1)}" text-anchor="middle" ` +
+        `font-family="DM Sans, Segoe UI, Arial, sans-serif" font-weight="800" ` +
+        `font-size="${fontSize}" fill="#ffffff" letter-spacing="0.5">${initials}</text>` +
+    `</svg>`;
+  }
+  function buildMonograms(name, email) {
+    const initials = initialsFor(name, email);
+    return MONOGRAM_PALETTES.map(pal => monogramSvg(pal, initials));
+  }
+  function svgToDataUrl(svg) { return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg); }
+  function defaultMonogramUrl(name) {
+    return svgToDataUrl(monogramSvg(MONOGRAM_PALETTES[0], initialsFor(name, user.email)));
+  }
+
   // ── Profile photo render + upload ─────────────────────────────
   const photoPreviewEl = document.getElementById('sPhotoPreview');
   const photoRemoveBtn = document.getElementById('sPhotoRemoveBtn');
   function renderPhotoPreview(url, fallbackName) {
+    photoPreviewEl.textContent = '';
     if (url) {
       photoPreviewEl.style.backgroundImage = `url("${url}")`;
-      photoPreviewEl.textContent = '';
       photoRemoveBtn.style.display = '';
     } else {
-      photoPreviewEl.style.backgroundImage = '';
-      const initial = (fallbackName || user.email || '?').trim().charAt(0).toUpperCase();
-      photoPreviewEl.textContent = initial;
+      // No uploaded photo / no chosen monogram → show the brand monogram.
+      photoPreviewEl.style.backgroundImage = `url("${defaultMonogramUrl(fallbackName)}")`;
       photoRemoveBtn.style.display = 'none';
     }
   }
   renderPhotoPreview(profile.photoURL || user.photoURL || '', profile.displayName);
+
+  // ── Monogram accent swatches ──────────────────────────────────
+  const presetGrid = document.getElementById('sPresetAvatars');
+  let presetUrls = buildMonograms(profile.displayName, user.email).map(svgToDataUrl);
+  function markSelectedPreset(currentUrl) {
+    [...presetGrid.children].forEach((btn, idx) => {
+      btn.classList.toggle('is-selected', presetUrls[idx] === currentUrl);
+    });
+  }
+  function renderPresetGrid(nameForInitials) {
+    const svgs = buildMonograms(nameForInitials, user.email);
+    presetUrls = svgs.map(svgToDataUrl);
+    presetGrid.innerHTML = '';
+    svgs.forEach((svg, idx) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'monogram-swatch';
+      btn.setAttribute('role', 'radio');
+      btn.setAttribute('aria-label', `Monogram accent — ${MONOGRAM_PALETTES[idx].id}`);
+      btn.innerHTML = svg;
+      btn.addEventListener('click', async () => {
+        const url = presetUrls[idx];
+        showMsg('sPhotoMsg', 'Saving…', 'ok');
+        try {
+          // Drop any previously uploaded custom photo from Storage (best-effort).
+          const oldPath = window.userProfile?.photoStoragePath;
+          if (oldPath) { try { await deleteObject(storageRef(window.storage, oldPath)); } catch { /* fine */ } }
+          await setDoc(doc(db, 'users', user.uid), { photoURL: url, photoStoragePath: '' }, { merge: true });
+          try { await updateProfile(user, { photoURL: url }); } catch { /* non-fatal */ }
+          window.userProfile = { ...window.userProfile, photoURL: url, photoStoragePath: '' };
+          renderPhotoPreview(url, window.userProfile.displayName);
+          markSelectedPreset(url);
+          showMsg('sPhotoMsg', 'Avatar updated ✓', 'ok');
+          renderProgress(window.userProfile);
+        } catch (e) {
+          console.warn('preset avatar save failed', e);
+          showMsg('sPhotoMsg', 'Failed to save. Try again.', 'err');
+        }
+      });
+      presetGrid.appendChild(btn);
+    });
+    markSelectedPreset(window.userProfile?.photoURL || '');
+  }
+  renderPresetGrid(profile.displayName);
+
+  // Live-refresh swatches (and the empty-state disc) as the name is typed.
+  let _monogramTimer = null;
+  document.getElementById('sDisplayName').addEventListener('input', function () {
+    clearTimeout(_monogramTimer);
+    const v = this.value;
+    _monogramTimer = setTimeout(() => {
+      renderPresetGrid(v);
+      if (!window.userProfile?.photoURL) renderPhotoPreview('', v);
+    }, 150);
+  });
 
   document.getElementById('sPhotoUploadBtn').addEventListener('click', () => {
     document.getElementById('sPhotoInput').click();
@@ -1175,6 +1323,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
       try { await updateProfile(user, { photoURL: url }); } catch { /* non-fatal */ }
       window.userProfile = { ...window.userProfile, photoURL: url, photoStoragePath: path };
       renderPhotoPreview(url, profile.displayName);
+      markSelectedPreset(url);
       showMsg('sPhotoMsg', 'Photo updated ✓', 'ok');
       renderProgress(window.userProfile);
     } catch (e) {
@@ -1200,6 +1349,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
       try { await updateProfile(user, { photoURL: '' }); } catch { /* non-fatal */ }
       window.userProfile = { ...window.userProfile, photoURL: '', photoStoragePath: '' };
       renderPhotoPreview('', profile.displayName);
+      markSelectedPreset('');
       showMsg('sPhotoMsg', 'Photo removed ✓', 'ok');
       renderProgress(window.userProfile);
     } catch (e) {
