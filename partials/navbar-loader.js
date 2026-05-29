@@ -768,6 +768,7 @@ const NAV_ITEMS = [
     { key: 'school-leadership-read-me',          href: '/school-leadership-read-me',          label: 'Read Me First' },
     { key: 'school-leadership-operational-guide',href: '/school-leadership-operational-guide',label: 'Operational Guide' },
     { key: 'school-leadership-meetings',         href: '/school-leadership-meetings',         label: 'Meetings' },
+    { key: 'school-leadership-proposals',        href: '/school-leadership-proposals',        label: 'Proposals' },
     { key: 'school-leadership-decisions',        href: '/school-leadership-decisions',        label: 'Decisions' },
     { key: 'school-leadership-directory',        href: '/school-leadership-directory',        label: 'Directory' },
     { key: 'school-artifacts',                   href: '/school-artifacts',                   label: 'Artifacts' },

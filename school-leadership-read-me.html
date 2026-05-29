@@ -712,7 +712,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
         </button>
         <div class="sec-body" id="sec-flow-body">
         <div class="sec-body-inner">
-        <p class="sec-lead">The 7 pages tell one story: <strong>meetings produce decisions, decisions become activities, activities anchor against artifacts</strong>. The directory keeps track of who is in the room.</p>
+        <p class="sec-lead">The pages tell one story: <strong>meetings raise topics, proposals debate the big ones, decisions make them binding, activities do the work, artifacts anchor it</strong>. The directory keeps track of who is in the room.</p>
 
         <div class="flow">
           <div class="flow-track">
@@ -726,24 +726,32 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
             </div>
             <div class="flow-step">
               <div class="flow-step-bubble">2</div>
-              <div class="flow-step-icon">⚖️</div>
-              <div class="flow-step-num">Step 2 · Decide</div>
-              <div class="flow-step-title">Decisions</div>
-              <div class="flow-step-text">Binding rules from meetings. Auditable across academic years. Supersede rather than edit — never lose the trail.</div>
-              <a class="flow-step-link" href="/school-leadership-decisions">Open →</a>
+              <div class="flow-step-icon">💬</div>
+              <div class="flow-step-num">Step 2 · Discuss</div>
+              <div class="flow-step-title">Proposals</div>
+              <div class="flow-step-text">Debate the big "should we?" questions — KPI, assessment, curriculum — in phases before deciding. The Principal promotes the agreed ones.</div>
+              <a class="flow-step-link" href="/school-leadership-proposals">Open →</a>
             </div>
             <div class="flow-step">
               <div class="flow-step-bubble">3</div>
+              <div class="flow-step-icon">⚖️</div>
+              <div class="flow-step-num">Step 3 · Decide</div>
+              <div class="flow-step-title">Decisions</div>
+              <div class="flow-step-text">Binding rules from meetings or promoted proposals. Auditable across academic years. Supersede rather than edit — never lose the trail.</div>
+              <a class="flow-step-link" href="/school-leadership-decisions">Open →</a>
+            </div>
+            <div class="flow-step">
+              <div class="flow-step-bubble">4</div>
               <div class="flow-step-icon">📦</div>
-              <div class="flow-step-num">Step 3 · Do</div>
+              <div class="flow-step-num">Step 4 · Do</div>
               <div class="flow-step-title">Activities</div>
               <div class="flow-step-text">Kanban work that flows from decisions. Action-tagged meeting items spawn cards here automatically.</div>
               <a class="flow-step-link" href="/school-activities">Open →</a>
             </div>
             <div class="flow-step">
-              <div class="flow-step-bubble">4</div>
+              <div class="flow-step-bubble">5</div>
               <div class="flow-step-icon">📄</div>
-              <div class="flow-step-num">Step 4 · Anchor</div>
+              <div class="flow-step-num">Step 5 · Anchor</div>
               <div class="flow-step-title">Artifacts</div>
               <div class="flow-step-text">Living documents (Annual Plan, SoW, intervention plans) that decisions + activities point to.</div>
               <a class="flow-step-link" href="/school-artifacts">Open →</a>
@@ -829,6 +837,44 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
                 <li>Other tags stay as discussion — they shape the context but do not create downstream work.</li>
               </ul>
             </div>
+          </div>
+        </div>
+
+        <!-- Proposals -->
+        <div class="page-detail" id="page-proposals">
+          <div class="page-detail-head">
+            <div class="page-detail-icon">💬</div>
+            <div class="page-detail-head-text">
+              <div class="page-detail-name">Proposals <span style="font-size:11px;font-weight:500;color:var(--ink-3);margin-left:6px;">(the discussion board)</span></div>
+              <div class="page-detail-slug">/school-leadership-proposals</div>
+            </div>
+            <a href="/school-leadership-proposals" class="page-detail-open">Open page →</a>
+          </div>
+          <div class="kv-grid">
+            <div class="kv-key">What it is</div>
+            <div class="kv-val">A discussion board for big ideas your leadership team is <strong>still talking about</strong> — before anyone decides. "Should we change how we weight KPIs?", "Should we trial a new diagnostic test?". You open a proposal, write the idea, and the team comments. When everyone agrees, the Principal turns it into a real decision. It sits one step <em>before</em> the <a href="/school-leadership-decisions">Decisions</a> page.</div>
+            <div class="kv-key">Why we built it</div>
+            <div class="kv-val">The old way was a shared doc where ideas got lost and you could not tell what stage anything was at. Here every idea has a clear <strong>phase</strong> and a searchable comment thread, so you always know what is just an idea, what is open for debate, and what has been decided.</div>
+            <div class="kv-key">The four phases</div>
+            <div class="kv-val">
+              Each proposal moves left to right. The coloured pill on every card tells you where it is:
+              <ul>
+                <li><span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#f3f4f6;color:#374151;">Draft</span> &nbsp;— the author is still writing it. Not yet open for the team.</li>
+                <li><span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#cffafe;color:#155e75;">Open for comment</span> &nbsp;— the discussion is live. Read it and add your view.</li>
+                <li><span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#d1fae5;color:#065f46;">Decided</span> &nbsp;— agreed and promoted to the Decisions register, with a back-link.</li>
+                <li><span style="display:inline-block;padding:1px 8px;border-radius:10px;font-size:11px;font-weight:700;background:#fef3c7;color:#92400e;">Parked</span> &nbsp;— shelved for now, kept on the record so it can be re-opened later.</li>
+              </ul>
+            </div>
+            <div class="kv-key">Who can do what</div>
+            <div class="kv-val">
+              <ul>
+                <li><strong>Any leadership-team member</strong> can open a proposal, write the body, and add comments.</li>
+                <li>Only the <strong>Principal</strong> sets the phase (Open / Parked) and <strong>promotes</strong> a proposal to a binding decision. The team shapes the idea; the Principal makes the call.</li>
+                <li>Everything is scoped to your own school — other schools never see your proposals. The page carries a "How proposals work" panel at the top with the full phase legend + roles table.</li>
+              </ul>
+            </div>
+            <div class="kv-key">What to do</div>
+            <div class="kv-val">Open the <strong>Open for comment</strong> tab and read what the team is debating. If you have a view, say it in the thread — that is the whole point. New idea worth raising school-wide? Hit "+ New proposal", write the problem, the options, and your recommendation.</div>
           </div>
         </div>
 
@@ -1266,6 +1312,10 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
           <div class="gloss-row">
             <div class="gloss-term">Director-Network<span class="gloss-term-sub">HQ peer role</span></div>
             <div class="gloss-def">The HQ Primary or Secondary Director (CH-side). Not your line manager (you report to the Foundation Rep), but the senior peer who runs the network cohort meetings, provides cross-school benchmarks, and co-signs Principal 90-day readiness reports. Welcomes new Principals during Window 1 and makes an informational in-school visit during Window 2.</div>
+          </div>
+          <div class="gloss-row">
+            <div class="gloss-term">Proposal<span class="gloss-term-sub">in Proposals</span></div>
+            <div class="gloss-def">An idea still being discussed — before it becomes a Decision. Moves through four phases: Draft → Open for comment → Decided → Parked. Any leadership-team member can open one and comment; only the Principal sets the phase and promotes it to a binding decision. The deliberation layer that sits before /school-leadership-decisions.</div>
           </div>
           <div class="gloss-row">
             <div class="gloss-term">Supersede<span class="gloss-term-sub">audit-trail discipline</span></div>
