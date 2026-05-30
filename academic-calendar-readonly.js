@@ -195,18 +195,21 @@
       return `<button class="ec-filter-chip${active ? ' is-active' : ''}" data-filter="${escapeHtml(key)}" style="--c:${cfg.color}">${escapeHtml(label)}</button>`;
     }).join('');
 
-    // Dark .ec-hero wrapper removed 2026-05-24 — the page now ships
-    // a canonical .page-hero band above the calendar mount, so this
-    // widget's bespoke navy strip with eyebrow + title was a
-    // duplicate. The view switch + filter chips kept (still useful
-    // controls), repotted onto a light .ec-toolbar surface that
-    // sits on the page's paper bg.
     return `
-      <div class="ec-toolbar">
-        <div class="ec-filter-row" role="group" aria-label="Department filter">
+      <div class="ec-hero">
+        <div class="ec-hero-top">
+          <div class="ec-hero-left">
+            <div class="ec-hero-eyebrow">Eduversal Indonesia</div>
+            <h1 class="ec-hero-title">Academic Calendar 2025–2026</h1>
+          </div>
+          <div class="ec-hero-right">
+            <div class="ec-view-switch">${viewBtns}</div>
+          </div>
+        </div>
+        <div class="ec-filter-row">
+          <span class="ec-filter-row-label">Filter:</span>
           ${filterChips}
         </div>
-        <div class="ec-view-switch" role="tablist" aria-label="Calendar view">${viewBtns}</div>
       </div>
     `;
   }
@@ -557,65 +560,54 @@
     .ec-empty-icon { font-size: 40px; margin-bottom: 12px; }
     .ec-empty-hint { font-size: 12px; margin-top: 6px; color: #94a3b8; }
 
-    /* ── Toolbar — light surface that holds the filter chips
-       (left, justified) + view switch (right, end-justified).
-       "Filter:" label dropped 2026-05-25 — chips are
-       self-descriptive. Hugs the page-hero band above (no top
-       padding) so the toolbar doesn't float in dead space. ── */
-    .ec-toolbar {
-      padding: 8px 0 14px;
-      display: flex; align-items: center; gap: 10px 18px;
-      flex-wrap: wrap;
+    /* ── Hero banner — mirrors CH header ── */
+    .ec-hero {
+      background: linear-gradient(135deg, #0F172A 0%, #1E3A5F 60%, #1D4ED8 100%);
+      color: #fff; padding: 28px 32px 24px;
     }
-    /* Chip cluster left, view switch right — via auto margin on
-       the view-switch so any leftover space sits between them. */
-    .ec-toolbar .ec-view-switch { margin-left: auto; }
+    .ec-hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+    .ec-hero-left { flex: 1; min-width: 280px; }
+    .ec-hero-eyebrow {
+      font-size: 11px; font-weight: 700; color: #93C5FD;
+      letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .ec-hero-title {
+      font-family: 'Lora', 'Times New Roman', serif;
+      font-size: 26px; font-weight: 800; letter-spacing: -0.5px;
+      margin: 0; color: #fff;
+    }
+    .ec-hero-right { flex-shrink: 0; }
     .ec-view-switch {
-      display: inline-flex; gap: 4px; flex-shrink: 0;
-      background: #f1f5f9;        /* slate-100 — sits well on paper bg */
-      border: 1px solid #e2e8f0;
-      border-radius: 10px; padding: 3px;
+      display: flex; gap: 6px;
+      background: rgba(255,255,255,0.1); border-radius: 10px; padding: 4px;
     }
     .ec-view-btn {
-      padding: 6px 12px; border: none; cursor: pointer;
-      background: transparent; color: #475569;
-      font-weight: 600; font-size: 12.5px; border-radius: 7px;
-      font-family: inherit; transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+      padding: 7px 16px; border: none; cursor: pointer;
+      background: transparent; color: rgba(255,255,255,0.7);
+      font-weight: 700; font-size: 13px; border-radius: 7px;
+      font-family: inherit; transition: all 0.15s;
     }
-    .ec-view-btn:hover:not(.is-active) { color: #0F172A; background: rgba(255,255,255,0.6); }
-    .ec-view-btn.is-active {
-      background: #fff; color: var(--accent, #6c5ce7);
-      font-weight: 700;
-      box-shadow: 0 1px 2px rgba(15,23,42,0.08), 0 0 0 1px #e2e8f0;
-    }
+    .ec-view-btn.is-active { background: #fff; color: #1E3A5F; }
+    .ec-view-btn:hover:not(.is-active) { color: #fff; }
 
     .ec-filter-row {
-      display: inline-flex; gap: 6px; align-items: center;
-      flex-wrap: nowrap; min-width: 0;
+      display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
     }
-    /* Light-surface filter chips. Inactive = neutral; active fills
-       with the department colour (--c is set inline per chip). */
+    .ec-filter-row-label {
+      font-size: 12px; color: #CBD5E1; font-weight: 600; margin-right: 4px;
+    }
     .ec-filter-chip {
-      padding: 5px 11px; border-radius: 999px; border: 1.5px solid #e2e8f0;
-      background: #fff; color: #475569;
-      font-size: 11.5px; font-weight: 700; cursor: pointer;
+      padding: 6px 14px; border-radius: 999px; border: 1.5px solid transparent;
+      background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55);
+      font-size: 12px; font-weight: 700; cursor: pointer;
       font-family: inherit; transition: all 0.15s;
-      white-space: nowrap; flex-shrink: 0; line-height: 1.3;
+      opacity: 0.65;
     }
-    /* Below ~1100px the 6-chip cluster wraps inside its own row instead
-       of pushing the strip out of bounds. The whole .ec-toolbar still
-       wraps to a second line if the viewport is narrower than the
-       view-switch + first chip combined. */
-    @media (max-width: 1100px) {
-      .ec-filter-row { flex-wrap: wrap; }
-    }
-    .ec-filter-chip:hover {
-      border-color: var(--c, #94a3b8);
-      color: var(--c, #0F172A);
-    }
+    .ec-filter-chip:hover { opacity: 1; }
     .ec-filter-chip.is-active {
       background: var(--c); color: #fff; border-color: var(--c);
-      box-shadow: 0 1px 3px rgba(15,23,42,0.18);
+      opacity: 1;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.25);
     }
 
     /* ── Strip view ── */
