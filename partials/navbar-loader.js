@@ -730,7 +730,7 @@ const NAV_ITEMS = [
     { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
   ]},
-  { group: 'admin', label: 'Admin', adminOnly: true, icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>', items: [
+  { group: 'admin', label: 'Performance', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
     // Ordered to mirror the desktop Admin dropdown's semantic role-grouping
     // (2026-05-27): FR-primary → SP-primary → AC-primary → Cross-hub & Settings.
     //
@@ -756,10 +756,7 @@ const NAV_ITEMS = [
     { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
     { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
     { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
-    // Cross-hub shortcuts + Settings (academic_admin-only, no sub-role audience):
-    { key: 'admin-console-ext',   href: 'https://centralhub.eduversal.org/console',     label: 'User Console ↗' },
-    { key: 'admin-pageacc-ext',   href: 'https://centralhub.eduversal.org/page-access', label: 'Page Access ↗' },
-    { key: 'admin-ch-ext',        href: 'https://centralhub.eduversal.org',             label: 'Central Hub ↗' },
+    // This hub (cross-hub HQ shortcuts removed 2026-05-30):
     { key: 'surveys',             href: '/surveys',                                     label: 'Shared Surveys' },
     { key: 'settings',            href: '/settings',                                    label: 'Settings' },
   ]},
