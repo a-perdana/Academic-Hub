@@ -218,7 +218,7 @@ const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
 
 // ── Pilot-system gating (per-school enrolment) ─────────────────────
 // partner_schools/{schoolId}.enabled_systems[] ⊂ {kpi, appraisal,
-// competency, induction}. Missing field = all enabled (back-compat);
+// competency, induction, aicf}. Missing field = all enabled (back-compat);
 // empty array = all explicitly disabled. Admins + HQ users (no
 // schoolId) always bypass.
 //
@@ -241,6 +241,10 @@ const PILOT_SLUG_MAP = {
   'learning-path':        'competency',
   'my-portfolio':         'competency',
   'my-certificates':      'competency',
+  // AICF track (AI Competency Framework — own pilot system since 2026-05-30).
+  // ai-maturity-admin (CH) is NOT here — it's an HQ triage tool, admin-gated.
+  'ai-validate-teacher-assessments': 'aicf',
+  'ai-maturity-self-assessment':     'aicf',
   // Induction track
   'my-induction':       'induction',
   'team-induction':     'induction',

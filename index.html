@@ -4177,10 +4177,13 @@
                 'learning-path':        'competency',
                 'my-portfolio':         'competency',
                 'my-certificates':      'competency',
+                'ai-validate-teacher-assessments': 'aicf',
+                'ai-maturity-self-assessment':     'aicf',
                 'my-induction':       'induction',
                 'team-induction':     'induction',
                 'observation-entry':  'induction',
-                'handbook':           'induction',
+                // NB: 'handbook' intentionally NOT pilot-gated — network-wide
+                // knowledge base, parity with PILOT_SLUG_MAP (2026-05-30).
               };
               const slugFromCardHref = (a) => {
                 const href = a.getAttribute('href') || '';
