@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
-<title>Eduversal Partner Schools – Accreditation Dashboard 2025</title>
+<title>Eduversal Partner Schools â€“ Accreditation Dashboard 2025</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #1a1a2e; }
@@ -344,7 +344,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #
     <button class="filter-btn" onclick="filterLevel('SMP', this)" style="color:#f44336;border-color:#f44336">SMP</button>
     <button class="filter-btn" onclick="filterLevel('SMA', this)" style="color:#9c27b0;border-color:#9c27b0">SMA</button>
   </div>
-  <input type="text" class="search-box" placeholder="&#128269; Search schools, location, NPSN..." id="search-input" oninput="applyFilters()">
+  <input aria-label="&#128269; Search schools, location, NPSN" type="text" class="search-box" placeholder="&#128269; Search schools, location, NPSN..." id="search-input" oninput="applyFilters()">
 </div>
 
 <!-- MAIN -->
@@ -385,11 +385,11 @@ const LEVEL_LABELS = { TK: 'Early Childhood', SD: 'Elementary', SMP: 'Junior Hig
 const COMP_LABELS = {
   'Komponen B: Kinerja Satuan Pendidikan': {
     short: 'Komponen B',
-    full: 'School Performance (Komponen B — Kinerja Satuan Pendidikan)'
+    full: 'School Performance (Komponen B â€” Kinerja Satuan Pendidikan)'
   },
   'Komponen C: Wawasan Kebangsaan': {
     short: 'Komponen C',
-    full: 'National Awareness & Citizenship (Komponen C — Wawasan Kebangsaan)'
+    full: 'National Awareness & Citizenship (Komponen C â€” Wawasan Kebangsaan)'
   },
   'Komponen 1: Kinerja Pendidik dalam Mengelola Proses Pembelajaran yang berpusat pada peserta didik': {
     short: 'Komponen 1',
@@ -490,9 +490,9 @@ function openPanel(school) {
   html += '<div class="info-grid">' +
     '<div class="info-item"><div class="info-label">School Network</div><div class="info-value">' + esc(school.network) + '</div></div>' +
     '<div class="info-item"><div class="info-label">Location</div><div class="info-value">' + esc(school.location) + '</div></div>' +
-    '<div class="info-item" style="grid-column:1/-1"><div class="info-label">Address</div><div class="info-value">' + esc(school.address||'—') + '</div></div>' +
+    '<div class="info-item" style="grid-column:1/-1"><div class="info-label">Address</div><div class="info-value">' + esc(school.address||'â€”') + '</div></div>' +
     '<div class="info-item"><div class="info-label">Accreditation Year</div><div class="info-value">2025</div></div>' +
-    '<div class="info-item"><div class="info-label">Validity Period</div><div class="info-value">' + esc(school.validityPeriod||'Dec 2025 – Dec 2030') + '</div></div>' +
+    '<div class="info-item"><div class="info-label">Validity Period</div><div class="info-value">' + esc(school.validityPeriod||'Dec 2025 â€“ Dec 2030') + '</div></div>' +
     '</div>';
 
   if (school.certificateUrl) {

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Leadership Directory — Academic Hub</title>
+<title>School Leadership Directory â€” Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@ body { padding-top: 62px; }
   box-sizing: border-box;
 }
 
-/* Page footer — induction tint */
+/* Page footer â€” induction tint */
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
@@ -128,9 +128,9 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Workspace</p>
       <h1 class="page-hero__title">School Leadership Directory</h1>
-      <p class="page-hero__desc">The leadership team at this school — Foundation Reps, School Principal, Academic + Cambridge Coordinators. Curated entries, not auto-synced from the user database, so departures + transitions can be reflected immediately.</p>
+      <p class="page-hero__desc">The leadership team at this school â€” Foundation Reps, School Principal, Academic + Cambridge Coordinators. Curated entries, not auto-synced from the user database, so departures + transitions can be reflected immediately.</p>
     </div>
   </div>
 </header>
@@ -144,7 +144,7 @@ body { padding-top: 62px; }
   <div class="cd-filter-bar">
     <div class="cd-search-wrap">
       <svg class="cd-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" class="cd-search" id="filterSearch" placeholder="Search name, email, title…">
+      <input aria-label="Search name, email, titleâ€¦" type="text" class="cd-search" id="filterSearch" placeholder="Search name, email, titleâ€¦">
     </div>
     <select class="cd-filter" id="filterKind">
       <option value="">All roles</option>
@@ -195,11 +195,11 @@ body { padding-top: 62px; }
       </div>
       <div class="form-group">
         <label class="form-label">Phone (optional)</label>
-        <input type="text" class="form-input" id="ePhone" placeholder="+62 …">
+        <input type="text" class="form-input" id="ePhone" placeholder="+62 â€¦">
       </div>
       <div class="form-group">
         <label class="form-label">Notes (optional)</label>
-        <textarea class="form-textarea" id="eNotes" rows="3" placeholder="Anything peers should know — office hours, on leave until X, etc."></textarea>
+        <textarea class="form-textarea" id="eNotes" rows="3" placeholder="Anything peers should know â€” office hours, on leave until X, etc."></textarea>
       </div>
     </div>
     <div class="modal-foot">
@@ -339,7 +339,7 @@ function render() {
   wrap.innerHTML = sortedKinds.map(kind => `
     <section class="kind-section" data-kind="${kind}">
       <header class="kind-section-head">
-        <span class="kind-section-rank">${KIND_RANK[kind] || '·'}</span>
+        <span class="kind-section-rank">${KIND_RANK[kind] || 'Â·'}</span>
         <span class="kind-section-label">${KIND_LABELS[kind] || kind}</span>
         <span class="kind-section-count">${groups[kind].length}</span>
       </header>
@@ -360,16 +360,16 @@ function renderCard(e) {
     <article class="entry-card" data-kind="${e.kind || 'other'}">
       <div class="ec-header"></div>
       <div class="ec-body">
-        <div class="ec-name">${escHtml(e.name || '—')}</div>
+        <div class="ec-name">${escHtml(e.name || 'â€”')}</div>
         ${e.title ? `<div class="ec-title">${escHtml(e.title)}</div>` : ''}
         <div class="ec-detail">
-          ${e.email ? `<span>✉ <a href="mailto:${escHtml(e.email)}">${escHtml(e.email)}</a></span>` : ''}
-          ${e.phone ? `<span>☎ ${escHtml(e.phone)}</span>` : ''}
+          ${e.email ? `<span>âœ‰ <a href="mailto:${escHtml(e.email)}">${escHtml(e.email)}</a></span>` : ''}
+          ${e.phone ? `<span>â˜Ž ${escHtml(e.phone)}</span>` : ''}
           ${e.notes ? `<span style="font-style:italic;margin-top:4px;">${escHtml(e.notes)}</span>` : ''}
         </div>
         ${subjectPills ? `<div class="ec-pill-row">${subjectPills}</div>` : ''}
         <div class="ec-actions">
-          <button class="ec-btn" data-edit="${e.id}">✎ Edit</button>
+          <button class="ec-btn" data-edit="${e.id}">âœŽ Edit</button>
           <button class="ec-btn danger" data-delete="${e.id}" data-confirming="false">Delete</button>
         </div>
       </div>
@@ -411,7 +411,7 @@ function closeModal() {
 async function saveEntry() {
   const name = $('eName').value.trim();
   if (!name) { showToast('Name required.'); return; }
-  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile â€” cannot save.'); return; }
 
   const subjectIds = $('eSubjects').value
     .split(',').map(s => s.trim().toLowerCase()).filter(s => SUBJECTS.includes(s));
@@ -473,10 +473,10 @@ async function confirmDelete(id, btn) {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Directory</span>
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace Â· Directory</span>
       <h2 class="page-footer__cta-title">Know who's in the room before the meeting starts.</h2>
-      <p class="page-footer__cta-desc">A leadership directory only stays useful if it's curated — entries here are hand-maintained, not auto-synced from the user database. Update on the day someone joins or leaves the team, not at year-end.</p>
-      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to schedule the next one <span aria-hidden="true">→</span></a>
+      <p class="page-footer__cta-desc">A leadership directory only stays useful if it's curated â€” entries here are hand-maintained, not auto-synced from the user database. Update on the day someone joins or leaves the team, not at year-end.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to schedule the next one <span aria-hidden="true">â†’</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Directory footer navigation">
       <div class="page-footer__nav-group">
@@ -496,8 +496,8 @@ async function confirmDelete(id, btn) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Curated · not auto-synced · update on the day someone joins or leaves the team</span>
+    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-right">Curated Â· not auto-synced Â· update on the day someone joins or leaves the team</span>
   </div>
 </footer>
 </body>

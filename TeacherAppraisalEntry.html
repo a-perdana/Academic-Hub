@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Appraisal Entry — Academic Hub</title>
+<title>Teacher Appraisal Entry â€” Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -25,11 +25,11 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-/* ── HERO (canonical .page-hero from /base.css · dark family) ──
+/* â”€â”€ HERO (canonical .page-hero from /base.css Â· dark family) â”€â”€
    Page CSS MUST NOT override .page-hero background or KPI layout
    (root CLAUDE.md Common Mistake #50). Body content rail = 1200px;
    width:100% on direct body children avoids the body:has(>.page-footer)
-   flex-column shrink trap. ───────────────────────────────────── */
+   flex-column shrink trap. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 body:has(> .page-footer) > .page-hero,
 body:has(> .page-footer) > #setupPhase,
 body:has(> .page-footer) > #scoringPhase,
@@ -46,7 +46,7 @@ body:has(> .page-footer) > .page-wrap {
   padding-right: 0;
 }
 
-/* Hero action link (page-local — target page-local class, never .page-hero*) */
+/* Hero action link (page-local â€” target page-local class, never .page-hero*) */
 .tae-hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 .tae-hero-link {
   display: inline-flex; align-items: center; gap: 7px;
@@ -74,7 +74,7 @@ body:has(> .page-footer) > .page-wrap {
 .page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 100px; }
 .form-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
 
-/* ── SESSION TYPE ── */
+/* â”€â”€ SESSION TYPE â”€â”€ */
 .session-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .session-opt {
   border: 2px solid #e2e8f0; border-radius: 14px; padding: 20px;
@@ -88,7 +88,7 @@ body:has(> .page-footer) > .page-wrap {
 .session-opt.active .session-opt-title { color: #7c3aed; }
 .session-opt-desc { font-size: .78rem; color: #64748b; line-height: 1.5; }
 
-/* ── CONTEXT BAR ── */
+/* â”€â”€ CONTEXT BAR â”€â”€ */
 .context-bar {
   background: #fff;
   border: 1px solid #e2e8f0;
@@ -164,7 +164,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .btn-ghost-sm:hover { background: #ede9fe; }
 
-/* ── FRAMEWORK TABS BAR ── */
+/* â”€â”€ FRAMEWORK TABS BAR â”€â”€ */
 .fw-tabs-bar {
   display: flex; gap: 0; border-bottom: 2px solid #e2e8f0;
   margin-bottom: 20px; overflow-x: visible;
@@ -172,7 +172,7 @@ body:has(> .page-footer) > .page-wrap {
   padding: 0 4px;
 }
 
-/* ── FRAMEWORK TABS ── */
+/* â”€â”€ FRAMEWORK TABS â”€â”€ */
 .fw-tab {
   padding: 12px 22px; font-family: inherit; font-size: .85rem; font-weight: 600;
   color: #64748b; background: none; border: none; border-bottom: 2px solid transparent;
@@ -187,7 +187,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .fw-tab.active .fw-tab-count { background: #ede9fe; color: #7c3aed; }
 
-/* ── CARDS ── */
+/* â”€â”€ CARDS â”€â”€ */
 .card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
   box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
@@ -200,7 +200,7 @@ body:has(> .page-footer) > .page-wrap {
 .card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
 .card-body { padding: 20px 24px; }
 
-/* ── FORM FIELDS ── */
+/* â”€â”€ FORM FIELDS â”€â”€ */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
 .form-row.one { grid-template-columns: 1fr; }
@@ -224,7 +224,7 @@ body:has(> .page-footer) > .page-wrap {
   width: 8px; height: 8px; border-radius: 50%; display: inline-block;
 }
 
-/* ── FEEDBACK BLOCKS (Glow / Grow / Go) ── */
+/* â”€â”€ FEEDBACK BLOCKS (Glow / Grow / Go) â”€â”€ */
 .feedback-block {
   border-radius: 12px; padding: 16px 18px; margin-bottom: 16px;
   border: 1.5px solid transparent;
@@ -262,7 +262,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .feedback-tag-input:focus { outline: none; border-color: #7c3aed; }
 
-/* ── COACHING QUESTIONS ── */
+/* â”€â”€ COACHING QUESTIONS â”€â”€ */
 .coaching-item-group { margin-bottom: 20px; }
 .coaching-item-group:last-child { margin-bottom: 0; }
 .coaching-item-header {
@@ -306,7 +306,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .coaching-selected-remove:hover { color: #7c3aed; }
 
-/* ── FOLLOW-UP ── */
+/* â”€â”€ FOLLOW-UP â”€â”€ */
 .followup-prev-banner {
   border-radius: 12px; padding: 14px 16px;
   background: #fffbeb; border: 1.5px solid #fde68a;
@@ -341,7 +341,7 @@ body:has(> .page-footer) > .page-wrap {
 .followup-verdict-btn.verdict-partial { border-color: #f59e0b; background: #fffbeb; color: #92400e; }
 .followup-verdict-btn.verdict-no      { border-color: #dc2626; background: #fef2f2; color: #b91c1c; }
 
-/* ── DOMAIN BLOCK ── */
+/* â”€â”€ DOMAIN BLOCK â”€â”€ */
 .domain-label {
   font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;
   color: #64748b; padding: 8px 24px; background: #f8fafc; border-bottom: 1px solid #f1f5f9;
@@ -354,7 +354,7 @@ body:has(> .page-footer) > .page-wrap {
 .domain-body.collapsed { display: none; }
 .domain-progress-text { font-size: .7rem; font-weight: 600; color: #94a3b8; }
 
-/* ── ITEM ROW ── */
+/* â”€â”€ ITEM ROW â”€â”€ */
 .item-row {
   padding: 16px 24px; border-bottom: 1px solid #f8fafc;
   display: flex; flex-direction: column; gap: 10px;
@@ -363,9 +363,9 @@ body:has(> .page-footer) > .page-wrap {
 .item-row:last-child { border-bottom: none; }
 .item-row.item-focused { background: #faf5ff !important; box-shadow: inset 3px 0 0 #7c3aed; }
 .item-row.item-done { background: #f0fdf4 !important; }
-.item-row.item-done .item-title-text::after { content: ' ✓'; color: #16a34a; font-size: .75rem; font-weight: 800; }
+.item-row.item-done .item-title-text::after { content: ' âœ“'; color: #16a34a; font-size: .75rem; font-weight: 800; }
 
-/* Level colour stripe — left border shows which level introduced the item */
+/* Level colour stripe â€” left border shows which level introduced the item */
 .item-row.level-induction  { border-left: 4px solid #eab308; }
 .item-row.level-developing { border-left: 4px solid #f97316; }
 .item-row.level-proficient { border-left: 4px solid #3b82f6; }
@@ -391,7 +391,7 @@ body:has(> .page-footer) > .page-wrap {
 .item-title-text { font-size: .88rem; font-weight: 600; color: #1e293b; flex: 1; }
 .item-theory { font-size: .7rem; color: #94a3b8; font-style: italic; margin-top: 2px; }
 
-/* ── SCORE BUTTONS ── */
+/* â”€â”€ SCORE BUTTONS â”€â”€ */
 .score-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: stretch; }
 .score-btn {
   flex: 1; min-width: 140px; border: 1.5px solid #e2e8f0; border-radius: 10px;
@@ -418,14 +418,14 @@ body:has(> .page-footer) > .page-wrap {
 .score-btn-label { font-size: .72rem; font-weight: 700; }
 .score-btn-desc { font-size: .80rem; color: #64748b; line-height: 1.45; margin-top: 2px; }
 
-/* ── ITEM NOTE ── */
+/* â”€â”€ ITEM NOTE â”€â”€ */
 .item-note-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 .item-note-toggle {
   font-size: .72rem; color: #7c3aed; font-weight: 600; cursor: pointer;
   background: none; border: none; font-family: inherit; padding: 0;
 }
 .item-note-toggle:hover { text-decoration: underline; }
-/* Required hint shown when score ≤ 2 */
+/* Required hint shown when score â‰¤ 2 */
 .note-required-hint {
   font-size: .68rem; color: #f97316; font-weight: 600; display: none;
 }
@@ -440,7 +440,7 @@ body:has(> .page-footer) > .page-wrap {
 /* Orange border when note is required but empty */
 .item-note-input.note-warn { border-color: #f97316; }
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 .sticky-sidebar { position: sticky; top: 80px; }
 .progress-card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
@@ -458,7 +458,7 @@ body:has(> .page-footer) > .page-wrap {
 .score-preview-label { font-size: .62rem; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
 .score-preview-val { font-size: 1rem; font-weight: 800; color: #1e293b; margin-top: 2px; }
 
-/* ── BUTTONS ── */
+/* â”€â”€ BUTTONS â”€â”€ */
 .action-bar {
   display: flex; gap: 10px; justify-content: flex-end; align-items: center;
   padding: 16px 24px; border-top: 1px solid #f1f5f9; background: #fafafa;
@@ -507,7 +507,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── RUBRIC MODAL ── */
+/* â”€â”€ RUBRIC MODAL â”€â”€ */
 .rubric-modal-overlay {
   position: fixed; inset: 0; background: rgba(15,15,30,.55); z-index: 10000;
   display: flex; align-items: center; justify-content: center; padding: 24px;
@@ -551,7 +551,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .rubric-view-btn:hover { color: #6d28d9; }
 
-/* ── PREV YEAR BADGE ── */
+/* â”€â”€ PREV YEAR BADGE â”€â”€ */
 .prev-score-badge {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: .65rem; font-weight: 700; color: #64748b;
@@ -568,12 +568,12 @@ body:has(> .page-footer) > .page-wrap {
   .score-btn { min-width: 100%; }
   .session-opts { grid-template-columns: 1fr; }
 
-  /* Context bar — stack on small screens */
+  /* Context bar â€” stack on small screens */
   .context-bar        { flex-direction: column; align-items: flex-start; gap: 12px; }
   .context-bar-right  { margin-left: 0; width: 100%; justify-content: flex-start; }
   .context-kbd-hints  { display: none; }
 
-  /* Framework tab bar — allow horizontal scroll, no wrapping */
+  /* Framework tab bar â€” allow horizontal scroll, no wrapping */
   .fw-tabs-bar {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
@@ -591,7 +591,7 @@ body:has(> .page-footer) > .page-wrap {
   .score-preview-grid        { grid-template-columns: 1fr 1fr; }
 }
 
-/* ── FRAMEWORK OVERVIEW ── */
+/* â”€â”€ FRAMEWORK OVERVIEW â”€â”€ */
 .fw-overview-row {
   display: flex; gap: 18px; padding: 20px 24px;
   border-bottom: 1px solid #f1f5f9; align-items: flex-start;
@@ -643,7 +643,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .fw-ov-tip:hover { filter: brightness(.93); transform: translateY(-1px); }
 
-/* ── WHO / WHEN BANNER ── */
+/* â”€â”€ WHO / WHEN BANNER â”€â”€ */
 .who-banner {
   display: flex; align-items: center; gap: 10px;
   padding: 10px 20px; font-size: .8rem; line-height: 1.4;
@@ -664,7 +664,7 @@ body:has(> .page-footer) > .page-wrap {
   background: rgba(0,0,0,.07);
 }
 
-/* ── PRINT REPORT CONTENT ── */
+/* â”€â”€ PRINT REPORT CONTENT â”€â”€ */
 #printReportArea { display: none; }
 .pr-header { margin-bottom: 18pt; border-bottom: 2px solid #1e1b4b; padding-bottom: 10pt; }
 .pr-header h1 { font-size: 16pt; color: #1e1b4b; margin-bottom: 4pt; }
@@ -683,7 +683,7 @@ body:has(> .page-footer) > .page-wrap {
 .pr-radar { text-align: center; margin: 10pt 0; }
 .pr-footer { font-size: 8pt; color: #94a3b8; margin-top: 18pt; border-top: 1px solid #e2e8f0; padding-top: 6pt; }
 
-/* ── PRINT / PDF ── */
+/* â”€â”€ PRINT / PDF â”€â”€ */
 @media print {
   body { padding-top: 0 !important; background: #fff !important; font-size: 11pt; }
   #navbarMount, #setupPhase, #scoringPhase, .hero,
@@ -691,7 +691,7 @@ body:has(> .page-footer) > .page-wrap {
   #printReportArea { display: block !important; }
 }
 
-/* ── SELF-APPRAISAL PANEL ───────────────────────────── */
+/* â”€â”€ SELF-APPRAISAL PANEL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 .collapsed-body { display: none !important; }
 
 .sa-not-submitted {
@@ -741,7 +741,7 @@ body:has(> .page-footer) > .page-wrap {
 .sa-delta-0    { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
 .sa-delta-1    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 .sa-delta-2up  { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
-/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
+/* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€ */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
@@ -791,13 +791,13 @@ body:has(> .page-footer) > .page-wrap {
 <body data-page-accent="dark">
 <div id="navbarMount"></div>
 
-<!-- HERO (canonical .page-hero · My Work / dark family) -->
+<!-- HERO (canonical .page-hero Â· My Work / dark family) -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
+      <p class="page-hero__eyebrow">Academic Hub Â· Appraisal</p>
       <h1 class="page-hero__title">Teacher Appraisal Entry</h1>
-      <p class="page-hero__desc">Complete the formal, scored teacher appraisal against the network framework — anchored to the Cambridge Teacher Standards (CTS chips link to the verbatim standard). The teacher's appraisal level determines which rubric items appear.</p>
+      <p class="page-hero__desc">Complete the formal, scored teacher appraisal against the network framework â€” anchored to the Cambridge Teacher Standards (CTS chips link to the verbatim standard). The teacher's appraisal level determines which rubric items appear.</p>
       <div class="tae-hero-actions">
         <a href="TeacherAppraisalCalibration.html" class="tae-hero-link">&#x1F3AF; Calibration Session &#x2197;</a>
       </div>
@@ -831,9 +831,9 @@ body:has(> .page-footer) > .page-wrap {
     <!-- Framework Overview -->
     <div class="card" id="frameworkOverviewCard">
       <div class="card-head" style="cursor:pointer;user-select:none;" onclick="toggleFwOverview()">
-        <div><h2>Framework Overview</h2><div class="card-head-sub">What you will be scoring — weights, who fills each section, and when</div></div>
+        <div><h2>Framework Overview</h2><div class="card-head-sub">What you will be scoring â€” weights, who fills each section, and when</div></div>
         <span id="fwOverviewToggleBtn" style="font-size:.78rem;font-weight:600;color:#7c3aed;display:flex;align-items:center;gap:5px;white-space:nowrap;">
-          <span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;">▲</span> Hide
+          <span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;">â–²</span> Hide
         </span>
       </div>
       <div class="card-body" style="padding:0;">
@@ -845,9 +845,9 @@ body:has(> .page-footer) > .page-wrap {
             <div class="fw-ov-title" style="color:#4338ca;">Teacher Administration <span class="fw-ov-weight" style="background:#eef2ff;color:#4338ca;">20%</span></div>
             <div class="fw-ov-desc">Checks whether the teacher fulfils their administrative responsibilities: calendar awareness, lesson plans, gradebook, attendance, resource stewardship.</div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-items">📋 9 items · all levels</span>
-              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-who">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-when">🗓 Observation Session</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-items">ðŸ“‹ 9 items Â· all levels</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-who">ðŸ‘¤ Appraiser</span>
+              <span class="fw-ov-chip chip-blue fw-ov-tip" data-tip="f1-when">ðŸ—“ Observation Session</span>
             </div>
           </div>
         </div>
@@ -857,41 +857,41 @@ body:has(> .page-footer) > .page-wrap {
           <div class="fw-ov-badge" style="background:#f5f3ff;color:#7c3aed;">F2</div>
           <div class="fw-ov-main">
             <div class="fw-ov-title" style="color:#7c3aed;">Class Observation <span class="fw-ov-weight" style="background:#f5f3ff;color:#7c3aed;">50%</span></div>
-            <div class="fw-ov-desc">Observed live during a formal announced lesson (35–40 min). Covers four domains — item count and complexity increase with appraisal level.</div>
+            <div class="fw-ov-desc">Observed live during a formal announced lesson (35â€“40 min). Covers four domains â€” item count and complexity increase with appraisal level.</div>
             <div class="fw-ov-domains">
               <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#818cf8;cursor:pointer;" data-tip="d1">
-                <span class="fw-ov-domain-label">D1 · Lesson Planning</span>
-                <span class="fw-ov-domain-items">10 items · all levels</span>
+                <span class="fw-ov-domain-label">D1 Â· Lesson Planning</span>
+                <span class="fw-ov-domain-items">10 items Â· all levels</span>
               </div>
               <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#a78bfa;cursor:pointer;" data-tip="d2">
-                <span class="fw-ov-domain-label">D2 · Classroom Management</span>
-                <span class="fw-ov-domain-items">8 items · all levels</span>
+                <span class="fw-ov-domain-label">D2 Â· Classroom Management</span>
+                <span class="fw-ov-domain-items">8 items Â· all levels</span>
               </div>
               <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#c084fc;cursor:pointer;" data-tip="d3">
-                <span class="fw-ov-domain-label">D3 · Instructional Process</span>
-                <span class="fw-ov-domain-items">9–21 items · level-gated</span>
+                <span class="fw-ov-domain-label">D3 Â· Instructional Process</span>
+                <span class="fw-ov-domain-items">9â€“21 items Â· level-gated</span>
               </div>
               <div class="fw-ov-domain-chip fw-ov-tip" style="border-color:#e879f9;cursor:pointer;" data-tip="d4">
-                <span class="fw-ov-domain-label">D4 · Assessment</span>
-                <span class="fw-ov-domain-items">4–6 items · level-gated</span>
+                <span class="fw-ov-domain-label">D4 Â· Assessment</span>
+                <span class="fw-ov-domain-items">4â€“6 items Â· level-gated</span>
               </div>
             </div>
             <div class="fw-ov-level-legend">
               <span class="fw-ov-level-chip fw-ov-tip" style="background:#fef9c3;color:#854d0e;cursor:pointer;" data-tip="lvl-induction">Induction</span>
               <span style="color:#94a3b8;font-size:.72rem;">foundational items only</span>
-              <span class="fw-ov-level-sep">·</span>
+              <span class="fw-ov-level-sep">Â·</span>
               <span class="fw-ov-level-chip fw-ov-tip" style="background:#ffedd5;color:#9a3412;cursor:pointer;" data-tip="lvl-developing">Developing</span>
               <span style="color:#94a3b8;font-size:.72rem;">+ higher-order thinking, variety, values</span>
-              <span class="fw-ov-level-sep">·</span>
+              <span class="fw-ov-level-sep">Â·</span>
               <span class="fw-ov-level-chip fw-ov-tip" style="background:#dbeafe;color:#1e40af;cursor:pointer;" data-tip="lvl-proficient">Proficient</span>
               <span style="color:#94a3b8;font-size:.72rem;">+ questioning, coherence, closure</span>
-              <span class="fw-ov-level-sep">·</span>
+              <span class="fw-ov-level-sep">Â·</span>
               <span class="fw-ov-level-chip fw-ov-tip" style="background:#dcfce7;color:#166534;cursor:pointer;" data-tip="lvl-lead">Lead</span>
               <span style="color:#94a3b8;font-size:.72rem;">+ persistence, full set + F3L</span>
             </div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-who">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-when">🗓 Observation Session — scored live in classroom</span>
+              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-who">ðŸ‘¤ Appraiser</span>
+              <span class="fw-ov-chip chip-purple fw-ov-tip" data-tip="f2-when">ðŸ—“ Observation Session â€” scored live in classroom</span>
             </div>
           </div>
         </div>
@@ -903,9 +903,9 @@ body:has(> .page-footer) > .page-wrap {
             <div class="fw-ov-title" style="color:#0e7490;">Work Inspection <span class="fw-ov-weight" style="background:#ecfeff;color:#0e7490;">20%</span></div>
             <div class="fw-ov-desc">Professional conduct, responsibilities beyond the classroom, and school community contribution. Lead teachers are assessed on 6 additional leadership items (F3L).</div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-items">📋 10 items (+ 6 Lead-only)</span>
-              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-who">👤 Appraiser</span>
-              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-when">🗓 End-of-Year Conference</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-items">ðŸ“‹ 10 items (+ 6 Lead-only)</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-who">ðŸ‘¤ Appraiser</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-when">ðŸ—“ End-of-Year Conference</span>
             </div>
           </div>
         </div>
@@ -915,11 +915,11 @@ body:has(> .page-footer) > .page-wrap {
           <div class="fw-ov-badge" style="background:#f0fdf4;color:#15803d;">F4</div>
           <div class="fw-ov-main">
             <div class="fw-ov-title" style="color:#15803d;">Student Survey <span class="fw-ov-weight" style="background:#f0fdf4;color:#15803d;">10%</span></div>
-            <div class="fw-ov-desc">Student perspectives on teaching quality, collected independently during the year. <strong>Students fill the survey — you enter the aggregated results here.</strong></div>
+            <div class="fw-ov-desc">Student perspectives on teaching quality, collected independently during the year. <strong>Students fill the survey â€” you enter the aggregated results here.</strong></div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-items">📋 17 items · all levels</span>
-              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-who">🎓 Filled by students</span>
-              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-when">🗓 Collected independently · enter results anytime</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-items">ðŸ“‹ 17 items Â· all levels</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-who">ðŸŽ“ Filled by students</span>
+              <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-when">ðŸ—“ Collected independently Â· enter results anytime</span>
             </div>
           </div>
         </div>
@@ -939,7 +939,7 @@ body:has(> .page-footer) > .page-wrap {
           <div class="session-opt" data-mode="endofyear" id="optEndOfYear">
             <div class="session-opt-icon">&#x1F4CA;</div>
             <div class="session-opt-title">End-of-Year Conference</div>
-            <div class="session-opt-desc">Score F3 Work Inspection — completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
+            <div class="session-opt-desc">Score F3 Work Inspection â€” completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
           </div>
         </div>
       </div>
@@ -951,7 +951,7 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row">
           <div class="field" style="position:relative;">
             <label>Teacher Name <span style="color:#dc2626">*</span></label>
-            <input type="text" id="teacherName" placeholder="Type to search teachers…" autocomplete="off"
+            <input aria-label="Type to search teachersâ€¦" type="text" id="teacherName" placeholder="Type to search teachersâ€¦" autocomplete="off"
               oninput="teacherSearch(this.value)">
             <div id="teacherDropdown" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:999;
               background:#fff;border:1.5px solid #c4b5fd;border-radius:10px;box-shadow:0 4px 20px rgba(0,0,0,.12);
@@ -994,11 +994,11 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row">
           <div class="field">
             <label>Student Profile Notes</label>
-            <textarea id="preConf_studentProfile" rows="2" placeholder="Class composition, prior attainment, any relevant student context…"></textarea>
+            <textarea id="preConf_studentProfile" rows="2" placeholder="Class composition, prior attainment, any relevant student contextâ€¦"></textarea>
           </div>
           <div class="field">
             <label>Agreed Focus Areas</label>
-            <textarea id="preConf_focusAreas" rows="2" placeholder="Items or domains the teacher has requested feedback on, or areas flagged from previous observations…"></textarea>
+            <textarea id="preConf_focusAreas" rows="2" placeholder="Items or domains the teacher has requested feedback on, or areas flagged from previous observationsâ€¦"></textarea>
           </div>
         </div>
       </div>
@@ -1016,9 +1016,9 @@ body:has(> .page-footer) > .page-wrap {
           <div class="field">
             <label>Appraisal Level <span style="color:#dc2626">*</span></label>
             <select id="appraisalLevel">
-              <option value="">— Select level —</option>
-              <option value="induction">Induction (Year 1–2)</option>
-              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+              <option value="">â€” Select level â€”</option>
+              <option value="induction">Induction (Year 1â€“2)</option>
+              <option value="developing">Developing (Year 3â€“5 or predicate C/D)</option>
               <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
               <option value="lead">Lead (Subject Leader / HoD)</option>
             </select>
@@ -1051,7 +1051,7 @@ body:has(> .page-footer) > .page-wrap {
           </div>
         </div>
         <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
-        <!-- Previous follow-up banner — injected by JS when prior record found -->
+        <!-- Previous follow-up banner â€” injected by JS when prior record found -->
         <div id="prevFollowUpBanner" style="display:none;"></div>
       </div>
     </div>
@@ -1068,9 +1068,9 @@ body:has(> .page-footer) > .page-wrap {
           <div class="field">
             <label>Appraisal Level <span style="color:#dc2626">*</span></label>
             <select id="appraisalLevelEoy">
-              <option value="">— Select level —</option>
-              <option value="induction">Induction (Year 1–2)</option>
-              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+              <option value="">â€” Select level â€”</option>
+              <option value="induction">Induction (Year 1â€“2)</option>
+              <option value="developing">Developing (Year 3â€“5 or predicate C/D)</option>
               <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
               <option value="lead">Lead (Subject Leader / HoD)</option>
             </select>
@@ -1103,23 +1103,23 @@ body:has(> .page-footer) > .page-wrap {
     <div class="context-bar-left">
       <div class="context-avatar" id="stripAvatar">?</div>
       <div class="context-main">
-        <div class="context-name" id="stripTeacher">—</div>
+        <div class="context-name" id="stripTeacher">â€”</div>
         <div class="context-meta-row">
-          <span class="context-meta-item"><span class="context-meta-label">Subject</span><span id="stripSubject">—</span></span>
-          <span class="context-divider">·</span>
-          <span class="context-meta-item"><span class="context-meta-label">Date</span><span id="stripDate">—</span></span>
+          <span class="context-meta-item"><span class="context-meta-label">Subject</span><span id="stripSubject">â€”</span></span>
+          <span class="context-divider">Â·</span>
+          <span class="context-meta-item"><span class="context-meta-label">Date</span><span id="stripDate">â€”</span></span>
         </div>
       </div>
     </div>
     <div class="context-badges">
-      <div id="stripLevel" class="context-badge-level">—</div>
-      <div id="stripSession" class="context-badge-session">—</div>
+      <div id="stripLevel" class="context-badge-level">â€”</div>
+      <div id="stripSession" class="context-badge-session">â€”</div>
       <span id="autosaveStatus" style="font-size:.68rem;color:#94a3b8;margin-left:8px;transition:color .3s;"></span>
     </div>
     <div class="context-bar-right">
       <div class="context-kbd-hints">
         <span title="Press S to save draft"><kbd class="kbd">S</kbd><span>save</span></span>
-        <span title="Press 1–4 to score focused item"><kbd class="kbd">1–4</kbd><span>score</span></span>
+        <span title="Press 1â€“4 to score focused item"><kbd class="kbd">1â€“4</kbd><span>score</span></span>
         <span title="Press N for Not Observed"><kbd class="kbd">N</kbd><span>N/O</span></span>
       </div>
       <button class="btn-ghost-sm" onclick="backToSetup()">&#x270E; Edit</button>
@@ -1140,18 +1140,18 @@ body:has(> .page-footer) > .page-wrap {
 
       <!-- F1 TAB -->
       <div id="panelF1" class="fw-panel">
-        <!-- TODO (pilot → production): lock F1 tab as read-only when sessionMode === 'endofyear' -->
+        <!-- TODO (pilot â†’ production): lock F1 tab as read-only when sessionMode === 'endofyear' -->
         <div class="session-panel-note" id="f1EoyNote">
           &#x1F4CB; F1 scores pre-loaded from the observation record. Pilot: editable. Production: will be read-only.
         </div>
         <div class="card">
           <div class="who-banner who-appraiser">
-            <span class="who-icon">👤</span>
-            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>Observation Session</strong> — during or immediately after the formal classroom visit</span>
+            <span class="who-icon">ðŸ‘¤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this Â· <strong>Observation Session</strong> â€” during or immediately after the formal classroom visit</span>
             <span class="who-weight">20%</span>
           </div>
           <div class="card-head">
-            <div><h2>F1 — Teacher Administration</h2><div class="card-head-sub">9 items · Administrative readiness & compliance</div></div>
+            <div><h2>F1 â€” Teacher Administration</h2><div class="card-head-sub">9 items Â· Administrative readiness & compliance</div></div>
             <div id="f1Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 9 scored</div>
           </div>
           <div id="f1Items"></div>
@@ -1160,18 +1160,18 @@ body:has(> .page-footer) > .page-wrap {
 
       <!-- F2 TAB -->
       <div id="panelF2" class="fw-panel" style="display:none;">
-        <!-- TODO (pilot → production): lock F2 tab as read-only when sessionMode === 'endofyear' -->
+        <!-- TODO (pilot â†’ production): lock F2 tab as read-only when sessionMode === 'endofyear' -->
         <div class="session-panel-note" id="f2EoyNote">
           &#x1F4CB; F2 scores pre-loaded from the observation record. Pilot: editable. Production: will be read-only.
         </div>
         <div class="card">
           <div class="who-banner who-appraiser">
-            <span class="who-icon">👤</span>
-            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>Observation Session</strong> — scored live during the formal announced lesson (35–40 min)</span>
+            <span class="who-icon">ðŸ‘¤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this Â· <strong>Observation Session</strong> â€” scored live during the formal announced lesson (35â€“40 min)</span>
             <span class="who-weight">50%</span>
           </div>
           <div class="card-head">
-            <div><h2>F2 — Class Observation</h2><div class="card-head-sub">Items vary by level · 4 domains: Planning, Management, Instruction, Assessment</div></div>
+            <div><h2>F2 â€” Class Observation</h2><div class="card-head-sub">Items vary by level Â· 4 domains: Planning, Management, Instruction, Assessment</div></div>
             <div id="f2Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
           </div>
           <div id="f2Items"></div>
@@ -1182,12 +1182,12 @@ body:has(> .page-footer) > .page-wrap {
       <div id="panelF3" class="fw-panel" style="display:none;">
         <div class="card">
           <div class="who-banner who-appraiser">
-            <span class="who-icon">👤</span>
-            <span class="who-text"><strong>Appraiser</strong> fills this · <strong>End-of-Year Conference</strong> — scored at the annual review meeting with the teacher</span>
+            <span class="who-icon">ðŸ‘¤</span>
+            <span class="who-text"><strong>Appraiser</strong> fills this Â· <strong>End-of-Year Conference</strong> â€” scored at the annual review meeting with the teacher</span>
             <span class="who-weight">20%</span>
           </div>
           <div class="card-head">
-            <div><h2>F3 — Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level · Professional conduct & responsibilities beyond the classroom</div></div>
+            <div><h2>F3 â€” Work Inspection</h2><div class="card-head-sub" id="f3Subtitle">Items vary by level Â· Professional conduct & responsibilities beyond the classroom</div></div>
             <div id="f3Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / ? scored</div>
           </div>
           <div id="f3Items"></div>
@@ -1198,12 +1198,12 @@ body:has(> .page-footer) > .page-wrap {
       <div id="panelF4" class="fw-panel" style="display:none;">
         <div class="card">
           <div class="who-banner who-students">
-            <span class="who-icon">🎓</span>
-            <span class="who-text"><strong>Students</strong> fill the original survey · Appraiser enters aggregated results here · <strong>Collected independently during the academic year</strong></span>
+            <span class="who-icon">ðŸŽ“</span>
+            <span class="who-text"><strong>Students</strong> fill the original survey Â· Appraiser enters aggregated results here Â· <strong>Collected independently during the academic year</strong></span>
             <span class="who-weight">10%</span>
           </div>
           <div class="card-head">
-            <div><h2>F4 — Student Survey</h2><div class="card-head-sub">17 items · Student perspective on teaching quality</div></div>
+            <div><h2>F4 â€” Student Survey</h2><div class="card-head-sub">17 items Â· Student perspective on teaching quality</div></div>
             <div id="f4Progress" style="font-size:.75rem;font-weight:700;color:#7c3aed;">0 / 17 scored</div>
           </div>
           <div id="f4Items" class="card-body" style="padding:0;"></div>
@@ -1219,7 +1219,7 @@ body:has(> .page-footer) > .page-wrap {
         </div>
 
         <div class="card" id="radarCard" style="display:none;">
-          <div class="card-head"><h2>Domain Radar</h2><div class="card-head-sub">Mean score per domain · 4.00 max</div></div>
+          <div class="card-head"><h2>Domain Radar</h2><div class="card-head-sub">Mean score per domain Â· 4.00 max</div></div>
           <div class="card-body" style="display:flex;justify-content:center;">
             <canvas id="radarCanvas" width="380" height="340" style="max-width:100%;"></canvas>
           </div>
@@ -1240,7 +1240,7 @@ body:has(> .page-footer) > .page-wrap {
             <div id="coachingCustomWrap" style="margin-top:18px;display:none;">
               <div class="feedback-tag-label" style="margin-bottom:6px;">Add your own question</div>
               <div style="display:flex;gap:8px;">
-                <input type="text" id="coachingCustomInput" class="field feedback-tag-input" placeholder="Type a custom coaching question…" style="flex:1;">
+                <input type="text" id="coachingCustomInput" class="field feedback-tag-input" placeholder="Type a custom coaching questionâ€¦" style="flex:1;">
                 <button class="btn-secondary" id="coachingAddBtn" style="white-space:nowrap;padding:7px 14px;font-size:.8rem;">Add</button>
               </div>
             </div>
@@ -1255,7 +1255,7 @@ body:has(> .page-footer) > .page-wrap {
         <div class="card" id="followUpCheckCard" style="display:none;">
           <div class="card-head">
             <div>
-              <h2>&#x1F504; Follow-up — Previous Go Target</h2>
+              <h2>&#x1F504; Follow-up â€” Previous Go Target</h2>
               <div class="card-head-sub">Check in on the action agreed at the last observation before writing this session's feedback.</div>
             </div>
           </div>
@@ -1290,11 +1290,11 @@ body:has(> .page-footer) > .page-wrap {
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x2728;</span>
                 <div>
-                  <div class="feedback-block-title">Glow — What is working well</div>
+                  <div class="feedback-block-title">Glow â€” What is working well</div>
                   <div class="feedback-block-hint">Specific evidence of strong practice. Name the strategy, describe what you saw, explain the impact on learners.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="narr_strengths" placeholder="e.g. "Cold-calling with 3-second wait time ensured all students had processing time — 85% of responses were substantive.""></textarea>
+              <textarea class="field feedback-textarea" id="narr_strengths" placeholder="e.g. "Cold-calling with 3-second wait time ensured all students had processing time â€” 85% of responses were substantive.""></textarea>
             </div>
 
             <!-- GROW -->
@@ -1302,15 +1302,15 @@ body:has(> .page-footer) > .page-wrap {
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x1F331;</span>
                 <div>
-                  <div class="feedback-block-title">Grow — Priority development area</div>
-                  <div class="feedback-block-hint">One focused area linked to a framework item. Describe the gap and its impact — avoid generalisations.</div>
+                  <div class="feedback-block-title">Grow â€” Priority development area</div>
+                  <div class="feedback-block-hint">One focused area linked to a framework item. Describe the gap and its impact â€” avoid generalisations.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 — Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
+              <textarea class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 â€” Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework item</label>
                 <select class="field feedback-tag-input" id="narr_grow_item" style="height:38px;">
-                  <option value="">— Select framework item —</option>
+                  <option value="">â€” Select framework item â€”</option>
                 </select>
               </div>
             </div>
@@ -1321,9 +1321,9 @@ body:has(> .page-footer) > .page-wrap {
                 <span class="feedback-icon">&#x1F3AF;</span>
                 <div style="flex:1;">
                   <div class="feedback-block-title" style="display:flex;align-items:center;gap:8px;">
-                    Go — Next step (SMART)
-                    <span id="goCompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#dcfce7;color:#15803d;letter-spacing:.03em;">✓ Complete</span>
-                    <span id="goIncompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#fff1f2;color:#b91c1c;letter-spacing:.03em;">⚠ Incomplete — add date & check</span>
+                    Go â€” Next step (SMART)
+                    <span id="goCompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#dcfce7;color:#15803d;letter-spacing:.03em;">âœ“ Complete</span>
+                    <span id="goIncompleteBadge" style="display:none;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:10px;background:#fff1f2;color:#b91c1c;letter-spacing:.03em;">âš  Incomplete â€” add date & check</span>
                   </div>
                   <div class="feedback-block-hint">One concrete action. Specify <strong>what</strong> the teacher will do, <strong>by when</strong>, and <strong>how progress will be checked</strong>. All three fields required for this target to appear in the next observation's follow-up.</div>
                 </div>
@@ -1353,7 +1353,7 @@ body:has(> .page-footer) > .page-wrap {
           <div class="card-head">
             <div>
               <h2>&#x1F4CB; Teacher Self-Appraisal</h2>
-              <div class="card-head-sub">Scores submitted by the teacher — compare with your observation ratings below</div>
+              <div class="card-head-sub">Scores submitted by the teacher â€” compare with your observation ratings below</div>
             </div>
             <button class="btn-secondary" style="font-size:.75rem;padding:6px 12px;" onclick="document.getElementById('selfAppraisalBody').classList.toggle('collapsed-body')">Toggle</button>
           </div>
@@ -1365,7 +1365,7 @@ body:has(> .page-footer) > .page-wrap {
         <!-- End-of-Year Conference narratives (EOY mode) -->
         <div class="card" id="eoyNarrativeCard" style="display:none;">
           <div class="card-head">
-            <div><h2>End-of-Year Conference Report</h2><div class="card-head-sub">Covers full-year evidence — shared with teacher at finalisation</div></div>
+            <div><h2>End-of-Year Conference Report</h2><div class="card-head-sub">Covers full-year evidence â€” shared with teacher at finalisation</div></div>
           </div>
           <div class="card-body">
 
@@ -1375,10 +1375,10 @@ body:has(> .page-footer) > .page-wrap {
                 <span class="feedback-icon">&#x1F4CB;</span>
                 <div>
                   <div class="feedback-block-title">Overall Annual Summary</div>
-                  <div class="feedback-block-hint">2–3 sentences capturing the teacher's professional trajectory across the year.</div>
+                  <div class="feedback-block-hint">2â€“3 sentences capturing the teacher's professional trajectory across the year.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_summary" placeholder="e.g. "Over this academic year, [name] has demonstrated consistent growth in instructional practice, particularly in formative assessment…""></textarea>
+              <textarea class="field feedback-textarea" id="eoy_summary" placeholder="e.g. "Over this academic year, [name] has demonstrated consistent growth in instructional practice, particularly in formative assessmentâ€¦""></textarea>
             </div>
 
             <!-- GLOW -->
@@ -1386,7 +1386,7 @@ body:has(> .page-footer) > .page-wrap {
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x2728;</span>
                 <div>
-                  <div class="feedback-block-title">Glow — Sustained strengths (full year)</div>
+                  <div class="feedback-block-title">Glow â€” Sustained strengths (full year)</div>
                   <div class="feedback-block-hint">Strengths evidenced across observation, work inspection, and professional conduct. Reference specific moments.</div>
                 </div>
               </div>
@@ -1398,15 +1398,15 @@ body:has(> .page-footer) > .page-wrap {
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x1F331;</span>
                 <div>
-                  <div class="feedback-block-title">Grow — Priority development area for next year</div>
+                  <div class="feedback-block-title">Grow â€” Priority development area for next year</div>
                   <div class="feedback-block-hint">The single most important area for growth. Link to a framework domain. Be specific about the gap pattern.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 — Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
+              <textarea class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 â€” Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework domain / item</label>
                 <select class="field feedback-tag-input" id="eoy_grow_item" style="height:38px;">
-                  <option value="">— Select framework item —</option>
+                  <option value="">â€” Select framework item â€”</option>
                 </select>
               </div>
             </div>
@@ -1416,11 +1416,11 @@ body:has(> .page-footer) > .page-wrap {
               <div class="feedback-block-header">
                 <span class="feedback-icon">&#x1F3AF;</span>
                 <div>
-                  <div class="feedback-block-title">Go — Professional Development Plan</div>
+                  <div class="feedback-block-title">Go â€” Professional Development Plan</div>
                   <div class="feedback-block-hint">Specific, time-bound targets. Link to CPD programme, training, mentoring, or peer observation. Include success criteria.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_actions" placeholder="e.g. "Term 1: attend AfL workshop (CPD calendar). Terms 1–2: co-plan one lesson/fortnight with subject leader. Success: F2 D4 score ≥ 3 by next formal observation.""></textarea>
+              <textarea class="field feedback-textarea" id="eoy_actions" placeholder="e.g. "Term 1: attend AfL workshop (CPD calendar). Terms 1â€“2: co-plan one lesson/fortnight with subject leader. Success: F2 D4 score â‰¥ 3 by next formal observation.""></textarea>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
                 <div>
                   <label class="feedback-tag-label">First review date</label>
@@ -1428,7 +1428,7 @@ body:has(> .page-footer) > .page-wrap {
                 </div>
                 <div>
                   <label class="feedback-tag-label">Success criteria / evidence</label>
-                  <input type="text" class="field feedback-tag-input" id="eoy_go_check" placeholder="e.g. F2 D4 score ≥ 3 by next observation">
+                  <input type="text" class="field feedback-tag-input" id="eoy_go_check" placeholder="e.g. F2 D4 score â‰¥ 3 by next observation">
                 </div>
               </div>
             </div>
@@ -1461,26 +1461,26 @@ body:has(> .page-footer) > .page-wrap {
         <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:14px;">
           <div class="progress-title">Live Scores</div>
           <div class="score-preview-grid">
-            <div class="score-preview-item"><div class="score-preview-label">F1 (20%)</div><div class="score-preview-val" id="liveF1">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F2 (50%)</div><div class="score-preview-val" id="liveF2">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F3 (20%)</div><div class="score-preview-val" id="liveF3">—</div></div>
-            <div class="score-preview-item"><div class="score-preview-label">F4 (10%)</div><div class="score-preview-val" id="liveF4">—</div></div>
-            <div class="score-preview-item" style="grid-column:span 2;"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">—</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F1 (20%)</div><div class="score-preview-val" id="liveF1">â€”</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F2 (50%)</div><div class="score-preview-val" id="liveF2">â€”</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F3 (20%)</div><div class="score-preview-val" id="liveF3">â€”</div></div>
+            <div class="score-preview-item"><div class="score-preview-label">F4 (10%)</div><div class="score-preview-val" id="liveF4">â€”</div></div>
+            <div class="score-preview-item" style="grid-column:span 2;"><div class="score-preview-label">Final %</div><div class="score-preview-val" id="liveFinal">â€”</div></div>
           </div>
           <div id="predWrap" style="margin-top:12px;text-align:center;display:none;">
             <div style="font-size:.65rem;color:#94a3b8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;">Predicate</div>
-            <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">—</div>
+            <div id="livePred" style="font-size:2rem;font-weight:800;color:#1e293b;">â€”</div>
           </div>
         </div>
       </div>
       <div class="progress-card" style="margin-top:0;">
         <div class="progress-title">Rubric Legend</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>N/O</strong> — Not observed · excluded from score</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> â€” Exceptional practice</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> â€” Expected standard</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> â€” Developing</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> â€” Does not meet</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>N/O</strong> â€” Not observed Â· excluded from score</span></div>
         </div>
       </div>
     </div>
@@ -1496,7 +1496,7 @@ body:has(> .page-footer) > .page-wrap {
   <div id="fwPopover" style="background:#fff;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.18);max-width:480px;width:90%;padding:0;overflow:hidden;max-height:85vh;display:flex;flex-direction:column;" onclick="event.stopPropagation()">
     <div id="fwPopoverHead" style="padding:16px 20px 14px;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;justify-content:space-between;">
       <div id="fwPopoverTitle" style="font-size:.95rem;font-weight:800;color:#1e293b;"></div>
-      <button onclick="closeFwPopover()" style="background:none;border:none;font-size:1.2rem;color:#94a3b8;cursor:pointer;line-height:1;">×</button>
+      <button onclick="closeFwPopover()" style="background:none;border:none;font-size:1.2rem;color:#94a3b8;cursor:pointer;line-height:1;">Ã—</button>
     </div>
     <div id="fwPopoverBody" style="padding:16px 20px;font-size:.83rem;color:#374151;line-height:1.6;max-height:70vh;overflow-y:auto;"></div>
   </div>
@@ -1507,25 +1507,25 @@ body:has(> .page-footer) > .page-wrap {
   <div class="rubric-modal">
     <div class="rubric-modal-head">
       <div>
-        <div class="rubric-modal-title" id="rubricModalTitle">—</div>
-        <div class="rubric-modal-sub" id="rubricModalSub">—</div>
+        <div class="rubric-modal-title" id="rubricModalTitle">â€”</div>
+        <div class="rubric-modal-sub" id="rubricModalSub">â€”</div>
       </div>
-      <button class="rubric-modal-close" onclick="closeRubricModal()">✕</button>
+      <button class="rubric-modal-close" onclick="closeRubricModal()">âœ•</button>
     </div>
     <div id="rubricModalBody"></div>
   </div>
 </div>
 
-<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Appraisal · Teacher Framework</span>
-      <h2 class="page-footer__cta-title">Score against the framework — anchored to Cambridge.</h2>
+      <span class="page-footer__cta-eyebrow">Appraisal Â· Teacher Framework</span>
+      <h2 class="page-footer__cta-title">Score against the framework â€” anchored to Cambridge.</h2>
       <p class="page-footer__cta-desc">Every appraisal item maps to a Cambridge Teacher Standard. Score what you observed, evidence each judgement, and calibrate with other appraisers first so the network's appraisal data stays fair and comparable.</p>
-      <a href="/appraiser-calibration" class="page-footer__cta-btn">Open Appraisal Calibration <span aria-hidden="true">→</span></a>
+      <a href="/appraiser-calibration" class="page-footer__cta-btn">Open Appraisal Calibration <span aria-hidden="true">â†’</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Teacher Appraisal Entry footer navigation">
       <div class="page-footer__nav-group">
@@ -1542,32 +1542,32 @@ body:has(> .page-footer) > .page-wrap {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Anchored to the Cambridge Teacher Standards · appraisal level sets which rubric items appear</span>
+    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-right">Anchored to the Cambridge Teacher Standards Â· appraisal level sets which rubric items appear</span>
   </div>
 </footer>
 
 <script type="module">
 import { getFirestore, collection, doc, setDoc, addDoc, getDoc, getDocs, query, where, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// ── STATE ─────────────────────────────────────────────────
+// â”€â”€ STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 let FRAMEWORK = null;
 let LEVELS    = null;
 let COACHING_DB = null;       // coaching-questions.json data
 let currentDocId  = null;
 let sessionMode   = 'observation'; // 'observation' | 'endofyear'
 let loadedObsRecord  = null;
-let prevYearScores   = {};  // itemId → score from previous academic year
-const scores         = {};  // itemId → 1–4
-const notes         = {};   // itemId → string
-const surveyScores  = {};   // F4 itemId → 1–4
+let prevYearScores   = {};  // itemId â†’ score from previous academic year
+const scores         = {};  // itemId â†’ 1â€“4
+const notes         = {};   // itemId â†’ string
+const surveyScores  = {};   // F4 itemId â†’ 1â€“4
 window.surveyScores = surveyScores;
 const notObserved = new Set(); // itemIds explicitly marked N/O
-let selectedQuestions = [];    // { itemId, text } — questions chosen for debrief
+let selectedQuestions = [];    // { itemId, text } â€” questions chosen for debrief
 let prevRecord = null;         // previous observation record (for follow-up)
 let followUpVerdict = null;    // 'yes' | 'partial' | 'no'
 
-let frameworkItemMap = {}; // itemId → item object with feedback_prompts, follow_up_indicators
+let frameworkItemMap = {}; // itemId â†’ item object with feedback_prompts, follow_up_indicators
 
 function buildFrameworkItemMap() {
   if (!FRAMEWORK) return;
@@ -1594,7 +1594,7 @@ function populateGrowItemSelects() {
       const addItems = (items) => items.forEach(item => {
         const opt = document.createElement('option');
         opt.value = item.id;
-        opt.textContent = `${item.id} — ${item.title}`;
+        opt.textContent = `${item.id} â€” ${item.title}`;
         grp.appendChild(opt);
       });
       if (fw.domains) fw.domains.forEach(d => addItems(d.items||[]));
@@ -1629,7 +1629,7 @@ Promise.all([
 });
 
 // Returns the Set of item IDs that cannot be marked N/O for a given level.
-// Source: appraisal-levels.json — only items visible at the level can be mandatory.
+// Source: appraisal-levels.json â€” only items visible at the level can be mandatory.
 function getMandatoryItems(level) {
   // Always mandatory at all levels (directly observable in any lesson):
   const base = new Set([
@@ -1645,12 +1645,12 @@ function getMandatoryItems(level) {
   if (level === 'developing' || level === 'proficient' || level === 'lead') {
     ['F3.3', 'F3.4', 'F3.5', 'F3.9', 'F3.10'].forEach(id => base.add(id));
   }
-  // F3.6, F3.7 visible from Developing but involve leadership initiative —
+  // F3.6, F3.7 visible from Developing but involve leadership initiative â€”
   // legitimate to N/O in some contexts, so not in mandatory set.
   return base;
 }
 
-// ── LOCAL STORAGE AUTO-SAVE ───────────────────────────────
+// â”€â”€ LOCAL STORAGE AUTO-SAVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const LS_KEY = 'appraisal_draft_v2';
 
 function lsSave() {
@@ -1670,7 +1670,7 @@ function lsSave() {
       savedAt: Date.now()
     };
     localStorage.setItem(LS_KEY, JSON.stringify(draft));
-  } catch(e) { /* quota exceeded — ignore */ }
+  } catch(e) { /* quota exceeded â€” ignore */ }
 }
 
 function lsRestore() {
@@ -1686,7 +1686,7 @@ function lsRestore() {
 
 function lsClear() { localStorage.removeItem(LS_KEY); }
 
-// ── HELPERS ──────────────────────────────────────────────
+// â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function showToast(msg, duration=3500) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.display = 'block';
@@ -1705,11 +1705,11 @@ function isVisible(item, level) {
 }
 
 function scoreLabel(s) {
-  return ['','Unsatisfactory','Basic','Proficient','Distinguished'][s] || '—';
+  return ['','Unsatisfactory','Basic','Proficient','Distinguished'][s] || 'â€”';
 }
 
 function buildItemRow(item) {
-  // Full rubric text — no truncation (fix #1)
+  // Full rubric text â€” no truncation (fix #1)
   const scoreHtml = [1,2,3,4].map(s => {
     const rubricText = item.rubric?.[s] || '';
     return `<button class="score-btn" data-item="${item.id}" data-score="${s}" onclick="selectScore('${item.id}',${s})">
@@ -1719,11 +1719,11 @@ function buildItemRow(item) {
     </button>`;
   }).join('');
 
-  // Not Observed button — red-tinted to signal it's a deliberate exclusion, not a neutral choice
+  // Not Observed button â€” red-tinted to signal it's a deliberate exclusion, not a neutral choice
   const noBtn = `<button class="score-btn no-obs" data-item="${item.id}" data-score="no"
       onclick="selectScore('${item.id}','no')"
       style="border-color:#fca5a5;background:#fff1f2;"
-      title="This item was not observable during the lesson — it will be excluded from the mean. Use only when the item genuinely could not be assessed.">
+      title="This item was not observable during the lesson â€” it will be excluded from the mean. Use only when the item genuinely could not be assessed.">
     <div class="score-btn-num"><span class="dot" style="background:#dc2626;"></span> <span style="color:#dc2626;font-weight:800;">N/O</span></div>
     <div class="score-btn-label" style="color:#dc2626;">Not Observed</div>
     <div class="score-btn-desc" style="font-style:italic;color:#ef4444;">Excluded from score</div>
@@ -1749,11 +1749,11 @@ function buildItemRow(item) {
           <span class="item-title-text">${item.title}</span>
           ${lvPill}
           ${Array.isArray(item.cambridge_standard_refs) && item.cambridge_standard_refs.length
-            ? item.cambridge_standard_refs.map(r => `<span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:600;" title="Cambridge Teacher Standards 2023 — ${r}">CTS ${r}</span>`).join('')
+            ? item.cambridge_standard_refs.map(r => `<span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:600;" title="Cambridge Teacher Standards 2023 â€” ${r}">CTS ${r}</span>`).join('')
             : ''}
-          <button class="rubric-view-btn" onclick="openRubricModal('${item.id}')">View rubric ↗</button>
+          <button class="rubric-view-btn" onclick="openRubricModal('${item.id}')">View rubric â†—</button>
           <span class="prev-score-badge" id="prev-${item.id}" style="display:none;"></span>
-          <span class="kbd-hint" title="Keyboard: 1–4 to score, N for Not Observed">⌨ 1–4 / N</span>
+          <span class="kbd-hint" title="Keyboard: 1â€“4 to score, N for Not Observed">âŒ¨ 1â€“4 / N</span>
         </div>
         ${theory}
       </div>
@@ -1763,10 +1763,10 @@ function buildItemRow(item) {
       : noBtn}</div>
     <div class="item-note-row">
       <button class="item-note-toggle" id="noteToggle-${item.id}" onclick="toggleNote('${item.id}')">+ Add note</button>
-      <span class="note-required-hint" id="noteHint-${item.id}">⚠ note required for score ≤ 2</span>
+      <span class="note-required-hint" id="noteHint-${item.id}">âš  note required for score â‰¤ 2</span>
     </div>
     <textarea class="item-note-input" id="note-${item.id}"
-      placeholder="Evidence / comment for this item…"
+      placeholder="Evidence / comment for this itemâ€¦"
       onchange="notes['${item.id}']=this.value; checkNoteWarn('${item.id}'); updateLiveScores();"></textarea>
   </div>`;
 }
@@ -1783,7 +1783,7 @@ function domainSection(id, title, items, collapsed = false) {
       <span>${title}</span>
       <span style="display:flex;align-items:center;gap:10px;">
         <span class="domain-progress-text domain-prog-${id}">${items.length} items</span>
-        <span class="domain-chevron">▾</span>
+        <span class="domain-chevron">â–¾</span>
       </span>
     </div>
     <div class="domain-body${collapsed ? ' collapsed' : ''}" data-domain-body="${id}">
@@ -1799,30 +1799,30 @@ window.toggleDomain = function(labelEl) {
   body.classList.toggle('collapsed');
 };
 
-// D3 observation phase map — helps appraiser know WHEN to score each item
+// D3 observation phase map â€” helps appraiser know WHEN to score each item
 // pre = reviewable before lesson (from lesson plan); live = score during lesson; post = reflect after
 const D3_PHASE = {
-  'D3.1':  'live',   // Punctuality & readiness — observable at lesson start
-  'D3.2':  'pre',    // Communication style — can note from plan, confirmed live
-  'D3.3':  'live',   // Learning intentions — observed live
-  'D3.4':  'live',   // Activity–objective alignment — observed live
-  'D3.5':  'live',   // Higher-order thinking — observed live
-  'D3.6':  'post',   // Student performance awareness — requires post-lesson reflection
-  'D3.7':  'live',   // Teaching strategy variety — observed live
-  'D3.8':  'live',   // Instructional materials — observed live
-  'D3.9':  'post',   // Timely feedback — may require checking workbooks post-lesson
-  'D3.10': 'live',   // Lesson progression — observed live
-  'D3.11': 'live',   // Values integration — observed live
-  'D3.12': 'pre',    // Class opening (Proficient+) — observe first 5 min
-  'D3.13': 'post',   // Subject-matter coherence — easier to assess post-lesson
-  'D3.14': 'live',   // Questioning for critical thinking — observed live
-  'D3.15': 'pre',    // Content-standard coherence — assess from lesson plan
-  'D3.16': 'post',   // Lesson closure — observe last 5 min / reflect post
-  'D3.17': 'live',   // Equitable participation — observed live
-  'D3.18': 'live',   // Concept acquisition — observed live
-  'D3.19': 'live',   // Language of instruction — observed live
-  'D3.20': 'live',   // Monitoring understanding — observed live
-  'D3.21': 'live',   // Determination & persistence (Lead) — observed live
+  'D3.1':  'live',   // Punctuality & readiness â€” observable at lesson start
+  'D3.2':  'pre',    // Communication style â€” can note from plan, confirmed live
+  'D3.3':  'live',   // Learning intentions â€” observed live
+  'D3.4':  'live',   // Activityâ€“objective alignment â€” observed live
+  'D3.5':  'live',   // Higher-order thinking â€” observed live
+  'D3.6':  'post',   // Student performance awareness â€” requires post-lesson reflection
+  'D3.7':  'live',   // Teaching strategy variety â€” observed live
+  'D3.8':  'live',   // Instructional materials â€” observed live
+  'D3.9':  'post',   // Timely feedback â€” may require checking workbooks post-lesson
+  'D3.10': 'live',   // Lesson progression â€” observed live
+  'D3.11': 'live',   // Values integration â€” observed live
+  'D3.12': 'pre',    // Class opening (Proficient+) â€” observe first 5 min
+  'D3.13': 'post',   // Subject-matter coherence â€” easier to assess post-lesson
+  'D3.14': 'live',   // Questioning for critical thinking â€” observed live
+  'D3.15': 'pre',    // Content-standard coherence â€” assess from lesson plan
+  'D3.16': 'post',   // Lesson closure â€” observe last 5 min / reflect post
+  'D3.17': 'live',   // Equitable participation â€” observed live
+  'D3.18': 'live',   // Concept acquisition â€” observed live
+  'D3.19': 'live',   // Language of instruction â€” observed live
+  'D3.20': 'live',   // Monitoring understanding â€” observed live
+  'D3.21': 'live',   // Determination & persistence (Lead) â€” observed live
 };
 
 const D3_PHASE_STYLE = {
@@ -1841,7 +1841,7 @@ function buildD3ItemRow(item) {
     background:${style.bg};color:${style.color};border:1px solid ${style.border};
     letter-spacing:.04em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;"
     title="Score this item ${phase === 'pre' ? 'before the lesson (from lesson plan)' : phase === 'live' ? 'live during the lesson' : 'after the lesson in post-observation reflection'}">
-    ${phase === 'pre' ? '📋' : phase === 'live' ? '🔴' : '🔄'} ${style.label}
+    ${phase === 'pre' ? 'ðŸ“‹' : phase === 'live' ? 'ðŸ”´' : 'ðŸ”„'} ${style.label}
   </span>`;
 
   // Inject phase tag after the item ID badge
@@ -1867,16 +1867,16 @@ function buildF2(level) {
         <div style="padding:8px 24px;background:#f8fafc;border-bottom:1px solid #f1f5f9;
           display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:.72rem;">
           <span style="font-weight:700;color:#64748b;">Score timing:</span>
-          <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:2px 8px;border-radius:5px;font-weight:700;">📋 Pre / Plan — ${phaseCounts.pre}</span>
-          <span style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 8px;border-radius:5px;font-weight:700;">🔴 Live — ${phaseCounts.live}</span>
-          <span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 8px;border-radius:5px;font-weight:700;">🔄 Post — ${phaseCounts.post}</span>
+          <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;padding:2px 8px;border-radius:5px;font-weight:700;">ðŸ“‹ Pre / Plan â€” ${phaseCounts.pre}</span>
+          <span style="background:#f0fdf4;color:#15803d;border:1px solid #bbf7d0;padding:2px 8px;border-radius:5px;font-weight:700;">ðŸ”´ Live â€” ${phaseCounts.live}</span>
+          <span style="background:#fff7ed;color:#c2410c;border:1px solid #fed7aa;padding:2px 8px;border-radius:5px;font-weight:700;">ðŸ”„ Post â€” ${phaseCounts.post}</span>
         </div>`;
       html += `
         <div class="domain-label${isFirst ? '' : ' collapsed'}" onclick="toggleDomain(this)" data-domain="${domain.id}">
-          <span>${domain.id} — ${domain.title}</span>
+          <span>${domain.id} â€” ${domain.title}</span>
           <span style="display:flex;align-items:center;gap:10px;">
             <span class="domain-progress-text domain-prog-${domain.id}">${visible.length} items</span>
-            <span class="domain-chevron">▾</span>
+            <span class="domain-chevron">â–¾</span>
           </span>
         </div>
         <div class="domain-body${isFirst ? '' : ' collapsed'}" data-domain-body="${domain.id}">
@@ -1884,15 +1884,15 @@ function buildF2(level) {
           ${visible.map(buildD3ItemRow).join('')}
         </div>`;
     } else {
-      html += domainSection(domain.id, `${domain.id} — ${domain.title}`, visible, !isFirst);
+      html += domainSection(domain.id, `${domain.id} â€” ${domain.title}`, visible, !isFirst);
     }
     isFirst = false;
   }
   document.getElementById('f2Items').innerHTML = html;
 }
 
-// F3 evidence notes — teacher-provided evidence gathered at EOY conference
-const f3Evidence = {};  // itemId → string
+// F3 evidence notes â€” teacher-provided evidence gathered at EOY conference
+const f3Evidence = {};  // itemId â†’ string
 
 function buildF3ItemRow(item) {
   const baseRow = buildItemRow(item);
@@ -1907,7 +1907,7 @@ function buildF3ItemRow(item) {
       </div>
       <textarea class="item-note-input visible" id="f3ev-${item.id}"
         style="border-color:#a5f3fc;min-height:52px;"
-        placeholder="e.g. Showed CPD certificate, shared lesson journal, referenced PD attendance record…"
+        placeholder="e.g. Showed CPD certificate, shared lesson journal, referenced PD attendance recordâ€¦"
         onchange="f3Evidence['${item.id}']=this.value;"></textarea>
     </div>`;
   // Insert before the closing </div> of the item-row
@@ -1927,7 +1927,7 @@ function buildF3(level) {
     html += `<div style="padding:10px 24px;background:#ecfeff;border-bottom:1px solid #a5f3fc;
       font-size:.78rem;color:#0e7490;display:flex;align-items:center;gap:8px;">
       <span>&#x1F4CB;</span>
-      <span><strong>Lead level — ${totalF3Items} items total:</strong> ${visibleF3.length} core + 6 F3L Leadership items (expanded below)</span>
+      <span><strong>Lead level â€” ${totalF3Items} items total:</strong> ${visibleF3.length} core + 6 F3L Leadership items (expanded below)</span>
     </div>`;
   }
 
@@ -1938,7 +1938,7 @@ function buildF3(level) {
         <span>${title}</span>
         <span style="display:flex;align-items:center;gap:10px;">
           <span class="domain-progress-text domain-prog-${id}">${items.length} items</span>
-          <span class="domain-chevron">▾</span>
+          <span class="domain-chevron">â–¾</span>
         </span>
       </div>
       <div class="domain-body${collapsed ? ' collapsed' : ''}" data-domain-body="${id}">
@@ -1950,8 +1950,8 @@ function buildF3(level) {
     html += f3DomainSection('f3-conduct', 'Professional Conduct &amp; Responsibilities', visibleF3, false);
   }
   if (level === 'lead' && f3Lfw) {
-    html += f3DomainSection('f3l', 'F3L — Leadership Responsibilities', f3Lfw.items, false);
-    document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) · 20%';
+    html += f3DomainSection('f3l', 'F3L â€” Leadership Responsibilities', f3Lfw.items, false);
+    document.getElementById('f3Subtitle').textContent = 'Work Inspection + Leadership (Lead level) Â· 20%';
   }
   document.getElementById('f3Items').innerHTML = html;
 }
@@ -1997,7 +1997,7 @@ function updateF4Progress() {
   const needed       = Math.ceil(total * threshold);      // 14
   const meetsThreshold = done >= needed;
 
-  // Progress text in card header — show threshold status clearly
+  // Progress text in card header â€” show threshold status clearly
   const progEl = document.getElementById('f4Progress');
   if (progEl) {
     if (done === 0) {
@@ -2007,11 +2007,11 @@ function updateF4Progress() {
       progEl.innerHTML =
         `<span style="color:#c2410c;font-weight:800;">${done} / ${total} scored</span>` +
         `<span style="color:#c2410c;font-size:.68rem;margin-left:6px;">` +
-        `— score ${needed - done} more to include F4 in composite</span>`;
+        `â€” score ${needed - done} more to include F4 in composite</span>`;
     } else {
       progEl.innerHTML =
         `<span style="color:#15803d;font-weight:800;">${done} / ${total} scored</span>` +
-        `<span style="color:#15803d;font-size:.68rem;margin-left:6px;">✓ threshold met — F4 counts as 10%</span>`;
+        `<span style="color:#15803d;font-size:.68rem;margin-left:6px;">âœ“ threshold met â€” F4 counts as 10%</span>`;
     }
   }
 
@@ -2031,7 +2031,7 @@ function updateF4Progress() {
     el.style.color      = meetsThreshold ? '#15803d' : (done > 0 ? '#c2410c' : '');
   }
 
-  // Inline banner below the who-banner in the F4 card — persistent threshold reminder
+  // Inline banner below the who-banner in the F4 card â€” persistent threshold reminder
   let bannerEl = document.getElementById('f4ThresholdBanner');
   if (!bannerEl) {
     bannerEl = document.createElement('div');
@@ -2046,20 +2046,20 @@ function updateF4Progress() {
     bannerEl.style.background   = '#f0fdf4';
     bannerEl.style.borderColor  = '#bbf7d0';
     bannerEl.style.color        = '#15803d';
-    bannerEl.innerHTML = `✓ <strong>F4 will contribute 10%</strong> to the composite — threshold met (${done}/${total} scored).`;
+    bannerEl.innerHTML = `âœ“ <strong>F4 will contribute 10%</strong> to the composite â€” threshold met (${done}/${total} scored).`;
   } else if (done > 0) {
     bannerEl.style.background   = '#fff7ed';
     bannerEl.style.borderColor  = '#fed7aa';
     bannerEl.style.color        = '#c2410c';
     bannerEl.innerHTML =
-      `⚠ <strong>F4 not yet counted</strong> — ${done}/${total} scored, need at least ${needed}. ` +
+      `âš  <strong>F4 not yet counted</strong> â€” ${done}/${total} scored, need at least ${needed}. ` +
       `Its 10% is not yet included in the composite.`;
   } else {
     bannerEl.style.background  = '#f8fafc';
     bannerEl.style.borderColor = '#e2e8f0';
     bannerEl.style.color       = '#64748b';
     bannerEl.innerHTML =
-      `ℹ F4 is scored by entering aggregated student survey results. ` +
+      `â„¹ F4 is scored by entering aggregated student survey results. ` +
       `Score at least ${needed}/${total} items to include F4's 10% in the composite.`;
   }
 }
@@ -2073,7 +2073,7 @@ function refreshScoreUI() {
       btn.className = btn.classList.contains('no-obs') ? 'score-btn no-obs' : 'score-btn';
       if (parseInt(btn.dataset.score) === score) btn.classList.add(`selected-${score}`);
     });
-    // Show note hint if score ≤ 2 and no note yet
+    // Show note hint if score â‰¤ 2 and no note yet
     if (score <= 2) {
       const hint = document.getElementById(`noteHint-${itemId}`);
       if (hint) hint.classList.add('visible');
@@ -2091,7 +2091,7 @@ function refreshScoreUI() {
     el.value = text;
     el.classList.add('visible');
     const toggle = document.getElementById(`noteToggle-${itemId}`);
-    if (toggle) toggle.textContent = '− Note';
+    if (toggle) toggle.textContent = 'âˆ’ Note';
   });
   // Mark done rows after pre-fill
   Object.keys(scores).forEach(id => markItemDone(id, true));
@@ -2105,7 +2105,7 @@ function refreshScoreUI() {
   updateLiveScores();
 }
 
-// Warn visually if score ≤ 2 and note still empty (fix #4)
+// Warn visually if score â‰¤ 2 and note still empty (fix #4)
 function checkNoteWarn(itemId) {
   const noteEl = document.getElementById(`note-${itemId}`);
   if (!noteEl) return;
@@ -2117,7 +2117,7 @@ function checkNoteWarn(itemId) {
   }
 }
 
-// ── PROGRESS ─────────────────────────────────────────────
+// â”€â”€ PROGRESS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // N/O items count as "addressed" in progress (explicit decision made)
 function addressed(item) { return !!scores[item.id] || notObserved.has(item.id); }
 
@@ -2201,7 +2201,7 @@ function updateSidebarProgress(level) {
         ${!meetsThreshold && done > 0 ? `<div style="font-size:.65rem;color:#c2410c;font-weight:600;">
           Score ${Math.ceil(total * threshold) - done} more to unlock score (${thPct}% min)
         </div>` : ''}
-        ${meetsThreshold ? `<div style="font-size:.65rem;color:#15803d;font-weight:600;">✓ Threshold met — score visible</div>` : ''}
+        ${meetsThreshold ? `<div style="font-size:.65rem;color:#15803d;font-weight:600;">âœ“ Threshold met â€” score visible</div>` : ''}
       </div>`;
     }).join('') +
     (sessionMode === 'observation'
@@ -2235,17 +2235,17 @@ function updateTabCounts() {
   });
 }
 
-// ── SCORING COMPLETION THRESHOLDS ────────────────────────────
+// â”€â”€ SCORING COMPLETION THRESHOLDS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // A section mean is only shown when enough items have been addressed.
-// "Addressed" = scored (1–4) OR explicitly marked N/O (a deliberate decision).
+// "Addressed" = scored (1â€“4) OR explicitly marked N/O (a deliberate decision).
 // Rationale: if only 2/37 items are scored, the mean is driven by cherry-picked items
-// and does not represent the teacher's actual performance — showing it causes anchoring bias.
+// and does not represent the teacher's actual performance â€” showing it causes anchoring bias.
 //
 // Thresholds:
-//   F1 (9 items)  — all 9 must be addressed (administrative checklist, no excuse to skip)
-//   F2 (variable) — 80% must be addressed  (live observation; N/O is legitimate for unseen items)
-//   F3 (variable) — 80% must be addressed  (EOY conference; some items may not apply)
-//   F4 (17 items) — 80% must be addressed  (survey; some questions may not be applicable)
+//   F1 (9 items)  â€” all 9 must be addressed (administrative checklist, no excuse to skip)
+//   F2 (variable) â€” 80% must be addressed  (live observation; N/O is legitimate for unseen items)
+//   F3 (variable) â€” 80% must be addressed  (EOY conference; some items may not apply)
+//   F4 (17 items) â€” 80% must be addressed  (survey; some questions may not be applicable)
 const COMPLETION_THRESHOLD = { F1: 1.0, F2: 0.80, F3: 0.80, F4: 0.80 };
 
 function calcScores(level) {
@@ -2260,7 +2260,7 @@ function calcScores(level) {
   function addressed(item) { return !!scores[item.id] || notObserved.has(item.id); }
 
   // Returns { mean, addressedCount, totalCount, pct, meetsThreshold }
-  // mean is ONLY calculated over scored (non-N/O) items — N/O items are excluded from denominator.
+  // mean is ONLY calculated over scored (non-N/O) items â€” N/O items are excluded from denominator.
   // But the section mean is suppressed (null) until the threshold % of items are addressed.
   function sectionStats(items, thresholdKey) {
     const total      = items.length;
@@ -2318,7 +2318,7 @@ function calcScores(level) {
   const bands     = [{l:'A',min:86},{l:'B',min:66},{l:'C',min:51},{l:'D',min:36},{l:'F',min:0}];
   const predicate = composite!==null ? (bands.find(b=>composite>=b.min)?.l || 'F') : null;
 
-  // Display-only sub-scores for Lead teachers — NOT used in composite
+  // Display-only sub-scores for Lead teachers â€” NOT used in composite
   const fw3Base  = FRAMEWORK.frameworks.find(f=>f.id==='F3');
   const fw3LFw   = FRAMEWORK.frameworks.find(f=>f.id==='F3L');
   const f3BaseItems = fw3Base.items.filter(i => isVisible(i, level));
@@ -2343,11 +2343,11 @@ function updateLiveScores() {
   const level = getLevel();
   if (!level) return;
   const r = calcScores(level);
-  document.getElementById('liveF1').textContent    = r?.f1!=null ? r.f1.toFixed(2) : '—';
-  document.getElementById('liveF2').textContent    = r?.f2!=null ? r.f2.toFixed(2) : '—';
-  document.getElementById('liveF3').textContent    = r?.f3!=null ? r.f3.toFixed(2) : '—';
-  document.getElementById('liveF4').textContent    = r?.f4!=null ? r.f4.toFixed(2) : '—';
-  document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : '—';
+  document.getElementById('liveF1').textContent    = r?.f1!=null ? r.f1.toFixed(2) : 'â€”';
+  document.getElementById('liveF2').textContent    = r?.f2!=null ? r.f2.toFixed(2) : 'â€”';
+  document.getElementById('liveF3').textContent    = r?.f3!=null ? r.f3.toFixed(2) : 'â€”';
+  document.getElementById('liveF4').textContent    = r?.f4!=null ? r.f4.toFixed(2) : 'â€”';
+  document.getElementById('liveFinal').textContent = r?.composite!=null ? r.composite.toFixed(1)+'%' : 'â€”';
   // Predicate only shown when composite is complete (anchoring bias fix)
   const predWrap = document.getElementById('predWrap');
   if (r?.isComplete && r.predicate) {
@@ -2370,7 +2370,7 @@ function buildReviewSummary() {
   const predColors = {A:'#16a34a',B:'#2563eb',C:'#ca8a04',D:'#f97316',F:'#dc2626'};
 
   // scoreBox with threshold awareness
-  // sectionKey: 'f1'|'f2'|'f3'|'f4' — maps to r.sections for completion info
+  // sectionKey: 'f1'|'f2'|'f3'|'f4' â€” maps to r.sections for completion info
   const scoreBox = (label, val, sectionKey, note='') => {
     const sec = r?.sections?.[sectionKey];
     const meetsThreshold = sec?.meetsThreshold ?? (val !== null);
@@ -2380,7 +2380,7 @@ function buildReviewSummary() {
     const thNeeded = Math.ceil(totalCount * threshold);
 
     if (!meetsThreshold && addrCount > 0) {
-      // In progress but below threshold — show progress instead of score
+      // In progress but below threshold â€” show progress instead of score
       return `
         <div style="text-align:center;padding:16px;background:#fff7ed;border-radius:12px;border:1.5px solid #fed7aa;">
           <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#c2410c;font-weight:700;margin-bottom:4px;">${label}</div>
@@ -2398,9 +2398,9 @@ function buildReviewSummary() {
     return `
       <div style="text-align:center;padding:16px;background:#f8fafc;border-radius:12px;">
         <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:4px;">${label}</div>
-        <div style="font-size:1.4rem;font-weight:800;">${val!=null ? val.toFixed(2) : '—'}</div>
+        <div style="font-size:1.4rem;font-weight:800;">${val!=null ? val.toFixed(2) : 'â€”'}</div>
         <div style="font-size:.7rem;color:#94a3b8;">${note || '/ 4.00'}</div>
-        <div style="font-size:.65rem;color:#15803d;margin-top:3px;">✓ ${addrCount}/${totalCount} addressed</div>
+        <div style="font-size:.65rem;color:#15803d;margin-top:3px;">âœ“ ${addrCount}/${totalCount} addressed</div>
       </div>`;
   };
 
@@ -2408,7 +2408,7 @@ function buildReviewSummary() {
     return `
       ${buildCalibrationWarning(level)}
       <div style="margin-bottom:16px;padding:10px 14px;background:#e0f2fe;border:1px solid #bae6fd;border-radius:10px;font-size:.8rem;color:#075985;">
-        &#x1F4CB; Observation Session — F3 will be scored at the End-of-Year Conference.
+        &#x1F4CB; Observation Session â€” F3 will be scored at the End-of-Year Conference.
       </div>
       <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px;">
         ${scoreBox('F1 Admin (20%)', r?.f1, 'f1')}
@@ -2470,7 +2470,7 @@ function buildReviewSummary() {
           return `
             <div style="margin-bottom:10px;">
               <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:3px;">
-                <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'⚠ ':''}${label}</span>
+                <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'âš  ':''}${label}</span>
                 <span style="color:#64748b;">${avg.toFixed(1)} &nbsp;(${count} item${count>1?'s':''})</span>
               </div>
               <div style="background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden;">
@@ -2482,11 +2482,11 @@ function buildReviewSummary() {
           <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0;">
             <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:14px;">
               Coaching Focus Analysis
-              <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">— weakest domains first · scored items only</span>
+              <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">â€” weakest domains first Â· scored items only</span>
             </div>
             ${barHtml}
             <div style="font-size:.69rem;color:#94a3b8;margin-top:10px;font-style:italic;">
-              ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
+              âš  Domain average below 2.5 â€” prioritise in post-conference Grow question.
             </div>
           </div>`;
       })()}
@@ -2519,15 +2519,15 @@ function buildReviewSummary() {
         return `
           <div style="margin-top:20px;padding:16px 18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;">
             <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-bottom:8px;">
-              🌱 Suggested Grow Question
+              ðŸŒ± Suggested Grow Question
             </div>
             <div style="font-size:.78rem;color:#78350f;font-weight:600;margin-bottom:6px;">
-              ${growItem.id} — ${growItem.title}
+              ${growItem.id} â€” ${growItem.title}
               <span style="font-weight:400;color:#b45309;margin-left:6px;">Score: ${scores[growItem.id]} / 4</span>
             </div>
             <div style="font-size:.88rem;color:#1c1917;line-height:1.65;font-style:italic;">"${growQ}"</div>
             <div style="font-size:.68rem;color:#a16207;margin-top:8px;">
-              Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level · from coaching-questions.json
+              Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level Â· from coaching-questions.json
             </div>
           </div>`;
       })()}`;
@@ -2536,15 +2536,15 @@ function buildReviewSummary() {
   // EOY mode
   const obsNote = loadedObsRecord
     ? `<div style="margin-bottom:12px;padding:10px 14px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;font-size:.8rem;color:#166534;">
-        ✓ F1 &amp; F2 loaded from observation record (${loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || '—'}).
+        âœ“ F1 &amp; F2 loaded from observation record (${loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || 'â€”'}).
        </div>`
     : `<div style="margin-bottom:12px;padding:10px 14px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.8rem;color:#92400e;">
-        ⚠ No observation record loaded. Enter F1 &amp; F2 manually for a valid composite.
+        âš  No observation record loaded. Enter F1 &amp; F2 manually for a valid composite.
        </div>`;
 
   const incompleteNote = !r?.isComplete
     ? `<div style="margin-bottom:12px;padding:10px 14px;background:#fff1f2;border:1px solid #fecdd3;border-radius:10px;font-size:.8rem;color:#991b1b;">
-        ⚠ Not all sections scored — composite unavailable.
+        âš  Not all sections scored â€” composite unavailable.
        </div>` : '';
 
   return `
@@ -2558,11 +2558,11 @@ function buildReviewSummary() {
             <div style="font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:700;margin-bottom:2px;text-align:center;">F3 Work (20%)</div>
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:.75rem;">
               <span style="color:#64748b;">Professional (F3)</span>
-              <span style="font-weight:800;color:#1e293b;">${r?.f3Base!=null ? r.f3Base.toFixed(2) : '—'} / 4</span>
+              <span style="font-weight:800;color:#1e293b;">${r?.f3Base!=null ? r.f3Base.toFixed(2) : 'â€”'} / 4</span>
             </div>
             <div style="display:flex;justify-content:space-between;align-items:center;font-size:.75rem;">
               <span style="color:#64748b;">Leadership (F3L)</span>
-              <span style="font-weight:800;color:#1e293b;">${r?.f3Lead!=null ? r.f3Lead.toFixed(2) : '—'} / 4</span>
+              <span style="font-weight:800;color:#1e293b;">${r?.f3Lead!=null ? r.f3Lead.toFixed(2) : 'â€”'} / 4</span>
             </div>
             <div style="font-size:.65rem;color:#94a3b8;text-align:center;margin-top:2px;">Combined weight: 20%</div>
           </div>`
@@ -2578,7 +2578,7 @@ function buildReviewSummary() {
       </div>
     </div>
     <div style="font-size:.8rem;color:#64748b;padding:10px 12px;background:#f8fafc;border-radius:8px;">
-      Formula: (F1/4 × 20%) + (F2/4 × 50%) + (F3/4 × 20%) + (F4/4 × 10%) × 100${r?.f4==null?' &nbsp;·&nbsp; F4 not yet scored — composite is provisional':''}
+      Formula: (F1/4 Ã— 20%) + (F2/4 Ã— 50%) + (F3/4 Ã— 20%) + (F4/4 Ã— 10%) Ã— 100${r?.f4==null?' &nbsp;Â·&nbsp; F4 not yet scored â€” composite is provisional':''}
     </div>
     ${(() => {
       const FOCUS_LABELS = {
@@ -2628,7 +2628,7 @@ function buildReviewSummary() {
         return `
           <div style="margin-bottom:10px;">
             <div style="display:flex;justify-content:space-between;font-size:.75rem;font-weight:600;margin-bottom:3px;">
-              <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'⚠ ':''}${label}</span>
+              <span style="color:${isWeak?'#b91c1c':'#374151'};">${isWeak?'âš  ':''}${label}</span>
               <span style="color:#64748b;">${avg.toFixed(1)} &nbsp;(${count} item${count>1?'s':''})</span>
             </div>
             <div style="background:#f1f5f9;border-radius:6px;height:10px;overflow:hidden;">
@@ -2640,11 +2640,11 @@ function buildReviewSummary() {
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid #e2e8f0;">
           <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:14px;">
             Coaching Focus Analysis
-            <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">— weakest domains first · scored items only</span>
+            <span style="font-weight:400;font-style:italic;text-transform:none;color:#94a3b8;margin-left:6px;">â€” weakest domains first Â· scored items only</span>
           </div>
           ${barHtml}
           <div style="font-size:.69rem;color:#94a3b8;margin-top:10px;font-style:italic;">
-            ⚠ Domain average below 2.5 — prioritise in post-conference Grow question.
+            âš  Domain average below 2.5 â€” prioritise in post-conference Grow question.
           </div>
         </div>`;
     })()}
@@ -2677,21 +2677,21 @@ function buildReviewSummary() {
       return `
         <div style="margin-top:20px;padding:16px 18px;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;">
           <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#92400e;margin-bottom:8px;">
-            🌱 Suggested Grow Question
+            ðŸŒ± Suggested Grow Question
           </div>
           <div style="font-size:.78rem;color:#78350f;font-weight:600;margin-bottom:6px;">
-            ${growItem.id} — ${growItem.title}
+            ${growItem.id} â€” ${growItem.title}
             <span style="font-weight:400;color:#b45309;margin-left:6px;">Score: ${scores[growItem.id]} / 4</span>
           </div>
           <div style="font-size:.88rem;color:#1c1917;line-height:1.65;font-style:italic;">"${growQ}"</div>
           <div style="font-size:.68rem;color:#a16207;margin-top:8px;">
-            Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level · from coaching-questions.json
+            Calibrated to ${lvl.charAt(0).toUpperCase()+lvl.slice(1)} level Â· from coaching-questions.json
           </div>
         </div>`;
     })()}`;
 }
 
-// ── CALIBRATION WARNING ────────────────────────────────────
+// â”€â”€ CALIBRATION WARNING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Shown in Review tab when current scores deviate significantly from previous year
 function buildCalibrationWarning(level) {
   if (!Object.keys(prevYearScores).length || !FRAMEWORK || !level) return '';
@@ -2722,31 +2722,31 @@ function buildCalibrationWarning(level) {
 
   const items = flagged.map(c => {
     const delta = c.cur - c.prev;
-    const dir   = delta > 0 ? '▲' : '▼';
+    const dir   = delta > 0 ? 'â–²' : 'â–¼';
     const color = delta > 0 ? '#15803d' : '#dc2626';
     return `<li style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
       <strong style="min-width:60px;">${c.label}</strong>
       <span style="color:${color};font-weight:800;">${dir} ${Math.abs(delta).toFixed(2)}</span>
-      <span style="color:#64748b;font-size:.8rem;">(prev ${c.prev.toFixed(2)} → now ${c.cur.toFixed(2)})</span>
+      <span style="color:#64748b;font-size:.8rem;">(prev ${c.prev.toFixed(2)} â†’ now ${c.cur.toFixed(2)})</span>
     </li>`;
   }).join('');
 
   return `
     <div style="margin-bottom:16px;padding:12px 16px;background:#fffbeb;border:1.5px solid #fde68a;border-radius:12px;">
       <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;display:flex;align-items:center;gap:6px;">
-        ⚖️ Calibration check — significant shift from previous year
+        âš–ï¸ Calibration check â€” significant shift from previous year
       </div>
       <ul style="list-style:none;padding:0;margin:0;font-size:.82rem;">
         ${items}
       </ul>
       <div style="font-size:.74rem;color:#92400e;margin-top:8px;padding-top:8px;border-top:1px solid #fde68a;">
-        A shift ≥ 0.75 points warrants reflection: is this genuine growth/decline, or a scoring inconsistency? Consider reviewing the rubric or discussing with a second appraiser.
-        <a href="TeacherAppraisalCalibration.html" style="display:inline-block;margin-top:6px;font-weight:700;color:#92400e;text-decoration:underline;">&#x1F3AF; Run a calibration session →</a>
+        A shift â‰¥ 0.75 points warrants reflection: is this genuine growth/decline, or a scoring inconsistency? Consider reviewing the rubric or discussing with a second appraiser.
+        <a href="TeacherAppraisalCalibration.html" style="display:inline-block;margin-top:6px;font-weight:700;color:#92400e;text-decoration:underline;">&#x1F3AF; Run a calibration session â†’</a>
       </div>
     </div>`;
 }
 
-// ── PREV YEAR BADGES ─────────────────────────────────────
+// â”€â”€ PREV YEAR BADGES â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function applyPrevYearBadges() {
   const scoreLabels = {1:'Unsatisf.',2:'Basic',3:'Proficient',4:'Distingd.'};
   Object.entries(prevYearScores).forEach(([itemId, prevScore]) => {
@@ -2759,24 +2759,24 @@ function applyPrevYearBadges() {
       const diff = cur - prevScore;
       trend = diff > 0 ? 'up' : 'down';
       trendHtml = diff > 0
-        ? `<span class="trend-up">▲${diff}</span>`
-        : `<span class="trend-down">▼${Math.abs(diff)}</span>`;
+        ? `<span class="trend-up">â–²${diff}</span>`
+        : `<span class="trend-down">â–¼${Math.abs(diff)}</span>`;
     } else if (cur && cur === prevScore) {
       trend = 'same';
-      trendHtml = `<span class="trend-same">→</span>`;
+      trendHtml = `<span class="trend-same">â†’</span>`;
     }
     // Plateau: same score for this year as last, and not yet Distinguished
     const isPlateaued = (trend === 'same' && cur <= 3);
     const plateauHtml = isPlateaued
-      ? `<span title="Same score as last year — consider discussing a stretch goal in the post-conference"
-           style="color:#f59e0b;font-size:.65rem;margin-left:2px;cursor:default;">⚠</span>`
+      ? `<span title="Same score as last year â€” consider discussing a stretch goal in the post-conference"
+           style="color:#f59e0b;font-size:.65rem;margin-left:2px;cursor:default;">âš </span>`
       : '';
     el.innerHTML = `Last yr: ${scoreLabels[prevScore] || prevScore} ${trendHtml}${plateauHtml}`;
     el.style.display = 'inline-flex';
   });
 }
 
-// ── RADAR CHART ───────────────────────────────────────────
+// â”€â”€ RADAR CHART â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function drawRadar() {
   if (!FRAMEWORK) return;
   const level = getLevel();
@@ -2887,7 +2887,7 @@ function drawRadar() {
   });
 }
 
-// ── SESSION MODE ──────────────────────────────────────────
+// â”€â”€ SESSION MODE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function applySessionMode(mode) {
   sessionMode = mode;
   document.getElementById('optObservation').classList.toggle('active', mode === 'observation');
@@ -2903,10 +2903,10 @@ function applySessionMode(mode) {
   document.getElementById('f1EoyNote').classList.toggle('visible', mode === 'endofyear');
   document.getElementById('f2EoyNote').classList.toggle('visible', mode === 'endofyear');
   document.getElementById('step1Next').textContent =
-    mode === 'observation' ? 'Confirm & Start Scoring →' : 'Confirm & Score F3 →';
+    mode === 'observation' ? 'Confirm & Start Scoring â†’' : 'Confirm & Score F3 â†’';
 }
 
-// ── WALKTHROUGH HISTORY (EOY F3) ──────────────────────────
+// â”€â”€ WALKTHROUGH HISTORY (EOY F3) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 async function loadWalkthroughHistory() {
   const uid  = document.getElementById('teacherUid')?.value?.trim();
   const year = document.getElementById('academicYear')?.value;
@@ -2955,10 +2955,10 @@ function renderWalkthroughHistory(records) {
   const rows = records.map(rec => {
     const date = rec.visitDate?.toDate
       ? rec.visitDate.toDate().toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
-      : '—';
+      : 'â€”';
     const fociHtml = Object.entries(rec.fociResponses || {}).map(([fid, val]) => {
       const label = FOCUS_LABELS[fid] || fid;
-      const code  = val?.code || '—';
+      const code  = val?.code || 'â€”';
       const style = CODE_STYLE[code] || '';
       return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;${style}">${code} ${label}</span>`;
     }).join(' ');
@@ -2979,16 +2979,16 @@ function renderWalkthroughHistory(records) {
   container.innerHTML = `
     <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:16px 20px;box-shadow:0 1px 4px rgba(0,0,0,.04);">
       <div style="font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#64748b;margin-bottom:2px;">
-        Walkthrough History — ${records.length} visit${records.length > 1 ? 's' : ''} this year
+        Walkthrough History â€” ${records.length} visit${records.length > 1 ? 's' : ''} this year
       </div>
       <div style="font-size:.71rem;color:#94a3b8;margin-bottom:14px;font-style:italic;">
-        Formative records only — not included in composite score. Use as evidence when scoring F3 items.
+        Formative records only â€” not included in composite score. Use as evidence when scoring F3 items.
       </div>
       ${rows}
     </div>`;
 }
 
-// ── TAB NAVIGATION ────────────────────────────────────────
+// â”€â”€ TAB NAVIGATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const TAB_PANELS = { f1:'panelF1', f2:'panelF2', f3:'panelF3', f4:'panelF4', review:'panelReview' };
 
 let autoSaveTimer = null;
@@ -3018,7 +3018,7 @@ function switchTab(tab) {
   }
 }
 
-// ── COACHING QUESTIONS ─────────────────────────────────────
+// â”€â”€ COACHING QUESTIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function buildCoachingQuestions() {
   if (!COACHING_DB) return;
   const level = (document.getElementById('appraisalLevel')?.value ||
@@ -3054,7 +3054,7 @@ function buildCoachingQuestions() {
     const qs = questions.map(q => {
       const alreadySelected = selectedQuestions.some(s => s.itemId === itemId && s.text === q);
       return `<div class="coaching-q-item${alreadySelected ? ' selected' : ''}" data-item="${itemId}" data-q="${escAttr(q)}">
-        <div class="coaching-q-checkbox">${alreadySelected ? '✓' : ''}</div>
+        <div class="coaching-q-checkbox">${alreadySelected ? 'âœ“' : ''}</div>
         <div class="coaching-q-text">${esc(q)}</div>
       </div>`;
     }).join('');
@@ -3090,7 +3090,7 @@ function toggleCoachingQuestion(el) {
   } else {
     selectedQuestions.push({ itemId, text });
     el.classList.add('selected');
-    el.querySelector('.coaching-q-checkbox').textContent = '✓';
+    el.querySelector('.coaching-q-checkbox').textContent = 'âœ“';
   }
   renderSelectedQuestions();
 }
@@ -3105,7 +3105,7 @@ function renderSelectedQuestions() {
   list.innerHTML = selectedQuestions.map((q, i) => `
     <div class="coaching-selected-pill">
       <div class="coaching-selected-pill-text">${esc(q.text)}</div>
-      <button class="coaching-selected-remove" data-idx="${i}" title="Remove">✕</button>
+      <button class="coaching-selected-remove" data-idx="${i}" title="Remove">âœ•</button>
     </div>`).join('');
   list.querySelectorAll('.coaching-selected-remove').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -3123,7 +3123,7 @@ function esc(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// ── FOLLOW-UP CHECK-IN ─────────────────────────────────────
+// â”€â”€ FOLLOW-UP CHECK-IN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 function renderFollowUpCheckIn() {
   const card = document.getElementById('followUpCheckCard');
   if (!prevRecord) { card.style.display = 'none'; return; }
@@ -3133,13 +3133,13 @@ function renderFollowUpCheckIn() {
   card.style.display = '';
 
   const obsDate = prevRecord.observationDate?.toDate
-    ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB') : '—';
+    ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB') : 'â€”';
 
   // Look up follow_up_indicators for the linked framework item
   const prevItem = an.growItem ? frameworkItemMap[an.growItem] : null;
   const indicators = prevItem?.follow_up_indicators || [];
   const growLabel = an.growItem
-    ? `${an.growItem}${prevItem ? ` — ${prevItem.title}` : ''}`
+    ? `${an.growItem}${prevItem ? ` â€” ${prevItem.title}` : ''}`
     : null;
 
   document.getElementById('followUpPrevGoSummary').innerHTML = `
@@ -3149,12 +3149,12 @@ function renderFollowUpCheckIn() {
       ${an.actions  ? `<div class="followup-prev-gosum-text">${esc(an.actions)}</div>` : ''}
       <div class="followup-prev-gosum-meta" style="margin-top:6px;">
         ${an.goDate  ? `Target: ${an.goDate}` : ''}
-        ${an.goDate && an.goCheck ? ' · ' : ''}
+        ${an.goDate && an.goCheck ? ' Â· ' : ''}
         ${an.goCheck ? `Check: ${esc(an.goCheck)}` : ''}
       </div>
       ${indicators.length ? `
       <div style="margin-top:12px;padding-top:12px;border-top:1px solid #e2e8f0;">
-        <div class="feedback-tag-label" style="margin-bottom:6px;">&#x1F4CB; Observable indicators — what to look for</div>
+        <div class="feedback-tag-label" style="margin-bottom:6px;">&#x1F4CB; Observable indicators â€” what to look for</div>
         <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;">
           ${indicators.map(ind => `
           <li style="display:flex;align-items:flex-start;gap:8px;font-size:.82rem;color:#1e293b;">
@@ -3196,7 +3196,7 @@ window.checkGoCompleteness = function() {
   if (warnBadge) warnBadge.style.display = complete ? 'none' : '';
 };
 
-// Wire grow-item selects → dynamic placeholder prompts
+// Wire grow-item selects â†’ dynamic placeholder prompts
 document.getElementById('narr_grow_item').addEventListener('change', () => applyGrowItemPrompts('narr_grow_item'));
 document.getElementById('eoy_grow_item').addEventListener('change', () => applyGrowItemPrompts('eoy_grow_item'));
 
@@ -3219,7 +3219,7 @@ window.backToSetup = function() {
 
 window.selectScore = function(itemId, score) {
   if (score === 'no' && getMandatoryItems(getLevel()).has(itemId)) {
-    showToast('⚠ This item must be scored — N/O is not permitted here.');
+    showToast('âš  This item must be scored â€” N/O is not permitted here.');
     return;
   }
   if (score === 'no') {
@@ -3251,7 +3251,7 @@ window.selectScore = function(itemId, score) {
     const noteEl = document.getElementById(`note-${itemId}`);
     if (noteEl) { noteEl.classList.add('visible'); checkNoteWarn(itemId); }
     const toggle = document.getElementById(`noteToggle-${itemId}`);
-    if (toggle) toggle.textContent = '− Note';
+    if (toggle) toggle.textContent = 'âˆ’ Note';
     const hint = document.getElementById(`noteHint-${itemId}`);
     if (hint) hint.classList.add('visible');
   } else {
@@ -3265,24 +3265,24 @@ window.selectScore = function(itemId, score) {
   if (Object.keys(prevYearScores).length) applyPrevYearBadges();
   if (s > 2) advanceFocus(itemId); // skip auto-advance for low scores so user can add note
 
-  // Debounced Firebase autosave — fires 1500ms after the last score change
+  // Debounced Firebase autosave â€” fires 1500ms after the last score change
   clearTimeout(autoSaveTimer);
   autoSaveTimer = setTimeout(() => {
     if (typeof window.saveAppraisal === 'function' && getLevel()) {
       const el = document.getElementById('autosaveStatus');
-      if (el) { el.textContent = '💾 Saving…'; el.style.color = '#94a3b8'; }
+      if (el) { el.textContent = 'ðŸ’¾ Savingâ€¦'; el.style.color = '#94a3b8'; }
       window.saveAppraisal('draft', sessionMode === 'endofyear', true)
         .then(() => {
           const el = document.getElementById('autosaveStatus');
           if (!el) return;
           const now = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-          el.textContent = `✓ Saved ${now}`;
+          el.textContent = `âœ“ Saved ${now}`;
           el.style.color = '#16a34a';
           setTimeout(() => { el.textContent = ''; }, 4000);
         })
         .catch(() => {
           const el = document.getElementById('autosaveStatus');
-          if (el) { el.textContent = '⚠ Save failed'; el.style.color = '#dc2626'; }
+          if (el) { el.textContent = 'âš  Save failed'; el.style.color = '#dc2626'; }
         });
     }
   }, 1500);
@@ -3328,22 +3328,22 @@ window.openRubricModal = function(itemId) {
   if (!item) return;
 
   const levels = [
-    { s:4, label:'4 — Distinguished', cls:'s4' },
-    { s:3, label:'3 — Proficient',    cls:'s3' },
-    { s:2, label:'2 — Basic',         cls:'s2' },
-    { s:1, label:'1 — Unsatisfactory',cls:'s1' },
+    { s:4, label:'4 â€” Distinguished', cls:'s4' },
+    { s:3, label:'3 â€” Proficient',    cls:'s3' },
+    { s:2, label:'2 â€” Basic',         cls:'s2' },
+    { s:1, label:'1 â€” Unsatisfactory',cls:'s1' },
   ];
-  document.getElementById('rubricModalTitle').textContent = `${item.id} — ${item.title}`;
+  document.getElementById('rubricModalTitle').textContent = `${item.id} â€” ${item.title}`;
   // Subtitle shows Cambridge Teacher Standards refs (Track B) +
-  // Eduversal theory_basis if present, separated by ·.
+  // Eduversal theory_basis if present, separated by Â·.
   {
     const refs = Array.isArray(item.cambridge_standard_refs) ? item.cambridge_standard_refs : [];
-    const cambridgeBit = refs.length ? `Cambridge Teacher Standards 2023 — ${refs.map(r => 'CTS ' + r).join(', ')}` : '';
+    const cambridgeBit = refs.length ? `Cambridge Teacher Standards 2023 â€” ${refs.map(r => 'CTS ' + r).join(', ')}` : '';
     const subEl = document.getElementById('rubricModalSub');
-    subEl.textContent = [cambridgeBit, item.theory_basis].filter(Boolean).join(' · ');
+    subEl.textContent = [cambridgeBit, item.theory_basis].filter(Boolean).join(' Â· ');
   }
   document.getElementById('rubricModalBody').innerHTML = levels.map(lv => {
-    const text = item.rubric?.[lv.s] || '—';
+    const text = item.rubric?.[lv.s] || 'â€”';
     return `<div class="rubric-level-row">
       <div><span class="rubric-level-badge ${lv.cls}">${lv.label}</span></div>
       <div class="rubric-level-text">${text}</div>
@@ -3362,10 +3362,10 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeRubricModal(); closeFwPopover(); }
 });
 
-// ── FRAMEWORK OVERVIEW POPOVER ────────────────────────────
+// â”€â”€ FRAMEWORK OVERVIEW POPOVER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const FW_TIP_CONTENT = {
   'f1-items': {
-    title: '📋 F1 — Items',
+    title: 'ðŸ“‹ F1 â€” Items',
     body: `<p>F1 contains <strong>9 items</strong>, all visible at every appraisal level (Induction through Lead).</p>
       <ol style="padding-left:18px;margin-top:8px;">
         <li>Knowledge of the School Academic Calendar</li>
@@ -3380,32 +3380,32 @@ const FW_TIP_CONTENT = {
       </ol>`
   },
   'f1-who': {
-    title: '👤 Who fills F1?',
-    body: `<p>The <strong>Appraiser</strong> fills F1 — this is the academic coordinator or school principal conducting the formal appraisal.</p>
+    title: 'ðŸ‘¤ Who fills F1?',
+    body: `<p>The <strong>Appraiser</strong> fills F1 â€” this is the academic coordinator or school principal conducting the formal appraisal.</p>
       <p style="margin-top:8px;">The teacher being appraised does <em>not</em> self-score F1. Evidence is gathered from school records (submission logs, gradebook, attendance system) and direct appraiser observation.</p>`
   },
   'f1-when': {
-    title: '🗓 When is F1 scored?',
-    body: `<p>F1 is scored during the <strong>Observation Session</strong> — the formal announced classroom visit. It is typically completed during or immediately after the visit, while records are being reviewed.</p>
+    title: 'ðŸ—“ When is F1 scored?',
+    body: `<p>F1 is scored during the <strong>Observation Session</strong> â€” the formal announced classroom visit. It is typically completed during or immediately after the visit, while records are being reviewed.</p>
       <p style="margin-top:8px;">F1 scores are saved as part of the Observation record. They are carried forward and locked in the End-of-Year composite.</p>`
   },
   'f2-who': {
-    title: '👤 Who fills F2?',
+    title: 'ðŸ‘¤ Who fills F2?',
     body: `<p>The <strong>Appraiser</strong> fills F2 live during the observation lesson. This requires the appraiser to be physically present in the classroom for a minimum of 35 minutes.</p>
       <p style="margin-top:8px;">Two appraisers are required for Lead-level teachers (joint calibration).</p>`
   },
   'f2-when': {
-    title: '🗓 When is F2 scored?',
-    body: `<p>F2 is scored <strong>live in the classroom</strong> during the formal announced lesson (35–40 minutes). The appraiser scores in real time or completes scoring within 30 minutes of the lesson ending.</p>
+    title: 'ðŸ—“ When is F2 scored?',
+    body: `<p>F2 is scored <strong>live in the classroom</strong> during the formal announced lesson (35â€“40 minutes). The appraiser scores in real time or completes scoring within 30 minutes of the lesson ending.</p>
       <p style="margin-top:8px;">Scores must not be altered after the post-observation debrief without documented justification.</p>`
   },
   'd1': {
-    title: 'D1 · Lesson Planning — 10 items',
+    title: 'D1 Â· Lesson Planning â€” 10 items',
     body: `<p>Evaluates the quality of lesson design before the class. All 10 items are visible at all levels.</p>
       <ul style="padding-left:18px;margin-top:8px;">
         <li>Lesson Plan Structure: Layout, Sequencing, Timing</li>
         <li>Clarity and Measurability of Learning Objectives</li>
-        <li>Content–Objective Alignment</li>
+        <li>Contentâ€“Objective Alignment</li>
         <li>Differentiated Planning for Diverse Learners</li>
         <li>Balance of Individual and Collaborative Activities</li>
         <li>Selection of Instructional Materials</li>
@@ -3416,7 +3416,7 @@ const FW_TIP_CONTENT = {
       </ul>`
   },
   'd2': {
-    title: 'D2 · Classroom Management — 8 items',
+    title: 'D2 Â· Classroom Management â€” 8 items',
     body: `<p>Evaluates the teacher's creation and maintenance of a productive, orderly learning environment. All 8 items visible at all levels.</p>
       <ul style="padding-left:18px;margin-top:8px;">
         <li>Awareness of Classroom Dynamics</li>
@@ -3430,52 +3430,52 @@ const FW_TIP_CONTENT = {
       </ul>`
   },
   'd3': {
-    title: 'D3 · Instructional Process — up to 21 items',
-    body: `<p>The largest domain. Items are <strong>level-gated</strong> — each item has a minimum level from which it becomes visible:</p>
+    title: 'D3 Â· Instructional Process â€” up to 21 items',
+    body: `<p>The largest domain. Items are <strong>level-gated</strong> â€” each item has a minimum level from which it becomes visible:</p>
       <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem;">
         <tr style="background:#f8fafc;"><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Visible from</th><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Items added</th></tr>
-        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Punctuality & readiness, Learning intentions, Activity–objective alignment, Response distribution, Participation, Concept acquisition, Language of instruction, Monitoring understanding (9 items)</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Punctuality & readiness, Learning intentions, Activityâ€“objective alignment, Response distribution, Participation, Concept acquisition, Language of instruction, Monitoring understanding (9 items)</td></tr>
         <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#ffedd5;color:#9a3412;padding:1px 6px;border-radius:5px;font-weight:700;">Developing</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Higher-order thinking, Teaching strategy variety, Instructional materials, Timely feedback, Lesson progression, Values integration (6 items)</td></tr>
         <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dbeafe;color:#1e40af;padding:1px 6px;border-radius:5px;font-weight:700;">Proficient</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Class opening, Student performance awareness, Subject-matter coherence, Questioning for critical thinking, Content-standard coherence, Lesson closure (5 items)</td></tr>
         <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dcfce7;color:#166534;padding:1px 6px;border-radius:5px;font-weight:700;">Lead</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Determination and persistence in student success (1 item)</td></tr>
       </table>`
   },
   'd4': {
-    title: 'D4 · Assessment — up to 6 items',
+    title: 'D4 Â· Assessment â€” up to 6 items',
     body: `<p>Evaluates assessment design and use of data. Level-gated:</p>
       <table style="width:100%;border-collapse:collapse;margin-top:8px;font-size:.8rem;">
         <tr style="background:#f8fafc;"><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Visible from</th><th style="padding:5px 8px;text-align:left;border:1px solid #e2e8f0;">Items</th></tr>
-        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Clarity of Assessment Criteria · Appropriateness of Activities · Curriculum Alignment · Records in Edunav (4 items)</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#fef9c3;color:#854d0e;padding:1px 6px;border-radius:5px;font-weight:700;">Induction</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Clarity of Assessment Criteria Â· Appropriateness of Activities Â· Curriculum Alignment Â· Records in Edunav (4 items)</td></tr>
         <tr style="background:#fafafa;"><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#ffedd5;color:#9a3412;padding:1px 6px;border-radius:5px;font-weight:700;">Developing</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Student Progress Monitoring Over Time (1 item)</td></tr>
         <tr><td style="padding:5px 8px;border:1px solid #f1f5f9;"><span style="background:#dbeafe;color:#1e40af;padding:1px 6px;border-radius:5px;font-weight:700;">Proficient</span></td><td style="padding:5px 8px;border:1px solid #f1f5f9;">Action Based on Assessment Results (1 item)</td></tr>
       </table>`
   },
   'lvl-induction': {
-    title: '🟡 Induction Level (Year 1–2)',
+    title: 'ðŸŸ¡ Induction Level (Year 1â€“2)',
     body: `<p>New teachers in their first two years. Scored on <strong>foundational items only</strong> across all domains.</p>
-      <p style="margin-top:8px;">Focus: building core routines — lesson planning basics, classroom presence, administrative compliance, clear learning intentions, equitable participation.</p>
-      <p style="margin-top:8px;">D3: 9 items · D4: 4 items · F3: 5 items</p>`
+      <p style="margin-top:8px;">Focus: building core routines â€” lesson planning basics, classroom presence, administrative compliance, clear learning intentions, equitable participation.</p>
+      <p style="margin-top:8px;">D3: 9 items Â· D4: 4 items Â· F3: 5 items</p>`
   },
   'lvl-developing': {
-    title: '🟠 Developing Level (Year 3–5 or Predicate C/D)',
+    title: 'ðŸŸ  Developing Level (Year 3â€“5 or Predicate C/D)',
     body: `<p>Teachers who have moved beyond foundational routines but have not yet demonstrated consistent mastery. Also assigned to teachers who scored Predicate C or D in the previous year.</p>
       <p style="margin-top:8px;">Adds: higher-order thinking, teaching strategy variety, purposeful materials, timely feedback, lesson progression, values integration, progress monitoring, co-curricular contribution, leadership initiative, stakeholder communication.</p>
-      <p style="margin-top:8px;">D3: 15 items · D4: 5 items · F3: 9 items</p>`
+      <p style="margin-top:8px;">D3: 15 items Â· D4: 5 items Â· F3: 9 items</p>`
   },
   'lvl-proficient': {
-    title: '🔵 Proficient Level (Year 5+ and Predicate B+)',
+    title: 'ðŸ”µ Proficient Level (Year 5+ and Predicate B+)',
     body: `<p>Experienced teachers with a consistent track record of effective practice. Requires 5+ years of service and a prior-year predicate of B or above.</p>
       <p style="margin-top:8px;">Adds: deliberate lesson opening, awareness of student performance patterns, subject-matter depth, higher-order questioning, content-standard coherence, lesson closure, data-informed assessment action.</p>
-      <p style="margin-top:8px;">D3: 20 items · D4: 6 items · F3: 10 items</p>`
+      <p style="margin-top:8px;">D3: 20 items Â· D4: 6 items Â· F3: 10 items</p>`
   },
   'lvl-lead': {
-    title: '🟢 Lead Level (Subject Leader / HoD)',
+    title: 'ðŸŸ¢ Lead Level (Subject Leader / HoD)',
     body: `<p>Subject Leaders and Heads of Department. Assessed on the full F2 item set plus 6 additional <strong>F3L Leadership items</strong>.</p>
       <p style="margin-top:8px;">F3L adds: Subject Expertise & Knowledge Sharing, Coaching & Mentoring, Curriculum Leadership, Data-Informed Departmental Decision Making, Professional Community Building, Strategic Communication with Stakeholders.</p>
-      <p style="margin-top:8px;">D3: 21 items · D4: 6 items · F3: 10 items + F3L: 6 leadership items · Requires two appraisers.</p>`
+      <p style="margin-top:8px;">D3: 21 items Â· D4: 6 items Â· F3: 10 items + F3L: 6 leadership items Â· Requires two appraisers.</p>`
   },
   'f3-items': {
-    title: '📋 F3 — Items',
+    title: 'ðŸ“‹ F3 â€” Items',
     body: `<p>F3 has <strong>10 core items</strong> on professional conduct and responsibilities beyond the classroom. Lead teachers also receive <strong>6 additional F3L leadership items</strong>.</p>
       <p style="margin-top:8px;"><strong>Core items (all levels):</strong></p>
       <ul style="padding-left:18px;margin-top:4px;">
@@ -3490,18 +3490,18 @@ const FW_TIP_CONTENT = {
       <p style="margin-top:8px;"><strong>F3L (Lead only):</strong> Curriculum Leadership, Coaching & Mentoring, Data-Informed Decisions, Professional Community Building, Subject Expertise Sharing, Strategic Communication.</p>`
   },
   'f3-who': {
-    title: '👤 Who fills F3?',
-    body: `<p>The <strong>Appraiser</strong> fills F3 — typically the academic coordinator or school principal. Evidence is drawn from school records, observation over the year, and direct appraiser knowledge of the teacher's professional conduct.</p>
-      <p style="margin-top:8px;">F3 is not a self-assessment — the teacher may share evidence but does not score themselves.</p>`
+    title: 'ðŸ‘¤ Who fills F3?',
+    body: `<p>The <strong>Appraiser</strong> fills F3 â€” typically the academic coordinator or school principal. Evidence is drawn from school records, observation over the year, and direct appraiser knowledge of the teacher's professional conduct.</p>
+      <p style="margin-top:8px;">F3 is not a self-assessment â€” the teacher may share evidence but does not score themselves.</p>`
   },
   'f3-when': {
-    title: '🗓 When is F3 scored?',
-    body: `<p>F3 is scored at the <strong>End-of-Year Conference</strong> — the formal annual review meeting between appraiser and teacher. This meeting brings together all four framework scores to produce the composite annual predicate.</p>
+    title: 'ðŸ—“ When is F3 scored?',
+    body: `<p>F3 is scored at the <strong>End-of-Year Conference</strong> â€” the formal annual review meeting between appraiser and teacher. This meeting brings together all four framework scores to produce the composite annual predicate.</p>
       <p style="margin-top:8px;">The conference typically takes place in the final 6 weeks of the academic year. Load the observation record first so F1 and F2 scores are included in the composite.</p>`
   },
   'f4-items': {
-    title: '📋 F4 — 17 Survey Items',
-    body: `<p>The Student Survey contains <strong>17 standardised items</strong>, all visible at every appraisal level. Students respond on a 4-point scale: Always · Usually · Sometimes · Rarely.</p>
+    title: 'ðŸ“‹ F4 â€” 17 Survey Items',
+    body: `<p>The Student Survey contains <strong>17 standardised items</strong>, all visible at every appraisal level. Students respond on a 4-point scale: Always Â· Usually Â· Sometimes Â· Rarely.</p>
       <ol style="padding-left:18px;margin-top:8px;columns:2;column-gap:16px;">
         <li>Assignments are helpful for my learning</li>
         <li>The teacher responds to late or incomplete submissions</li>
@@ -3523,13 +3523,13 @@ const FW_TIP_CONTENT = {
       </ol>`
   },
   'f4-who': {
-    title: '🎓 Who fills F4?',
-    body: `<p><strong>Students</strong> fill the original survey — not the teacher and not the appraiser. The survey is distributed and collected independently, outside of any appraisal session, to ensure honest responses.</p>
-      <p style="margin-top:8px;">The appraiser enters the <em>aggregated results</em> into this system — the mean score per item from the collected student responses.</p>`
+    title: 'ðŸŽ“ Who fills F4?',
+    body: `<p><strong>Students</strong> fill the original survey â€” not the teacher and not the appraiser. The survey is distributed and collected independently, outside of any appraisal session, to ensure honest responses.</p>
+      <p style="margin-top:8px;">The appraiser enters the <em>aggregated results</em> into this system â€” the mean score per item from the collected student responses.</p>`
   },
   'f4-when': {
-    title: '🗓 When is F4 collected?',
-    body: `<p>Student surveys are collected <strong>independently during the academic year</strong> — typically once per semester or at a set point defined by the school calendar.</p>
+    title: 'ðŸ—“ When is F4 collected?',
+    body: `<p>Student surveys are collected <strong>independently during the academic year</strong> â€” typically once per semester or at a set point defined by the school calendar.</p>
       <p style="margin-top:8px;">The appraiser enters the aggregated scores into this form at any time before finalising the End-of-Year record. F4 contributes <strong>10%</strong> to the composite score.</p>`
   }
 };
@@ -3546,7 +3546,7 @@ window.closeFwPopover = function() {
   document.getElementById('fwPopoverOverlay').style.display = 'none';
 };
 
-// ── FRAMEWORK OVERVIEW TOGGLE ────────────────────────────
+// â”€â”€ FRAMEWORK OVERVIEW TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 (function() {
   const LS_KEY = 'fw_overview_hidden';
   const body   = document.querySelector('#frameworkOverviewCard .card-body');
@@ -3556,7 +3556,7 @@ window.closeFwPopover = function() {
   function setVisible(visible, save) {
     body.style.display   = visible ? '' : 'none';
     chevron.style.transform = visible ? '' : 'rotate(180deg)';
-    btn.innerHTML = `<span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;transform:${visible ? '' : 'rotate(180deg)'}">${visible ? '▲' : '▼'}</span> ${visible ? 'Hide' : 'Show'}`;
+    btn.innerHTML = `<span id="fwOverviewChevron" style="display:inline-block;transition:transform .2s;transform:${visible ? '' : 'rotate(180deg)'}">${visible ? 'â–²' : 'â–¼'}</span> ${visible ? 'Hide' : 'Show'}`;
     if (save) localStorage.setItem(LS_KEY, visible ? '0' : '1');
   }
 
@@ -3581,10 +3581,10 @@ window.toggleNote = function(itemId) {
   const el     = document.getElementById(`note-${itemId}`);
   const toggle = document.getElementById(`noteToggle-${itemId}`);
   el.classList.toggle('visible');
-  if (toggle) toggle.textContent = el.classList.contains('visible') ? '− Note' : '+ Add note';
+  if (toggle) toggle.textContent = el.classList.contains('visible') ? 'âˆ’ Note' : '+ Add note';
 };
 
-// ── AUTH READY ────────────────────────────────────────────
+// â”€â”€ AUTH READY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('teacher-appraisal-entry', { user, profile });
   const db = window.db;
@@ -3613,7 +3613,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const age = Math.round((Date.now() - savedDraft.savedAt) / 60000);
     const banner = document.createElement('div');
     banner.style.cssText = 'margin:16px 32px 0;padding:12px 18px;background:#fefce8;border:1px solid #fde047;border-radius:10px;font-size:.82rem;color:#92400e;display:flex;align-items:center;justify-content:space-between;gap:12px;';
-    banner.innerHTML = `<span>&#x1F4BE; Unsaved draft found (${age} min ago) — <strong>${savedDraft.teacherName || 'unnamed teacher'}</strong></span>
+    banner.innerHTML = `<span>&#x1F4BE; Unsaved draft found (${age} min ago) â€” <strong>${savedDraft.teacherName || 'unnamed teacher'}</strong></span>
       <span style="display:flex;gap:8px;">
         <button onclick="restoreDraft()" style="padding:4px 14px;background:#ca8a04;color:#fff;border:none;border-radius:7px;font-family:inherit;font-size:.8rem;font-weight:700;cursor:pointer;">Restore</button>
         <button onclick="this.closest('div').remove();lsClear();" style="padding:4px 10px;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:7px;font-family:inherit;font-size:.8rem;cursor:pointer;">Discard</button>
@@ -3651,10 +3651,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (d.currentDocId) currentDocId = d.currentDocId;
     document.querySelector('[data-draft-banner]')?.remove();
     document.querySelectorAll('[style*="fefce8"]').forEach(el => el.remove());
-    showToast('Draft restored — continue where you left off.');
+    showToast('Draft restored â€” continue where you left off.');
   };
 
-  // ── TEACHER AUTOCOMPLETE ─────────────────────────────────
+  // â”€â”€ TEACHER AUTOCOMPLETE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   let allTeachersCache = null;
 
   async function loadTeachersCache() {
@@ -3701,9 +3701,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
                 ${(u.displayName||'?')[0].toUpperCase()}
               </div>
               <div>
-                <div style="font-size:.88rem;font-weight:700;color:#1e293b;">${u.displayName||'—'}</div>
+                <div style="font-size:.88rem;font-weight:700;color:#1e293b;">${u.displayName||'â€”'}</div>
                 <div style="font-size:.72rem;color:#64748b;margin-top:1px;">
-                  ${schoolName ? schoolName : ''}${u.subject ? ' · ' + u.subject : ''}
+                  ${schoolName ? schoolName : ''}${u.subject ? ' Â· ' + u.subject : ''}
                 </div>
               </div>
             </div>`;
@@ -3731,7 +3731,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       document.getElementById('appraisalLevelEoy').value = level;
       document.getElementById('appraisalLevel').dispatchEvent(new Event('change'));
       document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
-      showToast(`${name} seçildi — level: ${level}`);
+      showToast(`${name} seÃ§ildi â€” level: ${level}`);
     }
     // Fetch previous observation record for follow-up banner
     fetchPreviousRecord(uid);
@@ -3770,12 +3770,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
     const obsDate = prevRecord.observationDate?.toDate
       ? prevRecord.observationDate.toDate().toLocaleDateString('en-GB')
-      : '—';
+      : 'â€”';
 
     banner.style.display = '';
     banner.innerHTML = `
       <div class="followup-prev-banner">
-        <div class="followup-prev-banner-title">&#x1F552; Previous observation — ${obsDate}</div>
+        <div class="followup-prev-banner-title">&#x1F552; Previous observation â€” ${obsDate}</div>
         ${an.growItem ? `<div class="followup-prev-meta" style="margin-bottom:6px;">Grow area: <strong>${esc(an.growItem)}</strong></div>` : ''}
         ${an.actions ? `<div class="followup-prev-goal">Go target: ${esc(an.actions)}</div>` : ''}
         ${an.goDate  ? `<div class="followup-prev-meta">Target date: ${an.goDate}</div>` : ''}
@@ -3812,7 +3812,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const submittedTs = data.submittedAt?.toDate?.();
     const dateStr     = submittedTs
       ? submittedTs.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
-      : '—';
+      : 'â€”';
 
     const LEVEL_ORDER = ['induction','developing','proficient','lead'];
     const isVis = item => LEVEL_ORDER.indexOf(level) >= LEVEL_ORDER.indexOf(item.visible_from || 'induction');
@@ -3821,7 +3821,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
     function scoreCell(itemId) {
       const s = selfScores[itemId];
-      if (!s) return '<span style="font-size:.72rem;color:#94a3b8;font-style:italic;">—</span>';
+      if (!s) return '<span style="font-size:.72rem;color:#94a3b8;font-style:italic;">â€”</span>';
       const appScore = scores[itemId];
       let deltaHtml = '';
       if (appScore) {
@@ -3856,7 +3856,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       const rows = itemRows(d.items);
       if (!rows) return '';
       return `<div class="sa-fw-section">
-        <div class="sa-fw-title">${d.id} — ${d.title}</div>
+        <div class="sa-fw-title">${d.id} â€” ${d.title}</div>
         <div class="sa-item-grid">${rows}</div>
       </div>`;
     }).join('');
@@ -3869,12 +3869,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         <span style="font-size:.73rem;color:#94a3b8;margin-left:auto;">Delta shows teacher score minus your score. Negative = teacher scored themselves lower.</span>
       </div>
       <div class="sa-fw-section">
-        <div class="sa-fw-title">F1 — Teacher Administration</div>
+        <div class="sa-fw-title">F1 â€” Teacher Administration</div>
         <div class="sa-item-grid">${itemRows(f1.items)}</div>
       </div>
       ${f2Sections}
       <div class="sa-fw-section">
-        <div class="sa-fw-title">F3 — Professional Conduct &amp; Development</div>
+        <div class="sa-fw-title">F3 â€” Professional Conduct &amp; Development</div>
         <div class="sa-item-grid">${itemRows(f3.items)}</div>
       </div>`;
   }
@@ -3973,7 +3973,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.teacherUid) fetchPreviousRecord(d.teacherUid);
         if (d.teacherUid) fetchSelfAppraisal(d.teacherUid);
         loadedObsRecord = d;
-        showToast('Draft loaded — continue where you left off.');
+        showToast('Draft loaded â€” continue where you left off.');
       }
     } catch(e) { console.warn('Could not load draft by id:', e); }
   }
@@ -4015,7 +4015,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (lv) {
       const el = document.getElementById('levelSummary');
       el.style.display = '';
-      el.innerHTML = `<strong>${lv.label}</strong> — ${lv.description}<br>
+      el.innerHTML = `<strong>${lv.label}</strong> â€” ${lv.description}<br>
         <strong>Total scored items:</strong> ${lv.item_counts.total_scored}
         (F1: ${lv.item_counts.F1}, D1+D2+D3+D4: ${lv.item_counts.D1+lv.item_counts.D2+lv.item_counts.D3+lv.item_counts.D4},
          F3: ${lv.item_counts.F3}${level==='lead'?`, F3L: ${lv.item_counts.F3L}`:''})`;
@@ -4029,7 +4029,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (lv) {
       const el = document.getElementById('eoyLevelSummary');
       el.style.display = '';
-      el.innerHTML = `<strong>${lv.label}</strong> — ${lv.description}`;
+      el.innerHTML = `<strong>${lv.label}</strong> â€” ${lv.description}`;
     }
     buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
   });
@@ -4041,7 +4041,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const statusEl = document.getElementById('loadObsStatus');
     if (!uid)  { showToast('Enter a Teacher UID first.'); return; }
     if (!year) { showToast('Select an academic year first.'); return; }
-    statusEl.textContent = 'Searching…';
+    statusEl.textContent = 'Searchingâ€¦';
     try {
       let bestDoc = null;
       const q1 = query(collection(db,'teacher_appraisals'),
@@ -4057,7 +4057,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           bestDoc = s2.docs.sort((a,b)=>(b.data().updatedAt?.seconds||0)-(a.data().updatedAt?.seconds||0))[0];
       }
       if (!bestDoc) {
-        statusEl.innerHTML = '<span style="color:#dc2626;">✗ No record found. You can still proceed and enter F3 manually.</span>';
+        statusEl.innerHTML = '<span style="color:#dc2626;">âœ— No record found. You can still proceed and enter F3 manually.</span>';
         return;
       }
       loadedObsRecord = bestDoc.data();
@@ -4076,12 +4076,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         const mandatoryAtLevel = lvl ? getMandatoryItems(lvl) : new Set();
         loadedObsRecord.notObservedItems.filter(id => !mandatoryAtLevel.has(id)).forEach(id => notObserved.add(id));
       }
-      const obsDate = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
-      statusEl.innerHTML = `<span style="color:#16a34a;">✓ Loaded: ${loadedObsRecord.teacherName||uid} — observed ${obsDate} (ID: ${currentDocId})</span>`;
-      showToast('Observation record loaded — F1/F2 scores pre-filled.');
+      const obsDate = loadedObsRecord.observationDate?.toDate?.()?.toLocaleDateString('en-GB') || 'â€”';
+      statusEl.innerHTML = `<span style="color:#16a34a;">âœ“ Loaded: ${loadedObsRecord.teacherName||uid} â€” observed ${obsDate} (ID: ${currentDocId})</span>`;
+      showToast('Observation record loaded â€” F1/F2 scores pre-filled.');
     } catch(e) {
       console.error(e);
-      statusEl.innerHTML = '<span style="color:#dc2626;">✗ Error — check console.</span>';
+      statusEl.innerHTML = '<span style="color:#dc2626;">âœ— Error â€” check console.</span>';
     }
   });
 
@@ -4117,12 +4117,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       : document.getElementById('conferenceDate').value;
     const teacherName = document.getElementById('teacherName').value.trim();
     document.getElementById('stripTeacher').textContent = teacherName;
-    document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
+    document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || 'â€”';
     document.getElementById('stripDate').textContent    = dateDisplay;
     // Avatar initial
     const avatarEl = document.getElementById('stripAvatar');
     avatarEl.textContent = teacherName ? teacherName.trim().charAt(0).toUpperCase() : '?';
-    // Level badge — apply class directly on the element
+    // Level badge â€” apply class directly on the element
     const lvLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level;
     const lvEl = document.getElementById('stripLevel');
     lvEl.textContent  = lvLabel;
@@ -4160,19 +4160,19 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
   });
 
-  // ── SAVE ─────────────────────────────────────────────────
+  // â”€â”€ SAVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   async function saveAppraisal(status, isEoy, silent = false) {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
     if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     const level = getLevel();
     const r     = calcScores(level);
 
-    // Warn about score ≤ 2 items with no supporting note (fix #4)
+    // Warn about score â‰¤ 2 items with no supporting note (fix #4)
     const missingNotes = Object.entries(scores)
       .filter(([id, s]) => s <= 2 && !notes[id]?.trim())
       .map(([id]) => id);
     if (missingNotes.length) {
-      showToast(`⚠ ${missingNotes.length} low-score item(s) have no supporting note: ${missingNotes.slice(0,3).join(', ')}${missingNotes.length>3?' …':''}`, 5000);
+      showToast(`âš  ${missingNotes.length} low-score item(s) have no supporting note: ${missingNotes.slice(0,3).join(', ')}${missingNotes.length>3?' â€¦':''}`, 5000);
     }
 
     // Collect survey from surveyScores state
@@ -4182,7 +4182,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
     try {
       if (!isEoy) {
-        // ── Observation session ───────────────────────────
+        // â”€â”€ Observation session â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const payload = {
           teacherUid:          document.getElementById('teacherUid').value.trim() || null,
           teacherName:         document.getElementById('teacherName').value.trim(),
@@ -4224,7 +4224,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
               development:      document.getElementById('narr_development').value.trim(),
               actions:          document.getElementById('narr_actions').value.trim(),
               growItem:         growId,
-              growItemLabel:    growFwItem ? `${growId} — ${growFwItem.title}` : growId,
+              growItemLabel:    growFwItem ? `${growId} â€” ${growFwItem.title}` : growId,
               goDate,
               goCheck,
               // Flag whether Go target is sufficiently defined (needed for follow-up quality check)
@@ -4254,8 +4254,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (!silent) showToast(status==='shared' ? 'Observation shared with teacher.' : 'Draft saved.');
 
       } else {
-        // ── End-of-Year Conference ─────────────────────────
-        // TODO (pilot → production): lock F1 and F2 tabs as read-only in End-of-Year mode so
+        // â”€â”€ End-of-Year Conference â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+        // TODO (pilot â†’ production): lock F1 and F2 tabs as read-only in End-of-Year mode so
         //   observation scores cannot be altered during the conference session
         const eoyPayload = {
           scores:           { ...scores },
@@ -4280,7 +4280,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
               development:   document.getElementById('eoy_development').value.trim(),
               actions:       document.getElementById('eoy_actions').value.trim(),
               growItem:      growId,
-              growItemLabel: growFwItem ? `${growId} — ${growFwItem.title}` : growId,
+              growItemLabel: growFwItem ? `${growId} â€” ${growFwItem.title}` : growId,
               goDate,
               goCheck,
               goIsComplete:  !!(document.getElementById('eoy_actions').value.trim() && goDate && goCheck),
@@ -4323,7 +4323,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       if (!silent) document.getElementById('submitMsg').textContent = `Saved (ID: ${currentDocId})`;
       lsClear();
     } catch(e) {
-      showToast('Error saving — check console.'); console.error(e);
+      showToast('Error saving â€” check console.'); console.error(e);
     }
   }
 
@@ -4348,19 +4348,19 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (e.key === 'Enter') document.getElementById('coachingAddBtn').click();
   });
 
-  // ── PDF EXPORT ────────────────────────────────────────────
+  // â”€â”€ PDF EXPORT â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   window.exportPDF = function exportPDF() {
     const level     = getLevel();
     const r         = level ? calcScores(level) : null;
     const isEoy     = sessionMode === 'endofyear';
-    const teacher   = document.getElementById('teacherName').value.trim()  || '—';
-    const school    = document.getElementById('schoolId').value.trim()      || '—';
-    const subject   = document.getElementById('subject').value.trim()       || '—';
-    const year      = document.getElementById('academicYear').value         || '—';
-    const levelLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level || '—';
+    const teacher   = document.getElementById('teacherName').value.trim()  || 'â€”';
+    const school    = document.getElementById('schoolId').value.trim()      || 'â€”';
+    const subject   = document.getElementById('subject').value.trim()       || 'â€”';
+    const year      = document.getElementById('academicYear').value         || 'â€”';
+    const levelLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level || 'â€”';
 
     const scoreRow = (label, val) =>
-      `<tr><td>${label}</td><td>${val!=null ? val.toFixed(2) : '—'}</td></tr>`;
+      `<tr><td>${label}</td><td>${val!=null ? val.toFixed(2) : 'â€”'}</td></tr>`;
 
     const narrativeBlock = (label, val) =>
       val ? `<div class="pr-narrative"><strong>${label}</strong><p>${val.replace(/\n/g,'<br>')}</p></div>` : '';
@@ -4380,7 +4380,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         const no = notObserved.has(item.id);
         return `<tr>
           <td style="font-size:.85em;">${item.title}</td>
-          <td style="text-align:center;font-weight:700;">${no ? 'N/O' : (s ?? '—')}</td>
+          <td style="text-align:center;font-weight:700;">${no ? 'N/O' : (s ?? 'â€”')}</td>
           <td style="font-size:.82em;color:#475569;">${n || ''}</td>
         </tr>`;
       }).join('');
@@ -4392,7 +4392,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         const s = surveyScores[item.id];
         return `<tr>
           <td style="font-size:.85em;">${item.title}</td>
-          <td style="text-align:center;font-weight:700;">${s ?? '—'}</td>
+          <td style="text-align:center;font-weight:700;">${s ?? 'â€”'}</td>
         </tr>`;
       }).join('');
     }
@@ -4407,69 +4407,69 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const html = `
       <div class="pr-header">
         <h1>Teacher Appraisal Report</h1>
-        <p class="pr-meta">${teacher} &nbsp;·&nbsp; ${school} &nbsp;·&nbsp; ${subject} &nbsp;·&nbsp; ${year}</p>
-        <p class="pr-meta">Level: <strong>${levelLabel}</strong> &nbsp;·&nbsp; Mode: <strong>${isEoy ? 'End-of-Year' : 'Mid-Year Observation'}</strong></p>
+        <p class="pr-meta">${teacher} &nbsp;Â·&nbsp; ${school} &nbsp;Â·&nbsp; ${subject} &nbsp;Â·&nbsp; ${year}</p>
+        <p class="pr-meta">Level: <strong>${levelLabel}</strong> &nbsp;Â·&nbsp; Mode: <strong>${isEoy ? 'End-of-Year' : 'Mid-Year Observation'}</strong></p>
       </div>
 
       <table class="pr-score-table">
-        <thead><tr><th>Component</th><th>Mean (1–4)</th></tr></thead>
+        <thead><tr><th>Component</th><th>Mean (1â€“4)</th></tr></thead>
         <tbody>
-          ${scoreRow('F1 — Administrative', r?.f1)}
-          ${scoreRow('F2 — Observation',    r?.f2)}
-          ${isEoy ? scoreRow('F3 — Work Quality',  r?.f3) : ''}
-          ${scoreRow('F4 — Student Survey', r?.f4)}
-          <tr class="pr-total"><td>Composite Score</td><td>${r?.composite!=null ? r.composite.toFixed(1)+'%' : '—'}</td></tr>
-          <tr class="pr-total"><td>Predicate</td><td>${r?.predicate || '—'}</td></tr>
+          ${scoreRow('F1 â€” Administrative', r?.f1)}
+          ${scoreRow('F2 â€” Observation',    r?.f2)}
+          ${isEoy ? scoreRow('F3 â€” Work Quality',  r?.f3) : ''}
+          ${scoreRow('F4 â€” Student Survey', r?.f4)}
+          <tr class="pr-total"><td>Composite Score</td><td>${r?.composite!=null ? r.composite.toFixed(1)+'%' : 'â€”'}</td></tr>
+          <tr class="pr-total"><td>Predicate</td><td>${r?.predicate || 'â€”'}</td></tr>
         </tbody>
       </table>
 
       ${radarImg ? `<div class="pr-radar"><img src="${radarImg}" style="max-width:320px;"/></div>` : ''}
 
       ${fw1?.items?.length ? `
-        <h2 class="pr-section">F1 — Administrative Readiness</h2>
+        <h2 class="pr-section">F1 â€” Administrative Readiness</h2>
         <table class="pr-items"><thead><tr><th>Item</th><th>Score</th><th>Notes</th></tr></thead>
         <tbody>${itemsHtml(fw1.items)}</tbody></table>` : ''}
 
       ${fw2?.domains?.length ? fw2.domains.map(d=>`
-        <h2 class="pr-section">F2 — ${d.title}</h2>
+        <h2 class="pr-section">F2 â€” ${d.title}</h2>
         <table class="pr-items"><thead><tr><th>Item</th><th>Score</th><th>Notes</th></tr></thead>
         <tbody>${itemsHtml(d.items)}</tbody></table>`).join('') : ''}
 
       ${isEoy && fw3 ? `
-        <h2 class="pr-section">F3 — Work Quality</h2>
+        <h2 class="pr-section">F3 â€” Work Quality</h2>
         <table class="pr-items"><thead><tr><th>Item</th><th>Score</th><th>Notes</th></tr></thead>
         <tbody>${itemsHtml((fw3.items||[]).filter(i=>i.visible_from===level||!i.visible_from))}</tbody></table>` : ''}
 
       ${fw4?.items?.length ? `
-        <h2 class="pr-section">F4 — Student Survey</h2>
-        <table class="pr-items"><thead><tr><th>Item</th><th>Score (1–4)</th></tr></thead>
+        <h2 class="pr-section">F4 â€” Student Survey</h2>
+        <table class="pr-items"><thead><tr><th>Item</th><th>Score (1â€“4)</th></tr></thead>
         <tbody>${surveyItemsHtml()}</tbody></table>` : ''}
 
       ${!isEoy ? `
       <h2 class="pr-section">Observation Feedback</h2>
-      ${narrativeBlock('✨ Glow — What is working well', document.getElementById('narr_strengths')?.value)}
-      ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('narr_development')?.value)}
-      ${document.getElementById('narr_grow_item')?.value ? narrativeBlock('Linked framework item', (() => { const v = document.getElementById('narr_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} — ${it.title}` : v; })()) : ''}
-      ${narrativeBlock('🎯 Go — Next step', document.getElementById('narr_actions')?.value)}
+      ${narrativeBlock('âœ¨ Glow â€” What is working well', document.getElementById('narr_strengths')?.value)}
+      ${narrativeBlock('ðŸŒ± Grow â€” Priority development area', document.getElementById('narr_development')?.value)}
+      ${document.getElementById('narr_grow_item')?.value ? narrativeBlock('Linked framework item', (() => { const v = document.getElementById('narr_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} â€” ${it.title}` : v; })()) : ''}
+      ${narrativeBlock('ðŸŽ¯ Go â€” Next step', document.getElementById('narr_actions')?.value)}
       ${document.getElementById('narr_go_date')?.value ? narrativeBlock('Target date', document.getElementById('narr_go_date').value) : ''}
       ${document.getElementById('narr_go_check')?.value ? narrativeBlock('Progress check', document.getElementById('narr_go_check').value) : ''}
       ` : `
       <h2 class="pr-section">End-of-Year Conference Report</h2>
       ${narrativeBlock('Overall Annual Summary', document.getElementById('eoy_summary')?.value)}
-      ${narrativeBlock('✨ Glow — Sustained strengths', document.getElementById('eoy_strengths')?.value)}
-      ${narrativeBlock('🌱 Grow — Priority development area', document.getElementById('eoy_development')?.value)}
-      ${document.getElementById('eoy_grow_item')?.value ? narrativeBlock('Linked framework domain / item', (() => { const v = document.getElementById('eoy_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} — ${it.title}` : v; })()) : ''}
-      ${narrativeBlock('🎯 Go — Professional Development Plan', document.getElementById('eoy_actions')?.value)}
+      ${narrativeBlock('âœ¨ Glow â€” Sustained strengths', document.getElementById('eoy_strengths')?.value)}
+      ${narrativeBlock('ðŸŒ± Grow â€” Priority development area', document.getElementById('eoy_development')?.value)}
+      ${document.getElementById('eoy_grow_item')?.value ? narrativeBlock('Linked framework domain / item', (() => { const v = document.getElementById('eoy_grow_item').value; const it = frameworkItemMap[v]; return it ? `${v} â€” ${it.title}` : v; })()) : ''}
+      ${narrativeBlock('ðŸŽ¯ Go â€” Professional Development Plan', document.getElementById('eoy_actions')?.value)}
       ${document.getElementById('eoy_go_date')?.value ? narrativeBlock('First review date', document.getElementById('eoy_go_date').value) : ''}
       ${document.getElementById('eoy_go_check')?.value ? narrativeBlock('Success criteria', document.getElementById('eoy_go_check').value) : ''}
       `}
 
       ${prevRecord && followUpVerdict ? (() => {
         const an = prevRecord.appraiserNarrative || {};
-        const verdictLabels = { yes: '✔ Achieved', partial: '~ Partially achieved', no: '✗ Not yet achieved' };
+        const verdictLabels = { yes: 'âœ” Achieved', partial: '~ Partially achieved', no: 'âœ— Not yet achieved' };
         const verdictColors  = { yes: '#15803d',    partial: '#92400e',              no: '#b91c1c' };
         const note = document.getElementById('followUpNote')?.value.trim() || '';
-        return `<h2 class="pr-section">Follow-up — Previous Go Target</h2>
+        return `<h2 class="pr-section">Follow-up â€” Previous Go Target</h2>
           ${an.actions ? `<p style="font-size:.83rem;color:#475569;margin-bottom:6px;"><strong>Previous target:</strong> ${esc(an.actions)}</p>` : ''}
           <p style="font-size:.85rem;font-weight:700;color:${verdictColors[followUpVerdict]};margin-bottom:4px;">${verdictLabels[followUpVerdict]}</p>
           ${note ? `<p style="font-size:.83rem;color:#475569;">${esc(note)}</p>` : ''}`;
@@ -4480,7 +4480,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         ${selectedQuestions.map(q => `<li style="margin-bottom:6px;font-size:.85rem;color:#334155;">${esc(q.text)}</li>`).join('')}
       </ul>` : ''}
 
-      <p class="pr-footer">Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})} · Eduversal Academic Hub</p>
+      <p class="pr-footer">Generated ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})} Â· Eduversal Academic Hub</p>
     `;
 
     let area = document.getElementById('printReportArea');
@@ -4501,7 +4501,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       if (document.getElementById('scoringPhase').style.display === 'none') return;
       e.preventDefault();
       saveAppraisal('draft', sessionMode === 'endofyear');
-      showToast('⌨ Draft saved (S)');
+      showToast('âŒ¨ Draft saved (S)');
     }
   });
 });
