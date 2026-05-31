@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Artifacts — Academic Hub</title>
+<title>School Artifacts â€” Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -104,16 +104,16 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Leaders · School Resources</p>
+      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Â· School Resources</p>
       <h1 class="page-hero__title">School Artifacts</h1>
-      <p class="page-hero__desc">Per-subject living documents this school maintains — Annual Plan, Scheme of Work, lesson plans, internal assessments, intervention plans. Each subject card collects what's current; superseded versions stay archived for audit.</p>
+      <p class="page-hero__desc">Per-subject living documents this school maintains â€” Annual Plan, Scheme of Work, lesson plans, internal assessments, intervention plans. Each subject card collects what's current; superseded versions stay archived for audit.</p>
     </div>
   </div>
 </header>
 
 <main class="page-wrap" id="mainRoot" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
-    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by subject, type, status, or year — or upload a new artifact.</div>
+    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by subject, type, status, or year â€” or upload a new artifact.</div>
     <button class="da-btn-add" id="btnAddArtifact">+ New artifact</button>
   </div>
 
@@ -166,12 +166,12 @@ body { padding-top: 62px; }
       </div>
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input type="text" class="form-input" id="aTitle" placeholder="e.g. Year 8 Math Annual Plan 2026/2027">
+        <input aria-label="e.g. Year 8 Math Annual Plan 2026/2027" type="text" class="form-input" id="aTitle" placeholder="e.g. Year 8 Math Annual Plan 2026/2027">
       </div>
       <div class="form-group">
         <label class="form-label">Link (Google Drive / SharePoint / external)</label>
-        <input type="url" class="form-input" id="aUrl" placeholder="https://docs.google.com/…">
-        <div class="form-hint">Files live in your school's drive — paste a link here. Eduversal does not host the file.</div>
+        <input aria-label="https://docs.google.com/â€¦" type="url" class="form-input" id="aUrl" placeholder="https://docs.google.com/â€¦">
+        <div class="form-hint">Files live in your school's drive â€” paste a link here. Eduversal does not host the file.</div>
       </div>
       <div class="form-group">
         <label class="form-label">Academic year</label>
@@ -182,7 +182,7 @@ body { padding-top: 62px; }
       </div>
       <div class="form-group">
         <label class="form-label">Notes (optional)</label>
-        <textarea class="form-textarea" id="aNotes" rows="2" placeholder="What changed from last year? Who curates this?"></textarea>
+        <textarea aria-label="What changed from last year? Who curates this?" class="form-textarea" id="aNotes" rows="2" placeholder="What changed from last year? Who curates this?"></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Status</label>
@@ -190,7 +190,7 @@ body { padding-top: 62px; }
           <option value="current">Current (live)</option>
           <option value="archived">Archived</option>
         </select>
-        <div class="form-hint">Mark old versions as archived rather than deleting — keeps the trail.</div>
+        <div class="form-hint">Mark old versions as archived rather than deleting â€” keeps the trail.</div>
       </div>
     </div>
     <div class="modal-foot">
@@ -322,7 +322,7 @@ function render() {
     const rows = filtered.filter(a => a.subjectId === subj);
     return `
       <div class="subject-card">
-        <h3><span class="subject-icon ${subj}">${SUBJECT_ICONS[subj] || '·'}</span> ${SUBJECT_LABELS[subj]}</h3>
+        <h3><span class="subject-icon ${subj}">${SUBJECT_ICONS[subj] || 'Â·'}</span> ${SUBJECT_LABELS[subj]}</h3>
         ${rows.length ? `
           <div class="artifact-row-list">
             ${rows.map(renderRow).join('')}
@@ -343,14 +343,14 @@ function renderRow(a) {
       <div class="ar-text">
         <span class="ar-type">${escHtml(TYPE_LABELS[a.artifactType] || a.artifactType || 'Other')}</span>
         <div class="ar-title">${a.url
-          ? `<a href="${escHtml(safeUrl(a.url))}" target="_blank" rel="noopener">${escHtml(a.title || 'Untitled')} ↗</a>`
+          ? `<a href="${escHtml(safeUrl(a.url))}" target="_blank" rel="noopener">${escHtml(a.title || 'Untitled')} â†—</a>`
           : escHtml(a.title || 'Untitled')}</div>
-        <div class="ar-meta">${escHtml(a.academicYear || '—')} · ${status === 'archived' ? '<span style="color:#92400e;">archived</span> · ' : ''}updated ${fmtDate(a.updatedAt)}</div>
+        <div class="ar-meta">${escHtml(a.academicYear || 'â€”')} Â· ${status === 'archived' ? '<span style="color:#92400e;">archived</span> Â· ' : ''}updated ${fmtDate(a.updatedAt)}</div>
         ${a.notes ? `<div class="ar-meta" style="font-style:italic;margin-top:4px;">${escHtml(a.notes)}</div>` : ''}
       </div>
       <div class="ar-actions">
-        <button class="ar-btn" data-edit="${a.id}">✎</button>
-        ${isAdmin ? `<button class="ar-btn danger" data-delete="${a.id}" data-confirming="false">×</button>` : ''}
+        <button class="ar-btn" data-edit="${a.id}">âœŽ</button>
+        ${isAdmin ? `<button class="ar-btn danger" data-delete="${a.id}" data-confirming="false">Ã—</button>` : ''}
       </div>
     </div>
   `;
@@ -400,7 +400,7 @@ function closeModal() {
 async function saveArtifact() {
   const title = $('aTitle').value.trim();
   if (!title) { showToast('Title required.'); return; }
-  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile â€” cannot save.'); return; }
 
   const payload = {
     subjectId: $('aSubject').value,
@@ -437,7 +437,7 @@ async function confirmDelete(id, btn) {
   if (!isAdmin) { showToast('Only admin can delete.'); return; }
   if (btn.dataset.confirming === 'true') {
     btn.dataset.confirming = 'false';
-    btn.textContent = '×';
+    btn.textContent = 'Ã—';
     try {
       await deleteDoc(doc(db, 'school_artifacts', id));
       showToast('Deleted.');
@@ -448,11 +448,11 @@ async function confirmDelete(id, btn) {
     return;
   }
   btn.dataset.confirming = 'true';
-  btn.textContent = '✓ confirm';
+  btn.textContent = 'âœ“ confirm';
   setTimeout(() => {
     if (btn.dataset.confirming === 'true') {
       btn.dataset.confirming = 'false';
-      btn.textContent = '×';
+      btn.textContent = 'Ã—';
     }
   }, 3000);
 }
@@ -461,10 +461,10 @@ async function confirmDelete(id, btn) {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Resources · Artifacts</span>
+      <span class="page-footer__cta-eyebrow">School Resources Â· Artifacts</span>
       <h2 class="page-footer__cta-title">The annual plan only counts if the team can find it.</h2>
-      <p class="page-footer__cta-desc">Per-subject annual plans, schemes of work, and intervention plans are the living spine of the academic year. Link them here once and the whole leadership team — and HQ on review visits — knows where to look.</p>
-      <a href="/curriculum-map" class="page-footer__cta-btn">Cross-check with the Curriculum Map <span aria-hidden="true">→</span></a>
+      <p class="page-footer__cta-desc">Per-subject annual plans, schemes of work, and intervention plans are the living spine of the academic year. Link them here once and the whole leadership team â€” and HQ on review visits â€” knows where to look.</p>
+      <a href="/curriculum-map" class="page-footer__cta-btn">Cross-check with the Curriculum Map <span aria-hidden="true">â†’</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Artifacts footer navigation">
       <div class="page-footer__nav-group">
@@ -484,8 +484,8 @@ async function confirmDelete(id, btn) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Files live in your school's drive — Eduversal stores the index, not the file</span>
+    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-right">Files live in your school's drive â€” Eduversal stores the index, not the file</span>
   </div>
 </footer>
 </body>

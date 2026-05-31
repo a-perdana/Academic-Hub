@@ -309,7 +309,7 @@ body { padding-top: 62px; }
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input type="text" class="form-input" id="newTitle" placeholder="e.g. Trial a Friday late-start for Year 11 revision">
+        <input aria-label="e.g. Trial a Friday late-start for Year 11 revision" type="text" class="form-input" id="newTitle" placeholder="e.g. Trial a Friday late-start for Year 11 revision">
       </div>
       <div class="form-group">
         <label class="form-label">Category</label>
@@ -576,17 +576,17 @@ function renderDetail(p) {
       ${isAdmin ? `<button class="pd-btn danger" id="pdDelete" data-confirming="false">Delete</button>` : ''}
     </div>
     <div class="pd-section-label">Proposal â€” the problem, the options, your recommendation</div>
-    <textarea class="pd-body-input" id="pdBody" placeholder="Write the proposal hereâ€¦">${escHtml(p.description || '')}</textarea>
+    <textarea aria-label="Write the proposal hereâ€¦" class="pd-body-input" id="pdBody" placeholder="Write the proposal hereâ€¦">${escHtml(p.description || '')}</textarea>
     <div class="pd-section-label">References (cite source files / standards)</div>
     <div class="pd-refs" id="pdRefs"></div>
     <div class="ref-add-row">
-      <input type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. appraisal-framework-v2.json â†’ F3.weights, CSLS 4.1">
+      <input aria-label="e.g. appraisal-framework-v2.json â†’ F3.weights, CSLS 4.1" type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. appraisal-framework-v2.json â†’ F3.weights, CSLS 4.1">
       <button class="ref-add-btn" id="pdRefAdd">+ Add reference</button>
     </div>
     <div class="pd-section-label">Discussion <span id="pdCommentCount" style="color:var(--ink-3);font-weight:400;"></span></div>
     <div class="pd-thread" id="pdThread"></div>
     <div class="comment-composer">
-      <textarea id="pdCommentInput" placeholder="Add to the discussionâ€¦"></textarea>
+      <textarea aria-label="Add to the discussionâ€¦" id="pdCommentInput" placeholder="Add to the discussionâ€¦"></textarea>
       <div class="comment-composer-row"><button class="btn-save" id="pdCommentPost">Post comment</button></div>
     </div>
   `;

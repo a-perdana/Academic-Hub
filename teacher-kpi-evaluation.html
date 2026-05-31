@@ -966,11 +966,11 @@
         <div class="eval-meta-grid">
           <div class="eval-meta-item">
             <label>Evaluator Name</label>
-            <input type="text" id="evaluator-name" placeholder="Your name" />
+            <input aria-label="Your name" type="text" id="evaluator-name" placeholder="Your name" />
           </div>
           <div class="eval-meta-item">
             <label>Position</label>
-            <input type="text" id="evaluator-position" placeholder="e.g. School Principal" />
+            <input aria-label="e.g. School Principal" type="text" id="evaluator-position" placeholder="e.g. School Principal" />
           </div>
           <div class="eval-meta-item">
             <label>Evaluation Date</label>
@@ -1092,7 +1092,7 @@
           </div>
           <div class="overall-comments">
             <label>Overall Comments</label>
-            <textarea id="overall-comments" placeholder="Summarise your overall observations and recommendationsâ€¦" rows="4"></textarea>
+            <textarea aria-label="Summarise your overall observations and recommendationsâ€¦" id="overall-comments" placeholder="Summarise your overall observations and recommendationsâ€¦" rows="4"></textarea>
           </div>
         </div>
 
@@ -1129,11 +1129,11 @@
         </div>
         <div>
           <label>Location (optional)</label>
-          <input type="text" id="meetingLocation" placeholder="e.g. Principal's Office / Google Meet" />
+          <input aria-label="e.g. Principal's Office / Google Meet" type="text" id="meetingLocation" placeholder="e.g. Principal's Office / Google Meet" />
         </div>
         <div>
           <label>Note to teacher (optional)</label>
-          <textarea id="meetingNote" placeholder="e.g. Please bring your lesson observation recordsâ€¦"></textarea>
+          <textarea aria-label="e.g. Please bring your lesson observation recordsâ€¦" id="meetingNote" placeholder="e.g. Please bring your lesson observation recordsâ€¦"></textarea>
         </div>
       </div>
       <div class="meeting-modal-foot">
@@ -1463,7 +1463,7 @@
                 <div class="rating-stars" id="admin-stars-${kpi.id}"></div>
                 <div style="margin-top:6px;">
                   <label style="font-size:.75rem;color:#6b7280;">Actual Value (admin) ${kpi.target ? `â€” target: ${escHtml(String(kpi.target))} ${escHtml(kpi.unit||'')}` : ''}</label>
-                  <input type="number" step="0.01" id="admin-actual-${kpi.id}" placeholder="${kpi.unit ? 'Value in ' + escAttr(kpi.unit) : 'Observed value'}" style="width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.82rem;font-family:inherit;margin-top:4px;"
+                  <input aria-label="${kpi.unit ? 'Value in ' + escAttr(kpi.unit) : 'Observed value'}" type="number" step="0.01" id="admin-actual-${kpi.id}" placeholder="${kpi.unit ? 'Value in ' + escAttr(kpi.unit) : 'Observed value'}" style="width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.82rem;font-family:inherit;margin-top:4px;"
                     value="${escAttr(String(savedAdmin.administratorActualValue || ''))}" />
                   ${kpi.target ? `<div id="eval-sg-${kpi.id}" style="display:none;margin-top:5px;padding:6px 10px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px dashed;"></div>` : ''}
                 </div>
@@ -1472,27 +1472,27 @@
             <div class="form-fields" style="margin-top:14px;">
               <div class="field-group">
                 <label>Strengths Observed</label>
-                <textarea id="strengths-${kpi.id}" placeholder="Specific strengths observedâ€¦">${escHtml(savedAdmin.strengths || '')}</textarea>
+                <textarea aria-label="Specific strengths observedâ€¦" id="strengths-${kpi.id}" placeholder="Specific strengths observedâ€¦">${escHtml(savedAdmin.strengths || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Areas for Development</label>
-                <textarea id="areas-${kpi.id}" placeholder="Areas needing improvementâ€¦">${escHtml(savedAdmin.areasForDevelopment || '')}</textarea>
+                <textarea aria-label="Areas needing improvementâ€¦" id="areas-${kpi.id}" placeholder="Areas needing improvementâ€¦">${escHtml(savedAdmin.areasForDevelopment || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Recommendations</label>
-                <textarea id="recs-${kpi.id}" placeholder="Specific recommendationsâ€¦">${escHtml(savedAdmin.recommendations || '')}</textarea>
+                <textarea aria-label="Specific recommendationsâ€¦" id="recs-${kpi.id}" placeholder="Specific recommendationsâ€¦">${escHtml(savedAdmin.recommendations || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Evidence Reviewed</label>
-                <textarea id="evidence-${kpi.id}" placeholder="Lesson observations, data, portfoliosâ€¦">${escHtml(savedAdmin.evidenceReviewed || '')}</textarea>
+                <textarea aria-label="Lesson observations, data, portfoliosâ€¦" id="evidence-${kpi.id}" placeholder="Lesson observations, data, portfoliosâ€¦">${escHtml(savedAdmin.evidenceReviewed || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Support Provided</label>
-                <textarea id="support-${kpi.id}" placeholder="Support or resources providedâ€¦">${escHtml(savedAdmin.supportProvided || '')}</textarea>
+                <textarea aria-label="Support or resources providedâ€¦" id="support-${kpi.id}" placeholder="Support or resources providedâ€¦">${escHtml(savedAdmin.supportProvided || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Action Plan</label>
-                <textarea id="action-${kpi.id}" placeholder="Agreed action stepsâ€¦">${escHtml(savedAdmin.actionPlan || '')}</textarea>
+                <textarea aria-label="Agreed action stepsâ€¦" id="action-${kpi.id}" placeholder="Agreed action stepsâ€¦">${escHtml(savedAdmin.actionPlan || '')}</textarea>
               </div>
             </div>
             <div class="agreed-row">
@@ -1626,19 +1626,19 @@
           <div class="goal-fields">
             <div class="field-group" style="grid-column:1/-1">
               <label>Goal</label>
-              <textarea data-field="goal" data-idx="${i}" rows="2" placeholder="Describe the development goalâ€¦">${escHtml(g.goal || '')}</textarea>
+              <textarea aria-label="Describe the development goalâ€¦" data-field="goal" data-idx="${i}" rows="2" placeholder="Describe the development goalâ€¦">${escHtml(g.goal || '')}</textarea>
             </div>
             <div class="field-group">
               <label>Timeline</label>
-              <input type="text" data-field="timeline" data-idx="${i}" placeholder="e.g. End of Term 2" value="${escAttr(g.timeline || '')}" />
+              <input aria-label="e.g. End of Term 2" type="text" data-field="timeline" data-idx="${i}" placeholder="e.g. End of Term 2" value="${escAttr(g.timeline || '')}" />
             </div>
             <div class="field-group">
               <label>Support Needed</label>
-              <input type="text" data-field="support" data-idx="${i}" placeholder="Resources or supportâ€¦" value="${escAttr(g.support || '')}" />
+              <input aria-label="Resources or supportâ€¦" type="text" data-field="support" data-idx="${i}" placeholder="Resources or supportâ€¦" value="${escAttr(g.support || '')}" />
             </div>
             <div class="field-group" style="grid-column:1/-1">
               <label>Success Criteria</label>
-              <input type="text" data-field="successCriteria" data-idx="${i}" placeholder="How will success be measured?" value="${escAttr(g.successCriteria || '')}" />
+              <input aria-label="How will success be measured?" type="text" data-field="successCriteria" data-idx="${i}" placeholder="How will success be measured?" value="${escAttr(g.successCriteria || '')}" />
             </div>
           </div>
         `;

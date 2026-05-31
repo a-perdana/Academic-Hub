@@ -1050,8 +1050,8 @@ window.__addSdeRow = function(aspectId) {
   row.className = 'sde-row';
   row.id = `sde-row-${aspectId}-${idx}`;
   row.innerHTML = `
-    <input class="sde-input" placeholder="Label" value="" data-field="label" data-aspect="${aspectId}" data-idx="${idx}">
-    <input class="sde-input" placeholder="https://..." value="" data-field="url" data-aspect="${aspectId}" data-idx="${idx}">
+    <input aria-label="Label" class="sde-input" placeholder="Label" value="" data-field="label" data-aspect="${aspectId}" data-idx="${idx}">
+    <input aria-label="https://" class="sde-input" placeholder="https://..." value="" data-field="url" data-aspect="${aspectId}" data-idx="${idx}">
     <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspectId}',${idx})" title="Remove">âœ•</button>`;
   rows.appendChild(row);
 };
@@ -1168,8 +1168,8 @@ function renderOverview() {
     <div style="margin-bottom:20px;">
       <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;">School Summary</div>
       <div class="overview-fields">
-        <div class="field-block"><label>Key Strengths</label><textarea data-field="strengths" placeholder="What does your school do particularly well?" ${!canEdit?'disabled':''}>${appraisalDoc?.strengths||''}</textarea></div>
-        <div class="field-block"><label>Areas for Improvement</label><textarea data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
+        <div class="field-block"><label>Key Strengths</label><textarea aria-label="What does your school do particularly well?" data-field="strengths" placeholder="What does your school do particularly well?" ${!canEdit?'disabled':''}>${appraisalDoc?.strengths||''}</textarea></div>
+        <div class="field-block"><label>Areas for Improvement</label><textarea aria-label="What are your school's priority development areas?" data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
       </div>
       ${appraisalDoc?.recommendations ? `<div class="field-block" style="margin-top:4px;"><label>Eduversal Coordinator Recommendations</label><textarea disabled style="min-height:80px;background:var(--d2-bg);border-color:var(--d2-border);">${appraisalDoc.recommendations}</textarea></div>` : ''}
     </div>
@@ -1310,7 +1310,7 @@ function renderDomain(domainId) {
           <!-- Evidence & Notes -->
           <div class="ab-section">
             <div class="ab-section-label">Evidence & Notes</div>
-            <textarea class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific â€” refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
+            <textarea aria-label="Describe the evidence that supports your rating. Be specific â€” refer to documents, data, or observations" class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific â€” refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
           </div>
 
           <!-- Evidence examples (collapsible) -->
@@ -1347,8 +1347,8 @@ function renderDomain(domainId) {
               <div class="sde-rows" id="sde-rows-${aspect.id}">
                 ${(aspect.sample_documents||[]).map((doc, i) => `
                 <div class="sde-row" id="sde-row-${aspect.id}-${i}">
-                  <input class="sde-input" placeholder="Label" value="${doc.label.replace(/"/g,'&quot;')}" data-field="label" data-aspect="${aspect.id}" data-idx="${i}">
-                  <input class="sde-input" placeholder="https://..." value="${doc.url.replace(/"/g,'&quot;')}" data-field="url" data-aspect="${aspect.id}" data-idx="${i}">
+                  <input aria-label="Label" class="sde-input" placeholder="Label" value="${doc.label.replace(/"/g,'&quot;')}" data-field="label" data-aspect="${aspect.id}" data-idx="${i}">
+                  <input aria-label="https://" class="sde-input" placeholder="https://..." value="${doc.url.replace(/"/g,'&quot;')}" data-field="url" data-aspect="${aspect.id}" data-idx="${i}">
                   <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspect.id}',${i})" title="Remove">âœ•</button>
                 </div>`).join('')}
               </div>
@@ -1380,7 +1380,7 @@ function renderDomain(domainId) {
             <div class="evidence-link-section" style="margin-top:${files.length||canEdit?'10px':'0'};">
               ${canEdit ? `
               <div class="evidence-link-row">
-                <input class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="Or paste an evidence link (Google Drive, Dropbox, etc.)" />
+                <input aria-label="Or paste an evidence link (Google Drive, Dropbox, etc.)" class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="Or paste an evidence link (Google Drive, Dropbox, etc.)" />
                 <button class="evidence-link-add-btn" onclick="window.__addLink('${aspect.id}')">+ Add</button>
               </div>` : ''}
               <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `

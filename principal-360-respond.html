@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Principal 360° — Respond — Academic Hub</title>
+<title>Principal 360Â° â€” Respond â€” Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -107,11 +107,11 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
 
 <div class="page-wrap">
   <div class="page-header">
-    <div class="eyebrow">Principal 360° · Anonymous feedback</div>
-    <h1>Annual Leadership Review — Your Voice</h1>
+    <div class="eyebrow">Principal 360Â° Â· Anonymous feedback</div>
+    <h1>Annual Leadership Review â€” Your Voice</h1>
     <p>Your responses are anonymous and combined with others before any human reads them. Min 5 respondents per cohort before any aggregate is shown to anyone (Charter NN5).</p>
   </div>
-  <div id="content"><div class="loading-state">Loading…</div></div>
+  <div id="content"><div class="loading-state">Loadingâ€¦</div></div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -160,7 +160,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       return;
     }
 
-    // Has this user already responded? (rough idempotency — anonymisation is by Cloud Function, but we hint here)
+    // Has this user already responded? (rough idempotency â€” anonymisation is by Cloud Function, but we hint here)
     const respondedKey = `360responded:${CYCLE_ID}:${user.uid}`;
     if (localStorage.getItem(respondedKey)) {
       showAccessDenied('You have already submitted a response for this cycle. Each respondent can submit once.');
@@ -213,14 +213,14 @@ function render() {
           <div style="margin-bottom: 14px;">
             <label style="display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
             ${nf.description ? `<p style="font-size:11.5px;color:var(--ink-3);margin:0 0 6px;line-height:1.5;">${escapeHtml(nf.description)}</p>` : ''}
-            <textarea class="notes-area" data-narr="${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…"></textarea>
+            <textarea aria-label="${escapeAttr(nf.label)}â€¦" class="notes-area" data-narr="${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}â€¦"></textarea>
           </div>
         `).join('')}
       </div>
     ` : ''}
 
     <div class="action-bar">
-      <div class="progress-info" id="progressInfo">—</div>
+      <div class="progress-info" id="progressInfo">â€”</div>
       <button class="btn btn-primary" id="btnSubmit">Submit responses</button>
     </div>
   `;
@@ -253,7 +253,7 @@ function renderQuestion(q) {
   }).join('');
   return `
     <div class="q-row">
-      <div class="q-text"><span class="q-id">${escapeHtml(q.id)}</span> · ${escapeHtml(q.text)}</div>
+      <div class="q-text"><span class="q-id">${escapeHtml(q.id)}</span> Â· ${escapeHtml(q.text)}</div>
       <div class="scale-row">${pills}</div>
     </div>
   `;
@@ -284,7 +284,7 @@ async function submit() {
   try {
     // Anonymous response: write into principal_360_responses with no respondent uid.
     // The respondent's auth.uid is used only to enforce 1-response-per-cycle via the
-    // local idempotency key. The persisted doc has NO respondent identifier — Cloud
+    // local idempotency key. The persisted doc has NO respondent identifier â€” Cloud
     // Function aggregator (planned) reads only cohort + scores.
     await addDoc(collection(window.db, 'principal_360_responses'), {
       cycleId: CYCLE_ID,

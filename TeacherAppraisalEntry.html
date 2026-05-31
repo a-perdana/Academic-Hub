@@ -961,7 +961,7 @@ body:has(> .page-footer) > .page-wrap {
           <input type="hidden" id="teacherUid">
           <div class="field">
             <label>School <span style="font-size:.68rem;color:#94a3b8;font-weight:400;">(auto-filled on select)</span></label>
-            <input type="text" id="schoolName" placeholder="Auto-filled when teacher selected" readonly
+            <input aria-label="Auto-filled when teacher selected" type="text" id="schoolName" placeholder="Auto-filled when teacher selected" readonly
               style="background:#f8fafc;color:#475569;cursor:default;">
             <input type="hidden" id="schoolId">
           </div>
@@ -969,7 +969,7 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row">
           <div class="field">
             <label>Subject</label>
-            <input type="text" id="subject" placeholder="e.g. Mathematics">
+            <input aria-label="e.g. Mathematics" type="text" id="subject" placeholder="e.g. Mathematics">
           </div>
           <div class="field">
             <label>Academic Year</label>
@@ -988,17 +988,17 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row one">
           <div class="field">
             <label>Teacher's Stated Lesson Objectives</label>
-            <textarea id="preConf_objectives" rows="2" placeholder="What is the teacher planning to demonstrate in this lesson? What learning outcomes have they set?"></textarea>
+            <textarea aria-label="What is the teacher planning to demonstrate in this lesson? What learning outcomes have they set?" id="preConf_objectives" rows="2" placeholder="What is the teacher planning to demonstrate in this lesson? What learning outcomes have they set?"></textarea>
           </div>
         </div>
         <div class="form-row">
           <div class="field">
             <label>Student Profile Notes</label>
-            <textarea id="preConf_studentProfile" rows="2" placeholder="Class composition, prior attainment, any relevant student contextâ€¦"></textarea>
+            <textarea aria-label="Class composition, prior attainment, any relevant student contextâ€¦" id="preConf_studentProfile" rows="2" placeholder="Class composition, prior attainment, any relevant student contextâ€¦"></textarea>
           </div>
           <div class="field">
             <label>Agreed Focus Areas</label>
-            <textarea id="preConf_focusAreas" rows="2" placeholder="Items or domains the teacher has requested feedback on, or areas flagged from previous observationsâ€¦"></textarea>
+            <textarea aria-label="Items or domains the teacher has requested feedback on, or areas flagged from previous observationsâ€¦" id="preConf_focusAreas" rows="2" placeholder="Items or domains the teacher has requested feedback on, or areas flagged from previous observationsâ€¦"></textarea>
           </div>
         </div>
       </div>
@@ -1027,7 +1027,7 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row">
           <div class="field">
             <label>Year Group / Class Observed</label>
-            <input type="text" id="yearGroup" placeholder="e.g. Year 10A">
+            <input aria-label="e.g. Year 10A" type="text" id="yearGroup" placeholder="e.g. Year 10A">
           </div>
           <div class="field">
             <label>Lesson Duration (minutes)</label>
@@ -1037,17 +1037,17 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row one">
           <div class="field">
             <label>Lesson Topic / Objective</label>
-            <input type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
+            <input aria-label="Brief description of the lesson observed" type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
           </div>
         </div>
         <div class="form-row" id="secondAppraiserRow" style="display:none;">
           <div class="field">
             <label>Second Appraiser Name <span style="color:#dc2626">*</span></label>
-            <input type="text" id="secondAppraiserName" placeholder="Full name (Lead level requires two appraisers)">
+            <input aria-label="Full name (Lead level requires two appraisers)" type="text" id="secondAppraiserName" placeholder="Full name (Lead level requires two appraisers)">
           </div>
           <div class="field">
             <label>Second Appraiser UID (Firestore)</label>
-            <input type="text" id="secondAppraiserUid" placeholder="uid from users/{uid}">
+            <input aria-label="uid from users/{uid}" type="text" id="secondAppraiserUid" placeholder="uid from users/{uid}">
           </div>
         </div>
         <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
@@ -1240,7 +1240,7 @@ body:has(> .page-footer) > .page-wrap {
             <div id="coachingCustomWrap" style="margin-top:18px;display:none;">
               <div class="feedback-tag-label" style="margin-bottom:6px;">Add your own question</div>
               <div style="display:flex;gap:8px;">
-                <input type="text" id="coachingCustomInput" class="field feedback-tag-input" placeholder="Type a custom coaching questionâ€¦" style="flex:1;">
+                <input aria-label="Type a custom coaching questionâ€¦" type="text" id="coachingCustomInput" class="field feedback-tag-input" placeholder="Type a custom coaching questionâ€¦" style="flex:1;">
                 <button class="btn-secondary" id="coachingAddBtn" style="white-space:nowrap;padding:7px 14px;font-size:.8rem;">Add</button>
               </div>
             </div>
@@ -1272,7 +1272,7 @@ body:has(> .page-footer) > .page-wrap {
               </div>
               <div>
                 <div class="feedback-tag-label" style="margin-bottom:4px;">Evidence / context</div>
-                <textarea class="field feedback-textarea" id="followUpNote" placeholder="What did you observe that tells you this? Be specific." style="min-height:60px;"></textarea>
+                <textarea aria-label="What did you observe that tells you this? Be specific" class="field feedback-textarea" id="followUpNote" placeholder="What did you observe that tells you this? Be specific." style="min-height:60px;"></textarea>
               </div>
             </div>
           </div>
@@ -1294,7 +1294,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">Specific evidence of strong practice. Name the strategy, describe what you saw, explain the impact on learners.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="narr_strengths" placeholder="e.g. "Cold-calling with 3-second wait time ensured all students had processing time â€” 85% of responses were substantive.""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="narr_strengths" placeholder="e.g. "Cold-calling with 3-second wait time ensured all students had processing time â€” 85% of responses were substantive.""></textarea>
             </div>
 
             <!-- GROW -->
@@ -1306,7 +1306,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">One focused area linked to a framework item. Describe the gap and its impact â€” avoid generalisations.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 â€” Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="narr_development" placeholder="e.g. "D3 â€” Differentiation: extension tasks were absent for higher-attaining students (approx. 6 pupils) who completed work 10+ min early.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework item</label>
                 <select class="field feedback-tag-input" id="narr_grow_item" style="height:38px;">
@@ -1378,7 +1378,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">2â€“3 sentences capturing the teacher's professional trajectory across the year.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_summary" placeholder="e.g. "Over this academic year, [name] has demonstrated consistent growth in instructional practice, particularly in formative assessmentâ€¦""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="eoy_summary" placeholder="e.g. "Over this academic year, [name] has demonstrated consistent growth in instructional practice, particularly in formative assessmentâ€¦""></textarea>
             </div>
 
             <!-- GLOW -->
@@ -1390,7 +1390,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">Strengths evidenced across observation, work inspection, and professional conduct. Reference specific moments.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_strengths" placeholder="e.g. "Consistently strong questioning technique across all three observations. Work inspection showed well-structured feedback cycles.""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="eoy_strengths" placeholder="e.g. "Consistently strong questioning technique across all three observations. Work inspection showed well-structured feedback cycles.""></textarea>
             </div>
 
             <!-- GROW -->
@@ -1402,7 +1402,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">The single most important area for growth. Link to a framework domain. Be specific about the gap pattern.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 â€” Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="eoy_development" placeholder="e.g. "D4 â€” Assessment for Learning: in-lesson AfL strategies remain inconsistent; teacher relies primarily on summative marks.""></textarea>
               <div class="feedback-framework-tag-wrap">
                 <label class="feedback-tag-label">Linked framework domain / item</label>
                 <select class="field feedback-tag-input" id="eoy_grow_item" style="height:38px;">
@@ -1420,7 +1420,7 @@ body:has(> .page-footer) > .page-wrap {
                   <div class="feedback-block-hint">Specific, time-bound targets. Link to CPD programme, training, mentoring, or peer observation. Include success criteria.</div>
                 </div>
               </div>
-              <textarea class="field feedback-textarea" id="eoy_actions" placeholder="e.g. "Term 1: attend AfL workshop (CPD calendar). Terms 1â€“2: co-plan one lesson/fortnight with subject leader. Success: F2 D4 score â‰¥ 3 by next formal observation.""></textarea>
+              <textarea aria-label="e.g" class="field feedback-textarea" id="eoy_actions" placeholder="e.g. "Term 1: attend AfL workshop (CPD calendar). Terms 1â€“2: co-plan one lesson/fortnight with subject leader. Success: F2 D4 score â‰¥ 3 by next formal observation.""></textarea>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
                 <div>
                   <label class="feedback-tag-label">First review date</label>
@@ -1428,7 +1428,7 @@ body:has(> .page-footer) > .page-wrap {
                 </div>
                 <div>
                   <label class="feedback-tag-label">Success criteria / evidence</label>
-                  <input type="text" class="field feedback-tag-input" id="eoy_go_check" placeholder="e.g. F2 D4 score â‰¥ 3 by next observation">
+                  <input aria-label="e.g. F2 D4 score â‰¥ 3 by next observation" type="text" class="field feedback-tag-input" id="eoy_go_check" placeholder="e.g. F2 D4 score â‰¥ 3 by next observation">
                 </div>
               </div>
             </div>

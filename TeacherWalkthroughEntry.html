@@ -602,18 +602,18 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row" style="margin-bottom:12px;">
           <div class="field" style="grid-column:1/-1;">
             <label>School <span style="font-size:.68rem;color:#94a3b8;font-weight:400;">(auto-filled when teacher selected)</span></label>
-            <input type="text" id="schoolName" placeholder="Auto-filled when teacher selected" readonly
+            <input aria-label="Auto-filled when teacher selected" type="text" id="schoolName" placeholder="Auto-filled when teacher selected" readonly
               style="background:#f8fafc;color:#475569;cursor:default;">
           </div>
         </div>
         <div class="form-row three">
           <div class="field">
             <label>Subject <span style="color:#dc2626;">*</span></label>
-            <input type="text" id="subject" placeholder="e.g. Mathematics" autocomplete="off">
+            <input aria-label="e.g. Mathematics" type="text" id="subject" placeholder="e.g. Mathematics" autocomplete="off">
           </div>
           <div class="field">
             <label>Year Group / Class <span style="color:#dc2626;">*</span></label>
-            <input type="text" id="yearGroup" placeholder="e.g. Year 9B" autocomplete="off">
+            <input aria-label="e.g. Year 9B" type="text" id="yearGroup" placeholder="e.g. Year 9B" autocomplete="off">
           </div>
           <div class="field">
             <label>Academic Year</label>
@@ -708,7 +708,7 @@ body:has(> .page-footer) > .page-wrap {
           </div>
           <div class="narr-field">
             <label>Key Strength Observed <span style="color:#dc2626;">*</span></label>
-            <textarea id="narr_glow" rows="3" placeholder="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase." oninput="updateNarrChar(this,'glow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <textarea aria-label="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase" id="narr_glow" rows="3" placeholder="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase." oninput="updateNarrChar(this,'glow-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="narr-field"><div class="char-count-inline" id="glow-count">0 / 300</div></div>
           </div>
         </div>
@@ -720,7 +720,7 @@ body:has(> .page-footer) > .page-wrap {
           </div>
           <div class="narr-field">
             <label>Area for Development</label>
-            <textarea id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase â€” students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <textarea aria-label="e.g. Formative checks were rare in this lesson phase â€” students may benefit from more frequent low-stakes opportunities to signal understanding before moving on" id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase â€” students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="char-count-inline" id="grow-count">0 / 300</div>
           </div>
         </div>
@@ -732,7 +732,7 @@ body:has(> .page-footer) > .page-wrap {
           </div>
           <div class="narr-field">
             <label>Suggested Next Step</label>
-            <textarea id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson â€” a quick show-of-hands, mini-whiteboard response, or traffic-light card â€” to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <textarea aria-label="e.g. Try one exit-ticket technique at the end of the next lesson â€” a quick show-of-hands, mini-whiteboard response, or traffic-light card â€” to gauge understanding before closure" id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson â€” a quick show-of-hands, mini-whiteboard response, or traffic-light card â€” to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="char-count-inline" id="go-count">0 / 300</div>
           </div>
         </div>

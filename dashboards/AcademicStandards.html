@@ -652,7 +652,7 @@
               </div>
               <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} style={{ ...inp, marginBottom: '10px', padding: '6px' }} />
               {file && <p style={{ fontSize: '12px', color: dark ? '#9ca3af' : '#6b7280', marginBottom: '8px' }}>{file.name} — {(file.size / 1024).toFixed(0)} KB</p>}
-              <input type="text" placeholder="Caption (optional)" value={caption} onChange={e => setCaption(e.target.value)} style={{ ...inp, marginBottom: '10px' }} />
+              <input aria-label="Caption (optional)" type="text" placeholder="Caption (optional)" value={caption} onChange={e => setCaption(e.target.value)} style={{ ...inp, marginBottom: '10px' }} />
               <div style={{ marginBottom: '14px' }}>
                 <label style={{ fontSize: '12px', color: dark ? '#9ca3af' : '#6b7280', display: 'block', marginBottom: '4px' }}>Insert after block</label>
                 <select value={afterBlock} onChange={e => setAfterBlock(e.target.value)} style={{ ...inp }}>

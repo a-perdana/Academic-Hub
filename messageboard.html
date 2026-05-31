@@ -1150,8 +1150,8 @@ body {
       el.innerHTML = `
         <div class="thread-post">
           <div class="inline-edit-form">
-            <input class="inline-input" id="editTopicTitle" value="${escHtml(d.title)}" placeholder="Title">
-            <textarea class="inline-textarea" id="editTopicBody" placeholder="Body">${escHtml(d.body)}</textarea>
+            <input aria-label="Title" class="inline-input" id="editTopicTitle" value="${escHtml(d.title)}" placeholder="Title">
+            <textarea aria-label="Body" class="inline-textarea" id="editTopicBody" placeholder="Body">${escHtml(d.body)}</textarea>
             <div class="inline-edit-actions">
               <button class="save-btn" id="saveTopicEditBtn">Save Changes</button>
               <button class="cancel-btn" id="cancelTopicEditBtn">Cancel</button>
@@ -1231,7 +1231,7 @@ body {
                   </div>
                 </div>
                 <div class="inline-edit-form">
-                  <textarea class="inline-textarea" id="editReplyBody_${d.id}" placeholder="Reply">${escHtml(data.body)}</textarea>
+                  <textarea aria-label="Reply" class="inline-textarea" id="editReplyBody_${d.id}" placeholder="Reply">${escHtml(data.body)}</textarea>
                   <div class="inline-edit-actions">
                     <button class="save-btn" data-replyid="${d.id}" data-action="saveReply">Save</button>
                     <button class="cancel-btn" data-action="cancelReply">Cancel</button>
@@ -1268,7 +1268,7 @@ body {
       </div>
       <div class="reply-form-card">
         <div class="reply-form-label">Leave a Reply</div>
-        <textarea class="reply-textarea" id="replyTextarea" placeholder="Write your replyâ€¦"></textarea>
+        <textarea aria-label="Write your replyâ€¦" class="reply-textarea" id="replyTextarea" placeholder="Write your replyâ€¦"></textarea>
         <div class="reply-form-footer">
           <button class="reply-send-btn" id="replySendBtn">
             ${SEND_ICON} Send Reply

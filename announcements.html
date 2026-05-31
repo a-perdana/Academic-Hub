@@ -1438,7 +1438,7 @@ body {
           <div class="no-comments" id="no-comments-${id}">Loading commentsâ€¦</div>
         </div>
         <div class="comment-input-row">
-          <textarea class="comment-input" id="comment-input-${id}" placeholder="Write a commentâ€¦" rows="1"></textarea>
+          <textarea aria-label="Write a commentâ€¦" class="comment-input" id="comment-input-${id}" placeholder="Write a commentâ€¦" rows="1"></textarea>
           <button class="comment-post-btn" id="comment-post-${id}">Post</button>
         </div>
       </div>`;
@@ -1688,8 +1688,8 @@ body {
       const row = document.createElement('div');
       row.className = 'link-form-row';
       row.innerHTML = `
-        <input type="text" class="link-form-input" placeholder="Label (e.g. View Document)" value="${escHtml(link.text)}" data-li="${i}" data-field="text">
-        <input type="text" class="link-form-input" placeholder="https://â€¦" value="${escHtml(link.url)}" data-li="${i}" data-field="url">
+        <input aria-label="Label (e.g. View Document)" type="text" class="link-form-input" placeholder="Label (e.g. View Document)" value="${escHtml(link.text)}" data-li="${i}" data-field="text">
+        <input aria-label="https://â€¦" type="text" class="link-form-input" placeholder="https://â€¦" value="${escHtml(link.url)}" data-li="${i}" data-field="url">
         <button type="button" class="link-remove-btn" data-ri="${i}" title="Remove">Ã—</button>`;
       container.appendChild(row);
     });

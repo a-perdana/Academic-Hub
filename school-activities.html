@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Activities — Academic Hub</title>
+<title>School Activities â€” Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@ body { padding-top: 62px; }
   box-sizing: border-box;
 }
 
-/* Body content fills the full 1200px clamp even when the kanban is empty —
+/* Body content fills the full 1200px clamp even when the kanban is empty â€”
    without width:100% on the inner grid, the empty-state right column shrinks
    to content-fit and the whole layout reads as a narrow centered box.
    Same defensive width on the mtg-layout twin in school-leadership-meetings. */
@@ -131,7 +131,7 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Leaders · Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Â· Workspace</p>
       <h1 class="page-hero__title">School Activities</h1>
       <p class="page-hero__desc">School-scoped kanban for the leadership team. Each project is a thread of work (an audit, a curriculum review, a parent-engagement push); tasks ladder under projects with status backlog / doing / blocked / done.</p>
     </div>
@@ -161,11 +161,11 @@ body { padding-top: 62px; }
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input type="text" class="form-input" id="pTitle" placeholder="e.g. Q3 Year-7 Math intervention rollout">
+        <input aria-label="e.g. Q3 Year-7 Math intervention rollout" type="text" class="form-input" id="pTitle" placeholder="e.g. Q3 Year-7 Math intervention rollout">
       </div>
       <div class="form-group">
         <label class="form-label">Description</label>
-        <textarea class="form-textarea" id="pDesc" rows="3" placeholder="What's the goal, what does done look like, who's involved?"></textarea>
+        <textarea aria-label="What's the goal, what does done look like, who's involved?" class="form-textarea" id="pDesc" rows="3" placeholder="What's the goal, what does done look like, who's involved?"></textarea>
       </div>
       <div class="form-grid-2">
         <div class="form-group">
@@ -177,7 +177,7 @@ body { padding-top: 62px; }
         </div>
         <div class="form-group">
           <label class="form-label">Owner (free text)</label>
-          <input type="text" class="form-input" id="pOwner" placeholder="e.g. Academic Coordinator">
+          <input aria-label="e.g. Academic Coordinator" type="text" class="form-input" id="pOwner" placeholder="e.g. Academic Coordinator">
         </div>
       </div>
     </div>
@@ -198,11 +198,11 @@ body { padding-top: 62px; }
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input type="text" class="form-input" id="tTitle" placeholder="e.g. Draft the Y8 SoW revision">
+        <input aria-label="e.g. Draft the Y8 SoW revision" type="text" class="form-input" id="tTitle" placeholder="e.g. Draft the Y8 SoW revision">
       </div>
       <div class="form-group">
         <label class="form-label">Description / notes</label>
-        <textarea class="form-textarea" id="tDesc" rows="3" placeholder="Any context for the next person who picks this up."></textarea>
+        <textarea aria-label="Any context for the next person who picks this up" class="form-textarea" id="tDesc" rows="3" placeholder="Any context for the next person who picks this up."></textarea>
       </div>
       <div class="form-grid-2">
         <div class="form-group">
@@ -216,7 +216,7 @@ body { padding-top: 62px; }
         </div>
         <div class="form-group">
           <label class="form-label">Assignee (free text)</label>
-          <input type="text" class="form-input" id="tAssignee" placeholder="e.g. Principal">
+          <input aria-label="e.g. Principal" type="text" class="form-input" id="tAssignee" placeholder="e.g. Principal">
         </div>
       </div>
       <div class="form-grid-2">
@@ -333,7 +333,7 @@ function subscribeProjects() {
 function renderProjects() {
   const list = $('projList');
   if (!allProjects.length) {
-    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No projects yet — hit <strong>+ New</strong> above.</div>`;
+    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No projects yet â€” hit <strong>+ New</strong> above.</div>`;
     return;
   }
   list.innerHTML = allProjects.map(p => {
@@ -385,7 +385,7 @@ function renderBoard() {
         ${proj.description ? `<div class="desc">${escHtml(proj.description)}</div>` : ''}
       </div>
       <div style="display:flex;gap:8px;">
-        <button class="kanban-task-add" id="btnEditProject">✎ Edit project</button>
+        <button class="kanban-task-add" id="btnEditProject">âœŽ Edit project</button>
         <button class="kanban-task-add" id="btnAddTask">+ New task</button>
       </div>
     </div>
@@ -423,7 +423,7 @@ function renderTaskCard(t) {
       <div class="task-meta">
         ${t.priority && t.priority !== 'normal' ? `<span class="pill-tiny" style="background:${t.priority === 'urgent' ? '#fee2e2' : '#fef3c7'};color:${t.priority === 'urgent' ? '#991b1b' : '#92400e'};">${t.priority}</span>` : ''}
         ${t.assignee ? `<span class="assignee">${escHtml(t.assignee)}</span>` : ''}
-        ${dueStr ? `<span class="due ${overdue ? 'overdue' : ''}">📅 ${dueStr}</span>` : ''}
+        ${dueStr ? `<span class="due ${overdue ? 'overdue' : ''}">ðŸ“… ${dueStr}</span>` : ''}
       </div>
     </div>
   `;
@@ -455,7 +455,7 @@ function openProjectModal(projectId) {
 async function saveProject() {
   const title = $('pTitle').value.trim();
   if (!title) { showToast('Title required.'); return; }
-  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile â€” cannot save.'); return; }
 
   const payload = {
     title,
@@ -583,7 +583,7 @@ async function deleteTask() {
 
 let _confirming = null;
 function confirmDanger() {
-  // Single-tap → set timer; second tap within 3s → proceed
+  // Single-tap â†’ set timer; second tap within 3s â†’ proceed
   if (_confirming) { clearTimeout(_confirming); _confirming = null; return true; }
   showToast('Tap delete again within 3s to confirm.');
   _confirming = setTimeout(() => { _confirming = null; }, 3000);
@@ -594,10 +594,10 @@ function confirmDanger() {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Activities</span>
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace Â· Activities</span>
       <h2 class="page-footer__cta-title">Kanban is where decisions become work.</h2>
-      <p class="page-footer__cta-desc">A decision without a task is a wish. Use this board to ladder the action-tagged items from your meetings into named work — owner, due date, status. Friday afternoon: tick what's done, leave the rest for next week.</p>
-      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to surface a decision <span aria-hidden="true">→</span></a>
+      <p class="page-footer__cta-desc">A decision without a task is a wish. Use this board to ladder the action-tagged items from your meetings into named work â€” owner, due date, status. Friday afternoon: tick what's done, leave the rest for next week.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to surface a decision <span aria-hidden="true">â†’</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Activities footer navigation">
       <div class="page-footer__nav-group">
@@ -618,8 +618,8 @@ function confirmDanger() {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Same-school visibility · only your school's leaders see this board</span>
+    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-right">Same-school visibility Â· only your school's leaders see this board</span>
   </div>
 </footer>
 </body>
