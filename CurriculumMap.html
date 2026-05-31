@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Curriculum Map — Academic Hub</title>
+  <title>Curriculum Map â€” Academic Hub</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
   <style>
     /* Page-specific accent override (mor). Tokens, reset, and base
@@ -15,7 +15,7 @@
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── legacy 3-wrapper pattern. Per Common Mistake #52,
+    /* â”€â”€ HERO â”€â”€ legacy 3-wrapper pattern. Per Common Mistake #52,
        horizontal padding lives on .hero-inner (NOT on .hero) so the
        hero text shares a left edge with the .page-wrap content
        column at viewports > 1280px. Both clamps are canonical
@@ -79,10 +79,10 @@
       margin-top: 12px;
     }
 
-    /* ── PAGE WRAP ── 1200 content rail. width:100% gerekli çünkü
+    /* â”€â”€ PAGE WRAP â”€â”€ 1200 content rail. width:100% gerekli Ã§Ã¼nkÃ¼
        body flex-column (canonical .page-footer sticky pattern) ve
-       block child'lar default'ta içerik genişliğine düşer — bu
-       yüzden summary-row + week-grid daralırdı. */
+       block child'lar default'ta iÃ§erik geniÅŸliÄŸine dÃ¼ÅŸer â€” bu
+       yÃ¼zden summary-row + week-grid daralÄ±rdÄ±. */
     .page-wrap {
       width: 100%;
       max-width: var(--container-max);
@@ -90,7 +90,7 @@
       padding: 32px 0 80px;
     }
 
-    /* ── TOOLBAR ── single compact row holding: level + subject +
+    /* â”€â”€ TOOLBAR â”€â”€ single compact row holding: level + subject +
        (week view only) month pager + legend + view toggle. View
        toggle pinned to far right via margin-left:auto. Flex wraps
        cleanly when the viewport can't fit the full row. */
@@ -115,8 +115,8 @@
     }
     .map-toolbar select:focus { border-color: var(--accent); }
 
-    /* ── Icon-only dropdown — replaces native <select> visually.
-       Trigger shows the short code (IG / CP / AL · All / M / B / C /
+    /* â”€â”€ Icon-only dropdown â€” replaces native <select> visually.
+       Trigger shows the short code (IG / CP / AL Â· All / M / B / C /
        P) + a chevron; click opens an absolute-positioned menu of
        full-text options. The hidden native <select> stays as the
        data store + change-event source so existing handlers still
@@ -191,7 +191,7 @@
     .view-btn.active { background: var(--accent); color: #fff; }
     .view-btn:hover:not(.active) { background: var(--paper); color: var(--ink); }
 
-    /* ── LEGEND ── inline child of .map-toolbar — icon-only swatches
+    /* â”€â”€ LEGEND â”€â”€ inline child of .map-toolbar â€” icon-only swatches
        (hover tooltip via title= carries the status name). */
     .legend {
       display: inline-flex;
@@ -215,7 +215,7 @@
     .ld-pending { background: #e5e0d8; border: 1px solid #ccc; }
     .ld-gap     { background: #fee2e2; border: 1px solid #fca5a5; }
 
-    /* ── SUMMARY CARDS ── */
+    /* â”€â”€ SUMMARY CARDS â”€â”€ */
     .summary-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -251,7 +251,7 @@
     .sum-card.sc-red    { border-left: 3px solid #ef4444; }
     .sum-card.sc-violet { border-left: 3px solid #7c3aed; }
 
-    /* ── WEEK GRID VIEW ── */
+    /* â”€â”€ WEEK GRID VIEW â”€â”€ */
     .grid-wrap {
       background: var(--white);
       border: 1px solid var(--border);
@@ -356,7 +356,7 @@
     .status-pending .tc-status-dot { background: #d1d5db; }
     .empty-week { color: var(--ink-3); font-size: 0.75rem; font-style: italic; }
 
-    /* ── Month pagination ── inline child of .map-toolbar (single-row
+    /* â”€â”€ Month pagination â”€â”€ inline child of .map-toolbar (single-row
        layout). Hidden until the week-view renderer flips .visible. */
     .month-pager {
       display: none;
@@ -381,9 +381,9 @@
     .month-pager-btn:hover:not(.active) { background: var(--paper); border-color: var(--accent); color: var(--accent); }
     .month-pager-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
 
-    /* ── Chapter view pagers ── inline child of .map-toolbar
+    /* â”€â”€ Chapter view pagers â”€â”€ inline child of .map-toolbar
        (single-row layout across both views). Subject letter dots
-       + thin separator + month chips. Labels dropped — buttons
+       + thin separator + month chips. Labels dropped â€” buttons
        carry their full name in title= for hover tooltip. */
     .chapter-pagers {
       display: none;
@@ -428,7 +428,7 @@
       margin: 0 4px;
     }
 
-    /* ── Month separator row ── */
+    /* â”€â”€ Month separator row â”€â”€ */
     .month-separator-row td { padding: 0; border-bottom: none; }
     .month-separator-cell {
       position: sticky;
@@ -445,7 +445,7 @@
     }
     .month-separator-row:first-child .month-separator-cell { border-top: none; }
 
-    /* ── GAP PANEL ── */
+    /* â”€â”€ GAP PANEL â”€â”€ */
     .gap-panel {
       background: #fff8f8;
       border: 1px solid #fecaca;
@@ -502,7 +502,7 @@
       gap: 8px;
     }
 
-    /* ── CHAPTER LIST VIEW ── */
+    /* â”€â”€ CHAPTER LIST VIEW â”€â”€ */
     .chapter-list { display: flex; flex-direction: column; gap: 12px; }
     .chapter-card {
       background: var(--white);
@@ -562,7 +562,7 @@
     }
     .chapter-card.open .chapter-topics { display: block; }
 
-    /* ── OBJ BADGE ── */
+    /* â”€â”€ OBJ BADGE â”€â”€ */
     .obj-badge {
       font-family: 'DM Mono', monospace;
       font-size: 0.68rem;
@@ -576,7 +576,7 @@
     .obj-badge:hover { background: #ddd6fe; }
     .obj-badge.uncovered { background: #fee2e2; color: #dc2626; }
 
-    /* ── STATUS PILL ── */
+    /* â”€â”€ STATUS PILL â”€â”€ */
     .status-pill {
       display: inline-flex;
       align-items: center;
@@ -590,7 +590,7 @@
     .sp-inprogress { background: #fef3c7; color: #92400e; }
     .sp-pending    { background: var(--paper-2); color: var(--ink-3); }
 
-    /* ── DETAIL MODAL ── */
+    /* â”€â”€ DETAIL MODAL â”€â”€ */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -675,7 +675,7 @@
     .dm-code-desc  { font-size: 0.78rem; color: var(--ink-3); line-height: 1.5; }
     .dm-no-codes   { font-size: 0.83rem; color: var(--ink-3); font-style: italic; }
 
-    /* ── LOADING ── */
+    /* â”€â”€ LOADING â”€â”€ */
     .map-loading {
       display: flex;
       align-items: center;
@@ -695,7 +695,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── SKELETON ── */
+    /* â”€â”€ SKELETON â”€â”€ */
     .skel {
       background: linear-gradient(90deg, #ece9e0 25%, #f5f4f0 50%, #ece9e0 75%);
       background-size: 200% 100%;
@@ -712,7 +712,7 @@
     }
 
     /* Footer content 1200 rail'ine hizala: outer clamp
-       var(--container-max) (= 1200) + horizontal padding sıfır.
+       var(--container-max) (= 1200) + horizontal padding sÄ±fÄ±r.
        See [[references-three-rails-1200]]. */
     .page-footer__inner,
     .page-footer__meta { max-width: var(--container-max); padding-left: 0; padding-right: 0; }
@@ -722,11 +722,11 @@
 
   <div id="navbarMount"></div>
 
-  <!-- ── HERO ── -->
+  <!-- â”€â”€ HERO â”€â”€ -->
   <section class="hero">
     <div class="hero-inner">
       <div>
-        <p class="hero-eyebrow">Academics · Cambridge</p>
+        <p class="hero-eyebrow">Academics Â· Cambridge</p>
         <h1 class="hero-title">Curriculum Map</h1>
         <p class="hero-desc">Week-by-week visual overview of all subjects and Cambridge syllabus coverage. Identify gaps, overlaps, and pacing across the academic year.</p>
         <span class="ro-badge">
@@ -737,10 +737,10 @@
     </div>
   </section>
 
-  <!-- ── PAGE WRAP ── -->
+  <!-- â”€â”€ PAGE WRAP â”€â”€ -->
   <div class="page-wrap">
 
-    <!-- Toolbar — single compact row across BOTH views: level +
+    <!-- Toolbar â€” single compact row across BOTH views: level +
          subject + (week view) month pager / (chapter view) subject
          dots + month chips + legend + view toggle. View-specific
          children flip via .visible class set by the render path. -->
@@ -751,9 +751,9 @@
            visible UI is the custom .icon-dropdown built below; its
            menu items dispatch a synthetic change event on submit. -->
       <select id="selLevel" hidden aria-hidden="true">
-        <option value="igcse">IGCSE (Year 9–10)</option>
-        <option value="checkpoint">Checkpoint (Year 7–8)</option>
-        <option value="asalevel">AS &amp; A Level (Year 11–12)</option>
+        <option value="igcse">IGCSE (Year 9â€“10)</option>
+        <option value="checkpoint">Checkpoint (Year 7â€“8)</option>
+        <option value="asalevel">AS &amp; A Level (Year 11â€“12)</option>
       </select>
       <select id="selSubject" hidden aria-hidden="true">
         <option value="all">All Subjects</option>
@@ -764,14 +764,14 @@
       </select>
 
       <div class="icon-dropdown" data-for="selLevel">
-        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="IGCSE (Year 9–10)" aria-label="IGCSE (Year 9–10)">
+        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="IGCSE (Year 9â€“10)" aria-label="IGCSE (Year 9â€“10)">
           <span class="icon-dropdown-code">IG</span>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="icon-dropdown-menu" role="listbox" hidden>
-          <button class="icon-dropdown-item active" type="button" role="option" data-value="igcse"><span class="icon-dropdown-code">IG</span><span class="icon-dropdown-label">IGCSE (Year 9–10)</span></button>
-          <button class="icon-dropdown-item" type="button" role="option" data-value="checkpoint"><span class="icon-dropdown-code">CP</span><span class="icon-dropdown-label">Checkpoint (Year 7–8)</span></button>
-          <button class="icon-dropdown-item" type="button" role="option" data-value="asalevel"><span class="icon-dropdown-code">AL</span><span class="icon-dropdown-label">AS &amp; A Level (Year 11–12)</span></button>
+          <button class="icon-dropdown-item active" type="button" role="option" data-value="igcse"><span class="icon-dropdown-code">IG</span><span class="icon-dropdown-label">IGCSE (Year 9â€“10)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="checkpoint"><span class="icon-dropdown-code">CP</span><span class="icon-dropdown-label">Checkpoint (Year 7â€“8)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="asalevel"><span class="icon-dropdown-code">AL</span><span class="icon-dropdown-label">AS &amp; A Level (Year 11â€“12)</span></button>
         </div>
       </div>
 
@@ -842,7 +842,7 @@
 
     <!-- Main content area -->
     <div id="mapContent">
-      <div class="map-loading"><div class="spinner"></div>Loading curriculum data…</div>
+      <div class="map-loading"><div class="spinner"></div>Loading curriculum dataâ€¦</div>
     </div>
 
   </div>
@@ -852,7 +852,7 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
       <div class="modal-head">
         <h3 class="modal-title" id="detailTitle">Topic Detail</h3>
-        <button class="modal-close" id="detailClose" aria-label="Close">×</button>
+        <button class="modal-close" id="detailClose" aria-label="Close">Ã—</button>
       </div>
       <div class="modal-body" id="detailBody"></div>
     </div>
@@ -876,7 +876,7 @@
       collection, doc, getDoc, getDocs, query, where,
     } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-    // ── Syllabus lazy-fetch (called on modal open, not page load) ──
+    // â”€â”€ Syllabus lazy-fetch (called on modal open, not page load) â”€â”€
     async function fetchSyllabusCodesIfNeeded(codes) {
       const missing = codes.filter(c => !(c in syllabusCache));
       if (!missing.length) return;
@@ -893,7 +893,7 @@
       missing.forEach(c => { if (!(c in syllabusCache)) syllabusCache[c] = null; });
     }
 
-    // ── Subject configs per level ──────────────────────────────────
+    // â”€â”€ Subject configs per level â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     const SUBJECT_CONFIGS = {
       igcse: [
         { key: 'math',      label: 'Mathematics', col: 'math_pacing',      docId: 'year9-10',  syllabusPrefix: '0580', color: '#7c3aed' },
@@ -914,7 +914,7 @@
       ],
     };
 
-    // ── State ──────────────────────────────────────────────────────
+    // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     let db;
     let currentLevel          = 'igcse';
     let currentSubject        = 'all';
@@ -925,7 +925,7 @@
     let syllabusCache         = {};
     let pacingData            = {};
 
-    // ── Boot ──────────────────────────────────────────────────────
+    // â”€â”€ Boot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
       db = window.db;
 
@@ -951,7 +951,7 @@
       });
 
       // Wire the custom icon-only dropdowns that replaced the
-      // native <select>s. Click on a menu item → set hidden select
+      // native <select>s. Click on a menu item â†’ set hidden select
       // value + dispatch a synthetic change so existing handlers
       // fire. Outside click closes any open menu.
       document.querySelectorAll('.icon-dropdown').forEach(dd => {
@@ -1034,10 +1034,10 @@
       });
     }
 
-    // ── Load pacing data only (syllabus fetched lazily on modal open) ──
+    // â”€â”€ Load pacing data only (syllabus fetched lazily on modal open) â”€â”€
     async function loadAndRender() {
       document.getElementById('mapContent').innerHTML =
-        '<div class="map-loading"><div class="spinner"></div>Loading curriculum data…</div>';
+        '<div class="map-loading"><div class="spinner"></div>Loading curriculum dataâ€¦</div>';
 
       const configs = getActiveConfigs();
 
@@ -1052,7 +1052,7 @@
       render();
     }
 
-    // ── Render ────────────────────────────────────────────────────
+    // â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function render() {
       const configs = getActiveConfigs();
       renderSummary(configs);
@@ -1072,7 +1072,7 @@
       return currentSubject === 'all' ? all : all.filter(c => c.key === currentSubject);
     }
 
-    // ── Summary cards ─────────────────────────────────────────────
+    // â”€â”€ Summary cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderSummary(configs) {
       let totalTopics = 0, doneTopics = 0, totalHours = 0;
 
@@ -1093,12 +1093,12 @@
       document.getElementById('sumGaps').textContent     = `${doneTopics} / ${totalTopics}`;
     }
 
-    // ── Gap panel hidden (syllabus loaded lazily on modal open) ───
+    // â”€â”€ Gap panel hidden (syllabus loaded lazily on modal open) â”€â”€â”€
     function renderGaps() {
       document.getElementById('gapPanel').style.display = 'none';
     }
 
-    // ── Academic calendar month map (mirrors AcademicCalendar.html MONTHS) ──
+    // â”€â”€ Academic calendar month map (mirrors AcademicCalendar.html MONTHS) â”€â”€
     const AC_MONTHS = [
       { name:'July',      short:'Jul', year:2025 },
       { name:'August',    short:'Aug', year:2025 },
@@ -1112,11 +1112,11 @@
       { name:'April',     short:'Apr', year:2026 },
       { name:'May',       short:'May', year:2026 },
     ];
-    // Academic week 1 = July W1 → 4 weeks per month
+    // Academic week 1 = July W1 â†’ 4 weeks per month
     function weekToMonth(w) { return Math.floor((w - 1) / 4); } // 0-indexed into AC_MONTHS
-    function weekWithinMonth(w) { return ((w - 1) % 4) + 1; }   // 1–4
+    function weekWithinMonth(w) { return ((w - 1) % 4) + 1; }   // 1â€“4
 
-    // ── Week View ─────────────────────────────────────────────────
+    // â”€â”€ Week View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderWeekView(configs) {
       const weekMap = {};
       let maxWeek = 0;
@@ -1156,7 +1156,7 @@
         currentMonth = sortedMonths[0];
       }
 
-      // Build month pagination — icon-only (initial letter, hover
+      // Build month pagination â€” icon-only (initial letter, hover
       // tooltip shows full name + year via title attribute).
       const pager = document.getElementById('monthPager');
       pager.classList.add('visible');
@@ -1186,7 +1186,7 @@
         const weekData = weekMap[w] || {};
         const cells = configs.map(cfg => {
           const topics = weekData[cfg.key] || [];
-          if (!topics.length) return `<td><span class="empty-week">—</span></td>`;
+          if (!topics.length) return `<td><span class="empty-week">â€”</span></td>`;
           const chips = topics.map(t => {
             const status = t.status || 'pending';
             const codes  = (t.objective || '').split(/\s+/).filter(Boolean);
@@ -1228,7 +1228,7 @@
 
     }
 
-    // ── Chapter View ──────────────────────────────────────────────
+    // â”€â”€ Chapter View â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderChapterView(configs) {
       const pagerEl = document.getElementById('chapterPagers');
 
@@ -1275,10 +1275,10 @@
       }
       const activeMIdx = currentChapterMonth[cfg.key];
 
-      // ── Build pagers ──
+      // â”€â”€ Build pagers â”€â”€
       // One row: subject icon buttons (letter dot, hover for full
       // name) + thin separator + month chips for active subject.
-      // Labels dropped — buttons carry their own colour + title.
+      // Labels dropped â€” buttons carry their own colour + title.
       const subjectBtns = validConfigs.map(c => {
         const active = c.key === cfg.key;
         const initial = (c.label || '?').charAt(0).toUpperCase();
@@ -1306,7 +1306,7 @@
       pagerEl.innerHTML = `<div class="subject-pager">${subjectBtns}${sep}${monthBtns}</div>`;
       pagerEl.classList.add('visible');
 
-      // ── Render chapters for active subject + month ──
+      // â”€â”€ Render chapters for active subject + month â”€â”€
       // Filter chapters to those containing at least one topic in the active month
       const filteredChapters = activeMIdx == null ? chapters : chapters.map(ch => ({
         ...ch,
@@ -1329,7 +1329,7 @@
 
           html += `
           <div class="chapter-card" id="ch_${cfg.key}_${ci}">
-            <div class="chapter-head" onclick="toggleChapter('ch_${cfg.key}_${ci}')">
+            <div role="button" tabindex="0" class="chapter-head" onclick="toggleChapter('ch_${cfg.key}_${ci}')">
               <span class="ch-number" style="background:${cfg.color}1a;color:${cfg.color}">${chNum}</span>
               <span class="ch-name">${esc(chName)}</span>
               <span class="ch-meta">
@@ -1361,7 +1361,7 @@
                     const spClass = status === 'done' ? 'sp-done' : status === 'inprogress' ? 'sp-inprogress' : 'sp-pending';
                     const spLabel = status === 'done' ? 'Done' : status === 'inprogress' ? 'In Progress' : 'Pending';
                     const codeBadges = codes.map(c => {
-                      return `<span class="obj-badge${syllabusCache[c] === null ? ' uncovered' : ''}"
+                      return `<span role="button" tabindex="0" class="obj-badge${syllabusCache[c] === null ? ' uncovered' : ''}"
                         data-topic='${JSON.stringify({ name: t.topic, week: t.week, hours: (t.hour ?? t.hours), chapter: chName, status, objective: t.objective || '', subjectKey: cfg.key, color: cfg.color }).replace(/'/g, '&#39;')}'
                         onclick="event.stopPropagation();openDetailFromEl(this)"
                       >${esc(c)}</span>`;
@@ -1370,9 +1370,9 @@
                     return `<tr>
                       <td style="padding:10px 20px;border-bottom:1px solid var(--paper-2);font-size:0.72rem;color:var(--ink-3)">${chNum}.${ti + 1}</td>
                       <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);font-size:0.83rem;color:var(--ink);font-weight:500;line-height:1.4">${esc(t.topic)}</td>
-                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);font-size:0.78rem;color:var(--ink-3)">${t.week ? `W${weekWithinMonth(Number(t.week))} · ${AC_MONTHS[weekToMonth(Number(t.week))]?.short ?? ''}` : '—'}</td>
-                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);font-size:0.78rem;color:var(--ink-3)">${(t.hour ?? t.hours) ? `${t.hour ?? t.hours}h` : '—'}</td>
-                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2)">${codeBadges || '<span style="color:var(--ink-3);font-size:0.75rem">—</span>'}</td>
+                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);font-size:0.78rem;color:var(--ink-3)">${t.week ? `W${weekWithinMonth(Number(t.week))} Â· ${AC_MONTHS[weekToMonth(Number(t.week))]?.short ?? ''}` : 'â€”'}</td>
+                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);font-size:0.78rem;color:var(--ink-3)">${(t.hour ?? t.hours) ? `${t.hour ?? t.hours}h` : 'â€”'}</td>
+                      <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2)">${codeBadges || '<span style="color:var(--ink-3);font-size:0.75rem">â€”</span>'}</td>
                       <td style="padding:10px 12px;border-bottom:1px solid var(--paper-2);text-align:right"><span class="status-pill ${spClass}">${spLabel}</span></td>
                     </tr>`;
                   }).join('')}
@@ -1387,12 +1387,12 @@
       document.getElementById('mapContent').innerHTML = html;
     }
 
-    // ── Toggle chapter ────────────────────────────────────────────
+    // â”€â”€ Toggle chapter â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     window.toggleChapter = function(id) {
       document.getElementById(id)?.classList.toggle('open');
     };
 
-    // ── Detail modal ──────────────────────────────────────────────
+    // â”€â”€ Detail modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     window.openDetailFromEl = function(el) {
       try { openDetail(JSON.parse(el.dataset.topic.replace(/&#39;/g, "'"))); } catch {}
     };
@@ -1425,7 +1425,7 @@
         <div class="dm-section">
           <div class="dm-section-label">Cambridge Syllabus Objectives (${codes.length})</div>
           <div id="codeCardsArea" style="display:flex;flex-direction:column;gap:8px">
-            ${codes.length ? '<div class="map-loading" style="padding:16px 0"><div class="spinner"></div>Loading syllabus…</div>' : '<p class="dm-no-codes">No syllabus codes linked to this topic.</p>'}
+            ${codes.length ? '<div class="map-loading" style="padding:16px 0"><div class="spinner"></div>Loading syllabusâ€¦</div>' : '<p class="dm-no-codes">No syllabus codes linked to this topic.</p>'}
           </div>
         </div>`;
 
@@ -1464,10 +1464,10 @@
   <footer class="page-footer" role="contentinfo">
     <div class="page-footer__inner">
       <div class="page-footer__cta">
-        <span class="page-footer__cta-eyebrow">School · Curriculum</span>
+        <span class="page-footer__cta-eyebrow">School Â· Curriculum</span>
         <h2 class="page-footer__cta-title">One map, every subject, every week.</h2>
         <p class="page-footer__cta-desc">Curriculum Map gives you the network-wide view of Cambridge syllabus coverage across all subjects + weeks. For per-class drill-down, head to Syllabus Coverage.</p>
-        <a href="/syllabus-coverage" class="page-footer__cta-btn">Open Syllabus Coverage <span aria-hidden="true">→</span></a>
+        <a href="/syllabus-coverage" class="page-footer__cta-btn">Open Syllabus Coverage <span aria-hidden="true">â†’</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="Curriculum Map footer navigation">
         <div class="page-footer__nav-group">
@@ -1487,8 +1487,8 @@
       </nav>
     </div>
     <div class="page-footer__meta">
-      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-      <span class="page-footer__meta-right">Pacing authored by teachers in Teachers Hub — read-only here.</span>
+      <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+      <span class="page-footer__meta-right">Pacing authored by teachers in Teachers Hub â€” read-only here.</span>
     </div>
   </footer>
 </body>

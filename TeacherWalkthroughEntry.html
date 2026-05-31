@@ -753,11 +753,11 @@ body:has(> .page-footer) > .page-wrap {
 <div class="progress-tracker" id="progressTracker">
   <div style="display:flex;align-items:center;gap:12px;">
     <div class="progress-foci" id="fociDots">
-      <div class="foci-dot" data-focus="W1" title="W1 â€” click to scroll" onclick="scrollToFocus('W1')"></div>
-      <div class="foci-dot" data-focus="W2" title="W2 â€” click to scroll" onclick="scrollToFocus('W2')"></div>
-      <div class="foci-dot" data-focus="W3" title="W3 â€” click to scroll" onclick="scrollToFocus('W3')"></div>
-      <div class="foci-dot" data-focus="W4" title="W4 â€” click to scroll" onclick="scrollToFocus('W4')"></div>
-      <div class="foci-dot" data-focus="W5" title="W5 â€” click to scroll" onclick="scrollToFocus('W5')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W1" title="W1 â€” click to scroll" onclick="scrollToFocus('W1')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W2" title="W2 â€” click to scroll" onclick="scrollToFocus('W2')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W3" title="W3 â€” click to scroll" onclick="scrollToFocus('W3')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W4" title="W4 â€” click to scroll" onclick="scrollToFocus('W4')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W5" title="W5 â€” click to scroll" onclick="scrollToFocus('W5')"></div>
     </div>
     <div class="progress-label" id="progressLabel">0 / 5 foci rated</div>
   </div>
@@ -770,7 +770,7 @@ body:has(> .page-footer) > .page-wrap {
 <div class="toast" id="toast"></div>
 
 <!-- RUBRIC MODAL -->
-<div class="modal-overlay" id="rubricModal" onclick="closeRubricModal(event)">
+<div role="button" tabindex="0" class="modal-overlay" id="rubricModal" onclick="closeRubricModal(event)">
   <div class="modal-box">
     <div class="modal-head">
       <h3 id="modalFocusTitle"></h3>
@@ -868,7 +868,7 @@ window.teacherSearch = async function(val) {
           const schoolName = schoolMap[schoolId] || schoolId;
           const subj = u.subject || '';
           const meta = [schoolName, subj].filter(Boolean).join(' Â· ');
-          return `<div class="teacher-dropdown-item"
+          return `<div role="button" tabindex="0" class="teacher-dropdown-item"
             onclick="selectTeacher('${safeStr(u.uid)}','${safeStr(u.displayName)}','${safeStr(schoolId)}','${safeStr(u.subject||'')}','${safeStr(schoolName)}')">
             <div class="teacher-dropdown-avatar">${(u.displayName||'?')[0].toUpperCase()}</div>
             <div>
@@ -1211,7 +1211,7 @@ function buildFoci() {
     const theme = FOCUS_THEME[focus.id] || FOCUS_THEME.W1;
     const cssVars = `--focus-color:${theme.color};--focus-icon-bg:${theme.iconBg};--focus-border:${theme.border};--focus-bg:${theme.activeBg};`;
     return `
-    <div class="focus-card" id="card-${focus.id}" style="${cssVars}" tabindex="-1" onclick="activateFocusCard(${idx})">
+    <div role="button" tabindex="0" class="focus-card" id="card-${focus.id}" style="${cssVars}" tabindex="-1" onclick="activateFocusCard(${idx})">
       <div class="focus-card-inner">
         <div class="focus-header">
           <div class="focus-icon-wrap" id="iconwrap-${focus.id}">

@@ -1074,7 +1074,7 @@ body {
       const cnt  = data.replyCount || 0;
       const isPinned = data.pinned || false;
       return `
-        <div class="topic-row${isPinned?' pinned':''}" data-cat="${escHtml(cat)}"
+        <div role="button" tabindex="0" class="topic-row${isPinned?' pinned':''}" data-cat="${escHtml(cat)}"
              onclick="window.__mb_openTopic('${d.id}')">
           <div class="topic-row-icon">${cfg.emoji}</div>
           <div class="topic-row-body">

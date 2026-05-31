@@ -361,7 +361,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #
 </div>
 
 <!-- DETAIL PANEL -->
-<div class="detail-overlay" id="detail-overlay" onclick="handleOverlayClick(event)">
+<div role="button" tabindex="0" class="detail-overlay" id="detail-overlay" onclick="handleOverlayClick(event)">
   <div class="detail-panel" id="detail-panel">
     <div class="panel-header">
       <button class="panel-close" onclick="closePanel()">&times;</button>
@@ -374,7 +374,7 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #f0f2f5; color: #
 </div>
 
 <!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+<div role="button" tabindex="0" class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
   <img id="lightbox-img" src="" alt="Platform Screenshot">
 </div>
@@ -565,7 +565,7 @@ function openPanel(school) {
     school.documents.pngs.forEach((png, idx) => {
       const imgSrc = esc(png.path || (school.folder + '/' + png.name));
       const lightboxSrc = esc(png.path || png.viewUrl || (school.folder + '/' + png.name));
-      html += '<div class="png-wrap" onclick="openLightbox(\'' + lightboxSrc + '\')">' +
+      html += '<div role="button" tabindex="0" class="png-wrap" onclick="openLightbox(\'' + lightboxSrc + '\')">' +
         '<div class="png-thumb"><img src="' + imgSrc + '" alt="Screenshot ' + (idx+1) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div style=&quot;color:#ccc;font-size:11px;padding:12px&quot;>Screenshot ' + (idx+1) + '</div>\'"></div>' +
         '<div class="png-thumb-label">Screenshot ' + (idx+1) + '</div>' +
         '</div>';

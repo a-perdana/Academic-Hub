@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -40,7 +40,7 @@
         flex-direction: column;
       }
 
-      /* ── HEADER ── */
+      /* â”€â”€ HEADER â”€â”€ */
       header {
         height: var(--header-h);
         background: var(--navy);
@@ -102,14 +102,14 @@
         text-transform: uppercase;
       }
 
-      /* ── LAYOUT ── */
+      /* â”€â”€ LAYOUT â”€â”€ */
       .layout {
         display: flex;
         flex: 1;
         overflow: hidden;
       }
 
-      /* ── SIDEBAR ── */
+      /* â”€â”€ SIDEBAR â”€â”€ */
       aside {
         width: var(--sidebar-w);
         background: var(--navy);
@@ -234,7 +234,7 @@
         display: none;
       }
 
-      /* ── MAIN ── */
+      /* â”€â”€ MAIN â”€â”€ */
       main {
         flex: 1;
         display: flex;
@@ -428,7 +428,7 @@
         line-height: 1.5;
       }
 
-      /* ── HAMBURGER (mobile only) ── */
+      /* â”€â”€ HAMBURGER (mobile only) â”€â”€ */
       .hamburger {
         display: none;
         flex-shrink: 0;
@@ -450,7 +450,7 @@
         stroke-linecap: round;
       }
 
-      /* ── SIDEBAR BACKDROP (mobile only) ── */
+      /* â”€â”€ SIDEBAR BACKDROP (mobile only) â”€â”€ */
       .sidebar-backdrop {
         display: none;
         position: fixed;
@@ -463,7 +463,7 @@
         display: block;
       }
 
-      /* ── MOBILE BREAKPOINT ── */
+      /* â”€â”€ MOBILE BREAKPOINT â”€â”€ */
       @media (max-width: 768px) {
         .hamburger {
           display: flex;
@@ -502,7 +502,7 @@
       <div class="header-logo">E</div>
       <div>
         <div class="header-title">Eduversal Academic Standards</div>
-        <div class="header-subtitle">Partner School Network · Indonesia</div>
+        <div class="header-subtitle">Partner School Network Â· Indonesia</div>
       </div>
       <div class="header-info">
         <div class="version-badge">January 2026 &middot; 23 Sections</div>
@@ -512,7 +512,7 @@
     <div class="layout">
       <aside id="sidebar">
         <div class="search-wrap">
-          <span class="search-icon">🔍</span>
+          <span class="search-icon">ðŸ”</span>
           <input
             type="text"
             id="searchInput"
@@ -524,7 +524,7 @@
         <div class="nav-list" id="navList">
           <!-- Governance -->
           <div class="nav-group-label">Governance & Compliance</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -537,7 +537,7 @@
             <span class="nav-num">01</span
             ><span class="nav-label">Front Matter and Governance Charter</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -550,7 +550,7 @@
             <span class="nav-num">02</span
             ><span class="nav-label">Legal and Regulatory Compliance</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -566,7 +566,7 @@
 
           <!-- Academic -->
           <div class="nav-group-label">Academic Framework</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -581,7 +581,7 @@
               >Strategic Planning and School Improvement</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -594,7 +594,7 @@
             <span class="nav-num">05</span
             ><span class="nav-label">Curriculum Architecture</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -607,7 +607,7 @@
             <span class="nav-num">06</span
             ><span class="nav-label">Assessment and Reporting</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -623,7 +623,7 @@
 
           <!-- Student Support -->
           <div class="nav-group-label">Student Support</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -636,7 +636,7 @@
             <span class="nav-num">08</span
             ><span class="nav-label">Inclusion, EAL, and Learning Support</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -651,7 +651,7 @@
               >Safeguarding, Child Protection & Wellbeing</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -669,7 +669,7 @@
 
           <!-- Operations -->
           <div class="nav-group-label">Examinations & Operations</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -682,7 +682,7 @@
             <span class="nav-num">10</span
             ><span class="nav-label">Cambridge Examinations Management</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -695,7 +695,7 @@
             <span class="nav-num">13</span
             ><span class="nav-label">Operations, Finance, and Resources</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -710,7 +710,7 @@
               >Data Protection, Records & Information Systems</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -728,7 +728,7 @@
 
           <!-- External -->
           <div class="nav-group-label">External Relations</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -743,7 +743,7 @@
               >Admissions, Enrollment & Marketing Ethics</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -758,7 +758,7 @@
               >Parent, Student & Community Engagement</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -773,7 +773,7 @@
               >Quality Assurance and Internal Review</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -786,7 +786,7 @@
             <span class="nav-num">18</span
             ><span class="nav-label">Accreditation Toolkit (CIS/WASC)</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -804,7 +804,7 @@
 
           <!-- Resources -->
           <div class="nav-group-label">Resources & Tools</div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -819,7 +819,7 @@
               >Staff Lifecycle: Recruitment, Induction, Appraisal</span
             >
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -832,7 +832,7 @@
             <span class="nav-num">19</span
             ><span class="nav-label">Templates and Operational Tools</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -845,7 +845,7 @@
             <span class="nav-num">20</span
             ><span class="nav-label">References and Compliance Library</span>
           </div>
-          <div
+          <div role="button" tabindex="0"
             class="nav-item"
             onclick="
               loadSection(
@@ -864,7 +864,7 @@
 
         <div class="sidebar-footer">
           <p>
-            Eduversal Indonesia · Cambridge Partner Network<br />Documents
+            Eduversal Indonesia Â· Cambridge Partner Network<br />Documents
             update automatically from source.
           </p>
         </div>
@@ -915,7 +915,7 @@
           <div class="doc-toolbar">
             <div class="doc-title-bar" id="docTitleBar">Select a section</div>
             <a class="btn-open" id="openInDriveBtn" href="#" target="_blank">
-              ↗ Open in Drive
+              â†— Open in Drive
             </a>
           </div>
           <div class="iframe-wrap">
@@ -981,7 +981,7 @@
         }, 8000);
       }
 
-      // ── MOBILE SIDEBAR ──
+      // â”€â”€ MOBILE SIDEBAR â”€â”€
       (function () {
         const btn = document.getElementById("hamburgerBtn");
         const sidebar = document.getElementById("sidebar");

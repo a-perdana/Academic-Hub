@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Self-Appraisal — Academic Hub</title>
+<title>School Self-Appraisal â€” Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
@@ -12,7 +12,7 @@
     <style>
 /* Page-family: My Work (data-accent="dark"). Canonical .page-hero* /
    .page-footer* chrome comes from /base.css. Page-local styles below
-   MUST NOT override .page-hero* selectors — root CLAUDE.md Common Mistake #50.
+   MUST NOT override .page-hero* selectors â€” root CLAUDE.md Common Mistake #50.
    Page-specific accent override (amber) + 5 domain colors used by the
    appraisal sidebar pills. */
 :root {
@@ -29,7 +29,7 @@ body { padding-top: 62px; }
 
 /* Canonical hero + body-as-flex-column (body:has(>.page-footer)). The
    full-height sidebar layout (.page-body) must stay full width as a flex
-   item — without width:100% it shrinks to content. */
+   item â€” without width:100% it shrinks to content. */
 body:has(> .page-footer) > .page-hero,
 body:has(> .page-footer) > .page-body {
   width: 100%;
@@ -63,7 +63,7 @@ body:has(> .page-footer) > .page-body {
 }
 
 /* ===== DOMAIN CARD GRID =====
-   The 5 domain cards as an even row directly under the info-strip — one
+   The 5 domain cards as an even row directly under the info-strip â€” one
    line on desktop (5 equal columns), reflowing to 3 / 2 / 1 as the viewport
    narrows. #sidebarDomainBtns uses display:contents so the JS-rendered
    cards become direct grid items (no JS change). */
@@ -79,7 +79,7 @@ body:has(> .page-footer) > .page-body {
 @media (max-width:760px)  { .domain-sidebar { grid-template-columns:repeat(2, 1fr); } }
 @media (max-width:460px)  { .domain-sidebar { grid-template-columns:1fr; } }
 
-/* Domain card — even grid cell. */
+/* Domain card â€” even grid cell. */
 .domain-nav-card {
   display:flex; flex-direction:column; min-height:104px;
   border-radius:13px;
@@ -249,7 +249,7 @@ body:has(> .page-footer) > .page-body {
   background:rgba(0,0,0,.12); flex-wrap:wrap;
 }
 .dh-stat { font-size:12px; opacity:.8; display:flex; align-items:center; gap:6px; font-weight:500; }
-/* Legacy .dh-refs (single row, generic) — superseded by .dh-anchors. */
+/* Legacy .dh-refs (single row, generic) â€” superseded by .dh-anchors. */
 .dh-refs { display:flex; gap:6px; flex-wrap:wrap; margin-left:auto; }
 .dh-ref-tag {
   font-size:10px; font-weight:700; padding:3px 9px; border-radius:99px;
@@ -395,7 +395,7 @@ body:has(> .page-footer) > .page-body {
   background:var(--accent); opacity:.5;
 }
 
-/* Rating scale guide — always visible grid */
+/* Rating scale guide â€” always visible grid */
 .rsi-grid {
   display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px;
 }
@@ -426,7 +426,7 @@ body:has(> .page-footer) > .page-body {
 .rsi-4 .rsi-num { color:#2563eb; }
 .rsi-4 .rsi-label { color:#1e40af; }
 
-/* Rating buttons — card style */
+/* Rating buttons â€” card style */
 .rating-options {
   display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px;
 }
@@ -631,7 +631,7 @@ body:has(> .page-footer) > .page-body {
 .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 .toast-icon { font-size:15px; }
 
-/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ───
+/* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€
    Standalone full-width block between the hero and the .page-body flex
    row (a flex-row child would break the sidebar layout). Clamps to the
    1200 rail with matching horizontal padding so it aligns with the hero. */
@@ -692,21 +692,21 @@ body:has(> .page-footer) > .page-body {
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Quality</p>
+      <p class="page-hero__eyebrow">Academic Hub Â· School Quality</p>
       <h1 class="page-hero__title">School Self-Appraisal</h1>
-      <p class="page-hero__desc">An honest, whole-school review of your provision against the Eduversal Academic Standards. Complete this before an Eduversal quality visit — rate each aspect, attach evidence, and name your strengths and improvement areas.</p>
+      <p class="page-hero__desc">An honest, whole-school review of your provision against the Eduversal Academic Standards. Complete this before an Eduversal quality visit â€” rate each aspect, attach evidence, and name your strengths and improvement areas.</p>
     </div>
   </div>
 </header>
 
 <div class="info-strip-rail">
   <aside class="info-strip" role="note" aria-label="How this page works">
-    <div class="info-strip__icon" aria-hidden="true">🏫</div>
+    <div class="info-strip__icon" aria-hidden="true">ðŸ«</div>
     <div class="info-strip__body">
       <h2 class="info-strip__title">An honest review of your whole school</h2>
-      <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes — this is the starting picture before a school-quality visit.</p>
-      <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> — be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
-      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
+      <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes â€” this is the starting picture before a school-quality visit.</p>
+      <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> â€” be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">âš ï¸</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal + Academic Coordinator</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school</span>
@@ -714,7 +714,7 @@ body:has(> .page-footer) > .page-body {
         <span class="info-strip__pill info-strip__pill--progress" id="sidebarOverall">
           <b>Progress:</b>
           <span class="isp-bar"><span class="isp-fill" id="sopFill" style="width:0%"></span></span>
-          <span class="isp-nums"><span class="sop-pct" id="sopPct">0%</span> · <span class="sop-count" id="sopCount">0/— aspects</span></span>
+          <span class="isp-nums"><span class="sop-pct" id="sopPct">0%</span> Â· <span class="sop-count" id="sopCount">0/â€” aspects</span></span>
         </span>
       </div>
     </div>
@@ -727,21 +727,21 @@ body:has(> .page-footer) > .page-body {
   </nav>
 
   <main class="page-main">
-    <div class="page-loading" id="pageLoading">Loading your appraisal…</div>
+    <div class="page-loading" id="pageLoading">Loading your appraisalâ€¦</div>
     <div id="pageContent" style="display:none;"></div>
   </main>
 </div>
 
-<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leadership · School Quality</span>
+      <span class="page-footer__cta-eyebrow">School Leadership Â· School Quality</span>
       <h2 class="page-footer__cta-title">An honest self-appraisal makes the visit useful.</h2>
-      <p class="page-footer__cta-desc">Rate each aspect against the evidence, not the aspiration. The clearer your self-picture, the more focused the Eduversal quality visit — and the more the agreed actions actually move your school forward.</p>
-      <a href="/academic-standards" class="page-footer__cta-btn">Open Academic Standards <span aria-hidden="true">→</span></a>
+      <p class="page-footer__cta-desc">Rate each aspect against the evidence, not the aspiration. The clearer your self-picture, the more focused the Eduversal quality visit â€” and the more the agreed actions actually move your school forward.</p>
+      <a href="/academic-standards" class="page-footer__cta-btn">Open Academic Standards <span aria-hidden="true">â†’</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="School Self-Appraisal footer navigation">
       <div class="page-footer__nav-group">
@@ -757,8 +757,8 @@ body:has(> .page-footer) > .page-body {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Self-appraisal feeds the Eduversal quality visit · submitted ratings lock for review</span>
+    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-right">Self-appraisal feeds the Eduversal quality visit Â· submitted ratings lock for review</span>
   </div>
 </footer>
 
@@ -771,7 +771,7 @@ body:has(> .page-footer) > .page-body {
 </div>
 
 <input type="file" id="globalFileInput" style="display:none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
-<div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
+<div class="toast" id="toast"><span class="toast-icon">âœ“</span><span id="toastMsg"></span></div>
 
 <script src="partials/navbar-loader.js"></script>
 <script type="module">
@@ -792,7 +792,7 @@ let saveTimer = null;
 let toastTimer = null;
 let pendingUploadAspect = null;
 
-function showToast(msg, icon = '✓') {
+function showToast(msg, icon = 'âœ“') {
   const toast = document.getElementById('toast');
   const msgEl = document.getElementById('toastMsg');
   const iconEl = toast.querySelector('.toast-icon');
@@ -837,7 +837,7 @@ async function saveSampleDocOverrides(aspectId, docs) {
   });
 }
 
-function scoreLabel(n) { return { 1:'Beginning', 2:'Developing', 3:'Established', 4:'Exemplary' }[n] || '—'; }
+function scoreLabel(n) { return { 1:'Beginning', 2:'Developing', 3:'Established', 4:'Exemplary' }[n] || 'â€”'; }
 function scoreCls(n) { if (!n) return 's0'; return ['','s1','s2','s3','s4'][Math.round(n)] || 's0'; }
 function domainAvg(domainId) {
   if (!appraisalDoc?.ratings || !FRAMEWORK) return null;
@@ -893,7 +893,7 @@ async function findOrCreateAppraisal(profile) {
 // ===== SAVE =====
 async function saveAppraisal(newStatus) {
   if (!appraisalDocId || isReviewed) return;
-  document.getElementById('actionStatus').textContent = 'Saving…';
+  document.getElementById('actionStatus').textContent = 'Savingâ€¦';
   const status = newStatus || appraisalDoc.status || 'draft';
   await setDoc(doc(window.db, 'school_appraisals_v2', appraisalDocId), {
     ratings: appraisalDoc.ratings || {},
@@ -905,7 +905,7 @@ async function saveAppraisal(newStatus) {
     status, updatedAt: serverTimestamp(), updatedBy: window.currentUser?.email || ''
   }, { merge: true });
   appraisalDoc.status = status;
-  document.getElementById('actionStatus').textContent = 'Saved ✓';
+  document.getElementById('actionStatus').textContent = 'Saved âœ“';
   updateSidebarScores();
   if (newStatus === 'draft') showToast('Draft saved successfully');
   if (newStatus === 'submitted') {
@@ -929,7 +929,7 @@ function updateSidebarScores() {
     const bg  = domainBgs[d.id];
     // Score badge
     const badge = document.getElementById(`dnc-score-${d.id}`);
-    if (badge) { badge.textContent = avg || '—'; badge.className = `dnc-score-badge ${avg ? scoreCls(parseFloat(avg)) : 's0'}`; }
+    if (badge) { badge.textContent = avg || 'â€”'; badge.className = `dnc-score-badge ${avg ? scoreCls(parseFloat(avg)) : 's0'}`; }
     // Dots
     const dotsEl = document.getElementById(`dnc-dots-${d.id}`);
     if (dotsEl) {
@@ -989,7 +989,7 @@ async function uploadFile(aspectId, file) {
 async function handleFileUpload(aspectId, file) {
   if (!file) return;
   const actionEl = document.getElementById('actionStatus');
-  actionEl.textContent = 'Uploading…';
+  actionEl.textContent = 'Uploadingâ€¦';
   try {
     const fileData = await uploadFile(aspectId, file);
     if (!appraisalDoc.files) appraisalDoc.files = {};
@@ -1025,11 +1025,11 @@ function renderFileList(aspectId) {
     const sizeStr = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+'MB' : Math.round(f.size/1024)+'KB';
     return `
       <div class="file-item">
-        <span class="file-item-icon">${ext === 'PDF' ? '📄' : ['JPG','JPEG','PNG'].includes(ext) ? '🖼️' : '📎'}</span>
+        <span class="file-item-icon">${ext === 'PDF' ? 'ðŸ“„' : ['JPG','JPEG','PNG'].includes(ext) ? 'ðŸ–¼ï¸' : 'ðŸ“Ž'}</span>
         <span class="file-item-name" title="${f.name}">${f.name}</span>
         <span class="file-item-size">${sizeStr}</span>
         <a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a>
-        <button class="file-item-remove" onclick="window.__removeFile('${aspectId}',${i})" title="Remove">✕</button>
+        <button class="file-item-remove" onclick="window.__removeFile('${aspectId}',${i})" title="Remove">âœ•</button>
       </div>`;
   }).join('');
 }
@@ -1052,7 +1052,7 @@ window.__addSdeRow = function(aspectId) {
   row.innerHTML = `
     <input class="sde-input" placeholder="Label" value="" data-field="label" data-aspect="${aspectId}" data-idx="${idx}">
     <input class="sde-input" placeholder="https://..." value="" data-field="url" data-aspect="${aspectId}" data-idx="${idx}">
-    <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspectId}',${idx})" title="Remove">✕</button>`;
+    <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspectId}',${idx})" title="Remove">âœ•</button>`;
   rows.appendChild(row);
 };
 
@@ -1085,7 +1085,7 @@ window.__saveSampleDocs = async function(aspectId) {
 
   if (!valid) { statusEl.textContent = 'Fill in missing fields'; return; }
 
-  statusEl.textContent = 'Saving…';
+  statusEl.textContent = 'Savingâ€¦';
   try {
     await saveSampleDocOverrides(aspectId, docs);
     // Re-render the display list
@@ -1093,15 +1093,15 @@ window.__saveSampleDocs = async function(aspectId) {
     if (listEl) {
       listEl.innerHTML = docs.map(d => {
         const isSheet = d.url?.includes('spreadsheets');
-        const icon = isSheet ? '📊' : '📄';
+        const icon = isSheet ? 'ðŸ“Š' : 'ðŸ“„';
         return `<a class="sample-doc-item" href="${d.url}" target="_blank" rel="noopener">
           <span class="sample-doc-icon">${icon}</span>
           <span class="sample-doc-label">${d.label}</span>
-          <span class="sample-doc-arrow">↗</span>
+          <span class="sample-doc-arrow">â†—</span>
         </a>`;
       }).join('');
     }
-    statusEl.textContent = '✓ Saved';
+    statusEl.textContent = 'âœ“ Saved';
     setTimeout(() => {
       statusEl.textContent = '';
       document.getElementById(`sample-doc-editor-${aspectId}`)?.classList.remove('open');
@@ -1133,12 +1133,12 @@ function renderOverview() {
     const { done: dDone, total: dTotal } = domainCompletion(d.id);
     const col = domainColors[d.id]; const bg = domainBgs[d.id];
     return `
-      <div class="domain-card" onclick="window.__switchDomain('${d.id}')" style="border-color:${domainBorders[d.id]};border-left-color:${col};">
+      <div role="button" tabindex="0" class="domain-card" onclick="window.__switchDomain('${d.id}')" style="border-color:${domainBorders[d.id]};border-left-color:${col};">
         <div class="dc-top"><span class="dc-icon">${d.icon}</span><span class="dc-code" style="color:${col}">${d.code}</span></div>
         <div class="dc-title">${d.title}</div>
         <div class="dc-score-row">
           <div class="dc-score-bar"><div class="dc-score-fill" style="width:${davg?(parseFloat(davg)/4*100)+'%':'0%'};background:${col};"></div></div>
-          <div class="dc-score-num" style="color:${col}">${davg||'—'}</div>
+          <div class="dc-score-num" style="color:${col}">${davg||'â€”'}</div>
         </div>
         <div class="dc-completion">${dDone}/${dTotal} aspects rated</div>
       </div>`;
@@ -1146,14 +1146,14 @@ function renderOverview() {
 
   return `
     <div class="overview-hero">
-      <div class="oh-eyebrow">Eduversal School Appraisal · ${appraisalDoc?.academicYear||'2025–2026'}</div>
+      <div class="oh-eyebrow">Eduversal School Appraisal Â· ${appraisalDoc?.academicYear||'2025â€“2026'}</div>
       <h1 class="oh-title">${appraisalDoc?.schoolName||'Your School'}</h1>
       <p class="oh-sub">${FRAMEWORK.meta.description}</p>
       <div class="oh-score-row">
-        <div class="oh-score-chip"><div class="oh-score-val">${avg||'—'}</div><div class="oh-score-label">Overall Score</div></div>
+        <div class="oh-score-chip"><div class="oh-score-val">${avg||'â€”'}</div><div class="oh-score-label">Overall Score</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${pct}%</div><div class="oh-score-label">Completed</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${done}/${total}</div><div class="oh-score-label">Aspects Rated</div></div>
-        <div class="oh-score-chip"><div class="oh-score-val">${avg ? (FRAMEWORK.meta.rating_scale[Math.round(parseFloat(avg))]?.label||'—') : '—'}</div><div class="oh-score-label">Rating Level</div></div>
+        <div class="oh-score-chip"><div class="oh-score-val">${avg ? (FRAMEWORK.meta.rating_scale[Math.round(parseFloat(avg))]?.label||'â€”') : 'â€”'}</div><div class="oh-score-label">Rating Level</div></div>
       </div>
     </div>
 
@@ -1188,36 +1188,36 @@ function escAttr(s) { return escHtml(s); }
 // Renders the structured cambridge_school_leader_refs / eduversal_standard_refs /
 // pmd_refs (popover-active via cambridge-crossref.js) plus the free-text
 // framework name tags (CIS, WASC, NEASC, Danielson, etc.) below the domain
-// header. Source: school-appraisal-framework.json → domain.frameworkAnchors.
+// header. Source: school-appraisal-framework.json â†’ domain.frameworkAnchors.
 // Domain.references[] remains for back-compat consumers; if frameworkAnchors
 // is missing, fall back to the legacy single-row ref strip.
 function renderDomainAnchors(domain) {
   const fa = domain.frameworkAnchors;
   if (!fa) {
-    // Back-compat fallback — single row of generic references.
+    // Back-compat fallback â€” single row of generic references.
     const refTags = (domain.references || []).slice(0, 4).map(r => {
-      const label = String(r).split(/[—:]/)[0].trim().slice(0, 40);
+      const label = String(r).split(/[â€”:]/)[0].trim().slice(0, 40);
       return `<span class="dh-fw-tag" title="${escAttr(r)}">${escHtml(label)}</span>`;
     }).join('');
     return refTags ? `<div class="dh-anchors"><div class="dh-anchor-row">${refTags}</div></div>` : '';
   }
 
   const cslsChips = (fa.cambridgeSchoolLeaderRefs || []).map(r =>
-    `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)} — click for verbatim text.">CSLS ${escHtml(r)}</span>`
+    `<span class="csls-pill" data-csls-ref="${escAttr(r)}" title="Cambridge School Leader Standard ${escAttr(r)} â€” click for verbatim text.">CSLS ${escHtml(r)}</span>`
   ).join('');
 
   const esChips = (fa.eduversalStandardRefs || []).map(r =>
-    `<span class="es-pill" data-es-ref="${escAttr(r)}" title="Eduversal Academic Standards — Section ${escAttr(r)}. Click for the verbatim madde.">ES ${escHtml(r)}</span>`
+    `<span class="es-pill" data-es-ref="${escAttr(r)}" title="Eduversal Academic Standards â€” Section ${escAttr(r)}. Click for the verbatim madde.">ES ${escHtml(r)}</span>`
   ).join('');
 
   const pmdChips = (fa.pmdRefs || []).map(r =>
-    `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency — click for verbatim definition.">${escHtml(r)}</span>`
+    `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency â€” click for verbatim definition.">${escHtml(r)}</span>`
   ).join('');
 
   const fwTags = (fa.frameworks || []).map(f => {
     const name = f.name || '';
     const edition = f.edition || '';
-    return `<span class="dh-fw-tag" title="${escAttr(name + ' — ' + edition + (f.publisher ? ' · ' + f.publisher : ''))}">${escHtml(name)}${edition ? `<span class="dh-fw-tag-edition">${escHtml(edition)}</span>` : ''}</span>`;
+    return `<span class="dh-fw-tag" title="${escAttr(name + ' â€” ' + edition + (f.publisher ? ' Â· ' + f.publisher : ''))}">${escHtml(name)}${edition ? `<span class="dh-fw-tag-edition">${escHtml(edition)}</span>` : ''}</span>`;
   }).join('');
 
   const anchorRow = (cslsChips || esChips || pmdChips)
@@ -1243,7 +1243,7 @@ function renderDomain(domainId) {
     const rating = appraisalDoc?.ratings?.[aspect.id] || 0;
     const evidence = appraisalDoc?.evidence?.[aspect.id] || '';
     const files = appraisalDoc?.files?.[aspect.id] || [];
-    const badgeText = rating ? `${rating} — ${scoreLabel(rating)}` : 'Not rated';
+    const badgeText = rating ? `${rating} â€” ${scoreLabel(rating)}` : 'Not rated';
 
     const ratingBtns = [1,2,3,4].map(v => {
       const scale = FRAMEWORK.meta.rating_scale[v];
@@ -1269,7 +1269,7 @@ function renderDomain(domainId) {
     const fileListHtml = files.map((f, i) => {
       const ext = f.name.split('.').pop().toUpperCase();
       const sizeStr = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+'MB' : Math.round(f.size/1024)+'KB';
-      return `<div class="file-item"><span class="file-item-icon">${ext==='PDF'?'📄':['JPG','JPEG','PNG'].includes(ext)?'🖼️':'📎'}</span><span class="file-item-name" title="${f.name}">${f.name}</span><span class="file-item-size">${sizeStr}</span><a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a>${canEdit?`<button class="file-item-remove" onclick="window.__removeFile('${aspect.id}',${i})" title="Remove">✕</button>`:''}</div>`;
+      return `<div class="file-item"><span class="file-item-icon">${ext==='PDF'?'ðŸ“„':['JPG','JPEG','PNG'].includes(ext)?'ðŸ–¼ï¸':'ðŸ“Ž'}</span><span class="file-item-name" title="${f.name}">${f.name}</span><span class="file-item-size">${sizeStr}</span><a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a>${canEdit?`<button class="file-item-remove" onclick="window.__removeFile('${aspect.id}',${i})" title="Remove">âœ•</button>`:''}</div>`;
     }).join('');
 
     return `
@@ -1295,7 +1295,7 @@ function renderDomain(domainId) {
             </div>
           </div>
 
-          <!-- Rating scale guide — always visible -->
+          <!-- Rating scale guide â€” always visible -->
           <div class="ab-section">
             <div class="ab-section-label">Rating Scale Guide</div>
             <div class="rsi-grid">${scaleCards}</div>
@@ -1310,7 +1310,7 @@ function renderDomain(domainId) {
           <!-- Evidence & Notes -->
           <div class="ab-section">
             <div class="ab-section-label">Evidence & Notes</div>
-            <textarea class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific — refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
+            <textarea class="evidence-textarea" data-aspect="${aspect.id}" placeholder="Describe the evidence that supports your rating. Be specific â€” refer to documents, data, or observations." ${!canEdit?'disabled':''}>${evidence}</textarea>
           </div>
 
           <!-- Evidence examples (collapsible) -->
@@ -1331,17 +1331,17 @@ function renderDomain(domainId) {
             <div class="sample-docs" id="sample-docs-list-${aspect.id}">
               ${(aspect.sample_documents||[]).map(doc => {
                 const isSheet = doc.url?.includes('spreadsheets');
-                const icon = isSheet ? '📊' : '📄';
+                const icon = isSheet ? 'ðŸ“Š' : 'ðŸ“„';
                 return `<a class="sample-doc-item" href="${doc.url}" target="_blank" rel="noopener">
                   <span class="sample-doc-icon">${icon}</span>
                   <span class="sample-doc-label">${doc.label}</span>
-                  <span class="sample-doc-arrow">↗</span>
+                  <span class="sample-doc-arrow">â†—</span>
                 </a>`;
               }).join('')}
             </div>
             ${isAdmin ? `
             <button class="sample-doc-edit-btn" onclick="window.__toggleDocEditor('${aspect.id}')">
-              ✏️ Edit Links
+              âœï¸ Edit Links
             </button>
             <div class="sample-doc-editor" id="sample-doc-editor-${aspect.id}">
               <div class="sde-rows" id="sde-rows-${aspect.id}">
@@ -1349,7 +1349,7 @@ function renderDomain(domainId) {
                 <div class="sde-row" id="sde-row-${aspect.id}-${i}">
                   <input class="sde-input" placeholder="Label" value="${doc.label.replace(/"/g,'&quot;')}" data-field="label" data-aspect="${aspect.id}" data-idx="${i}">
                   <input class="sde-input" placeholder="https://..." value="${doc.url.replace(/"/g,'&quot;')}" data-field="url" data-aspect="${aspect.id}" data-idx="${i}">
-                  <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspect.id}',${i})" title="Remove">✕</button>
+                  <button class="sde-remove-btn" onclick="window.__removeSdeRow('${aspect.id}',${i})" title="Remove">âœ•</button>
                 </div>`).join('')}
               </div>
               <div class="sde-add-row">
@@ -1366,10 +1366,10 @@ function renderDomain(domainId) {
             ${canEdit ? `
             <div class="file-upload-section">
               <div class="drop-zone" id="dropzone-${aspect.id}" data-aspect="${aspect.id}">
-                <span class="drop-zone-icon">📎</span>
+                <span class="drop-zone-icon">ðŸ“Ž</span>
                 <div>
                   <div class="drop-zone-text"><strong>Upload a file</strong> or drag and drop here</div>
-                  <div class="drop-zone-sub">PDF, Word, Excel, PowerPoint, images — max 20MB</div>
+                  <div class="drop-zone-sub">PDF, Word, Excel, PowerPoint, images â€” max 20MB</div>
                 </div>
               </div>
               <div class="upload-progress" id="upload-progress-${aspect.id}">
@@ -1385,9 +1385,9 @@ function renderDomain(domainId) {
               </div>` : ''}
               <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `
                 <div class="link-item">
-                  <span class="link-item-icon">🔗</span>
+                  <span class="link-item-icon">ðŸ”—</span>
                   <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label||l.url}</a>
-                  ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspect.id}',${i})" title="Remove">✕</button>` : ''}
+                  ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspect.id}',${i})" title="Remove">âœ•</button>` : ''}
                 </div>`).join('')}
               </div>
             </div>
@@ -1418,7 +1418,7 @@ function renderDomain(domainId) {
         </div>
         <div class="dh-stat" style="color:rgba(255,255,255,.85);">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          ${davg ? `Avg ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
+          ${davg ? `Avg ${davg} â€” ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
         </div>
       </div>
       ${renderDomainAnchors(domain)}
@@ -1427,7 +1427,7 @@ function renderDomain(domainId) {
     <div class="domain-score-bar-wrap" style="border-color:${border};border-left:4px solid ${col};">
       <div class="dsb-label">Domain Average Score</div>
       <div class="dsb-val ${scoreCls(parseFloat(davg||0))}" id="domain-avg-${domainId}">
-        ${davg ? `${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : '—'}
+        ${davg ? `${davg} â€” ${scoreLabel(Math.round(parseFloat(davg)))}` : 'â€”'}
       </div>
     </div>`;
 }
@@ -1469,10 +1469,10 @@ function switchView(viewId) {
         row.querySelectorAll('.rating-btn').forEach(b => b.className = 'rating-btn');
         btn.className = `rating-btn sel-${val}`;
         const badge = document.getElementById(`badge-${aspectId}`);
-        if (badge) { badge.textContent = `${val} — ${scoreLabel(val)}`; badge.className = `aspect-score-badge ${scoreCls(val)}`; }
+        if (badge) { badge.textContent = `${val} â€” ${scoreLabel(val)}`; badge.className = `aspect-score-badge ${scoreCls(val)}`; }
         const davg = domainAvg(viewId);
         const avgEl = document.getElementById(`domain-avg-${viewId}`);
-        if (avgEl) { avgEl.textContent = davg ? `${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : '—'; avgEl.className = `dsb-val ${scoreCls(parseFloat(davg||0))}`; }
+        if (avgEl) { avgEl.textContent = davg ? `${davg} â€” ${scoreLabel(Math.round(parseFloat(davg)))}` : 'â€”'; avgEl.className = `dsb-val ${scoreCls(parseFloat(davg||0))}`; }
         updateSidebarScores(); scheduleSave();
       });
     });
@@ -1515,9 +1515,9 @@ function renderLinkList(aspectId) {
   const canEdit = !isReviewed && appraisalDoc?.status !== 'submitted';
   list.innerHTML = links.map((l, i) => `
     <div class="link-item">
-      <span class="link-item-icon">🔗</span>
+      <span class="link-item-icon">ðŸ”—</span>
       <a class="link-item-url" href="${l.url}" target="_blank" rel="noopener" title="${l.url}">${l.label || l.url}</a>
-      ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspectId}',${i})" title="Remove">✕</button>` : ''}
+      ${canEdit ? `<button class="link-item-remove" onclick="window.__removeLink('${aspectId}',${i})" title="Remove">âœ•</button>` : ''}
     </div>`).join('');
 }
 
@@ -1559,7 +1559,7 @@ function buildSidebar() {
           <div class="dnc-code" style="color:${col}">${d.code}</div>
           <div class="dnc-title">${d.title}</div>
         </div>
-        <span class="dnc-score-badge s0" id="dnc-score-${d.id}">—</span>
+        <span class="dnc-score-badge s0" id="dnc-score-${d.id}">â€”</span>
       </div>
       <div class="dnc-progress">
         <div class="dnc-dots" id="dnc-dots-${d.id}">${dots}</div>
@@ -1590,8 +1590,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   isReviewed = appraisal.status === 'reviewed';
   buildSidebar();
 
-  // Return-to-overview is provided by the "← Back to overview" link inside
-  // each domain panel (see renderDomain) — the standalone Overview tile was
+  // Return-to-overview is provided by the "â† Back to overview" link inside
+  // each domain panel (see renderDomain) â€” the standalone Overview tile was
   // removed so the domain cards read as one even grid. Guard kept defensive.
   document.getElementById('overviewNavBtn')?.addEventListener('click', () => switchView('overview'));
 
@@ -1600,7 +1600,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   if (appraisal.status === 'submitted') {
     actionBar.style.display = 'flex';
     document.getElementById('btnSubmit').style.display = 'none';
-    document.getElementById('actionStatus').textContent = 'Submitted — awaiting review';
+    document.getElementById('actionStatus').textContent = 'Submitted â€” awaiting review';
   }
 
   document.getElementById('btnSaveDraft').addEventListener('click', () => saveAppraisal('draft'));

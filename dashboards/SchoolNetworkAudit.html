@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -498,7 +498,7 @@
   <body>
 <div class="container">
       <div class="header">
-        <div class="logo">🔒</div>
+        <div class="logo">ðŸ”’</div>
         <h1>Network Security Assessment</h1>
         <p class="subtitle">
           Eduversal Indonesia - Cambridge International Schools
@@ -506,12 +506,12 @@
         <span class="badge">PP 17/2025 Compliance Test</span>
         <div id="userBadge" style="margin-top:10px;font-size:12px;color:#666;display:none;">
           Signed in as <strong id="userEmail"></strong>
-          &nbsp;·&nbsp;<a href="#" onclick="signOutUser()" style="color:#ef4444;text-decoration:none;">Sign out</a>
+          &nbsp;Â·&nbsp;<a href="#" onclick="signOutUser()" style="color:#ef4444;text-decoration:none;">Sign out</a>
         </div>
       </div>
 
       <div class="input-group">
-        <label>🏫 School Name:</label>
+        <label>ðŸ« School Name:</label>
         <input
           type="text"
           id="schoolName"
@@ -521,15 +521,15 @@
       </div>
 
       <div class="input-group">
-        <label>🔍 Testing Mode:</label>
+        <label>ðŸ” Testing Mode:</label>
         <div class="device-selector">
-          <div class="device-option" onclick="selectTestMode('principal')">
-            <div class="device-icon">💼</div>
+          <div role="button" tabindex="0" class="device-option" onclick="selectTestMode('principal')">
+            <div class="device-icon">ðŸ’¼</div>
             <div class="device-name">Quick Test</div>
             <div class="device-desc">From my laptop (network only)</div>
           </div>
-          <div class="device-option" onclick="selectTestMode('student')">
-            <div class="device-icon">🎯</div>
+          <div role="button" tabindex="0" class="device-option" onclick="selectTestMode('student')">
+            <div class="device-icon">ðŸŽ¯</div>
             <div class="device-name">Full Test</div>
             <div class="device-desc">From student device (recommended)</div>
           </div>
@@ -537,20 +537,20 @@
       </div>
 
       <div class="input-group" id="deviceTypeSelector" style="display: none">
-        <label>📱 Student Device Type:</label>
+        <label>ðŸ“± Student Device Type:</label>
         <div class="device-selector device-type-grid">
-          <div class="device-option" onclick="selectDevice('ipad')">
-            <div class="device-icon">📱</div>
+          <div role="button" tabindex="0" class="device-option" onclick="selectDevice('ipad')">
+            <div class="device-icon">ðŸ“±</div>
             <div class="device-name">iPad</div>
             <div class="device-desc">School device</div>
           </div>
-          <div class="device-option" onclick="selectDevice('chromebook')">
-            <div class="device-icon">💻</div>
+          <div role="button" tabindex="0" class="device-option" onclick="selectDevice('chromebook')">
+            <div class="device-icon">ðŸ’»</div>
             <div class="device-name">Chromebook</div>
             <div class="device-desc">School device</div>
           </div>
-          <div class="device-option" onclick="selectDevice('phone')">
-            <div class="device-icon">📲</div>
+          <div role="button" tabindex="0" class="device-option" onclick="selectDevice('phone')">
+            <div class="device-icon">ðŸ“²</div>
             <div class="device-name">Phone</div>
             <div class="device-desc">Android/iPhone</div>
           </div>
@@ -574,24 +574,24 @@
         ></p>
       </div>
 
-      <!-- Manual device management checklist — shown only for iPad/Chromebook -->
+      <!-- Manual device management checklist â€” shown only for iPad/Chromebook -->
       <div id="manualChecklist" style="display:none; margin: 25px 0;">
         <div style="background:#1a1a2e; color:white; padding:12px 15px; border-radius:8px; font-weight:700; font-size:14px; margin-bottom:12px;">
-          🔧 Device Management — Manual Verification
+          ðŸ”§ Device Management â€” Manual Verification
           <div style="font-size:11px; font-weight:400; opacity:0.7; margin-top:4px;">These cannot be tested automatically. Check each item on the device before proceeding.</div>
         </div>
         <div id="checklistItems" style="display:flex; flex-direction:column; gap:10px;"></div>
       </div>
 
       <button class="test-button" onclick="startTest()" id="startBtn" disabled>
-        🚀 Start Security Assessment
+        ðŸš€ Start Security Assessment
       </button>
 
       <div class="loading" id="loading">
         <div class="spinner"></div>
         <p class="loading-text">Testing your network security...</p>
         <p class="loading-text" style="font-size: 13px">
-          <span id="progress">0/—</span> checks completed
+          <span id="progress">0/â€”</span> checks completed
         </p>
         <div class="test-log" id="testLog"></div>
       </div>
@@ -622,12 +622,12 @@
         </div>
 
         <div style="background:#f0f9ff; border-left:4px solid #3b82f6; border-radius:10px; padding:16px 20px; margin-bottom:20px; font-size:12px; color:#1e3a8a; line-height:1.6;">
-          <strong>📋 About this assessment</strong><br>
+          <strong>ðŸ“‹ About this assessment</strong><br>
           Network tests use a server-side probe (Railway backend) for real HTTP status codes, with browser fetch as fallback.
-          Results indicate whether sites are reachable — blocked results are strong evidence of filtering.
+          Results indicate whether sites are reachable â€” blocked results are strong evidence of filtering.
           VPN port tests (OpenVPN 1194, WireGuard 51820) are performed server-side for accuracy.
-          Items marked <strong>⚠ low confidence</strong> should be verified manually.
-          Device management items are self-reported — verify against your MDM/Admin Console.
+          Items marked <strong>âš  low confidence</strong> should be verified manually.
+          Device management items are self-reported â€” verify against your MDM/Admin Console.
         </div>
 
         <div class="recommendations" id="recommendations"></div>
@@ -636,17 +636,17 @@
 
         <!-- Methodology section (visible in PDF) -->
         <div id="methodologySection" style="margin-top:30px;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:20px;">
-          <h3 style="color:#1a1a2e;font-size:15px;margin-bottom:12px;">📐 Test Methodology</h3>
+          <h3 style="color:#1a1a2e;font-size:15px;margin-bottom:12px;">ðŸ“ Test Methodology</h3>
           <div id="methodologyBody" style="font-size:12px;color:#475569;line-height:1.7;"></div>
         </div>
 
         <div class="share-section">
           <div class="share-buttons" style="grid-template-columns:1fr 1fr;">
             <button class="share-button copy-btn" onclick="copyResults()">
-              <span>📋</span><span>Copy Report</span>
+              <span>ðŸ“‹</span><span>Copy Report</span>
             </button>
             <button class="share-button" style="background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);" onclick="exportPdf()">
-              <span>📄</span><span>Save as PDF</span>
+              <span>ðŸ“„</span><span>Save as PDF</span>
             </button>
           </div>
           <p style="text-align:center;color:#666;font-size:12px;margin-top:15px;">
@@ -656,7 +656,7 @@
       </div>
 
       <div class="footer">
-        <p><strong>© 2025 Eduversal Indonesia</strong></p>
+        <p><strong>Â© 2025 Eduversal Indonesia</strong></p>
         <p>Cambridge International Schools Network</p>
       </div>
     </div>
@@ -666,7 +666,7 @@
       document.addEventListener("authReady", ({ detail: { user, profile } }) => {
       });
 
-      // Auth integration — show user badge once auth-guard.js fires authReady
+      // Auth integration â€” show user badge once auth-guard.js fires authReady
       document.addEventListener("authReady", ({ detail: { user } }) => {
         const badge = document.getElementById("userBadge");
         const emailEl = document.getElementById("userEmail");
@@ -691,14 +691,14 @@
       let totalScore = 0;
       let baselineMs = 1500; // adaptive: calibrated before tests start
 
-      // ── Railway backend config ─────────────────────────────────────────────
+      // â”€â”€ Railway backend config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       // Set RAILWAY_API_URL + RAILWAY_API_TOKEN in Vercel env vars.
       // If not configured, all Railway probes are skipped gracefully.
       const RAILWAY_URL   = "__RAILWAY_API_URL__";   // e.g. https://network-audit-api-production.up.railway.app
       const RAILWAY_TOKEN = "__RAILWAY_API_TOKEN__";
       const railwayEnabled = RAILWAY_URL && RAILWAY_URL !== "__RAILWAY_API_URL__" && RAILWAY_URL.startsWith("http");
 
-      /** Railway HTTP probe — real status codes from server side */
+      /** Railway HTTP probe â€” real status codes from server side */
       async function railwayProbe(domain, timeoutMs = 6000) {
         if (!railwayEnabled) return null;
         try {
@@ -710,11 +710,11 @@
           if (!res.ok) return null;
           return await res.json(); // { blocked, reachable, statusCode, redirectUrl, latencyMs }
         } catch {
-          return null; // railway unreachable — fall back to browser probe
+          return null; // railway unreachable â€” fall back to browser probe
         }
       }
 
-      /** Railway DNS resolve — real DNS from public resolver (8.8.8.8 / 1.1.1.1) */
+      /** Railway DNS resolve â€” real DNS from public resolver (8.8.8.8 / 1.1.1.1) */
       async function railwayDns(domain, timeoutMs = 5000) {
         if (!railwayEnabled) return null;
         try {
@@ -730,7 +730,7 @@
         }
       }
 
-      /** Railway TCP port probe — real port reachability from server */
+      /** Railway TCP port probe â€” real port reachability from server */
       async function railwayPort(host, port, timeoutMs = 5000) {
         if (!railwayEnabled) return null;
         try {
@@ -746,7 +746,7 @@
         }
       }
 
-      // ── Special probe: VPN ports (OpenVPN / WireGuard) ───────────────────
+      // â”€â”€ Special probe: VPN ports (OpenVPN / WireGuard) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
       // Tests whether common VPN protocol ports are reachable FROM THE SCHOOL NETWORK.
       // Uses Railway TCP probe (accurate). Falls back to "untested" if Railway unavailable.
       async function probeVpnPorts(timeoutMs) {
@@ -754,7 +754,7 @@
           return { status: "untested", detail: "Requires Railway backend (not configured)" };
         }
         // OpenVPN: 1194/UDP (test TCP too as many run dual-stack), 443/TCP (common fallback)
-        // WireGuard: 51820/UDP (test server-side TCP connect will timeout — still informative)
+        // WireGuard: 51820/UDP (test server-side TCP connect will timeout â€” still informative)
         const VPN_PORT_TESTS = [
           { host: "193.138.218.74",  port: 1194  },  // Mullvad OpenVPN
           { host: "193.138.218.74",  port: 51820 },  // Mullvad WireGuard
@@ -771,7 +771,7 @@
             details.push(`${host}:${port} blocked`);
           }
         }
-        // "pass" = all ports blocked (good — VPN harder to use)
+        // "pass" = all ports blocked (good â€” VPN harder to use)
         const allBlocked = openCount === 0;
         const status = allBlocked ? "pass" : openCount < VPN_PORT_TESTS.length ? "partial" : "fail";
         return { status, detail: details.join(" | "), openCount, total: VPN_PORT_TESTS.length };
@@ -813,13 +813,13 @@
       // Primary: Railway backend (real HTTP status, no no-cors ambiguity).
       // Fallback: browser fetch HEAD no-cors (used if Railway not configured).
       // Interpretation of browser fallback:
-      //   - fetch throws (network error / DNS fail) quickly  → blocked, high confidence
-      //   - fetch aborts via timeout                         → blocked, high confidence
-      //   - fetch resolves (opaque no-cors response)         → accessible, high confidence
-      // NOTE: Image probe was removed — sites like Instagram reject script/img requests
+      //   - fetch throws (network error / DNS fail) quickly  â†’ blocked, high confidence
+      //   - fetch aborts via timeout                         â†’ blocked, high confidence
+      //   - fetch resolves (opaque no-cors response)         â†’ accessible, high confidence
+      // NOTE: Image probe was removed â€” sites like Instagram reject script/img requests
       // while still being accessible in a browser, causing false "blocked" results.
       async function probeUrl(hostname, timeoutMs) {
-        // 1. Try Railway backend first (real HTTP — authoritative)
+        // 1. Try Railway backend first (real HTTP â€” authoritative)
         const rw = await railwayProbe(hostname, timeoutMs);
         if (rw !== null) {
           return { blocked: rw.blocked, confidence: "high", source: "railway", statusCode: rw.statusCode };
@@ -849,7 +849,7 @@
 
       // Multi-URL probe: returns { status: "pass"|"partial"|"fail", blockedCount, totalCount, confidence, detail }
       // "pass" = all URLs blocked. "partial" = some blocked. "fail" = none blocked.
-      // invertLogic: for YouTube — "pass" means accessible (not blocked)
+      // invertLogic: for YouTube â€” "pass" means accessible (not blocked)
       async function probeTest(test, timeoutMs) {
         const urls = test.urls || [test.url];
         const attempts = test.attempts || 1;
@@ -929,9 +929,9 @@
           if (i < 2) await new Promise(r => setTimeout(r, 200));
         }
         const avg = samples.reduce((a, b) => a + b, 0) / samples.length;
-        // timeout = 3× baseline, capped between 1500ms and 6000ms
+        // timeout = 3Ã— baseline, capped between 1500ms and 6000ms
         baselineMs = Math.min(8000, Math.max(2000, Math.round(avg * 4)));
-        addLog(`Baseline: ${Math.round(avg)}ms avg → using ${baselineMs}ms timeout per probe`, "info");
+        addLog(`Baseline: ${Math.round(avg)}ms avg â†’ using ${baselineMs}ms timeout per probe`, "info");
       }
 
       // Each test now supports urls[] (array). All must be blocked for full pts.
@@ -939,7 +939,7 @@
       const testSuites = {
         principal: [
           {
-            cat: "🔞 Adult Content (CRITICAL)",
+            cat: "ðŸ”ž Adult Content (CRITICAL)",
             tests: [
               { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],     pts: 12, critical: true,  attempts: 1 },
               { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],       pts: 12, critical: true,  attempts: 1 },
@@ -947,73 +947,73 @@
             ],
           },
           {
-            cat: "🎰 Gambling & Betting",
+            cat: "ðŸŽ° Gambling & Betting",
             tests: [
               { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"], pts: 8, critical: true,  attempts: 1 },
               { name: "Online Casino",   urls: ["888casino.com","pokerstars.com","casinoroom.com"], pts: 7, critical: true,  attempts: 1 },
             ],
           },
           {
-            cat: "🌐 DNS/Firewall Filtering",
+            cat: "ðŸŒ DNS/Firewall Filtering",
             tests: [
-              { name: "Cloudflare DNS IP Block",  urls: ["1.1.1.1","1.0.0.1"],  pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests outbound port-53/firewall filtering active" },
-              { name: "Google DNS IP Block",      urls: ["8.8.8.8","8.8.4.4"],  pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS/firewall filtering active" },
-              { name: "DNS-over-HTTPS Bypass",    urls: ["doh"],                pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver (cloudflare-dns.com/dns-query) is accessible — blocked means DoH bypass is prevented" },
+              { name: "Cloudflare DNS IP Block",  urls: ["1.1.1.1","1.0.0.1"],  pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs â€” blocked suggests outbound port-53/firewall filtering active" },
+              { name: "Google DNS IP Block",      urls: ["8.8.8.8","8.8.4.4"],  pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs â€” blocked suggests DNS/firewall filtering active" },
+              { name: "DNS-over-HTTPS Bypass",    urls: ["doh"],                pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver (cloudflare-dns.com/dns-query) is accessible â€” blocked means DoH bypass is prevented" },
             ],
           },
           {
-            cat: "🔒 VPN/Proxy Circumvention",
+            cat: "ðŸ”’ VPN/Proxy Circumvention",
             tests: [
               { name: "Web Proxy Sites",  urls: ["proxysite.com","hide.me","croxyproxy.com","kproxy.com"],   pts: 7, critical: true, attempts: 1 },
               { name: "VPN Services",     urls: ["nordvpn.com","expressvpn.com","mullvad.net"],              pts: 6, critical: true, attempts: 1 },
-              { name: "Tor Project",      urls: ["tor"],                                                      pts: 5, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked suggests Tor exit nodes are filtered" },
-              { name: "VPN Protocol Ports (OpenVPN/WireGuard)", urls: ["vpn-ports"],                         pts: 6, critical: true, attempts: 1, info: "TCP probe to VPN ports 1194 (OpenVPN) and 51820 (WireGuard) via server-side test — blocked = VPN harder to use" },
+              { name: "Tor Project",      urls: ["tor"],                                                      pts: 5, critical: true, attempts: 1, info: "Probes known Tor directory server IPs â€” blocked suggests Tor exit nodes are filtered" },
+              { name: "VPN Protocol Ports (OpenVPN/WireGuard)", urls: ["vpn-ports"],                         pts: 6, critical: true, attempts: 1, info: "TCP probe to VPN ports 1194 (OpenVPN) and 51820 (WireGuard) via server-side test â€” blocked = VPN harder to use" },
             ],
           },
           {
-            cat: "⚔️ Violence & Harmful Content",
+            cat: "âš”ï¸ Violence & Harmful Content",
             tests: [
               { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com","theync.com"],   pts: 8, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"],                pts: 5, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "💊 Drugs & Substances",
+            cat: "ðŸ’Š Drugs & Substances",
             tests: [
               { name: "Drug Information", urls: ["erowid.org","tripsit.me","psychonautwiki.org"], pts: 5, critical: false, attempts: 1 },
               { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"],                   pts: 4, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "📱 Social Media Control",
+            cat: "ðŸ“± Social Media Control",
             tests: [
               { name: "TikTok",     urls: ["tiktok.com","www.tiktok.com"],          pts: 4, critical: true,  attempts: 1 },
               { name: "Instagram",  urls: ["instagram.com","www.instagram.com"],    pts: 4, critical: true,  attempts: 1 },
               { name: "Snapchat",   urls: ["snapchat.com","www.snapchat.com"],      pts: 4, critical: true,  attempts: 1 },
               { name: "Facebook",   urls: ["facebook.com","www.facebook.com"],      pts: 2, critical: false, attempts: 1 },
-              { name: "Discord (Student Chat Risk)",  urls: ["discord.com","www.discord.com"],   pts: 3, critical: true,  attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels — should be blocked on school WiFi" },
-              { name: "Telegram (Unmoderated Groups)",urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true,  attempts: 1, info: "Telegram has uncensored channels with adult and extremist content — no content moderation" },
-              { name: "Reddit (NSFW Content)",        urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true,  attempts: 1, info: "Reddit hosts adult subreddits accessible without login — DNS filtering is the only effective block" },
+              { name: "Discord (Student Chat Risk)",  urls: ["discord.com","www.discord.com"],   pts: 3, critical: true,  attempts: 1, info: "Discord allows unmoderated chat with strangers and NSFW channels â€” should be blocked on school WiFi" },
+              { name: "Telegram (Unmoderated Groups)",urls: ["telegram.org","web.telegram.org"], pts: 3, critical: true,  attempts: 1, info: "Telegram has uncensored channels with adult and extremist content â€” no content moderation" },
+              { name: "Reddit (NSFW Content)",        urls: ["reddit.com","www.reddit.com"],     pts: 3, critical: true,  attempts: 1, info: "Reddit hosts adult subreddits accessible without login â€” DNS filtering is the only effective block" },
             ],
           },
           {
-            cat: "⚠️ Platforms With Built-In Adult Content",
+            cat: "âš ï¸ Platforms With Built-In Adult Content",
             tests: [
-              { name: "X / Twitter (Adult Videos)", urls: ["x.com","twitter.com"],         pts: 5, critical: true, attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering (1.1.1.3 or OpenDNS) stops this" },
+              { name: "X / Twitter (Adult Videos)", urls: ["x.com","twitter.com"],         pts: 5, critical: true, attempts: 1, info: "X.com allows adult videos â€” URL blocking is impossible, only DNS filtering (1.1.1.3 or OpenDNS) stops this" },
               { name: "YouTube Restricted Mode DNS", urls: ["restrict.youtube.com"],        pts: 6, critical: true, attempts: 1, invertLogic: true, info: "If restrict.youtube.com is reachable, your router is NOT enforcing YouTube Restricted Mode via DNS override. Set your DNS to force restrict.youtube.com for all devices." },
-              { name: "Twitch (Unmoderated Streams)",urls: ["twitch.tv","www.twitch.tv"],   pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams — consider blocking if not used for education" },
+              { name: "Twitch (Unmoderated Streams)",urls: ["twitch.tv","www.twitch.tv"],   pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams â€” consider blocking if not used for education" },
             ],
           },
           {
-            cat: "🛡️ Safety Controls",
+            cat: "ðŸ›¡ï¸ Safety Controls",
             tests: [
-              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true,  attempts: 2, invertLogic: true, info: "YouTube itself should be reachable — Restricted Mode is enforced server-side or via DNS" },
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true,  attempts: 2, invertLogic: true, info: "YouTube itself should be reachable â€” Restricted Mode is enforced server-side or via DNS" },
             ],
           },
         ],
         ipad: [
           {
-            cat: "🔞 Adult Content (CRITICAL)",
+            cat: "ðŸ”ž Adult Content (CRITICAL)",
             tests: [
               { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 1 },
               { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 1 },
@@ -1021,45 +1021,45 @@
             ],
           },
           {
-            cat: "🎰 Gambling & Betting",
+            cat: "ðŸŽ° Gambling & Betting",
             tests: [
               { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 1 },
               { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 1 },
             ],
           },
           {
-            cat: "🌐 DNS/Firewall Filtering",
+            cat: "ðŸŒ DNS/Firewall Filtering",
             tests: [
-              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS/firewall filtering active" },
-              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
-              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs â€” blocked suggests DNS/firewall filtering active" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs â€” blocked suggests outbound DNS filtering enforced" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible â€” blocked means DoH bypass is prevented" },
             ],
           },
           {
-            cat: "🔒 VPN/Proxy Circumvention",
+            cat: "ðŸ”’ VPN/Proxy Circumvention",
             tests: [
               { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
               { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
-              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
-              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
+              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs â€” blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports â€” blocked = harder to establish VPN tunnel" },
             ],
           },
           {
-            cat: "⚔️ Violence & Harmful Content",
+            cat: "âš”ï¸ Violence & Harmful Content",
             tests: [
               { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "💊 Drugs & Substances",
+            cat: "ðŸ’Š Drugs & Substances",
             tests: [
               { name: "Drug Information", urls: ["erowid.org","tripsit.me"],   pts: 4, critical: false, attempts: 1 },
               { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"], pts: 3, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "📱 Social Media Control",
+            cat: "ðŸ“± Social Media Control",
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
@@ -1071,23 +1071,23 @@
             ],
           },
           {
-            cat: "⚠️ Platforms With Built-In Adult Content",
+            cat: "âš ï¸ Platforms With Built-In Adult Content",
             tests: [
-              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],        pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],        pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos â€” URL blocking is impossible, only DNS filtering stops this" },
               { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],       pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
               { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"],  pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
-            cat: "🛡️ Safety Controls",
+            cat: "ðŸ›¡ï¸ Safety Controls",
             tests: [
-              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable — Restricted Mode enforced via MDM or DNS policy" },
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable â€” Restricted Mode enforced via MDM or DNS policy" },
             ],
           },
         ],
         chromebook: [
           {
-            cat: "🔞 Adult Content (CRITICAL)",
+            cat: "ðŸ”ž Adult Content (CRITICAL)",
             tests: [
               { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 10, critical: true,  attempts: 1 },
               { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 10, critical: true,  attempts: 1 },
@@ -1095,45 +1095,45 @@
             ],
           },
           {
-            cat: "🎰 Gambling & Betting",
+            cat: "ðŸŽ° Gambling & Betting",
             tests: [
               { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 6, critical: true, attempts: 1 },
               { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 4, critical: true, attempts: 1 },
             ],
           },
           {
-            cat: "🌐 DNS/Firewall Filtering",
+            cat: "ðŸŒ DNS/Firewall Filtering",
             tests: [
-              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS policy enforced" },
-              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
-              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs â€” blocked suggests DNS policy enforced" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs â€” blocked suggests outbound DNS filtering enforced" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible â€” blocked means DoH bypass is prevented" },
             ],
           },
           {
-            cat: "🔒 VPN/Proxy Circumvention",
+            cat: "ðŸ”’ VPN/Proxy Circumvention",
             tests: [
               { name: "Web Proxy Sites",    urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 5, critical: true, attempts: 1 },
               { name: "VPN Services",       urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true, attempts: 1 },
-              { name: "Tor Project",        urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
-              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                                  pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
+              { name: "Tor Project",        urls: ["tor"],                                         pts: 3, critical: true, attempts: 1, info: "Probes known Tor directory server IPs â€” blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                                  pts: 4, critical: true, attempts: 1, info: "TCP probe to VPN ports â€” blocked = harder to establish VPN tunnel" },
             ],
           },
           {
-            cat: "⚔️ Violence & Harmful Content",
+            cat: "âš”ï¸ Violence & Harmful Content",
             tests: [
               { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 6, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 4, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "💊 Drugs & Substances",
+            cat: "ðŸ’Š Drugs & Substances",
             tests: [
               { name: "Drug Information", urls: ["erowid.org","tripsit.me"],   pts: 4, critical: false, attempts: 1 },
               { name: "Cannabis Sites",   urls: ["leafly.com","weedmaps.com"], pts: 3, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "📱 Social Media Control",
+            cat: "ðŸ“± Social Media Control",
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 3, critical: true,  attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 3, critical: true,  attempts: 1 },
@@ -1145,23 +1145,23 @@
             ],
           },
           {
-            cat: "⚠️ Platforms With Built-In Adult Content",
+            cat: "âš ï¸ Platforms With Built-In Adult Content",
             tests: [
-              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos â€” URL blocking is impossible, only DNS filtering stops this" },
               { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],      pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
               { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"], pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
-            cat: "🛡️ Safety Controls",
+            cat: "ðŸ›¡ï¸ Safety Controls",
             tests: [
-              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable — Restricted Mode enforced via Chrome policy" },
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 4, critical: true, attempts: 2, invertLogic: true, info: "YouTube itself must be reachable â€” Restricted Mode enforced via Chrome policy" },
             ],
           },
         ],
         phone: [
           {
-            cat: "🔞 Adult Content (CRITICAL)",
+            cat: "ðŸ”ž Adult Content (CRITICAL)",
             tests: [
               { name: "Pornography Sites",    urls: ["pornhub.com","xhamster.com","redtube.com"],      pts: 15, critical: true,  attempts: 1 },
               { name: "Adult Video Sites",    urls: ["xvideos.com","xnxx.com","spankbang.com"],        pts: 15, critical: true,  attempts: 1 },
@@ -1169,38 +1169,38 @@
             ],
           },
           {
-            cat: "🎰 Gambling & Betting",
+            cat: "ðŸŽ° Gambling & Betting",
             tests: [
               { name: "Sports Betting",  urls: ["bet365.com","betway.com","williamhill.com"],  pts: 10, critical: true, attempts: 1 },
               { name: "Online Casino",   urls: ["888casino.com","pokerstars.com"],             pts: 5,  critical: true, attempts: 1 },
             ],
           },
           {
-            cat: "🌐 DNS/Firewall Filtering",
+            cat: "ðŸŒ DNS/Firewall Filtering",
             tests: [
-              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS-level filtering active" },
-              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS filtering active" },
-              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
+              { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs â€” blocked suggests DNS-level filtering active" },
+              { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs â€” blocked suggests DNS filtering active" },
+              { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible â€” blocked means DoH bypass is prevented" },
             ],
           },
           {
-            cat: "🔒 VPN/Proxy Circumvention",
+            cat: "ðŸ”’ VPN/Proxy Circumvention",
             tests: [
               { name: "Web Proxy Sites", urls: ["proxysite.com","hide.me","croxyproxy.com"],   pts: 8, critical: true,  attempts: 1 },
               { name: "VPN Services",    urls: ["nordvpn.com","expressvpn.com","mullvad.net"], pts: 5, critical: true,  attempts: 1 },
-              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: false, attempts: 1, info: "Probes known Tor directory server IPs — blocked means Tor is filtered" },
-              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 5, critical: true,  attempts: 1, info: "TCP probe to VPN ports — blocked = harder to establish VPN tunnel" },
+              { name: "Tor Project",     urls: ["tor"],                                         pts: 3, critical: false, attempts: 1, info: "Probes known Tor directory server IPs â€” blocked means Tor is filtered" },
+              { name: "VPN Protocol Ports", urls: ["vpn-ports"],                               pts: 5, critical: true,  attempts: 1, info: "TCP probe to VPN ports â€” blocked = harder to establish VPN tunnel" },
             ],
           },
           {
-            cat: "⚔️ Violence & Harmful Content",
+            cat: "âš”ï¸ Violence & Harmful Content",
             tests: [
               { name: "Graphic Violence", urls: ["bestgore.com","goregrish.com"], pts: 8, critical: true,  attempts: 1 },
               { name: "Weapons Sales",    urls: ["armslist.com","gunbroker.com"], pts: 5, critical: false, attempts: 1 },
             ],
           },
           {
-            cat: "📱 Social Media Control",
+            cat: "ðŸ“± Social Media Control",
             tests: [
               { name: "TikTok",    urls: ["tiktok.com","www.tiktok.com"],       pts: 4, critical: true, attempts: 1 },
               { name: "Instagram", urls: ["instagram.com","www.instagram.com"], pts: 4, critical: true, attempts: 1 },
@@ -1211,17 +1211,17 @@
             ],
           },
           {
-            cat: "⚠️ Platforms With Built-In Adult Content",
+            cat: "âš ï¸ Platforms With Built-In Adult Content",
             tests: [
-              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos — URL blocking is impossible, only DNS filtering stops this" },
+              { name: "X / Twitter (Adult Videos)",  urls: ["x.com","twitter.com"],       pts: 5, critical: true,  attempts: 1, info: "X.com allows adult videos â€” URL blocking is impossible, only DNS filtering stops this" },
               { name: "YouTube Restricted Mode DNS",  urls: ["restrict.youtube.com"],      pts: 5, critical: true,  attempts: 1, invertLogic: true, info: "If reachable, your router is NOT enforcing YouTube Restricted Mode. Set DNS override to force it." },
               { name: "Twitch (Unmoderated Streams)", urls: ["twitch.tv","www.twitch.tv"], pts: 2, critical: false, attempts: 1, info: "Twitch can host inappropriate live streams" },
             ],
           },
           {
-            cat: "🛡️ Safety Controls",
+            cat: "ðŸ›¡ï¸ Safety Controls",
             tests: [
-              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true, attempts: 2, invertLogic: true, info: "YouTube must be reachable — network-level Restricted Mode enforced via DNS or firewall redirect" },
+              { name: "YouTube (should be accessible)", urls: ["youtube.com"], pts: 5, critical: true, attempts: 2, invertLogic: true, info: "YouTube must be reachable â€” network-level Restricted Mode enforced via DNS or firewall redirect" },
             ],
           },
         ],
@@ -1250,28 +1250,28 @@
           selectedDevice = "";
           modeInfo.style.display = "block";
           modeInfoText.innerHTML =
-            '<strong>Full Test Mode:</strong> Tests both network filtering AND device management (MDM/enrollment, app restrictions, policy enforcement). Score out of 100. <span style="color:#065f46;font-weight:600;">✓ Recommended for accurate results.</span>';
+            '<strong>Full Test Mode:</strong> Tests both network filtering AND device management (MDM/enrollment, app restrictions, policy enforcement). Score out of 100. <span style="color:#065f46;font-weight:600;">âœ“ Recommended for accurate results.</span>';
           document.getElementById("startBtn").disabled = true;
         }
       }
 
       const manualChecks = {
         ipad: [
-          { id: "mdm",        pts: 8, critical: true,  label: "MDM Profile Installed",       how: "Settings → General → VPN & Device Management — an enrollment profile must appear." },
-          { id: "supervised", pts: 5, critical: true,  label: "Supervision Mode Enabled",    how: "Settings → General → About — look for 'This iPad is supervised and managed by…'." },
-          { id: "apprestrict",pts: 3, critical: false, label: "App Installation Restricted", how: "Open App Store — if installation is blocked by MDM, this is passing." },
-          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "Open Safari → google.com → search 'how to turn off SafeSearch' — if the toggle is greyed out, passing." },
+          { id: "mdm",        pts: 8, critical: true,  label: "MDM Profile Installed",       how: "Settings â†’ General â†’ VPN & Device Management â€” an enrollment profile must appear." },
+          { id: "supervised", pts: 5, critical: true,  label: "Supervision Mode Enabled",    how: "Settings â†’ General â†’ About â€” look for 'This iPad is supervised and managed byâ€¦'." },
+          { id: "apprestrict",pts: 3, critical: false, label: "App Installation Restricted", how: "Open App Store â€” if installation is blocked by MDM, this is passing." },
+          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "Open Safari â†’ google.com â†’ search 'how to turn off SafeSearch' â€” if the toggle is greyed out, passing." },
         ],
         chromebook: [
-          { id: "enrolled",   pts: 7, critical: true,  label: "Chrome Device Enrollment",    how: "chrome://policy — look for 'DeviceEnrollmentDomain'. If empty, device is NOT enrolled." },
-          { id: "extpolicy",  pts: 5, critical: true,  label: "Extension Policy Applied",    how: "chrome://policy — look for ExtensionInstallForcelist or BlockList entries." },
-          { id: "reenroll",   pts: 4, critical: true,  label: "Force Re-enrollment Active",  how: "Admin Console → Devices → Settings → Enrollment & Access → 'Keep device enrolled'." },
-          { id: "userpolicy", pts: 2, critical: false, label: "User Policy Enforced",        how: "chrome://policy — filter by 'user' scope; policies should be populated after sign-in." },
-          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "google.com → search settings — if SafeSearch is locked ON by admin, passing." },
+          { id: "enrolled",   pts: 7, critical: true,  label: "Chrome Device Enrollment",    how: "chrome://policy â€” look for 'DeviceEnrollmentDomain'. If empty, device is NOT enrolled." },
+          { id: "extpolicy",  pts: 5, critical: true,  label: "Extension Policy Applied",    how: "chrome://policy â€” look for ExtensionInstallForcelist or BlockList entries." },
+          { id: "reenroll",   pts: 4, critical: true,  label: "Force Re-enrollment Active",  how: "Admin Console â†’ Devices â†’ Settings â†’ Enrollment & Access â†’ 'Keep device enrolled'." },
+          { id: "userpolicy", pts: 2, critical: false, label: "User Policy Enforced",        how: "chrome://policy â€” filter by 'user' scope; policies should be populated after sign-in." },
+          { id: "safesearch", pts: 3, critical: false, label: "SafeSearch Enforced",         how: "google.com â†’ search settings â€” if SafeSearch is locked ON by admin, passing." },
         ],
       };
 
-      let manualCheckState = {}; // id → true/false
+      let manualCheckState = {}; // id â†’ true/false
 
       function renderManualChecklist(device) {
         const checks = manualChecks[device];
@@ -1288,7 +1288,7 @@
           div.innerHTML = `
             <input type="checkbox" id="chk_${c.id}" onchange="toggleManualCheck('${c.id}', this.checked)">
             <div class="checklist-label">
-              <strong>${c.label}${c.critical ? ' <span style="color:#ef4444">★ Critical</span>' : ''}</strong>
+              <strong>${c.label}${c.critical ? ' <span style="color:#ef4444">â˜… Critical</span>' : ''}</strong>
               <span>How to verify: ${c.how}</span>
             </div>
             <div class="checklist-pts">+${c.pts} pts</div>`;
@@ -1362,19 +1362,19 @@
             url: "manual",
             pts: mc.pts,
             critical: mc.critical,
-            category: "🔧 Device Management",
+            category: "ðŸ”§ Device Management",
             blocked: passed, // "blocked" means the control IS in place = good
             earned: passed ? mc.pts : 0,
             confidence: "manual",
           };
           testResults.push(result);
           totalScore += result.earned;
-          addLog(`[Manual] ${mc.label}: ${passed ? "VERIFIED ✓" : "NOT VERIFIED ✗"}`, passed ? "success" : "error");
+          addLog(`[Manual] ${mc.label}: ${passed ? "VERIFIED âœ“" : "NOT VERIFIED âœ—"}`, passed ? "success" : "error");
         }
 
         // Step 3: run automated network tests
         const suite = testSuites[selectedDevice];
-        // filter out old url:"test" entries — replaced by manual checklist above
+        // filter out old url:"test" entries â€” replaced by manual checklist above
         const networkSuite = suite.map(cat => ({
           ...cat,
           tests: cat.tests.filter(t => t.url !== "test" && !t.note)
@@ -1383,7 +1383,7 @@
         // also handle info notes
         const infoTests = suite.flatMap(cat => cat.tests.filter(t => t.note));
         for (const t of infoTests) {
-          addLog(`ℹ️ ${t.name}: ${t.note}`, "info");
+          addLog(`â„¹ï¸ ${t.name}: ${t.note}`, "info");
         }
 
         const totalAuto = networkSuite.reduce((sum, cat) => sum + cat.tests.length, 0);
@@ -1397,7 +1397,7 @@
             document.getElementById("progress").textContent = `${count}/${totalAll}`;
 
             const urlCount = (test.urls || [test.url]).filter(u => u !== "test").length;
-            addLog(`  Probing ${test.name} (${urlCount} URL${urlCount > 1 ? "s" : ""}, ${test.attempts || 1}× each)...`, "info");
+            addLog(`  Probing ${test.name} (${urlCount} URL${urlCount > 1 ? "s" : ""}, ${test.attempts || 1}Ã— each)...`, "info");
 
             const { status, blockedCount, totalCount, confidence, detail } = await probeTest(test, baselineMs);
 
@@ -1421,7 +1421,7 @@
             testResults.push(result);
             totalScore += earned;
 
-            const confTag = confidence === "low" ? " ⚠ low confidence" : "";
+            const confTag = confidence === "low" ? " âš  low confidence" : "";
             const statusTag = status === "pass" ? "ALL BLOCKED" : status === "partial" ? `PARTIAL (${blockedCount}/${totalCount})` : "ACCESSIBLE";
             addLog(`  ${test.name}: ${statusTag}${confTag}`, status === "pass" ? "success" : status === "partial" ? "info" : "error");
             if (detail) addLog(`    ${detail}`, "info");
@@ -1430,7 +1430,7 @@
           }
         }
 
-        addLog("\n✓ Assessment complete. Generating report...", "success");
+        addLog("\nâœ“ Assessment complete. Generating report...", "success");
         await new Promise((r) => setTimeout(r, 500));
         displayResults();
         await saveAuditToFirestore();
@@ -1484,7 +1484,7 @@
           };
 
           await addDoc(collection(window.db, "networkAudits"), payload);
-          addLog("✓ Audit saved to Firestore.", "success");
+          addLog("âœ“ Audit saved to Firestore.", "success");
         } catch (err) {
           console.warn("Firestore save failed:", err);
         }
@@ -1504,7 +1504,7 @@
         const normalizedScore = maxPossible > 0 ? Math.min(100, Math.round((totalScore / maxPossible) * 100)) : 0;
 
         document.getElementById("scoreNum").textContent = normalizedScore;
-        document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}⚡)` : "");
+        document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}âš¡)` : "");
         document.getElementById("failCount").textContent = failed;
         document.getElementById("percent").textContent = percent + "%";
 
@@ -1514,16 +1514,16 @@
         const grade = document.getElementById("grade");
         let gradeText, gradeClass;
         if (totalScore >= 85) {
-          gradeText = "🌟 EXCELLENT";
+          gradeText = "ðŸŒŸ EXCELLENT";
           gradeClass = "excellent";
         } else if (totalScore >= 70) {
-          gradeText = "✅ GOOD";
+          gradeText = "âœ… GOOD";
           gradeClass = "good";
         } else if (totalScore >= 50) {
-          gradeText = "⚠️ FAIR";
+          gradeText = "âš ï¸ FAIR";
           gradeClass = "fair";
         } else {
-          gradeText = "❌ NEEDS URGENT ACTION";
+          gradeText = "âŒ NEEDS URGENT ACTION";
           gradeClass = "poor";
         }
 
@@ -1539,7 +1539,7 @@
         const critical = testResults.filter((r) => (r.status === "fail" || r.status === "partial") && r.critical);
         const recDiv = document.getElementById("recommendations");
 
-        let html = "<h3>⚡ Action Required</h3>";
+        let html = "<h3>âš¡ Action Required</h3>";
 
         if (testingMode === "principal") {
           html +=
@@ -1548,10 +1548,10 @@
 
         if (critical.length === 0) {
           html +=
-            '<div class="action-steps"><p style="color:#065f46;font-weight:600;">✅ All critical security controls are in place. Your network meets PP 17/2025 compliance standards.</p>';
+            '<div class="action-steps"><p style="color:#065f46;font-weight:600;">âœ… All critical security controls are in place. Your network meets PP 17/2025 compliance standards.</p>';
           if (testingMode === "principal") {
             html +=
-              '<p style="color:#1e40af;margin-top:10px;font-size:12px;">💡 Consider running a Full Test from a student device to verify device management policies.</p>';
+              '<p style="color:#1e40af;margin-top:10px;font-size:12px;">ðŸ’¡ Consider running a Full Test from a student device to verify device management policies.</p>';
           }
           html += "</div>";
         } else {
@@ -1567,12 +1567,12 @@
               )
             ) {
               html += `<div class="action-step" style="border-left-color:#10b981;background:linear-gradient(135deg,#f0fdf4,#ecfdf5);">
-                            <h4 style="color:#065f46;font-size:17px;">🛡️ Step 1: Change Router DNS Right Now — FREE</h4>
-                            <p style="font-size:13px;"><strong>Why urgent:</strong> X.com (Twitter), Reddit, and other social platforms host adult videos that cannot be blocked by URL — only DNS filtering stops them.<br><br>
-                            <strong>Action:</strong> Router admin → DNS settings → set to <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.1.1.3</span> and <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.0.0.3</span> (Cloudflare Family)<br>
+                            <h4 style="color:#065f46;font-size:17px;">ðŸ›¡ï¸ Step 1: Change Router DNS Right Now â€” FREE</h4>
+                            <p style="font-size:13px;"><strong>Why urgent:</strong> X.com (Twitter), Reddit, and other social platforms host adult videos that cannot be blocked by URL â€” only DNS filtering stops them.<br><br>
+                            <strong>Action:</strong> Router admin â†’ DNS settings â†’ set to <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.1.1.3</span> and <span style="font-family:monospace;font-weight:900;font-size:15px;color:#1e40af;">1.0.0.3</span> (Cloudflare Family)<br>
                             <strong>Alternative:</strong> <span style="font-family:monospace;font-weight:800;color:#92400e;">208.67.222.123</span> / <span style="font-family:monospace;font-weight:800;color:#92400e;">208.67.220.123</span> (OpenDNS FamilyShield)<br>
                             <strong>Timeline:</strong> 2 minutes</p>
-                            <span class="cost">100% FREE — Blocks adult content, gambling & malware</span>
+                            <span class="cost">100% FREE â€” Blocks adult content, gambling & malware</span>
                         </div>`;
             }
             if (
@@ -1581,7 +1581,7 @@
               )
             ) {
               html += `<div class="action-step">
-                            <h4>🚫 Step 2: Block VPN Protocols</h4>
+                            <h4>ðŸš« Step 2: Block VPN Protocols</h4>
                             <p><strong>Action:</strong> Configure firewall to block ports 1194, 1723, 4500, 500<br>
                             <strong>Why:</strong> Prevent VPN protocol usage at network level<br>
                             <strong>Timeline:</strong> Same day</p>
@@ -1590,7 +1590,7 @@
             }
             if (critical.some((c) => c.name.includes("DNS"))) {
               html += `<div class="action-step">
-                            <h4>🌐 Step 3: Force DNS Settings</h4>
+                            <h4>ðŸŒ Step 3: Force DNS Settings</h4>
                             <p><strong>Action:</strong> Set DHCP to force DNS 208.67.222.123, block outbound port 53<br>
                             <strong>Why:</strong> Enable DNS-level filtering, prevent 8.8.8.8 bypass<br>
                             <strong>Timeline:</strong> Same day</p>
@@ -1598,14 +1598,14 @@
                         </div>`;
             }
             html += `<div class="action-step" style="border-left-color:#f59e0b;background:#fffbeb;">
-                        <h4>⚠️ Important: Device Management</h4>
+                        <h4>âš ï¸ Important: Device Management</h4>
                         <p style="color:#78350f;">Your test only covered network filtering. Student devices also need MDM (iPad) or Chrome Education Upgrade (Chromebook) for complete protection. <strong>Run a Full Test from a student device</strong> to assess device security.</p>
                     </div>`;
           } else if (selectedDevice === "ipad") {
             // iPad-specific recommendations
             if (critical.some((c) => c.name.includes("MDM"))) {
               html += `<div class="action-step">
-                            <h4>🔧 Step 1: Deploy MDM System</h4>
+                            <h4>ðŸ”§ Step 1: Deploy MDM System</h4>
                             <p><strong>Action:</strong> Install Jamf School or Mosyle on all iPads<br>
                             <strong>Why:</strong> Block VPN apps, lock DNS, enable supervision<br>
                             <strong>Timeline:</strong> 1-2 weeks</p>
@@ -1618,7 +1618,7 @@
               )
             ) {
               html += `<div class="action-step">
-                            <h4>🔒 Step 2: Lock Device Settings</h4>
+                            <h4>ðŸ”’ Step 2: Lock Device Settings</h4>
                             <p><strong>Action:</strong> Deploy MDM profile to force DNS and block VPN apps<br>
                             <strong>Why:</strong> Prevent students from bypassing filters<br>
                             <strong>Timeline:</strong> Same day (via MDM)</p>
@@ -1631,7 +1631,7 @@
               )
             ) {
               html += `<div class="action-step">
-                            <h4>🛡️ Step 3: Upgrade Network Filter</h4>
+                            <h4>ðŸ›¡ï¸ Step 3: Upgrade Network Filter</h4>
                             <p><strong>Action:</strong> Deploy Fortinet or Lightspeed Relay<br>
                             <strong>Why:</strong> SSL inspection for HTTPS filtering<br>
                             <strong>Timeline:</strong> 2-4 weeks</p>
@@ -1647,7 +1647,7 @@
               )
             ) {
               html += `<div class="action-step">
-                            <h4>🔧 Step 1: Chrome Education Upgrade</h4>
+                            <h4>ðŸ”§ Step 1: Chrome Education Upgrade</h4>
                             <p><strong>Action:</strong> Purchase license via Google Admin Console<br>
                             <strong>Why:</strong> Enable forced enrollment and advanced policies<br>
                             <strong>Timeline:</strong> Same day</p>
@@ -1656,7 +1656,7 @@
             }
             if (critical.some((c) => c.name.includes("VPN"))) {
               html += `<div class="action-step">
-                            <h4>🚫 Step 2: Block VPN Extensions</h4>
+                            <h4>ðŸš« Step 2: Block VPN Extensions</h4>
                             <p><strong>Action:</strong> Add VPN extension IDs to blocklist (Admin Console > Apps)<br>
                             <strong>Why:</strong> Prevent NordVPN, ExpressVPN installation<br>
                             <strong>Timeline:</strong> 15 minutes</p>
@@ -1665,7 +1665,7 @@
             }
             if (critical.some((c) => c.name.includes("DNS"))) {
               html += `<div class="action-step">
-                            <h4>🌐 Step 3: Force DNS Policy</h4>
+                            <h4>ðŸŒ Step 3: Force DNS Policy</h4>
                             <p><strong>Action:</strong> Set DNS to 208.67.222.123 in Chrome device policy<br>
                             <strong>Why:</strong> DNS-level filtering, block malware domains<br>
                             <strong>Timeline:</strong> 10 minutes</p>
@@ -1678,7 +1678,7 @@
               )
             ) {
               html += `<div class="action-step">
-                            <h4>🛡️ Step 4: Deploy Content Filter</h4>
+                            <h4>ðŸ›¡ï¸ Step 4: Deploy Content Filter</h4>
                             <p><strong>Action:</strong> Install Lightspeed Relay or Securly extension<br>
                             <strong>Why:</strong> Advanced filtering on/off campus<br>
                             <strong>Timeline:</strong> 1-2 weeks</p>
@@ -1690,55 +1690,55 @@
           html += "</div>";
         }
 
-        // ── DNS Quick Fix Banner — always shown, prominent ──────────────────
+        // â”€â”€ DNS Quick Fix Banner â€” always shown, prominent â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         html += `
           <div style="margin-top:28px;border:3px solid #10b981;border-radius:16px;overflow:hidden;">
             <div style="background:#10b981;padding:16px 24px;">
-              <div style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;">🛡️ FREE INSTANT FIX: Change Your DNS</div>
-              <div style="color:#d1fae5;font-size:13px;margin-top:4px;">Takes 2 minutes · Zero cost · Blocks adult content network-wide</div>
+              <div style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px;">ðŸ›¡ï¸ FREE INSTANT FIX: Change Your DNS</div>
+              <div style="color:#d1fae5;font-size:13px;margin-top:4px;">Takes 2 minutes Â· Zero cost Â· Blocks adult content network-wide</div>
             </div>
             <div style="background:#f0fdf4;padding:20px 24px;">
 
               <div style="background:#fff;border:2px solid #10b981;border-radius:12px;padding:16px 20px;margin-bottom:16px;">
-                <div style="font-size:15px;font-weight:800;color:#065f46;margin-bottom:8px;">⚠️ Problem: X.com (Twitter) & Social Media Adult Content</div>
+                <div style="font-size:15px;font-weight:800;color:#065f46;margin-bottom:8px;">âš ï¸ Problem: X.com (Twitter) & Social Media Adult Content</div>
                 <div style="font-size:13px;color:#374151;line-height:1.7;">
-                  X.com hosts adult videos directly on its servers. Blocking <strong>individual URLs is impossible</strong> — the content comes from the same domain as regular posts.
+                  X.com hosts adult videos directly on its servers. Blocking <strong>individual URLs is impossible</strong> â€” the content comes from the same domain as regular posts.
                   The same applies to Reddit, Tumblr, and other platforms that allow adult content.
                   <strong>The only effective solution is DNS-level filtering.</strong>
                 </div>
               </div>
 
-              <div style="font-size:15px;font-weight:800;color:#1a1a2e;margin-bottom:12px;">Set your router's DNS to one of these — done:</div>
+              <div style="font-size:15px;font-weight:800;color:#1a1a2e;margin-bottom:12px;">Set your router's DNS to one of these â€” done:</div>
 
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
                 <div style="background:#fff;border:2px solid #3b82f6;border-radius:10px;padding:14px 16px;">
-                  <div style="font-size:13px;font-weight:800;color:#1e40af;margin-bottom:6px;">🔵 Cloudflare Family DNS</div>
+                  <div style="font-size:13px;font-weight:800;color:#1e40af;margin-bottom:6px;">ðŸ”µ Cloudflare Family DNS</div>
                   <div style="font-family:monospace;font-size:18px;font-weight:900;color:#1e40af;letter-spacing:1px;">1.1.1.3</div>
                   <div style="font-family:monospace;font-size:14px;color:#3b82f6;">1.0.0.3</div>
-                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + malware · Fastest DNS globally</div>
+                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + malware Â· Fastest DNS globally</div>
                 </div>
                 <div style="background:#fff;border:2px solid #f59e0b;border-radius:10px;padding:14px 16px;">
-                  <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:6px;">🟡 OpenDNS FamilyShield</div>
+                  <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:6px;">ðŸŸ¡ OpenDNS FamilyShield</div>
                   <div style="font-family:monospace;font-size:18px;font-weight:900;color:#92400e;letter-spacing:1px;">208.67.222.123</div>
                   <div style="font-family:monospace;font-size:14px;color:#f59e0b;">208.67.220.123</div>
-                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + gambling · Battle-tested in schools</div>
+                  <div style="font-size:11px;color:#6b7280;margin-top:6px;">Blocks adult content + gambling Â· Battle-tested in schools</div>
                 </div>
               </div>
 
               <div style="background:#fefce8;border:1px solid #fbbf24;border-radius:8px;padding:12px 16px;font-size:12px;color:#78350f;line-height:1.6;margin-bottom:12px;">
-                <strong>How to apply:</strong> Router admin panel → WAN/LAN Settings → DNS Server → enter the numbers above → Save → Restart router.
-                All devices on the WiFi are protected instantly — no software installation needed on student devices.
+                <strong>How to apply:</strong> Router admin panel â†’ WAN/LAN Settings â†’ DNS Server â†’ enter the numbers above â†’ Save â†’ Restart router.
+                All devices on the WiFi are protected instantly â€” no software installation needed on student devices.
                 <br><strong>This also blocks:</strong> pornography sites, gambling, drug sites, Discord NSFW, Reddit adult content, and reduces malware risk significantly.
               </div>
 
               <div style="background:#eff6ff;border:2px solid #3b82f6;border-radius:10px;padding:14px 16px;">
-                <div style="font-size:14px;font-weight:800;color:#1e40af;margin-bottom:8px;">📺 Bonus: Force YouTube Safe Mode for All Devices</div>
+                <div style="font-size:14px;font-weight:800;color:#1e40af;margin-bottom:8px;">ðŸ“º Bonus: Force YouTube Safe Mode for All Devices</div>
                 <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
-                  YouTube cannot be simply blocked — it is an essential educational tool. But its algorithm can show inappropriate content.
+                  YouTube cannot be simply blocked â€” it is an essential educational tool. But its algorithm can show inappropriate content.
                   <strong>YouTube Restricted Mode</strong> filters out mature content and can be enforced at the router level so students cannot turn it off.<br><br>
                   <strong>How:</strong> In your router's DNS settings, add a custom DNS entry:<br>
-                  <span style="font-family:monospace;background:#dbeafe;padding:4px 8px;border-radius:4px;display:inline-block;margin:4px 0;font-size:13px;font-weight:700;">youtube.com → restrict.youtube.com</span><br>
-                  This tells every device on your WiFi to always open YouTube in Restricted Mode — students cannot bypass it even in browser settings.
+                  <span style="font-family:monospace;background:#dbeafe;padding:4px 8px;border-radius:4px;display:inline-block;margin:4px 0;font-size:13px;font-weight:700;">youtube.com â†’ restrict.youtube.com</span><br>
+                  This tells every device on your WiFi to always open YouTube in Restricted Mode â€” students cannot bypass it even in browser settings.
                   <br><br>
                   <strong>Also covers:</strong> youtu.be, m.youtube.com, youtubei.googleapis.com
                 </div>
@@ -1769,16 +1769,16 @@
 
           catResults.forEach((result) => {
             const confBadge = result.confidence === "low"
-              ? `<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin-left:6px;" title="Only one probe confirmed block">⚠ low confidence</span>`
+              ? `<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin-left:6px;" title="Only one probe confirmed block">âš  low confidence</span>`
               : result.confidence === "manual"
               ? `<span style="font-size:10px;background:#ede9fe;color:#5b21b6;padding:2px 6px;border-radius:4px;margin-left:6px;">manual</span>`
               : "";
             const statusClass = result.status === "pass" ? "pass" : result.status === "partial" ? "partial" : "fail";
             const statusLabel = result.status === "pass"
-              ? "✓ PROTECTED"
+              ? "âœ“ PROTECTED"
               : result.status === "partial"
-              ? `⚡ PARTIAL (${result.blockedCount}/${result.totalCount})`
-              : "✗ VULNERABLE";
+              ? `âš¡ PARTIAL (${result.blockedCount}/${result.totalCount})`
+              : "âœ— VULNERABLE";
             const ptsLabel = `<span style="font-size:11px;color:#6b7280;margin-left:6px;">${result.earned}/${result.pts}pts</span>`;
             const detailHtml = result.detail
               ? `<div style="font-size:11px;color:#6b7280;margin-top:4px;padding-left:4px;font-family:monospace;">${result.detail}</div>`
@@ -1806,12 +1806,12 @@
 
         let grade =
           totalScore >= 85
-            ? "EXCELLENT 🌟"
+            ? "EXCELLENT ðŸŒŸ"
             : totalScore >= 70
-            ? "GOOD ✅"
+            ? "GOOD âœ…"
             : totalScore >= 50
-            ? "FAIR ⚠️"
-            : "URGENT ACTION NEEDED ❌";
+            ? "FAIR âš ï¸"
+            : "URGENT ACTION NEEDED âŒ";
 
         const testMode =
           testingMode === "principal"
@@ -1822,43 +1822,43 @@
             ? "Full Test (Student Chromebook)"
             : "Full Test (Student Phone)";
 
-        let msg = `🔒 EDUVERSAL SECURITY ASSESSMENT\n`;
-        msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`;
-        msg += `🏫 School: ${schoolName}\n`;
-        msg += `👤 Tester: ${window.currentUser ? window.currentUser.email : "—"}\n`;
-        msg += `🔍 Test Mode: ${testMode}\n\n`;
-        msg += `📊 SCORE: ${totalScore}/100\n`;
-        msg += `🎯 Grade: ${grade}\n`;
-        msg += `✅ Protected: ${passed}/${total}\n`;
-        msg += `⚡ Partial: ${partial}/${total}\n`;
-        msg += `❌ Vulnerable: ${total - passed - partial}/${total}\n\n`;
+        let msg = `ðŸ”’ EDUVERSAL SECURITY ASSESSMENT\n`;
+        msg += `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n\n`;
+        msg += `ðŸ« School: ${schoolName}\n`;
+        msg += `ðŸ‘¤ Tester: ${window.currentUser ? window.currentUser.email : "â€”"}\n`;
+        msg += `ðŸ” Test Mode: ${testMode}\n\n`;
+        msg += `ðŸ“Š SCORE: ${totalScore}/100\n`;
+        msg += `ðŸŽ¯ Grade: ${grade}\n`;
+        msg += `âœ… Protected: ${passed}/${total}\n`;
+        msg += `âš¡ Partial: ${partial}/${total}\n`;
+        msg += `âŒ Vulnerable: ${total - passed - partial}/${total}\n\n`;
 
         if (testingMode === "principal") {
-          msg += `ℹ️ Note: Network-level test only\n`;
-          msg += `💡 Recommend: Full test from student device\n\n`;
+          msg += `â„¹ï¸ Note: Network-level test only\n`;
+          msg += `ðŸ’¡ Recommend: Full test from student device\n\n`;
         }
 
         if (critical.length > 0) {
-          msg += `⚠️ CRITICAL ISSUES:\n`;
+          msg += `âš ï¸ CRITICAL ISSUES:\n`;
           critical.forEach((c, i) => {
-            const tag = c.confidence === "low" ? " ⚠ (low confidence)" : c.confidence === "manual" ? " (manual — unverified)" : "";
+            const tag = c.confidence === "low" ? " âš  (low confidence)" : c.confidence === "manual" ? " (manual â€” unverified)" : "";
             msg += `${i + 1}. ${c.name}${tag}\n`;
           });
-          msg += `\n🚨 Immediate action required!\n\n`;
+          msg += `\nðŸš¨ Immediate action required!\n\n`;
         } else {
-          msg += `✅ All critical controls active\n`;
+          msg += `âœ… All critical controls active\n`;
           msg += `PP 17/2025 compliant\n\n`;
         }
 
         const lowConf = testResults.filter(r => r.confidence === "low");
         if (lowConf.length > 0) {
-          msg += `⚠️ LOW CONFIDENCE RESULTS (verify manually):\n`;
+          msg += `âš ï¸ LOW CONFIDENCE RESULTS (verify manually):\n`;
           lowConf.forEach(r => msg += `- ${r.name}\n`);
           msg += `\n`;
         }
 
-        msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-        msg += `📅 ${new Date().toLocaleDateString("en-GB")}\n`;
+        msg += `â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”\n`;
+        msg += `ðŸ“… ${new Date().toLocaleDateString("en-GB")}\n`;
         msg += `_Eduversal Indonesia - Cambridge Schools_`;
 
         return msg;
@@ -1867,9 +1867,9 @@
       function buildMethodology() {
         const testMode = testingMode === "principal"
           ? "Quick Test (network only)"
-          : selectedDevice === "ipad" ? "Full Test — iPad"
-          : selectedDevice === "chromebook" ? "Full Test — Chromebook"
-          : "Full Test — Phone";
+          : selectedDevice === "ipad" ? "Full Test â€” iPad"
+          : selectedDevice === "chromebook" ? "Full Test â€” Chromebook"
+          : "Full Test â€” Phone";
 
         const totalNetworkTests = testResults.filter(r => r.confidence !== "manual").length;
         const manualItems = testResults.filter(r => r.confidence === "manual").length;
@@ -1879,16 +1879,16 @@
         body.innerHTML = `
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
             <tr><td style="padding:4px 8px;width:180px;color:#94a3b8;font-weight:600;">School</td><td style="padding:4px 8px;">${schoolName}</td></tr>
-            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Tester</td><td style="padding:4px 8px;">${window.currentUser ? window.currentUser.email : "—"}</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Tester</td><td style="padding:4px 8px;">${window.currentUser ? window.currentUser.email : "â€”"}</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Test Mode</td><td style="padding:4px 8px;">${testMode}</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Date & Time</td><td style="padding:4px 8px;">${new Date().toLocaleString("en-GB")}</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Network Tests</td><td style="padding:4px 8px;">${totalNetworkTests} automated probes</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Manual Checks</td><td style="padding:4px 8px;">${manualItems} self-reported items</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Probe Method</td><td style="padding:4px 8px;">${railwayEnabled ? "Server-side HTTP (Railway) + browser fallback" : "Browser fetch HEAD no-cors"}, adaptive timeout (${baselineMs}ms)</td></tr>
-            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Backend</td><td style="padding:4px 8px;">${railwayEnabled ? "Railway API active — real HTTP status codes, DNS resolve, port probes" : "Railway API not configured — browser-only probes"}</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Backend</td><td style="padding:4px 8px;">${railwayEnabled ? "Railway API active â€” real HTTP status codes, DNS resolve, port probes" : "Railway API not configured â€” browser-only probes"}</td></tr>
             <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Scoring</td><td style="padding:4px 8px;">Full pts = all URLs blocked; half pts = partial block; 0 = fully accessible</td></tr>
-            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Low Confidence Items</td><td style="padding:4px 8px;">${lowConf} (only one probe returned blocked — manual verification recommended)</td></tr>
-            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Special Probes</td><td style="padding:4px 8px;">DoH: fetch to cloudflare-dns.com/dns-query with Accept: application/dns-json · Tor: HTTP probe to 4 of 6 directory authority IPs</td></tr>
+            <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Low Confidence Items</td><td style="padding:4px 8px;">${lowConf} (only one probe returned blocked â€” manual verification recommended)</td></tr>
+            <tr><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Special Probes</td><td style="padding:4px 8px;">DoH: fetch to cloudflare-dns.com/dns-query with Accept: application/dns-json Â· Tor: HTTP probe to 4 of 6 directory authority IPs</td></tr>
             <tr style="background:#f1f5f9;"><td style="padding:4px 8px;color:#94a3b8;font-weight:600;">Limitations</td><td style="padding:4px 8px;">Cannot detect transparent proxy redirect, SSL inspection activity, or QUIC/UDP-level filtering. Device management items are self-reported.</td></tr>
           </table>`;
       }
@@ -1909,7 +1909,7 @@
 
       function copyResults() {
         navigator.clipboard.writeText(getReportText()).then(() => {
-          alert("✅ Report copied to clipboard!");
+          alert("âœ… Report copied to clipboard!");
         });
       }
     </script>

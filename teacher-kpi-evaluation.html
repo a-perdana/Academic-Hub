@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -52,11 +52,11 @@
       padding-top: 62px;
     }
 
-    /* ── Hero (canonical .page-hero from /base.css · dark family) ──
+    /* â”€â”€ Hero (canonical .page-hero from /base.css Â· dark family) â”€â”€
        Page CSS MUST NOT override .page-hero background or KPI layout
        (root CLAUDE.md Common Mistake #50). Body content rail = 1200px;
        width:100% on direct body children avoids the body:has(>.page-footer)
-       flex-column shrink trap. ────────────────────────────────── */
+       flex-column shrink trap. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     body:has(> .page-footer) > .page-hero,
     body:has(> .page-footer) > .page-wrap {
       width: 100%;
@@ -85,10 +85,10 @@
       .page-wrap { padding-left: 14px; padding-right: 14px; }
     }
 
-    /* ── Layout ──────────────────────────────────────────────── */
+    /* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 60px; }
 
-    /* ── Access Denied Banner ────────────────────────────────── */
+    /* â”€â”€ Access Denied Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .access-denied {
       background: #fff0f0;
       border: 1px solid #fca5a5;
@@ -100,7 +100,7 @@
     .access-denied h2 { color: #dc2626; font-size: 1.2rem; margin-bottom: 8px; }
     .access-denied p { color: #6b7280; font-size: .9rem; }
 
-    /* ── Period selector bar ──────────────────────────────────── */
+    /* â”€â”€ Period selector bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .top-bar {
       display: flex;
       align-items: center;
@@ -126,7 +126,7 @@
     }
     .top-bar select:focus { outline: none; border-color: var(--accent); }
 
-    /* ── Teacher list grid ───────────────────────────────────── */
+    /* â”€â”€ Teacher list grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .section-title {
       font-size: 1rem;
       font-weight: 700;
@@ -185,7 +185,7 @@
     }
     .avg-self strong { color: var(--primary); }
 
-    /* ── Evaluation Panel ────────────────────────────────────── */
+    /* â”€â”€ Evaluation Panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .eval-panel {
       background: #fff;
       border-radius: 16px;
@@ -235,7 +235,7 @@
     .eval-meta-item input:focus,
     .eval-meta-item select:focus { outline: none; border-color: var(--accent); }
 
-    /* ── Summary Banner ──────────────────────────────────────── */
+    /* â”€â”€ Summary Banner â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .summary-bar {
       display: flex;
       gap: 0;
@@ -254,7 +254,7 @@
     .summary-stat.admin .val { color: var(--success); }
     .summary-stat.diff .val { color: var(--warning); }
 
-    /* ── KPI Accordion ───────────────────────────────────────── */
+    /* â”€â”€ KPI Accordion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .kpi-list { padding: 20px 28px; }
 
     .kpi-item {
@@ -330,7 +330,7 @@
     }
     .kpi-item.open .chevron { transform: rotate(180deg); }
 
-    /* ── KPI Body ─────────────────────────────────────────────── */
+    /* â”€â”€ KPI Body â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .kpi-body {
       display: none;
       padding: 18px 20px 20px;
@@ -436,7 +436,7 @@
     .agreed-row input[type="checkbox"] { width: 16px; height: 16px; cursor: pointer; }
     .agreed-row label { font-size: .85rem; color: #374151; cursor: pointer; }
 
-    /* ── Development Goals ───────────────────────────────────── */
+    /* â”€â”€ Development Goals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .dev-goals-section { padding: 0 28px 24px; }
     .dev-goals-section h3 {
       font-size: .95rem;
@@ -505,7 +505,7 @@
     }
     .btn-add-goal:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
 
-    /* ── Overall section ─────────────────────────────────────── */
+    /* â”€â”€ Overall section â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .overall-section { padding: 0 28px 24px; }
     .overall-section h3 {
       font-size: .95rem;
@@ -560,7 +560,7 @@
       color: #374151;
     }
 
-    /* ── Action footer ───────────────────────────────────────── */
+    /* â”€â”€ Action footer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .eval-footer {
       padding: 20px 28px;
       border-top: 1.5px solid var(--border);
@@ -621,7 +621,7 @@
     .save-status.saved { color: var(--success); font-weight: 600; }
     .save-status.error { color: #dc2626; font-weight: 600; }
 
-    /* ── Meeting modal ── */
+    /* â”€â”€ Meeting modal â”€â”€ */
     .meeting-modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,.55); z-index: 2000;
       display: flex; align-items: center; justify-content: center; padding: 20px;
@@ -655,7 +655,7 @@
       border-radius: 8px; padding: 6px 14px; font-size: .78rem; font-weight: 600;
     }
 
-    /* ── Empty/Loading states ───────────────────────────────── */
+    /* â”€â”€ Empty/Loading states â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .state-card {
       background: #fff;
       border-radius: 14px;
@@ -678,7 +678,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── Guide boxes ─────────────────────────────────────────── */
+    /* â”€â”€ Guide boxes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     .guide-card {
       background: #fff;
       border-radius: 14px;
@@ -754,7 +754,7 @@
     .meeting-phase-info strong { display: block; font-size: .82rem; font-weight: 700; color: #1e293b; }
     .meeting-phase-info p      { font-size: .75rem; color: #64748b; margin-top: 2px; line-height: 1.4; }
 
-    /* ── Responsive ──────────────────────────────────────────── */
+    /* â”€â”€ Responsive â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
     @media (max-width: 900px) {
       .hero { padding: 24px 20px 20px; }
       .page-wrap { padding: 20px 16px 40px; }
@@ -770,7 +770,7 @@
       .eval-meta-grid { grid-template-columns: 1fr; }
       .top-bar { flex-direction: column; align-items: flex-start; }
     }
-    /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
+    /* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€ */
     .info-strip {
       background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
       border: 1px solid #ddd6fe;
@@ -820,13 +820,13 @@
 <body data-page-accent="dark">
   <div id="navbarMount"></div>
 
-  <!-- Hero (canonical .page-hero · My Work / dark family) -->
+  <!-- Hero (canonical .page-hero Â· My Work / dark family) -->
   <header class="page-hero" data-accent="dark">
     <div class="page-hero__inner">
       <div class="page-hero__text">
-        <p class="page-hero__eyebrow">Academic Hub · School Quality</p>
+        <p class="page-hero__eyebrow">Academic Hub Â· School Quality</p>
         <h1 class="page-hero__title">Teacher KPI Evaluation</h1>
-        <p class="page-hero__desc">Evaluator dashboard for reviewing teacher KPI submissions at your school. Compare each teacher's self-ratings with your evaluation per KPI, then record development goals and an overall recommendation. School-scoped — you see only your own school's submissions.</p>
+        <p class="page-hero__desc">Evaluator dashboard for reviewing teacher KPI submissions at your school. Compare each teacher's self-ratings with your evaluation per KPI, then record development goals and an overall recommendation. School-scoped â€” you see only your own school's submissions.</p>
       </div>
     </div>
   </header>
@@ -861,7 +861,7 @@
     <!-- Loading state -->
     <div id="loading-state" class="state-card">
       <div class="spinner"></div>
-      <p>Loading evaluation data…</p>
+      <p>Loading evaluation dataâ€¦</p>
     </div>
 
     <!-- Main content (hidden until auth ready + access confirmed) -->
@@ -869,9 +869,9 @@
 
       <!-- Evaluator step-by-step guide -->
       <div class="guide-card collapsed">
-        <div class="guide-card-head indigo" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
-          <span>📋 How to Conduct a Teacher Evaluation</span>
-          <span class="guide-card-chevron">▼</span>
+        <div role="button" tabindex="0" class="guide-card-head indigo" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+          <span>ðŸ“‹ How to Conduct a Teacher Evaluation</span>
+          <span class="guide-card-chevron">â–¼</span>
         </div>
         <div class="guide-card-body">
           <div class="guide-steps">
@@ -895,7 +895,7 @@
                 <strong>Complete your assessment for each KPI</strong>
                 <p>Expand each KPI card and provide your evaluation. For each one:</p>
                 <div class="guide-step-tags">
-                  <span class="guide-tag blue">Administrator Rating (1–5)</span>
+                  <span class="guide-tag blue">Administrator Rating (1â€“5)</span>
                   <span class="guide-tag green">Evidence Reviewed</span>
                   <span class="guide-tag purple">Identified Strengths</span>
                   <span class="guide-tag amber">Areas for Development</span>
@@ -907,14 +907,14 @@
               <div class="guide-step-num">4</div>
               <div class="guide-step-text">
                 <strong>Set professional development goals collaboratively</strong>
-                <p>Add 2–3 SMART goals with the teacher. For each goal specify: a clear description, timeline, support to be provided, and success criteria.</p>
+                <p>Add 2â€“3 SMART goals with the teacher. For each goal specify: a clear description, timeline, support to be provided, and success criteria.</p>
               </div>
             </div>
             <div class="guide-step">
               <div class="guide-step-num">5</div>
               <div class="guide-step-text">
                 <strong>Complete the overall assessment and finalise</strong>
-                <p>Select an overall recommendation (Excellent / Good / Satisfactory / Needs Improvement) and write a comprehensive summary. Click "Finalise Evaluation" — the teacher will be able to view the completed evaluation.</p>
+                <p>Select an overall recommendation (Excellent / Good / Satisfactory / Needs Improvement) and write a comprehensive summary. Click "Finalise Evaluation" â€” the teacher will be able to view the completed evaluation.</p>
               </div>
             </div>
           </div>
@@ -925,7 +925,7 @@
       <div class="top-bar">
         <label for="period-select">Evaluation Period:</label>
         <select id="period-select">
-          <option value="">— Select Period —</option>
+          <option value="">â€” Select Period â€”</option>
         </select>
       </div>
 
@@ -940,14 +940,14 @@
 
       <!-- No submissions -->
       <div id="no-submissions" class="state-card" style="display:none;">
-        <div class="icon">📋</div>
+        <div class="icon">ðŸ“‹</div>
         <h3>No Submissions Yet</h3>
         <p>No teachers have submitted their self-assessment for this period.</p>
       </div>
 
       <!-- No period selected -->
       <div id="no-period" class="state-card" style="display:none;">
-        <div class="icon">📅</div>
+        <div class="icon">ðŸ“…</div>
         <h3>Select a Period</h3>
         <p>Choose an evaluation period above to see teacher submissions.</p>
       </div>
@@ -956,8 +956,8 @@
       <div id="eval-panel" class="eval-panel" style="display:none;">
         <div class="eval-header">
           <div class="eval-header-info">
-            <h2 id="eval-teacher-name">—</h2>
-            <p id="eval-teacher-meta">—</p>
+            <h2 id="eval-teacher-name">â€”</h2>
+            <p id="eval-teacher-meta">â€”</p>
           </div>
           <div id="eval-period-name" style="background:rgba(255,255,255,.15);padding:8px 16px;border-radius:10px;font-size:.85rem;font-weight:600;"></div>
         </div>
@@ -981,15 +981,15 @@
         <!-- Summary stats -->
         <div class="summary-bar">
           <div class="summary-stat self">
-            <div class="val" id="avg-self-rating">—</div>
+            <div class="val" id="avg-self-rating">â€”</div>
             <div class="lbl">Avg Self-Rating</div>
           </div>
           <div class="summary-stat admin">
-            <div class="val" id="avg-admin-rating">—</div>
+            <div class="val" id="avg-admin-rating">â€”</div>
             <div class="lbl">Avg Your Rating</div>
           </div>
           <div class="summary-stat diff">
-            <div class="val" id="avg-diff">—</div>
+            <div class="val" id="avg-diff">â€”</div>
             <div class="lbl">Avg Difference</div>
           </div>
           <div class="summary-stat">
@@ -1000,59 +1000,59 @@
 
         <!-- Evaluator reminders -->
         <div class="guide-card collapsed" style="border-radius:12px;margin-top:4px;">
-          <div class="guide-card-head red" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
-            <span>⚠️ Important Reminders for Evaluators</span>
-            <span class="guide-card-chevron">▼</span>
+          <div role="button" tabindex="0" class="guide-card-head red" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+            <span>âš ï¸ Important Reminders for Evaluators</span>
+            <span class="guide-card-chevron">â–¼</span>
           </div>
           <div class="guide-card-body">
             <div class="reminder-list">
-              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Be specific and evidence-based</strong> — all feedback must be grounded in observed behaviours and documented evidence, not impressions.</span></div>
-              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Focus on behaviours, not personality</strong> — evaluate teaching practices and outcomes, never personal characteristics.</span></div>
-              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Maintain confidentiality</strong> — evaluation discussions and ratings are confidential between you and the teacher.</span></div>
-              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Document all observations</strong> — record classroom visits with dates, duration, and specific notes to support your ratings.</span></div>
-              <div class="reminder-row"><span class="reminder-icon">🔴</span><span><strong>Address disagreements through dialogue</strong> — if your rating differs significantly from the teacher's self-rating, discuss it respectfully; do not simply override without explanation.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">ðŸ”´</span><span><strong>Be specific and evidence-based</strong> â€” all feedback must be grounded in observed behaviours and documented evidence, not impressions.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">ðŸ”´</span><span><strong>Focus on behaviours, not personality</strong> â€” evaluate teaching practices and outcomes, never personal characteristics.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">ðŸ”´</span><span><strong>Maintain confidentiality</strong> â€” evaluation discussions and ratings are confidential between you and the teacher.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">ðŸ”´</span><span><strong>Document all observations</strong> â€” record classroom visits with dates, duration, and specific notes to support your ratings.</span></div>
+              <div class="reminder-row"><span class="reminder-icon">ðŸ”´</span><span><strong>Address disagreements through dialogue</strong> â€” if your rating differs significantly from the teacher's self-rating, discuss it respectfully; do not simply override without explanation.</span></div>
             </div>
           </div>
         </div>
 
         <!-- Meeting structure -->
         <div class="guide-card collapsed" style="border-radius:12px;margin-top:8px;">
-          <div class="guide-card-head green" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
-            <span>🗓️ Evaluation Meeting Structure (60–90 min)</span>
-            <span class="guide-card-chevron">▼</span>
+          <div role="button" tabindex="0" class="guide-card-head green" onclick="this.closest('.guide-card').classList.toggle('collapsed')">
+            <span>ðŸ—“ï¸ Evaluation Meeting Structure (60â€“90 min)</span>
+            <span class="guide-card-chevron">â–¼</span>
           </div>
           <div class="guide-card-body">
             <div class="meeting-timeline">
               <div class="meeting-phase p-open">
-                <div class="meeting-phase-time">5–10 min</div>
+                <div class="meeting-phase-time">5â€“10 min</div>
                 <div class="meeting-phase-info">
                   <strong>Opening</strong>
                   <p>Set a positive tone, explain the agenda, and establish expectations for open dialogue.</p>
                 </div>
               </div>
               <div class="meeting-phase p-teacher">
-                <div class="meeting-phase-time">15–20 min</div>
+                <div class="meeting-phase-time">15â€“20 min</div>
                 <div class="meeting-phase-info">
                   <strong>Teacher Presentation</strong>
                   <p>Allow the teacher to present their self-assessment, highlight achievements, and discuss challenges without interruption.</p>
                 </div>
               </div>
               <div class="meeting-phase p-admin">
-                <div class="meeting-phase-time">20–30 min</div>
+                <div class="meeting-phase-time">20â€“30 min</div>
                 <div class="meeting-phase-info">
                   <strong>Evaluator Feedback</strong>
                   <p>Share your observations, provide specific feedback per KPI, and discuss areas where ratings differ. Use concrete examples.</p>
                 </div>
               </div>
               <div class="meeting-phase p-goals">
-                <div class="meeting-phase-time">15–20 min</div>
+                <div class="meeting-phase-time">15â€“20 min</div>
                 <div class="meeting-phase-info">
                   <strong>Goal Setting</strong>
-                  <p>Collaboratively set 2–3 professional development goals with clear timelines and agreed support.</p>
+                  <p>Collaboratively set 2â€“3 professional development goals with clear timelines and agreed support.</p>
                 </div>
               </div>
               <div class="meeting-phase p-close">
-                <div class="meeting-phase-time">5–10 min</div>
+                <div class="meeting-phase-time">5â€“10 min</div>
                 <div class="meeting-phase-info">
                   <strong>Closing</strong>
                   <p>Summarise key points, confirm next steps, and schedule any follow-up check-in.</p>
@@ -1062,10 +1062,10 @@
             <div style="margin-top:14px;padding:12px 14px;background:#f0fdf4;border-radius:10px;border:1px solid #bbf7d0;">
               <div style="font-size:.72rem;font-weight:700;color:#14532d;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;">Communication best practices</div>
               <div style="display:flex;flex-direction:column;gap:5px;">
-                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Listen actively</strong> — allow the teacher to speak without interruption.</span></div>
-                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Balance feedback</strong> — acknowledge strengths before discussing areas for growth.</span></div>
-                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Ask questions</strong> — encourage reflection through open-ended questions.</span></div>
-                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>✔️</span><span><strong>Show empathy</strong> — acknowledge challenges and validate concerns.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>âœ”ï¸</span><span><strong>Listen actively</strong> â€” allow the teacher to speak without interruption.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>âœ”ï¸</span><span><strong>Balance feedback</strong> â€” acknowledge strengths before discussing areas for growth.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>âœ”ï¸</span><span><strong>Ask questions</strong> â€” encourage reflection through open-ended questions.</span></div>
+                <div style="font-size:.79rem;color:#166534;display:flex;gap:8px;"><span>âœ”ï¸</span><span><strong>Show empathy</strong> â€” acknowledge challenges and validate concerns.</span></div>
               </div>
             </div>
           </div>
@@ -1092,7 +1092,7 @@
           </div>
           <div class="overall-comments">
             <label>Overall Comments</label>
-            <textarea id="overall-comments" placeholder="Summarise your overall observations and recommendations…" rows="4"></textarea>
+            <textarea id="overall-comments" placeholder="Summarise your overall observations and recommendationsâ€¦" rows="4"></textarea>
           </div>
         </div>
 
@@ -1100,7 +1100,7 @@
         <div class="eval-footer">
           <button class="btn-save-eval" id="btn-save">Save Draft</button>
           <button class="btn-finalize" id="btn-finalize">Finalise Evaluation</button>
-          <button class="btn-propose-meeting" id="btn-propose-meeting" style="display:none;">📅 Propose Meeting</button>
+          <button class="btn-propose-meeting" id="btn-propose-meeting" style="display:none;">ðŸ“… Propose Meeting</button>
           <span class="save-status" id="save-status"></span>
         </div>
       </div>
@@ -1112,8 +1112,8 @@
   <div class="meeting-modal-overlay" id="meetingModalOverlay" style="display:none;">
     <div class="meeting-modal">
       <div class="meeting-modal-head">
-        <h3>📅 Propose Evaluation Meeting</h3>
-        <button class="meeting-modal-close" id="meetingModalClose">✕</button>
+        <h3>ðŸ“… Propose Evaluation Meeting</h3>
+        <button class="meeting-modal-close" id="meetingModalClose">âœ•</button>
       </div>
       <div class="meeting-modal-body">
         <div id="meetingExistingWrap" style="display:none;">
@@ -1133,7 +1133,7 @@
         </div>
         <div>
           <label>Note to teacher (optional)</label>
-          <textarea id="meetingNote" placeholder="e.g. Please bring your lesson observation records…"></textarea>
+          <textarea id="meetingNote" placeholder="e.g. Please bring your lesson observation recordsâ€¦"></textarea>
         </div>
       </div>
       <div class="meeting-modal-foot">
@@ -1143,16 +1143,16 @@
     </div>
   </div>
 
-  <!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
+  <!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
        MUST be a direct child of <body> for the sticky-via-:has() rule
        in base.css to fire. -->
   <footer class="page-footer" role="contentinfo">
     <div class="page-footer__inner">
       <div class="page-footer__cta">
-        <span class="page-footer__cta-eyebrow">School Quality · Teacher KPI</span>
+        <span class="page-footer__cta-eyebrow">School Quality Â· Teacher KPI</span>
         <h2 class="page-footer__cta-title">Fair KPI reviews build trust with your teachers.</h2>
         <p class="page-footer__cta-desc">Compare self-ratings with your evaluation honestly, agree development goals together, and keep the record school-scoped. Consistent KPI scoring across appraisers keeps the network's teacher data trustworthy.</p>
-        <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
+        <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">â†’</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="Teacher KPI Evaluation footer navigation">
         <div class="page-footer__nav-group">
@@ -1169,8 +1169,8 @@
       </nav>
     </div>
     <div class="page-footer__meta">
-      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-      <span class="page-footer__meta-right">KPI submissions are school-scoped · evaluators flip status fields only</span>
+      <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+      <span class="page-footer__meta-right">KPI submissions are school-scoped Â· evaluators flip status fields only</span>
     </div>
   </footer>
 
@@ -1178,7 +1178,7 @@
     import { getFirestore, collection, doc, getDocs, getDoc, setDoc, addDoc, updateDoc, query, where, orderBy, serverTimestamp }
       from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-    // ── State ──────────────────────────────────────────────────
+    // â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     let db, currentUser, userProfile;
     let allPeriods   = [];
     let selectedPeriod = null;
@@ -1190,7 +1190,7 @@
     let isEvaluator  = false;     // school_principal or academic_coordinator
     let existingMeetingProposalId = null; // for update vs create
 
-    // ── Auth guard ─────────────────────────────────────────────
+    // â”€â”€ Auth guard â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
       currentUser = user;
       userProfile = profile;
@@ -1235,7 +1235,7 @@
       await loadKpiConfig();
     });
 
-    // ── Load periods ───────────────────────────────────────────
+    // â”€â”€ Load periods â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     async function loadPeriods() {
       const snap = await getDocs(query(collection(db, 'teacher_kpi_settings'), orderBy('createdAt', 'desc')));
       allPeriods = snap.docs.map(d => ({ id: d.id, ...d.data() }));
@@ -1264,7 +1264,7 @@
       }
     }
 
-    // ── Load KPI config ────────────────────────────────────────
+    // â”€â”€ Load KPI config â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     async function loadKpiConfig() {
       const snap = await getDocs(query(
         collection(db, 'teacher_kpi_config'),
@@ -1274,7 +1274,7 @@
       kpiConfig = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     }
 
-    // ── Period changed ─────────────────────────────────────────
+    // â”€â”€ Period changed â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     async function onPeriodChange(periodId) {
       selectedPeriod = allPeriods.find(p => p.id === periodId) || null;
 
@@ -1292,7 +1292,7 @@
       // Load submissions for this period (status = 'submitted' or 'evaluated').
       // academic_admin sees every school's submissions; sub-role evaluators
       // (school_principal, academic_coordinator) are restricted to their own
-      // school via Firestore rules — adding the where() here matches the rule
+      // school via Firestore rules â€” adding the where() here matches the rule
       // and avoids partial result sets / permission-denied errors.
       const isAdmin   = userProfile?.role_academichub === 'academic_admin';
       const mySchool  = userProfile?.schoolId || '';
@@ -1315,7 +1315,7 @@
       renderTeacherGrid();
     }
 
-    // ── Render teacher grid ────────────────────────────────────
+    // â”€â”€ Render teacher grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderTeacherGrid() {
       const grid = document.getElementById('teacher-grid');
       grid.innerHTML = '';
@@ -1331,7 +1331,7 @@
         const assArr = Object.values(sub.assessments || {});
         const avgSelf = assArr.length
           ? (assArr.reduce((s, a) => s + (Number(a.selfRating) || 0), 0) / assArr.length).toFixed(1)
-          : '—';
+          : 'â€”';
 
         const statusLabel = sub.status === 'finalized' ? 'Finalized'
           : sub.status === 'evaluated' ? 'Evaluated'
@@ -1342,7 +1342,7 @@
 
         card.innerHTML = `
           <div class="name">${escHtml(info.displayName || sub.email || 'Unknown Teacher')}</div>
-          <div class="meta">${escHtml(info.school || '')}${info.subjects ? ' · ' + escHtml(info.subjects) : ''}</div>
+          <div class="meta">${escHtml(info.school || '')}${info.subjects ? ' Â· ' + escHtml(info.subjects) : ''}</div>
           <div class="status-row">
             <span class="status-pill ${statusClass}">${statusLabel}</span>
             <span class="avg-self">Self avg: <strong>${avgSelf}</strong>/5</span>
@@ -1353,7 +1353,7 @@
       }
     }
 
-    // ── Open evaluation for a submission ───────────────────────
+    // â”€â”€ Open evaluation for a submission â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     async function openEvaluation(sub) {
       // Deselect all cards, select clicked
       document.querySelectorAll('.teacher-card').forEach(c => c.classList.remove('selected'));
@@ -1371,9 +1371,9 @@
       const info = sub.teacherInfo || {};
       document.getElementById('eval-teacher-name').textContent = info.displayName || sub.email || 'Unknown Teacher';
       document.getElementById('eval-teacher-meta').textContent =
-        [info.school, info.subjects, info.classes].filter(Boolean).join(' · ');
-      const periodTypeLabel = selectedPeriod?.type === 'mid-year' ? ' · Mid-Year'
-        : selectedPeriod?.type === 'full-year' ? ' · Full-Year' : '';
+        [info.school, info.subjects, info.classes].filter(Boolean).join(' Â· ');
+      const periodTypeLabel = selectedPeriod?.type === 'mid-year' ? ' Â· Mid-Year'
+        : selectedPeriod?.type === 'full-year' ? ' Â· Full-Year' : '';
       document.getElementById('eval-period-name').textContent = (selectedPeriod?.name || sub.periodName || '') + periodTypeLabel;
 
       // Restore evaluator fields from saved data
@@ -1411,7 +1411,7 @@
       loadMeetingProposal();
     }
 
-    // ── Render KPI accordion ───────────────────────────────────
+    // â”€â”€ Render KPI accordion â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function renderKpiAccordion(sub) {
       const accordion = document.getElementById('kpi-accordion');
       accordion.innerHTML = '';
@@ -1441,12 +1441,12 @@
               <div class="aspect">${escHtml(kpi.aspect || '')}</div>
               <div class="indicator">${escHtml(kpi.indicator || '')}</div>
               ${Array.isArray(kpi.cambridge_standard_refs) && kpi.cambridge_standard_refs.length
-                ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${kpi.cambridge_standard_refs.map(r => `<span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:600;" title="Cambridge Teacher Standards 2023 — ${escHtml(r)}">CTS ${escHtml(r)}</span>`).join('')}</div>`
+                ? `<div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">${kpi.cambridge_standard_refs.map(r => `<span style="font-family:'DM Mono',monospace;font-size:.65rem;padding:2px 6px;background:#ede9fe;color:#5b21b6;border-radius:4px;font-weight:600;" title="Cambridge Teacher Standards 2023 â€” ${escHtml(r)}">CTS ${escHtml(r)}</span>`).join('')}</div>`
                 : ''}
             </span>
             <span class="kpi-ratings">${selfChip}${adminChip}</span>
             <span class="kpi-weight">${kpi.weight || 0}%</span>
-            <span class="chevron">▼</span>
+            <span class="chevron">â–¼</span>
           </button>
           <div class="kpi-body">
             <div class="rating-compare-grid">
@@ -1454,7 +1454,7 @@
               <div class="compare-box self-box">
                 <div class="box-label">Teacher Self-Assessment</div>
                 <div class="rating-stars" id="self-stars-${kpi.id}"></div>
-                <div class="actual-val">Actual: ${escHtml(String(selfData.actualValue || '—'))}</div>
+                <div class="actual-val">Actual: ${escHtml(String(selfData.actualValue || 'â€”'))}</div>
                 <div class="box-text" style="margin-top:6px;">${selfData.strengths ? '<strong>Strengths:</strong> ' + escHtml(selfData.strengths) : ''}</div>
               </div>
               <!-- Admin rating (editable) -->
@@ -1462,7 +1462,7 @@
                 <div class="box-label">Your Evaluation</div>
                 <div class="rating-stars" id="admin-stars-${kpi.id}"></div>
                 <div style="margin-top:6px;">
-                  <label style="font-size:.75rem;color:#6b7280;">Actual Value (admin) ${kpi.target ? `— target: ${escHtml(String(kpi.target))} ${escHtml(kpi.unit||'')}` : ''}</label>
+                  <label style="font-size:.75rem;color:#6b7280;">Actual Value (admin) ${kpi.target ? `â€” target: ${escHtml(String(kpi.target))} ${escHtml(kpi.unit||'')}` : ''}</label>
                   <input type="number" step="0.01" id="admin-actual-${kpi.id}" placeholder="${kpi.unit ? 'Value in ' + escAttr(kpi.unit) : 'Observed value'}" style="width:100%;padding:6px 8px;border:1.5px solid #e5e7eb;border-radius:6px;font-size:.82rem;font-family:inherit;margin-top:4px;"
                     value="${escAttr(String(savedAdmin.administratorActualValue || ''))}" />
                   ${kpi.target ? `<div id="eval-sg-${kpi.id}" style="display:none;margin-top:5px;padding:6px 10px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px dashed;"></div>` : ''}
@@ -1472,27 +1472,27 @@
             <div class="form-fields" style="margin-top:14px;">
               <div class="field-group">
                 <label>Strengths Observed</label>
-                <textarea id="strengths-${kpi.id}" placeholder="Specific strengths observed…">${escHtml(savedAdmin.strengths || '')}</textarea>
+                <textarea id="strengths-${kpi.id}" placeholder="Specific strengths observedâ€¦">${escHtml(savedAdmin.strengths || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Areas for Development</label>
-                <textarea id="areas-${kpi.id}" placeholder="Areas needing improvement…">${escHtml(savedAdmin.areasForDevelopment || '')}</textarea>
+                <textarea id="areas-${kpi.id}" placeholder="Areas needing improvementâ€¦">${escHtml(savedAdmin.areasForDevelopment || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Recommendations</label>
-                <textarea id="recs-${kpi.id}" placeholder="Specific recommendations…">${escHtml(savedAdmin.recommendations || '')}</textarea>
+                <textarea id="recs-${kpi.id}" placeholder="Specific recommendationsâ€¦">${escHtml(savedAdmin.recommendations || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Evidence Reviewed</label>
-                <textarea id="evidence-${kpi.id}" placeholder="Lesson observations, data, portfolios…">${escHtml(savedAdmin.evidenceReviewed || '')}</textarea>
+                <textarea id="evidence-${kpi.id}" placeholder="Lesson observations, data, portfoliosâ€¦">${escHtml(savedAdmin.evidenceReviewed || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Support Provided</label>
-                <textarea id="support-${kpi.id}" placeholder="Support or resources provided…">${escHtml(savedAdmin.supportProvided || '')}</textarea>
+                <textarea id="support-${kpi.id}" placeholder="Support or resources providedâ€¦">${escHtml(savedAdmin.supportProvided || '')}</textarea>
               </div>
               <div class="field-group">
                 <label>Action Plan</label>
-                <textarea id="action-${kpi.id}" placeholder="Agreed action steps…">${escHtml(savedAdmin.actionPlan || '')}</textarea>
+                <textarea id="action-${kpi.id}" placeholder="Agreed action stepsâ€¦">${escHtml(savedAdmin.actionPlan || '')}</textarea>
               </div>
             </div>
             <div class="agreed-row">
@@ -1531,10 +1531,10 @@
               const pct  = Math.round((actual/target)*100);
               const sugg = pct>=105?5:pct>=95?4:pct>=85?3:pct>=70?2:1;
               evalSg.style.cssText = SUGGEST_STYLES[sugg] + 'display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:7px;font-size:.73rem;font-weight:600;cursor:pointer;border:1.5px dashed;';
-              evalSg.textContent = `💡 Suggested: ${sugg}/5 (${SUGGEST_LABELS[sugg]}) — ${pct}% of target. Click to apply.`;
+              evalSg.textContent = `ðŸ’¡ Suggested: ${sugg}/5 (${SUGGEST_LABELS[sugg]}) â€” ${pct}% of target. Click to apply.`;
               evalSg.onclick = () => {
                 buildAdminStars(kpi.id, sugg); // rebuild with new rating
-                // re-run buildAdminStars replaces container content — need direct update instead:
+                // re-run buildAdminStars replaces container content â€” need direct update instead:
                 const c = document.getElementById(`admin-stars-${kpi.id}`);
                 if (c) c.querySelectorAll('.star-btn').forEach(b => {
                   b.classList.toggle('active', Number(b.dataset.val) <= sugg);
@@ -1598,7 +1598,7 @@
       }
     }
 
-    // ── Development Goals ──────────────────────────────────────
+    // â”€â”€ Development Goals â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     let goals = [];
 
     function renderGoals() {
@@ -1621,12 +1621,12 @@
           <div class="goal-card-header">
             <span class="goal-num">${i + 1}</span>
             <span>Development Goal ${i + 1}</span>
-            ${goals.length > 1 ? `<button class="btn-del-goal" data-idx="${i}">✕ Remove</button>` : ''}
+            ${goals.length > 1 ? `<button class="btn-del-goal" data-idx="${i}">âœ• Remove</button>` : ''}
           </div>
           <div class="goal-fields">
             <div class="field-group" style="grid-column:1/-1">
               <label>Goal</label>
-              <textarea data-field="goal" data-idx="${i}" rows="2" placeholder="Describe the development goal…">${escHtml(g.goal || '')}</textarea>
+              <textarea data-field="goal" data-idx="${i}" rows="2" placeholder="Describe the development goalâ€¦">${escHtml(g.goal || '')}</textarea>
             </div>
             <div class="field-group">
               <label>Timeline</label>
@@ -1634,7 +1634,7 @@
             </div>
             <div class="field-group">
               <label>Support Needed</label>
-              <input type="text" data-field="support" data-idx="${i}" placeholder="Resources or support…" value="${escAttr(g.support || '')}" />
+              <input type="text" data-field="support" data-idx="${i}" placeholder="Resources or supportâ€¦" value="${escAttr(g.support || '')}" />
             </div>
             <div class="field-group" style="grid-column:1/-1">
               <label>Success Criteria</label>
@@ -1668,7 +1668,7 @@
       renderGoalCards();
     });
 
-    // ── Overall recommendation buttons ─────────────────────────
+    // â”€â”€ Overall recommendation buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     document.querySelectorAll('.rec-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         overallRecommendation = btn.dataset.rec;
@@ -1677,7 +1677,7 @@
       });
     });
 
-    // ── Summary stats ──────────────────────────────────────────
+    // â”€â”€ Summary stats â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function updateSummary() {
       if (!kpiConfig.length) return;
       let selfTotal = 0, selfCount = 0, adminTotal = 0, adminCount = 0;
@@ -1696,19 +1696,19 @@
         }
       }
 
-      const avgSelf  = selfCount  ? (selfTotal  / selfCount).toFixed(1)  : '—';
-      const avgAdmin = adminCount ? (adminTotal / adminCount).toFixed(1) : '—';
+      const avgSelf  = selfCount  ? (selfTotal  / selfCount).toFixed(1)  : 'â€”';
+      const avgAdmin = adminCount ? (adminTotal / adminCount).toFixed(1) : 'â€”';
       const diff     = (selfCount && adminCount)
         ? (Math.abs(adminTotal / adminCount - selfTotal / selfCount)).toFixed(1)
-        : '—';
+        : 'â€”';
 
-      document.getElementById('avg-self-rating').textContent  = avgSelf  !== '—' ? avgSelf  + '/5' : '—';
-      document.getElementById('avg-admin-rating').textContent = avgAdmin !== '—' ? avgAdmin + '/5' : '—';
+      document.getElementById('avg-self-rating').textContent  = avgSelf  !== 'â€”' ? avgSelf  + '/5' : 'â€”';
+      document.getElementById('avg-admin-rating').textContent = avgAdmin !== 'â€”' ? avgAdmin + '/5' : 'â€”';
       document.getElementById('avg-diff').textContent         = diff;
       document.getElementById('kpi-completed').textContent    = `${adminCount}/${kpiConfig.length}`;
     }
 
-    // ── Collect eval data from DOM ─────────────────────────────
+    // â”€â”€ Collect eval data from DOM â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function collectEvalData() {
       const kpiEvaluations = {};
       for (const kpi of kpiConfig) {
@@ -1754,7 +1754,7 @@
       };
     }
 
-    // ── Save draft ─────────────────────────────────────────────
+    // â”€â”€ Save draft â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     document.getElementById('btn-save').addEventListener('click', () => saveEvaluation('draft'));
     document.getElementById('btn-finalize').addEventListener('click', () => {
       if (!overallRecommendation) {
@@ -1770,7 +1770,7 @@
         ? document.getElementById('btn-finalize')
         : document.getElementById('btn-save');
       btn.disabled = true;
-      setStatus('Saving…', '');
+      setStatus('Savingâ€¦', '');
 
       try {
         const data = collectEvalData();
@@ -1816,7 +1816,7 @@
       if (cls === 'saved') setTimeout(() => { el.textContent = ''; el.className = 'save-status'; }, 3000);
     }
 
-    // ── Meeting Scheduler ─────────────────────────────────────
+    // â”€â”€ Meeting Scheduler â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Called after a submission is selected in the eval panel
     async function loadMeetingProposal() {
       if (!activeSubmission?.id) return;
@@ -1835,9 +1835,9 @@
           if (p.location)     document.getElementById('meetingLocation').value = p.location || '';
           if (p.note)         document.getElementById('meetingNote').value = p.note || '';
           // Show existing status
-          const statusText = p.status === 'confirmed' ? '✅ Teacher confirmed this meeting'
-            : p.status === 'declined' ? '❌ Teacher declined — update and resend'
-            : '⏳ Awaiting teacher response';
+          const statusText = p.status === 'confirmed' ? 'âœ… Teacher confirmed this meeting'
+            : p.status === 'declined' ? 'âŒ Teacher declined â€” update and resend'
+            : 'â³ Awaiting teacher response';
           const pill = document.getElementById('meetingExistingPill');
           pill.textContent = statusText;
           document.getElementById('meetingExistingWrap').style.display = 'block';
@@ -1867,7 +1867,7 @@
 
       const btn = document.getElementById('meetingModalSend');
       btn.disabled = true;
-      btn.textContent = 'Sending…';
+      btn.textContent = 'Sendingâ€¦';
 
       try {
         const proposalData = {
@@ -1897,7 +1897,7 @@
         setStatus('Meeting proposal sent to teacher!', 'saved');
         // Refresh existing pill
         const pill = document.getElementById('meetingExistingPill');
-        pill.textContent = '⏳ Awaiting teacher response';
+        pill.textContent = 'â³ Awaiting teacher response';
         document.getElementById('meetingExistingWrap').style.display = 'block';
       } catch (err) {
         console.error(err);
@@ -1908,7 +1908,7 @@
       }
     });
 
-    // ── Helpers ────────────────────────────────────────────────
+    // â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     function escHtml(str) {
       return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     }

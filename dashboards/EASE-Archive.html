@@ -852,7 +852,7 @@ function renderExamList() {
   el.innerHTML = S.filtered.map(ex => {
     const avg = ex.average > 0 ? ex.average : null;
     const isActive = S.exam && S.exam.id === ex.id;
-    return `<div class="exam-card${isActive ? ' active' : ''}" id="ec-${ex.id}" onclick="onExamClick(${ex.id})">
+    return `<div role="button" tabindex="0" class="exam-card${isActive ? ' active' : ''}" id="ec-${ex.id}" onclick="onExamClick(${ex.id})">
       <div class="ec-top">
         <div class="ec-name">${ex.name}</div>
         <span class="g-tag">G${ex.grade}</span>

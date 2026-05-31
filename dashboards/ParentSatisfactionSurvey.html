@@ -681,7 +681,7 @@
         domains.forEach(([d, data]) => {
           const pct = (data.avg / 5) * 100;
           const uid = "dom_" + d.replace(/\s/g, "");
-          html += `<div class="domain-bar" style="cursor:pointer;flex-wrap:wrap" onclick="toggleDomainDetail('${uid}',this)">
+          html += `<div role="button" tabindex="0" class="domain-bar" style="cursor:pointer;flex-wrap:wrap" onclick="toggleDomainDetail('${uid}',this)">
             <div class="domain-label">${d}</div>
             <div class="domain-progress"><div class="domain-progress-fill" style="width:${pct}%;background:${getScoreColor(data.avg)}">${data.avg.toFixed(2)}</div></div>
             <span id="${uid}-arrow" style="font-size:11px;color:#aaa;margin-left:8px">â–¼ ${data.questions ? data.questions.length : 0} questions</span>
