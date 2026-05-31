@@ -110,6 +110,7 @@
         <button class="ref-facet" data-cat="eduversalStandards" role="tab" aria-selected="false"><span>Eduversal Standards</span><span class="count" id="cntEduversalStandards">0</span></button>
         <button class="ref-facet" data-cat="organization" role="tab" aria-selected="false"><span>Organization</span><span class="count" id="cntOrganization">0</span></button>
         <button class="ref-facet" data-cat="aicf" role="tab" aria-selected="false"><span>AI Framework</span><span class="count" id="cntAicf">0</span></button>
+        <button class="ref-facet" data-cat="pd" role="tab" aria-selected="false"><span>PD &amp; Facilitation</span><span class="count" id="cntPd">0</span></button>
       </div>
     </div>
   </div>
@@ -191,6 +192,16 @@
         <p class="ref-section-blurb">Eduversal AI Competency Framework v1.0 — verbatim reference layer (Teacher / Student / Institutional matrices + UNESCO alignment) plus a practical layer (role-aware playbooks, prompt library, red lines, decision trees, weekly tips, classroom activities). School leadership reads <strong>Part 3 (Institutional Maturity)</strong> for school AI strategy + the Leader Playbook for day-to-day practice.</p>
       </summary>
       <div class="ref-grid" id="gridAicf"></div>
+    </details>
+
+    <details class="ref-section" data-cat="pd">
+      <summary class="ref-section-head">
+        <span class="ref-section-caret" aria-hidden="true">▸</span>
+        <h2 class="ref-section-title">PD &amp; Facilitation</h2>
+        <span class="ref-section-count" data-count-for="pd">0</span>
+        <p class="ref-section-blurb">Facilitator-led professional-development delivery materials — session guides (timed run-of-show), participant one-pagers, slide-deck outlines, and calibration workbooks for school-leadership PD. ESL/EAL English (CEFR B1–B2). These package the live frameworks into facilitated sessions; they never restate the frameworks themselves.</p>
+      </summary>
+      <div class="ref-grid" id="gridPd"></div>
     </details>
 
     <div class="ref-results-empty" id="refResultsEmpty">
@@ -338,6 +349,22 @@
         { id: 'aicf-decision-trees',      title: 'AICF Decision Trees',                        desc: '9 step-by-step decision trees for ambiguous situations: should-I-use-AI, which-tool, suspected student AI submission, parent asks about AI, staff misuse, school adopting a new tool, etc.',                kind: 'json', path: 'aicf/decision-trees.json',      meta: ['JSON', '9 trees'] },
         { id: 'aicf-weekly-tips',         title: 'AICF Weekly Tips · 34 effective weeks',      desc: 'One small AI move per week, calibrated to the Eduversal Indonesian Cambridge 34-week academic year. Cross-linked to existing weekly-checklist task IDs.',                                                kind: 'json', path: 'aicf/weekly-tips.json',         meta: ['JSON', '34 weeks'] },
         { id: 'aicf-classroom-activities',title: 'AICF Classroom Activities · 11 lesson outlines', desc: '11 ready-to-run lesson outlines for student AI literacy across 3 age bands. Each carries learning objective + lesson flow + materials + assessment idea + red-line guardrails.',                  kind: 'json', path: 'aicf/classroom-activities.json', meta: ['JSON', '11 activities'] },
+      ],
+      pd: [
+        // Shared scaffolding + cross-tier one-pager
+        { id: 'pd-readme',                  title: 'PD Corpus · README + Index',              desc: 'What the PD delivery corpus is + the index + authoring rules (ESL/EAL, citation discipline) + verified framework figures.',                                                                kind: 'md', path: 'pd/README.md',                           meta: ['MD', 'entry point'] },
+        { id: 'pd-facilitator-conventions', title: 'Facilitator Conventions · Shared Playbook', desc: 'The shared standard for every PD session — ESL/EAL English rule, the 5-block timing model, face-to-face vs online variants, opening frames, exit tickets, Glow/Grow/Go.',                  kind: 'md', path: 'pd/facilitator-conventions.md',          meta: ['MD', 'binding'] },
+        { id: 'pd-program-map',             title: 'July PD Program Map · The Whole Arc',      desc: 'The planning view: which session for which audience, in what order, a priority guide if time is short, F2F/online modes, the after-July follow-up loop.',                                kind: 'md', path: 'pd/july-pd-program-map.md',              meta: ['MD', 'planning'] },
+        { id: 'pd-three-systems',           title: 'Three Rating Systems · At a Glance',       desc: 'Participant one-pager — KPI vs Appraisal vs Competency: who owns each, the scale, does it score me, how they relate, the shared Cambridge backbone.',                                    kind: 'md', path: 'pd/three-rating-systems-at-a-glance.md',  meta: ['MD', 'one-pager'] },
+        { id: 'pd-deck-three-systems',      title: 'Slide Deck · Three Rating Systems',        desc: 'Slide-shaped outline (11 slides) for the Three Rating Systems session — bullets + speaker notes + visual suggestions.',                                                                kind: 'md', path: 'pd/slides/deck-three-rating-systems.md',  meta: ['MD', 'slides'] },
+        // Leaders tier (AH leadership audience)
+        { id: 'pd-onepager-leadership-map', title: 'Leadership Evaluation Map · One-Pager',    desc: 'Two-hats-one-backbone map: what a leader evaluates (teacher KPI / Appraisal / Walkthroughs / Competency) vs what evaluates them (leadership competency + principal evaluation).',          kind: 'md', path: 'pd/leaders/onepager-leadership-evaluation-map.md', meta: ['MD', 'one-pager'] },
+        { id: 'pd-session-calibration',     title: 'Observer Calibration (F2) · Session',      desc: '120-min facilitator guide: score F2 the same way across schools — evidence not impression, reading the rubric (3 vs 4), score-alone-then-reconcile, the three traps. Protects the 50%-weighted observation.', kind: 'md', path: 'pd/leaders/session-observer-calibration-f2.md', meta: ['MD', 'session', 'high-priority'] },
+        { id: 'pd-workbook-calibration',    title: 'F2 Calibration Exercise · Workbook',       desc: 'Hands-on workbook: the exact F2 rubric extracts, two lesson vignettes (clear + borderline), score-and-reconcile tables, the three traps, facilitator answer notes.',                     kind: 'md', path: 'pd/leaders/workbook-f2-calibration-exercise.md', meta: ['MD', 'workbook'] },
+        { id: 'pd-session-coaching',        title: 'Coaching Your Teachers · Glow/Grow/Go',    desc: '120-min facilitator guide: post-observation feedback that changes practice — one Glow, one Grow, one Go tied to evidence, plus GROW questions. Pairs with F2 calibration.',              kind: 'md', path: 'pd/leaders/session-coaching-glow-grow-go.md', meta: ['MD', 'session', 'high-priority'] },
+        { id: 'pd-session-kpi-targets',     title: 'Setting Teacher KPI Targets · Session',    desc: '120-min facilitator guide: set weight profiles that signal real priorities (not all-equal), and run agreed-not-assigned target conversations.',                                          kind: 'md', path: 'pd/leaders/session-kpi-target-setting.md', meta: ['MD', 'session'] },
+        { id: 'pd-session-leadership-comp', title: 'Your Leadership Competency · Session',     desc: '90-min guided self-assessment of the 6 leaders-track domains on the 4-level ladder, with the evidence habit. Leaders model the honesty they ask of teachers.',                          kind: 'md', path: 'pd/leaders/session-leadership-competency.md', meta: ['MD', 'session'] },
+        { id: 'pd-deck-calibration',        title: 'Slide Deck · Observer Calibration (F2)',  desc: 'Slide-shaped outline (11 slides) for the F2 observer-calibration session.',                                                                                                            kind: 'md', path: 'pd/slides/deck-observer-calibration.md', meta: ['MD', 'slides'] },
       ],
     };
 
