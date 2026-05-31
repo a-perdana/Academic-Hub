@@ -52,7 +52,7 @@ const A11Y_WRAPPER_PATTERNS = [
 ];
 function injectA11y(html, fileBase) {
   if (A11Y_SKIP_FILES.has(fileBase)) return html;
-  if (/class="skip-link"/.test(html) || /id="main-content"/.test(html)) return html;
+  if (/class="skip-link"/.test(html)) return html;
   const SKIP = '<a class="skip-link" href="#main-content">Skip to main content</a>\n';
   const LANDMARK = ' id="main-content" role="main" tabindex="-1"';
   let out = html.replace(/(<body\b[^>]*>)/, `$1\n${SKIP}`);
