@@ -260,7 +260,7 @@ body:has(> .page-footer) > .page-wrap {
   <div class="filter-bar">
     <label>Academic year</label>
     <select id="yearFilter">
-      <option value="2026-2027" selected>2026-2027</option>
+      <option value="2026-2027">2026-2027</option>
       <option value="2025-2026">2025-2026</option>
     </select>
     <label>Status</label>
@@ -360,6 +360,18 @@ document.addEventListener('authReady', async ({ detail } = {}) => {
   if (!state.schoolId) {
     document.getElementById('listContainer').innerHTML = '<div class="empty-state">Your account is not linked to a school yet. Contact the Eduversal Academic Directorate.</div>';
     return;
+  }
+  // Default filter year from the single source of truth (calendar_settings/current).
+  state.filterYear = (window.getCurrentAcademicYear && window.getCurrentAcademicYear())
+    || (() => { const n = new Date(), y = n.getFullYear(); return n.getMonth() >= 6 ? `${y}-${y+1}` : `${y-1}-${y}`; })();
+  const yfEl = document.getElementById('yearFilter');
+  if (yfEl) {
+    if (![...yfEl.options].some(o => o.value === state.filterYear)) {
+      const o = document.createElement('option');
+      o.value = state.filterYear; o.textContent = state.filterYear;
+      yfEl.insertBefore(o, yfEl.firstChild);
+    }
+    yfEl.value = state.filterYear;
   }
   await loadRows();
   document.getElementById('yearFilter').onchange = (e) => { state.filterYear = e.target.value; loadRows(); };

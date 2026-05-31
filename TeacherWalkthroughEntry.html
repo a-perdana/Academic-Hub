@@ -1424,12 +1424,17 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   const db = window.db;
 
-  // Populate year selector
+  // Populate year selector. teacher_walkthroughs uses the slash format `2025/2026`.
+  // Current year comes from calendar_settings/current (single source of truth);
+  // older years stay selectable. Anchor the range on the current start year.
   const yearSel = document.getElementById('academicYear');
-  const yr = new Date().getFullYear();
-  for (let i = yr; i >= yr-3; i--) {
+  const curLabel = (window.getCurrentAcademicYear && window.getCurrentAcademicYear())
+    || (() => { const n = new Date(), yy = n.getFullYear(); return n.getMonth() >= 6 ? `${yy}-${yy+1}` : `${yy-1}-${yy}`; })();
+  const startY = Number(curLabel.slice(0, 4));
+  for (let i = startY; i >= startY-3; i--) {
     const o = document.createElement('option');
     o.value = `${i}/${i+1}`; o.textContent = `${i}/${i+1}`;
+    if (i === startY) o.selected = true;
     yearSel.appendChild(o);
   }
 

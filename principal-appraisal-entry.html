@@ -314,10 +314,12 @@ import { collection, doc, getDoc, setDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // URL params: ?principalUid=X[&academicYear=2025-2026]
+// ACADEMIC_YEAR/DOC_ID are finalised in authReady from the single source of
+// truth (calendar_settings/current) unless the URL pins a specific year.
 const params = new URLSearchParams(window.location.search);
 const PRINCIPAL_UID = params.get('principalUid');
-const ACADEMIC_YEAR = params.get('academicYear') || '2025-2026';
-const DOC_ID = PRINCIPAL_UID ? `${PRINCIPAL_UID}_${ACADEMIC_YEAR}` : null;
+let ACADEMIC_YEAR = params.get('academicYear') || '';
+let DOC_ID = null;
 
 let framework = null;
 let principal = null;
@@ -349,6 +351,13 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     showAccessDenied('Missing principalUid in URL. Open this form from the principal\'s record or the appraisal cycle.');
     return;
   }
+
+  // Finalise academic year: URL param wins; otherwise calendar_settings/current.
+  if (!ACADEMIC_YEAR) {
+    ACADEMIC_YEAR = (window.getCurrentAcademicYear && window.getCurrentAcademicYear())
+      || (() => { const n = new Date(), y = n.getFullYear(); return n.getMonth() >= 6 ? `${y}-${y+1}` : `${y-1}-${y}`; })();
+  }
+  DOC_ID = `${PRINCIPAL_UID}_${ACADEMIC_YEAR}`;
 
   try {
     // Fetch the framework cross-origin from CH /references-data
