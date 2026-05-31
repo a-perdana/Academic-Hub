@@ -327,6 +327,17 @@ htmlFiles.forEach((file) => {
     }
   }
 
+  // A11Y (WCAG 2.1.1 Keyboard): inject keyboard-enabler.js on every page —
+  // global Enter/Space -> click for role="button" non-native elements. Defer.
+  if (!/<script\s[^>]*src=["']\/?keyboard-enabler\.js["']/.test(html)) {
+    const kClose = html.lastIndexOf('</body>');
+    if (kClose >= 0) {
+      html = html.slice(0, kClose)
+        + '<script src="/keyboard-enabler.js" defer></script>\n'
+        + html.slice(kClose);
+    }
+  }
+
   // 3. Write to dist using the slug name so Vercel cleanUrls serves the
   //    correct path (e.g. cambridge-pathway.html -> /cambridge-pathway).
   //    Files whose slug matches their base name (e.g. announcements.html)
@@ -620,3 +631,9 @@ Object.keys(replacements).forEach((key) => {
 });
 
 
+
+// -- Copy keyboard-enabler.js (A11Y WCAG 2.1.1 — build-injected per page)
+if (fs.existsSync("keyboard-enabler.js")) {
+  fs.copyFileSync("keyboard-enabler.js", path.join("dist", "keyboard-enabler.js"));
+  console.log("Copied: keyboard-enabler.js");
+}
