@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EASE Archive â€” Academic Hub</title>
+  <title>EASE Archive — Academic Hub</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 
   <script src="firebase-config.js"></script>
@@ -22,7 +22,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
   <style>
-    /* â”€â”€ Reset & Tokens â”€â”€ */
+    /* ── Reset & Tokens ── */
     :root {
       --bg:         #070d17;
       --bg2:        #0e1724;
@@ -51,7 +51,7 @@
       overflow-x: hidden;
       }
 
-    /* â”€â”€ Animated Background â”€â”€ */
+    /* ── Animated Background ── */
     .bg-layer {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
     }
@@ -67,14 +67,14 @@
       66%  { transform: translate(-20px, 20px) scale(0.96); }
     }
 
-    /* â”€â”€ Layout â”€â”€ */
+    /* ── Layout ── */
     .dashboard {
       position: relative; z-index: 1;
       max-width: 1720px; margin: 0 auto;
       padding: 2rem 2rem 6rem;
     }
 
-    /* â”€â”€ Header â”€â”€ */
+    /* ── Header ── */
     .header {
       margin-bottom: 1.75rem;
       padding-bottom: 1.5rem;
@@ -116,7 +116,7 @@
     }
     .header-sub { font-size: 0.875rem; color: var(--text2); }
 
-    /* â”€â”€ Filter Bar â”€â”€ */
+    /* ── Filter Bar ── */
     .filter-bar {
       display: flex; gap: 1rem; align-items: flex-end;
       flex-wrap: wrap; margin-bottom: 1.5rem;
@@ -156,7 +156,7 @@
       color: var(--text3); pointer-events: none;
     }
 
-    /* â”€â”€ Stats Row â”€â”€ */
+    /* ── Stats Row ── */
     .stats-row {
       display: grid; grid-template-columns: repeat(4, 1fr);
       gap: 1rem; margin-bottom: 1.5rem;
@@ -174,14 +174,14 @@
     }
     .stat-lbl { font-size: 0.76rem; color: var(--text2); font-weight: 500; }
 
-    /* â”€â”€ Main Layout â”€â”€ */
+    /* ── Main Layout ── */
     .main-layout {
       display: grid;
       grid-template-columns: 370px 1fr;
       gap: 1.25rem; align-items: start;
     }
 
-    /* â”€â”€ Exam Panel â”€â”€ */
+    /* ── Exam Panel ── */
     .exam-panel {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 14px; overflow: hidden;
@@ -273,7 +273,7 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* â”€â”€ Analysis Panel â”€â”€ */
+    /* ── Analysis Panel ── */
     .analysis-panel {
       background: var(--card); border: 1px solid var(--border);
       border-radius: 14px; min-height: 500px;
@@ -384,7 +384,7 @@
       padding: 0.16rem 0.48rem; border-radius: 4px; display: inline-block;
     }
 
-    /* â”€â”€ Responsive â”€â”€ */
+    /* ── Responsive ── */
     @media (max-width: 1100px) {
       .main-layout { grid-template-columns: 320px 1fr; }
     }
@@ -401,7 +401,7 @@
       .stats-row { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* â”€â”€ FAB â”€â”€ (hidden 2026-05-22 â€” dashboards are chrome-less, FAB feedback
+    /* ── FAB ── (hidden 2026-05-22 — dashboards are chrome-less, FAB feedback
        is an AH-specific surface that visiting TH/CH users shouldn't see.
        Markup + script left intact in case auth-aware re-enable is wanted later.) */
     .fab-container { display: none !important; }
@@ -521,7 +521,7 @@
       <span class="live-badge"><span class="live-dot"></span>Live API</span>
     </div>
     <h1 class="header-title">EASE Assessment Archive</h1>
-    <p class="header-sub">Real-time network data Â· All partner schools Â· Eduversal Indonesia</p>
+    <p class="header-sub">Real-time network data · All partner schools · Eduversal Indonesia</p>
   </header>
 
   <!-- Filter Bar -->
@@ -545,14 +545,14 @@
     <div class="fg search-wrap">
       <label>Search</label>
       <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input aria-label="Subject or gradeâ€¦" type="text" id="searchInput" placeholder="Subject or gradeâ€¦">
+      <input aria-label="Subject or grade…" type="text" id="searchInput" placeholder="Subject or grade…">
     </div>
   </div>
 
   <!-- Stats -->
   <div class="stats-row">
     <div class="stat-card">
-      <div class="stat-val" id="sExams">â€”</div>
+      <div class="stat-val" id="sExams">—</div>
       <div class="stat-lbl">Total Exams</div>
     </div>
     <div class="stat-card">
@@ -560,11 +560,11 @@
       <div class="stat-lbl">Partner Schools</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val" id="sSubjects">â€”</div>
+      <div class="stat-val" id="sSubjects">—</div>
       <div class="stat-lbl">Subjects</div>
     </div>
     <div class="stat-card">
-      <div class="stat-val" id="sGrades">â€”</div>
+      <div class="stat-val" id="sGrades">—</div>
       <div class="stat-lbl">Grade Levels</div>
     </div>
   </div>
@@ -576,7 +576,7 @@
     <div class="exam-panel">
       <div class="panel-hd">
         <span class="panel-title">Exam Browser</span>
-        <span class="count-badge" id="cntBadge">â€”</span>
+        <span class="count-badge" id="cntBadge">—</span>
       </div>
       <div class="panel-filters">
         <div class="subject-tabs" id="subjectTabs">
@@ -587,14 +587,14 @@
         </div>
       </div>
       <div class="exam-list" id="examList">
-        <div class="state-msg"><div class="spinner"></div><span>Loading examsâ€¦</span></div>
+        <div class="state-msg"><div class="spinner"></div><span>Loading exams…</span></div>
       </div>
     </div>
 
     <!-- Analysis -->
     <div class="analysis-panel" id="analysisPanel">
       <div class="empty-state" id="emptyState">
-        <div class="empty-ico">ðŸ“Š</div>
+        <div class="empty-ico">📊</div>
         <div class="empty-ttl">Select an Exam</div>
         <div class="empty-sub">Choose any exam from the browser to view network-wide analysis and school-level drill-down.</div>
       </div>
@@ -638,7 +638,7 @@
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackSubject">Subject</label>
       <select class="feedback-select" id="fabFeedbackSubject">
-        <option value="">â€” select â€”</option>
+        <option value="">— select —</option>
         <option value="bug">Bug / Issue</option>
         <option value="feature">Feature Request</option>
         <option value="content">Content Update</option>
@@ -648,7 +648,7 @@
     </div>
     <div class="feedback-field">
       <label class="feedback-label" for="fabFeedbackMessage">Message</label>
-      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedbackâ€¦"></textarea>
+      <textarea class="feedback-textarea" id="fabFeedbackMessage" placeholder="Describe your feedback…"></textarea>
     </div>
     <button class="feedback-submit-btn" id="fabFeedbackSubmitBtn">Send Feedback</button>
     <div class="feedback-status" id="fabFeedbackStatus"></div>
@@ -687,7 +687,7 @@
 <script>
 'use strict';
 
-/* â”€â”€ API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── API ─────────────────────────────────────────── */
 const API  = 'https://edunav.net/api/eduversal';
 const TK   = 'Kx9mP!vL8@F1*FVFS!zF5$uY3!bE6*tB10';
 
@@ -702,7 +702,7 @@ async function apiFetch(endpoint, params = {}) {
   return res.json();
 }
 
-/* â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── State ───────────────────────────────────────── */
 const S = {
   schools:   [],
   exams:     [],
@@ -715,7 +715,7 @@ const S = {
   filters:   { year:'2024/2025', group:'ease1', subject:'', grade:'', search:'' },
 };
 
-/* â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Helpers ─────────────────────────────────────── */
 const sub = name => (name || '').replace(/\s+\d+$/, '').trim();
 
 function scClass(v) {
@@ -730,7 +730,7 @@ function scColor(v) {
   return '#ef4444';
 }
 function fDate(d) {
-  if (!d) return 'â€”';
+  if (!d) return '—';
   return new Date(d).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
 }
 function dChart(key) {
@@ -740,7 +740,7 @@ function schoolName(id) {
   return S.schools.find(s => s.id == id)?.name || `School ${id}`;
 }
 
-/* â”€â”€ Load Schools â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Load Schools ────────────────────────────────── */
 async function loadSchools() {
   try {
     const r = await apiFetch('schools');
@@ -749,10 +749,10 @@ async function loadSchools() {
   } catch (e) { console.warn('Schools load failed:', e); }
 }
 
-/* â”€â”€ Load Exams â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Load Exams ──────────────────────────────────── */
 async function loadExams() {
   document.getElementById('examList').innerHTML =
-    '<div class="state-msg"><div class="spinner"></div><span>Loading examsâ€¦</span></div>';
+    '<div class="state-msg"><div class="spinner"></div><span>Loading exams…</span></div>';
   S.exam = null;
   resetExamStats();
   hideDetail();
@@ -776,15 +776,15 @@ async function loadExams() {
 }
 
 function resetExamStats() {
-  ['sExams','sSubjects','sGrades'].forEach(id => document.getElementById(id).textContent = 'â€”');
-  document.getElementById('cntBadge').textContent = 'â€”';
+  ['sExams','sSubjects','sGrades'].forEach(id => document.getElementById(id).textContent = '—');
+  document.getElementById('cntBadge').textContent = '—';
 }
 function hideDetail() {
   document.getElementById('emptyState').style.display = '';
   document.getElementById('detailContent').style.display = 'none';
 }
 
-/* â”€â”€ Build Filters â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Build Filters ───────────────────────────────── */
 function buildSubjectFilter() {
   const subs = [...new Set(S.exams.map(e => sub(e.name)))].sort();
   const el = document.getElementById('subjectTabs');
@@ -842,7 +842,7 @@ function updateTopStats() {
   document.getElementById('sGrades').textContent   = new Set(S.exams.map(e => e.grade)).size;
 }
 
-/* â”€â”€ Render Exam List â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Render Exam List ────────────────────────────── */
 function renderExamList() {
   const el = document.getElementById('examList');
   if (!S.filtered.length) {
@@ -868,7 +868,7 @@ function renderExamList() {
         </span>
         <span class="ec-mi">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          ${ex.duration ? ex.duration + ' min' : 'â€”'}
+          ${ex.duration ? ex.duration + ' min' : '—'}
         </span>
         <span class="spill ${scClass(avg)}" style="margin-left:auto">${avg ? avg.toFixed(1) : 'N/A'}</span>
       </div>
@@ -876,7 +876,7 @@ function renderExamList() {
   }).join('');
 }
 
-/* â”€â”€ Exam Click â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Exam Click ──────────────────────────────────── */
 window.onExamClick = function(id) {
   const exam = S.exams.find(e => e.id === id);
   if (!exam) return;
@@ -888,7 +888,7 @@ window.onExamClick = function(id) {
   fetchNetworkComparison(exam);
 };
 
-/* â”€â”€ Detail Shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Detail Shell ────────────────────────────────── */
 function buildDetailShell(exam) {
   document.getElementById('emptyState').style.display  = 'none';
   const dc = document.getElementById('detailContent');
@@ -915,7 +915,7 @@ function buildDetailShell(exam) {
       </span>
       <span class="det-mi">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        ${exam.duration || 'â€”'} min
+        ${exam.duration || '—'} min
       </span>
       <span class="det-mi">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -928,41 +928,41 @@ function buildDetailShell(exam) {
   <div class="school-bar">
     <span class="school-bar-lbl">Drill into a school:</span>
     <select id="scSelect" class="fselect" style="min-width:210px">
-      <option value="">â€” Select School â€”</option>
+      <option value="">— Select School —</option>
       ${schoolOpts}
     </select>
     <span id="scLoadInd" style="display:none;font-size:.8rem;color:var(--text2);display:none;align-items:center;gap:.5rem">
-      <span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Loadingâ€¦
+      <span class="spinner" style="width:14px;height:14px;border-width:2px"></span> Loading…
     </span>
   </div>
 
   <!-- Detail Stats -->
   <div class="det-stats">
-    <div class="ds-card"><div class="ds-val c-teal"  id="dsp">â€”</div><div class="ds-lbl">Participants</div></div>
-    <div class="ds-card"><div class="ds-val c-amber" id="dsa">â€”</div><div class="ds-lbl">Average Score</div></div>
-    <div class="ds-card"><div class="ds-val c-green" id="dsh">â€”</div><div class="ds-lbl">Highest Score</div></div>
-    <div class="ds-card"><div class="ds-val c-red"   id="dsl">â€”</div><div class="ds-lbl">Lowest Score</div></div>
+    <div class="ds-card"><div class="ds-val c-teal"  id="dsp">—</div><div class="ds-lbl">Participants</div></div>
+    <div class="ds-card"><div class="ds-val c-amber" id="dsa">—</div><div class="ds-lbl">Average Score</div></div>
+    <div class="ds-card"><div class="ds-val c-green" id="dsh">—</div><div class="ds-lbl">Highest Score</div></div>
+    <div class="ds-card"><div class="ds-val c-red"   id="dsl">—</div><div class="ds-lbl">Lowest Score</div></div>
   </div>
 
   <!-- Network Comparison -->
   <div class="sect" id="netSect">
     <div class="sect-title">Network Comparison</div>
     <div id="netContent">
-      <div class="cmp-loading"><div class="spinner"></div><span>Fetching data from all ${S.schools.length} schoolsâ€¦</span></div>
+      <div class="cmp-loading"><div class="spinner"></div><span>Fetching data from all ${S.schools.length} schools…</span></div>
     </div>
   </div>
 
   <!-- School Charts (hidden until school selected) -->
   <div id="schoolCharts" style="display:none">
     <div class="sect" style="border-top:1px solid var(--border)">
-      <div class="sect-title">School Analysis Â· <span class="sect-title-name" id="scName">â€”</span></div>
+      <div class="sect-title">School Analysis · <span class="sect-title-name" id="scName">—</span></div>
       <div class="charts-2">
         <div class="chart-card">
           <div class="cc-title">Score Distribution</div>
           <div style="position:relative;height:200px"><canvas id="distCvs"></canvas></div>
         </div>
         <div class="chart-card">
-          <div class="cc-title">Bloom's Taxonomy â€” Avg Correct Rate by Cognitive Level</div>
+          <div class="cc-title">Bloom's Taxonomy — Avg Correct Rate by Cognitive Level</div>
           <div style="position:relative;height:200px"><canvas id="bloomsCvs"></canvas></div>
         </div>
       </div>
@@ -994,7 +994,7 @@ function buildDetailShell(exam) {
   });
 }
 
-/* â”€â”€ Network Comparison â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Network Comparison ──────────────────────────── */
 async function fetchNetworkComparison(exam) {
   const results = await Promise.allSettled(
     S.schools.map(sc =>
@@ -1067,7 +1067,7 @@ function renderNetworkChart(data) {
               return [
                 ` Avg Score : ${d.avg.toFixed(1)}`,
                 ` Participants : ${d.count}`,
-                ` Highest : ${isFinite(d.high) ? d.high.toFixed(1) : 'â€”'}  /  Lowest : ${isFinite(d.low) ? d.low.toFixed(1) : 'â€”'}`,
+                ` Highest : ${isFinite(d.high) ? d.high.toFixed(1) : '—'}  /  Lowest : ${isFinite(d.low) ? d.low.toFixed(1) : '—'}`,
               ];
             },
           },
@@ -1084,7 +1084,7 @@ function renderNetworkChart(data) {
   });
 }
 
-/* â”€â”€ School Detail â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── School Detail ───────────────────────────────── */
 async function loadSchoolDetail(examId, schoolId) {
   const ind = document.getElementById('scLoadInd');
   if (ind) { ind.style.display = 'inline-flex'; }
@@ -1106,10 +1106,10 @@ async function loadSchoolDetail(examId, schoolId) {
 
     document.getElementById('dsp').textContent = count;
     const avgEl = document.getElementById('dsa');
-    avgEl.textContent = avg ? avg.toFixed(1) : 'â€”';
+    avgEl.textContent = avg ? avg.toFixed(1) : '—';
     avgEl.style.color = avg ? scColor(avg) : 'var(--amber)';
-    document.getElementById('dsh').textContent = isFinite(high) && high > 0 ? high.toFixed(1) : 'â€”';
-    document.getElementById('dsl').textContent = isFinite(low)  && low  > 0 ? low.toFixed(1)  : 'â€”';
+    document.getElementById('dsh').textContent = isFinite(high) && high > 0 ? high.toFixed(1) : '—';
+    document.getElementById('dsl').textContent = isFinite(low)  && low  > 0 ? low.toFixed(1)  : '—';
 
     /* Show charts section */
     document.getElementById('schoolCharts').style.display = '';
@@ -1122,13 +1122,13 @@ async function loadSchoolDetail(examId, schoolId) {
 
   } catch (e) {
     console.error('School detail failed:', e);
-    ['dsp','dsa','dsh','dsl'].forEach(id => document.getElementById(id).textContent = 'â€”');
+    ['dsp','dsa','dsh','dsl'].forEach(id => document.getElementById(id).textContent = '—');
   } finally {
     if (ind) ind.style.display = 'none';
   }
 }
 
-/* â”€â”€ Score Distribution â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Score Distribution ──────────────────────────── */
 function renderDistChart(students) {
   dChart('dist');
   const scores = students.map(s => parseFloat(s.score || s.total_score || 0)).filter(v => v > 0);
@@ -1136,7 +1136,7 @@ function renderDistChart(students) {
 
   const bins = Array(10).fill(0);
   scores.forEach(s => bins[Math.min(9, Math.floor(s / 10))]++);
-  const labels = ['0â€“10','10â€“20','20â€“30','30â€“40','40â€“50','50â€“60','60â€“70','70â€“80','80â€“90','90â€“100'];
+  const labels = ['0–10','10–20','20–30','30–40','40–50','50–60','60–70','70–80','80–90','90–100'];
   const colors = [0,10,20,30,40,50,60,70,80,90].map(m => scColor(m + 5));
 
   dChart('dist');
@@ -1157,7 +1157,7 @@ function renderDistChart(students) {
   });
 }
 
-/* â”€â”€ Bloom's Chart â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Bloom's Chart ───────────────────────────────── */
 function renderBloomsChart(questions) {
   dChart('blooms');
   if (!questions.length) return;
@@ -1203,7 +1203,7 @@ function renderBloomsChart(questions) {
   });
 }
 
-/* â”€â”€ Top Students Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Top Students Table ──────────────────────────── */
 function renderTopTable(students) {
   const el = document.getElementById('topTbl');
   if (!students.length) { el.innerHTML = '<div class="state-msg"><span>No data.</span></div>'; return; }
@@ -1219,21 +1219,21 @@ function renderTopTable(students) {
     <tbody>${sorted.map((s, i) =>
       `<tr>
         <td class="rk">${i + 1}</td>
-        <td class="nm" title="${s.name || ''}">${s.name || 'â€”'}</td>
+        <td class="nm" title="${s.name || ''}">${s.name || '—'}</td>
         <td><span class="sc-pill ${scClass(s._sc)}">${s._sc.toFixed(1)}</span></td>
       </tr>`
     ).join('')}</tbody>
   </table>`;
 }
 
-/* â”€â”€ Weak Questions Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Weak Questions Table ────────────────────────── */
 function renderWeakTable(questions) {
   const el = document.getElementById('weakTbl');
   const mc = questions.filter(q => q.correct_rate !== undefined && q.correct_rate !== null);
   if (!mc.length) { el.innerHTML = '<div class="state-msg"><span>No question data.</span></div>'; return; }
 
   const sorted = [...mc].sort((a, b) => a.correct_rate - b.correct_rate).slice(0, 20);
-  const diffLbl   = d => d == 1 ? 'Easy' : d == 2 ? 'Medium' : d == 3 ? 'Hard' : 'â€”';
+  const diffLbl   = d => d == 1 ? 'Easy' : d == 2 ? 'Medium' : d == 3 ? 'Hard' : '—';
   const diffColor = d => d == 1 ? '#22c55e' : d == 2 ? '#f59e0b' : '#ef4444';
 
   el.innerHTML = `<table>
@@ -1242,7 +1242,7 @@ function renderWeakTable(questions) {
       const r = parseFloat(q.correct_rate || 0);
       return `<tr>
         <td class="rk">${q.number || i+1}</td>
-        <td style="font-size:.74rem;color:var(--text2)">${q.type || 'â€”'}</td>
+        <td style="font-size:.74rem;color:var(--text2)">${q.type || '—'}</td>
         <td><span style="font-size:.71rem;color:${diffColor(q.difficulty)}">${diffLbl(q.difficulty)}</span></td>
         <td><span class="sc-pill ${scClass(r)}">${r.toFixed(1)}%</span></td>
       </tr>`;
@@ -1250,7 +1250,7 @@ function renderWeakTable(questions) {
   </table>`;
 }
 
-/* â”€â”€ Event Listeners â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Event Listeners ─────────────────────────────── */
 document.getElementById('yearSelect').addEventListener('change', function() {
   S.filters.year = this.value; loadExams();
 });
@@ -1268,7 +1268,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
   _archiveSearchTimer = setTimeout(() => applyFilters(), 300);
 });
 
-/* â”€â”€ FAB â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── FAB ─────────────────────────────────────────── */
 (function () {
   const c = document.getElementById('fabContainer');
   const m = document.getElementById('fabMain');
@@ -1299,11 +1299,11 @@ document.getElementById('fabFeedbackSubmitBtn')?.addEventListener('click', async
     statusEl.textContent = 'Please fill in all fields.';
     statusEl.className   = 'feedback-status err'; return;
   }
-  btn.disabled = true; btn.textContent = 'Sendingâ€¦';
+  btn.disabled = true; btn.textContent = 'Sending…';
   try {
     const user = window._currentUser || null;
     await window._fbSubmitFeedback?.(subject, message, user);
-    statusEl.textContent = 'Feedback sent â€” thank you!';
+    statusEl.textContent = 'Feedback sent — thank you!';
     statusEl.className   = 'feedback-status ok';
     setTimeout(closeFeedback, 2000);
   } catch {
@@ -1312,7 +1312,7 @@ document.getElementById('fabFeedbackSubmitBtn')?.addEventListener('click', async
   } finally { btn.disabled = false; btn.textContent = 'Send Feedback'; }
 });
 
-/* â”€â”€ Init â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── Init ────────────────────────────────────────── */
 (async function init() {
   await loadSchools();
   await loadExams();

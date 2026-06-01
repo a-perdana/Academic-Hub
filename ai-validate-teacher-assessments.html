@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Validate Teacher AI Self-Assessments â€” Academic Hub</title>
+<title>Validate Teacher AI Self-Assessments — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -23,7 +23,7 @@
 <style>
 /* Page-family: My Work (data-accent="dark"). Tokens, reset, base typography,
    AND canonical .page-hero* / .page-footer* chrome come from /base.css.
-   Page-local styles below MUST NOT override .page-hero* selectors â€”
+   Page-local styles below MUST NOT override .page-hero* selectors —
    root CLAUDE.md Common Mistake #50. */
 :root {
   --accent: #e67e22;
@@ -175,7 +175,7 @@ body:has(> .page-footer) > .page-wrap {
 
 .loading-msg { padding: 30px; text-align: center; color: #64748b; }
 
-/* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€ */
+/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
@@ -235,21 +235,21 @@ body:has(> .page-footer) > .page-wrap {
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· AI Competency Framework v1.0</p>
+      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework v1.0</p>
       <h1 class="page-hero__title">AI Validity Assessment</h1>
-      <p class="page-hero__desc">Review and validate each teacher's annual AI Competency Part 1 self-assessment. Adjust the agreed level if the evidence doesn't match the self-rating â€” the notes you leave become the line-manager record.</p>
+      <p class="page-hero__desc">Review and validate each teacher's annual AI Competency Part 1 self-assessment. Adjust the agreed level if the evidence doesn't match the self-rating — the notes you leave become the line-manager record.</p>
     </div>
   </div>
 </header>
 
 <main class="page-wrap">
   <aside class="info-strip" role="note" aria-label="How this page works">
-    <div class="info-strip__icon" aria-hidden="true">ðŸ›¡ï¸</div>
+    <div class="info-strip__icon" aria-hidden="true">🛡️</div>
     <div class="info-strip__body">
       <h2 class="info-strip__title">Validate your teachers' AI self-assessments</h2>
-      <p class="info-strip__lede">Teachers rate their own AI skills first. As line manager, you check each self-assessment and agree or adjust the level they claimed â€” a fair second pair of eyes.</p>
-      <ol class="info-strip__flow"><li><strong>Teachers submit</strong> their AI Competency Part 1 self-assessment</li><li><strong>You review</strong> each one in this queue</li><li><strong>Approve the agreed level</strong> or note where you see it differently â€” kindly and clearly</li></ol>
-      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">âš ï¸</span><span><strong>This keeps AI-skill ratings fair and consistent</strong> across your school. It is the Part 1 validation step of the AI Competency Framework.</span></div>
+      <p class="info-strip__lede">Teachers rate their own AI skills first. As line manager, you check each self-assessment and agree or adjust the level they claimed — a fair second pair of eyes.</p>
+      <ol class="info-strip__flow"><li><strong>Teachers submit</strong> their AI Competency Part 1 self-assessment</li><li><strong>You review</strong> each one in this queue</li><li><strong>Approve the agreed level</strong> or note where you see it differently — kindly and clearly</li></ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>This keeps AI-skill ratings fair and consistent</strong> across your school. It is the Part 1 validation step of the AI Competency Framework.</span></div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
@@ -269,24 +269,24 @@ body:has(> .page-footer) > .page-wrap {
       <option value="submitted">Awaiting my review</option>
       <option value="validated">Validated</option>
     </select>
-    <div class="stats" id="stats">â€”</div>
+    <div class="stats" id="stats">—</div>
   </div>
 
   <div id="listContainer" class="list-table">
-    <div class="loading-msg">Loading assessmentsâ€¦</div>
+    <div class="loading-msg">Loading assessments…</div>
   </div>
 </main>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leadership Â· AI Competency Framework</span>
-      <h2 class="page-footer__cta-title">Validate honestly â€” the level only means something if the evidence backs it.</h2>
+      <span class="page-footer__cta-eyebrow">School Leadership · AI Competency Framework</span>
+      <h2 class="page-footer__cta-title">Validate honestly — the level only means something if the evidence backs it.</h2>
       <p class="page-footer__cta-desc">Adjust each teacher's agreed level where the self-rating overshoots the evidence, and leave notes that point to next year's focus. Track your own school's readiness in the AI Maturity assessment.</p>
-      <a href="/ai-maturity-self-assessment" class="page-footer__cta-btn">Open AI Maturity Assessment <span aria-hidden="true">â†’</span></a>
+      <a href="/ai-maturity-self-assessment" class="page-footer__cta-btn">Open AI Maturity Assessment <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="AI Validity Assessment footer navigation">
       <div class="page-footer__nav-group">
@@ -302,8 +302,8 @@ body:has(> .page-footer) > .page-wrap {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">AI Competency Framework v1.0 Â· line-manager validation feeds the teacher record + Eduversal appraisers</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">AI Competency Framework v1.0 · line-manager validation feeds the teacher record + Eduversal appraisers</span>
   </div>
 </footer>
 
@@ -312,13 +312,13 @@ body:has(> .page-footer) > .page-wrap {
   <div class="modal">
     <div class="modal-head">
       <div>
-        <div class="modal-title" id="modalTitle">â€”</div>
-        <div class="modal-sub" id="modalSub">â€”</div>
+        <div class="modal-title" id="modalTitle">—</div>
+        <div class="modal-sub" id="modalSub">—</div>
       </div>
-      <button class="modal-close" onclick="closeModal()">âœ•</button>
+      <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body" id="modalBody">
-      <div class="loading-msg">Loadingâ€¦</div>
+      <div class="loading-msg">Loading…</div>
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal()">Close</button>
@@ -380,7 +380,7 @@ document.addEventListener('authReady', async ({ detail } = {}) => {
 
 async function loadRows() {
   const container = document.getElementById('listContainer');
-  container.innerHTML = '<div class="loading-msg">Loading assessmentsâ€¦</div>';
+  container.innerHTML = '<div class="loading-msg">Loading assessments…</div>';
   try {
     const q = query(
       collection(window.db, 'ai_competency_self_assessments'),
@@ -407,7 +407,7 @@ function renderList() {
   const rows = state.rows.filter(r => state.filterStatus === 'all' || r.status === state.filterStatus);
   const submittedCount = state.rows.filter(r => r.status === 'submitted').length;
   const validatedCount = state.rows.filter(r => r.status === 'validated').length;
-  document.getElementById('stats').textContent = `${submittedCount} awaiting Â· ${validatedCount} validated`;
+  document.getElementById('stats').textContent = `${submittedCount} awaiting · ${validatedCount} validated`;
 
   if (rows.length === 0) {
     container.innerHTML = '<div class="empty-state">No assessments match the current filters.</div>';
@@ -423,14 +423,14 @@ function renderList() {
   </div>`;
 
   const html = rows.map(r => {
-    const submittedDate = r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString('en-GB') : 'â€”';
+    const submittedDate = r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleDateString('en-GB') : '—';
     const level = r.selfDeclaredLevel || 'foundation';
     return `<div role="button" tabindex="0" class="list-row" data-id="${r.id}" onclick="window.openRow('${r.id}')">
-      <div class="name">${escapeHtml(r.displayName || r.userEmail || 'â€”')}<small>${escapeHtml(r.userEmail || '')}</small></div>
+      <div class="name">${escapeHtml(r.displayName || r.userEmail || '—')}<small>${escapeHtml(r.userEmail || '')}</small></div>
       <div class="submitted">${submittedDate}</div>
       <div><span class="level-chip ${level}">${LEVEL_LABELS[level] || level}</span></div>
       <div><span class="status-chip ${r.status}">${r.status === 'submitted' ? 'Awaiting review' : 'Validated'}</span></div>
-      <div style="text-align:right;color:#94a3b8;font-size:18px;">â€º</div>
+      <div style="text-align:right;color:#94a3b8;font-size:18px;">›</div>
     </div>`;
   }).join('');
 
@@ -442,15 +442,15 @@ window.openRow = async function(docId) {
   if (!row) return;
   state.openDoc = row;
   document.getElementById('modal').classList.add('open');
-  document.getElementById('modalTitle').textContent = row.displayName || row.userEmail || 'â€”';
-  document.getElementById('modalSub').textContent = `${row.userEmail || ''} Â· Submitted ${row.submittedAt?.toDate ? row.submittedAt.toDate().toLocaleDateString('en-GB') : 'â€”'}`;
+  document.getElementById('modalTitle').textContent = row.displayName || row.userEmail || '—';
+  document.getElementById('modalSub').textContent = `${row.userEmail || ''} · Submitted ${row.submittedAt?.toDate ? row.submittedAt.toDate().toLocaleDateString('en-GB') : '—'}`;
 
   const ratings = row.ratings?.teacher || {};
   const renderMatrix = () => {
     const rows = ['domainA', 'domainB', 'domainC', 'domainD', 'domainE'].map(domain => {
       const cells = ['foundation', 'practitioner', 'leader'].map(level => {
         const rating = ratings[level]?.[domain];
-        if (!rating) return `<div class="rm-cell empty">â€”</div>`;
+        if (!rating) return `<div class="rm-cell empty">—</div>`;
         return `<div class="rm-cell ${rating}">${RATING_LABELS[rating]}</div>`;
       }).join('');
       return `<div class="rm-row-label">${DOMAIN_LABELS[domain]}</div>${cells}`;
@@ -472,7 +472,7 @@ window.openRow = async function(docId) {
       <div><span class="level-chip ${row.selfDeclaredLevel || 'foundation'}">${LEVEL_LABELS[row.selfDeclaredLevel] || row.selfDeclaredLevel}</span></div>
     </div>
     <div class="detail-section">
-      <div class="detail-label">Self-ratings (5 domains Ã— 3 levels)</div>
+      <div class="detail-label">Self-ratings (5 domains × 3 levels)</div>
       ${renderMatrix()}
     </div>
     <div class="detail-section reflection-readonly">
@@ -499,7 +499,7 @@ window.openRow = async function(docId) {
         <label>Notes</label>
         <textarea aria-label="What you discussed, what you agreed, what they'll focus on next year" id="managerNotes" placeholder="What you discussed, what you agreed, what they'll focus on next year." ${alreadyValidated ? 'disabled' : ''}>${escapeHtml(existingValidation.managerNotes || '')}</textarea>
         <div class="hint">Max 1000 characters. Notes are visible to the teacher and to CH appraisers.</div>
-        ${alreadyValidated ? `<div style="margin-top:12px;font-size:12px;color:#166534;">âœ“ Already validated on ${existingValidation.validatedAt?.toDate ? existingValidation.validatedAt.toDate().toLocaleDateString('en-GB') : 'â€”'}.</div>` : ''}
+        ${alreadyValidated ? `<div style="margin-top:12px;font-size:12px;color:#166534;">✓ Already validated on ${existingValidation.validatedAt?.toDate ? existingValidation.validatedAt.toDate().toLocaleDateString('en-GB') : '—'}.</div>` : ''}
       </div>
     </div>
   `;

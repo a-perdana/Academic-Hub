@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Appraiser Calibration â€” Academic Hub</title>
+<title>Appraiser Calibration — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -25,11 +25,11 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-/* â”€â”€ HERO (canonical .page-hero from /base.css Â· dark family) â”€â”€
+/* ── HERO (canonical .page-hero from /base.css · dark family) ──
    Page CSS MUST NOT override .page-hero background or KPI layout
    (root CLAUDE.md Common Mistake #50). Body content rail = 1200px;
    width:100% on direct body children avoids the body:has(>.page-footer)
-   flex-column shrink trap. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   flex-column shrink trap. ───────────────────────────────────── */
 body:has(> .page-footer) > .page-hero,
 body:has(> .page-footer) > .page-wrap {
   width: 100%;
@@ -44,7 +44,7 @@ body:has(> .page-footer) > .page-wrap {
   padding-right: 0;
 }
 
-/* Hero notice pill (page-local â€” target page-local class, never .page-hero*) */
+/* Hero notice pill (page-local — target page-local class, never .page-hero*) */
 .hero-notice {
   margin-top: 16px; display: inline-flex; align-items: center; gap: 8px;
   background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25);
@@ -373,7 +373,7 @@ body:has(> .page-footer) > .page-wrap {
   .rubric-anchor-grid { grid-template-columns: 1fr; }
   .gc-result-grid { grid-template-columns: 1fr; }
 }
-/* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€ */
+/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
@@ -424,14 +424,14 @@ body:has(> .page-footer) > .page-wrap {
 
 <div id="navbarMount"></div>
 
-<!-- HERO (canonical .page-hero Â· My Work / dark family) -->
+<!-- HERO (canonical .page-hero · My Work / dark family) -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· Appraisal</p>
+      <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
       <h1 class="page-hero__title">Appraisal Calibration</h1>
       <p class="page-hero__desc">Compare your scoring with other appraisers and expert consensus to keep appraisals fair across the network. Score each lesson vignette independently, then check your inter-rater agreement. Complete all scenarios before conducting formal appraisals.</p>
-      <span class="hero-notice">&#x2139;&#xFE0F; Formative exercise â€” results saved to your profile. Target: â‰¥85% adjacent agreement (Â±1 point).</span>
+      <span class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</span>
     </div>
   </div>
 </header>
@@ -487,16 +487,16 @@ body:has(> .page-footer) > .page-wrap {
 
 </div>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Appraisal Â· Calibration</span>
+      <span class="page-footer__cta-eyebrow">Appraisal · Calibration</span>
       <h2 class="page-footer__cta-title">Calibrated appraisers score the same lesson the same way.</h2>
-      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through every vignette, compare with the expert consensus, and aim for â‰¥85% adjacent agreement before you run a formal appraisal.</p>
-      <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">â†’</span></a>
+      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through every vignette, compare with the expert consensus, and aim for ≥85% adjacent agreement before you run a formal appraisal.</p>
+      <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Appraisal Calibration footer navigation">
       <div class="page-footer__nav-group">
@@ -513,8 +513,8 @@ body:has(> .page-footer) > .page-wrap {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Calibration is formative â€” results saved to your profile only</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Calibration is formative — results saved to your profile only</span>
   </div>
 </footer>
 
@@ -526,9 +526,9 @@ import {
 
 const db = window.db;
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    RUBRIC ANCHOR DESCRIPTORS
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 const ANCHORS = {
   'D3.3': {
     name: 'Making Learning Intentions Visible',
@@ -540,7 +540,7 @@ const ANCHORS = {
     ]
   },
   'D3.4': {
-    name: 'Activityâ€“Objective Alignment',
+    name: 'Activity–Objective Alignment',
     anchors: [
       'Activities bear no clear relationship to the stated objective.',
       'Some activities align but others are filler or off-objective; alignment is incidental.',
@@ -571,7 +571,7 @@ const ANCHORS = {
     anchors: [
       'No scaffolding; students are given tasks without modelling or guided practice.',
       'Teacher models but immediately releases to independent work; no check for readiness.',
-      'Clear I Doâ€“We Doâ€“You Do sequence; re-teaching visible when misconception detected.',
+      'Clear I Do–We Do–You Do sequence; re-teaching visible when misconception detected.',
       'Gradual release is explicit and adaptive; students articulate the learning process; peer scaffolding encouraged.'
     ]
   },
@@ -640,145 +640,145 @@ const ANCHORS = {
   }
 };
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    SCENARIOS  (8 total)
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 const SCENARIOS = [
   {
     id: 'S1',
-    title: 'Grade 10 Mathematics â€” Quadratic Functions',
+    title: 'Grade 10 Mathematics — Quadratic Functions',
     level: 'developing',
     items: ['D3.3','D3.4','D2.4'],
     vignette: [
-      'The observer enters at 08:14, two minutes after the bell. The teacher is writing the lesson topic on the whiteboard â€” "Quadratic Functions: Vertex Form" â€” while students settle. At 08:16 the teacher says, "Today we\'re looking at vertex form. Open to page 84." No learning objective is stated verbally. A handwritten objective is visible on the side whiteboard: "Students will convert standard form to vertex form." It remains posted for the entire lesson but is not referred to again.',
-      'The teacher demonstrates three worked examples on the board, narrating each step. Students copy. At 08:34 the teacher distributes a worksheet and says "complete questions 1 to 8." During independent work (18 minutes) the teacher sits at the desk and marks homework. At 08:49 the teacher calls time and reviews Q1 and Q2 from the front. The lesson ends without a closure activity. Two students in the back row are off-task for most of the independent phase â€” the teacher does not notice.'
+      'The observer enters at 08:14, two minutes after the bell. The teacher is writing the lesson topic on the whiteboard — "Quadratic Functions: Vertex Form" — while students settle. At 08:16 the teacher says, "Today we\'re looking at vertex form. Open to page 84." No learning objective is stated verbally. A handwritten objective is visible on the side whiteboard: "Students will convert standard form to vertex form." It remains posted for the entire lesson but is not referred to again.',
+      'The teacher demonstrates three worked examples on the board, narrating each step. Students copy. At 08:34 the teacher distributes a worksheet and says "complete questions 1 to 8." During independent work (18 minutes) the teacher sits at the desk and marks homework. At 08:49 the teacher calls time and reviews Q1 and Q2 from the front. The lesson ends without a closure activity. Two students in the back row are off-task for most of the independent phase — the teacher does not notice.'
     ],
     expertScores: { 'D3.3': 2, 'D3.4': 3, 'D2.4': 2 },
     rationale: {
-      'D3.3': 'Objective is physically present but never verbalised, reinforced, or returned to â€” students have partial awareness at best. Score 2.',
+      'D3.3': 'Objective is physically present but never verbalised, reinforced, or returned to — students have partial awareness at best. Score 2.',
       'D3.4': 'Worked examples and worksheet are aligned to the stated vertex form objective. Minor misalignment: no higher-complexity application or real-world context. Score 3.',
       'D2.4': 'Independent phase of 18 minutes is reasonable, but teacher circulation is absent throughout. Two students off-task for a sustained period without intervention. Score 2.'
     }
   },
   {
     id: 'S2',
-    title: 'Grade 7 English â€” Descriptive Writing',
+    title: 'Grade 7 English — Descriptive Writing',
     level: 'induction',
     items: ['D3.3','D2.1','D3.13'],
     vignette: [
       'The observer enters at 10:02. The teacher is already at the door greeting students as they arrive. The projector displays: "Learning Goal: I can use sensory language to describe a setting. Success criteria: I have used at least 3 senses; my description creates a clear picture." The teacher refers to the slide verbally: "Before we start, let\'s read our goal together." Students read it aloud as a class.',
-      'The teacher opens with a 4-minute paired activity â€” students describe a photo of a rainforest to each other using only one sense at a time. Feedback is gathered via mini-whiteboards. The teacher scans the room continuously, circulating every 2â€“3 minutes, and twice redirects off-task students by proximity before any disruption escalates. At 10:28 the teacher pauses the class: "Mini-whiteboards out â€” write one sentence using smell." She scans results, identifies a common gap, and re-explains the technique to three students. The lesson closes with students reading one sentence aloud and the teacher linking back to the success criteria on the projector.'
+      'The teacher opens with a 4-minute paired activity — students describe a photo of a rainforest to each other using only one sense at a time. Feedback is gathered via mini-whiteboards. The teacher scans the room continuously, circulating every 2–3 minutes, and twice redirects off-task students by proximity before any disruption escalates. At 10:28 the teacher pauses the class: "Mini-whiteboards out — write one sentence using smell." She scans results, identifies a common gap, and re-explains the technique to three students. The lesson closes with students reading one sentence aloud and the teacher linking back to the success criteria on the projector.'
     ],
     expertScores: { 'D3.3': 4, 'D2.1': 4, 'D3.13': 3 },
     rationale: {
       'D3.3': 'Learning intention and success criteria are displayed, read aloud as a class, returned to mid-lesson, and linked explicitly at closure. Students can clearly articulate the goal throughout. Score 4.',
-      'D2.1': 'Continuous scanning, proactive proximity redirection before escalation, whiteboard check â€” all demonstrate keen and continuous awareness with no disruption allowed to develop. Score 4.',
+      'D2.1': 'Continuous scanning, proactive proximity redirection before escalation, whiteboard check — all demonstrate keen and continuous awareness with no disruption allowed to develop. Score 4.',
       'D3.13': 'Clear sequencing and scaffolded practice (one sense at a time, then combine). Re-teaching moment visible. Gradual release present but the transition from guided to independent is not made fully explicit to students. Score 3.'
     }
   },
   {
     id: 'S3',
-    title: 'Grade 9 Biology â€” Cell Division',
+    title: 'Grade 9 Biology — Cell Division',
     level: 'proficient',
     items: ['D3.5','D3.19','D1.8'],
     vignette: [
       'The observer enters at 13:05, lesson already underway. Students are in groups of four, each group assigned a phase of mitosis (prophase, metaphase, anaphase, telophase). Groups are building a physical model using pipe cleaners and card. The teacher moves between groups, asking: "What would happen if the spindle fibres failed here?" and "How would this phase differ in a plant cell?"',
-      'At 13:22 the teacher calls the class together. Each group presents their model. During presentations the teacher poses follow-up questions to the audience, not just the presenters: "Do you agree with their interpretation of cytokinesis?" At 13:38 the teacher asks students to write a 3-sentence "exit explanation" answering: "Why does cell division require chromosome duplication first?" â€” collected before students leave. No review of prior learning at the lesson\'s start was observed. Teacher does not circulate during the initial 8-minute independent model-building phase.'
+      'At 13:22 the teacher calls the class together. Each group presents their model. During presentations the teacher poses follow-up questions to the audience, not just the presenters: "Do you agree with their interpretation of cytokinesis?" At 13:38 the teacher asks students to write a 3-sentence "exit explanation" answering: "Why does cell division require chromosome duplication first?" — collected before students leave. No review of prior learning at the lesson\'s start was observed. Teacher does not circulate during the initial 8-minute independent model-building phase.'
     ],
     expertScores: { 'D3.5': 4, 'D3.19': 3, 'D1.8': 2 },
     rationale: {
-      'D3.5': 'Spindle fibre failure question, plant vs animal cell comparison, cytokinesis interpretation â€” consistently demands analysis and application beyond recall throughout the lesson. Score 4.',
+      'D3.5': 'Spindle fibre failure question, plant vs animal cell comparison, cytokinesis interpretation — consistently demands analysis and application beyond recall throughout the lesson. Score 4.',
       'D3.19': 'Exit explanation is a deliberate, well-placed formative check. Questioning during presentations serves as live monitoring. Limited monitoring in the opening independent phase reduces this from Distinguished. Score 3.',
       'D1.8': 'Exit explanation is planned and well-placed. However, no formative check is planned for the opening phase (8 mins unmonitored), and only a single method is used, placed only at lesson end. Score 2.'
     }
   },
   {
     id: 'S4',
-    title: 'Grade 5 Mathematics â€” Fractions on a Number Line',
+    title: 'Grade 5 Mathematics — Fractions on a Number Line',
     level: 'induction',
     items: ['D3.13','D3.10','D3.7'],
     vignette: [
       'The observer enters at 09:05. The teacher writes "3/4" on the board and asks, "Who can tell me what this means?" One student answers correctly. The teacher says "Good" and moves immediately to distributing worksheets. No physical model or visual representation is used. Students work individually for 22 minutes; the teacher circulates briefly in the first 5 minutes then returns to the front.',
-      'At 09:34, the teacher reviews the answers: "Number 1 â€” who got Â¼?" Hands go up. "Good, it\'s the point halfway between 0 and Â½." No explanation of why is offered. A student says, "But I put it on the Â½ mark." The teacher replies, "That\'s wrong â€” the answer is Â¼, not Â½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems â€” the teacher does not return to them.'
+      'At 09:34, the teacher reviews the answers: "Number 1 — who got ¼?" Hands go up. "Good, it\'s the point halfway between 0 and ½." No explanation of why is offered. A student says, "But I put it on the ½ mark." The teacher replies, "That\'s wrong — the answer is ¼, not ½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems — the teacher does not return to them.'
     ],
     expertScores: { 'D3.13': 1, 'D3.10': 2, 'D3.7': 1 },
     rationale: {
-      'D3.13': 'No modelling, no guided practice, no check for readiness before independent work. Students given the task without scaffolding â€” a score of 1 is appropriate.',
+      'D3.13': 'No modelling, no guided practice, no check for readiness before independent work. Students given the task without scaffolding — a score of 1 is appropriate.',
       'D3.10': 'Students are mostly compliant but not cognitively engaged. Independent work is procedural; no discussion or collaborative sense-making. Score 2.',
       'D3.7': 'Feedback is purely evaluative ("good", "that\'s wrong") with no strategy offered for improvement. The student who misplaced the fraction receives no actionable guidance. Score 1.'
     }
   },
   {
     id: 'S5',
-    title: 'Grade 11 Chemistry â€” Equilibrium and Le Chatelier\'s Principle',
+    title: 'Grade 11 Chemistry — Equilibrium and Le Chatelier\'s Principle',
     level: 'lead',
     items: ['D3.5','D3.3','D1.3'],
     vignette: [
-      'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress â€” and by the end you\'ll be able to design an industrial process that maximises yield."',
-      'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early â€” these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task â€” watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
+      'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress — and by the end you\'ll be able to design an industrial process that maximises yield."',
+      'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early — these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task — watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
     ],
     expertScores: { 'D3.5': 4, 'D3.3': 4, 'D1.3': 4 },
     rationale: {
       'D3.5': 'Every teacher question demands application, analysis, or evaluation. Students debate real industrial trade-offs. Consistently Distinguished-level questioning throughout. Score 4.',
       'D3.3': 'Objective is delayed but then made explicit and ambitious; students clearly understand what success looks like by the end; referred back to at closure debate. Score 4.',
-      'D1.3': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards â€” all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
+      'D1.3': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards — all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
     }
   },
   {
     id: 'S6',
-    title: 'Grade 8 History â€” Causes of World War I',
+    title: 'Grade 8 History — Causes of World War I',
     level: 'developing',
     items: ['D2.3','D3.10','D3.19'],
     vignette: [
-      'The observer enters at 14:00. The teacher is reading from printed notes at the front. He pauses occasionally to ask recall questions: "Who was assassinated in Sarajevo?" One student answers correctly. Another student answers a different question incorrectly: "That\'s not right â€” we covered this last week. Were you paying attention?" The student lowers his head and does not volunteer again for the rest of the lesson.',
+      'The observer enters at 14:00. The teacher is reading from printed notes at the front. He pauses occasionally to ask recall questions: "Who was assassinated in Sarajevo?" One student answers correctly. Another student answers a different question incorrectly: "That\'s not right — we covered this last week. Were you paying attention?" The student lowers his head and does not volunteer again for the rest of the lesson.',
       'At 14:25 the teacher puts students into pairs to discuss the MAIN acronym (Militarism, Alliances, Imperialism, Nationalism). The room becomes louder. The teacher waits at the front rather than circulating. At 14:35 he calls for quiet and asks, "Does everyone understand?" The class is silent. He says, "Good, we\'ll pick this up next lesson." No formative check was conducted. Three students were observed reading an unrelated book during the teacher\'s lecture phase.'
     ],
     expertScores: { 'D2.3': 2, 'D3.10': 2, 'D3.19': 1 },
     rationale: {
       'D2.3': 'The public correction ("were you paying attention?") is potentially damaging to psychological safety. Climate is functional but not warm; the student\'s retreat into silence signals risk aversion. Score 2.',
       'D3.10': 'Students are mostly compliant but passive. Pair discussion is a positive moment but unmonitored. Overall engagement is procedural, not intellectual. Score 2.',
-      'D3.19': '"Does everyone understand?" is not a formative check â€” it yields no usable data. No other monitoring strategy was deployed. Score 1.'
+      'D3.19': '"Does everyone understand?" is not a formative check — it yields no usable data. No other monitoring strategy was deployed. Score 1.'
     }
   },
   {
     id: 'S7',
-    title: 'Grade 6 Science â€” Properties of Materials',
+    title: 'Grade 6 Science — Properties of Materials',
     level: 'proficient',
     items: ['D3.13','D2.4','D1.8'],
     vignette: [
-      'The observer enters at 08:58. The lesson is already 3 minutes in. The teacher is demonstrating a sorting activity at the visualiser: "I\'m going to sort these materials by conductivity. Watch what I do â€” I\'m asking myself: does this let electricity flow?" She sorts three materials aloud, narrating her thinking. She then passes a set of materials to pairs: "Your turn â€” sort your set and be ready to justify one decision." Pairs work for 6 minutes; the teacher circulates continuously, asking "What\'s your evidence for that?" rather than confirming answers.',
-      'At 09:12 the teacher brings the class together using a clap-call signal. Transitions take under 30 seconds. Each pair reports one decision; the teacher records answers on a class T-chart. At 09:22 the teacher distributes an independent investigation sheet. Students work individually. At 09:38 the teacher collects the sheets as an exit check. Two students have only completed 2 of 5 questions â€” the teacher notes their names for follow-up but does not intervene during the lesson. The lesson ends precisely on time.'
+      'The observer enters at 08:58. The lesson is already 3 minutes in. The teacher is demonstrating a sorting activity at the visualiser: "I\'m going to sort these materials by conductivity. Watch what I do — I\'m asking myself: does this let electricity flow?" She sorts three materials aloud, narrating her thinking. She then passes a set of materials to pairs: "Your turn — sort your set and be ready to justify one decision." Pairs work for 6 minutes; the teacher circulates continuously, asking "What\'s your evidence for that?" rather than confirming answers.',
+      'At 09:12 the teacher brings the class together using a clap-call signal. Transitions take under 30 seconds. Each pair reports one decision; the teacher records answers on a class T-chart. At 09:22 the teacher distributes an independent investigation sheet. Students work individually. At 09:38 the teacher collects the sheets as an exit check. Two students have only completed 2 of 5 questions — the teacher notes their names for follow-up but does not intervene during the lesson. The lesson ends precisely on time.'
     ],
     expertScores: { 'D3.13': 4, 'D2.4': 3, 'D1.8': 3 },
     rationale: {
-      'D3.13': 'Textbook I Do (visualiser modelling with think-aloud) â†’ We Do (guided pair sort with teacher questioning) â†’ You Do (independent investigation). Release is explicit and readiness-checked. Score 4.',
+      'D3.13': 'Textbook I Do (visualiser modelling with think-aloud) → We Do (guided pair sort with teacher questioning) → You Do (independent investigation). Release is explicit and readiness-checked. Score 4.',
       'D2.4': 'Transitions are highly efficient; time allocation is purposeful; teacher circulates actively during pair work. Minor note: two students behind at independent stage are not supported in-lesson. Score 3.',
       'D1.8': 'Exit check is planned and embedded at end. A mid-lesson checkpoint (the T-chart reporting) also functions as informal data. Two formative points present but no mid-task individual check. Score 3.'
     }
   },
   {
     id: 'S8',
-    title: 'Grade 10 English Literature â€” The Great Gatsby',
+    title: 'Grade 10 English Literature — The Great Gatsby',
     level: 'lead',
     items: ['D3.7','D2.3','D3.5'],
     vignette: [
-      'The observer enters at 10:05. A student is mid-sentence: "â€¦so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move â€” \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far â€” write that sentence down verbatim. You\'ll want it in your essay. What do others think â€” fake, or aspirational but unattainable?"',
-      'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that â€” it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim â€” try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
+      'The observer enters at 10:05. A student is mid-sentence: "…so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move — \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far — write that sentence down verbatim. You\'ll want it in your essay. What do others think — fake, or aspirational but unattainable?"',
+      'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that — it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim — try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
     ],
     expertScores: { 'D3.7': 4, 'D2.3': 4, 'D3.5': 4 },
     rationale: {
       'D3.7': 'Feedback is dialogic, specific, and acted on in real time ("write that sentence verbatim"; margin annotation with precise vocabulary suggestion). Students use feedback to self-correct immediately. Score 4.',
-      'D2.3': 'The tentative student\'s contribution is publicly celebrated; counter-argument task normalises intellectual risk. Climate is psychologically safe â€” students openly revise their own positions. Score 4.',
-      'D3.5': 'Every teacher utterance extends student thinking â€” from "performing wealth" to the philosophical question of whether the American Dream is inherently performative. All students are challenged to evaluate and argue, not recall. Score 4.'
+      'D2.3': 'The tentative student\'s contribution is publicly celebrated; counter-argument task normalises intellectual risk. Climate is psychologically safe — students openly revise their own positions. Score 4.',
+      'D3.5': 'Every teacher utterance extends student thinking — from "performing wealth" to the philosophical question of whether the American Dream is inherently performative. All students are challenged to evaluate and argue, not recall. Score 4.'
     }
   }
 ];
 
 const LABELS = { 1: 'Unsatisf.', 2: 'Basic', 3: 'Proficient', 4: 'Distngshd' };
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    STATE
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 let currentScenario = 0;
 let userScores = SCENARIOS.map(() => ({}));
 let activeMode = 'solo';
@@ -787,9 +787,9 @@ let groupSession = null; // { code, docRef, unsubscribe }
 let openAnchorPanels = {}; // itemId -> bool
 let activeTab = 'vignette'; // persists across score clicks
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    AUTH READY
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('calibration', { user, profile });
   isAdmin = profile?.role_academichub === 'academic_admin';
@@ -798,9 +798,9 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   renderScenario(0);
 });
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    MODE SWITCHER
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 window.setMode = function(mode) {
   activeMode = mode;
   document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
@@ -812,9 +812,9 @@ window.setMode = function(mode) {
   if (mode === 'leaderboard') renderLeaderboard();
 };
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   SOLO â€” progress dots
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─────────────────────────────────────────────
+   SOLO — progress dots
+   ───────────────────────────────────────────── */
 function renderStepDots() {
   document.getElementById('stepDots').innerHTML = SCENARIOS.map((_, i) => {
     const cls = i < currentScenario ? 'done' : i === currentScenario ? 'active' : '';
@@ -826,9 +826,9 @@ function renderStepDots() {
       : `Scenario ${currentScenario + 1} of ${SCENARIOS.length}`;
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   SOLO â€” scenario render
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─────────────────────────────────────────────
+   SOLO — scenario render
+   ───────────────────────────────────────────── */
 function renderScenario(idx) {
   const sc = SCENARIOS[idx];
   const myScores = userScores[idx];
@@ -843,7 +843,7 @@ function renderScenario(idx) {
 
     const anchorCards = anchorData ? anchorData.anchors.map((txt, i) => {
       const cls = ['a1','a2','a3','a4'][i];
-      const lbl = ['1 â€” Unsatisfactory','2 â€” Basic','3 â€” Proficient','4 â€” Distinguished'][i];
+      const lbl = ['1 — Unsatisfactory','2 — Basic','3 — Proficient','4 — Distinguished'][i];
       return `<div class="anchor-card ${cls}">
         <div class="anchor-score">${i+1}</div>
         <div class="anchor-lbl">${lbl}</div>
@@ -879,7 +879,7 @@ function renderScenario(idx) {
         <div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
             <span class="level-badge ${sc.level}">${sc.level.charAt(0).toUpperCase()+sc.level.slice(1)}</span>
-            <span style="font-size:.72rem;color:#94a3b8;">${sc.items.join(' Â· ')}</span>
+            <span style="font-size:.72rem;color:#94a3b8;">${sc.items.join(' · ')}</span>
           </div>
           <h2>${sc.title}</h2>
         </div>
@@ -908,7 +908,7 @@ function renderScenario(idx) {
         <span class="action-hint">${scored} of ${total} items scored</span>
         <button class="btn-primary" ${canSubmit ? '' : 'disabled'}
           onclick="window.submitScenario(${idx})">
-          See expert scores â†’
+          See expert scores →
         </button>
       </div>
     </div>`;
@@ -934,9 +934,9 @@ window.toggleAnchor = function(itemId) {
   if (btn) btn.textContent = openAnchorPanels[itemId] ? 'â–² Hide rubric' : 'â–¼ Show rubric';
 };
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   SOLO â€” results render
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─────────────────────────────────────────────
+   SOLO — results render
+   ───────────────────────────────────────────── */
 function renderResults(idx) {
   const sc = SCENARIOS[idx];
   const myScores = userScores[idx];
@@ -946,7 +946,7 @@ function renderResults(idx) {
     const expert = sc.expertScores[itemId];
     const delta  = Math.abs(mine - expert);
     const deltaCls = delta === 0 ? 'delta-0' : delta === 1 ? 'delta-1' : 'delta-2up';
-    const deltaLbl = delta === 0 ? 'Exact' : `Î” ${delta}`;
+    const deltaLbl = delta === 0 ? 'Exact' : `Δ ${delta}`;
     return `
       <div class="result-row">
         <div>
@@ -954,7 +954,7 @@ function renderResults(idx) {
           <div style="font-size:.7rem;color:#94a3b8;margin-bottom:6px;">${ANCHORS[itemId]?.name||''}</div>
           <div class="score-compare">
             <div class="score-box yours s${mine}">${mine}</div>
-            <span class="arrow">â†’</span>
+            <span class="arrow">→</span>
             <div class="score-box expert">${expert}</div>
           </div>
           <div style="margin-top:6px;">
@@ -977,7 +977,7 @@ function renderResults(idx) {
     <div class="card">
       <div class="card-head">
         <div>
-          <h2>Results â€” ${sc.title}</h2>
+          <h2>Results — ${sc.title}</h2>
           <div class="card-head-sub">Your scores compared to expert consensus</div>
         </div>
       </div>
@@ -990,13 +990,13 @@ function renderResults(idx) {
             <div class="irr-sub">${exact} of ${sc.items.length} items</div>
           </div>
           <div class="irr-card">
-            <div class="irr-label">Adjacent (Â±1)</div>
+            <div class="irr-label">Adjacent (±1)</div>
             <div class="irr-val">${adjPct}%</div>
             <div class="irr-sub">${adj} of ${sc.items.length} items</div>
           </div>
           <div class="irr-card">
             <div class="irr-label">Target</div>
-            <div class="irr-val">â‰¥85%</div>
+            <div class="irr-val">≥85%</div>
             <div class="irr-sub">adjacent agreement</div>
           </div>
         </div>
@@ -1004,8 +1004,8 @@ function renderResults(idx) {
       <div class="action-row">
         <span class="action-hint">${isLast ? 'Last scenario' : 'Scenario '+(idx+1)+' of '+SCENARIOS.length}</span>
         ${isLast
-          ? `<button class="btn-primary" onclick="window.showSummary()">View session summary â†’</button>`
-          : `<button class="btn-primary" onclick="window.nextScenario(${idx+1})">Next scenario â†’</button>`
+          ? `<button class="btn-primary" onclick="window.showSummary()">View session summary →</button>`
+          : `<button class="btn-primary" onclick="window.nextScenario(${idx+1})">Next scenario →</button>`
         }
       </div>
     </div>`;
@@ -1013,9 +1013,9 @@ function renderResults(idx) {
   document.getElementById('resultsView').style.display = 'block';
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   SOLO â€” session summary
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─────────────────────────────────────────────
+   SOLO — session summary
+   ───────────────────────────────────────────── */
 function showSummary() {
   currentScenario = SCENARIOS.length;
   renderStepDots();
@@ -1049,7 +1049,7 @@ function showSummary() {
       <div class="card-head">
         <div>
           <h2>Calibration session summary</h2>
-          <div class="card-head-sub">${SCENARIOS.length} scenarios Â· ${itemTotal} items total</div>
+          <div class="card-head-sub">${SCENARIOS.length} scenarios · ${itemTotal} items total</div>
         </div>
       </div>
       <div class="card-body">
@@ -1067,13 +1067,13 @@ function showSummary() {
           <div class="irr-card">
             <div class="irr-label">Result</div>
             <div class="irr-val" style="color:${passed?'#16a34a':'#b45309'};">${passed ? 'Pass' : 'Retry'}</div>
-            <div class="irr-sub">â‰¥85% required</div>
+            <div class="irr-sub">≥85% required</div>
           </div>
         </div>
         <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">Per scenario</div>
         ${bars}
         ${passed
-          ? `<div class="badge-pass">&#x2713; Calibrated â€” ready to conduct formal appraisals</div>`
+          ? `<div class="badge-pass">&#x2713; Calibrated — ready to conduct formal appraisals</div>`
           : `<div class="badge-retry">&#x26A0; Review rubric descriptors and retry before appraising</div>`
         }
       </div>
@@ -1092,7 +1092,7 @@ async function saveResult(passed, adjPct, exactPct) {
   const statusEl = document.getElementById('saveStatus2') || document.getElementById('saveStatus');
   if (!db) { if (statusEl) statusEl.textContent = 'Firebase not connected.'; return; }
   try {
-    if (statusEl) statusEl.textContent = 'Saving resultâ€¦';
+    if (statusEl) statusEl.textContent = 'Saving result…';
     const uid = window.currentUser?.uid || null;
     const profile = window.userProfile || {};
     const payload = {
@@ -1114,28 +1114,28 @@ async function saveResult(passed, adjPct, exactPct) {
     if (uid) {
       const ref = doc(db, 'calibration_sessions', `${uid}_${new Date().getFullYear()}`);
       await setDoc(ref, payload, { merge: true });
-      if (statusEl) statusEl.textContent = `Result saved â€” ${passed ? 'Calibrated âœ“' : 'Needs retry'}`;
+      if (statusEl) statusEl.textContent = `Result saved — ${passed ? 'Calibrated ✓' : 'Needs retry'}`;
     } else {
-      if (statusEl) statusEl.textContent = 'Not logged in â€” result not saved.';
+      if (statusEl) statusEl.textContent = 'Not logged in — result not saved.';
     }
   } catch(e) {
     console.error(e);
-    if (statusEl) statusEl.textContent = 'Save failed â€” check connection.';
+    if (statusEl) statusEl.textContent = 'Save failed — check connection.';
   }
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   ADMIN â€” LEADERBOARD
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─────────────────────────────────────────────
+   ADMIN — LEADERBOARD
+   ───────────────────────────────────────────── */
 async function renderLeaderboard() {
   const el = document.getElementById('leaderboardContent');
   if (!isAdmin) {
     el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;font-size:.85rem;">Admin access required.</p></div></div>`;
     return;
   }
-  el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;">Loadingâ€¦</p></div></div>`;
+  el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;">Loading…</p></div></div>`;
   try {
-    // @lint-allow-unbounded â€” auto-annotated; revisit if collection grows large
+    // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
     const snap = await getDocs(collection(db, 'calibration_sessions'));
     const rows = [];
     snap.forEach(d => rows.push(d.data()));
@@ -1147,17 +1147,17 @@ async function renderLeaderboard() {
     }
 
     const tableRows = rows.map((r, i) => {
-      const pct = r.adjPct ?? 'â€”';
+      const pct = r.adjPct ?? '—';
       const barW = typeof r.adjPct === 'number' ? r.adjPct : 0;
       const barCls = barW >= 85 ? 'bar-green' : barW >= 67 ? 'bar-amber' : 'bar-red';
       const statusHtml = r.passed === true
         ? `<span class="lb-pass">&#x2713; Calibrated</span>`
         : r.passed === false
           ? `<span class="lb-retry">&#x26A0; Needs retry</span>`
-          : `<span class="lb-na">â€”</span>`;
+          : `<span class="lb-na">—</span>`;
       const dateStr = r.completedAt?.toDate
         ? r.completedAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
-        : 'â€”';
+        : '—';
       return `<tr>
         <td class="lb-rank">${i+1}</td>
         <td>
@@ -1170,9 +1170,9 @@ async function renderLeaderboard() {
             <div class="lb-bar-lbl">${pct}% adjacent</div>
           </div>
         </td>
-        <td>${typeof r.exactPct === 'number' ? r.exactPct+'%' : 'â€”'}</td>
+        <td>${typeof r.exactPct === 'number' ? r.exactPct+'%' : '—'}</td>
         <td>${statusHtml}</td>
-        <td style="font-size:.75rem;color:#94a3b8;">${r.academicYear||'â€”'}</td>
+        <td style="font-size:.75rem;color:#94a3b8;">${r.academicYear||'—'}</td>
         <td style="font-size:.75rem;color:#94a3b8;">${dateStr}</td>
       </tr>`;
     }).join('');
@@ -1206,7 +1206,7 @@ async function renderLeaderboard() {
         <div class="card-head">
           <div>
             <h2>Appraiser Calibration Results</h2>
-            <div class="card-head-sub">All sessions â€” sorted by adjacent agreement</div>
+            <div class="card-head-sub">All sessions — sorted by adjacent agreement</div>
           </div>
         </div>
         <div class="card-body" style="padding:0;">
@@ -1227,9 +1227,9 @@ async function renderLeaderboard() {
   }
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    GROUP CALIBRATION
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 function renderGroupLanding() {
   document.getElementById('groupLanding').innerHTML = `
     <div class="card">
@@ -1244,15 +1244,15 @@ function renderGroupLanding() {
             Choose scenario
           </label>
           <select id="gcScenarioSelect" style="font-family:inherit;font-size:.82rem;padding:8px 12px;border:1.5px solid #e2e8f0;border-radius:8px;width:100%;margin-bottom:12px;">
-            ${SCENARIOS.map((s,i) => `<option value="${i}">${s.id} â€” ${s.title}</option>`).join('')}
+            ${SCENARIOS.map((s,i) => `<option value="${i}">${s.id} — ${s.title}</option>`).join('')}
           </select>
-          <button class="btn-primary" onclick="window.createGroupSession()">Create session â†’</button>
+          <button class="btn-primary" onclick="window.createGroupSession()">Create session →</button>
         </div>
         <div style="margin-top:24px;padding-top:20px;border-top:1px solid #f1f5f9;">
           <div style="font-size:.8rem;font-weight:700;color:#1e293b;margin-bottom:10px;">Join an existing session</div>
           <div class="gc-input-row">
             <input aria-label="SESSION CODE" class="gc-input" id="gcJoinCode" placeholder="SESSION CODE" maxlength="6">
-            <button class="btn-primary" onclick="window.joinGroupSession()">Join â†’</button>
+            <button class="btn-primary" onclick="window.joinGroupSession()">Join →</button>
           </div>
           <div id="gcJoinError" style="font-size:.78rem;color:#ef4444;"></div>
         </div>
@@ -1343,7 +1343,7 @@ function startGroupSession(code, scIdx, ref) {
       return `<div class="gc-participant">
         <div class="gc-dot ${hasScored ? 'scored' : 'online'}"></div>
         <span style="font-weight:${isSelf?'700':'400'}">${p.displayName}${isSelf?' (you)':''}</span>
-        ${hasScored ? '<span style="color:#1d4ed8;font-size:.68rem;">âœ“</span>' : ''}
+        ${hasScored ? '<span style="color:#1d4ed8;font-size:.68rem;">✓</span>' : ''}
       </div>`;
     }).join('');
 
@@ -1356,14 +1356,14 @@ function startGroupSession(code, scIdx, ref) {
         const spreadCls = spread === 0 ? 'gc-spread-low' : spread === 1 ? 'gc-spread-mid' : 'gc-spread-high';
         const scoreChips = pList.map(([,p]) => {
           const s = p.scores?.[itemId];
-          return s ? `<span class="gc-score-badge gc-s${s}">${s} â€” ${p.displayName}</span>` : '';
+          return s ? `<span class="gc-score-badge gc-s${s}">${s} — ${p.displayName}</span>` : '';
         }).join('');
         return `<div class="gc-result-item">
-          <div class="gc-result-name">${itemId} â€” ${ANCHORS[itemId]?.name||itemId}</div>
+          <div class="gc-result-name">${itemId} — ${ANCHORS[itemId]?.name||itemId}</div>
           <div class="gc-score-badges">${scoreChips}</div>
           <div class="gc-consensus-row">
             <span class="gc-consensus-lbl">Spread</span>
-            <span class="gc-spread-pill ${spreadCls}">Î” ${spread}</span>
+            <span class="gc-spread-pill ${spreadCls}">Δ ${spread}</span>
             <span class="gc-consensus-lbl" style="margin-left:8px;">Expert</span>
             <span class="gc-score-badge gc-s${expert}" style="background:#ede9fe;color:#3c3489;border-color:#c4b5fd;">${expert}</span>
           </div>
@@ -1371,7 +1371,7 @@ function startGroupSession(code, scIdx, ref) {
       }).join('');
       resultsHtml = `
         <div style="margin-top:16px;">
-          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">All scores revealed â€” discuss divergences before moving on</div>
+          <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">All scores revealed — discuss divergences before moving on</div>
           <div class="gc-result-grid">${resultRows}</div>
         </div>`;
     }
@@ -1380,7 +1380,7 @@ function startGroupSession(code, scIdx, ref) {
       <div class="card">
         <div class="card-head">
           <div>
-            <h2>&#x1F465; Group Session â€” ${sc.title}</h2>
+            <h2>&#x1F465; Group Session — ${sc.title}</h2>
             <div class="card-head-sub">Score independently, then compare</div>
           </div>
         </div>
@@ -1391,7 +1391,7 @@ function startGroupSession(code, scIdx, ref) {
             <div style="font-size:.75rem;color:#64748b;margin-bottom:8px;">${pList.length} participant${pList.length!==1?'s':''}</div>
             <div class="gc-participants">${participantChips}</div>
             ${!allScored && pList.some(([puid2,p]) => puid2!==uid && p.scores===null)
-              ? `<div class="gc-waiting">Waiting for others to submit their scoresâ€¦</div>` : ''}
+              ? `<div class="gc-waiting">Waiting for others to submit their scores…</div>` : ''}
           </div>
           <div class="vignette-box" style="margin-bottom:20px;">
             <div class="vignette-label">Observation vignette</div>
@@ -1400,14 +1400,14 @@ function startGroupSession(code, scIdx, ref) {
           ${!participants[uid]?.scores ? `
             <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">Score each item independently. Results hidden until everyone submits.</div>
             ${itemsHtml}
-          ` : `<div style="font-size:.82rem;color:#16a34a;font-weight:700;padding:10px 0;">&#x2713; Your scores submitted â€” waiting for all participants.</div>`}
+          ` : `<div style="font-size:.82rem;color:#16a34a;font-weight:700;padding:10px 0;">&#x2713; Your scores submitted — waiting for all participants.</div>`}
           ${resultsHtml}
         </div>
         <div class="action-row">
           ${!participants[uid]?.scores
             ? `<span class="action-hint">${scored} of ${total} items scored</span>
-               <button class="btn-primary" ${canSubmit ? '' : 'disabled'} onclick="window.gcSubmitScores('${code}')">Submit my scores â†’</button>`
-            : `<button class="btn-ghost" onclick="window.leaveGroupSession()">â† Leave session</button>`
+               <button class="btn-primary" ${canSubmit ? '' : 'disabled'} onclick="window.gcSubmitScores('${code}')">Submit my scores →</button>`
+            : `<button class="btn-ghost" onclick="window.leaveGroupSession()">← Leave session</button>`
           }
         </div>
       </div>`;
@@ -1443,9 +1443,9 @@ function startGroupSession(code, scIdx, ref) {
   groupSession = { code, docRef: ref, unsubscribe: unsub };
 }
 
-/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─────────────────────────────────────────────
    SOLO CONTROLS
-   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   ───────────────────────────────────────────── */
 window.selectScore = function(scIdx, itemId, score) {
   userScores[scIdx][itemId] = score;
   renderScenario(scIdx);

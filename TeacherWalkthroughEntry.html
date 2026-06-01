@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classroom Walkthrough â€” Academic Hub</title>
+<title>Classroom Walkthrough — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -25,11 +25,11 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-/* â”€â”€ HERO (canonical .page-hero from /base.css Â· dark family) â”€â”€
+/* ── HERO (canonical .page-hero from /base.css · dark family) ──
    Page CSS MUST NOT override .page-hero background or KPI layout
    (root CLAUDE.md Common Mistake #50). Body content rail = 1200px;
    width:100% on direct body children avoids the body:has(>.page-footer)
-   flex-column shrink trap. â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+   flex-column shrink trap. ───────────────────────────────────── */
 body:has(> .page-footer) > .page-hero,
 body:has(> .page-footer) > .page-wrap {
   width: 100%;
@@ -44,7 +44,7 @@ body:has(> .page-footer) > .page-wrap {
   padding-right: 0;
 }
 
-/* Hero meta pills (page-local â€” target page-local classes, never .page-hero*) */
+/* Hero meta pills (page-local — target page-local classes, never .page-hero*) */
 .wt-hero-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
 .formative-notice {
   display: inline-flex; align-items: center; gap: 8px;
@@ -71,7 +71,7 @@ body:has(> .page-footer) > .page-wrap {
   .page-wrap { padding-left: 14px; padding-right: 14px; }
 }
 
-/* â”€â”€ AUTOSAVE BANNER â”€â”€ */
+/* ── AUTOSAVE BANNER ── */
 .autosave-banner {
   max-width: 900px; margin: 0 auto; display: none;
   background: #fef9c3; border: 1px solid #fde047; border-radius: 10px;
@@ -86,12 +86,12 @@ body:has(> .page-footer) > .page-wrap {
   cursor: pointer;
 }
 
-/* â”€â”€ LAYOUT â”€â”€
+/* ── LAYOUT ──
    Body content shares the canonical 1200px rail with the hero / info-strip /
    footer (0 horizontal padding; inner cards carry their own insets). */
 .page-wrap { max-width: var(--container-max); margin: 0 auto; padding: 28px 0 100px; }
 
-/* â”€â”€ CARD â”€â”€ */
+/* ── CARD ── */
 .card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
   box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
@@ -104,7 +104,7 @@ body:has(> .page-footer) > .page-wrap {
 .card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
 .card-body { padding: 20px 24px; }
 
-/* â”€â”€ KEYBOARD HINT â”€â”€ */
+/* ── KEYBOARD HINT ── */
 .kbd-hint {
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
@@ -116,7 +116,7 @@ body:has(> .page-footer) > .page-wrap {
   box-shadow: 0 1px 0 #cbd5e1; min-width: 22px;
 }
 
-/* â”€â”€ FORM â”€â”€ */
+/* ── FORM ── */
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
 .form-row.three { grid-template-columns: 1fr 1fr 1fr; }
 .form-row.one { grid-template-columns: 1fr; margin-bottom: 0; }
@@ -131,7 +131,7 @@ body:has(> .page-footer) > .page-wrap {
 .field textarea { resize: vertical; min-height: 80px; }
 .field input.invalid, .field select.invalid { border-color: #dc2626 !important; background: #fef2f2; }
 
-/* â”€â”€ FOCUS CARDS â”€â”€ */
+/* ── FOCUS CARDS ── */
 .foci-grid { display: flex; flex-direction: column; gap: 0; }
 .focus-card {
   padding: 0; border-bottom: 1px solid #f1f5f9;
@@ -139,7 +139,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .focus-card:last-child { border-bottom: none; }
 
-/* Tematik accent bar â€” sol kenar rengi */
+/* Tematik accent bar — sol kenar rengi */
 .focus-card::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
   background: var(--focus-color, #059669); opacity: .7; transition: opacity .2s;
@@ -193,7 +193,7 @@ body:has(> .page-footer) > .page-wrap {
   border-left: 2px solid var(--focus-border, #bbf7d0);
 }
 
-/* â”€â”€ LESSON-PHASE HINT â”€â”€ */
+/* ── LESSON-PHASE HINT ── */
 .phase-hint {
   display: none; align-items: flex-start; gap: 8px;
   background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px;
@@ -203,7 +203,7 @@ body:has(> .page-footer) > .page-wrap {
 .phase-hint.show { display: flex; }
 .phase-hint-icon { flex-shrink: 0; margin-top: 1px; }
 
-/* â”€â”€ RESPONSE TILES â”€â”€ */
+/* ── RESPONSE TILES ── */
 .response-options { display: flex; gap: 8px; margin-bottom: 14px; }
 .resp-btn {
   flex: 1; border: 2px solid #e2e8f0; border-radius: 12px;
@@ -219,7 +219,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .resp-btn:hover { border-color: var(--focus-border, #bbf7d0); background: var(--focus-icon-bg, #f0fdf4); transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,.07); }
 
-/* Selected states â€” full tile fill */
+/* Selected states — full tile fill */
 .resp-btn.sel-E {
   border-color: #16a34a; background: #f0fdf4;
   box-shadow: 0 0 0 3px #bbf7d0, 0 3px 12px rgba(22,163,74,.12);
@@ -278,7 +278,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .char-count.warn { color: #ca8a04; }
 
-/* â”€â”€ CONFIDENCE â”€â”€ */
+/* ── CONFIDENCE ── */
 .confidence-row {
   display: flex; align-items: center; gap: 10px; margin-top: 10px;
 }
@@ -293,7 +293,7 @@ body:has(> .page-footer) > .page-wrap {
 .conf-btn.sel { border-color: #059669; background: #f0fdf4; color: #15803d; }
 .conf-btn.sel-low { border-color: #ca8a04; background: #fefce8; color: #92400e; }
 
-/* â”€â”€ NARRATIVE â”€â”€ */
+/* ── NARRATIVE ── */
 .narrative-card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
   box-shadow: 0 1px 4px rgba(0,0,0,.04); overflow: hidden; margin-bottom: 20px;
@@ -314,7 +314,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .narr-tab:not(:last-child) { border-right: 1px solid #e2e8f0; }
 .narr-tab.active { background: #fff; color: #1e293b; box-shadow: inset 0 -2px 0 #059669; }
-.narr-tab.complete::after { content: ' âœ“'; color: #059669; }
+.narr-tab.complete::after { content: ' ✓'; color: #059669; }
 .narr-tab-pane { display: none; }
 .narr-tab-pane.active { display: block; }
 
@@ -338,7 +338,7 @@ body:has(> .page-footer) > .page-wrap {
   font-size: .67rem; color: #94a3b8; text-align: right; margin-top: 3px;
 }
 
-/* â”€â”€ PROGRESS TRACKER â”€â”€ */
+/* ── PROGRESS TRACKER ── */
 .progress-tracker {
   position: sticky; bottom: 0; background: #fff; border-top: 1px solid #e2e8f0;
   padding: 12px 32px; display: flex; align-items: center; justify-content: space-between;
@@ -369,7 +369,7 @@ body:has(> .page-footer) > .page-wrap {
 .btn-submit:hover { background: #047857; }
 .btn-submit:disabled { opacity: .5; cursor: default; }
 
-/* â”€â”€ TEACHER PICKER â”€â”€ */
+/* ── TEACHER PICKER ── */
 .teacher-picker-wrap { position: relative; }
 .teacher-dropdown {
   display: none; position: absolute; top: 100%; left: 0; right: 0; z-index: 999;
@@ -408,7 +408,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .teacher-chip-clear:hover { color: #dc2626; }
 
-/* â”€â”€ RUBRIC MODAL â”€â”€ */
+/* ── RUBRIC MODAL ── */
 .modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
   z-index: 10000; align-items: center; justify-content: center; padding: 20px;
@@ -452,7 +452,7 @@ body:has(> .page-footer) > .page-wrap {
   box-shadow: 0 4px 24px rgba(0,0,0,.18); z-index: 9999; display: none;
 }
 
-/* â”€â”€ SUCCESS STATE â”€â”€ */
+/* ── SUCCESS STATE ── */
 .success-state {
   background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 16px;
   padding: 48px 32px; text-align: center; display: none;
@@ -473,7 +473,7 @@ body:has(> .page-footer) > .page-wrap {
   .page-wrap { padding: 20px 16px 80px; }
   .kbd-hint { display: none; }
 }
-/* â”€â”€â”€ INFO STRIP (hero-altÄ± bilgilendirme â€” mor / My Work family) â”€â”€â”€ */
+/* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
@@ -523,17 +523,17 @@ body:has(> .page-footer) > .page-wrap {
 <body data-page-accent="dark">
 <div id="navbarMount"></div>
 
-<!-- HERO (canonical .page-hero Â· My Work / dark family) -->
+<!-- HERO (canonical .page-hero · My Work / dark family) -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· Appraisal</p>
+      <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
       <h1 class="page-hero__title">Teacher Walkthrough</h1>
-      <p class="page-hero__desc">Short, frequent classroom-visit notes (5â€“10 min, unannounced) that build the evidence base over time. Formative only â€” no score assigned. Findings are shared with the teacher as developmental feedback.</p>
+      <p class="page-hero__desc">Short, frequent classroom-visit notes (5–10 min, unannounced) that build the evidence base over time. Formative only — no score assigned. Findings are shared with the teacher as developmental feedback.</p>
       <div class="wt-hero-meta">
         <span class="formative-notice">&#x2139;&#xFE0F; This observation does not contribute to the teacher's formal appraisal score.</span>
         <span class="walkthrough-count-badge" id="walkthroughCountBadge" style="display:none;">
-          &#x1F4CB; <span id="walkthroughCountText">Loadingâ€¦</span>
+          &#x1F4CB; <span id="walkthroughCountText">Loading…</span>
         </span>
       </div>
     </div>
@@ -580,7 +580,7 @@ body:has(> .page-footer) > .page-wrap {
         <div class="form-row" style="margin-bottom:12px;">
           <div class="field teacher-picker-wrap" style="grid-column:1/-1;">
             <label>Teacher <span style="color:#dc2626;">*</span></label>
-            <input aria-label="Type name or email to search teachersâ€¦" type="text" id="teacherNameSearch" placeholder="Type name or email to search teachersâ€¦" autocomplete="off"
+            <input aria-label="Type name or email to search teachers…" type="text" id="teacherNameSearch" placeholder="Type name or email to search teachers…" autocomplete="off"
               oninput="teacherSearch(this.value)" style="display:block;">
             <div class="teacher-dropdown" id="teacherDropdown"></div>
             <!-- chip shown after selection -->
@@ -648,7 +648,7 @@ body:has(> .page-footer) > .page-wrap {
           <div class="field">
             <label>Lesson Phase at Time of Visit</label>
             <select id="lessonPhase" onchange="updatePhaseHints()">
-              <option value="">â€” Optional â€”</option>
+              <option value="">— Optional —</option>
               <option value="Opening / Introduction">Opening / Introduction</option>
               <option value="Main Activity">Main Activity</option>
               <option value="Guided Practice">Guided Practice</option>
@@ -673,7 +673,7 @@ body:has(> .page-footer) > .page-wrap {
       <div style="padding:0 24px 12px;">
         <div class="kbd-hint">
           <span style="font-weight:700;color:#374151;">Keyboard shortcuts:</span>
-          <span><span class="kbd">â†‘</span><span class="kbd">â†“</span> navigate foci</span>
+          <span><span class="kbd">↑</span><span class="kbd">↓</span> navigate foci</span>
           <span><span class="kbd">E</span> Evident</span>
           <span><span class="kbd">D</span> Developing</span>
           <span><span class="kbd">N</span> Not Observed</span>
@@ -686,12 +686,12 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
-    <!-- NARRATIVE â€” Glow / Grow / Go -->
+    <!-- NARRATIVE — Glow / Grow / Go -->
     <div class="narrative-card">
       <div class="narrative-head">
         <div>
           <h2>&#x270F;&#xFE0F; Observation Narrative</h2>
-          <div style="font-size:.73rem;color:#94a3b8;margin-top:2px;">Glow Â· Grow Â· Go â€” structured coaching feedback</div>
+          <div style="font-size:.73rem;color:#94a3b8;margin-top:2px;">Glow · Grow · Go — structured coaching feedback</div>
         </div>
       </div>
       <div class="narrative-body">
@@ -704,7 +704,7 @@ body:has(> .page-footer) > .page-wrap {
         <!-- GLOW -->
         <div class="narr-tab-pane active" id="pane-glow">
           <div class="narr-prompt">
-            <strong>Glow</strong> â€” What did you see the teacher doing well? Name a specific strength observed during this visit. Be concrete: describe the behaviour, not just the outcome.
+            <strong>Glow</strong> — What did you see the teacher doing well? Name a specific strength observed during this visit. Be concrete: describe the behaviour, not just the outcome.
           </div>
           <div class="narr-field">
             <label>Key Strength Observed <span style="color:#dc2626;">*</span></label>
@@ -716,11 +716,11 @@ body:has(> .page-footer) > .page-wrap {
         <!-- GROW -->
         <div class="narr-tab-pane" id="pane-grow">
           <div class="narr-prompt">
-            <strong>Grow</strong> â€” What one area, if strengthened, would most improve student learning in this context? Frame it as a professional question or an observation, not a judgment.
+            <strong>Grow</strong> — What one area, if strengthened, would most improve student learning in this context? Frame it as a professional question or an observation, not a judgment.
           </div>
           <div class="narr-field">
             <label>Area for Development</label>
-            <textarea aria-label="e.g. Formative checks were rare in this lesson phase â€” students may benefit from more frequent low-stakes opportunities to signal understanding before moving on" id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase â€” students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <textarea aria-label="e.g. Formative checks were rare in this lesson phase — students may benefit from more frequent low-stakes opportunities to signal understanding before moving on" id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase — students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="char-count-inline" id="grow-count">0 / 300</div>
           </div>
         </div>
@@ -728,11 +728,11 @@ body:has(> .page-footer) > .page-wrap {
         <!-- GO -->
         <div class="narr-tab-pane" id="pane-go">
           <div class="narr-prompt">
-            <strong>Go</strong> â€” One specific, actionable next step. Framed as an invitation, not a mandate. Should be achievable before the next walkthrough visit.
+            <strong>Go</strong> — One specific, actionable next step. Framed as an invitation, not a mandate. Should be achievable before the next walkthrough visit.
           </div>
           <div class="narr-field">
             <label>Suggested Next Step</label>
-            <textarea aria-label="e.g. Try one exit-ticket technique at the end of the next lesson â€” a quick show-of-hands, mini-whiteboard response, or traffic-light card â€” to gauge understanding before closure" id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson â€” a quick show-of-hands, mini-whiteboard response, or traffic-light card â€” to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <textarea aria-label="e.g. Try one exit-ticket technique at the end of the next lesson — a quick show-of-hands, mini-whiteboard response, or traffic-light card — to gauge understanding before closure" id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson — a quick show-of-hands, mini-whiteboard response, or traffic-light card — to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="char-count-inline" id="go-count">0 / 300</div>
           </div>
         </div>
@@ -753,11 +753,11 @@ body:has(> .page-footer) > .page-wrap {
 <div class="progress-tracker" id="progressTracker">
   <div style="display:flex;align-items:center;gap:12px;">
     <div class="progress-foci" id="fociDots">
-      <div role="button" tabindex="0" class="foci-dot" data-focus="W1" title="W1 â€” click to scroll" onclick="scrollToFocus('W1')"></div>
-      <div role="button" tabindex="0" class="foci-dot" data-focus="W2" title="W2 â€” click to scroll" onclick="scrollToFocus('W2')"></div>
-      <div role="button" tabindex="0" class="foci-dot" data-focus="W3" title="W3 â€” click to scroll" onclick="scrollToFocus('W3')"></div>
-      <div role="button" tabindex="0" class="foci-dot" data-focus="W4" title="W4 â€” click to scroll" onclick="scrollToFocus('W4')"></div>
-      <div role="button" tabindex="0" class="foci-dot" data-focus="W5" title="W5 â€” click to scroll" onclick="scrollToFocus('W5')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W1" title="W1 — click to scroll" onclick="scrollToFocus('W1')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W2" title="W2 — click to scroll" onclick="scrollToFocus('W2')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W3" title="W3 — click to scroll" onclick="scrollToFocus('W3')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W4" title="W4 — click to scroll" onclick="scrollToFocus('W4')"></div>
+      <div role="button" tabindex="0" class="foci-dot" data-focus="W5" title="W5 — click to scroll" onclick="scrollToFocus('W5')"></div>
     </div>
     <div class="progress-label" id="progressLabel">0 / 5 foci rated</div>
   </div>
@@ -796,16 +796,16 @@ body:has(> .page-footer) > .page-wrap {
   </div>
 </div>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
+<!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Appraisal Â· Walkthroughs</span>
+      <span class="page-footer__cta-eyebrow">Appraisal · Walkthroughs</span>
       <h2 class="page-footer__cta-title">Frequent walkthroughs build an honest evidence base.</h2>
-      <p class="page-footer__cta-desc">Short, regular visits surface patterns a single formal observation can miss. Keep them developmental â€” never scored â€” and share the Glow Â· Grow Â· Go feedback with the teacher soon after each visit.</p>
-      <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">â†’</span></a>
+      <p class="page-footer__cta-desc">Short, regular visits surface patterns a single formal observation can miss. Keep them developmental — never scored — and share the Glow · Grow · Go feedback with the teacher soon after each visit.</p>
+      <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Teacher Walkthrough footer navigation">
       <div class="page-footer__nav-group">
@@ -822,15 +822,15 @@ body:has(> .page-footer) > .page-wrap {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Walkthroughs are formative only â€” they never feed the formal appraisal score</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Walkthroughs are formative only — they never feed the formal appraisal score</span>
   </div>
 </footer>
 
 <script type="module">
 import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-// â”€â”€ TEACHER SEARCH â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── TEACHER SEARCH ───────────────────────────────────────
 let allTeachersCache = null;
 async function loadTeachersCache() {
   if (allTeachersCache) return allTeachersCache;
@@ -867,12 +867,12 @@ window.teacherSearch = async function(val) {
           const schoolId   = u.schoolId || u.school || '';
           const schoolName = schoolMap[schoolId] || schoolId;
           const subj = u.subject || '';
-          const meta = [schoolName, subj].filter(Boolean).join(' Â· ');
+          const meta = [schoolName, subj].filter(Boolean).join(' · ');
           return `<div role="button" tabindex="0" class="teacher-dropdown-item"
             onclick="selectTeacher('${safeStr(u.uid)}','${safeStr(u.displayName)}','${safeStr(schoolId)}','${safeStr(u.subject||'')}','${safeStr(schoolName)}')">
             <div class="teacher-dropdown-avatar">${(u.displayName||'?')[0].toUpperCase()}</div>
             <div>
-              <div class="teacher-dropdown-name">${u.displayName || 'â€”'}</div>
+              <div class="teacher-dropdown-name">${u.displayName || '—'}</div>
               ${meta ? `<div class="teacher-dropdown-meta">${meta}</div>` : ''}
             </div>
           </div>`;
@@ -889,12 +889,12 @@ window.selectTeacher = function(uid, name, schoolId, subject, schoolNameParam) {
   document.getElementById('teacherDropdown').style.display = 'none';
   document.getElementById('teacherChip').style.display = 'flex';
   document.getElementById('teacherChipAvatar').textContent = (name||'?')[0].toUpperCase();
-  document.getElementById('teacherChipName').textContent = name || 'â€”';
+  document.getElementById('teacherChipName').textContent = name || '—';
   const schoolMap = {};
   if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
   const schoolDisplay = schoolNameParam || schoolMap[schoolId] || schoolId || '';
   const metaParts = [schoolDisplay, subject].filter(Boolean);
-  document.getElementById('teacherChipMeta').textContent = metaParts.join(' Â· ');
+  document.getElementById('teacherChipMeta').textContent = metaParts.join(' · ');
   // Write hidden fields
   document.getElementById('teacherName').value = name || '';
   document.getElementById('teacherUid').value  = uid  || '';
@@ -920,22 +920,22 @@ document.addEventListener('click', e => {
     document.getElementById('teacherDropdown').style.display = 'none';
 });
 
-// â”€â”€ RUBRIC DATA â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── RUBRIC DATA ───────────────────────────────────────────
 let RUBRIC = null;
 fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
 
-const fociResponses = {}; // focusId â†’ { code, note, confidence }
+const fociResponses = {}; // focusId → { code, note, confidence }
 let activeFocusIndex = -1; // keyboard nav
 const FOCUS_ORDER = ['W1','W2','W3','W4','W5'];
 const DRAFT_KEY = 'wt_draft_v1';
 const DRAFT_TTL = 8 * 60 * 60 * 1000; // 8 hours
 
-// â”€â”€ PHASE HINTS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── PHASE HINTS ─────────────────────────────────────────
 const PHASE_HINTS = {
   'W1': {
-    'Opening / Introduction': 'Expect learning intentions now â€” check if objectives are stated or displayed.',
+    'Opening / Introduction': 'Expect learning intentions now — check if objectives are stated or displayed.',
     'Closure / Review': 'Look for a revisit of the learning intention: did students achieve the goal?',
-    'Transition': 'Learning intentions may not be visible at this moment â€” note if previously posted.',
+    'Transition': 'Learning intentions may not be visible at this moment — note if previously posted.',
   },
   'W2': {
     'Independent Work': 'Note proportion on-task vs off-task. Are students self-managing effectively?',
@@ -943,17 +943,17 @@ const PHASE_HINTS = {
     'Guided Practice': 'Look for teacher circulation and checking-in, not just lecture engagement.',
   },
   'W3': {
-    'Transition': 'Climate is most visible during transitions â€” watch noise, movement, and teacher signals.',
+    'Transition': 'Climate is most visible during transitions — watch noise, movement, and teacher signals.',
     'Closure / Review': 'Are students energised or disengaged at lesson end? Tone tells you a lot.',
   },
   'W4': {
-    'Main Activity': 'Core instructional strategy is most visible here â€” name the method precisely.',
+    'Main Activity': 'Core instructional strategy is most visible here — name the method precisely.',
     'Guided Practice': 'Is the teacher gradually releasing responsibility? Scaffolding visible?',
     'Opening / Introduction': 'How is the teacher activating prior knowledge or setting context?',
   },
   'W5': {
-    'Closure / Review': 'Formative monitoring is most observable here â€” look for exit-ticket or check.',
-    'Main Activity': 'Circulating, cold-calling, scanning work â€” what data is the teacher gathering?',
+    'Closure / Review': 'Formative monitoring is most observable here — look for exit-ticket or check.',
+    'Main Activity': 'Circulating, cold-calling, scanning work — what data is the teacher gathering?',
     'Independent Work': 'Is the teacher using downtime to check-in individually or reviewing work?',
   },
 };
@@ -973,14 +973,14 @@ window.updatePhaseHints = function() {
   });
 };
 
-// â”€â”€ RUBRIC MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── RUBRIC MODAL ─────────────────────────────────────────
 let currentModalFocusId = null;
 window.openRubricModal = function(focusId) {
   if (!RUBRIC) return;
   const focus = RUBRIC.foci.find(f=>f.id===focusId);
   if (!focus) return;
   currentModalFocusId = focusId;
-  document.getElementById('modalFocusTitle').textContent = `${focus.id} â€” ${focus.title}`;
+  document.getElementById('modalFocusTitle').textContent = `${focus.id} — ${focus.title}`;
   document.getElementById('modalGuidingQ').textContent = focus.guiding_question;
   document.getElementById('modalDesc').textContent = focus.description;
   document.getElementById('modalPrompt').textContent = focus.prompt_for_observer;
@@ -993,7 +993,7 @@ window.closeRubricModal = function(evt) {
   currentModalFocusId = null;
 };
 
-// â”€â”€ HELPERS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── HELPERS ──────────────────────────────────────────────
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.display = 'block';
@@ -1007,7 +1007,7 @@ function updateProgress() {
     if (code) { counts[code]++; counts.total++; }
   });
   const label = counts.total === 5
-    ? `All 5 foci rated (${counts.E}E Â· ${counts.D}D Â· ${counts.N}N)`
+    ? `All 5 foci rated (${counts.E}E · ${counts.D}D · ${counts.N}N)`
     : `${counts.total} / 5 foci rated`;
   document.getElementById('progressLabel').textContent = label;
   document.querySelectorAll('.foci-dot').forEach(dot=>{
@@ -1040,7 +1040,7 @@ window.switchNarrTab = function(tab) {
   document.getElementById(`pane-${tab}`)?.classList.add('active');
 };
 
-// â”€â”€ AUTOSAVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── AUTOSAVE ─────────────────────────────────────────────
 function gatherDraft() {
   return {
     savedAt: Date.now(),
@@ -1116,7 +1116,7 @@ window.restoreDraft = function() {
     updateNarrTabState();
     updateProgress();
     document.getElementById('autosaveBanner').classList.remove('show');
-    showToast('Draft restored âœ“');
+    showToast('Draft restored ✓');
     const el = document.getElementById('draftIndicator');
     if (el) { el.textContent = 'Draft restored'; el.className = 'draft-indicator saved'; }
   } catch(e) {}
@@ -1127,7 +1127,7 @@ window.discardDraft = function() {
   document.getElementById('autosaveBanner').classList.remove('show');
 };
 
-// â”€â”€ KEYBOARD NAVIGATION â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── KEYBOARD NAVIGATION ──────────────────────────────────
 function setActiveFocus(idx) {
   activeFocusIndex = idx;
   document.querySelectorAll('.focus-card').forEach((card, i) => {
@@ -1188,16 +1188,16 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// â”€â”€ FOCUS THEME MAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── FOCUS THEME MAP ──────────────────────────────────────
 const FOCUS_THEME = {
-  W1: { icon: 'ðŸŽ¯', color: '#2563eb', iconBg: '#eff6ff', border: '#bfdbfe', activeBg: '#eff6ff', label: 'W1' },
+  W1: { icon: '🎯', color: '#2563eb', iconBg: '#eff6ff', border: '#bfdbfe', activeBg: '#eff6ff', label: 'W1' },
   W2: { icon: 'âš¡', color: '#d97706', iconBg: '#fffbeb', border: '#fde68a', activeBg: '#fffbeb', label: 'W2' },
-  W3: { icon: 'ðŸŒ¿', color: '#059669', iconBg: '#f0fdf4', border: '#bbf7d0', activeBg: '#f0fdf4', label: 'W3' },
-  W4: { icon: 'ðŸ”§', color: '#7c3aed', iconBg: '#f5f3ff', border: '#c4b5fd', activeBg: '#f5f3ff', label: 'W4' },
-  W5: { icon: 'ðŸ“¡', color: '#0891b2', iconBg: '#ecfeff', border: '#a5f3fc', activeBg: '#ecfeff', label: 'W5' },
+  W3: { icon: '🌿', color: '#059669', iconBg: '#f0fdf4', border: '#bbf7d0', activeBg: '#f0fdf4', label: 'W3' },
+  W4: { icon: '🔧', color: '#7c3aed', iconBg: '#f5f3ff', border: '#c4b5fd', activeBg: '#f5f3ff', label: 'W4' },
+  W5: { icon: '📡', color: '#0891b2', iconBg: '#ecfeff', border: '#a5f3fc', activeBg: '#ecfeff', label: 'W5' },
 };
 
-// â”€â”€ BUILD FOCI â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── BUILD FOCI ────────────────────────────────────────────
 function updateFocusBadge(focusId, code) {
   const wrap = document.getElementById(`iconwrap-${focusId}`);
   if (!wrap) return;
@@ -1221,7 +1221,7 @@ function buildFoci() {
           <div style="flex:1;min-width:0;">
             <div class="focus-title-row">
               <div class="focus-title">${focus.title}</div>
-              <button class="btn-rubric" onclick="event.stopPropagation();openRubricModal('${focus.id}')">ðŸ“– Rubric</button>
+              <button class="btn-rubric" onclick="event.stopPropagation();openRubricModal('${focus.id}')">📖 Rubric</button>
             </div>
             <div class="focus-question">${focus.guiding_question}</div>
           </div>
@@ -1230,7 +1230,7 @@ function buildFoci() {
         ${focus.theory_basis ? `<div class="focus-theory">${focus.theory_basis}</div>` : ''}
 
         <div class="phase-hint" id="hint-${focus.id}">
-          <span class="phase-hint-icon">ðŸ’¡</span>
+          <span class="phase-hint-icon">💡</span>
           <span id="hint-text-${focus.id}"></span>
         </div>
 
@@ -1260,7 +1260,7 @@ function buildFoci() {
           <div class="focus-note-label">${focus.prompt_for_observer}</div>
           <div class="focus-note-wrap">
             <textarea class="focus-note-input" id="note-${focus.id}" maxlength="300"
-              placeholder="Optional note for this focusâ€¦"
+              placeholder="Optional note for this focus…"
               oninput="setNote('${focus.id}',this.value);updateCharCount('${focus.id}',this.value);autosaveDraft();"
               onfocus="setActiveFocus(${idx})"></textarea>
             <span class="char-count" id="cc-${focus.id}">0</span>
@@ -1408,7 +1408,7 @@ function highlightInvalid() {
   return unratedFoci.length === 0 && fields.every(f => !!document.getElementById(f.id)?.value.trim()) && !glowEmpty;
 }
 
-// â”€â”€ AUTH READY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── AUTH READY ────────────────────────────────────────────
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   const subRoles = profile?.ah_sub_roles || [];
   const isAdmin  = profile?.role_academichub === 'academic_admin';
@@ -1493,7 +1493,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
 
     const btn = document.getElementById('submitBtn');
-    btn.disabled = true; btn.textContent = 'Savingâ€¦';
+    btn.disabled = true; btn.textContent = 'Saving…';
 
     const visitDateVal = document.getElementById('visitDate').value;
     const visitTimeVal = document.getElementById('visitTime').value;
@@ -1540,12 +1540,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       const subject = document.getElementById('subject').value.trim();
       document.getElementById('successSub').innerHTML =
         `Walkthrough for <strong>${teacherName}</strong> (${subject}) has been saved. ` +
-        `${glowVal && growVal && goVal ? 'Full GlowÂ·GrowÂ·Go narrative recorded.' : 'Partial narrative saved.'}`;
+        `${glowVal && growVal && goVal ? 'Full Glow·Grow·Go narrative recorded.' : 'Partial narrative saved.'}`;
       document.getElementById('formView').style.display = 'none';
       document.getElementById('progressTracker').style.display = 'none';
       document.getElementById('successState').style.display = 'block';
     } catch(e) {
-      showToast('Error saving â€” please try again.');
+      showToast('Error saving — please try again.');
       console.error(e);
       btn.disabled = false; btn.textContent = 'Save Walkthrough Record';
     }

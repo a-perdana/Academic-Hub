@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Decisions & Policies â€” Academic Hub</title>
+<title>Decisions & Policies — Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -28,13 +28,13 @@ body { padding-top: 62px; }
   box-sizing: border-box;
 }
 
-/* â”€â”€â”€ Page footer override (induction tint, mor) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Page footer override (induction tint, mor) ───────────────── */
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
-/* â”€â”€â”€ Filter bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Filter bar ─────────────────────────────────────────────── */
 .dr-filter-bar {
   display: flex; gap: 10px; flex-wrap: wrap;
   padding: 14px 18px; background: var(--white); border: 1px solid var(--border);
@@ -62,7 +62,7 @@ body { padding-top: 62px; }
 }
 .dr-btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
 
-/* â”€â”€â”€ Status tabs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Status tabs ────────────────────────────────────────────── */
 .dr-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--border); margin-bottom: 18px; }
 .dr-tab {
   padding: 9px 14px; background: none; border: none;
@@ -74,7 +74,7 @@ body { padding-top: 62px; }
 .dr-tab-count { background: var(--paper-2); padding: 1px 7px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-left: 5px; color: var(--ink-3); }
 .dr-tab.active .dr-tab-count { background: #ede9fe; color: var(--accent); }
 
-/* â”€â”€â”€ Decision cards â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Decision cards ─────────────────────────────────────────── */
 .dr-list { display: flex; flex-direction: column; gap: 12px; }
 .decision-card {
   background: var(--white); border: 1px solid var(--border);
@@ -110,7 +110,7 @@ body { padding-top: 62px; }
 .dc-supersede-chain { margin-top: 8px; font-size: 0.78rem; color: var(--ink-3); }
 .dc-supersede-chain strong { color: var(--ink-2); }
 
-/* â”€â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Modal ──────────────────────────────────────────────────── */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 560px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
@@ -136,7 +136,7 @@ body { padding-top: 62px; }
 .btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
 .btn-save:hover { opacity: 0.92; }
 
-/* â”€â”€â”€ Empty state + toast â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Empty state + toast ────────────────────────────────────── */
 .empty-state {
   text-align: center; padding: 48px 24px; color: var(--ink-3);
   background: var(--white); border: 1px dashed var(--border); border-radius: 10px;
@@ -160,27 +160,27 @@ body { padding-top: 62px; }
 <body>
 <div id="navbarMount"></div>
 
-<!-- â”€â”€â”€ HERO (My Work family Â· canonical .page-hero) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">Decisions &amp; Policies</h1>
-      <p class="page-hero__desc">Binding school-level rules surfaced from leadership meetings â€” or authored directly. Auditable across academic years; supersede rather than edit in place so the institutional memory stays intact.</p>
+      <p class="page-hero__desc">Binding school-level rules surfaced from leadership meetings — or authored directly. Auditable across academic years; supersede rather than edit in place so the institutional memory stays intact.</p>
     </div>
   </div>
 </header>
 
 <main class="page-wrap" id="mainRoot" style="display:none">
   <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px;">
-    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by status / category / subject â€” or open a row to edit.</div>
+    <div class="subtitle" style="font-size:0.86rem;color:var(--ink-3);">Filter by status / category / subject — or open a row to edit.</div>
     <button class="dr-btn-add" id="btnAddDecision">+ New decision</button>
   </div>
 
   <div class="dr-filter-bar">
     <div class="dr-search-wrap">
       <svg class="dr-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input aria-label="Search title or bodyâ€¦" type="text" class="dr-search" id="filterSearch" placeholder="Search title or bodyâ€¦">
+      <input aria-label="Search title or body…" type="text" class="dr-search" id="filterSearch" placeholder="Search title or body…">
     </div>
     <select class="dr-filter" id="filterCategory">
       <option value="">All categories</option>
@@ -223,7 +223,7 @@ body { padding-top: 62px; }
       </div>
       <div class="form-group">
         <label class="form-label">Body</label>
-        <textarea aria-label="Full text â€” explain the rule, why it exists, who it binds. Plain prose stays printable" class="form-textarea" id="dBody" rows="5" placeholder="Full text â€” explain the rule, why it exists, who it binds. Plain prose stays printable."></textarea>
+        <textarea aria-label="Full text — explain the rule, why it exists, who it binds. Plain prose stays printable" class="form-textarea" id="dBody" rows="5" placeholder="Full text — explain the rule, why it exists, who it binds. Plain prose stays printable."></textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Category</label>
@@ -305,7 +305,7 @@ function showToast(msg) {
 }
 
 function fmtDate(ts) {
-  if (!ts) return 'â€”';
+  if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
@@ -366,7 +366,7 @@ function wireUI() {
 }
 
 function subscribeDecisions() {
-  // School-scoped query â€” every doc carries schoolId, rule blocks cross-school reads.
+  // School-scoped query — every doc carries schoolId, rule blocks cross-school reads.
   // Admin sees all schools (no where-clause).
   const constraints = [orderBy('effectiveFrom', 'desc'), limit(500)];
   if (!isAdmin && schoolId) {
@@ -429,7 +429,7 @@ function renderCard(d) {
   const status = d.status || 'draft';
   const subjects = Array.isArray(d.subjectIds) ? d.subjectIds : [];
   const sourceMeetingLink = d.sourceMeetingId
-    ? `<span>From meeting: <a href="/school-leadership-meetings" target="_blank" rel="noopener">${escHtml(d.sourceMeetingId.slice(0, 8))} â†—</a></span>`
+    ? `<span>From meeting: <a href="/school-leadership-meetings" target="_blank" rel="noopener">${escHtml(d.sourceMeetingId.slice(0, 8))} ↗</a></span>`
     : '<span style="color:var(--ink-3);font-style:italic">Authored directly</span>';
 
   let supersedeChain = '';
@@ -451,13 +451,13 @@ function renderCard(d) {
   let actions = '';
   if (status === 'active') {
     actions = `
-      <button class="dc-btn" data-edit="${d.id}">âœŽ Edit</button>
-      <button class="dc-btn" data-supersede="${d.id}">â†— Supersede with new</button>
+      <button class="dc-btn" data-edit="${d.id}">✎ Edit</button>
+      <button class="dc-btn" data-supersede="${d.id}">↗ Supersede with new</button>
       ${isAdmin ? `<button class="dc-btn danger" data-delete="${d.id}" data-confirming="false">Delete</button>` : ''}
     `;
   } else if (status === 'draft') {
     actions = `
-      <button class="dc-btn" data-edit="${d.id}">âœŽ Edit</button>
+      <button class="dc-btn" data-edit="${d.id}">✎ Edit</button>
       <button class="dc-btn" data-promote-draft="${d.id}">Activate (publish)</button>
       ${isAdmin ? `<button class="dc-btn danger" data-delete="${d.id}" data-confirming="false">Delete</button>` : ''}
     `;
@@ -481,7 +481,7 @@ function renderCard(d) {
       <div class="dc-body">${escHtml(d.body || '')}</div>
       ${subjectChips ? `<div class="dc-pills" style="margin-bottom:10px;">${subjectChips}</div>` : ''}
       <div class="dc-meta">
-        <span>Effective: ${fmtDate(d.effectiveFrom)}${d.effectiveUntil ? ' â†’ ' + fmtDate(d.effectiveUntil) : ''}</span>
+        <span>Effective: ${fmtDate(d.effectiveFrom)}${d.effectiveUntil ? ' → ' + fmtDate(d.effectiveUntil) : ''}</span>
         ${sourceMeetingLink}
       </div>
       ${supersedeChain}
@@ -490,7 +490,7 @@ function renderCard(d) {
   `;
 }
 
-/* â”€â”€â”€â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ───── Modal ───────────────────────────────────────────────────── */
 function openModal(decisionId) {
   editingId = decisionId;
   if (decisionId) {
@@ -550,7 +550,7 @@ async function saveDecision() {
   const body = $('dBody').value.trim();
   if (!title) { showToast('Title required.'); return; }
   if (!body) { showToast('Body required.'); return; }
-  if (!schoolId && !isAdmin) { showToast('No schoolId on profile â€” cannot save.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No schoolId on profile — cannot save.'); return; }
 
   const scope = $('dScope').value;
   const subjectIds = [...$('dSubjectChips').querySelectorAll('input:checked')].map(c => c.dataset.subject);
@@ -606,7 +606,7 @@ async function promoteDraft(id) {
   }
 }
 
-/* â”€â”€â”€â”€â”€ Supersede flow â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ───── Supersede flow ──────────────────────────────────────────── */
 function openSupersedeModal(oldId) {
   const old = allDecisions.find(x => x.id === oldId);
   if (!old) { showToast('Original decision not found.'); return; }
@@ -665,7 +665,7 @@ async function supersedeWithNew(oldId) {
       updatedAt: serverTimestamp(),
     });
     closeModal();
-    showToast('Superseded â€” new decision active, original archived.');
+    showToast('Superseded — new decision active, original archived.');
   } catch (err) {
     console.error('[supersede]', err);
     showToast(`Supersede failed: ${err.code || err.message}`);
@@ -697,14 +697,14 @@ async function confirmDelete(id, btn) {
 }
 </script>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical Â· induction tint) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── PAGE FOOTER (canonical · induction tint) ──────────────── -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leaders Workspace Â· Decisions</span>
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Decisions</span>
       <h2 class="page-footer__cta-title">Make the decision auditable, not invisible.</h2>
-      <p class="page-footer__cta-desc">Every binding call at this school belongs here â€” with the meeting it came from, who was in the room, and what it supersedes. The register is the school's institutional memory; supersede rather than edit.</p>
-      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to capture a decision <span aria-hidden="true">â†’</span></a>
+      <p class="page-footer__cta-desc">Every binding call at this school belongs here — with the meeting it came from, who was in the room, and what it supersedes. The register is the school's institutional memory; supersede rather than edit.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings to capture a decision <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Decisions footer navigation">
       <div class="page-footer__nav-group">
@@ -726,8 +726,8 @@ async function confirmDelete(id, btn) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Supersede a prior decision rather than deleting it â€” audit trail stays intact.</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Supersede a prior decision rather than deleting it — audit trail stays intact.</span>
   </div>
 </footer>
 </body>

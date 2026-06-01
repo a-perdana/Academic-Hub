@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proposals â€” Academic Hub</title>
+<title>Proposals — Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <style>
 /* Page-family: My Work (data-accent="dark"). Tokens, reset, base
    typography, AND canonical .page-hero* + .page-footer* chrome come
-   from /base.css. New page 2026-05-29 â€” the discussion / RFC layer that
+   from /base.css. New page 2026-05-29 — the discussion / RFC layer that
    sits BEFORE /school-leadership-decisions. Cloned from CH /coordinator-proposals,
    schoolId-scoped via isAHSchoolLeader() rule (same as /school-leadership-decisions). */
 body { padding-top: 62px; }
@@ -28,13 +28,13 @@ body { padding-top: 62px; }
   box-sizing: border-box;
 }
 
-/* â”€â”€â”€ Page footer override (induction tint, mor) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Page footer override (induction tint, mor) ───────────────── */
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
-/* â”€â”€â”€ Phase legend + roles guide (collapsible) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Phase legend + roles guide (collapsible) ─────────────────── */
 .prop-guide { margin: 0 0 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--white); overflow: hidden; }
 .prop-guide > summary { list-style: none; cursor: pointer; padding: 13px 18px; display: flex; align-items: center; gap: 10px; font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--ink); user-select: none; }
 .prop-guide > summary::-webkit-details-marker { display: none; }
@@ -65,7 +65,7 @@ body { padding-top: 62px; }
 .pg-roles .no  { color: var(--ink-3); }
 .pg-roles__note { font-size: 0.74rem; color: var(--ink-3); margin-top: 10px; line-height: 1.5; }
 
-/* â”€â”€â”€ Toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Toolbar ──────────────────────────────────────────────────── */
 .prop-toolbar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
 .prop-search-wrap { position: relative; flex: 1; min-width: 200px; }
 .prop-search-wrap svg { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: var(--ink-3); pointer-events: none; }
@@ -82,7 +82,7 @@ body { padding-top: 62px; }
 .prop-tab .tab-count { background: var(--paper-2); padding: 1px 7px; border-radius: 10px; font-size: 0.7rem; font-weight: 600; margin-left: 5px; color: var(--ink-3); }
 .prop-tab.active .tab-count { background: #ede9fe; color: var(--accent); }
 
-/* â”€â”€â”€ Master / detail grid â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Master / detail grid ─────────────────────────────────────── */
 .prop-grid { display: grid; grid-template-columns: 360px 1fr; gap: 20px; align-items: start; }
 @media (max-width: 900px) { .prop-grid { grid-template-columns: 1fr; } .prop-detail.is-empty-mobile { display: none; } }
 .prop-list { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
@@ -151,7 +151,7 @@ body { padding-top: 62px; }
 .comment-composer textarea:focus { outline: none; border-color: var(--accent); background: var(--white); }
 .comment-composer-row { display: flex; justify-content: flex-end; margin-top: 8px; }
 
-/* â”€â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── Modal ──────────────────────────────────────────────────────── */
 .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.55); z-index: 1000; align-items: center; justify-content: center; padding: 20px; }
 .modal-overlay.open { display: flex; }
 .modal { background: var(--white); border-radius: 12px; width: 100%; max-width: 480px; max-height: 90vh; overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-lg); }
@@ -180,25 +180,25 @@ body { padding-top: 62px; }
 <body>
 <div id="navbarMount"></div>
 
-<!-- â”€â”€â”€ HERO (My Work family Â· canonical .page-hero) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">Proposals</h1>
-      <p class="page-hero__desc">A discussion board for ideas still being shaped at your school â€” before they become binding decisions. Open a proposal, gather your leadership team's comments, then promote the agreed ones to the Decisions register. Replaces the running shared doc.</p>
+      <p class="page-hero__desc">A discussion board for ideas still being shaped at your school — before they become binding decisions. Open a proposal, gather your leadership team's comments, then promote the agreed ones to the Decisions register. Replaces the running shared doc.</p>
     </div>
     <aside class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
-        <div class="page-hero__kpi-num" id="heroKpiOpen">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiOpen">—</div>
         <div class="page-hero__kpi-lbl">Open for comment</div>
       </div>
       <div class="page-hero__kpi">
-        <div class="page-hero__kpi-num" id="heroKpiDecided">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiDecided">—</div>
         <div class="page-hero__kpi-lbl">Decided</div>
       </div>
       <div class="page-hero__kpi">
-        <div class="page-hero__kpi-num" id="heroKpiTotal">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiTotal">—</div>
         <div class="page-hero__kpi-lbl">Total</div>
       </div>
     </aside>
@@ -209,33 +209,33 @@ body { padding-top: 62px; }
 
   <details class="prop-guide" id="propGuide">
     <summary>
-      <span class="pg-ico" aria-hidden="true">ðŸ§­</span>
-      How proposals work â€” phases &amp; who can do what
+      <span class="pg-ico" aria-hidden="true">🧭</span>
+      How proposals work — phases &amp; who can do what
       <svg class="pg-chev" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </summary>
     <div class="prop-guide__body">
       <div class="pg-flow">
         <div class="pg-phase draft">
           <span class="pg-phase__pill">Draft</span>
-          <div class="pg-phase__desc">The author is still writing â€” problem, options, recommendation. Not yet shown for discussion.</div>
+          <div class="pg-phase__desc">The author is still writing — problem, options, recommendation. Not yet shown for discussion.</div>
           <div class="pg-phase__who"><strong>Who:</strong> the author drafts it. Any leadership-team member can open a new proposal.</div>
         </div>
-        <div class="pg-arrow" aria-hidden="true">â†’</div>
+        <div class="pg-arrow" aria-hidden="true">→</div>
         <div class="pg-phase open">
           <span class="pg-phase__pill">Open for comment</span>
           <div class="pg-phase__desc">Discussion is live. The leadership team reads the proposal and adds comments. This is the brainstorming stage.</div>
           <div class="pg-phase__who"><strong>Who:</strong> the Principal opens it for comment. <strong>All</strong> leadership read &amp; comment.</div>
         </div>
-        <div class="pg-arrow" aria-hidden="true">â†’</div>
+        <div class="pg-arrow" aria-hidden="true">→</div>
         <div class="pg-phase decided">
           <span class="pg-phase__pill">Decided</span>
-          <div class="pg-phase__desc">Agreed. Promoted to the Decisions register (school-wide) with a back-link â€” the decision keeps its audit trail.</div>
+          <div class="pg-phase__desc">Agreed. Promoted to the Decisions register (school-wide) with a back-link — the decision keeps its audit trail.</div>
           <div class="pg-phase__who"><strong>Who:</strong> the <strong>Principal</strong> promotes &amp; approves the decision.</div>
         </div>
-        <div class="pg-arrow" aria-hidden="true">â†’</div>
+        <div class="pg-arrow" aria-hidden="true">→</div>
         <div class="pg-phase parked">
           <span class="pg-phase__pill">Parked</span>
-          <div class="pg-phase__desc">Shelved for now but kept on the record â€” revisit later. Not rejected, just not active.</div>
+          <div class="pg-phase__desc">Shelved for now but kept on the record — revisit later. Not rejected, just not active.</div>
           <div class="pg-phase__who"><strong>Who:</strong> the Principal parks it. Can be re-opened anytime.</div>
         </div>
       </div>
@@ -250,11 +250,11 @@ body { padding-top: 62px; }
             <tr><td>Write / edit the proposal body</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
             <tr><td>Add comments to the discussion</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
             <tr><td>Set the phase (Draft / Open / Parked)</td><td class="no">View only</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
-            <tr><td>Promote to a binding decision</td><td class="no">â€”</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
-            <tr><td>Delete a proposal</td><td class="no">â€”</td><td class="no">â€”</td><td class="yes">Yes</td></tr>
+            <tr><td>Promote to a binding decision</td><td class="no">—</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Delete a proposal</td><td class="no">—</td><td class="no">—</td><td class="yes">Yes</td></tr>
           </tbody>
         </table>
-        <p class="pg-roles__note">Phase &amp; promote control sit with the School Principal by design â€” the leadership team shapes the idea through discussion, the Principal makes the call. Everything here is scoped to your own school; other schools never see your proposals.</p>
+        <p class="pg-roles__note">Phase &amp; promote control sit with the School Principal by design — the leadership team shapes the idea through discussion, the Principal makes the call. Everything here is scoped to your own school; other schools never see your proposals.</p>
       </div>
     </div>
   </details>
@@ -262,7 +262,7 @@ body { padding-top: 62px; }
   <div class="prop-toolbar">
     <div class="prop-search-wrap">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input aria-label="Search proposals by title, body, or referenceâ€¦" type="text" class="prop-search" id="propSearch" placeholder="Search proposals by title, body, or referenceâ€¦" autocomplete="off">
+      <input aria-label="Search proposals by title, body, or reference…" type="text" class="prop-search" id="propSearch" placeholder="Search proposals by title, body, or reference…" autocomplete="off">
     </div>
     <select class="prop-cat-select" id="propCatFilter">
       <option value="all">All categories</option>
@@ -378,7 +378,7 @@ const CATEGORIES = ['kpi','assessment','curriculum','appraisal','operations','ot
 const CAT_LABELS = { kpi:'KPI', assessment:'Assessment', curriculum:'Curriculum', appraisal:'Appraisal', operations:'Operations', other:'Other' };
 const PHASES = ['draft','open_for_comment','decided','parked'];
 const PHASE_LABELS = { draft:'Draft', open_for_comment:'Open for comment', decided:'Decided', parked:'Parked' };
-// Proposal category â†’ Decisions-register category, when promoting.
+// Proposal category → Decisions-register category, when promoting.
 const CAT_TO_DECISION = { kpi:'appraisal', assessment:'pedagogy', curriculum:'pedagogy', appraisal:'appraisal', operations:'admin', other:'other' };
 
 let db, currentUser, userProfile;
@@ -400,12 +400,12 @@ function showToast(msg) {
   showToast._t = setTimeout(() => t.classList.remove('show'), 2400);
 }
 function fmtDate(ts) {
-  if (!ts) return 'â€”';
+  if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
 function fmtDateTime(ts) {
-  if (!ts) return 'â€”';
+  if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) + ', ' +
          d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
@@ -460,7 +460,7 @@ function wireUI() {
 }
 
 function subscribeProposals() {
-  // School-scoped â€” every doc carries schoolId; rule blocks cross-school reads.
+  // School-scoped — every doc carries schoolId; rule blocks cross-school reads.
   // Admin sees all schools (no where-clause). Mirrors /school-leadership-decisions.
   const constraints = [orderBy('updatedAt', 'desc'), limit(300)];
   if (!isAdmin && schoolId) constraints.unshift(where('schoolId', '==', schoolId));
@@ -522,13 +522,13 @@ function renderList() {
     return `
       <div class="prop-card ${p.id === selectedId ? 'is-selected' : ''}" data-id="${p.id}">
         <div class="prop-card__top">
-          <span class="prop-card__cat">${CAT_LABELS[p.category] || p.category || 'â€”'}</span>
+          <span class="prop-card__cat">${CAT_LABELS[p.category] || p.category || '—'}</span>
           <span class="prop-phase-pill ${phase}">${PHASE_LABELS[phase] || phase}</span>
         </div>
         <div class="prop-card__title">${escHtml(p.title || 'Untitled proposal')}</div>
         <div class="prop-card__meta">
           <span>${fmtDate(p.updatedAt || p.createdAt)}</span>
-          <span>ðŸ’¬ ${cc}</span>
+          <span>💬 ${cc}</span>
         </div>
       </div>`;
   }).join('');
@@ -557,7 +557,7 @@ function renderDetail(p) {
 
   const phase = p.phase || 'draft';
   const decidedBadge = p.decisionId
-    ? `<a class="pd-btn primary is-decided" href="/school-leadership-decisions" title="View in Decisions Register">âœ“ Decided â€” view decision</a>`
+    ? `<a class="pd-btn primary is-decided" href="/school-leadership-decisions" title="View in Decisions Register">✓ Decided — view decision</a>`
     : '';
   const phaseOptions = PHASES.map(ph => `<option value="${ph}" ${ph === phase ? 'selected' : ''}>${PHASE_LABELS[ph]}</option>`).join('');
 
@@ -571,27 +571,27 @@ function renderDetail(p) {
     </div>
     <div class="pd-title" id="pdTitle" contenteditable="true" spellcheck="false">${escHtml(p.title || 'Untitled proposal')}</div>
     <div class="pd-actions">
-      ${(isPrincipal && phase !== 'decided') ? `<button class="pd-btn primary" id="pdPromote">Promote to decision â†—</button>` : ''}
+      ${(isPrincipal && phase !== 'decided') ? `<button class="pd-btn primary" id="pdPromote">Promote to decision ↗</button>` : ''}
       ${decidedBadge}
       ${isAdmin ? `<button class="pd-btn danger" id="pdDelete" data-confirming="false">Delete</button>` : ''}
     </div>
-    <div class="pd-section-label">Proposal â€” the problem, the options, your recommendation</div>
-    <textarea aria-label="Write the proposal hereâ€¦" class="pd-body-input" id="pdBody" placeholder="Write the proposal hereâ€¦">${escHtml(p.description || '')}</textarea>
+    <div class="pd-section-label">Proposal — the problem, the options, your recommendation</div>
+    <textarea aria-label="Write the proposal here…" class="pd-body-input" id="pdBody" placeholder="Write the proposal here…">${escHtml(p.description || '')}</textarea>
     <div class="pd-section-label">References (cite source files / standards)</div>
     <div class="pd-refs" id="pdRefs"></div>
     <div class="ref-add-row">
-      <input aria-label="e.g. appraisal-framework-v2.json â†’ F3.weights, CSLS 4.1" type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. appraisal-framework-v2.json â†’ F3.weights, CSLS 4.1">
+      <input aria-label="e.g. appraisal-framework-v2.json → F3.weights, CSLS 4.1" type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. appraisal-framework-v2.json → F3.weights, CSLS 4.1">
       <button class="ref-add-btn" id="pdRefAdd">+ Add reference</button>
     </div>
     <div class="pd-section-label">Discussion <span id="pdCommentCount" style="color:var(--ink-3);font-weight:400;"></span></div>
     <div class="pd-thread" id="pdThread"></div>
     <div class="comment-composer">
-      <textarea aria-label="Add to the discussionâ€¦" id="pdCommentInput" placeholder="Add to the discussionâ€¦"></textarea>
+      <textarea aria-label="Add to the discussion…" id="pdCommentInput" placeholder="Add to the discussion…"></textarea>
       <div class="comment-composer-row"><button class="btn-save" id="pdCommentPost">Post comment</button></div>
     </div>
   `;
 
-  // Body â€” debounced autosave
+  // Body — debounced autosave
   let bodyTimer;
   $('pdBody').addEventListener('input', () => {
     clearTimeout(bodyTimer);
@@ -602,7 +602,7 @@ function renderDetail(p) {
   $('pdPhaseSelect').addEventListener('change', (e) => {
     const next = e.target.value;
     if (next === 'decided' && !p.decisionId) {
-      showToast('Use â€œPromote to decisionâ€ to mark a proposal decided.');
+      showToast('Use "Promote to decision" to mark a proposal decided.');
       e.target.value = p.phase || 'draft';
       return;
     }
@@ -632,8 +632,8 @@ function renderDetail(p) {
 function renderRefs(p) {
   const wrap = $('pdRefs');
   const refs = Array.isArray(p.referenceRefs) ? p.referenceRefs : [];
-  if (!refs.length) { wrap.innerHTML = '<span style="color:var(--ink-3);font-size:0.78rem;">None yet â€” anchor this proposal to a framework, KPI weight, or standard.</span>'; return; }
-  wrap.innerHTML = refs.map((r, i) => `<span class="ref-chip">${escHtml(r)}<span class="ref-x" data-ref-idx="${i}" title="Remove">Ã—</span></span>`).join('');
+  if (!refs.length) { wrap.innerHTML = '<span style="color:var(--ink-3);font-size:0.78rem;">None yet — anchor this proposal to a framework, KPI weight, or standard.</span>'; return; }
+  wrap.innerHTML = refs.map((r, i) => `<span class="ref-chip">${escHtml(r)}<span class="ref-x" data-ref-idx="${i}" title="Remove">×</span></span>`).join('');
   wrap.querySelectorAll('.ref-x').forEach(x => x.addEventListener('click', () => {
     const idx = Number(x.dataset.refIdx);
     const next = refs.filter((_, j) => j !== idx);
@@ -668,7 +668,7 @@ function subscribeThread(proposalId) {
 function renderThread() {
   const t = $('pdThread'); if (!t) return;
   const cc = $('pdCommentCount'); if (cc) cc.textContent = comments.length ? `(${comments.length})` : '';
-  if (!comments.length) { t.innerHTML = '<div class="thread-empty">No comments yet â€” start the discussion below.</div>'; return; }
+  if (!comments.length) { t.innerHTML = '<div class="thread-empty">No comments yet — start the discussion below.</div>'; return; }
   t.innerHTML = comments.map(c => {
     const canDelete = isAdmin || c.authorUid === currentUser.uid;
     return `
@@ -678,7 +678,7 @@ function renderThread() {
           <div class="comment__head">
             <span class="comment__author">${escHtml(c.authorName || 'Someone')}</span>
             <span class="comment__time">${fmtDateTime(c.createdAt)}</span>
-            ${canDelete ? `<button class="comment__del" data-del="${c.id}" title="Delete comment">Ã—</button>` : ''}
+            ${canDelete ? `<button class="comment__del" data-del="${c.id}" title="Delete comment">×</button>` : ''}
           </div>
           <div class="comment__body">${escHtml(c.body || '')}</div>
         </div>
@@ -733,7 +733,7 @@ async function persist(id, patch) {
 
 /* New proposal */
 function openNewModal() {
-  if (!schoolId && !isAdmin) { showToast('No school on your profile â€” cannot create.'); return; }
+  if (!schoolId && !isAdmin) { showToast('No school on your profile — cannot create.'); return; }
   $('newTitle').value = '';
   $('newCategory').value = 'kpi';
   $('modalNew').classList.add('open');
@@ -842,13 +842,13 @@ function wireDeleteButton(btn, id) {
 }
 </script>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical Â· induction tint) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── PAGE FOOTER (canonical · induction tint) ──────────────── -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leaders Workspace Â· Proposals</span>
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Proposals</span>
       <h2 class="page-footer__cta-title">Float the idea before it hardens into policy.</h2>
-      <p class="page-footer__cta-desc">Proposals are the deliberation phase â€” open one for comment, gather your leadership team's view, then the Principal promotes the agreed ones to the Decisions register with the audit trail intact.</p>
+      <p class="page-footer__cta-desc">Proposals are the deliberation phase — open one for comment, gather your leadership team's view, then the Principal promotes the agreed ones to the Decisions register with the audit trail intact.</p>
       <a href="#" class="page-footer__cta-btn" onclick="document.getElementById('btnNewProposal')?.click();return false;">New proposal <span aria-hidden="true">+</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Proposals footer navigation">
@@ -869,7 +869,7 @@ function wireDeleteButton(btn, id) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
     <span class="page-footer__meta-right">Proposals are visible to your school's leadership team; the Principal sets the phase and promotes decisions.</span>
   </div>
 </footer>

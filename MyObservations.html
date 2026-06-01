@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Observations â€” Academic Hub</title>
+<title>My Observations — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -24,11 +24,11 @@
 /* Page-family: My Work (data-accent="dark"). Tokens, reset, base
    typography, AND canonical .page-hero* chrome come from /base.css
    (injected by build.js). Page-local styles below MUST NOT override
-   .page-hero* selectors â€” see root CLAUDE.md Common Mistake #50. */
+   .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; padding-top: 62px; }
 
-/* â”€â”€ HERO ACTIONS (page-local CTA slot â€” not yet in base.css) â”€â”€ */
+/* ── HERO ACTIONS (page-local CTA slot — not yet in base.css) ── */
 .page-hero__actions {
   display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px;
   position: relative; z-index: 1;
@@ -44,8 +44,8 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .btn-hero-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
 .btn-hero-secondary:hover { background: rgba(255,255,255,.25); }
 
-/* â”€â”€ LAYOUT â”€â”€
-   Hero â†” page-wrap alignment: canonical .page-hero__inner clamps to
+/* ── LAYOUT ──
+   Hero ↔ page-wrap alignment: canonical .page-hero__inner clamps to
    --container-max (1200px) AND pads 40px inside that clamp. Match by
    giving page-wrap the same outer clamp + same inner padding, so the
    inner content column is 1120px on both. (Common Mistake #52 +80px
@@ -57,7 +57,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   padding: 28px 40px 100px;
 }
 
-/* â”€â”€ STATS â”€â”€ */
+/* ── STATS ── */
 .stats-strip {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 12px; margin-bottom: 24px;
@@ -70,7 +70,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .stat-value { font-size: 1.6rem; font-weight: 800; color: #1e293b; line-height: 1; }
 .stat-sub { font-size: .72rem; color: #64748b; }
 
-/* â”€â”€ TABS â”€â”€ */
+/* ── TABS ── */
 .tab-bar {
   display: flex; gap: 0; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px;
 }
@@ -88,7 +88,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 }
 .tab-btn.active .tab-count { background: #ede9fe; color: #7c3aed; }
 
-/* â”€â”€ FILTER BAR â”€â”€ */
+/* ── FILTER BAR ── */
 .filter-bar {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
   padding: 14px 20px; margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
@@ -101,7 +101,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
 .filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: #7c3aed; }
 .filter-bar input { flex: 1; min-width: 180px; }
 
-/* â”€â”€ TABLE â”€â”€ */
+/* ── TABLE ── */
 .table-wrap {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden;
 }
@@ -121,7 +121,7 @@ tr:last-child td { border-bottom: none; }
 tr:hover td { background: #fafbff; }
 .empty-row td { text-align: center; color: #94a3b8; font-size: .85rem; padding: 40px; }
 
-/* â”€â”€ PILLS & BADGES â”€â”€ */
+/* ── PILLS & BADGES ── */
 .status-pill {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 3px 10px; border-radius: 20px; font-size: .72rem; font-weight: 700;
@@ -138,13 +138,13 @@ tr:hover td { background: #fafbff; }
 .level-P { background: #dcfce7; color: #15803d; }
 .level-L { background: #fef3c7; color: #b45309; }
 
-/* â”€â”€ SCORE BAR â”€â”€ */
+/* ── SCORE BAR ── */
 .score-bar-wrap { display: flex; align-items: center; gap: 4px; }
 .score-bar-bg { width: 36px; flex-shrink: 0; height: 5px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
 .score-bar-fill { height: 100%; border-radius: 3px; background: #7c3aed; transition: width .3s; }
 .score-pct { font-size: .72rem; font-weight: 700; color: #475569; white-space: nowrap; }
 
-/* â”€â”€ FOCI DOTS â”€â”€ */
+/* ── FOCI DOTS ── */
 .foci-dot {
   display: inline-block; width: 10px; height: 10px; border-radius: 50%;
   margin-right: 3px;
@@ -152,10 +152,10 @@ tr:hover td { background: #fafbff; }
 .foci-dot.yes { background: #7c3aed; }
 .foci-dot.no  { background: #e2e8f0; }
 
-/* â”€â”€ ACTION CELL â”€â”€ */
+/* ── ACTION CELL ── */
 td.action-cell { overflow: visible; white-space: nowrap; }
 
-/* â”€â”€ VIEW / CONTINUE BTN â”€â”€ */
+/* ── VIEW / CONTINUE BTN ── */
 .btn-view {
   padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
   font-weight: 600; cursor: pointer; background: #ede9fe; color: #6d28d9;
@@ -169,7 +169,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 }
 .btn-continue:hover { background: #fde68a; }
 
-/* â”€â”€ MODAL â”€â”€ */
+/* ── MODAL ── */
 .modal-overlay {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45);
   z-index: 1000; align-items: center; justify-content: center; padding: 20px;
@@ -202,7 +202,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .score-row-detail { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
 .score-label-detail { font-size: .78rem; font-weight: 600; color: #475569; width: 80px; }
 
-/* â”€â”€ EMPTY STATE â”€â”€ */
+/* ── EMPTY STATE ── */
 .empty-state {
   text-align: center; padding: 60px 24px; color: #94a3b8;
 }
@@ -210,7 +210,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .empty-state h3 { font-size: 1rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
 .empty-state p { font-size: .83rem; }
 
-/* â”€â”€ DISPUTE â”€â”€ */
+/* ── DISPUTE ── */
 .btn-flag {
   padding: 5px 12px; border-radius: 8px; font-family: inherit; font-size: .75rem;
   font-weight: 600; cursor: pointer; background: #fff7ed; color: #c2410c;
@@ -239,7 +239,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .btn-dispute-submit:hover { background: #9a3412; }
 .btn-dispute-submit:disabled { opacity: .5; cursor: default; }
 
-/* â”€â”€ New-user intro banner (dismissable) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── New-user intro banner (dismissable) ─────────────────────── */
 .page-intro { display:none; background:linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%); border:1px solid #c4b5fd; border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
 .page-intro.show { display:flex; gap:14px; align-items:flex-start; }
 .page-intro-icon { font-size:22px; flex-shrink:0; padding-top:1px; }
@@ -252,7 +252,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid #c4b5fd; border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6d28d9; font-size:14px; line-height:1; transition:all .15s; }
 .page-intro-dismiss:hover { background:#fff; }
 
-/* â”€â”€â”€ PAGE FOOTER TOKEN OVERRIDES (portfolio tint, amber) â”€â”€â”€â”€â”€â”€â”€
+/* ─── PAGE FOOTER TOKEN OVERRIDES (portfolio tint, amber) ───────
    Canonical .page-footer chrome lives in /base.css. Token bundle
    selected for semantic pairing with submitted-evidence surfaces
    (observations are the leader's evidence trail of work delivered). */
@@ -284,11 +284,11 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 </script>
 <div id="navbarMount"></div>
 
-<!-- â”€â”€â”€ HERO (My Work family Â· canonical .page-hero) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Â· Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders · Workspace</p>
       <h1 class="page-hero__title">My Observation Records</h1>
       <p class="page-hero__desc">Formal appraisals and classroom walkthroughs you have submitted.</p>
       <div class="page-hero__actions">
@@ -302,42 +302,42 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 <div class="page-wrap">
 
   <div class="page-intro" data-intro-key="my-observations">
-    <div class="page-intro-icon">ðŸ‘€</div>
+    <div class="page-intro-icon">👀</div>
     <div class="page-intro-body">
       <div class="page-intro-title">First time on My Observations?</div>
       <div class="page-intro-text">
-        This page is a <strong>list of formal appraisals and classroom walkthroughs</strong> you have submitted as a leader. Empty on day 1 â€” observations land here automatically after you submit them from the Teacher Appraisal Entry or Teacher Walkthrough Entry pages.
+        This page is a <strong>list of formal appraisals and classroom walkthroughs</strong> you have submitted as a leader. Empty on day 1 — observations land here automatically after you submit them from the Teacher Appraisal Entry or Teacher Walkthrough Entry pages.
       </div>
-      <a class="page-intro-link" href="/welcome#page-observations">ðŸ“– Read the full guide â†’</a>
+      <a class="page-intro-link" href="/welcome#page-observations">📖 Read the full guide →</a>
     </div>
-    <button class="page-intro-dismiss" type="button" aria-label="Dismiss intro" onclick="window.__dismissIntro('my-observations')">âœ•</button>
+    <button class="page-intro-dismiss" type="button" aria-label="Dismiss intro" onclick="window.__dismissIntro('my-observations')">✕</button>
   </div>
 
   <!-- STATS -->
   <div class="stats-strip">
     <div class="stat-card">
       <div class="stat-label">Appraisals</div>
-      <div class="stat-value" id="statAppraisals">â€”</div>
+      <div class="stat-value" id="statAppraisals">—</div>
       <div class="stat-sub">total submitted</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Finalised</div>
-      <div class="stat-value" id="statFinalised">â€”</div>
+      <div class="stat-value" id="statFinalised">—</div>
       <div class="stat-sub">appraisals</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Walkthroughs</div>
-      <div class="stat-value" id="statWalkthroughs">â€”</div>
+      <div class="stat-value" id="statWalkthroughs">—</div>
       <div class="stat-sub">total submitted</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Avg Score</div>
-      <div class="stat-value" id="statAvg">â€”</div>
+      <div class="stat-value" id="statAvg">—</div>
       <div class="stat-sub">composite %</div>
     </div>
     <div class="stat-card" id="statDisputedCard" style="display:none;">
       <div class="stat-label">Disputed</div>
-      <div class="stat-value" id="statDisputed" style="color:#c2410c;">â€”</div>
+      <div class="stat-value" id="statDisputed" style="color:#c2410c;">—</div>
       <div class="stat-sub">awaiting review</div>
     </div>
   </div>
@@ -355,7 +355,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
   <!-- APPRAISALS PANEL -->
   <div id="panelAppraisals">
     <div class="filter-bar">
-      <input aria-label="Search teacher nameâ€¦" type="text" id="searchA" placeholder="Search teacher nameâ€¦">
+      <input aria-label="Search teacher name…" type="text" id="searchA" placeholder="Search teacher name…">
       <select id="filterYear">
         <option value="">All years</option>
         <option value="2025/2026">2025/2026</option>
@@ -394,7 +394,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
           <thead>
             <tr>
               <th>Teacher</th>
-              <th>School Â· Subject</th>
+              <th>School · Subject</th>
               <th>Year</th>
               <th>Level</th>
               <th>F1</th>
@@ -406,7 +406,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
             </tr>
           </thead>
           <tbody id="appraisalRows">
-            <tr class="empty-row"><td colspan="10">Loadingâ€¦</td></tr>
+            <tr class="empty-row"><td colspan="10">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -416,7 +416,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
   <!-- WALKTHROUGHS PANEL -->
   <div id="panelWalkthroughs" style="display:none;">
     <div class="filter-bar">
-      <input aria-label="Search teacher nameâ€¦" type="text" id="searchW" placeholder="Search teacher nameâ€¦">
+      <input aria-label="Search teacher name…" type="text" id="searchW" placeholder="Search teacher name…">
       <select id="filterYearW">
         <option value="">All years</option>
         <option value="2025/2026">2025/2026</option>
@@ -433,12 +433,12 @@ td.action-cell { overflow: visible; white-space: nowrap; }
               <th>Year</th>
               <th>Visit Date</th>
               <th>Phase</th>
-              <th>Foci (W1â€“W5)</th>
+              <th>Foci (W1–W5)</th>
               <th></th>
             </tr>
           </thead>
           <tbody id="walkthroughRows">
-            <tr class="empty-row"><td colspan="7">Loadingâ€¦</td></tr>
+            <tr class="empty-row"><td colspan="7">Loading…</td></tr>
           </tbody>
         </table>
       </div>
@@ -452,7 +452,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
   <div class="modal">
     <div class="modal-head">
       <h3 id="aModalTitle">Appraisal Detail</h3>
-      <button class="modal-close" onclick="document.getElementById('appraisalModal').classList.remove('open')">âœ•</button>
+      <button class="modal-close" onclick="document.getElementById('appraisalModal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body" id="aModalBody"></div>
   </div>
@@ -463,7 +463,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
   <div class="modal">
     <div class="modal-head">
       <h3 id="wModalTitle">Walkthrough Detail</h3>
-      <button class="modal-close" onclick="document.getElementById('walkthroughModal').classList.remove('open')">âœ•</button>
+      <button class="modal-close" onclick="document.getElementById('walkthroughModal').classList.remove('open')">✕</button>
     </div>
     <div class="modal-body" id="wModalBody"></div>
   </div>
@@ -473,17 +473,17 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 <div class="modal-overlay" id="disputeModal">
   <div class="modal" style="max-width:520px;">
     <div class="modal-head">
-      <h3>âš‘ Flag Appraisal for Review</h3>
-      <button class="modal-close" onclick="closeDisputeModal()">âœ•</button>
+      <h3>âš' Flag Appraisal for Review</h3>
+      <button class="modal-close" onclick="closeDisputeModal()">✕</button>
     </div>
     <div class="dispute-modal-body">
       <div class="dispute-notice">
         Flagging this appraisal will notify your coordinator that you wish to discuss or contest the outcome.
-        This does <strong>not</strong> automatically change your score â€” it opens a formal review dialogue.
+        This does <strong>not</strong> automatically change your score — it opens a formal review dialogue.
       </div>
       <div>
         <div class="dispute-label">Reason for flagging <span style="color:#dc2626;">*</span></div>
-        <textarea aria-label="Describe your concern clearly â€” e.g. a specific score you believe is inaccurate, evidence not considered, or a procedural concern" class="dispute-textarea" id="disputeReason" placeholder="Describe your concern clearly â€” e.g. a specific score you believe is inaccurate, evidence not considered, or a procedural concern."></textarea>
+        <textarea aria-label="Describe your concern clearly — e.g. a specific score you believe is inaccurate, evidence not considered, or a procedural concern" class="dispute-textarea" id="disputeReason" placeholder="Describe your concern clearly — e.g. a specific score you believe is inaccurate, evidence not considered, or a procedural concern."></textarea>
       </div>
       <button class="btn-dispute-submit" id="disputeSubmitBtn" onclick="submitDispute()">Submit Flag for Review</button>
     </div>
@@ -529,12 +529,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     });
   });
 
-  // Filters â€” appraisals
+  // Filters — appraisals
   ['searchA','filterYear','filterLevel','filterStatus'].forEach(id => {
     document.getElementById(id).addEventListener('input', renderAppraisals);
   });
 
-  // Filters â€” walkthroughs
+  // Filters — walkthroughs
   ['searchW','filterYearW'].forEach(id => {
     document.getElementById(id).addEventListener('input', renderWalkthroughs);
   });
@@ -560,7 +560,7 @@ function updateStats() {
   document.getElementById('statAppraisals').textContent = allAppraisals.length;
   document.getElementById('statFinalised').textContent = finalised;
   document.getElementById('statWalkthroughs').textContent = allWalkthroughs.length;
-  document.getElementById('statAvg').textContent = avg != null ? avg + '%' : 'â€”';
+  document.getElementById('statAvg').textContent = avg != null ? avg + '%' : '—';
   document.getElementById('tcAppraisals').textContent = allAppraisals.length;
   document.getElementById('tcWalkthroughs').textContent = allWalkthroughs.length;
   if (disputed > 0) {
@@ -591,25 +591,25 @@ function renderAppraisals() {
 
   tbody.innerHTML = rows.map(a => {
     const levelKey = a.level?.[0] || 'I';
-    const levelLabel = a.level?.split(' ')[0] || 'â€”';
+    const levelLabel = a.level?.split(' ')[0] || '—';
     const isDisputed = a.disputed && a.disputeStatus === 'open';
     const statusClass = isDisputed ? 'pill-disputed' : `pill-${a.status || 'draft'}`;
-    const statusLabel = isDisputed ? 'âš‘ Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
+    const statusLabel = isDisputed ? 'âš' Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
 
     const scoreBar = (val) => val != null
       ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${val}%"></div></div><span class="score-pct">${Math.round(val)}%</span></div>`
-      : '<span style="color:#cbd5e1;font-size:.78rem;">â€”</span>';
+      : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
 
     const composite = a.compositePercent != null
       ? `<span style="font-weight:700;font-size:.88rem;color:#1e293b;">${Math.round(a.compositePercent)}%</span>`
-      : '<span style="color:#cbd5e1;font-size:.78rem;">â€”</span>';
+      : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
 
     const canFlag = a.status === 'finalised' && !a.disputed;
 
     return `<tr>
-      <td style="font-weight:600;">${esc(a.teacherName||'â€”')}</td>
-      <td style="color:#475569;">${esc(a.schoolId||'â€”')} Â· ${esc(a.subject||'â€”')}</td>
-      <td style="color:#64748b;">${esc(a.academicYear||'â€”')}</td>
+      <td style="font-weight:600;">${esc(a.teacherName||'—')}</td>
+      <td style="color:#475569;">${esc(a.schoolId||'—')} · ${esc(a.subject||'—')}</td>
+      <td style="color:#64748b;">${esc(a.academicYear||'—')}</td>
       <td><span class="level-badge level-${levelKey}">${levelLabel}</span></td>
       <td>${scoreBar(a.f1Score)}</td>
       <td>${scoreBar(a.f2Score)}</td>
@@ -620,7 +620,7 @@ function renderAppraisals() {
         ${a.status === 'draft'
           ? `<button class="btn-continue" data-continue-id="${a.id}">Continue</button>`
           : ''}
-        ${canFlag ? `<button class="btn-flag" data-id="${a.id}">âš‘ Flag</button>` : ''}
+        ${canFlag ? `<button class="btn-flag" data-id="${a.id}">âš' Flag</button>` : ''}
         <button class="btn-view" data-id="${a.id}">View</button>
       </td>
     </tr>`;
@@ -657,7 +657,7 @@ function renderWalkthroughs() {
   }
 
   tbody.innerHTML = rows.map(w => {
-    const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : 'â€”';
+    const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
     const foci = w.fociResponses || {};
     const fociDots = [1,2,3,4,5].map(n => {
       const resp = foci[`W${n}`];
@@ -666,11 +666,11 @@ function renderWalkthroughs() {
     }).join('');
 
     return `<tr>
-      <td style="font-weight:600;">${esc(w.metadata?.teacherName||'â€”')}</td>
-      <td style="color:#475569;">${esc(w.metadata?.subject||'â€”')}</td>
-      <td style="color:#64748b;">${esc(w.academicYear||'â€”')}</td>
+      <td style="font-weight:600;">${esc(w.metadata?.teacherName||'—')}</td>
+      <td style="color:#475569;">${esc(w.metadata?.subject||'—')}</td>
+      <td style="color:#64748b;">${esc(w.academicYear||'—')}</td>
       <td>${visitDate}</td>
-      <td style="color:#64748b;font-size:.78rem;">${esc(w.metadata?.lessonPhase||'â€”')}</td>
+      <td style="color:#64748b;font-size:.78rem;">${esc(w.metadata?.lessonPhase||'—')}</td>
       <td>${fociDots}</td>
       <td><button class="btn-view" data-id="${w.id}">View</button></td>
     </tr>`;
@@ -684,7 +684,7 @@ function renderWalkthroughs() {
 function openAppraisalModal(id) {
   const a = allAppraisals.find(x => x.id === id);
   if (!a) return;
-  document.getElementById('aModalTitle').textContent = `Appraisal â€” ${a.teacherName || 'â€”'}`;
+  document.getElementById('aModalTitle').textContent = `Appraisal — ${a.teacherName || '—'}`;
 
   const scoreRow = (label, val) => `
     <div class="score-row-detail">
@@ -699,20 +699,20 @@ function openAppraisalModal(id) {
     <div class="detail-section">
       <div class="detail-section-title">Teacher Information</div>
       <div class="detail-grid">
-        <div class="detail-item"><div class="detail-item-label">Name</div><div class="detail-item-value">${esc(a.teacherName||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Level</div><div class="detail-item-value">${esc(a.level||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">School</div><div class="detail-item-value">${esc(a.schoolId||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(a.subject||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(a.academicYear||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(a.yearGroup||'â€”')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Name</div><div class="detail-item-value">${esc(a.teacherName||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Level</div><div class="detail-item-value">${esc(a.level||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">School</div><div class="detail-item-value">${esc(a.schoolId||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(a.subject||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(a.academicYear||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(a.yearGroup||'—')}</div></div>
       </div>
     </div>
     <div class="detail-section">
       <div class="detail-section-title">Observation</div>
       <div class="detail-grid">
-        <div class="detail-item"><div class="detail-item-label">Date</div><div class="detail-item-value">${a.observationDate?.toDate ? a.observationDate.toDate().toLocaleDateString('en-GB') : 'â€”'}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${a.lessonDuration ? a.lessonDuration + ' min' : 'â€”'}</div></div>
-        <div class="detail-item" style="grid-column:1/-1"><div class="detail-item-label">Lesson Topic</div><div class="detail-item-value">${esc(a.lessonTopic||'â€”')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Date</div><div class="detail-item-value">${a.observationDate?.toDate ? a.observationDate.toDate().toLocaleDateString('en-GB') : '—'}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${a.lessonDuration ? a.lessonDuration + ' min' : '—'}</div></div>
+        <div class="detail-item" style="grid-column:1/-1"><div class="detail-item-label">Lesson Topic</div><div class="detail-item-value">${esc(a.lessonTopic||'—')}</div></div>
       </div>
     </div>
     <div class="detail-section">
@@ -726,24 +726,24 @@ function openAppraisalModal(id) {
     <div class="detail-section">
       <div class="detail-section-title">Status</div>
       <div><span class="status-pill pill-${a.status||'draft'}">${(a.status||'draft').charAt(0).toUpperCase()+(a.status||'draft').slice(1)}</span></div>
-      ${a.appraiserNarrative?.strengths   ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">âœ¨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.strengths)}</div></div>` : ''}
-      ${a.appraiserNarrative?.development ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">ðŸŒ± Grow${(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) ? ' â€” ' + esc(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.development)}</div></div>` : ''}
-      ${a.appraiserNarrative?.actions     ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">ðŸŽ¯ Go${a.appraiserNarrative.goDate ? ' â€” by ' + a.appraiserNarrative.goDate : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.actions)}</div>${a.appraiserNarrative.goCheck ? `<div style="font-size:.75rem;color:#64748b;margin-top:3px;">Check: ${esc(a.appraiserNarrative.goCheck)}</div>` : ''}</div>` : ''}
+      ${a.appraiserNarrative?.strengths   ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">✨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.strengths)}</div></div>` : ''}
+      ${a.appraiserNarrative?.development ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">🌱 Grow${(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) ? ' — ' + esc(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.development)}</div></div>` : ''}
+      ${a.appraiserNarrative?.actions     ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go${a.appraiserNarrative.goDate ? ' — by ' + a.appraiserNarrative.goDate : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.actions)}</div>${a.appraiserNarrative.goCheck ? `<div style="font-size:.75rem;color:#64748b;margin-top:3px;">Check: ${esc(a.appraiserNarrative.goCheck)}</div>` : ''}</div>` : ''}
       ${a.teacherResponse ? `<div style="margin-top:8px;background:#f8fafc;border-radius:10px;padding:10px 14px;font-size:.83rem;color:#475569;line-height:1.6;"><strong>Teacher response:</strong> ${esc(a.teacherResponse)}</div>` : ''}
     </div>
     ${a.followUp?.achieved ? (() => {
-      const verdictLabels = { yes:'âœ” Achieved', partial:'~ Partially achieved', no:'âœ— Not yet achieved' };
+      const verdictLabels = { yes:'✔ Achieved', partial:'~ Partially achieved', no:'✗ Not yet achieved' };
       const verdictColors  = { yes:'#15803d',   partial:'#92400e',              no:'#b91c1c' };
       const v = a.followUp.achieved;
       return `<div class="detail-section">
-        <div class="detail-section-title">ðŸ”„ Follow-up â€” Previous Go Target</div>
+        <div class="detail-section-title">🔄 Follow-up — Previous Go Target</div>
         ${a.followUp.goalText ? `<div style="font-size:.82rem;color:#475569;margin-bottom:6px;">Target: ${esc(a.followUp.goalText)}</div>` : ''}
         <div style="font-size:.83rem;font-weight:700;color:${verdictColors[v]};">${verdictLabels[v]||v}</div>
         ${a.followUp.note ? `<div style="font-size:.8rem;color:#64748b;margin-top:4px;">${esc(a.followUp.note)}</div>` : ''}
       </div>`;
     })() : ''}
     ${a.coachingQuestions?.length ? `<div class="detail-section">
-      <div class="detail-section-title">ðŸ’¬ Debrief Questions Used</div>
+      <div class="detail-section-title">💬 Debrief Questions Used</div>
       <ul style="margin:6px 0 0;padding-left:16px;">
         ${a.coachingQuestions.map(q=>`<li style="font-size:.8rem;color:#475569;margin-bottom:4px;">${esc(q.text)}</li>`).join('')}
       </ul>
@@ -756,9 +756,9 @@ function openAppraisalModal(id) {
 function openWalkthroughModal(id) {
   const w = allWalkthroughs.find(x => x.id === id);
   if (!w) return;
-  document.getElementById('wModalTitle').textContent = `Walkthrough â€” ${w.metadata?.teacherName || 'â€”'}`;
+  document.getElementById('wModalTitle').textContent = `Walkthrough — ${w.metadata?.teacherName || '—'}`;
 
-  const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : 'â€”';
+  const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
   const foci = w.fociResponses || {};
   const codeColors = { E: '#15803d', D: '#92400e', N: '#64748b' };
   const codeLabels = { E: 'Evident', D: 'Developing', N: 'Not Observed' };
@@ -766,8 +766,8 @@ function openWalkthroughModal(id) {
     const resp = foci[`W${n}`] || {};
     const code = resp.code || 'N';
     return `<div class="detail-item">
-      <div class="detail-item-label">W${n} â€” ${FOCI_LABELS[n-1]}</div>
-      <div class="detail-item-value" style="font-size:.8rem;color:${codeColors[code]};">${codeLabels[code]}${resp.note ? ` â€” <span style="color:#475569;font-weight:400;">${esc(resp.note)}</span>` : ''}</div>
+      <div class="detail-item-label">W${n} — ${FOCI_LABELS[n-1]}</div>
+      <div class="detail-item-value" style="font-size:.8rem;color:${codeColors[code]};">${codeLabels[code]}${resp.note ? ` — <span style="color:#475569;font-weight:400;">${esc(resp.note)}</span>` : ''}</div>
     </div>`;
   }).join('');
 
@@ -775,14 +775,14 @@ function openWalkthroughModal(id) {
     <div class="detail-section">
       <div class="detail-section-title">Teacher & Visit</div>
       <div class="detail-grid">
-        <div class="detail-item"><div class="detail-item-label">Teacher</div><div class="detail-item-value">${esc(w.metadata?.teacherName||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(w.metadata?.subject||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(w.metadata?.yearGroup||'â€”')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Teacher</div><div class="detail-item-value">${esc(w.metadata?.teacherName||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(w.metadata?.subject||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(w.metadata?.yearGroup||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Visit Date</div><div class="detail-item-value">${visitDate}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${w.duration ? w.duration + ' min' : 'â€”'}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Lesson Phase</div><div class="detail-item-value">${esc(w.metadata?.lessonPhase||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Observer Role</div><div class="detail-item-value">${esc(w.metadata?.observerRole||'â€”')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(w.academicYear||'â€”')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${w.duration ? w.duration + ' min' : '—'}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Lesson Phase</div><div class="detail-item-value">${esc(w.metadata?.lessonPhase||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Observer Role</div><div class="detail-item-value">${esc(w.metadata?.observerRole||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(w.academicYear||'—')}</div></div>
       </div>
     </div>
     <div class="detail-section">
@@ -791,9 +791,9 @@ function openWalkthroughModal(id) {
     </div>
     ${(w.narrative?.glow || w.narrative?.grow || w.narrative?.go) ? `<div class="detail-section">
       <div class="detail-section-title">Observation Narrative</div>
-      ${w.narrative?.glow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">âœ¨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.glow)}</div></div>` : ''}
-      ${w.narrative?.grow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">ðŸŒ± Grow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.grow)}</div></div>` : ''}
-      ${w.narrative?.go   ? `<div><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">ðŸŽ¯ Go</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.go)}</div></div>` : ''}
+      ${w.narrative?.glow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">✨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.glow)}</div></div>` : ''}
+      ${w.narrative?.grow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">🌱 Grow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.grow)}</div></div>` : ''}
+      ${w.narrative?.go   ? `<div><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.go)}</div></div>` : ''}
     </div>` : (w.keyObservation ? `<div class="detail-section">
       <div class="detail-section-title">Key Observation</div>
       <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.keyObservation)}</div>
@@ -825,7 +825,7 @@ window.submitDispute = async function() {
   }
   const btn = document.getElementById('disputeSubmitBtn');
   btn.disabled = true;
-  btn.textContent = 'Submittingâ€¦';
+  btn.textContent = 'Submitting…';
   try {
     await updateDoc(doc(window.db, 'teacher_appraisals', disputeTargetId), {
       disputed: true,
@@ -842,7 +842,7 @@ window.submitDispute = async function() {
     console.error(e);
     btn.disabled = false;
     btn.textContent = 'Submit Flag for Review';
-    alert('Error submitting â€” please try again.');
+    alert('Error submitting — please try again.');
   }
 };
 
@@ -851,16 +851,16 @@ function esc(str) {
 }
 </script>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· portfolio tint) â”€â”€â”€â”€â”€
+<!-- ─── PAGE FOOTER (canonical .page-footer · portfolio tint) ─────
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Leadership observations Â· Year-round</span>
+      <span class="page-footer__cta-eyebrow">Leadership observations · Year-round</span>
       <h2 class="page-footer__cta-title">Make the next observation count.</h2>
-      <p class="page-footer__cta-desc">A short, focused walkthrough every week beats one long appraisal once a term. Pick one teacher, watch one focus, and write back the same day â€” the people you observe remember what you wrote, not how long you stayed.</p>
-      <a href="TeacherWalkthroughEntry.html" class="page-footer__cta-btn">Start a new walkthrough <span aria-hidden="true">â†’</span></a>
+      <p class="page-footer__cta-desc">A short, focused walkthrough every week beats one long appraisal once a term. Pick one teacher, watch one focus, and write back the same day — the people you observe remember what you wrote, not how long you stayed.</p>
+      <a href="TeacherWalkthroughEntry.html" class="page-footer__cta-btn">Start a new walkthrough <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="My Observations footer navigation">
       <div class="page-footer__nav-group">
@@ -880,8 +880,8 @@ function esc(str) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Submitted observations are immutable Â· disputes open a review lane</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Submitted observations are immutable · disputes open a review lane</span>
   </div>
 </footer>
 </body>

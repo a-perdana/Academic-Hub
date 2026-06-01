@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Events â€” Academic Hub</title>
+  <title>School Events — Academic Hub</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,7 +20,7 @@
       background: var(--paper);
     }
 
-    /* School pill sits in the hero (white-on-cyan) â€” readable on
+    /* School pill sits in the hero (white-on-cyan) — readable on
        both the canonical .page-hero cyan band and any future
        accent. Inherits its own contrast palette. */
     .school-pill {
@@ -45,7 +45,7 @@
     }
     .year-select option { background: #0e7490; color: #fff; }
 
-    /* Category filter bar â€” light surface, sits directly under the
+    /* Category filter bar — light surface, sits directly under the
        hero. Canonical container width (1200px + 40px padding) so it
        aligns with the body content below. */
     .cat-tab-bar {
@@ -109,7 +109,7 @@
     }
     .view-toggle { margin-left: auto; }
     /* Search takes the leftover space in the bar (no max-width cap)
-       so the bar fills edge-to-edge of the 1200px container â€” same
+       so the bar fills edge-to-edge of the 1200px container — same
        reason as the filter-bar-ev width:100%. Previously capped at
        300px which left a wide phantom blank on viewports > 1200px. */
     .search-ev {
@@ -272,7 +272,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* Inline-rendered inside .filter-bar-ev (next to search + view
-       toggle + Add Event) â€” no standalone row. */
+       toggle + Add Event) — no standalone row. */
     .stats-row { display: inline-flex; gap: 8px; flex-wrap: nowrap; }
     .stat-chip {
       display: inline-flex; align-items: center; gap: 6px;
@@ -289,7 +289,7 @@
     }
     .no-school-banner strong { font-weight: 700; }
 
-    /* â”€â”€ View toggle â”€â”€ */
+    /* ── View toggle ── */
     .view-toggle {
       display: inline-flex; background: var(--paper); border: 1px solid var(--border);
       border-radius: 8px; padding: 3px; gap: 2px;
@@ -304,7 +304,7 @@
     .view-toggle button:hover { color: var(--ink); }
     .view-toggle button.active { background: var(--white); color: var(--accent); box-shadow: var(--shadow-sm); }
 
-    /* â”€â”€ Calendar grid (2-month strip) â”€â”€ */
+    /* ── Calendar grid (2-month strip) ── */
     .cal-strip {
       display: grid; grid-template-columns: 1fr 1fr; gap: 24px;
     }
@@ -351,7 +351,7 @@
     }
     .cal-cell[data-has-events="1"]:hover { transform: scale(1.06); z-index: 2; }
 
-    /* Event cell coloring â€” uses category palettes that match badge colors */
+    /* Event cell coloring — uses category palettes that match badge colors */
     .cal-cell.ev-workshop  { background: #1e40af; color: #fff; }
     .cal-cell.ev-open_day  { background: #16a34a; color: #fff; }
     .cal-cell.ev-fair      { background: #d97706; color: #fff; }
@@ -470,7 +470,7 @@
 <header class="page-hero" data-accent="cyan" aria-label="School Events header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal Â· Academic Hub Â· My School</div>
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My School</div>
       <h1 class="page-hero__title">School Events</h1>
       <p class="page-hero__desc">Activities and events at your school. Add what you have planned and HQ + your leadership team can monitor at a glance.</p>
       <div class="school-pill" id="schoolPill" style="display:none"></div>
@@ -517,18 +517,18 @@
       <input aria-label="Search events" class="search-ev" id="searchInput" type="text" placeholder="Search events...">
       <div class="stats-row" id="statsRow"></div>
       <div class="view-toggle" id="viewToggle">
-        <button data-view="calendar" class="active" title="Calendar grid">ðŸ—“ Calendar</button>
-        <button data-view="list" title="List by month">ðŸ“‹ List</button>
+        <button data-view="calendar" class="active" title="Calendar grid">🗓 Calendar</button>
+        <button data-view="list" title="List by month">📋 List</button>
       </div>
       <button class="btn-add-ev" id="addEventBtn">+ Add Event</button>
     </div>
 
-    <!-- Calendar view (default) â€” 2-month strip with prev/next nav -->
+    <!-- Calendar view (default) — 2-month strip with prev/next nav -->
     <div id="calendarViewWrap">
       <div class="cal-nav">
-        <button class="cal-nav-arrow" id="calPrev">â† Prev 2 months</button>
-        <span class="cal-nav-label" id="calRangeLabel">â€”</span>
-        <button class="cal-nav-arrow" id="calNext">Next 2 months â†’</button>
+        <button class="cal-nav-arrow" id="calPrev">← Prev 2 months</button>
+        <span class="cal-nav-label" id="calRangeLabel">—</span>
+        <button class="cal-nav-arrow" id="calNext">Next 2 months →</button>
       </div>
       <div class="cal-strip" id="calStrip"></div>
     </div>
@@ -543,7 +543,7 @@
 
 </div>
 
-<!-- â”€â”€ ADD / EDIT EVENT MODAL â”€â”€ -->
+<!-- ── ADD / EDIT EVENT MODAL ── -->
 <div class="modal-bg" id="eventModal">
   <div class="modal-box">
     <div class="modal-head">
@@ -553,7 +553,7 @@
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">School</label>
-        <div class="form-readonly" id="evSchoolReadonly">â€”</div>
+        <div class="form-readonly" id="evSchoolReadonly">—</div>
       </div>
       <div class="form-group">
         <label class="form-label" for="evTitle">Event Title *</label>
@@ -577,7 +577,7 @@
         <input class="form-input" id="evDateStart" type="date">
       </div>
       <div class="form-group">
-        <label class="form-label" for="evDateEnd">End Date <span style="color:var(--ink-3);font-weight:400">(optional â€” for multi-day events)</span></label>
+        <label class="form-label" for="evDateEnd">End Date <span style="color:var(--ink-3);font-weight:400">(optional — for multi-day events)</span></label>
         <input class="form-input" id="evDateEnd" type="date">
       </div>
       <div class="form-group">
@@ -592,7 +592,7 @@
   </div>
 </div>
 
-<!-- â”€â”€ DELETE CONFIRM MODAL â”€â”€ -->
+<!-- ── DELETE CONFIRM MODAL ── -->
 <div class="modal-bg" id="deleteModal">
   <div class="modal-box">
     <div class="modal-head">
@@ -606,12 +606,12 @@
   </div>
 </div>
 
-<!-- â”€â”€ DAY DETAIL POPOVER (calendar view) â”€â”€ -->
+<!-- ── DAY DETAIL POPOVER (calendar view) ── -->
 <div class="cal-day-detail" id="dayDetail">
   <div class="box">
     <div class="box-head">
-      <h3 id="dayDetailTitle">â€”</h3>
-      <button class="box-close" id="dayDetailClose" aria-label="Close">Ã—</button>
+      <h3 id="dayDetailTitle">—</h3>
+      <button class="box-close" id="dayDetailClose" aria-label="Close">×</button>
     </div>
     <div class="box-body" id="dayDetailBody"></div>
   </div>
@@ -652,12 +652,12 @@ let mySchoolName = '';
 let editingId   = null;
 let deletingId  = null;
 
-// View state â€” 'calendar' (default) or 'list'. Persisted in localStorage.
+// View state — 'calendar' (default) or 'list'. Persisted in localStorage.
 const VIEW_KEY = 'schoolEventsView';
 let currentView = 'calendar';
 try { currentView = localStorage.getItem(VIEW_KEY) || 'calendar'; } catch(_) {}
 
-// Calendar pagination â€” anchor month (0-11) + year. Default: today's month.
+// Calendar pagination — anchor month (0-11) + year. Default: today's month.
 const __today = new Date();
 let calAnchorMonth = __today.getMonth();
 let calAnchorYear  = __today.getFullYear();
@@ -920,7 +920,7 @@ function renderListView() {
   }
 }
 
-// â”€â”€ Calendar grid view (2-month strip) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Calendar grid view (2-month strip) ─────────────────────────────────────
 const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
 function renderCalendarView() {
@@ -959,7 +959,7 @@ function renderCalendarView() {
 
   const labelA = `${MONTH_NAMES[monthA.m]} ${monthA.y}`;
   const labelB = `${MONTH_NAMES[monthB.m]} ${monthB.y}`;
-  document.getElementById('calRangeLabel').textContent = `${labelA} â€“ ${labelB}`;
+  document.getElementById('calRangeLabel').textContent = `${labelA} – ${labelB}`;
 
   const strip = document.getElementById('calStrip');
   strip.innerHTML = '';
@@ -1012,7 +1012,7 @@ function buildMonthCard(year, month, byDay, contByDay) {
     const allEvts   = [...startEvts, ...contEvts];
 
     if (allEvts.length > 0) {
-      // Pick the dominant category â€” first start event wins; if only
+      // Pick the dominant category — first start event wins; if only
       // continuations land here, use the first continuation.
       const dominant = startEvts[0] || contEvts[0];
       const cat = dominant.category || 'other';
@@ -1023,7 +1023,7 @@ function buildMonthCard(year, month, byDay, contByDay) {
       if (allEvts.length > 1) cell.dataset.multi = '1';
       cell.dataset.hasEvents = '1';
       cell.dataset.dateKey   = key;
-      cell.title = allEvts.map(e => e.title).join(' Â· ');
+      cell.title = allEvts.map(e => e.title).join(' · ');
       cell.addEventListener('click', () => openDayDetail(key, allEvts));
     }
 
@@ -1035,7 +1035,7 @@ function buildMonthCard(year, month, byDay, contByDay) {
   }
   card.appendChild(grid);
 
-  // Foot panel â€” list of events that START in this month, with
+  // Foot panel — list of events that START in this month, with
   // category-coloured day numbers (matches the screenshot mockup).
   const foot = document.createElement('div');
   foot.className = 'cal-month-foot';
@@ -1066,7 +1066,7 @@ function buildMonthCard(year, month, byDay, contByDay) {
   return card;
 }
 
-// â”€â”€ Day-detail popover (calendar cell click) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Day-detail popover (calendar cell click) ───────────────────────────────
 function openDayDetail(dateKey, events) {
   const [y, m, d] = dateKey.split('-').map(Number);
   const dt = new Date(y, m - 1, d);
@@ -1106,7 +1106,7 @@ function closeDayDetail() {
   document.getElementById('dayDetail').classList.remove('open');
 }
 
-// â”€â”€ Date helpers (shared by calendar + list views) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Date helpers (shared by calendar + list views) ─────────────────────────
 function parseLocalDate(iso) {
   const [y, m, d] = iso.split('-').map(Number);
   return new Date(y, m - 1, d);
@@ -1130,7 +1130,7 @@ function formatDateRange(start, end) {
   if (!end || end === start) return startStr;
   const [, em, ed] = end.split('-').map(Number);
   const endStr = `${ed} ${MONTH_NAMES[em - 1].slice(0, 3)}`;
-  return `${startStr} â€“ ${endStr}`;
+  return `${startStr} – ${endStr}`;
 }
 
 function daysDiff(dateStr) {
@@ -1265,10 +1265,10 @@ function escHtml(s) {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">My School Â· Communications</span>
+      <span class="page-footer__cta-eyebrow">My School · Communications</span>
       <h2 class="page-footer__cta-title">Your school's calendar, network-visible.</h2>
-      <p class="page-footer__cta-desc">Workshops, open days, fairs, ceremonies â€” what's happening at your school stays at HQ's fingertips. Tag categories so leadership can monitor at a glance.</p>
-      <a href="/academic-calendar" class="page-footer__cta-btn">Open Academic Calendar <span aria-hidden="true">â†’</span></a>
+      <p class="page-footer__cta-desc">Workshops, open days, fairs, ceremonies — what's happening at your school stays at HQ's fingertips. Tag categories so leadership can monitor at a glance.</p>
+      <a href="/academic-calendar" class="page-footer__cta-btn">Open Academic Calendar <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="School Events footer navigation">
       <div class="page-footer__nav-group">
@@ -1288,7 +1288,7 @@ function escHtml(s) {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
     <span class="page-footer__meta-right">Tag events by category so leadership can monitor at a glance.</span>
   </div>
 </footer>

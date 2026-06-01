@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>School Leadership Meetings â€” Academic Hub</title>
+<title>School Leadership Meetings — Academic Hub</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <style>
 /* Ported from CH /coordinators-meetings (2026-05-24), schoolId-scoped.
    Schema: school_leadership_meetings (envelope) + school_leadership_
-   meeting_items (top-level, FK by meetingId). Two-column layout â€”
+   meeting_items (top-level, FK by meetingId). Two-column layout —
    meetings list on left, selected meeting's agenda items on right. */
 body { padding-top: 62px; }
 
@@ -27,7 +27,7 @@ body { padding-top: 62px; }
   box-sizing: border-box;
 }
 
-/* Fill full 1200px clamp even when no meeting is picked yet â€” twin of the
+/* Fill full 1200px clamp even when no meeting is picked yet — twin of the
    act-layout fix in school-activities.html. */
 .mtg-layout { width: 100%; }
 
@@ -129,7 +129,7 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub Â· School Leaders Workspace</p>
+      <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">School Leadership Meetings</h1>
       <p class="page-hero__desc">Weekly + ad-hoc leadership team minutes. Each meeting carries agenda items tagged decision / action / discussion / announcement / red-text. Red-text items belong in the Decisions register; action items spawn cards in Activities.</p>
     </div>
@@ -159,7 +159,7 @@ body { padding-top: 62px; }
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input aria-label="e.g. Weekly leadership rhythm â€” week 12" type="text" class="form-input" id="mTitle" placeholder="e.g. Weekly leadership rhythm â€” week 12">
+        <input aria-label="e.g. Weekly leadership rhythm — week 12" type="text" class="form-input" id="mTitle" placeholder="e.g. Weekly leadership rhythm — week 12">
       </div>
       <div class="form-grid-2">
         <div class="form-group">
@@ -203,7 +203,7 @@ body { padding-top: 62px; }
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input aria-label="e.g. Year 8 SoW revision â€” sign-off needed" type="text" class="form-input" id="iTitle" placeholder="e.g. Year 8 SoW revision â€” sign-off needed">
+        <input aria-label="e.g. Year 8 SoW revision — sign-off needed" type="text" class="form-input" id="iTitle" placeholder="e.g. Year 8 SoW revision — sign-off needed">
       </div>
       <div class="form-group">
         <label class="form-label">Tag</label>
@@ -224,7 +224,7 @@ body { padding-top: 62px; }
         <div class="form-group">
           <label class="form-label">Subject (optional)</label>
           <select class="form-select" id="iSubject">
-            <option value="">â€” Not subject-scoped â€”</option>
+            <option value="">— Not subject-scoped —</option>
           </select>
         </div>
         <div class="form-group">
@@ -279,7 +279,7 @@ function showToast(msg) {
 }
 
 function fmtDate(ts) {
-  if (!ts) return 'â€”';
+  if (!ts) return '—';
   const d = ts.toDate ? ts.toDate() : new Date(ts);
   return d.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
 }
@@ -311,7 +311,7 @@ document.addEventListener('authReady', ({ detail }) => {
 
 function populateSubjectFilter() {
   const sel = $('iSubject');
-  sel.innerHTML = '<option value="">â€” Not subject-scoped â€”</option>' +
+  sel.innerHTML = '<option value="">— Not subject-scoped —</option>' +
     SUBJECTS.map(s => `<option value="${s}">${SUBJECT_LABELS[s]}</option>`).join('');
 }
 
@@ -347,7 +347,7 @@ function subscribeMeetings() {
 function renderMeetings() {
   const list = $('mtgList');
   if (!allMeetings.length) {
-    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No meetings yet â€” hit <strong>+ New</strong> above.</div>`;
+    list.innerHTML = `<div style="font-size:0.8rem;color:var(--ink-3);padding:14px;text-align:center;">No meetings yet — hit <strong>+ New</strong> above.</div>`;
     return;
   }
   list.innerHTML = allMeetings.map(m => {
@@ -356,7 +356,7 @@ function renderMeetings() {
     const actionCount = allItems.filter(i => i.meetingId === m.id && i.tag === 'action').length;
     return `<div class="mtg-item ${m.id === activeMeetingId ? 'active' : ''}" data-meeting="${m.id}">
       <div class="mtg-item-title">${escHtml(m.title || 'Untitled')}</div>
-      <div class="mtg-item-date">${fmtDate(m.meetingDate)} Â· ${KIND_LABELS[m.kind] || m.kind || ''}</div>
+      <div class="mtg-item-date">${fmtDate(m.meetingDate)} · ${KIND_LABELS[m.kind] || m.kind || ''}</div>
       ${itemCount ? `<div class="mtg-item-counts">
         <span class="pill-tiny">${itemCount} items</span>
         ${decisionCount ? `<span class="pill-tiny" style="background:#fee2e2;color:#991b1b;">${decisionCount} dec</span>` : ''}
@@ -404,12 +404,12 @@ function renderDetail() {
     <div class="mtg-head">
       <div style="flex:1;min-width:240px;">
         <h2>${escHtml(m.title || 'Untitled')}</h2>
-        <div class="meta">${fmtDate(m.meetingDate)} Â· ${KIND_LABELS[m.kind] || m.kind || ''} Â· ${mItems.length} item${mItems.length === 1 ? '' : 's'}</div>
+        <div class="meta">${fmtDate(m.meetingDate)} · ${KIND_LABELS[m.kind] || m.kind || ''} · ${mItems.length} item${mItems.length === 1 ? '' : 's'}</div>
         ${m.description ? `<div class="desc">${escHtml(m.description)}</div>` : ''}
         ${m.attendees ? `<div class="meta" style="margin-top:6px;"><strong>Attendees:</strong> ${escHtml(m.attendees)}</div>` : ''}
       </div>
       <div class="actions">
-        <button id="btnEditMeeting">âœŽ Edit meeting</button>
+        <button id="btnEditMeeting">✎ Edit meeting</button>
         ${isAdmin ? '<button class="danger" id="btnDeleteMeeting">Delete</button>' : ''}
       </div>
     </div>
@@ -419,7 +419,7 @@ function renderDetail() {
         <h3>Agenda items</h3>
         <button class="mtg-btn-add" id="btnAddItem">+ New item</button>
       </div>
-      ${mItems.length ? `<div class="items-list">${mItems.map(renderItem).join('')}</div>` : '<div class="empty-items">No agenda items yet â€” hit <strong>+ New item</strong> to add the first.</div>'}
+      ${mItems.length ? `<div class="items-list">${mItems.map(renderItem).join('')}</div>` : '<div class="empty-items">No agenda items yet — hit <strong>+ New item</strong> to add the first.</div>'}
     </div>
   `;
 
@@ -627,10 +627,10 @@ function confirmDanger() {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">School Leaders Workspace Â· Meetings</span>
+      <span class="page-footer__cta-eyebrow">School Leaders Workspace · Meetings</span>
       <h2 class="page-footer__cta-title">The agenda item is the unit of leadership.</h2>
       <p class="page-footer__cta-desc">Each row tagged decision belongs in the Decisions register; each action belongs in Activities. Tag them right at capture time and the rest of the workspace stays auditable.</p>
-      <a href="/school-leadership-decisions" class="page-footer__cta-btn">Open Decisions to surface a binding rule <span aria-hidden="true">â†’</span></a>
+      <a href="/school-leadership-decisions" class="page-footer__cta-btn">Open Decisions to surface a binding rule <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Meetings footer navigation">
       <div class="page-footer__nav-group">
@@ -651,8 +651,8 @@ function confirmDanger() {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Same-school visibility Â· minutes are an audit trail â€” admin-only delete</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Same-school visibility · minutes are an audit trail — admin-only delete</span>
   </div>
 </footer>
 </body>

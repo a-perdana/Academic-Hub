@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Weekly Checklist â€” Academic Hub</title>
+<title>Weekly Checklist — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <style>
 /* Page-family: My Work (data-accent="dark"). Tokens, reset, base
    typography, AND canonical .page-hero* chrome come from /base.css
    (injected by build.js). Page-local styles below MUST NOT override
-   .page-hero* selectors â€” see root CLAUDE.md Common Mistake #50. */
+   .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 :root {
-  --accent:   #6c5ce7;   /* brand mor â€” My Work family accent */
+  --accent:   #6c5ce7;   /* brand mor — My Work family accent */
   --accent-2: #ede9fe;
 }
 
-/* â”€â”€â”€ NAVBAR OFFSET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── NAVBAR OFFSET ──────────────────────────── */
 body { padding-top: 62px; }
 
-/* â”€â”€â”€ HERO LAYOUT EXTRAS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─── HERO LAYOUT EXTRAS ─────────────────────────
    The canonical .page-hero__inner is `display:flex; flex-wrap:wrap`
    with the text block as the first child. For weekly-checklist we
    want a 2-line layout:
@@ -32,7 +32,7 @@ body { padding-top: 62px; }
   row-gap: var(--space-5);
 }
 
-/* â”€â”€â”€ PROGRESS RING (page-local) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PROGRESS RING (page-local) ───────────────── */
 .wc-progress {
   flex-shrink: 0;
   display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -48,7 +48,7 @@ body { padding-top: 62px; }
 .ring-text { font-size: 18px; font-weight: 800; fill: #fff; dominant-baseline: middle; text-anchor: middle; }
 .ring-sub  { font-size: 9px; font-weight: 600; fill: rgba(255,255,255,0.55); dominant-baseline: middle; text-anchor: middle; }
 
-/* â”€â”€â”€ HERO TABS (page-local) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─── HERO TABS (page-local) ─────────────────────
    Sub-role tabs live inside the hero. Per-tab colour tokens keep
    the existing Foundation/Principal/Coordinator/Cambridge visual
    distinction. Layout: full-width row that wraps below the
@@ -92,7 +92,7 @@ body { padding-top: 62px; }
   background: var(--tc); left: 10px; right: 10px;
 }
 
-/* â”€â”€â”€ PAIRED HANDBOOK LINK (page-local) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── PAIRED HANDBOOK LINK (page-local) ────────── */
 .wc-paired-handbook {
   flex: 0 0 100%;
   display: none;          /* JS flips to inline-flex when a handbook is mapped */
@@ -111,7 +111,7 @@ body { padding-top: 62px; }
   border-color: rgba(255,255,255,0.28);
 }
 
-/* â”€â”€â”€ PAGE WRAP â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─── PAGE WRAP ──────────────────────────────────
    Canonical .page-hero__inner clamps to --container-max (1200px) AND
    pads 40px inside that clamp; matching .page-wrap with the same outer
    clamp + same inner padding gives both blocks a 1120px content column.
@@ -123,7 +123,7 @@ body { padding-top: 62px; }
   padding: 28px 40px 72px;
 }
 
-/* â”€â”€â”€ WEEK NAV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── WEEK NAV ───────────────────────────────── */
 .week-nav {
   display: flex; align-items: center; justify-content: space-between;
   background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
@@ -148,7 +148,7 @@ body { padding-top: 62px; }
 }
 .week-jump-select:focus { border-color: var(--accent); }
 
-/* â”€â”€â”€ ADMIN BAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── ADMIN BAR ──────────────────────────────── */
 .admin-bar {
   display: flex; align-items: center; justify-content: space-between;
   background: #fef9ee; border: 1px solid #fde68a; border-radius: var(--radius);
@@ -157,7 +157,7 @@ body { padding-top: 62px; }
 .admin-bar-label { font-size: 12px; font-weight: 700; color: #92400e; }
 .admin-bar-actions { display: flex; gap: 8px; }
 
-/* â”€â”€â”€ CATEGORY FILTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── CATEGORY FILTER ────────────────────────── */
 .cat-filter {
   display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px;
   align-items: center;
@@ -179,7 +179,7 @@ body { padding-top: 62px; }
 }
 .task-pager .ess-pager-btn { /* defined alongside essentials CSS below */ }
 
-/* â”€â”€â”€ TASK GROUPS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TASK GROUPS ────────────────────────────── */
 .task-group { margin-bottom: 28px; }
 .task-group-title {
   font-size: 11px; font-weight: 700; letter-spacing: 0.12em;
@@ -194,7 +194,7 @@ body { padding-top: 62px; }
   padding: 1px 8px; border-radius: 10px;
 }
 
-/* â”€â”€â”€ TASK CARD â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TASK CARD ──────────────────────────────── */
 .task-list { display: flex; flex-direction: column; gap: 10px; }
 .task-card {
   position: relative;
@@ -270,9 +270,9 @@ body { padding-top: 62px; }
 .task-chip.priority-important { background: #cffafe; color: #155e75; font-weight: 600; }
 .task-chip.priority-support   { background: #f1f5f9; color: #475569; }
 .task-chip.framework { background: #f0fdf4; color: #14532d; font-family: 'DM Mono', monospace; font-size: 10px; }
-/* Cambridge cross-reference chips â€” wired by cambridge-crossref.js at runtime
+/* Cambridge cross-reference chips — wired by cambridge-crossref.js at runtime
    (CTS via [title*="Cambridge Teacher Standards"], SKL via .hb-tag.skl,
-   PIGP via .hb-tag.pigp). On click â†’ popover with verbatim text + sibling
+   PIGP via .hb-tag.pigp). On click → popover with verbatim text + sibling
    KPI / Appraisal / Competency / Induction items. */
 .task-chip.cts {
   background: #ede9fe; color: #4c1d95; font-family: 'DM Mono', monospace;
@@ -350,7 +350,7 @@ body { padding-top: 62px; }
 .btn-icon:hover { background: var(--paper-2); color: var(--ink); }
 .btn-icon.danger:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
 
-/* â”€â”€â”€ NOTES INLINE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── NOTES INLINE ───────────────────────────── */
 .task-note-area {
   margin-top: 10px; border-top: 1px solid var(--border); padding-top: 10px;
 }
@@ -370,7 +370,7 @@ body { padding-top: 62px; }
 }
 .note-save-btn:hover { background: #ddd6fe; }
 
-/* â”€â”€â”€ EMPTY STATE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── EMPTY STATE ────────────────────────────── */
 .empty-state {
   text-align: center; padding: 64px 24px;
   background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
@@ -378,7 +378,7 @@ body { padding-top: 62px; }
 .empty-state h3 { font-size: 1rem; font-weight: 600; color: var(--ink-2); margin-bottom: 8px; }
 .empty-state p  { font-size: 0.875rem; color: var(--ink-3); margin-bottom: 20px; }
 
-/* â”€â”€â”€ LOADING â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── LOADING ────────────────────────────────── */
 .loading-state { text-align: center; padding: 56px; color: var(--ink-3); }
 .spinner {
   width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--accent);
@@ -386,7 +386,7 @@ body { padding-top: 62px; }
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* â”€â”€â”€ MODAL â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── MODAL ──────────────────────────────────── */
 .modal-bg {
   position: fixed; inset: 0; background: rgba(28,28,46,0.55);
   backdrop-filter: blur(4px); z-index: 9000;
@@ -417,7 +417,7 @@ body { padding-top: 62px; }
 .field-error { font-size: 0.75rem; color: #dc2626; margin-top: 4px; display: none; }
 .form-input.invalid { border-color: #dc2626; }
 
-/* â”€â”€â”€ BUTTONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── BUTTONS ────────────────────────────────── */
 .btn {
   font-family: 'DM Sans', sans-serif; font-size: 0.875rem; font-weight: 500;
   padding: 9px 18px; border-radius: 8px; border: 1px solid transparent;
@@ -429,7 +429,7 @@ body { padding-top: 62px; }
 .btn-secondary { background: var(--white); color: var(--ink-2); border-color: var(--border); }
 .btn-secondary:hover { background: var(--paper); }
 
-/* â”€â”€â”€ TOAST â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── TOAST ──────────────────────────────────── */
 .toast {
   position: fixed; bottom: 24px; right: 24px; font-size: 0.875rem;
   padding: 12px 20px; border-radius: 10px; z-index: 9999;
@@ -439,22 +439,22 @@ body { padding-top: 62px; }
 .toast.show { opacity: 1; transform: translateY(0); }
 .toast.error { background: #dc2626; }
 
-/* â”€â”€â”€ RESPONSIVE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ─── RESPONSIVE ─────────────────────────────── */
 @media (max-width: 640px) {
   .page-wrap { padding: 20px 16px 56px; }
   .week-nav { flex-wrap: wrap; justify-content: center; gap: 10px; }
   .wc-progress { margin-left: 0; }
 }
 
-/* â”€â”€â”€ WEEKLY ESSENTIALS (green accent â€” habit / cyclic) â”€â”€â”€â”€â”€â”€â”€â”€â”€
-   "Weekly Essentials" is the recurring-cadence panel â€” habits that
+/* ─── WEEKLY ESSENTIALS (green accent — habit / cyclic) ─────────
+   "Weekly Essentials" is the recurring-cadence panel — habits that
    apply every week, never one-off. Green reads as "growth / steady",
    which matches the panel's semantics. The card carries:
-     Â· 3px green left-edge stripe (governance signal),
-     Â· soft green-tinted background (#f0fdf4 family),
-     Â· gradient header bar (green â†’ emerald) with white uppercase
+     · 3px green left-edge stripe (governance signal),
+     · soft green-tinted background (#f0fdf4 family),
+     · gradient header bar (green → emerald) with white uppercase
        label so it pops above the page-wrap neutral.
-   Header â†’ list keeps the same content rhythm as before; only the
+   Header → list keeps the same content rhythm as before; only the
    chrome is wowed up. */
 .essentials-section {
   background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 38%);
@@ -489,7 +489,7 @@ body { padding-top: 62px; }
 @media (max-width: 640px) {
   .essentials-list { grid-template-columns: 1fr; }
 }
-/* Essentials pager nestled into the gradient header â€” flip its
+/* Essentials pager nestled into the gradient header — flip its
    colours so the buttons read on the dark green band. */
 .essentials-header .ess-pager-btn {
   background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.32); color: #fff;
@@ -508,7 +508,7 @@ body { padding-top: 62px; }
 .ess-pager-btn:disabled { opacity: 0.35; cursor: default; }
 .ess-pager-info { font-size: 0.72rem; color: var(--ink-3); font-weight: 500; }
 
-/* â”€â”€ JOURNAL â”€â”€ */
+/* ── JOURNAL ── */
 .journal-section {
   background: var(--white); border: 1px solid var(--border);
   border-radius: var(--radius); box-shadow: var(--shadow-sm);
@@ -556,7 +556,7 @@ body { padding-top: 62px; }
 .journal-editor b, .journal-editor strong { font-weight: 700; }
 .journal-editor i, .journal-editor em { font-style: italic; }
 .journal-editor u { text-decoration: underline; }
-/* â”€â”€â”€ EVENTS BAND (This Week cyan + Next Week mor) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─── EVENTS BAND (This Week cyan + Next Week mor) ─────────────
    Two-column band sits directly under the optional skipped-week
    amber banner. Each column carries its own colour family so the
    eye separates "right now" (cyan = active / live) from "coming
@@ -600,7 +600,7 @@ body { padding-top: 62px; }
   position: relative; z-index: 1;
 }
 
-/* This Week â€” cyan family (live / active). */
+/* This Week — cyan family (live / active). */
 .events-col--this-week {
   background: linear-gradient(180deg, #ecfeff 0%, #ffffff 38%);
   border-color: #a5f3fc;
@@ -611,7 +611,7 @@ body { padding-top: 62px; }
   background: linear-gradient(135deg, #0891b2 0%, #0e7490 60%, #155e75 100%);
 }
 
-/* Next Week â€” mor family (preview, matches hero My Work accent). */
+/* Next Week — mor family (preview, matches hero My Work accent). */
 .events-col--next-week {
   background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 38%);
   border-color: #ddd6fe;
@@ -679,9 +679,9 @@ body { padding-top: 62px; }
 .ess-title { font-size: 0.82rem; font-weight: 500; color: var(--ink); }
 .ess-item.checked .ess-title { color: var(--green); }
 
-/* â”€â”€â”€ PAGE FOOTER TOKEN OVERRIDES (learning tint, teal) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+/* ─── PAGE FOOTER TOKEN OVERRIDES (learning tint, teal) ─────────
    Canonical .page-footer chrome lives in /base.css. Token bundle
-   selected for semantic pairing with LearningPath â€” the weekly
+   selected for semantic pairing with LearningPath — the weekly
    checklist is the leader's year-round CPD operating rhythm. */
 .page-footer { background: var(--footer-grad-learning); }
 .page-footer::before { background: var(--footer-radial-learning-a), var(--footer-radial-learning-b); }
@@ -698,12 +698,12 @@ body { padding-top: 62px; }
 
 <div id="navbarMount"></div>
 
-<!-- â”€â”€â”€ HERO (My Work family Â· canonical .page-hero) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner wc-hero-inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow" id="heroEyebrow">Academic Hub Â· 2025â€“2026</p>
-      <h1 class="page-hero__title" id="heroTitle">Week â€” Checklist</h1>
+      <p class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · 2025–2026</p>
+      <h1 class="page-hero__title" id="heroTitle">Week — Checklist</h1>
       <p class="page-hero__desc" id="heroSub">Track weekly leadership tasks, meetings, and observations.</p>
     </div>
     <div class="wc-progress">
@@ -730,38 +730,38 @@ body { padding-top: 62px; }
          cross-hub link. -->
     <a id="pairedHandbookLink" class="wc-paired-handbook"
        href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener">
-      <span aria-hidden="true">ðŸ“•</span>
+      <span aria-hidden="true">📕</span>
       <span id="pairedHandbookLabel">Open paired 90-day handbook</span>
-      <span aria-hidden="true" style="opacity:.7;">â†—</span>
+      <span aria-hidden="true" style="opacity:.7;">↗</span>
     </a>
   </div>
 </header>
 
-<!-- â”€â”€â”€ MAIN â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── MAIN ──────────────────────────────────────────────────────── -->
 <div class="page-wrap">
 
   <!-- Week Navigator -->
   <div class="week-nav">
-    <button class="btn-nav" id="prevWeekBtn">â† Prev</button>
+    <button class="btn-nav" id="prevWeekBtn">← Prev</button>
     <div class="week-nav-center">
-      <div class="week-num" id="weekLabel">Week â€”</div>
+      <div class="week-num" id="weekLabel">Week —</div>
       <div class="week-dates" id="weekDates"></div>
       <div class="week-this" id="weekThisIndicator" style="display:none">This week</div>
     </div>
     <select class="week-jump-select" id="weekJumpSelect" title="Jump to week"></select>
-    <button class="btn-nav" id="nextWeekBtn">Next â†’</button>
+    <button class="btn-nav" id="nextWeekBtn">Next →</button>
   </div>
 
-  <!-- Skipped-week banner (EASE exam Â· Leadership Camp Â· Public Holiday)
+  <!-- Skipped-week banner (EASE exam · Leadership Camp · Public Holiday)
        Highest priority context above-the-fold: when the active week is a
        skipped teaching week, the amber banner anchors the reason BEFORE
        the events band + essentials so leadership sees "why no tasks"
        immediately. -->
   <div id="skippedWeekBanner" style="display:none;background:linear-gradient(135deg,#fef3c7,#fde68a);border:1px solid #f59e0b;border-radius:14px;padding:22px 24px;margin:0 0 18px;">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:#92400e;margin-bottom:6px;">This Week</div>
-    <h3 id="skippedWeekTitle" style="margin:0 0 6px;font-family:Lora,serif;font-size:1.4rem;color:#78350f;">â€”</h3>
+    <h3 id="skippedWeekTitle" style="margin:0 0 6px;font-family:Lora,serif;font-size:1.4rem;color:#78350f;">—</h3>
     <p id="skippedWeekDates" style="margin:0 0 10px;color:#78350f;font-size:0.95rem;"></p>
-    <p style="margin:0;color:#78350f;font-size:0.9rem;line-height:1.5;">No teaching-week checklist this week. Routine tasks resume on the next teaching week â€” use Next â†’ to preview.</p>
+    <p style="margin:0;color:#78350f;font-size:0.9rem;line-height:1.5;">No teaching-week checklist this week. Routine tasks resume on the next teaching week — use Next → to preview.</p>
   </div>
 
   <!-- Events band (This Week / Next Week) -->
@@ -772,7 +772,7 @@ body { padding-top: 62px; }
         <span class="ev-week-tag" id="evThisWeekTag"></span>
       </div>
       <div class="events-col-body" id="evThisWeekBody">
-        <div class="ev-loading">Loading eventsâ€¦</div>
+        <div class="ev-loading">Loading events…</div>
       </div>
     </div>
     <div class="events-col events-col--next-week">
@@ -781,7 +781,7 @@ body { padding-top: 62px; }
         <span class="ev-week-tag" id="evNextWeekTag"></span>
       </div>
       <div class="events-col-body" id="evNextWeekBody">
-        <div class="ev-loading">Loading eventsâ€¦</div>
+        <div class="ev-loading">Loading events…</div>
       </div>
     </div>
   </div>
@@ -801,7 +801,7 @@ body { padding-top: 62px; }
 
   <!-- Admin Bar -->
   <div class="admin-bar" id="adminBar" style="display:none">
-    <span class="admin-bar-label">Admin â€” manage tasks for this week</span>
+    <span class="admin-bar-label">Admin — manage tasks for this week</span>
     <div class="admin-bar-actions">
       <button class="btn btn-secondary" style="font-size:13px;padding:7px 14px" onclick="openTaskModal(null)">
         + Add Task
@@ -812,7 +812,7 @@ body { padding-top: 62px; }
   <!-- Loading -->
   <div class="loading-state" id="loadingState">
     <div class="spinner"></div>
-    Loading tasksâ€¦
+    Loading tasks…
   </div>
 
   <!-- Empty state -->
@@ -848,12 +848,12 @@ body { padding-top: 62px; }
       <button class="jtb-btn" id="jClear" title="Clear formatting">&#10005;</button>
     </div>
     <div class="journal-editor" id="journalEditor" contenteditable="true"
-         data-placeholder="Write your weekly notes, reflections, or plans hereâ€¦"></div>
+         data-placeholder="Write your weekly notes, reflections, or plans here…"></div>
   </div>
 
 </div><!-- /page-wrap -->
 
-<!-- â”€â”€â”€ TASK MODAL (admin) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ -->
+<!-- ─── TASK MODAL (admin) ─────────────────────────────────────────── -->
 <div class="modal-bg" id="taskModal">
   <div class="modal-box">
     <div class="modal-head"><h3 id="taskModalTitle">Add Task</h3></div>
@@ -906,22 +906,22 @@ import {
   collection, getDocs, query, orderBy
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// â”€â”€ Schedule state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Schedule state ────────────────────────────────────────────────
 // Single source of truth: `calendar_settings/current` (academicYearStart)
 // + `teaching_schedule/main` (weeks[] + skippedWeeks[]).
-// Computed at loadWeekSchedule() boot â€” never hardcoded.
+// Computed at loadWeekSchedule() boot — never hardcoded.
 let ACADEMIC_YEAR     = '';
 let TOTAL_WEEKS       = 0;
 let _weekScheduleByNo = null;
 let _teachingWeeks    = [];
 let _skippedWeeks     = [];
 
-// Event caches â€” fetched once per session
+// Event caches — fetched once per session
 let _academicEventsPromise = null;
 let _cambridgeEventsPromise = null;
 
 // Academic calendar events come from Firestore (collection: calendar_events).
-// CH /academic-calendar is the single source of truth â€” admin uses its
+// CH /academic-calendar is the single source of truth — admin uses its
 // "Sync from Sheets" button to import / refresh from the Apps Script feeder.
 const CAMBRIDGE_SERIES = [
   'igcse_june', 'alevel_june', 'checkpoint_may',
@@ -946,7 +946,7 @@ const CAT_COLORS = {
   'Other':                    { color: '#6b7280', bg: '#f9fafb' },
 };
 
-// â”€â”€ State â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── State ─────────────────────────────────────────────────────────
 let currentWeek     = 1;
 let isAdmin         = false;
 let currentUid      = null;
@@ -961,7 +961,7 @@ let activeFilter    = 'All';
 
 let essentials      = [];      // [{id, title}]
 let essPage         = 0;
-const ESS_PAGE_SIZE = 6;       // 6 per page balances a 3Ã—2 grid on the 2-column list
+const ESS_PAGE_SIZE = 6;       // 6 per page balances a 3×2 grid on the 2-column list
 
 // Task list pagination (mirrors essentials pager pattern).
 // Resets to 0 on: tab change, week change, filter change.
@@ -970,14 +970,14 @@ const TASK_PAGE_SIZE = 5;
 let unsubEssentials = null;
 let myEssProgress   = {};      // { essentialId: { checked: bool } }
 
-// â”€â”€ Auth Ready â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Auth Ready ────────────────────────────────────────────────────
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   currentUid = user.uid;
   isAdmin = profile?.role_academichub === 'academic_admin';
 
   window.__loadAcademicNavbar?.('', { user, profile });
 
-  // â”€â”€ Determine visible tabs from ah_sub_roles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // ── Determine visible tabs from ah_sub_roles ───────────────────
   const ahSubRoles = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
   const PLATFORM_ORDER = ['foundation_representative', 'school_principal', 'academic_coordinator', 'cambridge_coordinator'];
   const visiblePlatforms = isAdmin ? PLATFORM_ORDER : PLATFORM_ORDER.filter(p => ahSubRoles.includes(p));
@@ -989,14 +989,14 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   currentPlatform = activePlatforms[0];
 
   // Paired-handbook mapping. Each weekly-checklist sub-role (data-tab
-  // value) maps to its paired handbook on CH. Cross-hub link â€” opens in
+  // value) maps to its paired handbook on CH. Cross-hub link — opens in
   // new tab (target=_blank). Handbook host hardcoded to
   // centralhub.eduversal.org since handbooks live in CH dist.
   const PAIRED_HANDBOOK_AH = {
-    foundation_representative: { id: 'eduversal_foundation_rep_first_90_days_v1',         label: 'Foundation Rep Â· 90-day handbook' },
-    school_principal:          { id: 'eduversal_principal_v1',                            label: 'School Principal Â· Year-1 induction handbook' },
-    academic_coordinator:      { id: 'eduversal_academic_coordinator_first_90_days_v1',   label: 'Academic Coordinator Â· 90-day handbook' },
-    cambridge_coordinator:     { id: 'eduversal_cambridge_coordinator_first_90_days_v1',  label: 'Cambridge Coordinator Â· 90-day handbook' },
+    foundation_representative: { id: 'eduversal_foundation_rep_first_90_days_v1',         label: 'Foundation Rep · 90-day handbook' },
+    school_principal:          { id: 'eduversal_principal_v1',                            label: 'School Principal · Year-1 induction handbook' },
+    academic_coordinator:      { id: 'eduversal_academic_coordinator_first_90_days_v1',   label: 'Academic Coordinator · 90-day handbook' },
+    cambridge_coordinator:     { id: 'eduversal_cambridge_coordinator_first_90_days_v1',  label: 'Cambridge Coordinator · 90-day handbook' },
   };
   function updatePairedHandbookLink(platform) {
     const link = document.getElementById('pairedHandbookLink');
@@ -1056,7 +1056,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('emptyState').style.display = '';
       document.getElementById('emptyTitle').textContent = 'Academic calendar not configured';
-      document.getElementById('emptyMsg').textContent = 'Ask central_admin to open CH /academic-calendar â†’ âš™ Year Settings â†’ Sync Teaching Weeks.';
+      document.getElementById('emptyMsg').textContent = 'Ask central_admin to open CH /academic-calendar → ⚙ Year Settings → Sync Teaching Weeks.';
       return;
     }
     currentWeek = getCurrentWeekNumber();
@@ -1069,16 +1069,16 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 
 function updateHeroLabels() {
   const label = PLATFORM_LABELS[currentPlatform] || currentPlatform;
-  const yearLabel = (ACADEMIC_YEAR || '').replace('-', 'â€“');
+  const yearLabel = (ACADEMIC_YEAR || '').replace('-', '–');
   document.getElementById('heroEyebrow').textContent = yearLabel
-    ? `Academic Hub Â· ${label} Â· ${yearLabel}`
-    : `Academic Hub Â· ${label}`;
+    ? `Academic Hub · ${label} · ${yearLabel}`
+    : `Academic Hub · ${label}`;
   const skip = isOnSkippedWeek() && currentWeek === getCurrentWeekNumber() ? getCurrentSkippedWeek() : null;
   const weekText = skip ? skip.reason : getWeekLabel(currentWeek);
-  document.getElementById('heroTitle').textContent = `${weekText} â€” ${label} Checklist`;
+  document.getElementById('heroTitle').textContent = `${weekText} — ${label} Checklist`;
 }
 
-// â”€â”€ Week helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Week helpers ──────────────────────────────────────────────────
 function _academicYearLabelFromIso(iso) {
   if (!iso || !/^\d{4}-\d{2}-\d{2}/.test(iso)) return '';
   const y = Number(iso.slice(0, 4));
@@ -1141,10 +1141,10 @@ function getCurrentWeekNumber() {
 function isOnSkippedWeek()         { return _findSkippedWeek(new Date()) !== null; }
 function getCurrentSkippedWeek()   { return _findSkippedWeek(new Date()); }
 
-// Semester-relative label: "Semester II Â· Week 15". Falls back to "Week N".
+// Semester-relative label: "Semester II · Week 15". Falls back to "Week N".
 function getWeekLabel(weekNum) {
   const w = _weekScheduleByNo?.[weekNum];
-  if (w?.semLabel) return `${w.semLabel} Â· Week ${w.semWeekNo}`;
+  if (w?.semLabel) return `${w.semLabel} · Week ${w.semWeekNo}`;
   return `Week ${weekNum}`;
 }
 
@@ -1161,12 +1161,12 @@ function getWeekDates(weekNum) {
   const w = _weekScheduleByNo?.[weekNum];
   if (!w?.mon || !w?.fri) return '';
   const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-  return `${fmt(w.mon)} â€“ ${fmt(w.fri)}`;
+  return `${fmt(w.mon)} – ${fmt(w.fri)}`;
 }
 
 function isCurrentWeek(w) { return w === getCurrentWeekNumber(); }
 
-// â”€â”€ Events: Cambridge + Academic Calendar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Events: Cambridge + Academic Calendar ─────────────────────────
 function _normalizeIsoDate(s) {
   if (!s) return null;
   const str = String(s);
@@ -1237,7 +1237,7 @@ async function loadCambridgeEvents() {
         (def.we_send  || []).forEach(it => pushDeadline(it, 'We Send'));
         (def.exams || []).forEach(ex => {
           if (!ex?.date) return;
-          const m = String(ex.date).match(/(\w{3,})\s+(\d{1,2})(?:\s*[â€“-]\s*(\d{1,2}))?/) ||
+          const m = String(ex.date).match(/(\w{3,})\s+(\d{1,2})(?:\s*[–-]\s*(\d{1,2}))?/) ||
                     String(ex.date).match(/(\d{1,2})\s+(\w{3,})/);
           if (!m) return;
           const monthName = isNaN(m[1]) ? m[1] : m[2];
@@ -1249,7 +1249,7 @@ async function loadCambridgeEvents() {
           if (!mon) return;
           const pad = n => String(n).padStart(2,'0');
           out.push({
-            title: `${ex.code ? ex.code + ' â€” ' : ''}${ex.label || ''}`.trim() || ex.code || '',
+            title: `${ex.code ? ex.code + ' — ' : ''}${ex.label || ''}`.trim() || ex.code || '',
             date_start: `${docYear}-${pad(mon)}-${pad(day)}`,
             date_end:   `${docYear}-${pad(mon)}-${pad(endDay)}`,
             kind: 'Exam',
@@ -1282,7 +1282,7 @@ function _fmtEventDate(startIso, endIso) {
   const [, sm, sd] = startIso.split('-').map(Number);
   if (startIso === endIso) return `${sd} ${MS[sm-1]}`;
   const [, em, ed] = endIso.split('-').map(Number);
-  return sm === em ? `${sd}â€“${ed} ${MS[sm-1]}` : `${sd} ${MS[sm-1]}â€“${ed} ${MS[em-1]}`;
+  return sm === em ? `${sd}–${ed} ${MS[sm-1]}` : `${sd} ${MS[sm-1]}–${ed} ${MS[em-1]}`;
 }
 
 function _academicTagStyle(e) {
@@ -1312,7 +1312,7 @@ function renderEventsBand() {
   const nextRange = currentWeek < TOTAL_WEEKS ? _getWeekRange(currentWeek + 1) : null;
 
   document.getElementById('evThisWeekTag').textContent = skip ? skip.reason : getWeekLabelShort(currentWeek);
-  document.getElementById('evNextWeekTag').textContent = nextRange ? getWeekLabelShort(currentWeek + 1) : 'â€”';
+  document.getElementById('evNextWeekTag').textContent = nextRange ? getWeekLabelShort(currentWeek + 1) : '—';
 
   const renderAcadSection = (items) => {
     if (!items.length) return '';
@@ -1357,7 +1357,7 @@ function renderEventsBand() {
   };
 
   const fillCol = (bodyEl, range, slot) => {
-    if (!range) { bodyEl.innerHTML = '<div class="ev-empty" style="padding:12px 14px">â€”</div>'; return; }
+    if (!range) { bodyEl.innerHTML = '<div class="ev-empty" style="padding:12px 14px">—</div>'; return; }
     Promise.all([loadAcademicEvents(), loadCambridgeEvents()]).then(([acad, camb]) => {
       const acadHits = _eventsInRange(acad, range.startIso, range.endIso);
       const cambHits = _eventsInRange(camb, range.startIso, range.endIso);
@@ -1405,7 +1405,7 @@ function updateWeekUI() {
   document.getElementById('weekLabel').textContent = skip ? skip.reason : getWeekLabel(currentWeek);
   if (skip) {
     const fmt = d => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-    document.getElementById('weekDates').textContent = `${fmt(skip.mon)} â€“ ${fmt(skip.fri)}`;
+    document.getElementById('weekDates').textContent = `${fmt(skip.mon)} – ${fmt(skip.fri)}`;
   } else {
     document.getElementById('weekDates').textContent = getWeekDates(currentWeek);
   }
@@ -1421,7 +1421,7 @@ function updateWeekUI() {
       banner.style.display = '';
       document.getElementById('skippedWeekTitle').textContent = skip.reason;
       const fmt = d => d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
-      document.getElementById('skippedWeekDates').textContent = `${fmt(skip.mon)} â†’ ${fmt(skip.fri)}`;
+      document.getElementById('skippedWeekDates').textContent = `${fmt(skip.mon)} → ${fmt(skip.fri)}`;
     } else {
       banner.style.display = 'none';
     }
@@ -1431,7 +1431,7 @@ function updateWeekUI() {
   renderEventsBand();
 }
 
-// â”€â”€ Load week data â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Load week data ────────────────────────────────────────────────
 function loadWeek(week) {
   currentWeek = week;
   updateWeekUI();
@@ -1485,7 +1485,7 @@ function loadWeek(week) {
   }, err => { console.error('Progress snapshot error:', err); });
 }
 
-// â”€â”€ Save progress â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Save progress ─────────────────────────────────────────────────
 async function saveProgress() {
   const db = window.db;
   const progressId = `${currentUid}_${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${currentPlatform}`;
@@ -1502,7 +1502,7 @@ async function toggleTask(taskId) {
   myProgress[taskId] = { ...prev, checked: !prev.checked };
   render();
   await saveProgress();
-  showToast(myProgress[taskId].checked ? 'âœ“ Task checked' : 'Task unchecked');
+  showToast(myProgress[taskId].checked ? '✓ Task checked' : 'Task unchecked');
 }
 
 async function saveNote(taskId, note) {
@@ -1512,7 +1512,7 @@ async function saveNote(taskId, note) {
   showToast('Note saved.');
 }
 
-// â”€â”€ Render â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Render ────────────────────────────────────────────────────────
 function render() {
   document.getElementById('loadingState').style.display = 'none';
 
@@ -1543,7 +1543,7 @@ function render() {
   taskArea.appendChild(filterDiv);
   renderCatFilter(filtered.length);
 
-  // Flat task list â€” slice to current page only
+  // Flat task list — slice to current page only
   const totalPages = Math.max(1, Math.ceil(filtered.length / TASK_PAGE_SIZE));
   taskPage = Math.min(taskPage, totalPages - 1);
   const pageItems = filtered.slice(taskPage * TASK_PAGE_SIZE, (taskPage + 1) * TASK_PAGE_SIZE);
@@ -1569,7 +1569,7 @@ function buildTaskCard(task, _catColor) {
   const expanded = expandedTasks.has(task.id);
   const priority = task.priority || 'core';
 
-  // Resolve category code â†’ human label (denormalised on the doc by the seed
+  // Resolve category code → human label (denormalised on the doc by the seed
   // script). Fallback to the raw code if labels are absent (older docs).
   const catLabel = (window._taskCategories && window._taskCategories[task.category]) || task.category;
   const priorityLabel = (window._priorityLevels && window._priorityLevels[priority]?.label) || priority;
@@ -1591,22 +1591,22 @@ function buildTaskCard(task, _catColor) {
   card.dataset.taskId = task.id;
 
   const chips = [];
-  // Priority chip (most prominent â€” replaces what was just "C6")
+  // Priority chip (most prominent — replaces what was just "C6")
   chips.push(`<span class="task-chip priority-${priority}">${escHtml(priorityLabel)}</span>`);
-  // Category â€” name not code, when label resolved
+  // Category — name not code, when label resolved
   chips.push(`<span class="task-cat">${escHtml(catLabel)}</span>`);
-  if (timing)             chips.push(`<span class="task-chip timing">â° ${escHtml(timing)}</span>`);
+  if (timing)             chips.push(`<span class="task-chip timing">⏰ ${escHtml(timing)}</span>`);
   if (Number.isFinite(duration)) chips.push(`<span class="task-chip duration">${duration} min</span>`);
 
-  // Cambridge cross-reference chips â€” split framework_anchor + regulatory_anchor
+  // Cambridge cross-reference chips — split framework_anchor + regulatory_anchor
   // into pattern-aware chip families. cambridge-crossref.js auto-wires
-  // each variant at runtime (click â†’ verbatim + sibling popover).
+  // each variant at runtime (click → verbatim + sibling popover).
   const refsRegulatory = Array.isArray(task.regulatory_anchor) ? task.regulatory_anchor.filter(Boolean) : [];
   const otherFramework = []; // non-CTS framework refs (e.g. "Section 12.2 Weekly Rhythm", "appraisal_v2_1 F2")
   frameworkAnchors.forEach(ref => {
     const m = ref.match(/CTS\s*([0-9]+\.[0-9]+)/i);
     if (m) {
-      // CTS X.Y â€” auto-wired by cambridge-crossref.js via title-attr regex
+      // CTS X.Y — auto-wired by cambridge-crossref.js via title-attr regex
       chips.push(`<span class="task-chip cts" title="Cambridge Teacher Standards CTS ${m[1]}">CTS ${m[1]}</span>`);
     } else {
       otherFramework.push(ref);
@@ -1622,13 +1622,13 @@ function buildTaskCard(task, _catColor) {
       chips.push(`<span class="task-chip permen" title="${escAttr(ref)}">${escHtml(ref.replace(/_/g, ' ').replace(/PERMENDIKBUD/i, 'Permendikbud').replace(/PERMENDIKDASMEN/i, 'Permendikdasmen').slice(0, 28))}</span>`);
     }
   });
-  // Non-CTS framework anchors (eg Section refs) â†’ plain framework chip, no popover
+  // Non-CTS framework anchors (eg Section refs) → plain framework chip, no popover
   if (otherFramework.length) {
     const fa = otherFramework[0];
     const more = otherFramework.length > 1 ? ` +${otherFramework.length - 1}` : '';
-    chips.push(`<span class="task-chip framework" title="${escAttr(otherFramework.join(' Â· '))}">ðŸ“– ${escHtml(fa)}${more}</span>`);
+    chips.push(`<span class="task-chip framework" title="${escAttr(otherFramework.join(' · '))}">📖 ${escHtml(fa)}${more}</span>`);
   }
-  if (note) chips.push(`<span class="task-note-indicator">ðŸ“ Note</span>`);
+  if (note) chips.push(`<span class="task-note-indicator">📝 Note</span>`);
 
   // Expanded detail block
   let detailHtml = '';
@@ -1638,8 +1638,8 @@ function buildTaskCard(task, _catColor) {
     if (timing)      rows.push(`<div class="detail-row"><div class="detail-label">When</div><div class="detail-value">${escHtml(timing)}</div></div>`);
     if (appliesWhen) rows.push(`<div class="detail-row"><div class="detail-label">Applies when</div><div class="detail-value">${escHtml(appliesWhen)}</div></div>`);
     if (evidence.length) rows.push(`<div class="detail-row"><div class="detail-label">Evidence</div><div class="detail-value"><ul>${evidence.map(e => `<li>${escHtml(e)}</li>`).join('')}</ul></div></div>`);
-    if (frameworkAnchors.length) rows.push(`<div class="detail-row"><div class="detail-label">Frameworks</div><div class="detail-value">${frameworkAnchors.map(escHtml).join(' Â· ')}</div></div>`);
-    if (refsRegulatory.length) rows.push(`<div class="detail-row"><div class="detail-label">Regulatory</div><div class="detail-value">${refsRegulatory.map(escHtml).join(' Â· ')}</div></div>`);
+    if (frameworkAnchors.length) rows.push(`<div class="detail-row"><div class="detail-label">Frameworks</div><div class="detail-value">${frameworkAnchors.map(escHtml).join(' · ')}</div></div>`);
+    if (refsRegulatory.length) rows.push(`<div class="detail-row"><div class="detail-label">Regulatory</div><div class="detail-value">${refsRegulatory.map(escHtml).join(' · ')}</div></div>`);
     if (missedAction) rows.push(`<div class="detail-row"><div class="detail-label">If missed</div><div class="detail-value">${escHtml(missedAction)}</div></div>`);
     if (firstTime) rows.push(`<div class="detail-row"><div class="detail-label">First time?</div><div class="detail-value"><div class="first-time-guide">${escHtml(firstTime)}</div></div></div>`);
 
@@ -1664,7 +1664,7 @@ function buildTaskCard(task, _catColor) {
       ${detailHtml}
       ${noteOpen ? `
         <div class="task-note-area">
-          <textarea aria-label="Add a personal noteâ€¦" class="task-note-textarea" id="note-${escAttr(task.id)}" placeholder="Add a personal noteâ€¦">${escHtml(note)}</textarea>
+          <textarea aria-label="Add a personal note…" class="task-note-textarea" id="note-${escAttr(task.id)}" placeholder="Add a personal note…">${escHtml(note)}</textarea>
           <button class="note-save-btn" data-task-id="${escAttr(task.id)}">Save note</button>
           <button class="btn-icon" data-toggle-note="${escAttr(task.id)}" style="margin-left:8px;">Cancel</button>
         </div>` : `<button class="task-expand-btn" data-toggle-note="${escAttr(task.id)}">${note ? 'Edit note' : '+ Add note'}</button>`}
@@ -1732,7 +1732,7 @@ function buildTaskCard(task, _catColor) {
 function renderCatFilter(filteredCount) {
   const row = document.getElementById('catFilterRow');
   if (!row) return;
-  // Dynamic â€” derive from the actual categories used by this week's tasks.
+  // Dynamic — derive from the actual categories used by this week's tasks.
   const usedCats = Array.from(new Set(tasks.map(t => t.category).filter(Boolean))).sort();
   const cats = ['All', ...usedCats];
   const labelFor = (c) => c === 'All' ? 'All' : (window._taskCategories?.[c] || c);
@@ -1741,7 +1741,7 @@ function renderCatFilter(filteredCount) {
     <button class="cat-btn${activeFilter === c ? ' active' : ''}" data-cat="${escAttr(c)}">${escHtml(labelFor(c))}</button>
   `).join('');
 
-  // Pager â€” only when there's more than one page of tasks after filtering.
+  // Pager — only when there's more than one page of tasks after filtering.
   const count = Number.isFinite(filteredCount) ? filteredCount : tasks.length;
   const totalPages = Math.max(1, Math.ceil(count / TASK_PAGE_SIZE));
   taskPage = Math.min(taskPage, totalPages - 1);
@@ -1788,7 +1788,7 @@ function updateProgressRing() {
       : `${done} of ${total} tasks completed.`;
 }
 
-// â”€â”€ Admin task management â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Admin task management ─────────────────────────────────────────
 async function saveTaskTemplate() {
   const db = window.db;
   const templateId = `${ACADEMIC_YEAR}_w${String(currentWeek).padStart(2,'0')}_${currentPlatform}`;
@@ -1838,7 +1838,7 @@ async function deleteTask(taskId) {
   showToast('Task deleted.');
 }
 
-// â”€â”€ Weekly Essentials â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Weekly Essentials ─────────────────────────────────────────────
 function loadEssentials() {
   if (unsubEssentials) { unsubEssentials(); unsubEssentials = null; }
   essPage = 0;
@@ -1912,13 +1912,13 @@ async function toggleEssential(id) {
     academicYear: ACADEMIC_YEAR, platform: currentPlatform,
     essentials: myEssProgress, updatedAt: serverTimestamp(),
   }, { merge: true });
-  showToast(myEssProgress[id].checked ? 'âœ“ Essential checked' : 'Essential unchecked');
+  showToast(myEssProgress[id].checked ? '✓ Essential checked' : 'Essential unchecked');
 }
 
 document.getElementById('essPrev').addEventListener('click', () => { essPage--; renderEssentials(); });
 document.getElementById('essNext').addEventListener('click', () => { essPage++; renderEssentials(); });
 
-// â”€â”€ Helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Helpers ───────────────────────────────────────────────────────
 function genId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 }
@@ -1947,7 +1947,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeTaskModal();
 });
 
-// â”€â”€ Journal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ── Journal ───────────────────────────────────────────────────────
 (function initJournal() {
   const editor = document.getElementById('journalEditor');
   let saveTimer = null;
@@ -1988,16 +1988,16 @@ document.addEventListener('keydown', e => {
 })();
 </script>
 
-<!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· learning tint) â”€â”€â”€â”€â”€â”€
+<!-- ─── PAGE FOOTER (canonical .page-footer · learning tint) ──────
      MUST be a direct child of <body> for the sticky-via-:has() rule
      in base.css to fire. -->
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Leadership CPD Â· Year-round</span>
+      <span class="page-footer__cta-eyebrow">Leadership CPD · Year-round</span>
       <h2 class="page-footer__cta-title">Finish the week on the right thing.</h2>
-      <p class="page-footer__cta-desc">The checklist is the operating rhythm; the handbook is the why. If a week feels heavy, open the paired 90-day handbook for your sub-role and skim the stage you are in â€” most "too much to do" weeks are really "wrong order" weeks.</p>
-      <a href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener" class="page-footer__cta-btn">Open the paired 90-day handbook <span aria-hidden="true">â†—</span></a>
+      <p class="page-footer__cta-desc">The checklist is the operating rhythm; the handbook is the why. If a week feels heavy, open the paired 90-day handbook for your sub-role and skim the stage you are in — most "too much to do" weeks are really "wrong order" weeks.</p>
+      <a href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener" class="page-footer__cta-btn">Open the paired 90-day handbook <span aria-hidden="true">↗</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Weekly Checklist footer navigation">
       <div class="page-footer__nav-group">
@@ -2017,8 +2017,8 @@ document.addEventListener('keydown', e => {
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">Four sub-roles Â· Foundation Â· Principal Â· Academic Â· Cambridge</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Four sub-roles · Foundation · Principal · Academic · Cambridge</span>
   </div>
 </footer>
 </body>

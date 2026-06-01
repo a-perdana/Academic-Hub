@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Portfolio â€” Academic Hub</title>
+<title>My Portfolio — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
@@ -16,7 +16,7 @@
 }
 body { padding-top: 62px; }
 
-/* â”€â”€â”€ HERO (canonical .page-hero, portfolio-amber accent â€” tokens from base.css/tokens.css) â”€â”€â”€ */
+/* ─── HERO (canonical .page-hero, portfolio-amber accent — tokens from base.css/tokens.css) ─── */
 .page-hero {
   position: relative; overflow: hidden;
   padding: 52px 0;
@@ -57,7 +57,7 @@ body { padding-top: 62px; }
 .page-hero__kpi--primary {
   background: var(--hero-kpi-primary-portfolio); border-color: var(--hero-kpi-primary-portfolio-border);
 }
-/* Footer CTA override â€” amber (matches portfolio hero accent). Footer body keeps base.css dark default. */
+/* Footer CTA override — amber (matches portfolio hero accent). Footer body keeps base.css dark default. */
 .page-footer__cta-btn {
   background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
   box-shadow: 0 4px 14px rgba(217,119,6,0.38);
@@ -144,7 +144,7 @@ body { padding-top: 62px; }
 .skel{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;border-radius:6px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
-/* â”€â”€ New-user intro banner (dismissable) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── New-user intro banner (dismissable) ─────────────────────── */
 .page-intro { display:none; background:linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%); border:1px solid #c4b5fd; border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
 .page-intro.show { display:flex; gap:14px; align-items:flex-start; }
 .page-intro-icon { font-size:22px; flex-shrink:0; padding-top:1px; }
@@ -157,7 +157,7 @@ body { padding-top: 62px; }
 .page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid #c4b5fd; border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6d28d9; font-size:14px; line-height:1; transition:all .15s; }
 .page-intro-dismiss:hover { background:#fff; }
 
-/* Structured content helpers scoped to .page-intro â€” flow steps + status pills + callout + footnote */
+/* Structured content helpers scoped to .page-intro — flow steps + status pills + callout + footnote */
 .page-intro__flow { display:grid; gap:8px; margin:10px 0; padding:0; list-style:none; counter-reset:pi-step; }
 .page-intro__flow > li {
   position:relative; padding:8px 12px 8px 38px;
@@ -226,23 +226,23 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="portfolio">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal Â· Academic Hub Â· My CPD</div>
+      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
       <h1 class="page-hero__title">My Portfolio</h1>
       <p class="page-hero__desc">Submit proof of a leadership competency at a stage. Each submission carries a short narrative and an optional file; a central reviewer reads the evidence before granting the stage on your <a href="/learning-path" style="color:rgba(255,255,255,.95);text-decoration:underline;">Learning Path</a>.</p>
     </div>
     <div class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
-        <div class="page-hero__kpi-num" id="heroKpiTotal">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiTotal">—</div>
         <div class="page-hero__kpi-lbl">Submissions</div>
         <div class="page-hero__kpi-sub" id="heroKpiTotalSub">all-time</div>
       </div>
       <div class="page-hero__kpi">
-        <div class="page-hero__kpi-num" id="heroKpiApproved">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiApproved">—</div>
         <div class="page-hero__kpi-lbl">Approved</div>
         <div class="page-hero__kpi-sub">stage granted</div>
       </div>
       <div class="page-hero__kpi">
-        <div class="page-hero__kpi-num" id="heroKpiPending">â€”</div>
+        <div class="page-hero__kpi-num" id="heroKpiPending">—</div>
         <div class="page-hero__kpi-lbl">Pending</div>
         <div class="page-hero__kpi-sub">awaiting review</div>
       </div>
@@ -252,22 +252,22 @@ body { padding-top: 62px; }
 
 <div class="page-wrap">
   <div class="page-intro" data-intro-key="my-portfolio">
-    <div class="page-intro-icon">ðŸ“</div>
+    <div class="page-intro-icon">📁</div>
     <div class="page-intro-body">
-      <div class="page-intro-title">Portfolio â€” your official leadership CPD record</div>
+      <div class="page-intro-title">Portfolio — your official leadership CPD record</div>
       <div class="page-intro-text">
         This is where you <strong>submit proof</strong> of a leadership competency at a level. HQ reviews every submission before granting the level.
       </div>
 
       <ol class="page-intro__flow">
         <li><strong>Pick</strong> the competency + level (Awareness / Practitioner / Advanced / Lead) you want to claim</li>
-        <li><strong>Write a short story</strong> (â‰¥80 chars) about what you actually did â€” initiative led, decision made, outcome observed â€” attach a file if it helps</li>
-        <li><strong>Track the status</strong> next to your submission: <span class="page-intro__pill page-intro__pill--pending">Pending</span> waiting for review Â· <span class="page-intro__pill page-intro__pill--review">Under Review</span> HQ has opened it Â· <span class="page-intro__pill page-intro__pill--approved">Approved</span> lands on your Learning Path Â· <span class="page-intro__pill page-intro__pill--rejected">Revise &amp; Resubmit</span> HQ left a note</li>
+        <li><strong>Write a short story</strong> (≥80 chars) about what you actually did — initiative led, decision made, outcome observed — attach a file if it helps</li>
+        <li><strong>Track the status</strong> next to your submission: <span class="page-intro__pill page-intro__pill--pending">Pending</span> waiting for review · <span class="page-intro__pill page-intro__pill--review">Under Review</span> HQ has opened it · <span class="page-intro__pill page-intro__pill--approved">Approved</span> lands on your Learning Path · <span class="page-intro__pill page-intro__pill--rejected">Revise &amp; Resubmit</span> HQ left a note</li>
       </ol>
 
       <div class="page-intro__callout">
-        <span class="page-intro__callout-icon" aria-hidden="true">â³</span>
-        <span><strong>Don't submit on day 1.</strong> Do the real work first, then come back. Self-assessment ratings live on the <a href="/competency-framework">Competency Framework</a> page and are private â€” this page is for the official record.</span>
+        <span class="page-intro__callout-icon" aria-hidden="true">⏳</span>
+        <span><strong>Don't submit on day 1.</strong> Do the real work first, then come back. Self-assessment ratings live on the <a href="/competency-framework">Competency Framework</a> page and are private — this page is for the official record.</span>
       </div>
 
       <div class="page-intro__foot">
@@ -275,35 +275,35 @@ body { padding-top: 62px; }
         <span><strong>Reviewer:</strong> HQ (central_admin) reads everything before deciding</span>
       </div>
 
-      <a class="page-intro-link" href="/my-hub-read-me#page-portfolio">ðŸ“˜ Open the My Hub Read Me First guide â†’</a>
+      <a class="page-intro-link" href="/my-hub-read-me#page-portfolio">📘 Open the My Hub Read Me First guide →</a>
     </div>
-    <button class="page-intro-dismiss" type="button" aria-label="Dismiss intro" onclick="window.__dismissIntro('my-portfolio')">âœ•</button>
+    <button class="page-intro-dismiss" type="button" aria-label="Dismiss intro" onclick="window.__dismissIntro('my-portfolio')">✕</button>
   </div>
 
   <div class="submit-card">
     <div class="submit-card-title">Submit Evidence</div>
     <div class="submit-card-sub">Upload evidence to demonstrate a leadership competency level. Your submission will be reviewed by a central administrator.</div>
     <div class="form-row"><label class="form-label">Competency *</label><select class="form-select" id="compSelect"></select></div>
-    <div class="form-row"><label class="form-label">Level Claiming *</label><select class="form-select" id="levelSelect"><option value="">â€” select competency first â€”</option></select></div>
+    <div class="form-row"><label class="form-label">Level Claiming *</label><select class="form-select" id="levelSelect"><option value="">— select competency first —</option></select></div>
     <div class="form-row"><label class="form-label">Evidence Description *</label><textarea aria-label="Describe what initiative or action you undertook, what evidence you have, and what impact it had. Be specific" class="form-textarea" id="evidenceDesc" placeholder="Describe what initiative or action you undertook, what evidence you have, and what impact it had. Be specific."></textarea><div class="form-hint">Minimum 80 characters.</div></div>
     <div class="form-row">
       <label class="form-label">Attachment (optional)</label>
       <div role="button" tabindex="0" class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <div class="drop-zone-icon">ðŸ“Ž</div>
+        <div class="drop-zone-icon">📎</div>
         <div class="drop-zone-text"><strong>Click to upload</strong> or drag and drop</div>
-        <div class="drop-zone-sub">PDF, Word, Images â€” max 10 MB</div>
+        <div class="drop-zone-sub">PDF, Word, Images — max 10 MB</div>
       </div>
       <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.png,.jpg,.jpeg">
       <div id="filePreview" style="display:none;" class="file-preview">
-        <span class="file-preview-icon">ðŸ“„</span>
+        <span class="file-preview-icon">📄</span>
         <span class="file-preview-name" id="fileName"></span>
         <span class="file-preview-size" id="fileSize"></span>
-        <span role="button" tabindex="0" class="file-preview-remove" onclick="clearFile()">âœ•</span>
+        <span role="button" tabindex="0" class="file-preview-remove" onclick="clearFile()">✕</span>
       </div>
     </div>
     <div class="form-error" id="formError"></div>
     <div class="form-success" id="formSuccess">Evidence submitted successfully! A central admin will review it shortly.</div>
-    <button class="submit-btn" id="submitBtn" onclick="submitEvidence()">ðŸ“¤ Submit Evidence</button>
+    <button class="submit-btn" id="submitBtn" onclick="submitEvidence()">📤 Submit Evidence</button>
   </div>
 
   <div class="section-title">
@@ -348,7 +348,7 @@ const COMP_META = {
   'fcep-4':{name:'Local Regulatory Relationships (Dinas Pendidikan)',domain:'Family, Community & External Partnerships',levels:['awareness','practitioner','advanced']},
 };
 const LEVEL_LABEL={awareness:'Awareness',practitioner:'Practitioner',advanced:'Advanced',lead:'Lead / Mentor'};
-const DOMAIN_ICON={'Educational Vision & School Improvement':'ðŸŽ¯','Curriculum, Instruction & Assessment Leadership':'ðŸ“š','People Development & Professional Capacity':'ðŸŒ±','Equity, Wellbeing & School Culture':'ðŸ¤','Ethics, Accountability & Operations':'âš–ï¸','Family, Community & External Partnerships':'ðŸŒ'};
+const DOMAIN_ICON={'Educational Vision & School Improvement':'🎯','Curriculum, Instruction & Assessment Leadership':'📚','People Development & Professional Capacity':'🌱','Equity, Wellbeing & School Culture':'🤝','Ethics, Accountability & Operations':'⚖️','Family, Community & External Partnerships':'🌐'};
 let uid='', selectedFile=null;
 
 document.addEventListener('authReady',async({detail:{user,profile}})=>{
@@ -361,7 +361,7 @@ document.addEventListener('authReady',async({detail:{user,profile}})=>{
 
 function populateCompSelect(){
   const sel=document.getElementById('compSelect');
-  sel.innerHTML='<option value="">â€” select a competency â€”</option>';
+  sel.innerHTML='<option value="">— select a competency —</option>';
   const grouped={};
   Object.entries(COMP_META).forEach(([id,meta])=>{if(!grouped[meta.domain])grouped[meta.domain]=[];grouped[meta.domain].push({id,...meta});});
   Object.entries(grouped).forEach(([domain,comps])=>{
@@ -372,8 +372,8 @@ function populateCompSelect(){
   sel.addEventListener('change',()=>{
     const meta=COMP_META[sel.value];
     const lvlSel=document.getElementById('levelSelect');
-    if(!meta){lvlSel.innerHTML='<option value="">â€” select competency first â€”</option>';return;}
-    lvlSel.innerHTML='<option value="">â€” select level â€”</option>'+meta.levels.map(l=>`<option value="${l}">${LEVEL_LABEL[l]}</option>`).join('');
+    if(!meta){lvlSel.innerHTML='<option value="">— select competency first —</option>';return;}
+    lvlSel.innerHTML='<option value="">— select level —</option>'+meta.levels.map(l=>`<option value="${l}">${LEVEL_LABEL[l]}</option>`).join('');
   });
 }
 function prefillFromUrl(){
@@ -403,7 +403,7 @@ window.submitEvidence=async function(){
   if(!compId){showError('Please select a competency.');return;}
   if(!level){showError('Please select the level you are claiming.');return;}
   if(desc.length<80){showError(`Description too short (${desc.length}/80 characters).`);return;}
-  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submittingâ€¦';
+  const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Submitting…';
   try{
     const meta=COMP_META[compId];
     let fileUrl=null,fileName=null;
@@ -417,10 +417,10 @@ window.submitEvidence=async function(){
     }
     await addDoc(collection(window.db,'competency_evidence'),{userId:uid,platform:'academic',compId,compName:meta?.name||compId,domain:meta?.domain||'',level,description:desc,fileUrl,fileName,status:'pending',reviewerNote:null,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
     document.getElementById('formSuccess').classList.add('visible');
-    document.getElementById('compSelect').value='';document.getElementById('levelSelect').innerHTML='<option value="">â€” select competency first â€”</option>';document.getElementById('evidenceDesc').value='';clearFile();
+    document.getElementById('compSelect').value='';document.getElementById('levelSelect').innerHTML='<option value="">— select competency first —</option>';document.getElementById('evidenceDesc').value='';clearFile();
     await loadSubmissions();
   }catch(err){showError('Submission failed. Please try again.');console.error(err);}
-  finally{btn.disabled=false;btn.innerHTML='ðŸ“¤ Submit Evidence';}
+  finally{btn.disabled=false;btn.innerHTML='📤 Submit Evidence';}
 };
 
 async function loadSubmissions(){
@@ -437,14 +437,14 @@ async function loadSubmissions(){
   if(elTotal)elTotal.textContent=total;
   if(elApproved)elApproved.textContent=approved;
   if(elPending)elPending.textContent=pending;
-  if(snap.empty){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">ðŸ“‚</div><div class="empty-state-title">No submissions yet</div><div class="empty-state-sub">Submit your first evidence above.</div></div>`;return;}
+  if(snap.empty){list.innerHTML=`<div class="empty-state"><div class="empty-state-icon">📂</div><div class="empty-state-title">No submissions yet</div><div class="empty-state-sub">Submit your first evidence above.</div></div>`;return;}
   const statusMap={pending:'Pending Review',approved:'Approved',rejected:'Revise & Resubmit','under-review':'Under Review'};
   list.innerHTML=snap.docs.map(d=>{
     const ev={id:d.id,...d.data()};
-    const icon=DOMAIN_ICON[ev.domain]||'ðŸ“‹';
+    const icon=DOMAIN_ICON[ev.domain]||'📋';
     const date=ev.createdAt?.toDate?.()?.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})||'';
-    const fileLink=ev.fileName?(ev.fileUrl?`<a class="ev-file-link" href="${ev.fileUrl}" target="_blank" rel="noopener">ðŸ“Ž ${ev.fileName}</a>`:`<span class="ev-file-link" title="Upload pending â€” file reference saved without URL">ðŸ“Ž ${ev.fileName}</span>`):'';
-    return `<div class="evidence-card"><div class="ev-header"><div class="ev-icon">${icon}</div><div class="ev-body"><div class="ev-comp">${ev.domain}</div><div class="ev-desc">${ev.compName} â€” ${ev.description.substring(0,120)}${ev.description.length>120?'â€¦':''}</div><div class="ev-meta"><span class="ev-status ${ev.status}">${statusMap[ev.status]||ev.status}</span><span class="ev-level-badge lvl-${ev.level}">${LEVEL_LABEL[ev.level]||ev.level}</span><span class="ev-date">${date}</span>${fileLink}</div></div></div>${ev.reviewerNote?`<div class="ev-reviewer-note ${ev.status==='rejected'?'rejected-note':''}"><strong>Reviewer note:</strong> ${ev.reviewerNote}</div>`:''}</div>`;
+    const fileLink=ev.fileName?(ev.fileUrl?`<a class="ev-file-link" href="${ev.fileUrl}" target="_blank" rel="noopener">📎 ${ev.fileName}</a>`:`<span class="ev-file-link" title="Upload pending — file reference saved without URL">📎 ${ev.fileName}</span>`):'';
+    return `<div class="evidence-card"><div class="ev-header"><div class="ev-icon">${icon}</div><div class="ev-body"><div class="ev-comp">${ev.domain}</div><div class="ev-desc">${ev.compName} — ${ev.description.substring(0,120)}${ev.description.length>120?'…':''}</div><div class="ev-meta"><span class="ev-status ${ev.status}">${statusMap[ev.status]||ev.status}</span><span class="ev-level-badge lvl-${ev.level}">${LEVEL_LABEL[ev.level]||ev.level}</span><span class="ev-date">${date}</span>${fileLink}</div></div></div>${ev.reviewerNote?`<div class="ev-reviewer-note ${ev.status==='rejected'?'rejected-note':''}"><strong>Reviewer note:</strong> ${ev.reviewerNote}</div>`:''}</div>`;
   }).join('');
 }
 </script>
@@ -452,10 +452,10 @@ async function loadSubmissions(){
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Leadership Â· Evidence</span>
+      <span class="page-footer__cta-eyebrow">Leadership · Evidence</span>
       <h2 class="page-footer__cta-title">Have you done the work?</h2>
       <p class="page-footer__cta-desc">Pick the competency, pick the stage, write 80+ characters about what you actually did, attach a file if it helps. A central reviewer reads each submission before granting the stage on your Learning Path.</p>
-      <a href="/learning-path" class="page-footer__cta-btn">Open Learning Path <span aria-hidden="true">â†’</span></a>
+      <a href="/learning-path" class="page-footer__cta-btn">Open Learning Path <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="My Portfolio footer navigation">
       <div class="page-footer__nav-group">
@@ -475,8 +475,8 @@ async function loadSubmissions(){
     </nav>
   </div>
   <div class="page-footer__meta">
-    <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-    <span class="page-footer__meta-right">PDF / Word / image Â· max 10 MB Â· central admin review</span>
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">PDF / Word / image · max 10 MB · central admin review</span>
   </div>
 </footer>
 

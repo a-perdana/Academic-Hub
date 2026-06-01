@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Student Roster â€” Academic Hub</title>
+<title>Student Roster — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/base.css">
@@ -11,7 +11,7 @@
 /* Page-family: My Work (data-accent="dark"). Tokens, reset, base
    typography, AND canonical .page-hero* / .page-footer* chrome come
    from /base.css. Page-local styles below MUST NOT override
-   .page-hero* selectors â€” root CLAUDE.md Common Mistake #50. */
+   .page-hero* selectors — root CLAUDE.md Common Mistake #50. */
 :root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
 
@@ -98,23 +98,23 @@ table.roster tr:last-child td { border-bottom: none; }
   <header class="page-hero" data-accent="dark">
     <div class="page-hero__inner">
       <div class="page-hero__text">
-        <p class="page-hero__eyebrow">Academic Hub Â· School Leadership</p>
+        <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
         <h1 class="page-hero__title">Student Roster</h1>
         <p class="page-hero__desc">Active Students-Hub roster for your school. Approve pending sign-ins, graduate Year 12 cohorts, or remove duplicates. Read-only for everyone except school principals + academic admins.</p>
       </div>
       <div class="page-hero__kpis" id="heroKpis">
         <div class="page-hero__kpi page-hero__kpi--primary">
-          <div class="page-hero__kpi-num" id="kpiTotal">â€”</div>
+          <div class="page-hero__kpi-num" id="kpiTotal">—</div>
           <div class="page-hero__kpi-lbl">Total</div>
           <div class="page-hero__kpi-sub">roster size</div>
         </div>
         <div class="page-hero__kpi">
-          <div class="page-hero__kpi-num" id="kpiActive">â€”</div>
+          <div class="page-hero__kpi-num" id="kpiActive">—</div>
           <div class="page-hero__kpi-lbl">Active</div>
           <div class="page-hero__kpi-sub">signed in</div>
         </div>
         <div class="page-hero__kpi">
-          <div class="page-hero__kpi-num" id="kpiPending">â€”</div>
+          <div class="page-hero__kpi-num" id="kpiPending">—</div>
           <div class="page-hero__kpi-lbl">Pending</div>
           <div class="page-hero__kpi-sub">awaiting approval</div>
         </div>
@@ -143,23 +143,23 @@ table.roster tr:last-child td { border-bottom: none; }
         <option value="11">Year 11</option>
         <option value="12">Year 12</option>
       </select>
-      <input aria-label="Search by name or emailâ€¦" id="fSearch" placeholder="Search by name or emailâ€¦">
-      <span style="margin-left:auto; font-size:12px; color:var(--ink-3)" id="resultCount">â€”</span>
+      <input aria-label="Search by name or email…" id="fSearch" placeholder="Search by name or email…">
+      <span style="margin-left:auto; font-size:12px; color:var(--ink-3)" id="resultCount">—</span>
     </div>
 
     <div id="rosterBox"></div>
   </main>
 
-  <!-- â”€â”€â”€ PAGE FOOTER (canonical .page-footer Â· induction tint) â”€â”€â”€â”€â”€â”€
+  <!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
        MUST be a direct child of <body> for the sticky-via-:has() rule
        in base.css to fire. -->
   <footer class="page-footer" role="contentinfo">
     <div class="page-footer__inner">
       <div class="page-footer__cta">
-        <span class="page-footer__cta-eyebrow">School Leadership Â· Students Hub</span>
+        <span class="page-footer__cta-eyebrow">School Leadership · Students Hub</span>
         <h2 class="page-footer__cta-title">A clean roster keeps the data trustworthy.</h2>
         <p class="page-footer__cta-desc">Approve pending sign-ins within seven days, graduate Year 12 at year-end, and remove duplicates as you spot them. Healthy rosters feed reliable chapter-mastery and EASE-growth roll-ups.</p>
-        <a href="/school-assessment" class="page-footer__cta-btn">Open School Assessment <span aria-hidden="true">â†’</span></a>
+        <a href="/school-assessment" class="page-footer__cta-btn">Open School Assessment <span aria-hidden="true">→</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="Student Roster footer navigation">
         <div class="page-footer__nav-group">
@@ -175,8 +175,8 @@ table.roster tr:last-child td { border-bottom: none; }
       </nav>
     </div>
     <div class="page-footer__meta">
-      <span class="page-footer__meta-left">Â© Eduversal Â· Academic Hub</span>
-      <span class="page-footer__meta-right">Roster status flips: needs_class â†’ pending_approval â†’ active Â· principals + academic admins write</span>
+      <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+      <span class="page-footer__meta-right">Roster status flips: needs_class → pending_approval → active · principals + academic admins write</span>
     </div>
   </footer>
 
@@ -258,7 +258,7 @@ table.roster tr:last-child td { border-bottom: none; }
           <tbody>
             ${filtered.map(s => `
               <tr data-uid="${escAttr(s.id)}">
-                <td><strong>${escHtml(s.displayName || 'â€”')}</strong></td>
+                <td><strong>${escHtml(s.displayName || '—')}</strong></td>
                 <td style="color:var(--ink-3)">${escHtml(s.email || '')}</td>
                 <td>${escHtml(s.className || '')}</td>
                 <td>${s.gradeLevel ? 'Year ' + s.gradeLevel : ''}</td>
