@@ -296,12 +296,13 @@ const PILOT_SLUG_MAP = {
   // school opts out of students_assessment (parity with the TH teacher side).
   'student-roster':     'students_assessment',
   'school-assessment':  'students_assessment',
-  // Curriculum track (own pilot system since 2026-06-27). AH's curriculum
-  // surfaces — Cambridge curriculum map + syllabus coverage + academic
-  // standards. Parity with the TH pacing/tracker side.
+  // Curriculum track (own pilot system since 2026-06-27). AH's Cambridge
+  // curriculum surfaces — curriculum map + syllabus coverage. Parity with the
+  // TH pacing/tracker side. NB: 'academic-standards' is NOT here — it's the
+  // network-wide Eduversal Academic Standards (ES) policy manual, unrelated to
+  // Cambridge curriculum planning.
   'curriculum-map':     'curriculum',
   'syllabus-coverage':  'curriculum',
-  'academic-standards': 'curriculum',
   // NB: 'handbook' is intentionally NOT pilot-gated. The /handbook surface is
   // the network-wide knowledge base (school-facing handbooks, role-operational
   // 90-day guides, policy docs, AICF playbooks) — it sits in the "Handbooks &
