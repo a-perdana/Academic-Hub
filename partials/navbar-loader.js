@@ -699,10 +699,8 @@ const NAV_ITEMS = [
     // Mapping & Coverage
     { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
     { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
-    // Standards
-    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
-    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
-    { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
+    // NB: Standards (academic-standards / cambridge-standards / cambridge-calendar)
+    // moved to the PD group 2026-06-27.
   ]},
   { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
     // Handbooks & References (audience: everyone — AI Prompts moved to Communications > Prompt Library 2026-05-27)
@@ -729,6 +727,10 @@ const NAV_ITEMS = [
     { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
     { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
+    // Standards (moved from Curriculum group 2026-06-27)
+    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
+    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
+    { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
   ]},
   { group: 'admin', label: 'Performance', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
     // Ordered to mirror the desktop Admin dropdown's semantic role-grouping
