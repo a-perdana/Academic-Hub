@@ -684,9 +684,8 @@ const NAV_ITEMS = [
     { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
   ]},
   { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
-    // Calendar
-    { key: 'academic-calendar',    href: '/academic-calendar',    label: 'Academic Calendar' },
-    { key: 'school-events',        href: '/school-events',        label: 'School Events' },
+    // NB: academic-calendar + school-events moved to the PD group's Standards
+    // column 2026-06-27.
     // Messaging
     { key: 'announcements',        href: '/announcements',        label: 'Announcements', badgeId: 'annBadge' },
     { key: 'message-board',        href: '/message-board',        label: 'Message Board', badgeId: 'msgBadge' },
@@ -727,10 +726,13 @@ const NAV_ITEMS = [
     { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
     { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
     { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
-    // Standards (moved from Curriculum group 2026-06-27)
+    // Standards (moved from Curriculum group 2026-06-27; Academic Calendar +
+    // School Events moved here from Communications 2026-06-27)
     { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
     { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
     { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
+    { key: 'academic-calendar',       href: '/academic-calendar',       label: 'Academic Calendar' },
+    { key: 'school-events',           href: '/school-events',           label: 'School Events' },
   ]},
   { group: 'admin', label: 'Performance', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
     // Ordered to mirror the desktop Admin dropdown's semantic role-grouping
