@@ -562,6 +562,8 @@ function applyPilotSystemGating(enabled) {
   const PILOT_COMPANION_SLUG_MAP = {
     'admin-read-me-school-principal': ['appraisal', 'kpi', 'aicf', 'students_assessment'],
     'admin-read-me-academic-coord':   ['appraisal', 'kpi', 'competency'],
+    // My Hub "Read Me First" — its section covers Competency CPD + Induction.
+    'my-hub-read-me':                 ['competency', 'induction'],
   };
   const isCompanionAllowed = (slug) => {
     const systems = PILOT_COMPANION_SLUG_MAP[slug];
