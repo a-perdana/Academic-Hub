@@ -553,11 +553,27 @@ function applyPilotSystemGating(enabled) {
     return enabled.has(sys);
   };
 
+  // Companion intro pages: a "Read Me First" that introduces a GROUP of pilot
+  // systems (a whole Performance-dropdown section) rather than one page. It must
+  // hide only when NONE of the section's systems is enabled — otherwise it
+  // dangles alone after every functional page in the section is pilot-hidden.
+  // (The For-Foundation-Rep read-me is NOT here: that section's pages aren't
+  // pilot-gated, so page-access alone governs it.)
+  const PILOT_COMPANION_SLUG_MAP = {
+    'admin-read-me-school-principal': ['appraisal', 'kpi', 'aicf', 'students_assessment'],
+    'admin-read-me-academic-coord':   ['appraisal', 'kpi', 'competency'],
+  };
+  const isCompanionAllowed = (slug) => {
+    const systems = PILOT_COMPANION_SLUG_MAP[slug];
+    if (!systems) return true;
+    return systems.some(sys => enabled.has(sys)); // at least one still on
+  };
+
   // 1. Navbar items (desktop + mobile drawer clones).
   document.querySelectorAll('[data-nav-key], [data-mobile-nav-key]').forEach(el => {
     const key = (el.getAttribute('data-nav-key') || el.getAttribute('data-mobile-nav-key') || '').toLowerCase();
     if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
-    if (!isPilotAllowed(key)) el.setAttribute('data-pa-hidden', '1');
+    if (!isPilotAllowed(key) || !isCompanionAllowed(key)) el.setAttribute('data-pa-hidden', '1');
   });
 
   // 2. Dashboard cards by href slug. Covers both hand-crafted
@@ -565,7 +581,7 @@ function applyPilotSystemGating(enabled) {
   document.querySelectorAll('a.card[href]').forEach(el => {
     const key = slugFromHref(el.getAttribute('href'));
     if (!key || PAGE_ACCESS_BYPASS.has(key)) return;
-    if (!isPilotAllowed(key)) el.setAttribute('data-pa-hidden', '1');
+    if (!isPilotAllowed(key) || !isCompanionAllowed(key)) el.setAttribute('data-pa-hidden', '1');
   });
 
   // 3. Re-evaluate empty wrappers / columns after pilot hides layered
