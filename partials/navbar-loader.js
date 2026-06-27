@@ -693,6 +693,8 @@ const NAV_ITEMS = [
     { key: 'documents',            href: '/documents',            label: 'Documents', badgeId: 'docBadge', badgeCount: true },
     { key: 'library',              href: '/library',              label: 'Resource Library' },
     { key: 'ai-prompts',           href: '/ai-prompts',           label: 'Prompt Library' },
+    // Surveys (moved from the Performance group 2026-06-27)
+    { key: 'surveys',              href: '/surveys',              label: 'Shared Surveys' },
   ]},
   { group: 'curriculum', label: 'Curriculum', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Mapping & Coverage
@@ -760,9 +762,9 @@ const NAV_ITEMS = [
     { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
     { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
     { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
-    // This hub (cross-hub HQ shortcuts removed 2026-05-30):
-    { key: 'surveys',             href: '/surveys',                                     label: 'Shared Surveys' },
-    { key: 'settings',            href: '/settings',                                    label: 'Settings' },
+    // NB: 'surveys' (Shared Surveys) moved to the comms group 2026-06-27.
+    // 'settings' removed from the navbar dropdowns 2026-06-27 — still reachable
+    // from the profile dropdown's Settings link.
   ]},
   { group: 'principal', label: 'School Leaders', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
     // School leadership team workspace (mirrors CH Coordinators) — school-scoped via schoolId
