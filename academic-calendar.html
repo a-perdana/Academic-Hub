@@ -10,6 +10,10 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,600&display=swap" rel="stylesheet">
   <script src="firebase-config.js"></script>
   <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
+  <!-- This page already ships its own canonical .page-hero, so the calendar
+       widget must skip its own dark banner and emit a light single-line
+       toolbar (view switch + filter chips) directly under the page hero. -->
+  <script>window.ACADEMIC_CAL_NO_HERO = true;</script>
   <style>
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
