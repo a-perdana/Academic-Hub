@@ -726,9 +726,23 @@
       // ── Railway backend config ─────────────────────────────────────────────
       // Set RAILWAY_API_URL + RAILWAY_API_TOKEN in Vercel env vars.
       // If not configured, all Railway probes are skipped gracefully.
-      const RAILWAY_URL   = "__RAILWAY_API_URL__";   // e.g. https://network-audit-api-production.up.railway.app
+      // NOTE: token is public on this page (public, no-login route) — it only
+      // authorises server-side URL-reachability probes (no data access). If it
+      // gets abused, rotate it + gate the Railway service, or move the call
+      // behind a Cloud Function proxy (easeBankProxy pattern). Tracked follow-up.
       const RAILWAY_TOKEN = "__RAILWAY_API_TOKEN__";
-      const railwayEnabled = RAILWAY_URL && RAILWAY_URL !== "__RAILWAY_API_URL__" && RAILWAY_URL.startsWith("http");
+      // Normalise the URL: Vercel env var may be stored WITHOUT the https://
+      // scheme (it currently is), which would make .startsWith("http") false and
+      // silently disable the backend → every probe would fall back to the
+      // unreliable browser guess. Prepend https:// when the scheme is missing.
+      function normaliseRailwayUrl(raw) {
+        if (!raw || raw.startsWith("__")) return "";   // unset / placeholder
+        const trimmed = raw.trim().replace(/\/+$/, ""); // drop trailing slash
+        if (!trimmed) return "";
+        return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+      }
+      const RAILWAY_URL    = normaliseRailwayUrl("__RAILWAY_API_URL__");
+      const railwayEnabled = RAILWAY_URL.startsWith("http");
 
       /** Railway HTTP probe — real status codes from server side */
       async function railwayProbe(domain, timeoutMs = 6000) {
@@ -857,7 +871,12 @@
           return { blocked: rw.blocked, confidence: "high", source: "railway", statusCode: rw.statusCode };
         }
 
-        // 2. Fallback: browser fetch no-cors
+        // 2. Fallback: browser fetch no-cors.
+        // This path is a GUESS, not a measurement: no-cors returns an opaque
+        // response so we can't read the real HTTP status, and a timeout can be
+        // slowness rather than a block. Every browser-fallback result is
+        // therefore marked "low" confidence so the ⚠ badge + "verify manually"
+        // note appear. Only the Railway path above earns "high" confidence.
         try {
           const ctrl = new AbortController();
           const t = setTimeout(() => ctrl.abort(), timeoutMs);
@@ -871,11 +890,11 @@
           clearTimeout(t);
           // Resolved before timeout = accessible
           if (Date.now() - t0 >= timeoutMs - 50) {
-            return { blocked: true, confidence: "high", source: "browser" };
+            return { blocked: true, confidence: "low", source: "browser" };
           }
-          return { blocked: false, confidence: "high", source: "browser" };
+          return { blocked: false, confidence: "low", source: "browser" };
         } catch (err) {
-          return { blocked: true, confidence: err.name === "AbortError" ? "high" : "high", source: "browser" };
+          return { blocked: true, confidence: "low", source: "browser" };
         }
       }
 
@@ -921,12 +940,17 @@
 
         let blockedCount = 0;
         const details = [];
+        // Track confidence across every probe: if ANY host fell back to the
+        // browser guess (low), the whole result is low-confidence so the ⚠
+        // "verify manually" badge shows. Only all-Railway results stay high.
+        let anyLowConfidence = false;
 
         for (const hostname of urls) {
           let votes = 0;
           for (let i = 0; i < attempts; i++) {
-            const { blocked: b } = await probeUrl(hostname, timeoutMs);
+            const { blocked: b, confidence: c } = await probeUrl(hostname, timeoutMs);
             if (b) votes++;
+            if (c === "low") anyLowConfidence = true;
             if (i < attempts - 1) await new Promise(r => setTimeout(r, 250));
           }
           const isBlocked = votes >= Math.ceil(attempts / 2);
@@ -942,7 +966,7 @@
           status = blockedCount === totalCount ? "pass" : blockedCount > 0 ? "partial" : "fail";
         }
 
-        return { status, blockedCount, totalCount, confidence: "high", detail: details.join(" | ") };
+        return { status, blockedCount, totalCount, confidence: anyLowConfidence ? "low" : "high", detail: details.join(" | ") };
       }
 
       // Calibrate baseline latency using a known-reachable endpoint (google.com)
