@@ -658,7 +658,7 @@
           Network tests use a server-side probe (Railway backend) for real HTTP status codes, with browser fetch as fallback.
           Results indicate whether sites are reachable — blocked results are strong evidence of filtering.
           VPN port tests (OpenVPN 1194, WireGuard 51820) are performed server-side for accuracy.
-          Items marked <strong>âš  low confidence</strong> should be verified manually.
+          Items marked <strong>⚠ low confidence</strong> should be verified manually.
           Device management items are self-reported — verify against your MDM/Admin Console.
         </div>
 
@@ -1453,7 +1453,7 @@
             testResults.push(result);
             totalScore += earned;
 
-            const confTag = confidence === "low" ? " âš  low confidence" : "";
+            const confTag = confidence === "low" ? " ⚠ low confidence" : "";
             const statusTag = status === "pass" ? "ALL BLOCKED" : status === "partial" ? `PARTIAL (${blockedCount}/${totalCount})` : "ACCESSIBLE";
             addLog(`  ${test.name}: ${statusTag}${confTag}`, status === "pass" ? "success" : status === "partial" ? "info" : "error");
             if (detail) addLog(`    ${detail}`, "info");
@@ -1536,7 +1536,7 @@
         const normalizedScore = maxPossible > 0 ? Math.min(100, Math.round((totalScore / maxPossible) * 100)) : 0;
 
         document.getElementById("scoreNum").textContent = normalizedScore;
-        document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}âš¡)` : "");
+        document.getElementById("passCount").textContent = passed + (partial > 0 ? ` (+${partial}⚡)` : "");
         document.getElementById("failCount").textContent = failed;
         document.getElementById("percent").textContent = percent + "%";
 
@@ -1571,7 +1571,7 @@
         const critical = testResults.filter((r) => (r.status === "fail" || r.status === "partial") && r.critical);
         const recDiv = document.getElementById("recommendations");
 
-        let html = "<h3>âš¡ Action Required</h3>";
+        let html = "<h3>⚡ Action Required</h3>";
 
         if (testingMode === "principal") {
           html +=
@@ -1801,7 +1801,7 @@
 
           catResults.forEach((result) => {
             const confBadge = result.confidence === "low"
-              ? `<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin-left:6px;" title="Only one probe confirmed block">âš  low confidence</span>`
+              ? `<span style="font-size:10px;background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;margin-left:6px;" title="Only one probe confirmed block">⚠ low confidence</span>`
               : result.confidence === "manual"
               ? `<span style="font-size:10px;background:#ede9fe;color:#5b21b6;padding:2px 6px;border-radius:4px;margin-left:6px;">manual</span>`
               : "";
@@ -1809,7 +1809,7 @@
             const statusLabel = result.status === "pass"
               ? "✓ PROTECTED"
               : result.status === "partial"
-              ? `âš¡ PARTIAL (${result.blockedCount}/${result.totalCount})`
+              ? `⚡ PARTIAL (${result.blockedCount}/${result.totalCount})`
               : "✗ VULNERABLE";
             const ptsLabel = `<span style="font-size:11px;color:#6b7280;margin-left:6px;">${result.earned}/${result.pts}pts</span>`;
             const detailHtml = result.detail
@@ -1862,7 +1862,7 @@
         msg += `📊 SCORE: ${totalScore}/100\n`;
         msg += `🎯 Grade: ${grade}\n`;
         msg += `✅ Protected: ${passed}/${total}\n`;
-        msg += `âš¡ Partial: ${partial}/${total}\n`;
+        msg += `⚡ Partial: ${partial}/${total}\n`;
         msg += `❌ Vulnerable: ${total - passed - partial}/${total}\n\n`;
 
         if (testingMode === "principal") {
