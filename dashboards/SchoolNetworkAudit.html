@@ -823,6 +823,76 @@
         return { status, detail: details.join(" | "), openCount, total: VPN_PORT_TESTS.length };
       }
 
+      // ── Differential DNS-filter probe ────────────────────────────────────
+      // The reliable way to tell whether THIS SCHOOL's network filters unsafe
+      // sites is to compare two vantage points on the SAME domains:
+      //   A) Railway backend  — a clean off-school resolver (8.8.8.8). Tells us
+      //      the domain exists + is reachable from the open internet (baseline).
+      //   B) This device      — a real browser fetch from the student device on
+      //      the school WiFi. If the school filters at DNS or HTTP level, this
+      //      request fails while the Railway baseline succeeds.
+      // The DIFFERENCE between the two is the signal — not either one alone:
+      //   Railway reachable  + device blocked   → school filter ACTIVE (good)
+      //   Railway reachable  + device reachable  → NO effective filter (gap!)
+      //   Railway unreachable                    → can't judge (domain down / no backend)
+      // This is a comparison of two measurements, not a browser guess, so it is
+      // high-confidence whenever the Railway baseline is available.
+      async function probeDnsFilter(timeoutMs) {
+        // Domains that a school filter SHOULD block. Kept deliberately small +
+        // unambiguous (adult + gambling) so a "reachable from device" result is
+        // a real red flag, not a borderline call.
+        const targets = ["pornhub.com", "xvideos.com", "bet365.com"];
+        const rows = [];
+        let filteredCount = 0;   // blocked on this device (good)
+        let openCount = 0;       // reachable on this device (bad — gap)
+        let baselineMissing = 0; // couldn't establish an off-school baseline
+
+        for (const domain of targets) {
+          // A) off-school baseline via Railway (real DNS + reachability)
+          const base = await railwayDns(domain, timeoutMs);
+          const baselineReachable = !!(base && base.resolved);
+
+          // B) real access attempt from THIS device on the school WiFi
+          const dev = await probeUrl(domain, timeoutMs);   // { blocked, confidence }
+          const deviceBlocked = dev.blocked;
+
+          if (!baselineReachable) {
+            // No clean baseline → the domain may be down or backend missing;
+            // we can't attribute a device failure to the school filter.
+            baselineMissing++;
+            rows.push(`${domain}: baseline unavailable (skipped)`);
+            continue;
+          }
+          if (deviceBlocked) {
+            filteredCount++;
+            rows.push(`${domain}: filtered on this network ✓`);
+          } else {
+            openCount++;
+            rows.push(`${domain}: REACHABLE on this network ✗`);
+          }
+        }
+
+        const judged = filteredCount + openCount;   // domains with a clean baseline
+        let status;
+        if (judged === 0) {
+          status = "fail";                 // nothing testable → treat as unknown-bad
+        } else if (openCount === 0) {
+          status = "pass";                 // every unsafe domain blocked on device
+        } else if (filteredCount === 0) {
+          status = "fail";                 // none blocked → filter not working
+        } else {
+          status = "partial";              // some blocked, some open
+        }
+
+        // High confidence only when we actually had baselines to compare
+        // against; if the baseline was missing everywhere, downgrade so the ⚠
+        // "verify manually" badge shows.
+        const confidence = (railwayEnabled && judged > 0) ? "high" : "low";
+        const detail = rows.join(" | ") +
+          (baselineMissing ? ` | (${baselineMissing} domain(s) had no baseline)` : "");
+        return { status, blockedCount: filteredCount, totalCount: judged || targets.length, confidence, detail };
+      }
+
       // Known Tor directory authority IPs (stable, maintained by Tor Project)
       const TOR_IPS = ["128.31.0.39","86.59.21.38","194.109.206.212","131.188.40.189","199.58.81.140","204.13.164.118"];
       // DoH endpoint for DNS-over-HTTPS bypass test
@@ -919,23 +989,9 @@
           return { status: r.status, blockedCount: r.status === "pass" ? 1 : 0, totalCount: 1, confidence: railwayEnabled ? "high" : "low", detail: r.detail };
         }
         if (urls[0] === "dns-filter") {
-          // Real DNS filter test: compare Railway DNS resolve (public) vs inaccessibility from browser
-          const testDomains = ["instagram.com", "tiktok.com", "pornhub.com"];
-          const results = [];
-          let filteredCount = 0;
-          for (const domain of testDomains) {
-            const r = await railwayDns(domain, timeoutMs);
-            if (r && r.resolved) {
-              results.push(`${domain}: resolved (${r.addresses[0]})`);
-            } else if (r) {
-              results.push(`${domain}: DNS BLOCKED`);
-              filteredCount++;
-            } else {
-              results.push(`${domain}: untested (no backend)`);
-            }
-          }
-          const status = filteredCount === testDomains.length ? "pass" : filteredCount > 0 ? "partial" : "fail";
-          return { status, blockedCount: filteredCount, totalCount: testDomains.length, confidence: railwayEnabled ? "high" : "low", detail: results.join(" | ") };
+          // Differential test: off-school baseline (Railway) vs real access from
+          // this device on the school WiFi. See probeDnsFilter() for the logic.
+          return await probeDnsFilter(timeoutMs);
         }
 
         let blockedCount = 0;
@@ -1012,6 +1068,7 @@
           {
             cat: "🌐 DNS/Firewall Filtering",
             tests: [
+              { name: "Content Filter Working? (unsafe sites blocked on THIS network)", urls: ["dns-filter"], pts: 15, critical: true, attempts: 1, info: "Differential test: compares whether known adult + gambling domains are reachable from THIS student device vs a clean off-school baseline. 'Pass' = the school network actually blocks them; 'fail' = they are reachable here (a real safeguarding gap). This is the single most important filtering check." },
               { name: "Cloudflare DNS IP Block",  urls: ["1.1.1.1","1.0.0.1"],  pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests outbound port-53/firewall filtering active" },
               { name: "Google DNS IP Block",      urls: ["8.8.8.8","8.8.4.4"],  pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS/firewall filtering active" },
               { name: "DNS-over-HTTPS Bypass",    urls: ["doh"],                pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver (cloudflare-dns.com/dns-query) is accessible — blocked means DoH bypass is prevented" },
@@ -1086,6 +1143,7 @@
           {
             cat: "🌐 DNS/Firewall Filtering",
             tests: [
+              { name: "Content Filter Working? (unsafe sites blocked on THIS network)", urls: ["dns-filter"], pts: 15, critical: true, attempts: 1, info: "Differential test: compares whether known adult + gambling domains are reachable from THIS student device vs a clean off-school baseline. 'Pass' = the school network actually blocks them; 'fail' = they are reachable here (a real safeguarding gap). This is the single most important filtering check." },
               { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS/firewall filtering active" },
               { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
               { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
@@ -1160,6 +1218,7 @@
           {
             cat: "🌐 DNS/Firewall Filtering",
             tests: [
+              { name: "Content Filter Working? (unsafe sites blocked on THIS network)", urls: ["dns-filter"], pts: 15, critical: true, attempts: 1, info: "Differential test: compares whether known adult + gambling domains are reachable from THIS student device vs a clean off-school baseline. 'Pass' = the school network actually blocks them; 'fail' = they are reachable here (a real safeguarding gap). This is the single most important filtering check." },
               { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS policy enforced" },
               { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 6, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests outbound DNS filtering enforced" },
               { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 5, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
@@ -1234,6 +1293,7 @@
           {
             cat: "🌐 DNS/Firewall Filtering",
             tests: [
+              { name: "Content Filter Working? (unsafe sites blocked on THIS network)", urls: ["dns-filter"], pts: 15, critical: true, attempts: 1, info: "Differential test: compares whether known adult + gambling domains are reachable from THIS student device vs a clean off-school baseline. 'Pass' = the school network actually blocks them; 'fail' = they are reachable here (a real safeguarding gap). This is the single most important filtering check." },
               { name: "Cloudflare DNS IP Block", urls: ["1.1.1.1","1.0.0.1"], pts: 8, critical: true, attempts: 2, info: "HTTP probe to Cloudflare DNS IPs — blocked suggests DNS-level filtering active" },
               { name: "Google DNS IP Block",     urls: ["8.8.8.8","8.8.4.4"], pts: 7, critical: true, attempts: 2, info: "HTTP probe to Google DNS IPs — blocked suggests DNS filtering active" },
               { name: "DNS-over-HTTPS Bypass",   urls: ["doh"],               pts: 6, critical: true, attempts: 1, info: "Tests if DoH resolver is accessible — blocked means DoH bypass is prevented" },
