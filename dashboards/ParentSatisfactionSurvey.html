@@ -89,7 +89,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>📊 School Performance Comparison</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -103,7 +103,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>📈 Domain Analysis</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body"><div id="domainBars"></div></div>
@@ -113,7 +113,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>🎯 Performance Radar</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -125,7 +125,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>👥 Grade Level Comparison</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -137,7 +137,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>💯 NPS & Loyalty Metrics</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -153,7 +153,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>👨‍👩‍👧‍👦 Parent Demographics</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -178,7 +178,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>📝 Parent Feedback & Voices (373 responses)</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -194,7 +194,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>🔍 Response Browser (370 responses with written comments)</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -230,7 +230,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>⬇ Bottom 5 Questions Network-Wide</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body">
@@ -243,7 +243,7 @@
       <div class="accordion">
         <div class="accordion-header" role="button" tabindex="0" onclick="toggleAccordion(this)">
           <h3>🎯 Priority Action Items</h3>
-          <span class="accordion-icon">â–¼</span>
+          <span class="accordion-icon">▼</span>
         </div>
         <div class="accordion-content">
           <div class="accordion-body"><div id="actionItems"></div></div>
@@ -684,7 +684,7 @@
           html += `<div role="button" tabindex="0" class="domain-bar" style="cursor:pointer;flex-wrap:wrap" onclick="toggleDomainDetail('${uid}',this)">
             <div class="domain-label">${d}</div>
             <div class="domain-progress"><div class="domain-progress-fill" style="width:${pct}%;background:${getScoreColor(data.avg)}">${data.avg.toFixed(2)}</div></div>
-            <span id="${uid}-arrow" style="font-size:11px;color:#aaa;margin-left:8px">â–¼ ${data.questions ? data.questions.length : 0} questions</span>
+            <span id="${uid}-arrow" style="font-size:11px;color:#aaa;margin-left:8px">▼ ${data.questions ? data.questions.length : 0} questions</span>
           </div>`;
           if (data.questions && data.questions.length) {
             html += `<div id="${uid}" class="hidden" style="margin-left:165px;margin-bottom:10px">`;
@@ -962,7 +962,7 @@
         html += `</div>`;
 
         html += '<h3 style="color:#ffc107;font-size:20px;margin:30px 0 20px;border-bottom:2px solid #ffc107;padding-bottom:8px">🔧 Areas for Improvement</h3>';
-        html += `<div class="feedback-category" style="border-left-color:#ffc107"><h4 style="color:#f39c12">âš  Parent Concerns <span class="feedback-count" style="background:#ffc107;color:#000">${q.improvements.length} mentions</span></h4>`;
+        html += `<div class="feedback-category" style="border-left-color:#ffc107"><h4 style="color:#f39c12">⚠ Parent Concerns <span class="feedback-count" style="background:#ffc107;color:#000">${q.improvements.length} mentions</span></h4>`;
         html += renderList(q.improvements, "improvement-item", 10);
         html += `</div>`;
 
@@ -980,7 +980,7 @@
         if (!el) return;
         const isHidden = el.classList.contains("hidden");
         el.classList.toggle("hidden");
-        if (arrow) arrow.textContent = isHidden ? "â–¼ questions" : "â–² collapse";
+        if (arrow) arrow.textContent = isHidden ? "▼ questions" : "▲ collapse";
       }
 
       function toggleMore(btn, id) {

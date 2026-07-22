@@ -473,7 +473,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 <div class="modal-overlay" id="disputeModal">
   <div class="modal" style="max-width:520px;">
     <div class="modal-head">
-      <h3>âš' Flag Appraisal for Review</h3>
+      <h3>⚠ Flag Appraisal for Review</h3>
       <button class="modal-close" onclick="closeDisputeModal()">✕</button>
     </div>
     <div class="dispute-modal-body">
@@ -594,7 +594,7 @@ function renderAppraisals() {
     const levelLabel = a.level?.split(' ')[0] || '—';
     const isDisputed = a.disputed && a.disputeStatus === 'open';
     const statusClass = isDisputed ? 'pill-disputed' : `pill-${a.status || 'draft'}`;
-    const statusLabel = isDisputed ? 'âš' Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
+    const statusLabel = isDisputed ? '⚠ Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
 
     const scoreBar = (val) => val != null
       ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${val}%"></div></div><span class="score-pct">${Math.round(val)}%</span></div>`
@@ -620,7 +620,7 @@ function renderAppraisals() {
         ${a.status === 'draft'
           ? `<button class="btn-continue" data-continue-id="${a.id}">Continue</button>`
           : ''}
-        ${canFlag ? `<button class="btn-flag" data-id="${a.id}">âš' Flag</button>` : ''}
+        ${canFlag ? `<button class="btn-flag" data-id="${a.id}">⚠ Flag</button>` : ''}
         <button class="btn-view" data-id="${a.id}">View</button>
       </td>
     </tr>`;

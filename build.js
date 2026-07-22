@@ -287,8 +287,11 @@ htmlFiles.forEach((file) => {
     html = html.replace(new RegExp(placeholder, "g"), value);
   }
 
-  // Remove local-dev-only firebase-config.js script tag (not needed in dist)
-  html = html.replace(/<script src="firebase-config\.js"><\/script>\n?/g, "");
+  // Remove local-dev-only firebase-config.js script tag (not needed in dist).
+  // Tolerate extra attributes (e.g. onerror="void(0)") and single/double
+  // quotes — a stray attribute previously let the tag survive into dist and
+  // 404 in prod (rapor-pendidikan-2025, 2026-07-22).
+  html = html.replace(/<script\s+src=["']firebase-config\.js["'][^>]*><\/script>\n?/g, "");
 
   // 1b. Inject /base.css before the first <style> tag (or before </head>).
   //     Absolute path — relative paths fail from clean URL routes like

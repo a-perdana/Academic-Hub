@@ -864,7 +864,7 @@ function renderScenario(idx) {
         <div class="item-header">
           <span class="item-badge">${itemId}</span>
           <span class="item-title">${anchorData?.name || itemId}</span>
-          ${anchorData ? `<button class="item-anchor-toggle" onclick="window.toggleAnchor('${itemId}')">${panelOpen ? 'â–² Hide rubric' : 'â–¼ Show rubric'}</button>` : ''}
+          ${anchorData ? `<button class="item-anchor-toggle" onclick="window.toggleAnchor('${itemId}')">${panelOpen ? '▲ Hide rubric' : '▼ Show rubric'}</button>` : ''}
         </div>
         <div class="item-anchor-panel rubric-anchor-grid ${panelOpen ? 'open' : ''}" id="anchor-${itemId}">
           ${anchorCards}
@@ -931,7 +931,7 @@ window.toggleAnchor = function(itemId) {
   const panel = document.getElementById(`anchor-${itemId}`);
   const btn = document.querySelector(`[onclick="window.toggleAnchor('${itemId}')"]`);
   if (panel) panel.classList.toggle('open', openAnchorPanels[itemId]);
-  if (btn) btn.textContent = openAnchorPanels[itemId] ? 'â–² Hide rubric' : 'â–¼ Show rubric';
+  if (btn) btn.textContent = openAnchorPanels[itemId] ? '▲ Hide rubric' : '▼ Show rubric';
 };
 
 /* ─────────────────────────────────────────────
