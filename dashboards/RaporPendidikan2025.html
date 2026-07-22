@@ -670,10 +670,10 @@
       .crisis-banner { padding: 8px 16px; }
     }
   </style>
-  <script type="module" src="auth-guard.js"></script>
+  <!-- Public page: no auth-guard (no login required). -->
     </head>
 <body>
-<div id="app" style="display:none">
+<div id="app">
 
   <!-- Header -->
   <header class="page-header">
@@ -682,10 +682,7 @@
       <h1>Rapor Pendidikan 2025</h1>
       <p>Eduversal Partner Schools Network · SD / SMP / SMA</p>
     </div>
-    <div class="header-right">
-      <span id="user-name" style="font-size:0.78rem;color:var(--text-muted)"></span>
-      <button class="btn-sign-out" id="btn-sign-out">Sign Out</button>
-    </div>
+    <div class="header-right"></div>
   </header>
 
   <!-- Crisis Banner -->
@@ -1002,8 +999,6 @@
 
 <!-- ══════════════════ DATA + LOGIC ══════════════════ -->
 <script type="module">
-import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-
 // ─── School Data ───────────────────────────────────────────────────────────
 
 const NETWORK_AVGS = {
@@ -2026,18 +2021,9 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// ─── Auth ──────────────────────────────────────────────────────────────────
+// ─── Render (public — no auth required) ──────────────────────────────────────
 
-document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('user-name').textContent = user.displayName || user.email;
-
-  document.getElementById('btn-sign-out').addEventListener('click', async () => {
-    await signOut(window.auth);
-    location.href = 'index.html';
-  });
-
+function initDashboard() {
   buildCrisisPanel();
   buildTable();
   initTableControls();
@@ -2046,7 +2032,13 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   buildBestPractices();
   buildActionPlan();
   buildCharts();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDashboard);
+} else {
+  initDashboard();
+}
 </script>
 
 </body>
