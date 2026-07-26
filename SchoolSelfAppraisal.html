@@ -124,8 +124,8 @@ body:has(> .page-footer) > .page-body {
 .info-strip__pill--progress .sop-pct { font-weight:800; color:#4c1d95; }
 .info-strip__pill--progress .sop-count { color:#5a4bd1; font-weight:600; }
 
-/* Rail padding tightens on phones (grid columns handled by the breakpoints
-   above the domain-card rules). */
+/* Rail padding tightens on phones (grid columns handled by the
+   .domain-sidebar breakpoints above). */
 @media (max-width:768px) {
   .page-body { padding:0 16px; }
   .domain-sidebar { gap:10px; }
@@ -188,23 +188,9 @@ body:has(> .page-footer) > .page-body {
 .link-item-remove { font-size:10px; color:var(--ink-3); background:none; border:none; cursor:pointer; padding:2px 5px; border-radius:4px; flex-shrink:0; }
 .link-item-remove:hover { background:var(--border); color:var(--ink); }
 
-.domain-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px; margin-bottom:22px; }
-.domain-card {
-  background:var(--white); border:1.5px solid var(--border);
-  border-radius:14px; padding:18px 16px; cursor:pointer;
-  transition:box-shadow .2s, transform .2s;
-  border-left-width:4px;
-}
-.domain-card:hover { box-shadow:var(--shadow); transform:translateY(-3px); }
-.dc-top { display:flex; align-items:center; gap:9px; margin-bottom:10px; }
-.dc-icon { font-size:20px; }
-.dc-code { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; }
-.dc-title { font-size:13px; font-weight:700; line-height:1.35; margin-bottom:12px; }
-.dc-score-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
-.dc-score-bar { flex:1; height:6px; background:var(--paper-2); border-radius:3px; overflow:hidden; }
-.dc-score-fill { height:100%; border-radius:3px; transition:width .5s ease; }
-.dc-score-num { font-size:13px; font-weight:800; min-width:28px; text-align:right; }
-.dc-completion { font-size:11px; color:var(--ink-3); }
+/* .domain-grid / .domain-card / .dc-* removed 2026-07-26 — the overview no
+   longer renders its own copy of the 5 domain tiles. The persistent
+   .domain-sidebar strip (.domain-nav-card / .dnc-*) is the single renderer. */
 
 .overview-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
 @media (max-width:600px) { .overview-fields { grid-template-columns:1fr; } }
@@ -1138,21 +1124,12 @@ function renderOverview() {
       : `<span class="ref-pill" title="${name}">${label}</span>`;
   }).join('');
 
-  const domainCards = FRAMEWORK.domains.map(d => {
-    const davg = domainAvg(d.id);
-    const { done: dDone, total: dTotal } = domainCompletion(d.id);
-    const col = domainColors[d.id]; const bg = domainBgs[d.id];
-    return `
-      <div role="button" tabindex="0" class="domain-card" onclick="window.__switchDomain('${d.id}')" style="border-color:${domainBorders[d.id]};border-left-color:${col};">
-        <div class="dc-top"><span class="dc-icon">${d.icon}</span><span class="dc-code" style="color:${col}">${d.code}</span></div>
-        <div class="dc-title">${d.title}</div>
-        <div class="dc-score-row">
-          <div class="dc-score-bar"><div class="dc-score-fill" style="width:${davg?(parseFloat(davg)/4*100)+'%':'0%'};background:${col};"></div></div>
-          <div class="dc-score-num" style="color:${col}">${davg||'—'}</div>
-        </div>
-        <div class="dc-completion">${dDone}/${dTotal} aspects rated</div>
-      </div>`;
-  }).join('');
+  // NB: the 5 domain cards are NOT rendered here. The persistent
+  // `.domain-sidebar` strip above #pageContent (built once by buildSidebar(),
+  // kept live by updateSidebarScores()) already carries the same code, title,
+  // score and n/m-rated figure for every domain — and stays on screen inside
+  // domain views too, which this copy never did. Rendering both meant the
+  // overview showed each domain tile twice. Removed 2026-07-26.
 
   return `
     <div class="overview-hero">
@@ -1172,8 +1149,6 @@ function renderOverview() {
       <div style="flex:1;height:7px;background:var(--paper-2);border-radius:99px;overflow:hidden;"><div id="progressFill" style="height:100%;background:var(--accent);border-radius:99px;transition:width .4s;width:${pct}%"></div></div>
       <span id="progressPct" style="font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap;">${pct}%</span>
     </div>
-
-    <div class="domain-grid">${domainCards}</div>
 
     <div style="margin-bottom:20px;">
       <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;">School Summary</div>
