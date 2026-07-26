@@ -125,9 +125,15 @@ body:has(> .page-footer) > .page-body {
 .info-strip__pill--progress .sop-count { color:#5a4bd1; font-weight:600; }
 
 /* Rail padding tightens on phones (grid columns handled by the
-   .domain-sidebar breakpoints above). */
+   .domain-sidebar breakpoints above).
+   .page-hero__inner is pulled in with them: base.css pads it 40px at every
+   width, so without this the hero text sat 24px right of the info-strip and
+   the appraisal content below 768px — the Common Mistake #52 clamp-then-pad
+   asymmetry, at the mobile breakpoint instead of the desktop one. All three
+   rails must tighten together or they stop sharing a left edge. */
 @media (max-width:768px) {
   .page-body { padding:0 16px; }
+  .page-hero__inner { padding:0 16px; }
   .domain-sidebar { gap:10px; }
 }
 
@@ -720,12 +726,15 @@ body:has(> .page-footer) > .page-body {
 </header>
 
 <div class="info-strip-rail">
-  <aside class="info-strip" role="note" aria-label="How this page works">
+  <!-- Ships collapsed in the markup so there is no flash of the full
+       explainer before initInfoStripCollapse() runs; the script re-opens it
+       only when the user has previously expanded it. -->
+  <aside class="info-strip is-collapsed" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">🏫</div>
     <div class="info-strip__body">
       <button type="button" class="info-strip__toggle" id="infoStripToggle"
-              aria-expanded="true" aria-controls="infoStripExplainer"
-              title="Collapse explanation">
+              aria-expanded="false" aria-controls="infoStripExplainer"
+              title="Show explanation">
         <h2 class="info-strip__title">An honest review of your whole school</h2>
         <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
@@ -749,12 +758,11 @@ body:has(> .page-footer) > .page-body {
 </div>
 
 <script>
-// Info-strip collapse. Runs at parse time (not on authReady) so a saved
-// collapsed state paints without a flash of the full explainer.
-// Default is EXPANDED: this page is completed once or twice a year, so most
-// visits are a first visit for that user — the "be honest, not over-confident"
-// framing is the point of the page, not boilerplate to hide. Collapsing is
-// opt-in and then remembered.
+// Info-strip collapse. Runs at parse time (not on authReady) so the collapsed
+// state paints without a flash of the full explainer.
+// Default is COLLAPSED — the strip opens as title + pills (which carry the
+// live progress readout), and the explainer is one click away. Expanding is
+// opt-in and then remembered per browser.
 (function initInfoStripCollapse() {
   var KEY = 'ah:ssa:infoStripCollapsed';
   var strip = document.querySelector('.info-strip');
@@ -765,8 +773,9 @@ body:has(> .page-footer) > .page-body {
     btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
     btn.title = collapsed ? 'Show explanation' : 'Collapse explanation';
   }
-  var collapsed = false;
-  try { collapsed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  // No stored preference → collapsed. Only an explicit expand ('0') opens it.
+  var collapsed = true;
+  try { var v = localStorage.getItem(KEY); if (v !== null) collapsed = v === '1'; } catch (e) {}
   apply(collapsed);
   btn.addEventListener('click', function () {
     collapsed = !strip.classList.contains('is-collapsed');
