@@ -27,10 +27,16 @@
 }
 body { padding-top: 62px; }
 
-/* Canonical hero + body-as-flex-column (body:has(>.page-footer)). The
-   full-height sidebar layout (.page-body) must stay full width as a flex
-   item — without width:100% it shrinks to content. */
+/* Canonical hero + body-as-flex-column (body:has(>.page-footer)). Every
+   direct body child must be listed here: as flex items they shrink to their
+   content without width:100%, so an omitted band renders visibly inset from
+   the others (root CLAUDE.md Common Mistake #54).
+   .info-strip-rail was missing until 2026-07-26 — it read ~40px narrower on
+   each side than the hero above it and the D1–D5 strip below, despite all
+   three declaring the same max-width + padding. The clamp was never the
+   problem; the flex context was. */
 body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .info-strip-rail,
 body:has(> .page-footer) > .page-body {
   width: 100%;
   align-self: stretch;
