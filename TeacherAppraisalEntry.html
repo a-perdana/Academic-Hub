@@ -750,15 +750,18 @@ body:has(> .page-footer) > .page-wrap {
 /* Sits on the same 1200px rail as .setup-rail / .page-wrap below it. Those
    clamp with ZERO horizontal padding (root CLAUDE.md Common Mistake #53), so
    this must too — its 18px inner padding is inside the clamp, which would
-   otherwise push the text 18px right of the cards below. Vertical rhythm:
-   24px clear of the hero above, 24px clear of the content below. */
+   otherwise push the text 18px right of the cards below.
+   Vertical rhythm: 24px below the hero. The bottom margin is 0 because
+   .setup-rail / .page-wrap already open with 28px top padding — carrying a
+   24px margin here as well stacked them into a ~52px trough between the strip
+   and the Framework Overview card. */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
   border-left: 4px solid #6c5ce7;
   border-radius: 12px;
   max-width: var(--container-max);
-  margin: 24px auto;
+  margin: 24px auto 0;
   padding: 16px 18px;
   display: flex; gap: 14px; align-items: flex-start;
 }
@@ -3727,12 +3730,23 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   // ── TEACHER AUTOCOMPLETE ─────────────────────────────────
   let allTeachersCache = null;
 
+  // Admins may search the whole network; school leadership (SP / AC / CC / FR)
+  // is scoped to their own school. That scope is NOT optional — the users
+  // `list` rule cannot filter per-doc, so it grants the query and trusts this
+  // constraint. Dropping it would let a principal enumerate every teacher in
+  // the network. A leader with no schoolId gets an empty result rather than an
+  // unscoped read.
   async function loadTeachersCache() {
     if (allTeachersCache) return allTeachersCache;
-    const snap = await getDocs(query(
-      collection(window.db, 'users'),
-      where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
-    ));
+    const profile = window.userProfile || {};
+    const isAdminUser = profile.role_academichub === 'academic_admin'
+                     || profile.role_centralhub  === 'central_admin';
+    const constraints = [where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])];
+    if (!isAdminUser) {
+      if (!profile.schoolId) { allTeachersCache = []; return allTeachersCache; }
+      constraints.push(where('schoolId', '==', profile.schoolId));
+    }
+    const snap = await getDocs(query(collection(window.db, 'users'), ...constraints));
     allTeachersCache = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
     return allTeachersCache;
   }

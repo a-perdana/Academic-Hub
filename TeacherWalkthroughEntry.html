@@ -832,12 +832,22 @@ import { collection, addDoc, query, where, getDocs, serverTimestamp } from 'http
 
 // ── TEACHER SEARCH ───────────────────────────────────────
 let allTeachersCache = null;
+// Admins may search the whole network; school leadership (SP / AC / CC / FR)
+// is scoped to their own school. That scope is NOT optional — the users `list`
+// rule cannot filter per-doc, so it grants the query and trusts this
+// constraint. A leader with no schoolId gets an empty result rather than an
+// unscoped read. Mirrors TeacherAppraisalEntry.html.
 async function loadTeachersCache() {
   if (allTeachersCache) return allTeachersCache;
-  const snap = await getDocs(query(
-    collection(window.db, 'users'),
-    where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])
-  ));
+  const profile = window.userProfile || {};
+  const isAdminUser = profile.role_academichub === 'academic_admin'
+                   || profile.role_centralhub  === 'central_admin';
+  const constraints = [where('role_teachershub', 'in', ['teachers_user', 'teachers_admin'])];
+  if (!isAdminUser) {
+    if (!profile.schoolId) { allTeachersCache = []; return allTeachersCache; }
+    constraints.push(where('schoolId', '==', profile.schoolId));
+  }
+  const snap = await getDocs(query(collection(window.db, 'users'), ...constraints));
   allTeachersCache = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
   return allTeachersCache;
 }
