@@ -31,6 +31,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
    width:100% on direct body children avoids the body:has(>.page-footer)
    flex-column shrink trap. ───────────────────────────────────── */
 body:has(> .page-footer) > .page-hero,
+body:has(> .page-footer) > .info-strip,
 body:has(> .page-footer) > #setupPhase,
 body:has(> .page-footer) > #scoringPhase,
 body:has(> .page-footer) > .page-wrap {
@@ -63,11 +64,15 @@ body:has(> .page-footer) > .page-wrap {
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
 
+/* All rails tighten together below 760px — an omitted band stops sharing the
+   left edge with the rest (root CLAUDE.md Common Mistake #52). .info-strip is
+   in the list because it is its own rail on this page, not inside .page-wrap. */
 @media (max-width: 760px) {
   .page-hero__inner,
   .page-footer__inner,
   .page-footer__meta,
   .page-wrap,
+  .info-strip,
   .setup-rail { padding-left: 14px; padding-right: 14px; }
 }
 
@@ -742,13 +747,19 @@ body:has(> .page-footer) > .page-wrap {
 .sa-delta-1    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 .sa-delta-2up  { background: #fff1f2; color: #dc2626; border: 1px solid #fca5a5; }
 /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
+/* Sits on the same 1200px rail as .setup-rail / .page-wrap below it. Those
+   clamp with ZERO horizontal padding (root CLAUDE.md Common Mistake #53), so
+   this must too — its 18px inner padding is inside the clamp, which would
+   otherwise push the text 18px right of the cards below. Vertical rhythm:
+   24px clear of the hero above, 24px clear of the content below. */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
   border: 1px solid #ddd6fe;
   border-left: 4px solid #6c5ce7;
   border-radius: 12px;
+  max-width: var(--container-max);
+  margin: 24px auto;
   padding: 16px 18px;
-  margin: 0 0 24px;
   display: flex; gap: 14px; align-items: flex-start;
 }
 .info-strip__icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
@@ -830,7 +841,7 @@ body:has(> .page-footer) > .page-wrap {
 <!-- Ships collapsed in the markup so there is no flash of the full explainer
      before initInfoStripCollapse() runs; the script re-opens it only when the
      user has previously expanded it. -->
-<aside class="info-strip is-collapsed" role="note" aria-label="How this page works" style="max-width:var(--container-max);margin:0 auto 24px;padding:16px 18px;">
+<aside class="info-strip is-collapsed" role="note" aria-label="How this page works">
   <div class="info-strip__icon" aria-hidden="true">&#x1F4DD;</div>
   <div class="info-strip__body">
     <button type="button" class="info-strip__toggle" id="infoStripToggle"
