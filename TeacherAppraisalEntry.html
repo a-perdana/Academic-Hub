@@ -786,6 +786,28 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__pill b { color: #3730a3; font-weight: 700; }
 @media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
+
+/* ── Collapsible explainer (2026-07-26) ───────────────────────────────
+   The title row becomes the toggle; the lede, 3-step flow and callout fold
+   away. The pills row stays outside the collapsing region so the strip keeps
+   an always-on summary line (For / Scope / Anchor). Placed after the
+   canonical .info-strip rules above so these win without !important.
+   Mirrors the same pattern on /school-self-appraisal. */
+.info-strip__toggle {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: none; border: none; padding: 0; margin: 0 0 4px;
+  font-family: inherit; text-align: left; color: inherit; cursor: pointer;
+}
+.info-strip__toggle .info-strip__title { margin: 0; flex: 1; }
+.info-strip__chevron { flex-shrink: 0; color: #6c5ce7; opacity: .55; transition: transform .2s, opacity .15s; }
+.info-strip__toggle:hover .info-strip__chevron { opacity: 1; }
+.info-strip__toggle:focus-visible { outline: 2px solid #6c5ce7; outline-offset: 3px; border-radius: 6px; }
+.info-strip.is-collapsed .info-strip__chevron { transform: rotate(-90deg); }
+.info-strip.is-collapsed .info-strip__explainer { display: none; }
+/* Collapsed, the title sits directly on the pills row — drop that row's
+   divider + top padding so the two don't read as separate sections. */
+.info-strip.is-collapsed .info-strip__toggle { margin-bottom: 10px; }
+.info-strip.is-collapsed .info-strip__pills { padding-top: 0; border-top: none; }
 </style>
 </head>
 <body data-page-accent="dark">
@@ -805,17 +827,27 @@ body:has(> .page-footer) > .page-wrap {
   </div>
 </header>
 
-<aside class="info-strip" role="note" aria-label="How this page works" style="max-width:var(--container-max);margin:0 auto 24px;padding:16px 18px;">
+<!-- Ships collapsed in the markup so there is no flash of the full explainer
+     before initInfoStripCollapse() runs; the script re-opens it only when the
+     user has previously expanded it. -->
+<aside class="info-strip is-collapsed" role="note" aria-label="How this page works" style="max-width:var(--container-max);margin:0 auto 24px;padding:16px 18px;">
   <div class="info-strip__icon" aria-hidden="true">&#x1F4DD;</div>
   <div class="info-strip__body">
-    <h2 class="info-strip__title">The formal teacher appraisal</h2>
-    <p class="info-strip__lede">Score a teacher against the network appraisal framework. Each item is anchored to a Cambridge Teacher Standard &mdash; click any CTS chip to read the source. Use your walkthrough notes as evidence first.</p>
-    <ol class="info-strip__flow">
-      <li><strong>Gather evidence</strong> from your classroom walkthroughs</li>
-      <li><strong>Score each rubric item</strong> &mdash; open its detail to read the Cambridge anchor</li>
-      <li><strong>Write the narrative</strong> and submit &mdash; fair, grounded, on the record</li>
-    </ol>
-    <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Score against the anchor, not a gut feeling.</strong> Every item links to a Cambridge Teacher Standard (the CTS chips) &mdash; click one if you are unsure what it means.</span></div>
+    <button type="button" class="info-strip__toggle" id="infoStripToggle"
+            aria-expanded="false" aria-controls="infoStripExplainer"
+            title="Show explanation">
+      <h2 class="info-strip__title">The formal teacher appraisal</h2>
+      <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="info-strip__explainer" id="infoStripExplainer">
+      <p class="info-strip__lede">Score a teacher against the network appraisal framework. Each item is anchored to a Cambridge Teacher Standard &mdash; click any CTS chip to read the source. Use your walkthrough notes as evidence first.</p>
+      <ol class="info-strip__flow">
+        <li><strong>Gather evidence</strong> from your classroom walkthroughs</li>
+        <li><strong>Score each rubric item</strong> &mdash; open its detail to read the Cambridge anchor</li>
+        <li><strong>Write the narrative</strong> and submit &mdash; fair, grounded, on the record</li>
+      </ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Score against the anchor, not a gut feeling.</strong> Every item links to a Cambridge Teacher Standard (the CTS chips) &mdash; click one if you are unsure what it means.</span></div>
+    </div>
     <div class="info-strip__pills">
       <span class="info-strip__pill"><b>For:</b> Academic Coordinator (+ SP, CC)</span>
       <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
@@ -823,6 +855,33 @@ body:has(> .page-footer) > .page-wrap {
     </div>
   </div>
 </aside>
+
+<script>
+// Info-strip collapse. Runs at parse time (not on authReady) so the collapsed
+// state paints without a flash of the full explainer. Default is COLLAPSED —
+// the strip opens as title + pills, and the explainer is one click away.
+// Expanding is opt-in and then remembered per browser.
+(function initInfoStripCollapse() {
+  var KEY = 'ah:tae:infoStripCollapsed';
+  var strip = document.querySelector('.info-strip');
+  var btn = document.getElementById('infoStripToggle');
+  if (!strip || !btn) return;
+  function apply(collapsed) {
+    strip.classList.toggle('is-collapsed', collapsed);
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    btn.title = collapsed ? 'Show explanation' : 'Collapse explanation';
+  }
+  // No stored preference → collapsed. Only an explicit expand ('0') opens it.
+  var collapsed = true;
+  try { var v = localStorage.getItem(KEY); if (v !== null) collapsed = v === '1'; } catch (e) {}
+  apply(collapsed);
+  btn.addEventListener('click', function () {
+    collapsed = !strip.classList.contains('is-collapsed');
+    apply(collapsed);
+    try { localStorage.setItem(KEY, collapsed ? '1' : '0'); } catch (e) {}
+  });
+})();
+</script>
 
 <!-- PHASE 1: SETUP -->
 <div id="setupPhase">
