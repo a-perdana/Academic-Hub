@@ -335,8 +335,17 @@ body:has(> .page-footer) > .page-body {
   padding:18px 20px 16px; background:var(--white);
   border-bottom:1px solid var(--border);
   display:flex; justify-content:space-between; align-items:flex-start; gap:14px;
+  cursor:pointer; user-select:none; transition:background .15s;
+  width:100%; text-align:left; font-family:inherit;
 }
+.aspect-head:hover { background:var(--paper); }
+.aspect-card:not(.open) .aspect-head { border-bottom-color:transparent; }
 .aspect-head-left { flex:1; min-width:0; }
+.aspect-head-right { display:flex; align-items:center; gap:10px; flex-shrink:0; margin-top:2px; }
+.aspect-chevron {
+  color:var(--ink-3); flex-shrink:0; transition:transform .2s;
+}
+.aspect-card.open .aspect-chevron { transform:rotate(90deg); }
 .aspect-num {
   display:inline-flex; align-items:center; justify-content:center;
   font-size:9px; font-weight:800; color:var(--ink-3);
@@ -352,6 +361,7 @@ body:has(> .page-footer) > .page-body {
 }
 
 .aspect-body { padding:20px 22px; display:flex; flex-direction:column; gap:0; }
+.aspect-card:not(.open) .aspect-body { display:none; }
 
 /* Section dividers inside aspect body */
 .ab-section { margin-bottom:20px; }
@@ -1273,16 +1283,19 @@ function renderDomain(domainId) {
     }).join('');
 
     return `
-      <div class="aspect-card" id="aspect-${aspect.id}" style="border-left-color:${col};">
-        <div class="aspect-head">
+      <div class="aspect-card${idx === 0 ? ' open' : ''}" id="aspect-${aspect.id}" style="border-left-color:${col};">
+        <div class="aspect-head" role="button" tabindex="0" aria-expanded="${idx === 0}" aria-controls="aspect-body-${aspect.id}" onclick="window.__toggleAspect('${aspect.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.__toggleAspect('${aspect.id}');}">
           <div class="aspect-head-left">
             <div class="aspect-num">${domain.code}.${idx+1}</div>
             <div class="aspect-title">${aspect.title}</div>
             <div class="aspect-desc">${aspect.description}</div>
           </div>
-          <span class="aspect-score-badge ${scoreCls(rating)}" id="badge-${aspect.id}">${badgeText}</span>
+          <div class="aspect-head-right">
+            <span class="aspect-score-badge ${scoreCls(rating)}" id="badge-${aspect.id}">${badgeText}</span>
+            <svg class="aspect-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+          </div>
         </div>
-        <div class="aspect-body">
+        <div class="aspect-body" id="aspect-body-${aspect.id}">
 
           <!-- Expectations (collapsible) -->
           <div class="ab-section">
@@ -1506,6 +1519,11 @@ window.__switchDomain = id => switchView(id);
 window.__toggleBlock = (id, btn) => {
   const el = document.getElementById(id); if (!el) return;
   el.classList.toggle('open'); btn?.classList.toggle('open');
+};
+window.__toggleAspect = (aspectId) => {
+  const card = document.getElementById('aspect-' + aspectId); if (!card) return;
+  const open = card.classList.toggle('open');
+  card.querySelector('.aspect-head')?.setAttribute('aria-expanded', String(open));
 };
 
 function renderLinkList(aspectId) {
