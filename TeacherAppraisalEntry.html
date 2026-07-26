@@ -648,6 +648,73 @@ body:has(> .page-footer) > .page-wrap {
 }
 .fw-ov-tip:hover { filter: brightness(.93); transform: translateY(-1px); }
 
+/* ── WHO FILLS WHAT, AND WHEN (2026-07-27) ──
+   Closes the Framework Overview: the per-focus chips above say "Appraiser"
+   but never say WHICH role that is, so this spells out the delegation chain
+   from ES 12.14 and places the cycle from ES 12.7. */
+.fw-roles { padding: 18px 20px 20px; border-top: 1px solid #eef2f7; background: #fcfcfd; }
+.fw-roles__head {
+  display: flex; align-items: baseline; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 12px;
+}
+.fw-roles__title { font-size: .84rem; font-weight: 800; color: #1e293b; }
+.fw-roles__src {
+  margin-left: auto; font-size: .68rem; font-weight: 600; color: #94a3b8;
+  background: #f1f5f9; border: 1px solid #e2e8f0; padding: 2px 8px; border-radius: 999px;
+}
+.fw-roles__table {
+  width: 100%; border-collapse: collapse; margin-bottom: 16px;
+  background: #fff; border: 1px solid #e8ecf3; border-radius: 10px; overflow: hidden;
+}
+.fw-roles__table th {
+  text-align: left; font-size: .66rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: #94a3b8; padding: 9px 12px;
+  background: #f8fafc; border-bottom: 1px solid #e8ecf3;
+}
+.fw-roles__table td {
+  font-size: .78rem; color: #475569; line-height: 1.5;
+  padding: 10px 12px; border-bottom: 1px solid #f1f5f9; vertical-align: top;
+}
+.fw-roles__table tr:last-child td { border-bottom: none; }
+.fw-roles__table td strong { color: #1e293b; font-weight: 700; }
+.fw-roles__tag {
+  display: inline-block; font-size: .66rem; font-weight: 800;
+  padding: 1px 6px; border-radius: 5px; margin-right: 6px;
+}
+.fw-roles__who {
+  background: #fff; border: 1px solid #e8ecf3; border-left: 3px solid #7c3aed;
+  border-radius: 10px; padding: 13px 15px; margin-bottom: 14px;
+}
+.fw-roles__who-title { font-size: .78rem; font-weight: 800; color: #5b21b6; margin-bottom: 8px; }
+.fw-roles__who-list { margin: 0; padding-left: 18px; }
+.fw-roles__who-list li { font-size: .77rem; color: #475569; line-height: 1.6; margin-bottom: 5px; }
+.fw-roles__who-list li:last-child { margin-bottom: 0; }
+.fw-roles__who-list strong { color: #1e293b; }
+.fw-roles__excl { color: #92400e !important; }
+.fw-roles__excl strong { color: #92400e; }
+.fw-roles__cycle {
+  background: #fff; border: 1px solid #e8ecf3; border-radius: 10px; padding: 13px 15px;
+}
+.fw-roles__cycle-label {
+  display: block; font-size: .66rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: #94a3b8; margin-bottom: 9px;
+}
+.fw-roles__cycle-list { margin: 0; padding-left: 18px; }
+.fw-roles__cycle-list li { font-size: .77rem; color: #475569; line-height: 1.6; margin-bottom: 4px; }
+.fw-roles__cycle-list li > span {
+  display: inline-block; min-width: 62px; font-weight: 800; color: #0e7490;
+}
+.fw-roles__cycle-note { font-size: .68rem; color: #94a3b8; margin-top: 8px; }
+@media (max-width: 720px) {
+  .fw-roles__table thead { display: none; }
+  .fw-roles__table tr { display: block; border-bottom: 1px solid #f1f5f9; }
+  .fw-roles__table tr:last-child { border-bottom: none; }
+  .fw-roles__table td { display: block; border-bottom: none; padding: 4px 12px; }
+  .fw-roles__table td:first-child { padding-top: 10px; font-weight: 700; color: #1e293b; }
+  .fw-roles__table td:last-child { padding-bottom: 10px; color: #64748b; }
+  .fw-roles__cycle-list li > span { min-width: 0; margin-right: 5px; }
+}
+
 /* ── WHO / WHEN BANNER ── */
 .who-banner {
   display: flex; align-items: center; gap: 10px;
@@ -994,6 +1061,77 @@ body:has(> .page-footer) > .page-wrap {
               <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-who">🎓 Filled by students</span>
               <span class="fw-ov-chip chip-green fw-ov-tip" data-tip="f4-when">🗓 Collected independently · enter results anytime</span>
             </div>
+          </div>
+        </div>
+
+        <!-- Who fills what, and when ───────────────────────────────────
+             Sourced, not invented:
+               · who / when per focus  → appraisal-framework-v2.json →
+                 weights.collection_timing.{F1..F4}.{who,when}
+               · which role is "the Appraiser" → ES 12.14 (Roles and
+                 Responsibilities): Principal appraises SLT; Subject Leaders /
+                 HoDs conduct formal appraisals for teachers in their
+                 department "if delegated by Principal"; Principal reviews and
+                 approves all reports before finalisation; Mentors are
+                 explicitly NOT involved in formal appraisal.
+               · cycle stages → ES 12.7 (Annual Appraisal Cycle).
+             Do not hand-edit the who/when text — change the framework JSON
+             (root CLAUDE.md #45 + #10). -->
+        <div class="fw-roles">
+          <div class="fw-roles__head">
+            <span class="fw-roles__title">Who fills each section, and when</span>
+            <span class="fw-roles__src">Framework v2.1 · ES 12.7 &amp; 12.14</span>
+          </div>
+
+          <table class="fw-roles__table">
+            <thead>
+              <tr><th>Section</th><th>Who fills it</th><th>When</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="fw-roles__tag" style="background:#eef2ff;color:#4338ca;">F1</span> Teacher Administration</td>
+                <td><strong>Appraiser</strong></td>
+                <td>Observation Session — during or immediately after the formal classroom visit</td>
+              </tr>
+              <tr>
+                <td><span class="fw-roles__tag" style="background:#f5f3ff;color:#7c3aed;">F2</span> Class Observation</td>
+                <td><strong>Appraiser</strong></td>
+                <td>Observation Session — scored live during the announced lesson (35–40 min)</td>
+              </tr>
+              <tr>
+                <td><span class="fw-roles__tag" style="background:#ecfeff;color:#0e7490;">F3</span> Work Inspection</td>
+                <td><strong>Appraiser</strong></td>
+                <td>End-of-Year Conference — at the annual review meeting with the teacher</td>
+              </tr>
+              <tr>
+                <td><span class="fw-roles__tag" style="background:#f0fdf4;color:#15803d;">F4</span> Student Survey</td>
+                <td><strong>Students</strong> fill it — appraiser enters the aggregated result</td>
+                <td>Collected independently during the year — enter results anytime</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="fw-roles__who">
+            <div class="fw-roles__who-title">Who counts as “the Appraiser”?</div>
+            <ul class="fw-roles__who-list">
+              <li><strong>Subject Leader / Head of Department</strong> — conducts formal appraisals for teachers in their own department, <em>where the Principal has delegated it</em>.</li>
+              <li><strong>Principal</strong> — appraises the Senior Leadership Team (Vice Principal, Subject Leaders, Counsellors), and <strong>reviews and approves every appraisal report before it is finalised</strong>.</li>
+              <li><strong>Academic / Cambridge Coordinator</strong> — appraises where the Principal has delegated it, on the same rubric.</li>
+              <li><strong>Eduversal Subject Specialist</strong> — observes teachers in their subject during on-site visits and records the appraisal from Central Hub.</li>
+              <li class="fw-roles__excl"><strong>Mentors do not appraise.</strong> A mentee’s mentor stays out of the formal appraisal so the mentoring relationship keeps its confidentiality (ES 12.14).</li>
+            </ul>
+          </div>
+
+          <div class="fw-roles__cycle">
+            <span class="fw-roles__cycle-label">Where this sits in the year</span>
+            <ol class="fw-roles__cycle-list">
+              <li><span>Term 1</span> Orientation — teachers briefed on process, rubrics, expectations</li>
+              <li><span>Term 1</span> Goal setting — teacher and appraiser co-develop professional + student learning goals</li>
+              <li><span>Term 2</span> Mid-year review — progress check and evidence review</li>
+              <li><span>Terms 2–3</span> Formal observations — <strong>at least 2</strong> using the Eduversal rubric <em>(this page)</em></li>
+              <li><span>Term 3</span> Final appraisal meeting — summative discussion, rating assigned, next year’s goals set</li>
+            </ol>
+            <div class="fw-roles__cycle-note">Source: ES 12.7 Annual Appraisal Cycle.</div>
           </div>
         </div>
 
