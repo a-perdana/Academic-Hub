@@ -680,6 +680,30 @@ body:has(> .page-footer) > .page-body {
 }
 .info-strip__pill b { color: #3730a3; font-weight: 700; }
 @media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
+
+/* ── Collapsible explainer (2026-07-26) ───────────────────────────────
+   The title row becomes the toggle; the lede, 3-step flow and callout fold
+   away. The pills row stays OUT of the collapsing region on purpose — it
+   carries the live progress pill (sopFill/sopPct/sopCount), so hiding it
+   would hide a running indicator. Placed after the canonical .info-strip
+   rules above so these win without needing !important.
+   Preference persisted in localStorage, same tier as the CH notes-widget
+   collapse. */
+.info-strip__toggle {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: none; border: none; padding: 0; margin: 0 0 4px;
+  font-family: inherit; text-align: left; color: inherit; cursor: pointer;
+}
+.info-strip__toggle .info-strip__title { margin: 0; flex: 1; }
+.info-strip__chevron { flex-shrink: 0; color: #6c5ce7; opacity: .55; transition: transform .2s, opacity .15s; }
+.info-strip__toggle:hover .info-strip__chevron { opacity: 1; }
+.info-strip__toggle:focus-visible { outline: 2px solid #6c5ce7; outline-offset: 3px; border-radius: 6px; }
+.info-strip.is-collapsed .info-strip__chevron { transform: rotate(-90deg); }
+.info-strip.is-collapsed .info-strip__explainer { display: none; }
+/* Collapsed, the title sits directly on the pills row — drop that row's
+   divider + top padding so the two don't read as separate sections. */
+.info-strip.is-collapsed .info-strip__toggle { margin-bottom: 10px; }
+.info-strip.is-collapsed .info-strip__pills { padding-top: 0; border-top: none; }
 </style>
 </head>
 <body data-page-accent="dark">
@@ -699,10 +723,17 @@ body:has(> .page-footer) > .page-body {
   <aside class="info-strip" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">🏫</div>
     <div class="info-strip__body">
-      <h2 class="info-strip__title">An honest review of your whole school</h2>
-      <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes — this is the starting picture before a school-quality visit.</p>
-      <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> — be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
-      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
+      <button type="button" class="info-strip__toggle" id="infoStripToggle"
+              aria-expanded="true" aria-controls="infoStripExplainer"
+              title="Collapse explanation">
+        <h2 class="info-strip__title">An honest review of your whole school</h2>
+        <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="info-strip__explainer" id="infoStripExplainer">
+        <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes — this is the starting picture before a school-quality visit.</p>
+        <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> — be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
+        <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
+      </div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal + Academic Coordinator</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school</span>
@@ -716,6 +747,34 @@ body:has(> .page-footer) > .page-body {
     </div>
   </aside>
 </div>
+
+<script>
+// Info-strip collapse. Runs at parse time (not on authReady) so a saved
+// collapsed state paints without a flash of the full explainer.
+// Default is EXPANDED: this page is completed once or twice a year, so most
+// visits are a first visit for that user — the "be honest, not over-confident"
+// framing is the point of the page, not boilerplate to hide. Collapsing is
+// opt-in and then remembered.
+(function initInfoStripCollapse() {
+  var KEY = 'ah:ssa:infoStripCollapsed';
+  var strip = document.querySelector('.info-strip');
+  var btn = document.getElementById('infoStripToggle');
+  if (!strip || !btn) return;
+  function apply(collapsed) {
+    strip.classList.toggle('is-collapsed', collapsed);
+    btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+    btn.title = collapsed ? 'Show explanation' : 'Collapse explanation';
+  }
+  var collapsed = false;
+  try { collapsed = localStorage.getItem(KEY) === '1'; } catch (e) {}
+  apply(collapsed);
+  btn.addEventListener('click', function () {
+    collapsed = !strip.classList.contains('is-collapsed');
+    apply(collapsed);
+    try { localStorage.setItem(KEY, collapsed ? '1' : '0'); } catch (e) {}
+  });
+})();
+</script>
 
 <div class="page-body">
   <nav class="domain-sidebar" id="domainSidebar" aria-label="Appraisal domains">
