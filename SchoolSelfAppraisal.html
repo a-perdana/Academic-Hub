@@ -170,19 +170,17 @@ body:has(> .page-footer) > .page-body {
 .oh-score-val { font-size:1.8rem; font-weight:800; line-height:1; }
 .oh-score-label { font-size:11px; color:rgba(255,255,255,.65); margin-top:3px; }
 
-/* References strip */
-.ref-strip {
-  display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px;
-  padding:12px 16px; background:var(--white);
-  border:1px solid var(--border); border-radius:10px;
-}
+/* References strip — pills sit in an .ov-card body, so no own border/bg. */
+.ref-strip { display:flex; gap:7px; flex-wrap:wrap; }
 .ref-pill {
-  font-size:11px; font-weight:600; padding:3px 9px; border-radius:99px;
-  background:var(--paper-2); color:var(--ink-3); border:1px solid var(--border);
-  text-decoration:none; transition:background .15s, color .15s;
+  font-size:11.5px; font-weight:600; padding:5px 11px; border-radius:99px;
+  background:var(--paper); color:var(--ink-2); border:1px solid var(--border);
+  text-decoration:none; transition:all .15s;
 }
-.ref-pill:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
-.ref-strip-label { font-size:11px; color:var(--ink-3); font-weight:500; align-self:center; margin-right:4px; }
+a.ref-pill:hover {
+  background:var(--accent); color:#fff; border-color:var(--accent);
+  transform:translateY(-1px);
+}
 
 .evidence-link-section { margin-top:10px; }
 .evidence-link-label { font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; display:block; }
@@ -204,17 +202,71 @@ body:has(> .page-footer) > .page-body {
    longer renders its own copy of the 5 domain tiles. The persistent
    .domain-sidebar strip (.domain-nav-card / .dnc-*) is the single renderer. */
 
-.overview-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
-@media (max-width:600px) { .overview-fields { grid-template-columns:1fr; } }
-.field-block label { display:block; font-size:11px; font-weight:700; color:var(--ink-3); text-transform:uppercase; letter-spacing:.05em; margin-bottom:6px; }
-.field-block textarea {
-  width:100%; min-height:90px; padding:10px 12px;
-  border:1.5px solid var(--border); border-radius:10px;
-  font-family:'DM Sans',sans-serif; font-size:13px; color:var(--ink);
-  resize:vertical; background:var(--white); line-height:1.55; transition:border-color .15s;
+/* ===== OVERVIEW SECTIONS (2026-07-26) =====
+   The completion bar, School Summary and references strip were three inline-
+   styled slabs sitting loose on the page background, which read as unfinished
+   next to the card-based domain panels. They now share one .ov-card shell
+   with a small-caps section header, matching .aspect-card's language. */
+.ov-card {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:14px; margin-bottom:16px; overflow:hidden;
 }
-.field-block textarea:focus { outline:none; border-color:var(--accent); background:#fffdf8; }
-.field-block textarea:disabled { opacity:.6; background:var(--paper); }
+.ov-card__head {
+  display:flex; align-items:center; gap:10px;
+  padding:14px 20px; border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg, var(--paper) 0%, var(--white) 100%);
+}
+.ov-card__title {
+  font-size:11px; font-weight:800; color:var(--ink-3);
+  text-transform:uppercase; letter-spacing:.1em;
+}
+.ov-card__hint { font-size:11.5px; color:var(--ink-3); margin-left:auto; font-weight:500; }
+.ov-card__body { padding:18px 20px; }
+
+/* Completion bar — same shell, single compact row (no head). */
+.ov-progress { display:flex; align-items:center; gap:14px; padding:16px 20px; }
+.ov-progress__label {
+  font-size:11px; font-weight:800; color:var(--ink-3);
+  text-transform:uppercase; letter-spacing:.1em; white-space:nowrap;
+}
+.ov-progress__track {
+  flex:1; height:8px; background:var(--paper-2);
+  border-radius:99px; overflow:hidden;
+}
+.ov-progress__fill {
+  height:100%; border-radius:99px; transition:width .45s ease;
+  background:linear-gradient(90deg, #b45309, #d97706);
+}
+.ov-progress__pct {
+  font-size:14px; font-weight:800; color:var(--accent);
+  white-space:nowrap; min-width:42px; text-align:right;
+}
+
+.overview-fields { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media (max-width:600px) { .overview-fields { grid-template-columns:1fr; } }
+.field-block label {
+  display:block; font-size:11px; font-weight:700; color:var(--ink-2);
+  text-transform:uppercase; letter-spacing:.05em; margin-bottom:7px;
+}
+.field-block textarea {
+  width:100%; min-height:190px; padding:13px 15px;
+  border:1.5px solid var(--border); border-radius:11px;
+  font-family:'DM Sans',sans-serif; font-size:13.5px; color:var(--ink);
+  resize:vertical; background:var(--paper); line-height:1.65;
+  transition:border-color .15s, background .15s, box-shadow .15s;
+}
+.field-block textarea::placeholder { color:var(--ink-3); }
+.field-block textarea:hover:not(:disabled) { border-color:var(--ink-3); }
+.field-block textarea:focus {
+  outline:none; border-color:var(--accent); background:var(--white);
+  box-shadow:0 0 0 3px rgba(217,119,6,0.12);
+}
+.field-block textarea:disabled { opacity:.7; background:var(--paper-2); resize:none; }
+/* Coordinator feedback reads as received, not authored — tinted + full width. */
+.field-block--feedback { margin-top:16px; }
+.field-block--feedback textarea {
+  min-height:120px; background:var(--d2-bg); border-color:var(--d2-border);
+}
 
 /* ===== DOMAIN PANEL ===== */
 .back-to-overview {
@@ -1189,13 +1241,21 @@ function renderOverview() {
   const pct = total ? Math.round((done/total)*100) : 0;
   const canEdit = !isReviewed && appraisalDoc?.status !== 'submitted';
 
+  // Pill label. Prefer a leading acronym ("CIS (Council of…)" → "CIS"), then
+  // the part before an em-dash ("Permendiknas No. 13/2007 — Principal…"), and
+  // only fall back to the full name. The old rule took the parenthetical and
+  // otherwise the first two words, which rendered the expansion instead of the
+  // acronym and truncated the rest to "Permendiknas No." / "Cambridge
+  // International" — neither identifies the source. Full name stays in title=.
   const refs = FRAMEWORK.meta.references.map(r => {
     const name = r.name || r;
     const url = r.url || null;
-    const label = name.match(/\(([^)]+)\)/)?.[1] || name.split(' ').slice(0,2).join(' ');
+    const label =
+      name.match(/^([A-Z][A-Za-z]*(?:[A-Z]|[A-Z]\w*)?)\s*\(/)?.[1] ||
+      name.split(/\s+[—–-]\s+/)[0].trim();
     return url
-      ? `<a class="ref-pill" href="${url}" target="_blank" rel="noopener" title="${name}">${label}</a>`
-      : `<span class="ref-pill" title="${name}">${label}</span>`;
+      ? `<a class="ref-pill" href="${url}" target="_blank" rel="noopener" title="${name}">${escHtml(label)}</a>`
+      : `<span class="ref-pill" title="${name}">${escHtml(label)}</span>`;
   }).join('');
 
   // NB: the 5 domain cards are NOT rendered here. The persistent
@@ -1218,24 +1278,38 @@ function renderOverview() {
       </div>
     </div>
 
-    <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;">
-      <span style="font-size:12px;color:var(--ink-3);font-weight:500;white-space:nowrap;">Overall Completion</span>
-      <div style="flex:1;height:7px;background:var(--paper-2);border-radius:99px;overflow:hidden;"><div id="progressFill" style="height:100%;background:var(--accent);border-radius:99px;transition:width .4s;width:${pct}%"></div></div>
-      <span id="progressPct" style="font-size:12px;font-weight:700;color:var(--accent);white-space:nowrap;">${pct}%</span>
-    </div>
-
-    <div style="margin-bottom:20px;">
-      <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;">School Summary</div>
-      <div class="overview-fields">
-        <div class="field-block"><label>Key Strengths</label><textarea aria-label="What does your school do particularly well?" data-field="strengths" placeholder="What does your school do particularly well?" ${!canEdit?'disabled':''}>${appraisalDoc?.strengths||''}</textarea></div>
-        <div class="field-block"><label>Areas for Improvement</label><textarea aria-label="What are your school's priority development areas?" data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
+    <div class="ov-card">
+      <div class="ov-progress">
+        <span class="ov-progress__label">Overall Completion</span>
+        <div class="ov-progress__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}" aria-label="Overall appraisal completion">
+          <div class="ov-progress__fill" id="progressFill" style="width:${pct}%"></div>
+        </div>
+        <span class="ov-progress__pct" id="progressPct">${pct}%</span>
       </div>
-      ${appraisalDoc?.recommendations ? `<div class="field-block" style="margin-top:4px;"><label>Eduversal Coordinator Recommendations</label><textarea disabled style="min-height:80px;background:var(--d2-bg);border-color:var(--d2-border);">${appraisalDoc.recommendations}</textarea></div>` : ''}
     </div>
 
-    <div class="ref-strip">
-      <span class="ref-strip-label">International References:</span>
-      ${refs}
+    <div class="ov-card">
+      <div class="ov-card__head">
+        <h2 class="ov-card__title">School Summary</h2>
+        <span class="ov-card__hint">Saved automatically</span>
+      </div>
+      <div class="ov-card__body">
+        <div class="overview-fields">
+          <div class="field-block"><label for="ovStrengths">Key Strengths</label><textarea id="ovStrengths" data-field="strengths" placeholder="What does your school do particularly well?" ${!canEdit?'disabled':''}>${appraisalDoc?.strengths||''}</textarea></div>
+          <div class="field-block"><label for="ovImprovements">Areas for Improvement</label><textarea id="ovImprovements" data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
+        </div>
+        ${appraisalDoc?.recommendations ? `<div class="field-block field-block--feedback"><label for="ovRecommendations">Eduversal Coordinator Recommendations</label><textarea id="ovRecommendations" disabled>${appraisalDoc.recommendations}</textarea></div>` : ''}
+      </div>
+    </div>
+
+    <div class="ov-card">
+      <div class="ov-card__head">
+        <h2 class="ov-card__title">International References</h2>
+        <span class="ov-card__hint">Frameworks this appraisal is aligned to</span>
+      </div>
+      <div class="ov-card__body">
+        <div class="ref-strip">${refs}</div>
+      </div>
     </div>`;
 }
 
