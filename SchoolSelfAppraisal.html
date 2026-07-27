@@ -295,6 +295,64 @@ a.ref-pill:hover {
   font-size:.86rem; line-height:1.6; color:#451a03;
   white-space:pre-wrap;
 }
+/* ===== APPEALS (Updated Appraisal Model 8.1) ===== */
+.apz {
+  margin-top:22px; padding:20px 22px;
+  background:#faf5ff; border:1px solid #ddd6fe;
+  border-left:4px solid #7c3aed; border-radius:12px;
+}
+.apz.is-closed { background:#f8fafc; border-color:#e2e8f0; border-left-color:#94a3b8; }
+.apz-head {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:12px; flex-wrap:wrap; margin-bottom:10px;
+}
+.apz-title { font-family:'Lora',serif; font-size:1.15rem; font-weight:600; color:#5b21b6; }
+.apz-window { font-size:.78rem; font-weight:600; color:#6d28d9; }
+.apz-window.is-closed { color:#64748b; }
+.apz-intro { font-size:.84rem; line-height:1.6; color:#4c1d95; margin-bottom:14px; }
+.apz.is-closed .apz-intro { color:#475569; margin-bottom:0; }
+.apz-case { background:#fff; border:1px solid #ddd6fe; border-radius:9px; padding:13px 15px; margin-bottom:10px; }
+.apz-case-head {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:10px; flex-wrap:wrap; margin-bottom:7px;
+}
+.apz-domain { font-size:.88rem; font-weight:700; color:#4c1d95; }
+.apz-when { font-size:.72rem; color:#64748b; }
+.apz-grounds { font-size:.85rem; line-height:1.55; color:#334155; white-space:pre-wrap; }
+.apz-pending { margin-top:10px; font-size:.8rem; color:#6d28d9; font-style:italic; }
+.apz-decision { margin-top:11px; padding:11px 13px; border-radius:8px; border:1px solid #e2e8f0; background:#f8fafc; }
+.apz-decision.is-upheld { background:#d1fae5; border-color:#6ee7b7; }
+.apz-decision-head {
+  display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  font-size:.84rem; font-weight:700; color:#134e4a; margin-bottom:5px;
+}
+.apz-decision.is-not_upheld .apz-decision-head { color:#334155; }
+.apz-decision-meta { font-size:.72rem; font-weight:500; color:#64748b; }
+.apz-decision-with { font-size:.74rem; color:#64748b; font-style:italic; margin-bottom:5px; }
+.apz-decision-note { font-size:.85rem; line-height:1.55; color:#334155; white-space:pre-wrap; }
+.apz-final { font-size:.74rem; font-weight:600; color:#64748b; margin-top:7px; }
+.apz-form { background:#fff; border:1px solid #ddd6fe; border-radius:9px; padding:14px 15px; }
+.apz-form-label {
+  font-size:.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.05em; color:#6d28d9; margin-bottom:8px;
+}
+.apz-form select, .apz-form textarea {
+  width:100%; padding:8px 10px; margin-bottom:9px;
+  border:1.5px solid #ddd6fe; border-radius:8px;
+  font-family:inherit; font-size:.85rem; background:#fff;
+}
+.apz-form textarea { min-height:92px; resize:vertical; line-height:1.5; }
+.apz-form select:focus, .apz-form textarea:focus { outline:none; border-color:#7c3aed; }
+.apz-form-actions { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.apz-btn {
+  padding:8px 15px; border-radius:8px; cursor:pointer;
+  font-family:inherit; font-size:.83rem; font-weight:600;
+  background:#7c3aed; border:1.5px solid #7c3aed; color:#fff;
+}
+.apz-btn:hover { background:#6d28d9; }
+.apz-msg { font-size:.78rem; color:#6d28d9; }
+.apz-msg.is-error { color:#b91c1c; font-weight:600; }
+
 /* ===== ACTION PLAN (ES 17.8) — the school's response to the report ===== */
 .apx {
   margin-top:22px; padding:20px 22px;
@@ -1414,6 +1472,7 @@ function renderOverview() {
         ${appraisalDoc?.recommendations ? `<div class="field-block field-block--feedback"><label for="ovRecommendations">Eduversal Coordinator Recommendations</label><textarea id="ovRecommendations" disabled>${appraisalDoc.recommendations}</textarea></div>` : ''}
         ${renderPublishedReport()}
         ${renderActionPlan()}
+        ${renderAppeals()}
       </div>
     </div>
 
@@ -1470,6 +1529,160 @@ function renderPublishedReport() {
       </div>
       ${body}
     </div>`;
+}
+
+// ===== APPEALS (Updated Appraisal Model §8.1) =====
+// If the school believes a domain rating does not reflect the evidence, it may
+// appeal within 10 working days of the report. Eduversal responds within 15,
+// and the decision is final.
+//
+// The school writes cases{} only; decisions{} come back from Eduversal and are
+// read-only here. The rule enforces both directions — a school cannot write
+// its own outcome, and Eduversal cannot edit the grounds it is ruling on.
+function appealsState() {
+  const ap = appraisalDoc?.appeals || {};
+  return {
+    cases:     ap.cases && typeof ap.cases === 'object' ? ap.cases : {},
+    decisions: ap.decisions && typeof ap.decisions === 'object' ? ap.decisions : {},
+  };
+}
+
+// Working days, not calendar days — the model counts business days.
+function addWorkingDays(from, n) {
+  const d = new Date(from);
+  let left = n;
+  while (left > 0) {
+    d.setDate(d.getDate() + 1);
+    const day = d.getDay();
+    if (day !== 0 && day !== 6) left--;
+  }
+  return d;
+}
+
+function appealWindowState() {
+  const pub = appraisalDoc?.externalReview?.report?.publishedAt;
+  if (!pub) return null;
+  const from = new Date(pub);
+  if (isNaN(from)) return null;
+  const closes = addWorkingDays(from, 10);
+  return { closes, open: Date.now() <= closes.getTime() };
+}
+
+function renderAppeals() {
+  if (!reportPublished()) return '';
+  const { cases, decisions } = appealsState();
+  const win = appealWindowState();
+  const lodged = Object.keys(cases);
+
+  // Nothing lodged and the window has closed — say so and stop, rather than
+  // showing a form that cannot be used.
+  if (!lodged.length && win && !win.open) {
+    return `
+      <div class="apz is-closed">
+        <div class="apz-title">Appeals</div>
+        <div class="apz-intro">
+          The 10-working-day appeal window closed on
+          ${escHtml(win.closes.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }))}.
+          If you have a concern about a rating, raise it with your Primary Supervisor.
+        </div>
+      </div>`;
+  }
+
+  const existing = lodged.map(domainId => {
+    const c = cases[domainId] || {};
+    const dec = decisions[domainId];
+    const domain = (FRAMEWORK?.domains || []).find(d => d.id === domainId);
+    const title = domain ? `${domain.code} · ${domain.title}` : domainId;
+    return `
+      <div class="apz-case">
+        <div class="apz-case-head">
+          <span class="apz-domain">${escHtml(title)}</span>
+          <span class="apz-when">Submitted ${escHtml(c.submittedOn || '')}</span>
+        </div>
+        <div class="apz-grounds">${escHtml(c.grounds || '')}</div>
+        ${dec ? `
+          <div class="apz-decision is-${escAttr(dec.outcome || '')}">
+            <div class="apz-decision-head">
+              ${dec.outcome === 'upheld' ? 'Upheld — the rating has been revised' : 'Not upheld — the rating stands'}
+              <span class="apz-decision-meta">${escHtml(dec.decidedOn || '')}</span>
+            </div>
+            ${dec.reviewedWith ? `<div class="apz-decision-with">Reviewed with ${escHtml(dec.reviewedWith)}</div>` : ''}
+            <div class="apz-decision-note">${escHtml(dec.note || '')}</div>
+            <div class="apz-final">This decision is final.</div>
+          </div>`
+          : '<div class="apz-pending">Under review. Eduversal responds within 15 working days.</div>'}
+      </div>`;
+  }).join('');
+
+  // One appeal per domain, so only offer the domains not already appealed.
+  const available = (FRAMEWORK?.domains || []).filter(d => !cases[d.id]);
+  const form = win && win.open && available.length ? `
+    <div class="apz-form">
+      <div class="apz-form-label">Appeal a domain rating</div>
+      <select id="apzDomain">
+        <option value="">Choose the domain…</option>
+        ${available.map(d => `<option value="${escAttr(d.id)}">${escHtml(d.code)} · ${escHtml(d.title)}</option>`).join('')}
+      </select>
+      <textarea id="apzGrounds" placeholder="Which evidence do you believe was not reflected in the rating? Be specific — name documents, dates, and what they show."></textarea>
+      <div class="apz-form-actions">
+        <button type="button" id="apzSubmit" class="apz-btn">Submit appeal</button>
+        <span id="apzMsg" class="apz-msg"></span>
+      </div>
+    </div>` : '';
+
+  return `
+    <div class="apz">
+      <div class="apz-head">
+        <div class="apz-title">Appeals</div>
+        ${win ? `<div class="apz-window${win.open ? '' : ' is-closed'}">${win.open ? 'Window closes' : 'Window closed'} ${escHtml(win.closes.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }))}</div>` : ''}
+      </div>
+      <div class="apz-intro">
+        If you believe a domain rating does not reflect the evidence, you may appeal it within
+        10 working days of receiving the report. Eduversal reviews the appeal with the relevant
+        domain lead and responds within 15 working days. The decision is final.
+      </div>
+      ${existing}
+      ${form}
+    </div>`;
+}
+
+// Its own rule branch: cases only, with Eduversal's decisions carried back
+// untouched. Submitting is immediate — an appeal has a deadline, so there is
+// no draft state to forget to submit.
+async function submitAppeal(domainId, grounds) {
+  const { cases, decisions } = appealsState();
+  const msg = document.getElementById('apzMsg');
+  if (msg) { msg.textContent = 'Submitting…'; msg.classList.remove('is-error'); }
+
+  const payload = {
+    cases: {
+      ...cases,
+      [domainId]: {
+        grounds,
+        submittedBy: window.currentUser?.email || '',
+        submittedOn: new Date().toISOString().slice(0, 10),
+      },
+    },
+    decisions,   // carried back unchanged — the rule checks equality
+  };
+
+  try {
+    await setDoc(doc(window.db, 'school_appraisals_v2', appraisalDocId), {
+      appeals: payload,
+      updatedAt: serverTimestamp(),
+      updatedBy: window.currentUser?.email || '',
+    }, { merge: true });
+  } catch (e) {
+    if (msg) {
+      msg.textContent = e?.code === 'permission-denied'
+        ? 'Not submitted — you do not have permission to appeal on this record.'
+        : 'Not submitted — please try again.';
+      msg.classList.add('is-error');
+    }
+    return;
+  }
+  appraisalDoc.appeals = payload;
+  switchView('overview');
 }
 
 // ===== ACTION PLAN (ES 17.8 "School Response and Action Planning") =====
@@ -1971,6 +2184,32 @@ function switchView(viewId) {
     });
 
     content.querySelector('#apxSave')?.addEventListener('click', () => saveActionPlan());
+
+    // ── Appeal (Updated Appraisal Model §8.1) ──
+    // Two-click confirm: an appeal is a formal act with a final decision at
+    // the end of it, not something to fire off by mis-click.
+    const apzBtn = content.querySelector('#apzSubmit');
+    apzBtn?.addEventListener('click', () => {
+      const domainId = content.querySelector('#apzDomain')?.value || '';
+      const grounds = (content.querySelector('#apzGrounds')?.value || '').trim();
+      const msg = document.getElementById('apzMsg');
+      if (!domainId || !grounds) {
+        if (msg) {
+          msg.textContent = 'Choose a domain and set out the evidence before submitting.';
+          msg.classList.add('is-error');
+        }
+        return;
+      }
+      if (apzBtn.dataset.confirming !== '1') {
+        apzBtn.dataset.confirming = '1';
+        const original = apzBtn.textContent;
+        apzBtn.textContent = 'Submit this appeal? Click again';
+        setTimeout(() => { apzBtn.dataset.confirming = '0'; apzBtn.textContent = original; }, 3000);
+        return;
+      }
+      apzBtn.dataset.confirming = '0';
+      submitAppeal(domainId, grounds);
+    });
 
     // Submitting hands the plan to Eduversal and closes editing, so it asks
     // once rather than on a single click.
