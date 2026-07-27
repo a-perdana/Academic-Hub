@@ -295,6 +295,75 @@ a.ref-pill:hover {
   font-size:.86rem; line-height:1.6; color:#451a03;
   white-space:pre-wrap;
 }
+/* ===== ACTION PLAN (ES 17.8) — the school's response to the report ===== */
+.apx {
+  margin-top:22px; padding:20px 22px;
+  background:#f0fdfa; border:1px solid #99f6e4;
+  border-left:4px solid #0891b2; border-radius:12px;
+}
+.apx-head {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:12px; flex-wrap:wrap; margin-bottom:10px;
+}
+.apx-title { font-family:'Lora',serif; font-size:1.15rem; font-weight:600; color:#0e7490; }
+.apx-due { font-size:.78rem; font-weight:600; color:#0e7490; }
+.apx-due.is-overdue { color:#b91c1c; }
+.apx-intro { font-size:.84rem; line-height:1.6; color:#134e4a; margin-bottom:16px; }
+.apx-empty {
+  font-size:.85rem; color:#0f766e; padding:14px;
+  background:#fff; border:1px dashed #99f6e4; border-radius:8px;
+  display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+}
+.apx-item {
+  background:#fff; border:1px solid #99f6e4; border-radius:9px;
+  padding:13px 15px; margin-bottom:10px;
+}
+.apx-item-head { display:flex; gap:9px; align-items:baseline; margin-bottom:9px; }
+.apx-num {
+  flex:none; font-size:.7rem; font-weight:700; color:#0e7490;
+  background:#cffafe; border-radius:999px; padding:2px 8px;
+}
+.apx-priority { font-size:.84rem; font-weight:600; color:#134e4a; line-height:1.45; }
+.apx-label {
+  display:block; font-size:.7rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.05em; color:#0f766e; margin-bottom:4px;
+}
+.apx-action {
+  width:100%; min-height:64px; padding:8px 10px; margin-bottom:10px;
+  border:1.5px solid #99f6e4; border-radius:8px;
+  font-family:inherit; font-size:.85rem; line-height:1.5; resize:vertical;
+}
+.apx-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; }
+.apx-fields input, .apx-fields select {
+  width:100%; padding:7px 9px;
+  border:1.5px solid #99f6e4; border-radius:8px;
+  font-family:inherit; font-size:.84rem; background:#fff;
+}
+.apx-action:focus, .apx-fields input:focus, .apx-fields select:focus {
+  outline:none; border-color:#0891b2;
+}
+.apx-action:disabled, .apx-fields input:disabled, .apx-fields select:disabled {
+  background:#f8fafc; color:#64748b; border-style:dashed; cursor:not-allowed;
+}
+.apx-actions { display:flex; gap:9px; align-items:center; flex-wrap:wrap; margin-top:4px; }
+.apx-btn {
+  padding:8px 15px; border-radius:8px; cursor:pointer;
+  font-family:inherit; font-size:.83rem; font-weight:600;
+  background:#fff; border:1.5px solid #0891b2; color:#0e7490;
+}
+.apx-btn:hover { background:#cffafe; }
+.apx-btn--primary { background:#0891b2; border-color:#0891b2; color:#fff; }
+.apx-btn--primary:hover { background:#0e7490; }
+.apx-msg { font-size:.78rem; color:#0f766e; }
+.apx-msg.is-error { color:#b91c1c; font-weight:600; }
+.apx-reviews-label {
+  font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em;
+  color:#0f766e; margin:18px 0 8px; padding-top:14px; border-top:1px solid #99f6e4;
+}
+.apx-review { background:#fff; border:1px solid #99f6e4; border-radius:8px; padding:10px 13px; margin-bottom:8px; }
+.apx-review-head { font-size:.72rem; color:#0e7490; margin-bottom:4px; }
+.apx-review-note { font-size:.85rem; line-height:1.55; color:#134e4a; white-space:pre-wrap; }
+
 /* The composed document keeps the formatting Eduversal applied. */
 .rep-doc { font-size:.88rem; line-height:1.65; color:#451a03; }
 .rep-doc h1 { font-family:'Lora',serif; font-size:1.3rem; color:#78350f; margin:0 0 .35em; }
@@ -1344,6 +1413,7 @@ function renderOverview() {
         </div>
         ${appraisalDoc?.recommendations ? `<div class="field-block field-block--feedback"><label for="ovRecommendations">Eduversal Coordinator Recommendations</label><textarea id="ovRecommendations" disabled>${appraisalDoc.recommendations}</textarea></div>` : ''}
         ${renderPublishedReport()}
+        ${renderActionPlan()}
       </div>
     </div>
 
@@ -1400,6 +1470,168 @@ function renderPublishedReport() {
       </div>
       ${body}
     </div>`;
+}
+
+// ===== ACTION PLAN (ES 17.8 "School Response and Action Planning") =====
+// The school's answer to the published report. ES 17.8 gives it four weeks:
+// an action per recommendation, each with an owner and a date, submitted to
+// Eduversal for review.
+//
+// This is the SCHOOL's plan — Eduversal can append progress reviews but
+// cannot edit an item, and the rule enforces that in both directions.
+function actionPlanState() {
+  const ap = appraisalDoc?.actionPlan || {};
+  return {
+    items:   Array.isArray(ap.items) ? ap.items : [],
+    reviews: Array.isArray(ap.reviews) ? ap.reviews : [],
+    status:  ap.status || 'not_started',
+    submittedAt: ap.submittedAt || null,
+    submittedBy: ap.submittedBy || '',
+  };
+}
+
+function reportPublished() {
+  return appraisalDoc?.externalReview?.report?.status === 'published';
+}
+
+// Four weeks from publication, per ES 17.8.
+function actionPlanDeadline() {
+  const pub = appraisalDoc?.externalReview?.report?.publishedAt;
+  if (!pub) return null;
+  const d = new Date(pub);
+  if (isNaN(d)) return null;
+  d.setDate(d.getDate() + 28);
+  return d;
+}
+
+// Seed one row per priority in the published report, so the school answers
+// the recommendations rather than starting from a blank page. Priorities are
+// written as a numbered list, so split on the numbering.
+function seedItemsFromReport() {
+  const text = appraisalDoc?.externalReview?.report?.priorities || '';
+  const rows = String(text)
+    .split(/\n(?=\d+\.\s)/)
+    .map(s => s.trim())
+    .filter(s => /^\d+\.\s/.test(s));
+  return rows.map(r => ({
+    priority: r.split('\n')[0].replace(/^\d+\.\s*/, '').trim(),
+    action: '', owner: '', due: '', status: 'not_started',
+  }));
+}
+
+function renderActionPlan() {
+  if (!reportPublished()) return '';
+  const ap = actionPlanState();
+  const locked = ap.status === 'submitted';
+  const due = actionPlanDeadline();
+  const overdue = due && Date.now() > due.getTime() && !locked;
+
+  const rows = ap.items.map((it, i) => `
+    <div class="apx-item">
+      <div class="apx-item-head">
+        <span class="apx-num">${i + 1}</span>
+        ${it.priority ? `<span class="apx-priority">${escHtml(it.priority)}</span>` : ''}
+      </div>
+      <label class="apx-label" for="apxAction${i}">What we will do</label>
+      <textarea id="apxAction${i}" class="apx-action" data-ap-idx="${i}" data-ap-field="action"
+        ${locked ? 'disabled' : ''} placeholder="The specific action, not the intention…">${escHtml(it.action || '')}</textarea>
+      <div class="apx-fields">
+        <div>
+          <label class="apx-label" for="apxOwner${i}">Who owns it</label>
+          <input id="apxOwner${i}" data-ap-idx="${i}" data-ap-field="owner" ${locked ? 'disabled' : ''}
+            value="${escAttr(it.owner || '')}" placeholder="Name or role">
+        </div>
+        <div>
+          <label class="apx-label" for="apxDue${i}">By when</label>
+          <input id="apxDue${i}" data-ap-idx="${i}" data-ap-field="due" ${locked ? 'disabled' : ''}
+            value="${escAttr(it.due || '')}" placeholder="e.g. end of Term 2">
+        </div>
+        <div>
+          <label class="apx-label" for="apxStatus${i}">Status</label>
+          <select id="apxStatus${i}" data-ap-idx="${i}" data-ap-field="status" ${locked ? 'disabled' : ''}>
+            ${['not_started','in_progress','done'].map(s =>
+              `<option value="${s}" ${it.status === s ? 'selected' : ''}>${s.replace(/_/g,' ')}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>`).join('');
+
+  const reviews = ap.reviews.length ? `
+    <div class="apx-reviews-label">Eduversal progress reviews</div>
+    ${ap.reviews.map(r => `
+      <div class="apx-review">
+        <div class="apx-review-head">${escHtml(r.reviewedOn || '')} · ${escHtml(r.reviewedBy || '')}</div>
+        <div class="apx-review-note">${escHtml(r.note || '')}</div>
+      </div>`).join('')}` : '';
+
+  return `
+    <div class="apx">
+      <div class="apx-head">
+        <div class="apx-title">Our Action Plan</div>
+        ${due ? `<div class="apx-due${overdue ? ' is-overdue' : ''}">Due ${due.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}${overdue ? ' · overdue' : ''}</div>` : ''}
+      </div>
+      <div class="apx-intro">
+        Eduversal's report is above. Within four weeks your leadership team writes how the school will
+        respond — one action per recommendation, each with someone who owns it and a date. Eduversal
+        reviews progress at the mid-year check-in and after.
+        ${locked ? '<br><strong>This plan has been submitted and is now read-only.</strong>' : ''}
+      </div>
+      ${ap.items.length ? rows : `
+        <div class="apx-empty">
+          No actions yet.
+          <button type="button" id="apxSeed" class="apx-btn">Start from the report's priorities</button>
+        </div>`}
+      ${!locked && ap.items.length ? `
+        <div class="apx-actions">
+          <button type="button" id="apxSave" class="apx-btn">Save draft</button>
+          <button type="button" id="apxSubmit" class="apx-btn apx-btn--primary">Submit to Eduversal</button>
+          <span id="apxStatusMsg" class="apx-msg"></span>
+        </div>` : ''}
+      ${reviews}
+    </div>`;
+}
+
+// The action plan is its own rule branch — items only, and Eduversal's
+// reviews must round-trip untouched. So it writes separately from
+// saveAppraisal(), which covers the self-appraisal fields.
+async function saveActionPlan(newStatus) {
+  if (!appraisalDocId) return;
+  const ap = actionPlanState();
+  const msg = document.getElementById('apxStatusMsg');
+  if (msg) { msg.textContent = 'Saving…'; msg.classList.remove('is-error'); }
+
+  const payload = {
+    items: ap.items,
+    reviews: ap.reviews,           // carried back unchanged — the rule checks equality
+    status: newStatus || (ap.status === 'not_started' ? 'draft' : ap.status),
+  };
+  if (newStatus === 'submitted') {
+    payload.submittedAt = new Date().toISOString();
+    payload.submittedBy = window.currentUser?.email || '';
+  } else if (ap.submittedAt) {
+    payload.submittedAt = ap.submittedAt;
+    payload.submittedBy = ap.submittedBy;
+  }
+
+  try {
+    await setDoc(doc(window.db, 'school_appraisals_v2', appraisalDocId), {
+      actionPlan: payload,
+      updatedAt: serverTimestamp(),
+      updatedBy: window.currentUser?.email || '',
+    }, { merge: true });
+  } catch (e) {
+    if (msg) {
+      msg.textContent = e?.code === 'permission-denied'
+        ? 'Not saved — you do not have permission to edit this plan.'
+        : 'Not saved — please try again.';
+      msg.classList.add('is-error');
+    }
+    return;
+  }
+  appraisalDoc.actionPlan = { ...(appraisalDoc.actionPlan || {}), ...payload };
+  if (msg) msg.textContent = newStatus === 'submitted' ? 'Submitted ✓' : 'Saved ✓';
+  // Submitting locks the form, so re-render to show it read-only.
+  if (newStatus === 'submitted') switchView('overview');
 }
 
 // The report HTML was already sanitised when Central Hub stored it, but it
@@ -1707,6 +1939,62 @@ function switchView(viewId) {
   if (viewId === 'overview') {
     content.querySelectorAll('textarea[data-field]').forEach(ta => {
       ta.addEventListener('input', () => { appraisalDoc[ta.dataset.field] = ta.value; scheduleSave(); });
+    });
+
+    // ── Action plan (ES 17.8) ──
+    // Its own writer and its own rule branch, so it is NOT part of
+    // scheduleSave()'s autosave — the school saves or submits it explicitly.
+    content.querySelectorAll('[data-ap-field]').forEach(el => {
+      const evt = el.tagName === 'SELECT' ? 'change' : 'input';
+      el.addEventListener(evt, () => {
+        const i = parseInt(el.dataset.apIdx, 10);
+        if (!appraisalDoc.actionPlan) appraisalDoc.actionPlan = {};
+        if (!Array.isArray(appraisalDoc.actionPlan.items)) appraisalDoc.actionPlan.items = [];
+        const items = appraisalDoc.actionPlan.items;
+        if (!items[i]) items[i] = { action: '', owner: '', due: '', status: 'not_started' };
+        items[i][el.dataset.apField] = el.value;
+        const msg = document.getElementById('apxStatusMsg');
+        if (msg) { msg.textContent = 'Unsaved changes'; msg.classList.remove('is-error'); }
+      });
+    });
+
+    content.querySelector('#apxSeed')?.addEventListener('click', () => {
+      const seeded = seedItemsFromReport();
+      if (!seeded.length) {
+        const msg = document.getElementById('apxStatusMsg');
+        if (msg) msg.textContent = 'The report has no numbered priorities to start from — add actions manually.';
+        return;
+      }
+      if (!appraisalDoc.actionPlan) appraisalDoc.actionPlan = {};
+      appraisalDoc.actionPlan.items = seeded;
+      switchView('overview');
+    });
+
+    content.querySelector('#apxSave')?.addEventListener('click', () => saveActionPlan());
+
+    // Submitting hands the plan to Eduversal and closes editing, so it asks
+    // once rather than on a single click.
+    const submitBtn = content.querySelector('#apxSubmit');
+    submitBtn?.addEventListener('click', () => {
+      const items = actionPlanState().items;
+      const blank = items.filter(it => !String(it.action || '').trim());
+      const msg = document.getElementById('apxStatusMsg');
+      if (blank.length) {
+        if (msg) {
+          msg.textContent = `Not submitted — ${blank.length} recommendation${blank.length === 1 ? ' has' : 's have'} no action written yet.`;
+          msg.classList.add('is-error');
+        }
+        return;
+      }
+      if (submitBtn.dataset.confirming !== '1') {
+        submitBtn.dataset.confirming = '1';
+        const original = submitBtn.textContent;
+        submitBtn.textContent = 'Submit and lock? Click again';
+        setTimeout(() => { submitBtn.dataset.confirming = '0'; submitBtn.textContent = original; }, 3000);
+        return;
+      }
+      submitBtn.dataset.confirming = '0';
+      saveActionPlan('submitted');
     });
   } else {
     // Wire rating buttons
