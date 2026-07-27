@@ -1875,6 +1875,7 @@ function lsSave() {
       teacherName:   document.getElementById('teacherName')?.value  || '',
       teacherUid:    document.getElementById('teacherUid')?.value   || '',
       schoolId:      document.getElementById('schoolId')?.value     || '',
+      school:        document.getElementById('schoolName')?.value   || '',
       subject:       document.getElementById('subject')?.value      || '',
       academicYear:  document.getElementById('academicYear')?.value || '',
       level: getLevel(),
@@ -3838,10 +3839,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     applySessionMode(d.sessionMode || 'observation');
     if (d.teacherName) document.getElementById('teacherName').value = d.teacherName;
     if (d.teacherUid)  document.getElementById('teacherUid').value  = d.teacherUid;
-    if (d.schoolId) {
-      document.getElementById('schoolId').value   = d.schoolId;
-      document.getElementById('schoolName').value = d.schoolId; // best-effort; name shown if stored
-    }
+    if (d.schoolId) setSchoolFields(d.schoolId, d.school);
     if (d.subject)     document.getElementById('subject').value     = d.subject;
     if (d.academicYear) {
       document.getElementById('academicYear').value = d.academicYear;
@@ -3864,6 +3862,39 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     document.querySelectorAll('[style*="fefce8"]').forEach(el => el.remove());
     showToast('Draft restored — continue where you left off.');
   };
+
+  // ── SCHOOL NAME RESOLUTION ───────────────────────────────
+  // `users.schoolId` holds a `partner_schools` doc id (e.g. owwocOfmTd5Z7nVMmRJj),
+  // which is NOT the id space used by schools_compact.js (legacy slug / Drive ids).
+  // Looking the id up in window.SCHOOLS therefore always missed and the raw doc id
+  // leaked into the read-only School field. partner_schools/{id}.name is the source
+  // of truth; SCHOOLS stays as a fallback for the handful of legacy-id records.
+  const schoolNameCache = {};
+  async function resolveSchoolName(schoolId) {
+    if (!schoolId) return '';
+    if (schoolNameCache[schoolId] !== undefined) return schoolNameCache[schoolId];
+    let name = '';
+    try {
+      const s = await getDoc(doc(window.db, 'partner_schools', schoolId));
+      if (s.exists()) name = s.data().name || '';
+    } catch (_) { /* rules / offline — fall through to the legacy map */ }
+    if (!name && window.SCHOOLS) {
+      const hit = window.SCHOOLS.find(s => s.id === schoolId);
+      if (hit) name = hit.fullName || '';
+    }
+    schoolNameCache[schoolId] = name;
+    return name;
+  }
+
+  // Fill both the hidden id and the visible name field. `knownName` short-circuits
+  // the Firestore read when the caller already has the name (dropdown / saved doc).
+  async function setSchoolFields(schoolId, knownName) {
+    document.getElementById('schoolId').value = schoolId || '';
+    const nameEl = document.getElementById('schoolName');
+    if (!nameEl) return;
+    if (knownName) { nameEl.value = knownName; return; }
+    nameEl.value = await resolveSchoolName(schoolId) || '';
+  }
 
   // ── TEACHER AUTOCOMPLETE ─────────────────────────────────
   let allTeachersCache = null;
@@ -3904,16 +3935,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           (u.email || '').toLowerCase().includes(ql)
         );
 
-        // Build school lookup map from schools_compact.js SCHOOLS array
+        // Resolve the display name for every school in the result set up front so
+        // the dropdown rows render names, not ids. Cached per school id.
         const schoolMap = {};
-        if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
+        await Promise.all(
+          [...new Set(results.slice(0,8).map(u => u.schoolId).filter(Boolean))]
+            .map(async id => { schoolMap[id] = await resolveSchoolName(id); })
+        );
 
         if (!results.length) {
           dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found</div>`;
         } else {
           dropdown.innerHTML = results.slice(0,8).map(u => {
-            const schoolId   = u.schoolId || u.school || '';
-            const schoolName = schoolMap[schoolId] || schoolId;
+            // `schoolId` is the partner_schools doc id; `school` is the denormalised
+            // name. Never fall back from one to the other — they are different fields.
+            const schoolId   = u.schoolId || '';
+            const schoolName = schoolMap[schoolId] || u.school || '';
             const safeStr    = s => (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'");
             return `
             <div role="button" tabindex="0" onclick="selectTeacher('${safeStr(u.uid)}','${safeStr(u.displayName)}','${safeStr(u.appraisal_level)}','${safeStr(schoolId)}','${safeStr(u.subject)}','${safeStr(schoolName)}')"
@@ -3940,13 +3977,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     document.getElementById('teacherName').value = name;
     document.getElementById('teacherUid').value  = uid;
     document.getElementById('teacherDropdown').style.display = 'none';
-    if (schoolId) {
-      document.getElementById('schoolId').value = schoolId;
-      const schoolMap = {};
-      if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
-      const displayName = schoolNameParam || schoolMap[schoolId] || schoolId;
-      document.getElementById('schoolName').value = displayName;
-    }
+    if (schoolId) setSchoolFields(schoolId, schoolNameParam);
     if (subject)  document.getElementById('subject').value  = subject;
     if (level) {
       document.getElementById('appraisalLevel').value    = level;
@@ -4120,7 +4151,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         // Fill teacher fields
         if (d.teacherUid)  document.getElementById('teacherUid').value  = d.teacherUid;
         if (d.teacherName) document.getElementById('teacherName').value = d.teacherName;
-        if (d.schoolId)    document.getElementById('schoolId').value    = d.schoolId;
+        if (d.schoolId)    setSchoolFields(d.schoolId, d.school);
         if (d.subject)     document.getElementById('subject').value     = d.subject;
         if (d.yearGroup)   document.getElementById('yearGroup').value   = d.yearGroup;
         if (d.academicYear) {
@@ -4285,7 +4316,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       loadedObsRecord = bestDoc.data();
       currentDocId    = bestDoc.id;
       if (loadedObsRecord.teacherName) document.getElementById('teacherName').value = loadedObsRecord.teacherName;
-      if (loadedObsRecord.schoolId)    document.getElementById('schoolId').value    = loadedObsRecord.schoolId;
+      if (loadedObsRecord.schoolId)    setSchoolFields(loadedObsRecord.schoolId, loadedObsRecord.school);
       if (loadedObsRecord.subject)     document.getElementById('subject').value     = loadedObsRecord.subject;
       if (loadedObsRecord.level) {
         document.getElementById('appraisalLevelEoy').value = loadedObsRecord.level;
@@ -4412,6 +4443,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           secondAppraiserUid:  level==='lead' ? (document.getElementById('secondAppraiserUid').value.trim()||null) : null,
           secondAppraiserName: level==='lead' ? document.getElementById('secondAppraiserName').value.trim() : null,
           schoolId:            document.getElementById('schoolId').value.trim(),
+          school:              document.getElementById('schoolName').value.trim(),
           subject:             document.getElementById('subject').value.trim(),
           academicYear:        document.getElementById('academicYear').value,
           level,
@@ -4533,6 +4565,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             teacherName:  document.getElementById('teacherName').value.trim(),
             appraiserUid: user.uid,
             schoolId:     document.getElementById('schoolId').value.trim(),
+            school:       document.getElementById('schoolName').value.trim(),
             subject:      document.getElementById('subject').value.trim(),
             academicYear: document.getElementById('academicYear').value,
             level, sessionType: 'endofyear',
@@ -4576,7 +4609,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const r         = level ? calcScores(level) : null;
     const isEoy     = sessionMode === 'endofyear';
     const teacher   = document.getElementById('teacherName').value.trim()  || '—';
-    const school    = document.getElementById('schoolId').value.trim()      || '—';
+    const school    = document.getElementById('schoolName').value.trim()    || '—';
     const subject   = document.getElementById('subject').value.trim()       || '—';
     const year      = document.getElementById('academicYear').value         || '—';
     const levelLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level || '—';
