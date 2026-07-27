@@ -931,6 +931,15 @@ document.addEventListener('click', e => {
 });
 
 // ── RUBRIC DATA ───────────────────────────────────────────
+//
+// SIBLING FORM: Central Hub/walkthrough-entry.html renders the same rubric
+// into the same teacher_walkthroughs shape (all 13 payload fields match) — the
+// two exist only because the hubs have separate auth models, so a school
+// leader (role_academichub) cannot reach the CH form and an Eduversal
+// specialist (role_centralhub) cannot reach this one. The rendering logic is
+// duplicated by choice, not oversight. If you change the rubric contract (a
+// new focus, a new response option, a payload field), change BOTH — or extract
+// the shared renderer first.
 let RUBRIC = null;
 fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
 
