@@ -268,6 +268,34 @@ a.ref-pill:hover {
   min-height:120px; background:var(--d2-bg); border-color:var(--d2-border);
 }
 
+/* Eduversal's published appraisal report (ES 17.8). Read-only, and styled as
+   a received document rather than another form field — this is the outcome of
+   the visit, not something the school fills in. */
+.ext-report {
+  margin-top:22px; padding:20px 22px;
+  background:#fffbeb; border:1px solid #fde68a;
+  border-left:4px solid #d97706; border-radius:12px;
+}
+.ext-report-head {
+  display:flex; justify-content:space-between; align-items:baseline;
+  gap:12px; flex-wrap:wrap;
+  margin-bottom:16px; padding-bottom:12px; border-bottom:1px solid #fde68a;
+}
+.ext-report-title {
+  font-family:'Lora',serif; font-size:1.15rem; font-weight:600; color:#78350f;
+}
+.ext-report-when { font-size:.78rem; color:#92400e; }
+.rep-block { margin-bottom:16px; }
+.rep-block:last-child { margin-bottom:0; }
+.rep-block-label {
+  font-size:.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; color:#92400e; margin-bottom:5px;
+}
+.rep-block-text {
+  font-size:.86rem; line-height:1.6; color:#451a03;
+  white-space:pre-wrap;
+}
+
 /* ===== DOMAIN PANEL ===== */
 .back-to-overview {
   display:inline-flex; align-items:center; gap:6px;
@@ -1299,6 +1327,7 @@ function renderOverview() {
           <div class="field-block"><label for="ovImprovements">Areas for Improvement</label><textarea id="ovImprovements" data-field="improvements" placeholder="What are your school's priority development areas?" ${!canEdit?'disabled':''}>${appraisalDoc?.improvements||''}</textarea></div>
         </div>
         ${appraisalDoc?.recommendations ? `<div class="field-block field-block--feedback"><label for="ovRecommendations">Eduversal Coordinator Recommendations</label><textarea id="ovRecommendations" disabled>${appraisalDoc.recommendations}</textarea></div>` : ''}
+        ${renderPublishedReport()}
       </div>
     </div>
 
@@ -1316,6 +1345,41 @@ function renderOverview() {
 // ===== ESCAPE HELPERS =====
 function escHtml(s) { return String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch])); }
 function escAttr(s) { return escHtml(s); }
+
+// ===== EDUVERSAL'S WRITTEN REPORT (ES 17.8) =====
+// Read-only here — the report is written by the Eduversal appraisal team in
+// Central Hub. It appears only once they publish it, which models ES 17.8's
+// "Written Report (within 10 business days)" hand-over. A draft in progress
+// stays invisible so the school reads a finished document, not a work in
+// progress. Same treatment the recommendations field already gets.
+function renderPublishedReport() {
+  const rep = appraisalDoc?.externalReview?.report;
+  if (!rep || rep.status !== 'published') return '';
+
+  const when = rep.publishedAt
+    ? new Date(rep.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+    : '';
+  const block = (label, text) => text
+    ? `<div class="rep-block"><div class="rep-block-label">${escHtml(label)}</div><div class="rep-block-text">${escHtml(text)}</div></div>`
+    : '';
+
+  const domainBlocks = (FRAMEWORK?.domains || [])
+    .map(d => block(`${d.code} · ${d.title}`, rep.domains?.[d.id]))
+    .join('');
+
+  return `
+    <div class="ext-report">
+      <div class="ext-report-head">
+        <div class="ext-report-title">Eduversal Appraisal Report</div>
+        ${when ? `<div class="ext-report-when">Issued ${escHtml(when)}</div>` : ''}
+      </div>
+      ${block('Executive Summary', rep.summary)}
+      ${domainBlocks}
+      ${block('Commendations', rep.commendations)}
+      ${block('Recommendations', rep.recommendations)}
+      ${block('Priority Action Areas', rep.priorities)}
+    </div>`;
+}
 
 // ===== DOMAIN FRAMEWORK ANCHORS (per-domain chip strip) =====
 // Renders the structured cambridge_school_leader_refs / eduversal_standard_refs /
