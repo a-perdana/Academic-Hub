@@ -295,6 +295,45 @@ a.ref-pill:hover {
   font-size:.86rem; line-height:1.6; color:#451a03;
   white-space:pre-wrap;
 }
+/* ===== THE APPRAISAL YEAR, FROM THE SCHOOL'S SIDE ===== */
+.cyc {
+  background:#fff; border:1px solid #e0ddd6; border-radius:12px;
+  padding:18px 20px; margin-bottom:18px;
+}
+.cyc-head {
+  font-size:.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; color:#78716c; margin-bottom:14px;
+}
+.cyc-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:12px; }
+.cyc-step {
+  display:flex; gap:10px; padding:12px 13px;
+  border:1px solid #e7e5e4; border-radius:10px; background:#fafaf9;
+}
+.cyc-step-num {
+  flex:none; width:22px; height:22px; border-radius:999px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:.72rem; font-weight:700;
+  background:#e7e5e4; color:#78716c;
+}
+.cyc-step-title { font-size:.85rem; font-weight:700; color:#292524; margin-bottom:3px; }
+.cyc-step-text { font-size:.78rem; line-height:1.5; color:#57534e; }
+.cyc-step-note {
+  font-size:.72rem; font-weight:600; margin-top:6px; color:#78716c;
+}
+/* State tells the school whether this step is theirs right now. */
+.cyc-step.is-now { background:#fffbeb; border-color:#fde68a; }
+.cyc-step.is-now .cyc-step-num { background:#f59e0b; color:#fff; }
+.cyc-step.is-now .cyc-step-note { color:#b45309; }
+.cyc-step.is-done { background:#ecfdf5; border-color:#a7f3d0; }
+.cyc-step.is-done .cyc-step-num { background:#059669; color:#fff; }
+.cyc-step.is-done .cyc-step-note { color:#047857; }
+.cyc-step.is-waiting .cyc-step-num { background:#cbd5e1; color:#475569; }
+.cyc-step.is-later { opacity:.72; }
+.cyc-sup {
+  margin-top:14px; padding-top:12px; border-top:1px solid #e7e5e4;
+  font-size:.8rem; line-height:1.55; color:#57534e;
+}
+
 /* ===== APPEALS (Updated Appraisal Model 8.1) ===== */
 .apz {
   margin-top:22px; padding:20px 22px;
@@ -1167,8 +1206,19 @@ async function findOrCreateAppraisal(profile) {
   const schoolId = profile.schoolId || null;
   if (!schoolId) return null;
   let schoolName = null;
-  try { const s = await getDoc(doc(window.db, 'partner_schools', schoolId)); if (s.exists()) schoolName = s.data().name || schoolId; } catch(_) {}
+  // Also pick up this year's supervision plan while we are here — the cycle
+  // strip names the school's two Eduversal supervisors and their visit
+  // windows, and this is the only partner_schools read on the page.
+  let supervision = null;
+  try {
+    const s = await getDoc(doc(window.db, 'partner_schools', schoolId));
+    if (s.exists()) {
+      schoolName = s.data().name || schoolId;
+      supervision = s.data().appraisal_2026_27 || null;
+    }
+  } catch(_) {}
   if (!schoolName) return null;
+  window.__schoolSupervision = supervision;
   // Single source of truth: calendar_settings/current (via auth-guard).
   const currentYear = (window.getCurrentAcademicYear && window.getCurrentAcademicYear())
     || (() => { const n = new Date(), y = n.getFullYear(); return n.getMonth() >= 6 ? `${y}-${y+1}` : `${y-1}-${y}`; })();
@@ -1449,6 +1499,8 @@ function renderOverview() {
       </div>
     </div>
 
+    ${renderCycleStrip()}
+
     <div class="ov-card">
       <div class="ov-progress">
         <span class="ov-progress__label">Overall Completion</span>
@@ -1528,6 +1580,91 @@ function renderPublishedReport() {
         ${when ? `<div class="ext-report-when">Issued ${escHtml(when)}</div>` : ''}
       </div>
       ${body}
+    </div>`;
+}
+
+// ===== THE CYCLE, FROM THE SCHOOL'S SIDE =====
+// A school leader opening this page for the first time sees 31 aspects and no
+// idea what happens after they fill them in. This strip answers the two
+// questions they actually have: what is the sequence, and what is my part
+// right now.
+//
+// Each step reports its own state, so the strip doubles as a progress
+// indicator rather than static text that everyone learns to skip.
+function cycleSteps() {
+  const submitted = appraisalDoc?.status === 'submitted' || isReviewed;
+  const rep = appraisalDoc?.externalReview?.report;
+  const published = rep?.status === 'published';
+  const ap = actionPlanState();
+  const { cases } = appealsState();
+
+  const { done, total } = totalCompletion();
+
+  return [
+    {
+      title: 'You self-appraise',
+      body: 'Rate all 31 aspects and attach your evidence. Submit at least 5 working days before your first visit — the visit cannot go ahead without it.',
+      state: submitted ? 'done' : (done > 0 ? 'now' : 'now'),
+      note: submitted ? 'Submitted' : `${done} of ${total} aspects rated`,
+    },
+    {
+      title: 'Eduversal visits twice',
+      body: 'A five-person team visits for Teaching Quality, then again to validate. They rate the same aspects independently and explain anywhere they differ from you.',
+      state: published ? 'done' : (submitted ? 'waiting' : 'later'),
+      note: published ? 'Both visits complete' : 'Scheduled with your supervisor',
+    },
+    {
+      title: 'You receive the report',
+      body: 'Within 10 business days of the second visit: findings per domain, commendations, recommendations, and your School Development Rating.',
+      state: published ? 'done' : 'later',
+      note: published ? 'Published — read it below' : 'After the second visit',
+    },
+    {
+      title: 'You write an action plan',
+      body: 'Within four weeks of the report: one action per recommendation, each with someone who owns it and a date. Eduversal reviews your progress at the mid-year check-in.',
+      state: ap.status === 'submitted' ? 'done' : (published ? 'now' : 'later'),
+      note: ap.status === 'submitted' ? 'Submitted'
+          : (published ? `${ap.items.length} action${ap.items.length === 1 ? '' : 's'} drafted` : 'After the report'),
+    },
+    {
+      title: 'You may appeal',
+      body: 'If you believe a domain rating does not reflect the evidence, you have 10 working days from the report to say so. Eduversal responds within 15, and that decision is final.',
+      state: Object.keys(cases).length ? 'now' : 'later',
+      note: Object.keys(cases).length
+        ? `${Object.keys(cases).length} appeal${Object.keys(cases).length === 1 ? '' : 's'} lodged`
+        : 'Only if you need it',
+    },
+  ];
+}
+
+function renderCycleStrip() {
+  const steps = cycleSteps();
+  // Read from partner_schools alongside the school name — see
+  // findOrCreateAppraisal(). Absent for a school with no plan seeded yet.
+  const sup = window.__schoolSupervision || null;
+
+  const cards = steps.map((s, i) => `
+    <div class="cyc-step is-${escAttr(s.state)}">
+      <div class="cyc-step-num">${i + 1}</div>
+      <div class="cyc-step-body">
+        <div class="cyc-step-title">${escHtml(s.title)}</div>
+        <div class="cyc-step-text">${escHtml(s.body)}</div>
+        <div class="cyc-step-note">${escHtml(s.note)}</div>
+      </div>
+    </div>`).join('');
+
+  const supLine = sup && (sup.primarySupervisor || sup.secondarySupervisor) ? `
+    <div class="cyc-sup">
+      <strong>Your Eduversal supervisors this year:</strong>
+      ${sup.primarySupervisor ? `${escHtml(sup.primarySupervisor)}${sup.visit1?.dates ? ` (first visit ${escHtml(sup.visit1.dates)})` : ''}` : ''}
+      ${sup.secondarySupervisor ? ` · ${escHtml(sup.secondarySupervisor)}${sup.visit2?.dates ? ` (second visit ${escHtml(sup.visit2.dates)})` : ''}` : ''}
+    </div>` : '';
+
+  return `
+    <div class="cyc">
+      <div class="cyc-head">How the appraisal year works</div>
+      <div class="cyc-steps">${cards}</div>
+      ${supLine}
     </div>`;
 }
 
