@@ -295,6 +295,22 @@ a.ref-pill:hover {
   font-size:.86rem; line-height:1.6; color:#451a03;
   white-space:pre-wrap;
 }
+/* The composed document keeps the formatting Eduversal applied. */
+.rep-doc { font-size:.88rem; line-height:1.65; color:#451a03; }
+.rep-doc h1 { font-family:'Lora',serif; font-size:1.3rem; color:#78350f; margin:0 0 .35em; }
+.rep-doc h2 { font-family:'Lora',serif; font-size:1.08rem; color:#78350f; margin:1.35em 0 .4em; }
+.rep-doc h3 { font-size:.97rem; font-weight:700; margin:1.1em 0 .3em; }
+.rep-doc h4 { font-size:.88rem; font-weight:700; color:#92400e; margin:.95em 0 .2em; }
+.rep-doc p { margin:0 0 .7em; }
+.rep-doc ul, .rep-doc ol { margin:0 0 .8em 1.3em; }
+.rep-doc li { margin-bottom:.3em; }
+.rep-doc blockquote {
+  margin:.8em 0; padding:.5em .9em;
+  border-left:3px solid #d97706; background:#fef3c7; border-radius:0 6px 6px 0;
+}
+.rep-doc .ql-align-center { text-align:center; }
+.rep-doc .ql-align-right { text-align:right; }
+.rep-doc .ql-align-justify { text-align:justify; }
 
 /* ===== DOMAIN PANEL ===== */
 .back-to-overview {
@@ -1363,9 +1379,18 @@ function renderPublishedReport() {
     ? `<div class="rep-block"><div class="rep-block-label">${escHtml(label)}</div><div class="rep-block-text">${escHtml(text)}</div></div>`
     : '';
 
-  const domainBlocks = (FRAMEWORK?.domains || [])
-    .map(d => block(`${d.code} · ${d.title}`, rep.domains?.[d.id]))
-    .join('');
+  // Eduversal composes and formats the report in Central Hub, so a published
+  // record normally carries `html`. Render that when present; fall back to
+  // the section fields for reports published before the composer existed.
+  const body = rep.html
+    ? `<div class="rep-doc">${sanitiseReportHtml(rep.html)}</div>`
+    : [
+        block('Executive Summary', rep.summary),
+        (FRAMEWORK?.domains || []).map(d => block(`${d.code} · ${d.title}`, rep.domains?.[d.id])).join(''),
+        block('Commendations', rep.commendations),
+        block('Recommendations', rep.recommendations),
+        block('Priority Action Areas', rep.priorities)
+      ].join('');
 
   return `
     <div class="ext-report">
@@ -1373,12 +1398,37 @@ function renderPublishedReport() {
         <div class="ext-report-title">Eduversal Appraisal Report</div>
         ${when ? `<div class="ext-report-when">Issued ${escHtml(when)}</div>` : ''}
       </div>
-      ${block('Executive Summary', rep.summary)}
-      ${domainBlocks}
-      ${block('Commendations', rep.commendations)}
-      ${block('Recommendations', rep.recommendations)}
-      ${block('Priority Action Areas', rep.priorities)}
+      ${body}
     </div>`;
+}
+
+// The report HTML was already sanitised when Central Hub stored it, but it
+// arrives here as data from another surface — so it is sanitised again on
+// render. Cheap, and it means a bad write can never become a bad page.
+const REPORT_ALLOWED_TAGS = new Set([
+  'H1','H2','H3','H4','P','BR','HR','STRONG','B','EM','I','U','S',
+  'UL','OL','LI','BLOCKQUOTE','TABLE','THEAD','TBODY','TR','TH','TD','SPAN','DIV'
+]);
+function sanitiseReportHtml(html) {
+  const host = document.createElement('div');
+  host.innerHTML = String(html || '');
+  const walk = node => {
+    [...node.childNodes].forEach(child => {
+      if (child.nodeType === 3) return;
+      if (child.nodeType !== 1) { child.remove(); return; }
+      if (!REPORT_ALLOWED_TAGS.has(child.tagName)) {
+        child.replaceWith(document.createTextNode(child.textContent || ''));
+        return;
+      }
+      [...child.attributes].forEach(attr => {
+        const keep = attr.name === 'class' && /^ql-align-(center|right|justify)$/.test(attr.value);
+        if (!keep) child.removeAttribute(attr.name);
+      });
+      walk(child);
+    });
+  };
+  walk(host);
+  return host.innerHTML;
 }
 
 // ===== DOMAIN FRAMEWORK ANCHORS (per-domain chip strip) =====
