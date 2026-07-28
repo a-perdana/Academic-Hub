@@ -328,6 +328,10 @@ body:has(> .page-footer) > .page-wrap {
 }
 .card-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
 .card-head-sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
+.card-head-count {
+  font-size: .72rem; font-weight: 700; color: #6d28d9; background: #f5f3ff;
+  border: 1px solid #ddd6fe; border-radius: 99px; padding: 3px 10px; white-space: nowrap;
+}
 .card-body { padding: 20px 24px; }
 
 /* ── FORM FIELDS ── */
@@ -638,6 +642,114 @@ body:has(> .page-footer) > .page-wrap {
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
 /* ── RUBRIC MODAL ── */
+/* ── APPRAISED TEACHERS LIST (under Framework Overview) ─────────────
+   Existing records for this appraiser's school. Clicking a row opens the
+   summary modal, which in turn opens the SAME scoring form used for new
+   entries — see #scoringModal below. */
+.appr-list-empty {
+  padding: 22px 20px; text-align: center; font-size: .82rem; color: #94a3b8;
+}
+.appr-row {
+  display: grid; grid-template-columns: 34px 1fr auto auto auto;
+  gap: 12px; align-items: center; width: 100%; text-align: left;
+  padding: 12px 20px; border: none; border-bottom: 1px solid #f1f5f9;
+  background: #fff; cursor: pointer; font: inherit;
+}
+.appr-row:last-child { border-bottom: none; }
+.appr-row:hover  { background: #faf9ff; }
+.appr-row:focus-visible { outline: 2px solid #7c3aed; outline-offset: -2px; }
+.appr-avatar {
+  width: 34px; height: 34px; border-radius: 50%; background: #ede9fe; color: #6d28d9;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .82rem; font-weight: 800;
+}
+.appr-name   { font-size: .84rem; font-weight: 700; color: #1e293b; }
+.appr-meta   { font-size: .7rem; color: #94a3b8; margin-top: 2px; }
+.appr-score  { font-size: .82rem; font-weight: 800; color: #374151; text-align: right; }
+.appr-score-sub { font-size: .64rem; color: #94a3b8; font-weight: 500; }
+.appr-band {
+  min-width: 26px; height: 26px; border-radius: 7px; font-size: .78rem; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+}
+.appr-status {
+  font-size: .64rem; font-weight: 700; padding: 3px 8px; border-radius: 99px;
+  text-transform: uppercase; letter-spacing: .04em; white-space: nowrap;
+}
+.appr-status.draft     { background: #fff7ed; color: #c2410c; }
+.appr-status.shared    { background: #eff6ff; color: #1d4ed8; }
+.appr-status.finalised { background: #f0fdf4; color: #15803d; }
+.appr-filter-row {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+  padding: 12px 20px; border-bottom: 1px solid #f1f5f9; background: #fcfcfe;
+}
+.appr-filter-row input, .appr-filter-row select {
+  font-size: .78rem; padding: 7px 10px; border: 1.5px solid #e2e8f0;
+  border-radius: 8px; background: #fff; color: #374151;
+}
+.appr-filter-row input { flex: 1; min-width: 160px; }
+
+/* ── SCORING MODAL ──────────────────────────────────────────────────
+   Hosts the EXISTING #scoringPhase element — the node is moved in on open
+   and moved back to its original parent on close. There is deliberately no
+   second copy of the F1/F2/F3/F4 markup: new entries and existing records
+   are the same form, so they cannot drift apart. */
+.scoring-modal-back {
+  position: fixed; inset: 0; background: rgba(15,15,30,.55); z-index: 9000;
+  display: none; align-items: flex-start; justify-content: center;
+  padding: 24px 16px; overflow-y: auto;
+}
+.scoring-modal-back.is-open { display: flex; }
+.scoring-modal {
+  background: #f7f7fb; border-radius: 18px; width: 100%; max-width: 1200px;
+  box-shadow: 0 8px 48px rgba(0,0,0,.24); overflow: hidden; margin: auto;
+}
+.scoring-modal-head {
+  padding: 16px 22px; background: #fff; border-bottom: 1px solid #eceaf5;
+  display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  position: sticky; top: 0; z-index: 5;
+}
+.scoring-modal-head h2 { font-size: .98rem; font-weight: 800; color: #1e293b; margin: 0; }
+.scoring-modal-head .sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
+.scoring-modal-body { padding: 0; }
+/* The scoring phase renders its own page-wrap padding; inside the modal that
+   double-pads, so trim it back. */
+.scoring-modal-body > #scoringPhase > .page-wrap { padding-left: 20px; padding-right: 20px; }
+@media (max-width: 900px) {
+  .scoring-modal-body > #scoringPhase > .page-wrap { padding-left: 12px; padding-right: 12px; }
+}
+
+/* Summary modal — read-first view shown before entering the form. */
+.appr-sum-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px;
+}
+.appr-sum-cell {
+  text-align: center; padding: 12px 8px; background: #f8fafc; border-radius: 10px;
+}
+.appr-sum-cell .lbl {
+  font-size: .6rem; text-transform: uppercase; letter-spacing: .07em;
+  color: #94a3b8; font-weight: 700; margin-bottom: 3px;
+}
+.appr-sum-cell .val { font-size: 1.15rem; font-weight: 800; color: #1e293b; }
+.appr-sum-hero {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 16px 18px; border-radius: 12px; background: #f5f3ff;
+  border: 1px solid #ddd6fe; margin-bottom: 16px;
+}
+.appr-sum-narr { margin-top: 14px; }
+.appr-sum-narr h4 {
+  font-size: .7rem; text-transform: uppercase; letter-spacing: .06em;
+  color: #7c3aed; font-weight: 800; margin: 0 0 5px;
+}
+.appr-sum-narr p {
+  font-size: .82rem; color: #374151; line-height: 1.6; margin: 0 0 12px;
+  white-space: pre-wrap;
+}
+@media (max-width: 640px) {
+  .appr-sum-grid { grid-template-columns: repeat(2, 1fr); }
+  .appr-row { grid-template-columns: 34px 1fr auto; }
+  .appr-row .appr-status { display: none; }
+}
+
 .rubric-modal-overlay {
   position: fixed; inset: 0; background: rgba(15,15,30,.55); z-index: 10000;
   display: flex; align-items: center; justify-content: center; padding: 24px;
@@ -1266,59 +1378,31 @@ body:has(> .page-footer) > .page-wrap {
          appraiser picks below — F3 ⇒ end-of-year (behind a confirm dialog),
          everything else ⇒ observation. -->
 
-    <!-- Which framework to score. This is the setup screen's primary choice —
-         cards unlock as the required fields fill (see refreshSetupGate). -->
-    <div class="setup-pick-label">Choose what to score</div>
-    <div class="fw-tabs-hint setup-pick-hint" id="setupTabsHint">
-      <span id="setupTabsHintText">Select a teacher and an appraisal level to unlock scoring.</span>
-    </div>
-    <div class="setup-pick-grid" id="setupTabsPreview">
-      <button type="button" class="setup-pick is-locked" data-preview-tab="f1" disabled>
-        <span class="setup-pick-top">
-          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CB;</span>
-          <span class="setup-pick-title">F1 &mdash; Administration</span>
-          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
-        </span>
-        <span class="setup-pick-meta">9 items &middot; 20%</span>
-        <span class="setup-pick-who">Appraiser &middot; from the teacher's records</span>
-      </button>
-      <button type="button" class="setup-pick is-locked" data-preview-tab="f2" disabled>
-        <span class="setup-pick-top">
-          <span class="setup-pick-icon" aria-hidden="true">&#x1F441;</span>
-          <span class="setup-pick-title">F2 &mdash; Class Observation</span>
-          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
-        </span>
-        <span class="setup-pick-meta"><span id="previewCountF2">&mdash;</span> items &middot; 50%</span>
-        <span class="setup-pick-who">Appraiser &middot; live in the lesson</span>
-      </button>
-      <button type="button" class="setup-pick setup-pick--closing is-locked" data-preview-tab="f3" id="previewTabF3" disabled>
-        <span class="setup-pick-top">
-          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CA;</span>
-          <span class="setup-pick-title">F3 &mdash; Work Inspection</span>
-          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
-        </span>
-        <span class="setup-pick-meta"><span id="previewCountF3">&mdash;</span> items &middot; 20%</span>
-        <span class="setup-pick-who">Appraiser &middot; end-of-year conference</span>
-        <span class="setup-pick-flag">&#x26A0; Closes the annual record</span>
-      </button>
-      <button type="button" class="setup-pick is-locked" data-preview-tab="f4" disabled>
-        <span class="setup-pick-top">
-          <span class="setup-pick-icon" aria-hidden="true">&#x1F393;</span>
-          <span class="setup-pick-title">F4 &mdash; Student Survey</span>
-          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
-        </span>
-        <span class="setup-pick-meta">17 items &middot; 10%</span>
-        <span class="setup-pick-who">Students &middot; enter aggregated results</span>
-      </button>
-      <button type="button" class="setup-pick setup-pick--review is-locked" data-preview-tab="review" disabled>
-        <span class="setup-pick-top">
-          <span class="setup-pick-icon" aria-hidden="true">&#x2713;</span>
-          <span class="setup-pick-title">Review &amp; Submit</span>
-          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
-        </span>
-        <span class="setup-pick-meta">Composite &middot; predicate band</span>
-        <span class="setup-pick-who">Summary, radar, feedback &amp; submit</span>
-      </button>
+    <!-- Teachers already appraised at this school. Scoped by schoolId to the
+         appraiser's own school (admins see their profile school the same way);
+         the Firestore rule enforces the same boundary. Clicking a row opens the
+         summary modal, whose CTA opens the existing scoring form. -->
+    <div class="card" id="apprListCard">
+      <div class="card-head">
+        <div>
+          <h2>Appraised teachers</h2>
+          <div class="card-head-sub" id="apprListSub">Records for this school — open one to review or continue scoring</div>
+        </div>
+        <span class="card-head-count" id="apprListCount"></span>
+      </div>
+      <div class="appr-filter-row">
+        <input type="text" id="apprSearch" placeholder="Search teacher name…" aria-label="Search appraised teachers by name" autocomplete="off">
+        <select id="apprYearFilter" aria-label="Filter by academic year"><option value="">All years</option></select>
+        <select id="apprStatusFilter" aria-label="Filter by record status">
+          <option value="">All statuses</option>
+          <option value="draft">Draft</option>
+          <option value="shared">Shared</option>
+          <option value="finalised">Finalised</option>
+        </select>
+      </div>
+      <div id="apprListBody">
+        <div class="appr-list-empty">Loading records…</div>
+      </div>
     </div>
 
     <div class="card">
@@ -1395,6 +1479,63 @@ body:has(> .page-footer) > .page-wrap {
         <div id="prevFollowUpBanner" style="display:none;"></div>
       </div>
     </div>
+
+    <!-- Which framework to score. Sits BELOW Teacher Information: the appraiser
+         picks the teacher first, then what to score for them — the cards unlock
+         as those required fields fill (see refreshSetupGate). -->
+    <div class="setup-pick-label" id="setupPickAnchor">Choose what to score</div>
+    <div class="fw-tabs-hint setup-pick-hint" id="setupTabsHint">
+      <span id="setupTabsHintText">Select a teacher and an appraisal level to unlock scoring.</span>
+    </div>
+    <div class="setup-pick-grid" id="setupTabsPreview">
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f1" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CB;</span>
+          <span class="setup-pick-title">F1 &mdash; Administration</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">9 items &middot; 20%</span>
+        <span class="setup-pick-who">Appraiser &middot; from the teacher's records</span>
+      </button>
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f2" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F441;</span>
+          <span class="setup-pick-title">F2 &mdash; Class Observation</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta"><span id="previewCountF2">&mdash;</span> items &middot; 50%</span>
+        <span class="setup-pick-who">Appraiser &middot; live in the lesson</span>
+      </button>
+      <button type="button" class="setup-pick setup-pick--closing is-locked" data-preview-tab="f3" id="previewTabF3" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CA;</span>
+          <span class="setup-pick-title">F3 &mdash; Work Inspection</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta"><span id="previewCountF3">&mdash;</span> items &middot; 20%</span>
+        <span class="setup-pick-who">Appraiser &middot; end-of-year conference</span>
+        <span class="setup-pick-flag">&#x26A0; Closes the annual record</span>
+      </button>
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f4" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F393;</span>
+          <span class="setup-pick-title">F4 &mdash; Student Survey</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">17 items &middot; 10%</span>
+        <span class="setup-pick-who">Students &middot; enter aggregated results</span>
+      </button>
+      <button type="button" class="setup-pick setup-pick--review is-locked" data-preview-tab="review" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x2713;</span>
+          <span class="setup-pick-title">Review &amp; Submit</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">Composite &middot; predicate band</span>
+        <span class="setup-pick-who">Summary, radar, feedback &amp; submit</span>
+      </button>
+    </div>
+
 
     <!-- Pre-Conference Notes (observation mode only) -->
     <details class="card setup-fold" id="preConferenceCard">
@@ -1927,6 +2068,39 @@ body:has(> .page-footer) > .page-wrap {
     <div id="fwPopoverBody" style="padding:16px 20px;font-size:.83rem;color:#374151;line-height:1.6;max-height:70vh;overflow-y:auto;"></div>
   </div>
 </div>
+
+<!-- APPRAISAL SUMMARY MODAL — read-first view for an existing record.
+     Its CTA calls openScoringModal(), which hosts the SAME #scoringPhase form
+     used for new entries. No duplicate form markup lives here. -->
+<div role="button" tabindex="0" id="apprSumBack" class="rubric-modal-overlay" style="display:none;" onclick="if(event.target===this)closeApprSummary()">
+  <div class="rubric-modal" role="dialog" aria-modal="true" aria-labelledby="apprSumTitle">
+    <div class="rubric-modal-head">
+      <div>
+        <div class="rubric-modal-title" id="apprSumTitle">—</div>
+        <div class="rubric-modal-sub" id="apprSumSub">—</div>
+      </div>
+      <button class="rubric-modal-close" onclick="closeApprSummary()" aria-label="Close">&#x2715;</button>
+    </div>
+    <div id="apprSumBody" style="padding:18px 22px 22px;"></div>
+  </div>
+</div>
+
+<!-- SCORING MODAL — the live #scoringPhase node is moved in here on open and
+     returned to its placeholder on close. Deliberately empty in source. -->
+<div class="scoring-modal-back" id="scoringModalBack">
+  <div class="scoring-modal" role="dialog" aria-modal="true" aria-labelledby="scoringModalTitle">
+    <div class="scoring-modal-head">
+      <div>
+        <h2 id="scoringModalTitle">Scoring</h2>
+        <div class="sub" id="scoringModalSub">—</div>
+      </div>
+      <button class="rubric-modal-close" onclick="closeScoringModal()" aria-label="Close scoring">&#x2715;</button>
+    </div>
+    <div class="scoring-modal-body" id="scoringModalBody"></div>
+  </div>
+</div>
+<!-- Home for #scoringPhase while the modal is closed. -->
+<div id="scoringPhaseHome" hidden></div>
 
 <!-- RUBRIC MODAL -->
 <div role="button" tabindex="0" id="rubricModalOverlay" class="rubric-modal-overlay" style="display:none;" onclick="if(event.target===this)closeRubricModal()">
@@ -3465,17 +3639,59 @@ function enterScoring(targetTab) {
   updateTabCounts();
   if (loadedObsRecord) refreshScoreUI();
 
-  document.getElementById('setupPhase').style.display   = 'none';
-  document.getElementById('scoringPhase').style.display = 'block';
-  switchTab(targetTab || (sessionMode === 'endofyear' ? 'f3' : 'f1'));
-  window.scrollTo({top:0,behavior:'smooth'});
+  openScoringModal(targetTab);
 }
 
-// Returns to the setup screen from the scoring context bar's Edit button.
-function backToSetup() {
-  document.getElementById('scoringPhase').style.display = 'none';
-  document.getElementById('setupPhase').style.display   = 'block';
+// ── SCORING MODAL ─────────────────────────────────────────
+// The form is not rebuilt here. #scoringPhase — the one and only F1/F2/F3/F4
+// markup — is physically moved into the modal body on open and returned to its
+// placeholder on close, so a new entry and an existing record are the very same
+// DOM. Anything else would mean two forms to keep in sync.
+function openScoringModal(targetTab) {
+  const phase = document.getElementById('scoringPhase');
+  const body  = document.getElementById('scoringModalBody');
+  if (phase.parentElement !== body) body.appendChild(phase);
+  phase.style.display = 'block';
+
+  const teacher = document.getElementById('teacherName').value.trim() || 'Teacher';
+  const level   = getLevel();
+  const lvLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || '—';
+  document.getElementById('scoringModalTitle').textContent = teacher;
+  document.getElementById('scoringModalSub').textContent =
+    `${lvLabel} · ${sessionMode === 'observation' ? 'Observation session' : 'End-of-Year conference'}` +
+    (currentDocId ? ' · existing record' : ' · new record');
+
+  document.getElementById('scoringModalBack').classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  switchTab(targetTab || (sessionMode === 'endofyear' ? 'f3' : 'f1'));
+  document.getElementById('scoringModalBack').scrollTop = 0;
+}
+window.openScoringModal = openScoringModal;
+
+function closeScoringModal() {
+  const phase = document.getElementById('scoringPhase');
+  const home  = document.getElementById('scoringPhaseHome');
+  phase.style.display = 'none';
+  home.appendChild(phase);                       // park it back out of the modal
+  document.getElementById('scoringModalBack').classList.remove('is-open');
+  document.body.style.overflow = '';
   refreshSetupGate();
+  // The list may now show a record that did not exist a moment ago. Called via
+  // window because loadAppraisedTeachers is scoped inside the authReady callback
+  // and is not in this function's lexical scope.
+  window.loadAppraisedTeachers?.();
+}
+window.closeScoringModal = closeScoringModal;
+
+// The context bar's Edit button closes the modal back to setup.
+function backToSetup() {
+  // Keep both level selects in step so switching session type doesn't re-prompt.
+  const currentLevel = getLevel();
+  if (currentLevel) {
+    document.getElementById('appraisalLevel').value    = currentLevel;
+    document.getElementById('appraisalLevelEoy').value = currentLevel;
+  }
+  closeScoringModal();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 window.backToSetup = backToSetup;
@@ -3821,17 +4037,9 @@ document.getElementById('frameworkTabs').addEventListener('click', e => {
   if (btn) switchTab(btn.dataset.tab);
 });
 
-window.backToSetup = function() {
-  // Sync level between the two selects so switching session type doesn't re-prompt
-  const currentLevel = getLevel();
-  if (currentLevel) {
-    document.getElementById('appraisalLevel').value    = currentLevel;
-    document.getElementById('appraisalLevelEoy').value = currentLevel;
-  }
-  document.getElementById('setupPhase').style.display = 'block';
-  document.getElementById('scoringPhase').style.display = 'none';
-  window.scrollTo({top:0,behavior:'smooth'});
-};
+// (A second window.backToSetup used to be defined here and silently overrode the
+//  one above, because it was assigned later. Its only unique behaviour — syncing
+//  the level between the two selects — now lives in backToSetup() itself.)
 
 window.selectScore = function(itemId, score) {
   if (score === 'no' && getMandatoryItems(getLevel()).has(itemId)) {
@@ -4325,6 +4533,240 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     return allTeachersCache;
   }
 
+  // ── APPRAISED TEACHERS LIST ───────────────────────────────
+  // Existing teacher_appraisals records for the appraiser's own school, shown
+  // under the Framework Overview. Same schoolId scoping discipline as
+  // loadTeachersCache() above — a leader with no schoolId reads nothing rather
+  // than running an unscoped query across the network.
+  let apprRecords = [];
+
+  // The query MUST mirror what firestore.rules grants, because a list query is
+  // rejected outright unless the rule can be satisfied for every doc it could
+  // return. In `match /teacher_appraisals`, a plain academic_user may only read
+  // rows where appraiserUid == their uid; school-wide read is granted to
+  // academic_admin / central_user / teachers_admin. So: admins and HQ list by
+  // schoolId, everyone else lists their OWN appraisals. Filtering a broad query
+  // client-side instead would just produce a permission-denied.
+  async function loadAppraisedTeachers() {
+    const bodyEl = document.getElementById('apprListBody');
+    if (!bodyEl) return;
+    const profile = window.userProfile || {};
+    const canReadSchoolWide = profile.role_academichub === 'academic_admin'
+                           || profile.role_centralhub  === 'central_admin'
+                           || !!profile.role_centralhub
+                           || profile.role_teachershub === 'teachers_admin';
+    const subEl = document.getElementById('apprListSub');
+    try {
+      const constraints = [];
+      if (canReadSchoolWide) {
+        if (!profile.schoolId) {
+          // HQ user with no school — scope to their own entries rather than
+          // running an unscoped read across the whole network.
+          constraints.push(where('appraiserUid', '==', window.currentUser.uid));
+          if (subEl) subEl.textContent = 'Appraisals you have recorded';
+        } else {
+          constraints.push(where('schoolId', '==', profile.schoolId));
+          if (subEl) subEl.textContent = 'Records for this school — open one to review or continue scoring';
+        }
+      } else {
+        constraints.push(where('appraiserUid', '==', window.currentUser.uid));
+        if (subEl) subEl.textContent = 'Appraisals you have recorded — open one to review or continue scoring';
+      }
+      const snap = await getDocs(query(collection(window.db, 'teacher_appraisals'), ...constraints));
+      apprRecords = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => (b.updatedAt?.seconds || 0) - (a.updatedAt?.seconds || 0));
+
+      // Year filter options follow the data, so an empty year never appears.
+      const yearSel = document.getElementById('apprYearFilter');
+      const years = [...new Set(apprRecords.map(r => r.academicYear).filter(Boolean))].sort().reverse();
+      const keep = yearSel.value;
+      yearSel.innerHTML = '<option value="">All years</option>' +
+        years.map(y => `<option value="${esc(y)}">${esc(y)}</option>`).join('');
+      if (years.includes(keep)) yearSel.value = keep;
+    } catch (e) {
+      console.warn('Could not load appraised teachers:', e);
+      bodyEl.innerHTML = `<div class="appr-list-empty">Could not load records.${
+        canReadSchoolWide ? '' : ' You can only see appraisals you recorded yourself.'}</div>`;
+      document.getElementById('apprListCount').textContent = '';
+      return;
+    }
+    renderAppraisedTeachers();
+  }
+  window.loadAppraisedTeachers = loadAppraisedTeachers;
+
+  function apprBandColors(band) {
+    return ({ A:['#dcfce7','#15803d'], B:['#dbeafe','#1d4ed8'], C:['#fef9c3','#a16207'],
+              D:['#ffedd5','#c2410c'], F:['#fee2e2','#b91c1c'] })[band] || ['#f1f5f9','#94a3b8'];
+  }
+
+  function renderAppraisedTeachers() {
+    const bodyEl = document.getElementById('apprListBody');
+    const countEl = document.getElementById('apprListCount');
+    if (!bodyEl) return;
+    const q      = (document.getElementById('apprSearch').value || '').trim().toLowerCase();
+    const year   = document.getElementById('apprYearFilter').value;
+    const status = document.getElementById('apprStatusFilter').value;
+
+    const rows = apprRecords.filter(r =>
+      (!q      || (r.teacherName || '').toLowerCase().includes(q)) &&
+      (!year   || r.academicYear === year) &&
+      (!status || (r.status || 'draft') === status)
+    );
+
+    countEl.textContent = apprRecords.length
+      ? `${rows.length} of ${apprRecords.length}` : '';
+
+    if (!apprRecords.length) {
+      bodyEl.innerHTML = `<div class="appr-list-empty">No appraisal records yet.<br>
+        Pick a teacher below and choose a section to start the first one.</div>`;
+      return;
+    }
+    if (!rows.length) {
+      bodyEl.innerHTML = `<div class="appr-list-empty">No records match these filters.</div>`;
+      return;
+    }
+
+    bodyEl.innerHTML = rows.map(r => {
+      const name  = r.teacherName || 'Unnamed teacher';
+      const lv    = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[r.level] || r.level || '—';
+      const st    = r.status || 'draft';
+      const date  = r.observationDate?.toDate?.()?.toLocaleDateString('en-GB')
+                 || r.endOfYearDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
+      const sess  = r.sessionType === 'endofyear' ? 'End-of-Year' : 'Observation';
+      const pct   = typeof r.compositePercent === 'number' ? r.compositePercent.toFixed(1) + '%' : '—';
+      const [bg, fg] = apprBandColors(r.predicate);
+      return `<button type="button" class="appr-row" data-appr-id="${esc(r.id)}">
+        <span class="appr-avatar">${esc(name.charAt(0).toUpperCase())}</span>
+        <span>
+          <span class="appr-name">${esc(name)}</span>
+          <span class="appr-meta">${esc(lv)} · ${esc(sess)} · ${esc(date)}${
+            r.academicYear ? ' · ' + esc(r.academicYear) : ''}</span>
+        </span>
+        <span class="appr-score">${pct}<span class="appr-score-sub"> composite</span></span>
+        <span class="appr-band" style="background:${bg};color:${fg};">${esc(r.predicate || '—')}</span>
+        <span class="appr-status ${esc(st)}">${esc(st)}</span>
+      </button>`;
+    }).join('');
+  }
+
+  ['apprSearch','apprYearFilter','apprStatusFilter'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', renderAppraisedTeachers);
+  });
+
+  document.getElementById('apprListBody')?.addEventListener('click', e => {
+    const row = e.target.closest('[data-appr-id]');
+    if (row) openApprSummary(row.dataset.apprId);
+  });
+
+  // ── SUMMARY MODAL ─────────────────────────────────────────
+  // Read-first: shows the scores and narrative. "Open scoring form" hands off to
+  // the same #scoringPhase form used for new records.
+  let apprSumId = null;
+
+  function openApprSummary(id) {
+    const r = apprRecords.find(x => x.id === id);
+    if (!r) return;
+    apprSumId = id;
+    const name = r.teacherName || 'Unnamed teacher';
+    const lv   = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[r.level] || r.level || '—';
+    const sess = r.sessionType === 'endofyear' ? 'End-of-Year conference' : 'Observation session';
+    const date = r.observationDate?.toDate?.()?.toLocaleDateString('en-GB')
+              || r.endOfYearDate?.toDate?.()?.toLocaleDateString('en-GB') || '—';
+    document.getElementById('apprSumTitle').textContent = name;
+    document.getElementById('apprSumSub').textContent =
+      `${lv} · ${sess} · ${date}${r.academicYear ? ' · ' + r.academicYear : ''}`;
+
+    const num = v => typeof v === 'number' ? v.toFixed(2) : '—';
+    const [bg, fg] = apprBandColors(r.predicate);
+    const an = r.appraiserNarrative || {};
+    const en = r.endOfYearNarrative || {};
+    const narr = (label, val) => val
+      ? `<div class="appr-sum-narr"><h4>${label}</h4><p>${esc(val)}</p></div>` : '';
+
+    // surveyCounts is written by saveAppraisal(); older records predate it, so
+    // fall back to counting surveyData rather than showing a wrong total.
+    const sc = r.surveyCounts;
+    const f4Note = typeof r.surveyMean === 'number'
+      ? ''
+      : (sc?.answered || Object.keys(r.surveyData || {}).length)
+        ? `<div style="font-size:.7rem;color:#c2410c;margin-top:6px;">
+             F4 below the 80% response threshold${sc ? ` (${sc.answered}/${sc.total} scored)` : ''} — not counted in the composite.
+           </div>`
+        : '';
+
+    document.getElementById('apprSumBody').innerHTML = `
+      <div class="appr-sum-hero">
+        <div>
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:#7c3aed;font-weight:800;">Composite</div>
+          <div style="font-size:1.7rem;font-weight:800;color:#1e293b;">${
+            typeof r.compositePercent === 'number' ? r.compositePercent.toFixed(1) + '%' : '—'}</div>
+          ${typeof r.compositePercent !== 'number'
+            ? '<div style="font-size:.7rem;color:#94a3b8;">Not yet complete — F3 is scored at the end-of-year conference.</div>' : ''}
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.07em;color:#94a3b8;font-weight:800;margin-bottom:4px;">Predicate</div>
+          <div class="appr-band" style="background:${bg};color:${fg};width:44px;height:44px;font-size:1.3rem;margin:0 auto;">${esc(r.predicate || '—')}</div>
+        </div>
+      </div>
+
+      <div class="appr-sum-grid">
+        <div class="appr-sum-cell"><div class="lbl">F1 · 20%</div><div class="val">${num(r.f1Score)}</div></div>
+        <div class="appr-sum-cell"><div class="lbl">F2 · 50%</div><div class="val">${num(r.f2Score)}</div></div>
+        <div class="appr-sum-cell"><div class="lbl">F3 · 20%</div><div class="val">${num(r.f3Score)}</div></div>
+        <div class="appr-sum-cell"><div class="lbl">F4 · 10%</div><div class="val">${num(r.surveyMean)}</div></div>
+      </div>
+      ${f4Note}
+
+      ${narr('&#x2728; Glow — what is working well', an.strengths || en.strengths)}
+      ${narr('&#x1F331; Grow — priority development area', an.development || en.development)}
+      ${narr('&#x1F3AF; Go — next step', an.actions || en.actions)}
+      ${narr('Annual summary', en.summary)}
+
+      <div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;">
+        <button class="btn-primary" id="apprSumOpenBtn" style="flex:1;min-width:180px;">Open scoring form</button>
+        <button class="btn-secondary" onclick="closeApprSummary()">Close</button>
+      </div>
+      <div style="font-size:.68rem;color:#94a3b8;margin-top:10px;text-align:center;">
+        Opens the same F1&ndash;F4 form used for new records, with this record loaded.
+      </div>`;
+
+    document.getElementById('apprSumOpenBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('apprSumOpenBtn');
+      btn.disabled = true; btn.textContent = 'Loading…';
+      try {
+        // Re-read the doc so the form opens against current data, not a list
+        // snapshot that may be minutes old.
+        const snap = await getDoc(doc(window.db, 'teacher_appraisals', apprSumId));
+        if (!snap.exists()) { showToast('Record no longer exists.'); closeApprSummary(); return; }
+        await hydrateFromRecord(snap.data(), apprSumId);
+        closeApprSummary();
+        enterScoring();
+      } catch (err) {
+        console.error(err);
+        showToast('Could not open the record — check console.');
+        btn.disabled = false; btn.textContent = 'Open scoring form';
+      }
+    });
+
+    document.getElementById('apprSumBack').style.display = 'flex';
+  }
+  window.openApprSummary = openApprSummary;
+
+  function closeApprSummary() {
+    document.getElementById('apprSumBack').style.display = 'none';
+    apprSumId = null;
+  }
+  window.closeApprSummary = closeApprSummary;
+
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('apprSumBack')?.style.display === 'flex') closeApprSummary();
+    else if (document.getElementById('scoringModalBack')?.classList.contains('is-open')) closeScoringModal();
+  });
+
+  loadAppraisedTeachers();
+
   let teacherSearchTimer = null;
   window.teacherSearch = async function(val) {
     const dropdown = document.getElementById('teacherDropdown');
@@ -4543,14 +4985,31 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       document.getElementById('teacherDropdown').style.display = 'none';
   });
 
-  // Load existing draft via ?id= URL param
-  const urlId = new URLSearchParams(location.search).get('id');
-  if (urlId) {
-    try {
-      const snap = await getDoc(doc(db, 'teacher_appraisals', urlId));
-      if (snap.exists()) {
-        const d = snap.data();
-        currentDocId = urlId;
+  // Hydrates every page-level state holder from a stored teacher_appraisals doc.
+  // Extracted from the ?id= loader so the appraised-teacher list can reuse the
+  // exact same path — opening an existing record from the list and opening it
+  // from a deep link must produce byte-identical state, and duplicating ~80
+  // lines of field mapping would guarantee they drift apart.
+  async function hydrateFromRecord(d, docId) {
+        // Clear prior state first. Without this, opening teacher B after teacher A
+        // inherits A's scores/notes/N-O flags for every item B has not scored —
+        // the merge-write would then persist A's marks onto B's record.
+        Object.keys(scores).forEach(k => delete scores[k]);
+        Object.keys(notes).forEach(k => delete notes[k]);
+        Object.keys(surveyScores).forEach(k => delete surveyScores[k]);
+        Object.keys(f3Evidence).forEach(k => delete f3Evidence[k]);
+        Object.keys(prevYearScores).forEach(k => delete prevYearScores[k]);
+        notObserved.clear();
+        selectedQuestions.length = 0;
+        prevRecord = null; followUpVerdict = null; loadedObsRecord = null;
+        ['narr_strengths','narr_development','narr_actions','narr_grow_item','narr_go_date','narr_go_check',
+         'eoy_summary','eoy_strengths','eoy_development','eoy_actions','eoy_grow_item','eoy_go_date',
+         'eoy_go_check','followUpNote'].forEach(id => {
+          const el = document.getElementById(id); if (el) el.value = '';
+        });
+        document.querySelectorAll('#f4Items input[type="radio"]:checked').forEach(r => { r.checked = false; });
+
+        currentDocId = docId;
         // Determine mode from record
         const mode = d.f3Score != null ? 'endofyear' : 'observation';
         applySessionMode(mode);
@@ -4632,6 +5091,19 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         if (d.teacherUid) fetchPreviousRecord(d.teacherUid);
         if (d.teacherUid) fetchSelfAppraisal(d.teacherUid);
         loadedObsRecord = d;
+        refreshScoreUI();
+        refreshSetupGate();
+  }
+  window.hydrateFromRecord = hydrateFromRecord;
+
+  // Load existing draft via ?id= URL param — same hydration path the
+  // appraised-teacher list uses.
+  const urlId = new URLSearchParams(location.search).get('id');
+  if (urlId) {
+    try {
+      const snap = await getDoc(doc(db, 'teacher_appraisals', urlId));
+      if (snap.exists()) {
+        await hydrateFromRecord(snap.data(), urlId);
         showToast('Draft loaded — continue where you left off.');
       }
     } catch(e) { console.warn('Could not load draft by id:', e); }
