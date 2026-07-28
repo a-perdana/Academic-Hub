@@ -80,18 +80,6 @@ body:has(> .page-footer) > .page-wrap {
 .form-grid { display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start; }
 
 /* ── SESSION TYPE ── */
-.session-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.session-opt {
-  border: 2px solid #e2e8f0; border-radius: 14px; padding: 20px;
-  cursor: pointer; transition: border-color .15s, background .15s;
-  display: flex; flex-direction: column; gap: 6px;
-}
-.session-opt:hover { border-color: #c4b5fd; background: #faf5ff; }
-.session-opt.active { border-color: #7c3aed; background: #f5f3ff; }
-.session-opt-icon { font-size: 1.6rem; }
-.session-opt-title { font-size: .95rem; font-weight: 700; color: #1e293b; }
-.session-opt.active .session-opt-title { color: #7c3aed; }
-.session-opt-desc { font-size: .78rem; color: #64748b; line-height: 1.5; }
 
 /* ── CONTEXT BAR ── */
 .context-bar {
@@ -266,6 +254,40 @@ body:has(> .page-footer) > .page-wrap {
 .setup-pick.is-locked .setup-pick-meta { color: #cbd5e1; }
 .setup-pick-who { font-size: .72rem; color: #94a3b8; }
 .setup-pick--review { background: #faf5ff; border-color: #ddd6fe; }
+
+/* F3 closes the annual record — flag it on the card and confirm on click. */
+.setup-pick--closing { border-color: #fed7aa; background: #fffbeb; }
+.setup-pick--closing:hover:not(.is-locked) {
+  border-color: #f59e0b; box-shadow: 0 4px 16px rgba(217,119,6,.16);
+}
+.setup-pick--closing .setup-pick-meta { color: #b45309; }
+.setup-pick-flag {
+  margin-top: 6px; font-size: .7rem; font-weight: 700; color: #b45309;
+  background: #fef3c7; border-radius: 7px; padding: 4px 8px; align-self: flex-start;
+}
+.setup-pick.is-locked .setup-pick-flag { background: #f1f5f9; color: #cbd5e1; }
+
+/* Confirm dialog shown before entering the end-of-year (F3) session. */
+.eoy-confirm-back {
+  position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 400;
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.eoy-confirm-back.is-open { display: flex; }
+.eoy-confirm {
+  background: #fff; border-radius: 16px; max-width: 480px; width: 100%;
+  box-shadow: 0 20px 60px rgba(0,0,0,.28); overflow: hidden;
+}
+.eoy-confirm-head {
+  padding: 18px 24px; background: #fffbeb; border-bottom: 1px solid #fde68a;
+  display: flex; align-items: center; gap: 10px;
+}
+.eoy-confirm-head h3 { font-size: 1rem; font-weight: 800; color: #92400e; }
+.eoy-confirm-body { padding: 20px 24px; font-size: .86rem; color: #334155; line-height: 1.65; }
+.eoy-confirm-body ul { margin: 10px 0 0 18px; }
+.eoy-confirm-body li { margin-bottom: 5px; }
+.eoy-confirm-foot {
+  padding: 14px 24px 20px; display: flex; gap: 10px; justify-content: flex-end;
+}
 
 /* Locked tab preview — shown on the setup screen so the appraiser can see
    the whole structure before committing. Unlocks as required fields fill. */
@@ -674,7 +696,6 @@ body:has(> .page-footer) > .page-wrap {
   .form-row, .form-row.three { grid-template-columns: 1fr 1fr; }
   .score-row { flex-direction: column; }
   .score-btn { min-width: 100%; }
-  .session-opts { grid-template-columns: 1fr; }
 
   /* Context bar — stack on small screens */
   .context-bar        { flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -1241,23 +1262,9 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-head"><h2>Session Type</h2><div class="card-head-sub">Select which part of the appraisal you are recording</div></div>
-      <div class="card-body">
-        <div class="session-opts">
-          <div class="session-opt active" data-mode="observation" id="optObservation">
-            <div class="session-opt-icon">&#x1F4CB;</div>
-            <div class="session-opt-title">Observation Session</div>
-            <div class="session-opt-desc">Score F1 Administration and F2 Class Observation. Conducted during a live classroom visit.</div>
-          </div>
-          <div class="session-opt" data-mode="endofyear" id="optEndOfYear">
-            <div class="session-opt-icon">&#x1F4CA;</div>
-            <div class="session-opt-title">End-of-Year Conference</div>
-            <div class="session-opt-desc">Score F3 Work Inspection — completes the annual record. Load the observation record first to include prior F1/F2 scores in the composite.</div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <!-- Session Type card removed: the mode is derived from the section the
+         appraiser picks below — F3 ⇒ end-of-year (behind a confirm dialog),
+         everything else ⇒ observation. -->
 
     <!-- Which framework to score. This is the setup screen's primary choice —
          cards unlock as the required fields fill (see refreshSetupGate). -->
@@ -1284,7 +1291,7 @@ body:has(> .page-footer) > .page-wrap {
         <span class="setup-pick-meta"><span id="previewCountF2">&mdash;</span> items &middot; 50%</span>
         <span class="setup-pick-who">Appraiser &middot; live in the lesson</span>
       </button>
-      <button type="button" class="setup-pick is-locked" data-preview-tab="f3" id="previewTabF3" style="display:none;" disabled>
+      <button type="button" class="setup-pick setup-pick--closing is-locked" data-preview-tab="f3" id="previewTabF3" disabled>
         <span class="setup-pick-top">
           <span class="setup-pick-icon" aria-hidden="true">&#x1F4CA;</span>
           <span class="setup-pick-title">F3 &mdash; Work Inspection</span>
@@ -1292,6 +1299,7 @@ body:has(> .page-footer) > .page-wrap {
         </span>
         <span class="setup-pick-meta"><span id="previewCountF3">&mdash;</span> items &middot; 20%</span>
         <span class="setup-pick-who">Appraiser &middot; end-of-year conference</span>
+        <span class="setup-pick-flag">&#x26A0; Closes the annual record</span>
       </button>
       <button type="button" class="setup-pick is-locked" data-preview-tab="f4" disabled>
         <span class="setup-pick-top">
@@ -1466,6 +1474,35 @@ body:has(> .page-footer) > .page-wrap {
     </div>
   </div>
 </div><!-- /setupPhase -->
+
+<!-- Confirmation before entering the end-of-year session. F3 is the only
+     section that writes a composite + predicate and flips f3Status to
+     'complete', so the switch is made explicit rather than implicit. -->
+<div class="eoy-confirm-back" id="eoyConfirmBack">
+  <div class="eoy-confirm" role="dialog" aria-modal="true" aria-labelledby="eoyConfirmTitle">
+    <div class="eoy-confirm-head">
+      <span aria-hidden="true" style="font-size:1.3rem;">&#x26A0;</span>
+      <h3 id="eoyConfirmTitle">This closes the annual record</h3>
+    </div>
+    <div class="eoy-confirm-body">
+      F3 Work Inspection is scored at the <strong>End-of-Year Conference</strong> — the
+      annual review meeting with the teacher. Saving this session will:
+      <ul>
+        <li>Calculate the <strong>composite score and A&ndash;F predicate band</strong></li>
+        <li>Mark the appraisal record as <strong>complete</strong> for the year</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 12px;background:#f8fafc;border-radius:9px;font-size:.8rem;">
+        Load the existing observation record first so the F1 and F2 scores are
+        carried into the composite &mdash; otherwise they count as unscored.
+      </div>
+    </div>
+    <div class="eoy-confirm-foot">
+      <button type="button" class="btn-secondary" id="eoyConfirmCancel" style="font-size:.82rem;">Cancel</button>
+      <button type="button" class="btn-primary" id="eoyConfirmGo" style="font-size:.82rem;">Continue to F3 &rarr;</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- PHASE 2: SCORING -->
 <div id="scoringPhase" style="display:none;">
@@ -3280,9 +3317,22 @@ function drawRadar() {
 
 // ── SESSION MODE ──────────────────────────────────────────
 function applySessionMode(mode) {
+  const modeChanged = sessionMode !== mode;
   sessionMode = mode;
-  document.getElementById('optObservation').classList.toggle('active', mode === 'observation');
-  document.getElementById('optEndOfYear').classList.toggle('active', mode === 'endofyear');
+  // Carried over from the old Session Type click handler: switching mode with a
+  // loaded observation record keeps that record's level and doc context; with
+  // no record loaded, clear any stale load status.
+  if (modeChanged) {
+    if (loadedObsRecord?.level) {
+      const lvl = loadedObsRecord.level;
+      document.getElementById('appraisalLevel').value    = lvl;
+      document.getElementById('appraisalLevelEoy').value = lvl;
+    } else if (!loadedObsRecord) {
+      currentDocId = null;
+      const st = document.getElementById('loadObsStatus');
+      if (st) st.textContent = '';
+    }
+  }
   document.getElementById('preConferenceCard').style.display = mode === 'observation' ? '' : 'none';
   document.getElementById('obsSetupCard').style.display      = mode === 'observation' ? '' : 'none';
   document.getElementById('eoySetupCard').style.display      = mode === 'endofyear'   ? '' : 'none';
@@ -3299,7 +3349,9 @@ function applySessionMode(mode) {
   document.getElementById('eoyDateSlot').style.display = mode === 'endofyear'   ? '' : 'none';
   document.getElementById('secondAppraiserRow').style.display =
     (mode === 'observation' && document.getElementById('appraisalLevel').value === 'lead') ? '' : 'none';
-  document.getElementById('previewTabF3').style.display = mode === 'endofyear' ? '' : 'none';
+  // The F3 setup card stays visible in both modes — it is how the appraiser
+  // *enters* end-of-year mode (with a confirmation), so hiding it would make
+  // the mode unreachable now that the Session Type card is gone.
   syncLevelMirror(document.getElementById('appraisalLevel').value);
   refreshSetupGate();
   // F3 enters/leaves the switcher menu with the mode.
@@ -3330,6 +3382,13 @@ function setupMissingFields(forTab) {
   if (!document.getElementById('teacherName').value.trim()) missing.push('a teacher');
   if (forTab === 'f4') return missing;
   if (!document.getElementById('appraisalLevel').value)     missing.push('an appraisal level');
+  // F3 is entered via the confirm dialog, which flips the mode to end-of-year
+  // first. Gate it on the conference date regardless of the current mode so the
+  // card doesn't ask for an observation date it will never use.
+  if (forTab === 'f3') {
+    if (!document.getElementById('conferenceDate').value) missing.push('the conference date');
+    return missing;
+  }
   if (sessionMode === 'observation') {
     if (!document.getElementById('observationDate').value) missing.push('the observation date');
     if (document.getElementById('appraisalLevel').value === 'lead' &&
@@ -4575,29 +4634,6 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     } catch(e) { console.warn('Could not load draft by id:', e); }
   }
 
-  // Session type selector
-  document.querySelectorAll('.session-opt').forEach(opt => {
-    opt.addEventListener('click', () => {
-      const prevMode = sessionMode;
-      applySessionMode(opt.dataset.mode);
-
-      // If a record is loaded, carry over level and keep record context
-      if (loadedObsRecord) {
-        const lvl = loadedObsRecord.level;
-        if (lvl) {
-          document.getElementById('appraisalLevel').value    = lvl;
-          document.getElementById('appraisalLevelEoy').value = lvl;
-          document.getElementById('appraisalLevel').dispatchEvent(new Event('change'));
-          document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
-        }
-        // Don't wipe record/docId when switching between modes on same record
-      } else {
-        loadedObsRecord = null; currentDocId = null;
-        document.getElementById('loadObsStatus').textContent = '';
-      }
-    });
-  });
-
   // Level change handlers
   function onLevelChange(level) {
     if (!level || !FRAMEWORK) return;
@@ -4723,12 +4759,34 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   });
 
   // Setup section cards double as direct entry points once the gate opens.
+  // Picking a section also decides the session mode: F3 is the end-of-year
+  // closing session, everything else is an observation session.
   document.querySelectorAll('#setupTabsPreview .setup-pick').forEach(btn => {
     btn.addEventListener('click', () => {
-      const missing = setupMissingFields(btn.dataset.previewTab);
+      const tab = btn.dataset.previewTab;
+      if (tab === 'f3') { openEoyConfirm(); return; }
+      if (sessionMode !== 'observation') applySessionMode('observation');
+      const missing = setupMissingFields(tab);
       if (missing.length) { showToast(`Add ${missing.join(', ')} first.`); return; }
-      enterScoring(btn.dataset.previewTab);
+      enterScoring(tab);
     });
+  });
+
+  // F3 confirmation dialog
+  const eoyBack = document.getElementById('eoyConfirmBack');
+  window.openEoyConfirm = function openEoyConfirm() { eoyBack.classList.add('is-open'); };
+  function closeEoyConfirm() { eoyBack.classList.remove('is-open'); }
+  document.getElementById('eoyConfirmCancel').addEventListener('click', closeEoyConfirm);
+  eoyBack.addEventListener('click', (e) => { if (e.target === eoyBack) closeEoyConfirm(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && eoyBack.classList.contains('is-open')) closeEoyConfirm();
+  });
+  document.getElementById('eoyConfirmGo').addEventListener('click', () => {
+    closeEoyConfirm();
+    applySessionMode('endofyear');
+    const missing = setupMissingFields('f3');
+    if (missing.length) { showToast(`Add ${missing.join(', ')} first.`); return; }
+    enterScoring('f3');
   });
 
   // Keep the gate honest as the appraiser types / picks.
