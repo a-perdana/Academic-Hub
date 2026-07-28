@@ -558,6 +558,21 @@ a.ref-pill:hover {
   transition: background .12s, border-color .12s;
   letter-spacing: .02em;
 }
+/* IASP — BAN-S/M Akreditasi. Same shell as the other anchor chips, dashed
+   border to signal "no verbatim popover behind this one". */
+.dh-anchors .iasp-pill {
+  display: inline-block; padding: 3px 10px; border-radius: 99px;
+  font-family: 'DM Mono', monospace; font-size: 10.5px; font-weight: 700;
+  background: rgba(255,255,255,0.14); color: #fff;
+  border: 1px dashed rgba(255,255,255,0.42);
+  letter-spacing: .02em; cursor: default;
+}
+/* A 13/2007 principal competency: no archive entry, so it must not look
+   clickable like its 16/2007 siblings do. */
+.dh-anchors .perm-pill.is-unresolved {
+  background: rgba(255,255,255,0.10);
+  border-style: dashed; cursor: default;
+}
 .dh-anchors .csls-pill:hover,
 .dh-anchors .es-pill:hover,
 .dh-anchors .perm-pill:hover {
@@ -1749,7 +1764,7 @@ function renderPublishedReport() {
 }
 
 // ===== THE CYCLE, FROM THE SCHOOL'S SIDE =====
-// A school leader opening this page for the first time sees 31 aspects and no
+// A school leader opening this page for the first time sees 32 aspects and no
 // idea what happens after they fill them in. This strip answers the two
 // questions they actually have: what is the sequence, and what is my part
 // right now.
@@ -1768,7 +1783,7 @@ function cycleSteps() {
   return [
     {
       title: 'You self-appraise',
-      body: 'Rate all 31 aspects and attach your evidence. Submit at least 5 working days before your first visit — the visit cannot go ahead without it.',
+      body: 'Rate all 32 aspects and attach your evidence. Submit at least 5 working days before your first visit — the visit cannot go ahead without it.',
       state: submitted ? 'done' : (done > 0 ? 'now' : 'now'),
       note: submitted ? 'Submitted' : `${done} of ${total} aspects rated`,
     },
@@ -2204,8 +2219,29 @@ function renderDomainAnchors(domain) {
     `<span class="es-pill" data-es-ref="${escAttr(r)}" title="Eduversal Academic Standards — Section ${escAttr(r)}. Click for the verbatim madde.">ES ${escHtml(r)}</span>`
   ).join('');
 
-  const pmdChips = (fa.pmdRefs || []).map(r =>
-    `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency — click for verbatim definition.">${escHtml(r)}</span>`
+  // The PMD chip family resolves against Permendiknas No.16/2007 — the four
+  // TEACHER pillars. D1 and D5 also carry principal competencies from 13/2007,
+  // which is not in the research archive: wiring those to the same popover
+  // opens an empty panel, so they render as plain labels instead. See
+  // ES 24.6 for the full write-up and the options for resolving it.
+  const PMD_TEACHER_PILLARS = ['pedagogik', 'profesional', 'sosial', 'kepribadian'];
+  const pmdChips = (fa.pmdRefs || []).map(r => {
+    const key = String(r).toLowerCase().trim().split(/\s+/).pop().replace(/[^a-z]/g, '');
+    return PMD_TEACHER_PILLARS.includes(key)
+      ? `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency — click for verbatim definition.">${escHtml(r)}</span>`
+      : `<span class="perm-pill is-unresolved" title="Permendiknas No.13/2007 — principal competency standards. Not yet in the research archive, so no verbatim popover.">${escHtml(r)}</span>`;
+  }).join('');
+
+  // IASP — BAN-S/M Akreditasi components. Static (no verbatim archive behind
+  // the family), so title-only. Codes match school-kpi-v1.json's iasp_refs.
+  const IASP_COMPONENTS = {
+    'IASP-1': 'Komponen 1: Mutu Lulusan',
+    'IASP-2': 'Komponen 2: Proses Pembelajaran',
+    'IASP-3': 'Komponen 3: Mutu Guru',
+    'IASP-4': 'Komponen 4: Manajemen Sekolah',
+  };
+  const iaspChips = (fa.iaspRefs || []).map(r =>
+    `<span class="iasp-pill" title="BAN-S/M Akreditasi · ${escAttr(IASP_COMPONENTS[r] || r)}">${escHtml(r)}</span>`
   ).join('');
 
   const fwTags = (fa.frameworks || []).map(f => {
@@ -2214,8 +2250,8 @@ function renderDomainAnchors(domain) {
     return `<span class="dh-fw-tag" title="${escAttr(name + ' — ' + edition + (f.publisher ? ' · ' + f.publisher : ''))}">${escHtml(name)}${edition ? `<span class="dh-fw-tag-edition">${escHtml(edition)}</span>` : ''}</span>`;
   }).join('');
 
-  const anchorRow = (cslsChips || esChips || pmdChips)
-    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Anchored to</span><div class="dh-anchor-chips">${cslsChips}${esChips}${pmdChips}</div></div>`
+  const anchorRow = (cslsChips || esChips || pmdChips || iaspChips)
+    ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Anchored to</span><div class="dh-anchor-chips">${cslsChips}${esChips}${pmdChips}${iaspChips}</div></div>`
     : '';
   const fwRow = fwTags
     ? `<div class="dh-anchor-row"><span class="dh-anchor-label">Frameworks</span><div class="dh-anchor-chips">${fwTags}</div></div>`
