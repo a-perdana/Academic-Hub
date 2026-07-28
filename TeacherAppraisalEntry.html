@@ -1899,7 +1899,7 @@ body:has(> .page-footer) > .page-wrap {
           </div>
         </div>
       </div>
-      <div class="progress-card" style="margin-top:0;">
+      <div class="progress-card" style="margin-top:20px;">
         <div class="progress-title">Rubric Legend</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
           <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
@@ -4886,10 +4886,20 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       showToast(`⚠ ${missingNotes.length} low-score item(s) have no supporting note: ${missingNotes.slice(0,3).join(', ')}${missingNotes.length>3?' …':''}`, 5000);
     }
 
-    // Collect survey from surveyScores state
-    const surveyData = { ...surveyScores };
-    const surveyVals = Object.values(surveyData).map(Number).filter(Boolean);
-    const surveyMean = surveyVals.length ? surveyVals.reduce((a,b)=>a+b,0)/surveyVals.length : null;
+    // Collect survey from surveyScores state.
+    // surveyMean MUST agree with calcScores()'s F4 figure — that is the number the
+    // composite uses, and CH /teacher-appraisals + TH /teacher-appraisal-results both
+    // render surveyMean as authoritative. Computing a second, threshold-free mean here
+    // meant one scored item published "4.00 / 4.00" while F4 contributed nothing to the
+    // composite. Below threshold surveyMean stays null; surveyCounts carries the raw
+    // progress so readers can still show "3 / 17 responses recorded".
+    const surveyData   = { ...surveyScores };
+    const surveyMean   = r?.f4 ?? null;
+    const surveyCounts = {
+      answered:      r?.sections?.f4?.addressedCount ?? 0,
+      total:         r?.sections?.f4?.totalCount ?? 0,
+      meetsThreshold: r?.sections?.f4?.meetsThreshold ?? false,
+    };
 
     try {
       if (!isEoy) {
@@ -4953,14 +4963,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
             achieved:      followUpVerdict,
             note:          document.getElementById('followUpNote')?.value.trim() || '',
           } : null,
-          surveyData, surveyMean,
-          status, teacherResponse: '',
-          createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+          surveyData, surveyMean, surveyCounts,
+          status,
+          updatedAt: serverTimestamp()
         };
         if (currentDocId) {
-          await setDoc(doc(db,'teacher_appraisals',currentDocId), {...payload, updatedAt:serverTimestamp()}, {merge:true});
+          // Merge-update only. createdAt and teacherResponse are deliberately NOT in
+          // `payload`: re-sending createdAt reset the record's creation date on every
+          // 1.5s autosave, and re-sending teacherResponse:'' wiped whatever the teacher
+          // had written back on a shared observation. Both are set once, on create.
+          await setDoc(doc(db,'teacher_appraisals',currentDocId), payload, {merge:true});
         } else {
-          const ref = await addDoc(collection(db,'teacher_appraisals'), payload);
+          const ref = await addDoc(collection(db,'teacher_appraisals'), {
+            ...payload,
+            teacherResponse: '',
+            createdAt: serverTimestamp()
+          });
           currentDocId = ref.id;
         }
         if (!silent) showToast(status==='shared' ? 'Observation shared with teacher.' : 'Draft saved.');
@@ -4974,11 +4992,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           narratives:       { ...notes },
           notObservedItems: [...notObserved],
           f3Score:          r?.f3 ?? null,
-          f3Status:         'complete',
+          // 'complete' means the year is closed. A draft (or the silent autosave) must
+          // not make that claim — saveAppraisal() already blocks a non-draft submission
+          // when F1/F2 are missing, so only a real submission earns 'complete'.
+          f3Status:         status === 'draft' ? 'in_progress' : 'complete',
           f1Status:         loadedObsRecord ? 'complete' : (r?.f1!=null ? 'complete' : 'pending'),
           f2Status:         loadedObsRecord ? 'complete' : (r?.f2!=null ? 'complete' : 'pending'),
-          f1Score:          r?.f1 ?? null,
-          f2Score:          r?.f2 ?? null,
           compositePercent: r?.composite ?? null,
           predicate:        r?.predicate ?? null,
           endOfYearNarrative: (() => {
@@ -5011,9 +5030,15 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           } : null,
           endOfYearDate: document.getElementById('conferenceDate').value
             ? new Date(document.getElementById('conferenceDate').value) : null,
-          surveyData, surveyMean,
+          surveyData, surveyMean, surveyCounts,
           status, updatedAt: serverTimestamp()
         };
+        // f1Score / f2Score come from the observation session. If the conference was
+        // opened without loading that record, r.f1 / r.f2 are null — merging those nulls
+        // in would erase the real observation scores already stored on the doc. Only
+        // write them when we actually hold a value.
+        if (r?.f1 != null) eoyPayload.f1Score = r.f1;
+        if (r?.f2 != null) eoyPayload.f2Score = r.f2;
         if (currentDocId) {
           await setDoc(doc(db,'teacher_appraisals',currentDocId), eoyPayload, {merge:true});
         } else {
@@ -5151,7 +5176,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       ${isEoy && fw3 ? `
         <h2 class="pr-section">F3 — Work Quality</h2>
         <table class="pr-items"><thead><tr><th>Item</th><th>Score</th><th>Notes</th></tr></thead>
-        <tbody>${itemsHtml((fw3.items||[]).filter(i=>i.visible_from===level||!i.visible_from))}</tbody></table>` : ''}
+        <tbody>${itemsHtml([
+          ...(fw3.items||[]).filter(i=>isVisible(i, level)),
+          ...(level==='lead' ? (FRAMEWORK?.frameworks.find(f=>f.id==='F3L')?.items || []) : [])
+        ])}</tbody></table>` : ''}
 
       ${fw4?.items?.length ? `
         <h2 class="pr-section">F4 — Student Survey</h2>
