@@ -650,7 +650,8 @@ body:has(> .page-footer) > .page-wrap {
   padding: 22px 20px; text-align: center; font-size: .82rem; color: #94a3b8;
 }
 .appr-row {
-  display: grid; grid-template-columns: 34px 1fr auto auto auto;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto auto auto auto;
   gap: 12px; align-items: center; width: 100%; text-align: left;
   padding: 12px 20px; border: none; border-bottom: 1px solid #f1f5f9;
   background: #fff; cursor: pointer; font: inherit;
@@ -667,6 +668,32 @@ body:has(> .page-footer) > .page-wrap {
 .appr-meta   { font-size: .7rem; color: #94a3b8; margin-top: 2px; }
 .appr-score  { font-size: .82rem; font-weight: 800; color: #374151; text-align: right; }
 .appr-score-sub { font-size: .64rem; color: #94a3b8; font-weight: 500; }
+
+/* Per-framework means on the row. Each cell shows the section weight so the
+   number is readable without opening the record. A pending section renders a
+   dash rather than 0.00 — a missing score and a score of zero are different
+   claims, and the scoring model has no zero. */
+.appr-fw { display: flex; gap: 5px; }
+.appr-fw-cell {
+  min-width: 44px; padding: 4px 6px; border-radius: 7px; background: #f8fafc;
+  border: 1px solid #eef2f7; text-align: center; line-height: 1.25;
+}
+.appr-fw-lbl {
+  display: block; font-size: .56rem; font-weight: 800; letter-spacing: .04em;
+  color: #94a3b8; text-transform: uppercase;
+}
+.appr-fw-val { display: block; font-size: .76rem; font-weight: 800; color: #334155; }
+.appr-fw-cell.is-empty { background: #fcfcfd; border-style: dashed; }
+.appr-fw-cell.is-empty .appr-fw-val { color: #cbd5e1; }
+/* Tint by band so a weak section is visible at a glance across the list. */
+.appr-fw-cell.lvl-4 { background: #f0fdf4; border-color: #bbf7d0; }
+.appr-fw-cell.lvl-4 .appr-fw-val { color: #15803d; }
+.appr-fw-cell.lvl-3 { background: #fefce8; border-color: #fef08a; }
+.appr-fw-cell.lvl-3 .appr-fw-val { color: #a16207; }
+.appr-fw-cell.lvl-2 { background: #fff7ed; border-color: #fed7aa; }
+.appr-fw-cell.lvl-2 .appr-fw-val { color: #c2410c; }
+.appr-fw-cell.lvl-1 { background: #fef2f2; border-color: #fecaca; }
+.appr-fw-cell.lvl-1 .appr-fw-val { color: #b91c1c; }
 .appr-band {
   min-width: 26px; height: 26px; border-radius: 7px; font-size: .78rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
@@ -693,28 +720,50 @@ body:has(> .page-footer) > .page-wrap {
    and moved back to its original parent on close. There is deliberately no
    second copy of the F1/F2/F3/F4 markup: new entries and existing records
    are the same form, so they cannot drift apart. */
+/* The dialog is bounded to the viewport and the BODY scrolls, not the overlay.
+   Letting the overlay scroll made the modal grow past the screen, pushing the
+   header off the top and hiding the close button on a long F2 (45 items). */
 .scoring-modal-back {
   position: fixed; inset: 0; background: rgba(15,15,30,.55); z-index: 9000;
-  display: none; align-items: flex-start; justify-content: center;
-  padding: 24px 16px; overflow-y: auto;
+  display: none; align-items: center; justify-content: center;
+  padding: 20px 16px; overflow: hidden;
 }
 .scoring-modal-back.is-open { display: flex; }
 .scoring-modal {
   background: #f7f7fb; border-radius: 18px; width: 100%; max-width: 1200px;
-  box-shadow: 0 8px 48px rgba(0,0,0,.24); overflow: hidden; margin: auto;
+  box-shadow: 0 8px 48px rgba(0,0,0,.24);
+  max-height: calc(100vh - 40px);
+  display: flex; flex-direction: column; overflow: hidden;
 }
 .scoring-modal-head {
-  padding: 16px 22px; background: #fff; border-bottom: 1px solid #eceaf5;
+  padding: 14px 20px; background: #fff; border-bottom: 1px solid #eceaf5;
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
-  position: sticky; top: 0; z-index: 5;
+  flex: 0 0 auto;                       /* header never scrolls away */
 }
-.scoring-modal-head h2 { font-size: .98rem; font-weight: 800; color: #1e293b; margin: 0; }
-.scoring-modal-head .sub { font-size: .73rem; color: #94a3b8; margin-top: 2px; }
-.scoring-modal-body { padding: 0; }
+.scoring-modal-head h2 { font-size: .95rem; font-weight: 800; color: #1e293b; margin: 0; }
+.scoring-modal-head .sub { font-size: .72rem; color: #94a3b8; margin-top: 2px; }
+/* min-height:0 is required — without it a flex child refuses to shrink below
+   its content height and the max-height above would do nothing. */
+.scoring-modal-body {
+  padding: 0; flex: 1 1 auto; min-height: 0; overflow-y: auto;
+  overscroll-behavior: contain;         /* don't chain scroll to the page behind */
+}
 /* The scoring phase renders its own page-wrap padding; inside the modal that
    double-pads, so trim it back. */
-.scoring-modal-body > #scoringPhase > .page-wrap { padding-left: 20px; padding-right: 20px; }
+.scoring-modal-body > #scoringPhase > .page-wrap {
+  padding-left: 20px; padding-right: 20px; padding-bottom: 24px;
+}
+/* The sidebar sticks to the modal's scroll container, not the window. */
+.scoring-modal-body .sticky-sidebar { top: 12px; }
+.scoring-modal-body::-webkit-scrollbar { width: 10px; }
+.scoring-modal-body::-webkit-scrollbar-track { background: #f1f0f7; }
+.scoring-modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1; border-radius: 99px; border: 2px solid #f1f0f7;
+}
+.scoring-modal-body::-webkit-scrollbar-thumb:hover { background: #a8b3c2; }
 @media (max-width: 900px) {
+  .scoring-modal-back { padding: 10px 8px; }
+  .scoring-modal { max-height: calc(100vh - 20px); }
   .scoring-modal-body > #scoringPhase > .page-wrap { padding-left: 12px; padding-right: 12px; }
 }
 
@@ -744,10 +793,26 @@ body:has(> .page-footer) > .page-wrap {
   font-size: .82rem; color: #374151; line-height: 1.6; margin: 0 0 12px;
   white-space: pre-wrap;
 }
+/* Shed the least load-bearing columns first as width runs out: status pill,
+   then the composite figure — the F1–F4 cells are the point of the row and are
+   the last thing to go. */
+@media (max-width: 1080px) {
+  .appr-row { grid-template-columns: 34px minmax(0,1fr) auto auto auto; }
+  .appr-row .appr-status { display: none; }
+}
+@media (max-width: 860px) {
+  .appr-row { grid-template-columns: 34px minmax(0,1fr) auto auto; }
+  .appr-row .appr-score { display: none; }
+}
 @media (max-width: 640px) {
   .appr-sum-grid { grid-template-columns: repeat(2, 1fr); }
-  .appr-row { grid-template-columns: 34px 1fr auto; }
-  .appr-row .appr-status { display: none; }
+  /* Stack: identity on one line, the four means wrapping beneath it. */
+  .appr-row {
+    grid-template-columns: 34px minmax(0,1fr) auto;
+    row-gap: 8px;
+  }
+  .appr-row .appr-fw { grid-column: 1 / -1; flex-wrap: wrap; }
+  .appr-fw-cell { flex: 1 1 auto; }
 }
 
 .rubric-modal-overlay {
@@ -3664,7 +3729,7 @@ function openScoringModal(targetTab) {
   document.getElementById('scoringModalBack').classList.add('is-open');
   document.body.style.overflow = 'hidden';
   switchTab(targetTab || (sessionMode === 'endofyear' ? 'f3' : 'f1'));
-  document.getElementById('scoringModalBack').scrollTop = 0;
+  body.scrollTop = 0;   // the body is the scroll container, not the overlay
 }
 window.openScoringModal = openScoringModal;
 
@@ -3801,7 +3866,15 @@ function switchTab(tab) {
     renderFollowUpCheckIn();
   }
   renderSectionSwitcher(tab);
-  window.scrollTo({top:0,behavior:'smooth'});
+  // The form lives inside the modal, whose body is the scroll container — the
+  // window behind it is frozen, so window.scrollTo() would be a no-op and the
+  // reader would land mid-list after switching section.
+  const modalBody = document.getElementById('scoringModalBody');
+  if (modalBody?.contains(document.getElementById('scoringPhase'))) {
+    modalBody.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
   // Auto-save draft to Firestore on tab switch if there are any scores
   if (Object.keys(scores).length > 0 && getLevel() && typeof window.saveAppraisal === 'function') {
     clearTimeout(autoSaveTimer);
@@ -4599,6 +4672,28 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
               D:['#ffedd5','#c2410c'], F:['#fee2e2','#b91c1c'] })[band] || ['#f1f5f9','#94a3b8'];
   }
 
+  // The four framework means for one row. Each is a 1–4 mean, so the tint band is
+  // just the rounded value. F4 reads surveyMean, which saveAppraisal() keeps equal
+  // to the composite's F4 figure — below the 80% response threshold it is null,
+  // and a dash is the honest rendering of "not scored", not 0.00.
+  function apprFwCells(r) {
+    const cells = [
+      ['F1', r.f1Score],
+      ['F2', r.f2Score],
+      ['F3', r.f3Score],
+      ['F4', r.surveyMean],
+    ];
+    return cells.map(([label, val]) => {
+      const has = typeof val === 'number' && isFinite(val);
+      const cls = has ? `lvl-${Math.max(1, Math.min(4, Math.round(val)))}` : 'is-empty';
+      return `<span class="appr-fw-cell ${cls}" title="${label} — ${
+        has ? val.toFixed(2) + ' / 4.00' : 'not scored yet'}">
+        <span class="appr-fw-lbl">${label}</span>
+        <span class="appr-fw-val">${has ? val.toFixed(2) : '—'}</span>
+      </span>`;
+    }).join('');
+  }
+
   function renderAppraisedTeachers() {
     const bodyEl = document.getElementById('apprListBody');
     const countEl = document.getElementById('apprListCount');
@@ -4642,6 +4737,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           <span class="appr-meta">${esc(lv)} · ${esc(sess)} · ${esc(date)}${
             r.academicYear ? ' · ' + esc(r.academicYear) : ''}</span>
         </span>
+        <span class="appr-fw">${apprFwCells(r)}</span>
         <span class="appr-score">${pct}<span class="appr-score-sub"> composite</span></span>
         <span class="appr-band" style="background:${bg};color:${fg};">${esc(r.predicate || '—')}</span>
         <span class="appr-status ${esc(st)}">${esc(st)}</span>
