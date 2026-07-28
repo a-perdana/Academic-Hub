@@ -1495,6 +1495,9 @@ body:has(> .page-footer) > .page-wrap {
         Load the existing observation record first so the F1 and F2 scores are
         carried into the composite &mdash; otherwise they count as unscored.
       </div>
+      <!-- Filled by openEoyConfirm() when F1/F2 are missing. -->
+      <div id="eoyConfirmGap" style="display:none;margin-top:12px;padding:11px 13px;
+        background:#fef2f2;border:1px solid #fecaca;border-radius:9px;font-size:.81rem;color:#991b1b;"></div>
     </div>
     <div class="eoy-confirm-foot">
       <button type="button" class="btn-secondary" id="eoyConfirmCancel" style="font-size:.82rem;">Cancel</button>
@@ -4774,7 +4777,26 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   // F3 confirmation dialog
   const eoyBack = document.getElementById('eoyConfirmBack');
-  window.openEoyConfirm = function openEoyConfirm() { eoyBack.classList.add('is-open'); };
+  window.openEoyConfirm = function openEoyConfirm() {
+    // Flag missing F1/F2 up front. The record can still be opened and saved as a
+    // draft — the hard block lives in saveAppraisal(), which refuses to stamp
+    // f3Status:'complete' on a record that would carry a null composite.
+    const lvl  = getLevel();
+    const r    = lvl ? calcScores(lvl) : null;
+    const gaps = [];
+    if (!r?.sections?.f1?.meetsThreshold) gaps.push('F1 Administration');
+    if (!r?.sections?.f2?.meetsThreshold) gaps.push('F2 Class Observation');
+    const gapEl = document.getElementById('eoyConfirmGap');
+    if (gaps.length) {
+      gapEl.innerHTML = `<strong>&#x26A0; ${gaps.join(' and ')} ${gaps.length > 1 ? 'are' : 'is'} not scored yet.</strong>
+        You can open F3 and save a draft, but the annual record cannot be completed
+        until ${gaps.length > 1 ? 'they are' : 'it is'} in place &mdash; load the observation record below.`;
+      gapEl.style.display = '';
+    } else {
+      gapEl.style.display = 'none';
+    }
+    eoyBack.classList.add('is-open');
+  };
   function closeEoyConfirm() { eoyBack.classList.remove('is-open'); }
   document.getElementById('eoyConfirmCancel').addEventListener('click', closeEoyConfirm);
   eoyBack.addEventListener('click', (e) => { if (e.target === eoyBack) closeEoyConfirm(); });
@@ -4838,6 +4860,23 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (!getLevel()) { showToast('Please select an appraisal level.'); return; }
     const level = getLevel();
     const r     = calcScores(level);
+
+    // An end-of-year submission stamps f3Status:'complete' — the record reads as
+    // "year closed". Without F1 + F2 that claim is false: calcScores() would
+    // leave compositePercent and predicate null, so the record would be marked
+    // finished with no score attached. Block the submission (drafts and the
+    // silent autosave still go through, so work in progress is never lost).
+    if (isEoy && status !== 'draft' && !silent) {
+      const gaps = [];
+      if (!r?.sections?.f1?.meetsThreshold) gaps.push('F1 Administration');
+      if (!r?.sections?.f2?.meetsThreshold) gaps.push('F2 Class Observation');
+      if (gaps.length) {
+        showToast(
+          `Cannot complete the annual record — ${gaps.join(' and ')} ${gaps.length > 1 ? 'are' : 'is'} not scored. ` +
+          `Load the observation record, or save this as a draft.`, 7000);
+        return;
+      }
+    }
 
     // Warn about score ≤ 2 items with no supporting note (fix #4)
     const missingNotes = Object.entries(scores)
