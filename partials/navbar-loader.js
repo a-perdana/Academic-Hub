@@ -758,6 +758,7 @@ const NAV_ITEMS = [
     // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
     { key: 'admin-read-me-academic-coord', href: '/admin-read-me-academic-coord', label: 'Read Me First' },
     { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-levels',              href: '/teacher-levels',              label: 'Teacher Levels' },
     { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
     { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
     { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
