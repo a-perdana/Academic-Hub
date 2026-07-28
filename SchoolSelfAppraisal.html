@@ -865,6 +865,70 @@ a.ref-pill:hover {
 }
 .action-bar-left { font-size:12px; color:var(--ink-3); }
 .action-bar-btns { display:flex; gap:8px; }
+
+/* Submit is one-way for the school: once status leaves 'draft' every input on
+   this page is disabled and only Eduversal can reopen it. The action bar is
+   fixed, so a leader working inside one domain sees "Submit for Review" the
+   whole time and can read it as "submit this domain". These two surfaces —
+   the scope line in the bar, and the pre-submit review modal — exist to make
+   the whole-form scope and the finality unmissable before the click lands. */
+.action-bar-scope {
+  display:block; font-size:11px; color:var(--ink-3); margin-top:2px;
+}
+.action-bar-scope strong { color:#b45309; font-weight:700; }
+
+.submit-modal-overlay {
+  position:fixed; inset:0; z-index:400; background:rgba(15,23,42,.55);
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.submit-modal {
+  background:var(--white); border-radius:14px; width:100%; max-width:560px;
+  max-height:86vh; display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:0 24px 60px rgba(15,23,42,.28);
+}
+.submit-modal-head {
+  padding:20px 24px 14px; border-bottom:1px solid var(--border);
+}
+.submit-modal-head h3 { margin:0 0 4px; font-size:1.15rem; font-weight:800; color:var(--ink); }
+.submit-modal-head p { margin:0; font-size:13px; color:var(--ink-2); line-height:1.5; }
+.submit-modal-body { padding:16px 24px; overflow-y:auto; }
+.submit-modal-foot {
+  padding:14px 24px; border-top:1px solid var(--border);
+  display:flex; justify-content:flex-end; gap:8px; background:var(--paper);
+}
+.sm-dom-row {
+  display:flex; align-items:center; gap:10px; padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
+.sm-dom-row:last-child { border-bottom:none; }
+.sm-dom-name { flex:1; font-size:13px; font-weight:600; color:var(--ink); }
+.sm-dom-count { font-size:12px; font-weight:700; font-variant-numeric:tabular-nums; }
+.sm-dom-row.is-complete .sm-dom-count { color:#047857; }
+.sm-dom-row.is-partial  .sm-dom-count { color:#b45309; }
+.sm-dom-row.is-empty    .sm-dom-count { color:#b91c1c; }
+.sm-dom-tick { width:16px; text-align:center; font-size:13px; }
+.sm-warn {
+  margin-top:14px; padding:12px 14px; border-radius:10px;
+  background:#fffbeb; border:1px solid #fcd34d; color:#92400e;
+  font-size:12.5px; line-height:1.55;
+}
+.sm-warn strong { font-weight:800; }
+.sm-lock {
+  margin-top:10px; padding:12px 14px; border-radius:10px;
+  background:#f8fafc; border:1px solid var(--border); color:var(--ink-2);
+  font-size:12.5px; line-height:1.55;
+}
+.btn-sm-cancel {
+  padding:9px 18px; border-radius:9px; border:1.5px solid var(--border);
+  background:var(--white); color:var(--ink-2); font-size:13px; font-weight:600;
+  cursor:pointer; font-family:inherit;
+}
+.btn-sm-confirm {
+  padding:9px 18px; border-radius:9px; border:none;
+  background:#b45309; color:#fff; font-size:13px; font-weight:700;
+  cursor:pointer; font-family:inherit;
+}
+.btn-sm-confirm:hover { background:#92400e; }
 .btn-save-draft {
   padding:9px 18px; border-radius:9px; border:1.5px solid var(--border);
   background:var(--white); color:var(--ink-2); font-size:13px; font-weight:600;
@@ -1095,10 +1159,36 @@ a.ref-pill:hover {
 </footer>
 
 <div class="action-bar" id="actionBar" style="display:none;">
-  <span class="action-bar-left" id="actionStatus">Unsaved changes</span>
+  <div>
+    <span class="action-bar-left" id="actionStatus">Unsaved changes</span>
+    <!-- Names the scope explicitly. The bar is fixed and visible while the
+         leader works inside a single domain, so "Submit for Review" alone
+         reads as "submit this domain". -->
+    <span class="action-bar-scope" id="actionScope"></span>
+  </div>
   <div class="action-bar-btns">
     <button class="btn-save-draft" id="btnSaveDraft">Save Draft</button>
-    <button class="btn-submit" id="btnSubmit">Submit for Review</button>
+    <!-- Domain count is re-set from FRAMEWORK once it loads; the literal is the
+         pre-load fallback so the button is never ambiguous even for that beat. -->
+    <button class="btn-submit" id="btnSubmit">Submit all 5 domains for Review</button>
+  </div>
+</div>
+
+<!-- Pre-submit review. Replaces a bare confirm() that only said "you completed
+     N of M aspects" — a leader who filled one domain read that as a rounding
+     detail rather than "four domains are empty". This lists every domain by
+     name with its own count, so an unfinished one is impossible to miss. -->
+<div class="submit-modal-overlay" id="submitModal" style="display:none;">
+  <div class="submit-modal" role="dialog" aria-modal="true" aria-labelledby="smTitle">
+    <div class="submit-modal-head">
+      <h3 id="smTitle">Submit your self-appraisal</h3>
+      <p>This submits <strong>all five domains</strong> — the whole self-appraisal, not the domain you are currently viewing.</p>
+    </div>
+    <div class="submit-modal-body" id="smBody"></div>
+    <div class="submit-modal-foot">
+      <button class="btn-sm-cancel" id="smCancel">Keep editing</button>
+      <button class="btn-sm-confirm" id="smConfirm">Submit for review</button>
+    </div>
   </div>
 </div>
 
@@ -1108,7 +1198,7 @@ a.ref-pill:hover {
 <script src="partials/navbar-loader.js"></script>
 <script type="module">
 import {
-  collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp
+  collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp, arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import {
   getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject
@@ -1201,6 +1291,52 @@ function totalCompletion() {
   return { done, total };
 }
 
+// ===== PRE-SUBMIT REVIEW =====
+// Submitting is one-way from the school's side: the rule lets them write, but
+// every input on this page disables the moment status leaves 'draft', and only
+// Eduversal can reopen it. The failure this guards against is a leader who
+// completes one domain and submits believing they submitted only that domain.
+// A per-domain breakdown makes the four empty ones visible at the decision
+// point, which a single aggregate count never did.
+function openSubmitModal() {
+  if (!FRAMEWORK) return;
+  const rows = FRAMEWORK.domains.map(d => {
+    const { done, total } = domainCompletion(d.id);
+    const cls  = done === 0 ? 'is-empty' : (done < total ? 'is-partial' : 'is-complete');
+    const tick = done === 0 ? '○' : (done < total ? '◐' : '●');
+    return `<div class="sm-dom-row ${cls}">
+      <span class="sm-dom-tick">${tick}</span>
+      <span class="sm-dom-name">${escHtml(d.code)} · ${escHtml(d.title)}</span>
+      <span class="sm-dom-count">${done}/${total}</span>
+    </div>`;
+  }).join('');
+
+  const { done, total } = totalCompletion();
+  const emptyDomains = FRAMEWORK.domains.filter(d => domainCompletion(d.id).done === 0);
+  const partial = done < total;
+
+  let warn = '';
+  if (emptyDomains.length) {
+    warn = `<div class="sm-warn"><strong>${emptyDomains.length} domain${emptyDomains.length === 1 ? ' has' : 's have'} no ratings at all:</strong>
+      ${escHtml(emptyDomains.map(d => d.code).join(', '))}.
+      If you submit now, ${emptyDomains.length === 1 ? 'it' : 'they'} will be reviewed as unrated.</div>`;
+  } else if (partial) {
+    warn = `<div class="sm-warn">You have rated <strong>${done} of ${total}</strong> aspects. The unrated ones will be reviewed as unrated.</div>`;
+  }
+
+  document.getElementById('smBody').innerHTML = rows + warn +
+    `<div class="sm-lock">After you submit, this form locks and you cannot edit your
+     ratings or evidence. Only Eduversal can reopen it — contact your supervisor
+     if you submit by mistake.</div>`;
+
+  document.getElementById('smConfirm').textContent = partial
+    ? 'Submit incomplete' : 'Submit for review';
+  document.getElementById('submitModal').style.display = 'flex';
+}
+function closeSubmitModal() {
+  document.getElementById('submitModal').style.display = 'none';
+}
+
 // ===== FIND / CREATE =====
 async function findOrCreateAppraisal(profile) {
   const schoolId = profile.schoolId || null;
@@ -1237,7 +1373,22 @@ async function findOrCreateAppraisal(profile) {
 async function saveAppraisal(newStatus) {
   if (!appraisalDocId || isReviewed) return;
   document.getElementById('actionStatus').textContent = 'Saving…';
-  const status = newStatus || appraisalDoc.status || 'draft';
+  const prevStatus = appraisalDoc.status || 'draft';
+  const status = newStatus || prevStatus;
+  // Record the school's own submit. This is the event most likely to be
+  // disputed later ("we never meant to submit"), and until now nothing on the
+  // record said who pressed the button or when — `updatedBy` is overwritten by
+  // the next save. CH appends the same shape for its own transitions.
+  // ISO string, not serverTimestamp(): Firestore rejects a sentinel in an array.
+  const historyRow = (status !== prevStatus) ? {
+    from: prevStatus,
+    to: status,
+    at: new Date().toISOString(),
+    by: window.currentUser?.email || '',
+    byName: window.userProfile?.displayName || '',
+    action: 'advance',
+    via: 'academichub'
+  } : null;
   await setDoc(doc(window.db, 'school_appraisals_v2', appraisalDocId), {
     ratings: appraisalDoc.ratings || {},
     evidence: appraisalDoc.evidence || {},
@@ -1245,6 +1396,7 @@ async function saveAppraisal(newStatus) {
     links: appraisalDoc.links || {},
     strengths: appraisalDoc.strengths || '',
     improvements: appraisalDoc.improvements || '',
+    ...(historyRow ? { statusHistory: arrayUnion(historyRow) } : {}),
     status, updatedAt: serverTimestamp(), updatedBy: window.currentUser?.email || ''
   }, { merge: true });
   appraisalDoc.status = status;
@@ -1293,6 +1445,19 @@ function updateSidebarScores() {
   // also update progress bar if on overview
   const phFill = document.getElementById('progressFill'); if (phFill) phFill.style.width = pct + '%';
   const phPct  = document.getElementById('progressPct');  if (phPct)  phPct.textContent  = pct + '%';
+  // Scope line under the action bar's status. Says what Submit covers and how
+  // far off the whole form is — the bar is fixed, so this is on screen while
+  // the leader works inside a single domain.
+  const scopeEl = document.getElementById('actionScope');
+  if (scopeEl) {
+    const emptyCount = FRAMEWORK.domains.filter(d => domainCompletion(d.id).done === 0).length;
+    const domCount = FRAMEWORK.domains.length;
+    const submitBtn = document.getElementById('btnSubmit');
+    if (submitBtn) submitBtn.textContent = `Submit all ${domCount} domains for Review`;
+    scopeEl.innerHTML = emptyCount
+      ? `Submit covers all ${domCount} domains · <strong>${emptyCount} domain${emptyCount === 1 ? '' : 's'} not started</strong>`
+      : `Submit covers all ${domCount} domains · ${done}/${total} aspects rated`;
+  }
 }
 
 function showNotice(type) {
@@ -2523,9 +2688,13 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   }
 
   document.getElementById('btnSaveDraft').addEventListener('click', () => saveAppraisal('draft'));
-  document.getElementById('btnSubmit').addEventListener('click', async () => {
-    const { done, total } = totalCompletion();
-    if (done < total && !confirm(`You have only completed ${done} of ${total} aspects. Submit anyway?`)) return;
+  document.getElementById('btnSubmit').addEventListener('click', openSubmitModal);
+  document.getElementById('smCancel').addEventListener('click', closeSubmitModal);
+  document.getElementById('submitModal').addEventListener('click', e => {
+    if (e.target.id === 'submitModal') closeSubmitModal();
+  });
+  document.getElementById('smConfirm').addEventListener('click', async () => {
+    closeSubmitModal();
     await saveAppraisal('submitted');
   });
 
