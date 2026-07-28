@@ -305,6 +305,40 @@ a.ref-pill:hover {
   letter-spacing:.06em; color:#78716c; margin-bottom:14px;
 }
 .cyc-steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:12px; }
+
+/* "What this framework is built on" — the six sources of the blend, rendered
+   from FRAMEWORK.meta.global_benchmarks. CH shows the same data on a dark hero;
+   here it sits inside the light .cyc card, so it follows .cyc-step's palette
+   rather than CH's translucent-on-dark treatment. Collapsed by default —
+   context for a school that wants it, not a step in the work. */
+.ab-details { margin-top:16px; border-top:1px solid #e7e5e4; padding-top:14px; }
+.ab-summary {
+  cursor:pointer; font-size:.72rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:.06em; color:#78716c; list-style:none;
+  display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+}
+.ab-summary::-webkit-details-marker { display:none; }
+.ab-summary::before { content:'▸'; font-size:.8rem; transition:transform .15s; }
+.ab-details[open] .ab-summary::before { transform:rotate(90deg); }
+.ab-summary-hint {
+  text-transform:none; letter-spacing:0; font-weight:500;
+  font-size:.72rem; color:#a8a29e;
+}
+.ab-intro { margin:12px 0 14px; font-size:.82rem; line-height:1.6; color:#57534e; }
+.academic-basis-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px;
+}
+.ab-frame {
+  border:1px solid #e7e5e4; border-radius:10px; background:#fafaf9; padding:12px 14px 14px;
+}
+.ab-frame-flag {
+  display:inline-flex; align-items:center; gap:4px;
+  font-family:'DM Mono', monospace; font-size:.62rem; font-weight:700;
+  text-transform:uppercase; letter-spacing:.05em; color:#78716c;
+}
+.ab-frame-name { font-weight:700; font-size:.86rem; color:#1c1917; margin-top:6px; }
+.ab-frame-meta { font-size:.7rem; color:#a8a29e; font-style:italic; margin-top:2px; }
+.ab-frame-desc { font-size:.78rem; line-height:1.55; color:#57534e; margin-top:8px; }
 .cyc-step {
   display:flex; gap:10px; padding:12px 13px;
   border:1px solid #e7e5e4; border-radius:10px; background:#fafaf9;
@@ -1845,7 +1879,34 @@ function renderCycleStrip() {
       <div class="cyc-head">How the appraisal year works</div>
       <div class="cyc-steps">${cards}</div>
       ${supLine}
+      ${renderBenchmarks()}
     </div>`;
+}
+
+// The frameworks this one is built on. Rendered from
+// meta.global_benchmarks so CH and AH show the same six sources from one file.
+// AH had nothing here until 2026-07-29 — a school doing its own self-appraisal
+// could not see what it was being rated against, only that it was being rated.
+// Collapsed by default: it is context, not a step in the work.
+// ES Section 24 is the authority for the content.
+function renderBenchmarks() {
+  const gb = FRAMEWORK?.meta?.global_benchmarks;
+  if (!gb || !Array.isArray(gb.items) || !gb.items.length) return '';
+  const cards = gb.items.map(b => `
+    <div class="ab-frame">
+      <span class="ab-frame-flag">${escHtml(b.flag || '')} ${escHtml(b.regionLabel || '')}</span>
+      <div class="ab-frame-name">${escHtml(b.name)}</div>
+      <div class="ab-frame-meta">${escHtml(b.meta || '')}</div>
+      <p class="ab-frame-desc">${escHtml(b.contribution || '')}</p>
+    </div>`).join('');
+  return `
+    <details class="ab-details">
+      <summary class="ab-summary">What this framework is built on
+        <span class="ab-summary-hint">${gb.items.length} international and Indonesian sources</span>
+      </summary>
+      <p class="ab-intro">${escHtml(gb.description || '')}</p>
+      <div class="academic-basis-grid">${cards}</div>
+    </details>`;
 }
 
 // ===== APPEALS (Updated Appraisal Model §8.1) =====
