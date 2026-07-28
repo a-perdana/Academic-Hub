@@ -1041,9 +1041,9 @@ body:has(> .page-footer) > .page-wrap {
           <div class="fw-ov-badge" style="background:#ecfeff;color:#0e7490;">F3</div>
           <div class="fw-ov-main">
             <div class="fw-ov-title" style="color:#0e7490;">Work Inspection <span class="fw-ov-weight" style="background:#ecfeff;color:#0e7490;">20%</span></div>
-            <div class="fw-ov-desc">Professional conduct, responsibilities beyond the classroom, and school community contribution. Lead teachers are assessed on 6 additional leadership items (F3L).</div>
+            <div class="fw-ov-desc">Professional conduct, responsibilities beyond the classroom, and school community contribution. Lead teachers are assessed on 10 additional leadership items (F3L).</div>
             <div class="fw-ov-meta">
-              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-items">📋 10 items (+ 6 Lead-only)</span>
+              <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-items">📋 10 items (+ 10 Lead-only)</span>
               <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-who">👤 Appraiser</span>
               <span class="fw-ov-chip chip-teal fw-ov-tip" data-tip="f3-when">🗓 End-of-Year Conference</span>
             </div>
@@ -2139,7 +2139,7 @@ function buildF3(level) {
     html += `<div style="padding:10px 24px;background:#ecfeff;border-bottom:1px solid #a5f3fc;
       font-size:.78rem;color:#0e7490;display:flex;align-items:center;gap:8px;">
       <span>&#x1F4CB;</span>
-      <span><strong>Lead level — ${totalF3Items} items total:</strong> ${visibleF3.length} core + 6 F3L Leadership items (expanded below)</span>
+      <span><strong>Lead level — ${totalF3Items} items total:</strong> ${visibleF3.length} core + ${f3Lfw?.items?.length || 0} F3L Leadership items (expanded below)</span>
     </div>`;
   }
 
@@ -3682,13 +3682,13 @@ const FW_TIP_CONTENT = {
   },
   'lvl-lead': {
     title: '🟢 Lead Level (Subject Leader / HoD)',
-    body: `<p>Subject Leaders and Heads of Department. Assessed on the full F2 item set plus 6 additional <strong>F3L Leadership items</strong>.</p>
-      <p style="margin-top:8px;">F3L adds: Subject Expertise & Knowledge Sharing, Coaching & Mentoring, Curriculum Leadership, Data-Informed Departmental Decision Making, Professional Community Building, Strategic Communication with Stakeholders.</p>
-      <p style="margin-top:8px;">D3: 21 items · D4: 6 items · F3: 10 items + F3L: 6 leadership items · Requires two appraisers.</p>`
+    body: `<p>Subject Leaders and Heads of Department. Assessed on the full F2 item set plus 10 additional <strong>F3L Leadership items</strong>.</p>
+      <p style="margin-top:8px;">F3L adds: Subject Expertise &amp; Knowledge Sharing, Coaching &amp; Mentoring, Curriculum Leadership, Data-Informed Departmental Decision Making, Professional Community Building, Strategic Communication with Stakeholders, Lesson Plan Quality Governance, Walkthrough Discipline &amp; Database Integrity, PLC Facilitation &amp; Monday Commitment Follow-Through, Internal Moderation Leadership.</p>
+      <p style="margin-top:8px;">D3: 21 items · D4: 6 items · F3: 10 items + F3L: 10 leadership items · Requires two appraisers.</p>`
   },
   'f3-items': {
     title: '📋 F3 — Items',
-    body: `<p>F3 has <strong>10 core items</strong> on professional conduct and responsibilities beyond the classroom. Lead teachers also receive <strong>6 additional F3L leadership items</strong>.</p>
+    body: `<p>F3 has <strong>10 core items</strong> on professional conduct and responsibilities beyond the classroom. Lead teachers also receive <strong>10 additional F3L leadership items</strong>.</p>
       <p style="margin-top:8px;"><strong>Core items (all levels):</strong></p>
       <ul style="padding-left:18px;margin-top:4px;">
         <li>Work Punctuality and Deadline Adherence</li>
@@ -3699,7 +3699,7 @@ const FW_TIP_CONTENT = {
         <li>Upholding Student Dignity and Positive Reinforcement</li>
       </ul>
       <p style="margin-top:8px;"><strong>Developing+ adds:</strong> Leadership Skills & Initiative, Co-Curricular Contribution, Contribution to School Community, Communication with Stakeholders.</p>
-      <p style="margin-top:8px;"><strong>F3L (Lead only):</strong> Curriculum Leadership, Coaching & Mentoring, Data-Informed Decisions, Professional Community Building, Subject Expertise Sharing, Strategic Communication.</p>`
+      <p style="margin-top:8px;"><strong>F3L (Lead only):</strong> Curriculum Leadership, Coaching &amp; Mentoring, Data-Informed Decisions, Professional Community Building, Subject Expertise Sharing, Strategic Communication, Lesson Plan Quality Governance, Walkthrough Discipline &amp; Database Integrity, PLC Facilitation &amp; Monday Commitment Follow-Through, Internal Moderation Leadership.</p>`
   },
   'f3-who': {
     title: '👤 Who fills F3?',
