@@ -192,6 +192,34 @@ body:has(> .page-footer) > .page-wrap {
 }
 .fw-tab.active .fw-tab-count { background: #ede9fe; color: #7c3aed; }
 
+/* Locked tab preview — shown on the setup screen so the appraiser can see
+   the whole structure before committing. Unlocks as required fields fill. */
+.fw-tab.is-locked { color: #cbd5e1; cursor: not-allowed; }
+.fw-tab.is-locked:hover { color: #cbd5e1; }
+.fw-tab.is-locked .fw-tab-count { background: #f8fafc; color: #cbd5e1; }
+.fw-tab-lock { font-size: .72rem; line-height: 1; }
+.fw-tabs-bar.is-preview { margin-bottom: 14px; }
+.fw-tabs-hint {
+  font-size: .72rem; color: #94a3b8; padding: 0 4px 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.fw-tabs-hint.is-ready { color: #7c3aed; font-weight: 600; }
+
+/* Optional-details accordion on the setup screen */
+.setup-fold > summary {
+  list-style: none; cursor: pointer; padding: 14px 24px;
+  display: flex; align-items: center; gap: 10px;
+  font-size: .85rem; font-weight: 700; color: #475569;
+}
+.setup-fold > summary::-webkit-details-marker { display: none; }
+.setup-fold > summary:hover { color: #7c3aed; }
+.setup-fold > summary .fold-chevron { transition: transform .18s; color: #94a3b8; }
+.setup-fold[open] > summary .fold-chevron { transform: rotate(180deg); }
+.setup-fold > summary .fold-sub {
+  font-size: .72rem; font-weight: 500; color: #94a3b8; margin-left: auto;
+}
+.setup-fold .card-body { padding-top: 4px; border-top: 1px solid #f1f5f9; }
+
 /* ── CARDS ── */
 .card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
@@ -1156,6 +1184,29 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
+    <!-- Locked framework preview — shows the whole structure up front.
+         Unlocks the moment the required fields are filled (see refreshSetupGate). -->
+    <div class="fw-tabs-bar is-preview" id="setupTabsPreview">
+      <button type="button" class="fw-tab is-locked" data-preview-tab="f1" disabled>
+        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F1 Admin <span class="fw-tab-count">9</span>
+      </button>
+      <button type="button" class="fw-tab is-locked" data-preview-tab="f2" disabled>
+        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F2 Observation <span class="fw-tab-count" id="previewCountF2">—</span>
+      </button>
+      <button type="button" class="fw-tab is-locked" data-preview-tab="f3" id="previewTabF3" style="display:none;" disabled>
+        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F3 Work <span class="fw-tab-count" id="previewCountF3">—</span>
+      </button>
+      <button type="button" class="fw-tab is-locked" data-preview-tab="f4" disabled>
+        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F4 Student Survey <span class="fw-tab-count">17</span>
+      </button>
+      <button type="button" class="fw-tab is-locked" data-preview-tab="review" disabled>
+        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> Review &amp; Submit
+      </button>
+    </div>
+    <div class="fw-tabs-hint" id="setupTabsHint">
+      <span id="setupTabsHintText">Select a teacher and an appraisal level to unlock scoring.</span>
+    </div>
+
     <div class="card">
       <div class="card-head"><h2>Teacher Information</h2></div>
       <div class="card-body">
@@ -1177,24 +1228,67 @@ body:has(> .page-footer) > .page-wrap {
             <input type="hidden" id="schoolId">
           </div>
         </div>
-        <div class="form-row">
-          <div class="field">
-            <label>Subject</label>
-            <input aria-label="e.g. Mathematics" type="text" id="subject" placeholder="e.g. Mathematics">
-          </div>
+        <!-- Required essentials sit together, above the fold: who + which level + when.
+             Everything else is optional and lives in the fold below. -->
+        <div class="form-row three">
           <div class="field">
             <label>Academic Year</label>
             <select id="academicYear"></select>
           </div>
+          <div class="field" id="levelFieldSlot">
+            <label>Appraisal Level <span style="color:#dc2626">*</span></label>
+            <select id="appraisalLevel">
+              <option value="">— Select level —</option>
+              <option value="induction">Induction (Year 1–2)</option>
+              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+              <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
+              <option value="lead">Lead (Subject Leader / HoD)</option>
+            </select>
+          </div>
+          <div class="field" id="obsDateSlot">
+            <label>Observation Date <span style="color:#dc2626">*</span></label>
+            <input type="date" id="observationDate">
+          </div>
+          <div class="field" id="eoyDateSlot" style="display:none;">
+            <label>Conference Date <span style="color:#dc2626">*</span></label>
+            <input type="date" id="conferenceDate">
+          </div>
         </div>
+        <!-- Hidden mirror of #appraisalLevel. The two setup screens were merged into
+             one level picker, but ~15 call sites (draft load, prior-record load,
+             coaching questions, save payload) still address the EOY select by id.
+             syncLevelMirror() keeps this in lockstep so those paths keep working. -->
+        <select id="appraisalLevelEoy" style="display:none;" aria-hidden="true" tabindex="-1">
+          <option value="">— Select level —</option>
+          <option value="induction">Induction (Year 1–2)</option>
+          <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
+          <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
+          <option value="lead">Lead (Subject Leader / HoD)</option>
+        </select>
+        <div class="form-row" id="secondAppraiserRow" style="display:none;">
+          <div class="field">
+            <label>Second Appraiser Name <span style="color:#dc2626">*</span></label>
+            <input aria-label="Full name (Lead level requires two appraisers)" type="text" id="secondAppraiserName" placeholder="Full name (Lead level requires two appraisers)">
+          </div>
+          <div class="field">
+            <label>Second Appraiser UID (Firestore)</label>
+            <input aria-label="uid from users/{uid}" type="text" id="secondAppraiserUid" placeholder="uid from users/{uid}">
+          </div>
+        </div>
+        <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+        <div id="eoyLevelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
+        <!-- Previous follow-up banner — injected by JS when prior record found -->
+        <div id="prevFollowUpBanner" style="display:none;"></div>
       </div>
     </div>
 
     <!-- Pre-Conference Notes (observation mode only) -->
-    <div class="card" id="preConferenceCard">
-      <div class="card-head">
-        <div><h2>Pre-Conference Notes</h2><div class="card-head-sub">From the pre-observation meeting with the teacher</div></div>
-      </div>
+    <details class="card setup-fold" id="preConferenceCard">
+      <summary>
+        <span>Pre-Conference Notes</span>
+        <span class="fold-sub">Optional · from the pre-observation meeting</span>
+        <span class="fold-chevron" aria-hidden="true">&#x25BE;</span>
+      </summary>
       <div class="card-body">
         <div class="form-row one">
           <div class="field">
@@ -1213,81 +1307,43 @@ body:has(> .page-footer) > .page-wrap {
           </div>
         </div>
       </div>
-    </div>
+    </details>
 
-    <!-- Observation Setup (observation mode) -->
-    <div class="card" id="obsSetupCard">
-      <div class="card-head"><h2>Observation Setup</h2></div>
+    <!-- Lesson details (observation mode) — all optional, folded by default -->
+    <details class="card setup-fold" id="obsSetupCard">
+      <summary>
+        <span>Lesson details</span>
+        <span class="fold-sub">Optional · subject, class, duration, topic</span>
+        <span class="fold-chevron" aria-hidden="true">&#x25BE;</span>
+      </summary>
       <div class="card-body">
         <div class="form-row">
           <div class="field">
-            <label>Observation Date</label>
-            <input type="date" id="observationDate">
+            <label>Subject</label>
+            <input aria-label="e.g. Mathematics" type="text" id="subject" placeholder="e.g. Mathematics">
           </div>
-          <div class="field">
-            <label>Appraisal Level <span style="color:#dc2626">*</span></label>
-            <select id="appraisalLevel">
-              <option value="">— Select level —</option>
-              <option value="induction">Induction (Year 1–2)</option>
-              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
-              <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
-              <option value="lead">Lead (Subject Leader / HoD)</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-row">
           <div class="field">
             <label>Year Group / Class Observed</label>
             <input aria-label="e.g. Year 10A" type="text" id="yearGroup" placeholder="e.g. Year 10A">
           </div>
+        </div>
+        <div class="form-row">
           <div class="field">
             <label>Lesson Duration (minutes)</label>
             <input type="number" id="lessonDuration" value="40" min="20" max="90">
           </div>
-        </div>
-        <div class="form-row one">
           <div class="field">
             <label>Lesson Topic / Objective</label>
             <input aria-label="Brief description of the lesson observed" type="text" id="lessonTopic" placeholder="Brief description of the lesson observed">
           </div>
         </div>
-        <div class="form-row" id="secondAppraiserRow" style="display:none;">
-          <div class="field">
-            <label>Second Appraiser Name <span style="color:#dc2626">*</span></label>
-            <input aria-label="Full name (Lead level requires two appraisers)" type="text" id="secondAppraiserName" placeholder="Full name (Lead level requires two appraisers)">
-          </div>
-          <div class="field">
-            <label>Second Appraiser UID (Firestore)</label>
-            <input aria-label="uid from users/{uid}" type="text" id="secondAppraiserUid" placeholder="uid from users/{uid}">
-          </div>
-        </div>
-        <div id="levelSummary" style="display:none;margin-top:8px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
-        <!-- Previous follow-up banner — injected by JS when prior record found -->
-        <div id="prevFollowUpBanner" style="display:none;"></div>
       </div>
-    </div>
+    </details>
 
     <!-- End-of-Year Conference Setup (EOY mode) -->
     <div class="card" id="eoySetupCard" style="display:none;">
-      <div class="card-head"><h2>End-of-Year Conference Setup</h2></div>
+      <div class="card-head"><h2>Load Existing Observation Record</h2><div class="card-head-sub">Brings F1 and F2 forward so the composite can be calculated</div></div>
       <div class="card-body">
-        <div class="form-row">
-          <div class="field">
-            <label>Conference Date <span style="color:#dc2626">*</span></label>
-            <input type="date" id="conferenceDate">
-          </div>
-          <div class="field">
-            <label>Appraisal Level <span style="color:#dc2626">*</span></label>
-            <select id="appraisalLevelEoy">
-              <option value="">— Select level —</option>
-              <option value="induction">Induction (Year 1–2)</option>
-              <option value="developing">Developing (Year 3–5 or predicate C/D)</option>
-              <option value="proficient">Proficient (Year 5+ and predicate B+)</option>
-              <option value="lead">Lead (Subject Leader / HoD)</option>
-            </select>
-          </div>
-        </div>
-        <div id="eoyLevelSummary" style="display:none;margin-bottom:16px;padding:12px 16px;background:#f5f3ff;border-radius:10px;border:1px solid #ddd6fe;font-size:.8rem;color:#374151;line-height:1.6;"></div>
         <div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;background:#f8fafc;">
           <div style="font-size:.8rem;font-weight:700;color:#374151;margin-bottom:6px;">&#x1F50D; Load Existing Observation Record</div>
           <div style="font-size:.75rem;color:#64748b;margin-bottom:12px;line-height:1.5;">
@@ -3114,9 +3170,128 @@ function applySessionMode(mode) {
   document.getElementById('eoyNarrativeCard').style.display  = mode === 'endofyear'   ? '' : 'none';
   document.getElementById('f1EoyNote').classList.toggle('visible', mode === 'endofyear');
   document.getElementById('f2EoyNote').classList.toggle('visible', mode === 'endofyear');
+  // Date slot + Lead second-appraiser row follow the mode (both now live in the
+  // merged Teacher Information card rather than two separate setup cards).
+  document.getElementById('obsDateSlot').style.display = mode === 'observation' ? '' : 'none';
+  document.getElementById('eoyDateSlot').style.display = mode === 'endofyear'   ? '' : 'none';
+  document.getElementById('secondAppraiserRow').style.display =
+    (mode === 'observation' && document.getElementById('appraisalLevel').value === 'lead') ? '' : 'none';
+  document.getElementById('previewTabF3').style.display = mode === 'endofyear' ? '' : 'none';
+  syncLevelMirror(document.getElementById('appraisalLevel').value);
+  refreshSetupGate();
   document.getElementById('step1Next').textContent =
     mode === 'observation' ? 'Confirm & Start Scoring →' : 'Confirm & Score F3 →';
 }
+
+// ── SETUP GATE ────────────────────────────────────────────
+// The setup screen shows a locked preview of the F1-F4 tab bar so the appraiser
+// can see the whole structure up front. It unlocks as soon as the genuinely
+// required fields are filled, at which point the tabs become direct entry points
+// and the Confirm button is just a shortcut to the first one.
+
+// Keeps the hidden #appraisalLevelEoy mirror in step with the visible picker.
+function syncLevelMirror(level) {
+  const mirror = document.getElementById('appraisalLevelEoy');
+  if (mirror && mirror.value !== level) mirror.value = level;
+}
+
+// The single source of truth for "can we start scoring?" — mirrors the checks
+// the Confirm button enforces, minus the toasts.
+// `forTab === 'f4'` relaxes the level/date checks: the Student Survey is
+// collected independently during the year and every one of its 17 items is
+// visible_from 'induction', so it needs nothing but a teacher to be enterable.
+function setupMissingFields(forTab) {
+  const missing = [];
+  if (!document.getElementById('teacherName').value.trim()) missing.push('a teacher');
+  if (forTab === 'f4') return missing;
+  if (!document.getElementById('appraisalLevel').value)     missing.push('an appraisal level');
+  if (sessionMode === 'observation') {
+    if (!document.getElementById('observationDate').value) missing.push('the observation date');
+    if (document.getElementById('appraisalLevel').value === 'lead' &&
+        !document.getElementById('secondAppraiserName').value.trim()) {
+      missing.push('a second appraiser (Lead level)');
+    }
+  } else if (!document.getElementById('conferenceDate').value) {
+    missing.push('the conference date');
+  }
+  return missing;
+}
+
+function refreshSetupGate() {
+  const bar = document.getElementById('setupTabsPreview');
+  if (!bar) return;                       // scoring phase / early call — nothing to do
+  const missing = setupMissingFields();
+  const ready   = missing.length === 0;
+
+  bar.querySelectorAll('.fw-tab').forEach(btn => {
+    // F4 has its own, looser gate — see setupMissingFields().
+    const open = setupMissingFields(btn.dataset.previewTab).length === 0;
+    btn.classList.toggle('is-locked', !open);
+    btn.disabled = !open;
+    const lock = btn.querySelector('.fw-tab-lock');
+    if (lock) lock.style.display = open ? 'none' : '';
+  });
+
+  // Item counts follow the chosen level so the preview is honest about workload.
+  const lv = LEVELS?.levels?.find(l => l.id === document.getElementById('appraisalLevel').value);
+  if (lv?.item_counts) {
+    const c = lv.item_counts;
+    document.getElementById('previewCountF2').textContent = c.D1 + c.D2 + c.D3 + c.D4;
+    document.getElementById('previewCountF3').textContent = c.F3 + (c.F3L || 0);
+  }
+
+  const hint = document.getElementById('setupTabsHint');
+  const text = document.getElementById('setupTabsHintText');
+  hint.classList.toggle('is-ready', ready);
+  text.textContent = ready
+    ? '✓ Ready — jump straight to any section, or use Confirm below.'
+    : `Add ${missing.join(', ')} to unlock scoring.`;
+}
+
+// Shared by the Confirm button and the preview tabs.
+function enterScoring(targetTab) {
+  const level = getLevel();
+  // F4-only entry can happen before a level is picked (see setupMissingFields).
+  // The level-driven panels stay unbuilt until the picker is set, at which point
+  // the change listener builds them.
+  if (level) {
+    buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
+  }
+
+  const dateDisplay = sessionMode === 'observation'
+    ? document.getElementById('observationDate').value
+    : document.getElementById('conferenceDate').value;
+  const teacherName = document.getElementById('teacherName').value.trim();
+  document.getElementById('stripTeacher').textContent = teacherName;
+  document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
+  document.getElementById('stripDate').textContent    = dateDisplay;
+  const avatarEl = document.getElementById('stripAvatar');
+  avatarEl.textContent = teacherName ? teacherName.trim().charAt(0).toUpperCase() : '?';
+  const lvLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level;
+  const lvEl = document.getElementById('stripLevel');
+  lvEl.textContent = lvLabel;
+  lvEl.className   = `context-badge-level ${level}`;
+  const sesEl = document.getElementById('stripSession');
+  sesEl.textContent = sessionMode === 'observation' ? 'Observation' : 'End-of-Year';
+  sesEl.className   = 'context-badge-session';
+
+  updateTabCounts();
+  if (loadedObsRecord) refreshScoreUI();
+
+  document.getElementById('setupPhase').style.display   = 'none';
+  document.getElementById('scoringPhase').style.display = 'block';
+  switchTab(targetTab || (sessionMode === 'endofyear' ? 'f3' : 'f1'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// Returns to the setup screen from the scoring context bar's Edit button.
+function backToSetup() {
+  document.getElementById('scoringPhase').style.display = 'none';
+  document.getElementById('setupPhase').style.display   = 'block';
+  refreshSetupGate();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+window.backToSetup = backToSetup;
 
 // ── WALKTHROUGH HISTORY (EOY F3) ──────────────────────────
 async function loadWalkthroughHistory() {
@@ -3818,6 +3993,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   const today = new Date().toISOString().split('T')[0];
   document.getElementById('observationDate').value = today;
   document.getElementById('conferenceDate').value  = today;
+  applySessionMode(sessionMode);   // paints date slots + preview tabs + gate on first load
 
   // Restore localStorage draft if exists
   const savedDraft = lsRestore();
@@ -3986,6 +4162,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       document.getElementById('appraisalLevelEoy').dispatchEvent(new Event('change'));
       showToast(`${name} seçildi — level: ${level}`);
     }
+    refreshSetupGate();   // name is set programmatically — no 'input' event fires
     // Fetch previous observation record for follow-up banner
     fetchPreviousRecord(uid);
     // Fetch teacher self-appraisal (shows panel if submitted)
@@ -4263,10 +4440,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   document.getElementById('appraisalLevel').addEventListener('change', () => {
     const level = document.getElementById('appraisalLevel').value;
-    document.getElementById('secondAppraiserRow').style.display = level === 'lead' ? '' : 'none';
+    syncLevelMirror(level);
+    document.getElementById('secondAppraiserRow').style.display =
+      (level === 'lead' && sessionMode === 'observation') ? '' : 'none';
     const lv = onLevelChange(level);
     if (lv) {
-      const el = document.getElementById('levelSummary');
+      const el = document.getElementById(sessionMode === 'endofyear' ? 'eoyLevelSummary' : 'levelSummary');
       el.style.display = '';
       el.innerHTML = `<strong>${lv.label}</strong> — ${lv.description}<br>
         <strong>Total scored items:</strong> ${lv.item_counts.total_scored}
@@ -4274,10 +4453,16 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
          F3: ${lv.item_counts.F3}${level==='lead'?`, F3L: ${lv.item_counts.F3L}`:''})`;
     }
     buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
+    refreshSetupGate();
   });
 
+  // The EOY select is now a hidden mirror (see #appraisalLevelEoy in the markup).
+  // Programmatic paths — draft restore, prior-record load — still set it and
+  // dispatch 'change', so mirror the value back onto the visible picker.
   document.getElementById('appraisalLevelEoy').addEventListener('change', () => {
     const level = document.getElementById('appraisalLevelEoy').value;
+    const visible = document.getElementById('appraisalLevel');
+    if (visible.value !== level) visible.value = level;
     const lv = onLevelChange(level);
     if (lv) {
       const el = document.getElementById('eoyLevelSummary');
@@ -4285,6 +4470,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       el.innerHTML = `<strong>${lv.label}</strong> — ${lv.description}`;
     }
     buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
+    refreshSetupGate();
   });
 
   // Load observation record (EOY mode)
@@ -4348,6 +4534,22 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
   });
 
+  // Locked preview tabs double as direct entry points once the gate opens.
+  document.querySelectorAll('#setupTabsPreview .fw-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const missing = setupMissingFields(btn.dataset.previewTab);
+      if (missing.length) { showToast(`Add ${missing.join(', ')} first.`); return; }
+      enterScoring(btn.dataset.previewTab);
+    });
+  });
+
+  // Keep the gate honest as the appraiser types / picks.
+  ['teacherName','observationDate','conferenceDate','secondAppraiserName']
+    .forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', refreshSetupGate);
+    });
+
   // Setup confirm
   document.getElementById('step1Next').addEventListener('click', () => {
     if (!document.getElementById('teacherName').value.trim()) { showToast('Please enter the teacher name.'); return; }
@@ -4362,36 +4564,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       if (!document.getElementById('conferenceDate').value) { showToast('Please set the conference date.'); return; }
     }
 
-    const level = getLevel();
-    buildF2(level); buildF3(level); updateSidebarProgress(level); updateF2Progress(level); updateF3Progress(level);
-
-    const dateDisplay = sessionMode === 'observation'
-      ? document.getElementById('observationDate').value
-      : document.getElementById('conferenceDate').value;
-    const teacherName = document.getElementById('teacherName').value.trim();
-    document.getElementById('stripTeacher').textContent = teacherName;
-    document.getElementById('stripSubject').textContent = document.getElementById('subject').value.trim() || '—';
-    document.getElementById('stripDate').textContent    = dateDisplay;
-    // Avatar initial
-    const avatarEl = document.getElementById('stripAvatar');
-    avatarEl.textContent = teacherName ? teacherName.trim().charAt(0).toUpperCase() : '?';
-    // Level badge — apply class directly on the element
-    const lvLabel = { induction:'Induction', developing:'Developing', proficient:'Proficient', lead:'Lead' }[level] || level;
-    const lvEl = document.getElementById('stripLevel');
-    lvEl.textContent  = lvLabel;
-    lvEl.className    = `context-badge-level ${level}`;
-    // Session badge
-    const sesEl = document.getElementById('stripSession');
-    sesEl.textContent = sessionMode === 'observation' ? 'Observation' : 'End-of-Year';
-    sesEl.className   = 'context-badge-session';
-
-    updateTabCounts();
-    if (loadedObsRecord) refreshScoreUI();
-
-    document.getElementById('setupPhase').style.display  = 'none';
-    document.getElementById('scoringPhase').style.display = 'block';
-    switchTab(sessionMode === 'endofyear' ? 'f3' : 'f1');
-    window.scrollTo({top:0,behavior:'smooth'});
+    enterScoring();
 
     // Fetch prev year scores in background
     const uid  = document.getElementById('teacherUid').value.trim();
