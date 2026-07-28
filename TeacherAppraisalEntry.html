@@ -192,6 +192,81 @@ body:has(> .page-footer) > .page-wrap {
 }
 .fw-tab.active .fw-tab-count { background: #ede9fe; color: #7c3aed; }
 
+/* .fw-tabs-bar is display:flex, which beats the bare [hidden] attribute —
+   the hidden facade rail needs an explicit override. */
+.fw-tabs-bar[hidden] { display: none; }
+
+/* ── SECTION SWITCHER ── */
+/* Replaces the always-visible tab rail on the scoring screen: only the section
+   in progress is shown, other sections are one click away in the menu. */
+.sec-switch { position: relative; margin-bottom: 20px; }
+.sec-switch-trigger {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 10px 16px; border: 1.5px solid #ddd6fe; border-radius: 11px;
+  background: #fff; font-family: inherit; font-size: .92rem; font-weight: 700;
+  color: #7c3aed; cursor: pointer; transition: border-color .15s, background .15s;
+}
+.sec-switch-trigger:hover { border-color: #a78bfa; background: #faf5ff; }
+.sec-switch-count {
+  font-size: .7rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  background: #ede9fe; color: #7c3aed;
+}
+.sec-switch-chevron { color: #a78bfa; font-size: .75rem; transition: transform .18s; }
+.sec-switch.is-open .sec-switch-chevron { transform: rotate(180deg); }
+.sec-switch-menu {
+  display: none; position: absolute; top: calc(100% + 6px); left: 0; z-index: 60;
+  min-width: 290px; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0,0,0,.12); padding: 6px; overflow: hidden;
+}
+.sec-switch.is-open .sec-switch-menu { display: block; }
+.sec-switch-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 10px 12px; border: none; border-radius: 8px; background: none;
+  font-family: inherit; font-size: .85rem; font-weight: 600; color: #475569;
+  cursor: pointer; text-align: left; transition: background .12s;
+}
+.sec-switch-item:hover { background: #f5f3ff; color: #7c3aed; }
+.sec-switch-item.is-current { background: #ede9fe; color: #7c3aed; }
+.sec-switch-dot { font-size: .6rem; color: #cbd5e1; }
+.sec-switch-item.is-current .sec-switch-dot { color: #7c3aed; }
+.sec-switch-item-count {
+  margin-left: auto; font-size: .7rem; font-weight: 700;
+  padding: 1px 7px; border-radius: 9px; background: #f1f5f9; color: #64748b;
+}
+.sec-switch-item.is-current .sec-switch-item-count { background: #fff; color: #7c3aed; }
+
+/* ── SETUP SECTION CARDS ── */
+/* The setup screen's primary choice: which framework to score. */
+.setup-pick-label {
+  font-size: .78rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .07em; color: #64748b; margin: 0 0 4px;
+}
+.setup-pick-hint { font-size: .78rem; color: #94a3b8; margin-bottom: 14px; }
+.setup-pick-hint.is-ready { color: #7c3aed; font-weight: 600; }
+.setup-pick-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px; margin-bottom: 22px;
+}
+.setup-pick {
+  border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 16px 18px;
+  background: #fff; text-align: left; font-family: inherit; cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px;
+  transition: border-color .15s, box-shadow .15s, transform .1s;
+}
+.setup-pick:hover:not(.is-locked) {
+  border-color: #a78bfa; box-shadow: 0 4px 16px rgba(124,58,237,.12); transform: translateY(-1px);
+}
+.setup-pick.is-locked { cursor: not-allowed; opacity: .55; background: #f8fafc; }
+.setup-pick-top { display: flex; align-items: center; gap: 8px; }
+.setup-pick-icon { font-size: 1.15rem; }
+.setup-pick-title { font-size: .92rem; font-weight: 800; color: #1e293b; }
+.setup-pick-lock { margin-left: auto; font-size: .78rem; color: #cbd5e1; }
+.setup-pick.is-locked .setup-pick-title { color: #94a3b8; }
+.setup-pick-meta { font-size: .75rem; color: #7c3aed; font-weight: 700; }
+.setup-pick.is-locked .setup-pick-meta { color: #cbd5e1; }
+.setup-pick-who { font-size: .72rem; color: #94a3b8; }
+.setup-pick--review { background: #faf5ff; border-color: #ddd6fe; }
+
 /* Locked tab preview — shown on the setup screen so the appraiser can see
    the whole structure before committing. Unlocks as required fields fill. */
 .fw-tab.is-locked { color: #cbd5e1; cursor: not-allowed; }
@@ -1184,27 +1259,58 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
-    <!-- Locked framework preview — shows the whole structure up front.
-         Unlocks the moment the required fields are filled (see refreshSetupGate). -->
-    <div class="fw-tabs-bar is-preview" id="setupTabsPreview">
-      <button type="button" class="fw-tab is-locked" data-preview-tab="f1" disabled>
-        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F1 Admin <span class="fw-tab-count">9</span>
-      </button>
-      <button type="button" class="fw-tab is-locked" data-preview-tab="f2" disabled>
-        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F2 Observation <span class="fw-tab-count" id="previewCountF2">—</span>
-      </button>
-      <button type="button" class="fw-tab is-locked" data-preview-tab="f3" id="previewTabF3" style="display:none;" disabled>
-        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F3 Work <span class="fw-tab-count" id="previewCountF3">—</span>
-      </button>
-      <button type="button" class="fw-tab is-locked" data-preview-tab="f4" disabled>
-        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> F4 Student Survey <span class="fw-tab-count">17</span>
-      </button>
-      <button type="button" class="fw-tab is-locked" data-preview-tab="review" disabled>
-        <span class="fw-tab-lock" aria-hidden="true">&#x1F512;</span> Review &amp; Submit
-      </button>
-    </div>
-    <div class="fw-tabs-hint" id="setupTabsHint">
+    <!-- Which framework to score. This is the setup screen's primary choice —
+         cards unlock as the required fields fill (see refreshSetupGate). -->
+    <div class="setup-pick-label">Choose what to score</div>
+    <div class="fw-tabs-hint setup-pick-hint" id="setupTabsHint">
       <span id="setupTabsHintText">Select a teacher and an appraisal level to unlock scoring.</span>
+    </div>
+    <div class="setup-pick-grid" id="setupTabsPreview">
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f1" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CB;</span>
+          <span class="setup-pick-title">F1 &mdash; Administration</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">9 items &middot; 20%</span>
+        <span class="setup-pick-who">Appraiser &middot; from the teacher's records</span>
+      </button>
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f2" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F441;</span>
+          <span class="setup-pick-title">F2 &mdash; Class Observation</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta"><span id="previewCountF2">&mdash;</span> items &middot; 50%</span>
+        <span class="setup-pick-who">Appraiser &middot; live in the lesson</span>
+      </button>
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f3" id="previewTabF3" style="display:none;" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F4CA;</span>
+          <span class="setup-pick-title">F3 &mdash; Work Inspection</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta"><span id="previewCountF3">&mdash;</span> items &middot; 20%</span>
+        <span class="setup-pick-who">Appraiser &middot; end-of-year conference</span>
+      </button>
+      <button type="button" class="setup-pick is-locked" data-preview-tab="f4" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x1F393;</span>
+          <span class="setup-pick-title">F4 &mdash; Student Survey</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">17 items &middot; 10%</span>
+        <span class="setup-pick-who">Students &middot; enter aggregated results</span>
+      </button>
+      <button type="button" class="setup-pick setup-pick--review is-locked" data-preview-tab="review" disabled>
+        <span class="setup-pick-top">
+          <span class="setup-pick-icon" aria-hidden="true">&#x2713;</span>
+          <span class="setup-pick-title">Review &amp; Submit</span>
+          <span class="setup-pick-lock" aria-hidden="true">&#x1F512;</span>
+        </span>
+        <span class="setup-pick-meta">Composite &middot; predicate band</span>
+        <span class="setup-pick-who">Summary, radar, feedback &amp; submit</span>
+      </button>
     </div>
 
     <div class="card">
@@ -1389,12 +1495,25 @@ body:has(> .page-footer) > .page-wrap {
         <span title="Press 1–4 to score focused item"><kbd class="kbd">1–4</kbd><span>score</span></span>
         <span title="Press N for Not Observed"><kbd class="kbd">N</kbd><span>N/O</span></span>
       </div>
-      <button class="btn-ghost-sm" onclick="backToSetup()">&#x270E; Edit</button>
+      <button class="btn-ghost-sm" onclick="backToSetup()" title="Back to setup — change teacher, level, or pick another section">&#x2190; Setup</button>
     </div>
   </div>
 
-  <!-- Framework tabs -->
-  <div class="fw-tabs-bar" id="frameworkTabs">
+  <!-- Section switcher — one compact menu instead of a full tab rail, so the
+       scoring screen shows only the section being worked on. The tab buttons
+       below stay in the DOM (hidden) because switchTab() drives their .active
+       state and the counters; the menu is a facade over the same handlers. -->
+  <div class="sec-switch" id="sectionSwitcher">
+    <button type="button" class="sec-switch-trigger" id="secSwitchTrigger" aria-haspopup="true" aria-expanded="false">
+      <span class="sec-switch-current" id="secSwitchLabel">F1 Admin</span>
+      <span class="sec-switch-count" id="secSwitchCount">0/9</span>
+      <span class="sec-switch-chevron" aria-hidden="true">&#x25BE;</span>
+    </button>
+    <div class="sec-switch-menu" id="secSwitchMenu" role="menu"></div>
+  </div>
+
+  <!-- Framework tabs — hidden facade source (see sec-switch above) -->
+  <div class="fw-tabs-bar" id="frameworkTabs" hidden>
     <button class="fw-tab active" data-tab="f1">F1 Admin <span class="fw-tab-count" id="tabCountF1">0/9</span></button>
     <button class="fw-tab" data-tab="f2">F2 Observation <span class="fw-tab-count" id="tabCountF2">0/?</span></button>
     <button class="fw-tab" data-tab="f3" id="tabF3" style="display:none;">F3 Work <span class="fw-tab-count" id="tabCountF3">0/?</span></button>
@@ -2501,6 +2620,10 @@ function updateTabCounts() {
     el.style.background = d===t && t>0 ? '#dcfce7' : '';
     el.style.color      = d===t && t>0 ? '#15803d' : '';
   });
+
+  // The switcher mirrors these counts — repaint it whenever they move.
+  const activeTab = document.querySelector('#frameworkTabs .fw-tab.active')?.dataset.tab;
+  if (activeTab) renderSectionSwitcher(activeTab);
 }
 
 // ── SCORING COMPLETION THRESHOLDS ────────────────────────────
@@ -3179,6 +3302,8 @@ function applySessionMode(mode) {
   document.getElementById('previewTabF3').style.display = mode === 'endofyear' ? '' : 'none';
   syncLevelMirror(document.getElementById('appraisalLevel').value);
   refreshSetupGate();
+  // F3 enters/leaves the switcher menu with the mode.
+  renderSectionSwitcher(document.querySelector('#frameworkTabs .fw-tab.active')?.dataset.tab || 'f1');
   document.getElementById('step1Next').textContent =
     mode === 'observation' ? 'Confirm & Start Scoring →' : 'Confirm & Score F3 →';
 }
@@ -3223,12 +3348,12 @@ function refreshSetupGate() {
   const missing = setupMissingFields();
   const ready   = missing.length === 0;
 
-  bar.querySelectorAll('.fw-tab').forEach(btn => {
+  bar.querySelectorAll('.setup-pick').forEach(btn => {
     // F4 has its own, looser gate — see setupMissingFields().
     const open = setupMissingFields(btn.dataset.previewTab).length === 0;
     btn.classList.toggle('is-locked', !open);
     btn.disabled = !open;
-    const lock = btn.querySelector('.fw-tab-lock');
+    const lock = btn.querySelector('.setup-pick-lock');
     if (lock) lock.style.display = open ? 'none' : '';
   });
 
@@ -3397,12 +3522,54 @@ function switchTab(tab) {
     buildCoachingQuestions();
     renderFollowUpCheckIn();
   }
+  renderSectionSwitcher(tab);
   window.scrollTo({top:0,behavior:'smooth'});
   // Auto-save draft to Firestore on tab switch if there are any scores
   if (Object.keys(scores).length > 0 && getLevel() && typeof window.saveAppraisal === 'function') {
     clearTimeout(autoSaveTimer);
     autoSaveTimer = setTimeout(() => window.saveAppraisal('draft', sessionMode === 'endofyear', true), 800);
   }
+}
+
+// ── SECTION SWITCHER ──────────────────────────────────────
+// A facade over the (now hidden) .fw-tab rail: reads its labels + live counts
+// so there is exactly one source of truth for what a section is called and how
+// far along it is. Only the current section's name sits on screen.
+function renderSectionSwitcher(activeTab) {
+  const menu = document.getElementById('secSwitchMenu');
+  if (!menu) return;
+  const tabs = [...document.querySelectorAll('#frameworkTabs .fw-tab')]
+    .filter(t => t.style.display !== 'none');   // F3 is observation-mode-hidden
+
+  const labelOf = t => t.childNodes[0].textContent.trim();
+  const countOf = t => t.querySelector('.fw-tab-count')?.textContent.trim() || '';
+
+  const current = tabs.find(t => t.dataset.tab === activeTab) || tabs[0];
+  if (current) {
+    document.getElementById('secSwitchLabel').textContent = labelOf(current);
+    const cEl = document.getElementById('secSwitchCount');
+    const c   = countOf(current);
+    cEl.textContent   = c;
+    cEl.style.display = c ? '' : 'none';
+  }
+
+  menu.innerHTML = tabs.map(t => {
+    const isCur = t.dataset.tab === activeTab;
+    const c = countOf(t);
+    return `<button type="button" class="sec-switch-item${isCur ? ' is-current' : ''}" data-goto="${t.dataset.tab}" role="menuitem">
+      <span class="sec-switch-dot" aria-hidden="true">${isCur ? '&#x25CF;' : '&#x25CB;'}</span>
+      <span>${labelOf(t)}</span>
+      ${c ? `<span class="sec-switch-item-count">${c}</span>` : ''}
+    </button>`;
+  }).join('');
+
+  menu.querySelectorAll('[data-goto]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('sectionSwitcher').classList.remove('is-open');
+      document.getElementById('secSwitchTrigger').setAttribute('aria-expanded', 'false');
+      switchTab(btn.dataset.goto);
+    });
+  });
 }
 
 // ── COACHING QUESTIONS ─────────────────────────────────────
@@ -4534,8 +4701,29 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
   });
 
-  // Locked preview tabs double as direct entry points once the gate opens.
-  document.querySelectorAll('#setupTabsPreview .fw-tab').forEach(btn => {
+  // Section switcher open / close
+  const secTrigger = document.getElementById('secSwitchTrigger');
+  const secWrap    = document.getElementById('sectionSwitcher');
+  secTrigger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = secWrap.classList.toggle('is-open');
+    secTrigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!secWrap.contains(e.target)) {
+      secWrap.classList.remove('is-open');
+      secTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && secWrap.classList.contains('is-open')) {
+      secWrap.classList.remove('is-open');
+      secTrigger.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Setup section cards double as direct entry points once the gate opens.
+  document.querySelectorAll('#setupTabsPreview .setup-pick').forEach(btn => {
     btn.addEventListener('click', () => {
       const missing = setupMissingFields(btn.dataset.previewTab);
       if (missing.length) { showToast(`Add ${missing.join(', ')} first.`); return; }
