@@ -817,14 +817,39 @@ function _renderTemplate(str, values) {
     Object.prototype.hasOwnProperty.call(values, k) ? String(values[k] ?? '') : '');
 }
 
-async function notifyAdminsOfPendingAHUser(user, database) {
-  const url    = (window.ENV?.MAIL_SERVICE_URL || '').replace(/\/$/, '');
-  const secret = window.ENV?.MAIL_SERVICE_SECRET || '';
-  if (!url || !secret) {
-    console.info('[pending-notif] mail-service not configured — skipping');
-    return;
+// Server-side mail relay (2026-08-01): the Resend bearer secret lives in
+// Secret Manager behind the CH mailRelay Cloud Function — never in the
+// browser. Clients authenticate with their Firebase ID token. Mirrors the
+// CH/TH auth-guard helper — keep all three in sync.
+function mailRelayUrl() {
+  const pid = window.ENV?.FIREBASE_PROJECT_ID || 'centralhub-8727b';
+  return `https://asia-southeast1-${pid}.cloudfunctions.net/mailRelay`;
+}
+async function callMailRelay(user, data, timeoutMs = 15000) {
+  const idToken = await user.getIdToken();
+  const ctrl  = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+  try {
+    const res = await fetch(mailRelayUrl(), {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + idToken,
+      },
+      body: JSON.stringify({ data }),
+      signal: ctrl.signal,
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || j.error) {
+      throw new Error(j.error?.message || ('HTTP ' + res.status));
+    }
+    return j.result;
+  } finally {
+    clearTimeout(timer);
   }
+}
 
+async function notifyAdminsOfPendingAHUser(user, database) {
   // Fetch admin-edited template body if it exists. The Firestore rule
   // explicitly allows non-admin reads on docs where kind == 'system'.
   let subject = PENDING_NOTIFICATION_DEFAULT_SUBJECT;
@@ -866,15 +891,9 @@ async function notifyAdminsOfPendingAHUser(user, database) {
   const renderedBody    = _renderTemplate(body,    values);
 
   try {
-    const ctrl  = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 15000);
-    const res = await fetch(url + '/send-transactional', {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': 'Bearer ' + secret,
-      },
-      body: JSON.stringify({
+    await callMailRelay(user, {
+      action: 'transactional',
+      payload: {
         toEmail:      PENDING_NOTIFICATION_RECIPIENT,
         subject:      renderedSubject,
         bodyHtml:     renderedBody,
@@ -883,18 +902,11 @@ async function notifyAdminsOfPendingAHUser(user, database) {
           { name: 'kind',     value: 'ah-pending-notification' },
           { name: 'platform', value: 'academichub' },
         ],
-      }),
-      signal: ctrl.signal,
+      },
     });
-    clearTimeout(timer);
-    if (!res.ok) {
-      const data = await res.json().catch(() => ({}));
-      console.warn('[pending-notif] mail-service rejected:', res.status, data);
-    } else {
-      console.info('[pending-notif] notification email queued');
-    }
+    console.info('[pending-notif] notification email queued');
   } catch (e) {
-    console.warn('[pending-notif] network error:', e?.message);
+    console.warn('[pending-notif] relay error:', e?.message);
   }
 }
 
