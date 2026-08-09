@@ -165,7 +165,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
       <h1 class="page-hero__title">Principal 360° Results</h1>
-      <p class="page-hero__desc">Anonymous feedback from staff, parents, and students, shown as group averages per focus. A cohort only appears once it has 5 or more responses (Charter NN5) — below that, results stay hidden to protect anonymity.</p>
+      <p class="page-hero__desc">Anonymous feedback from staff, parents, and students, shown as group averages per focus. A cohort only appears once it has 5 or more responses (framework anonymity guarantee) — below that, results stay hidden to protect anonymity.</p>
     </div>
   </div>
 </header>
@@ -183,12 +183,12 @@ body:has(> .page-footer) > .page-wrap {
       </ol>
       <div class="info-strip__callout">
         <span class="info-strip__callout-icon" aria-hidden="true">⚠️</span>
-        <span><strong>A group's results stay hidden until 5+ people answer (Charter NN5).</strong> This protects honest feedback — never try to guess who said what.</span>
+        <span><strong>A group's results stay hidden until 5+ people answer (framework anonymity guarantee).</strong> This protects honest feedback — never try to guess who said what.</span>
       </div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> Foundation Rep + Principal</span>
         <span class="info-strip__pill"><b>Scope:</b> Read-only</span>
-        <span class="info-strip__pill"><b>Privacy:</b> NN5 anonymous</span>
+        <span class="info-strip__pill"><b>Privacy:</b> anonymous by framework guarantee</span>
       </div>
     </div>
   </aside>
@@ -221,7 +221,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Charter NN5 · anonymous · 5-respondent cohort threshold</span>
+    <span class="page-footer__meta-right">Framework anonymity guarantee · anonymous · 5-respondent cohort threshold</span>
   </div>
 </footer>
 
@@ -266,7 +266,7 @@ function render(agg, cycle) {
 
   root.innerHTML = `
     <div class="charter-banner">
-      <strong>Charter NN5 in effect</strong>
+      <strong>Anonymity guarantee in effect</strong>
       Below-threshold cohorts (fewer than 5 respondents) are hidden until more voices come in. Aggregation is a Cloud Function output — no individual response is identifiable here or anywhere else.
     </div>
 
