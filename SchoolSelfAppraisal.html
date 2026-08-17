@@ -2280,17 +2280,19 @@ function renderDomainAnchors(domain) {
     `<span class="es-pill" data-es-ref="${escAttr(r)}" title="Eduversal Academic Standards — Section ${escAttr(r)}. Click for the verbatim madde.">ES ${escHtml(r)}</span>`
   ).join('');
 
-  // The PMD chip family resolves against Permendiknas No.16/2007 — the four
-  // TEACHER pillars. D1 and D5 also carry principal competencies from 13/2007,
-  // which is not in the research archive: wiring those to the same popover
-  // opens an empty panel, so they render as plain labels instead. See
-  // ES 24.6 for the full write-up and the options for resolving it.
-  const PMD_TEACHER_PILLARS = ['pedagogik', 'profesional', 'sosial', 'kepribadian'];
+  // The PMD chip family covers BOTH Permendiknas competency standards:
+  // 16/2007 (four TEACHER pillars) and 13/2007 (five PRINCIPAL dimensions,
+  // extracted into the archive 2026-08-17). D1 and D5 carry principal refs;
+  // those used to render as unresolved labels and are now real chips.
+  // cambridge-crossref.js picks the instrument from the label — the two that
+  // appear in both (kepribadian, sosial) resolve to the teacher standard.
+  const PMD_PRINCIPAL_ONLY = ['manajerial', 'kewirausahaan', 'supervisi'];
   const pmdChips = (fa.pmdRefs || []).map(r => {
     const key = String(r).toLowerCase().trim().split(/\s+/).pop().replace(/[^a-z]/g, '');
-    return PMD_TEACHER_PILLARS.includes(key)
-      ? `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="Permendiknas No.16/2007 four-pillar competency — click for verbatim definition.">${escHtml(r)}</span>`
-      : `<span class="perm-pill is-unresolved" title="Permendiknas No.13/2007 — principal competency standards. Not yet in the research archive, so no verbatim popover.">${escHtml(r)}</span>`;
+    const src = PMD_PRINCIPAL_ONLY.includes(key)
+      ? 'Permendiknas No.13/2007 principal competency dimension'
+      : 'Permendiknas No.16/2007 four-pillar competency';
+    return `<span class="perm-pill" data-pmd-ref="${escAttr(r)}" title="${escAttr(src)} — click for verbatim definition.">${escHtml(r)}</span>`;
   }).join('');
 
   // IASP — BAN-S/M Akreditasi components. Static (no verbatim archive behind
