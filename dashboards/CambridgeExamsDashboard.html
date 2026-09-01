@@ -108,7 +108,7 @@
         border-bottom: 1px solid rgba(15, 118, 110, 0.15);
         box-shadow: 0 10px 16px -16px rgba(28, 28, 46, 0.9);
       }
-      .cx-tabs__inner { display: flex; gap: 2px; overflow-x: auto; }
+      .cx-tabs__inner { display: flex; gap: 2px; flex-wrap: wrap; align-items: center; }
       .cx-tab {
         appearance: none; background: none; border: 0;
         padding: 15px 16px 12px;
@@ -291,6 +291,57 @@
 
       .cx-up { color: var(--green); font-weight: var(--fw-semibold); }
       .cx-down { color: var(--red); font-weight: var(--fw-semibold); }
+
+      /* ---- school focus ------------------------------------------------
+         The page is network-comparative end to end, which leaves a reader from
+         one school hunting for their own bar in every card. Choosing a school
+         does not filter the others away — the comparison is the point — it
+         pulls that school forward and dims the rest. */
+      .cx-select {
+        appearance: none; cursor: pointer;
+        padding: 6px 30px 6px 13px; border-radius: 999px;
+        border: 1px solid var(--border); background-color: var(--white);
+        font-family: var(--font-body); font-size: var(--text-sm);
+        font-weight: var(--fw-semibold); color: var(--ink-2);
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235b6b7a' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat; background-position: right 9px center; background-size: 13px;
+      }
+      .cx-select:focus-visible { outline: 2px solid var(--teal-ink); outline-offset: 2px; }
+      .cx-select[data-on="1"] {
+        background-color: var(--teal-ink); border-color: var(--teal-ink); color: #fff;
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      }
+      .cx-table tbody tr.cx-focus td { background: #eefaf8; }
+      .cx-table tbody tr.cx-focus td:first-child { box-shadow: inset 3px 0 0 var(--teal-ink); }
+      .cx-focus-col { box-shadow: inset 0 0 0 2px var(--teal-ink); }
+
+      /* ---- signals: the few numbers worth reacting to ------------------- */
+      .cx-signals { display: grid; gap: 10px; }
+      .cx-signal {
+        display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start;
+        padding: 12px 15px; border: 1px solid var(--border);
+        border-radius: var(--radius); background: #fbfbfa;
+      }
+      .cx-signal__mark {
+        width: 26px; height: 26px; border-radius: 8px; display: flex;
+        align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 700; color: #fff;
+      }
+      .cx-signal__title { font-weight: var(--fw-semibold); color: var(--ink); font-size: var(--text-sm); }
+      .cx-signal__body { font-size: var(--text-sm); line-height: 1.62; color: var(--ink-2); margin-top: 2px; }
+
+      /* ---- school profile ----------------------------------------------- */
+      .cx-prof-empty { text-align: center; padding: 30px 20px; }
+      .cx-prof-empty__title {
+        font-family: var(--font-title); font-size: var(--text-2xl);
+        font-weight: 600; color: var(--ink); margin: 0 0 6px;
+      }
+      .cx-prof-levels { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+      .cx-prof-level {
+        padding: 5px 12px; border-radius: 999px; font-size: var(--text-xs);
+        font-weight: var(--fw-bold); background: var(--secondary-2); color: var(--cyan-deep);
+      }
+      .cx-prof-level[data-absent="1"] { background: #f1f2f4; color: var(--ink-3); }
 
       /* Family accent used by page-local chrome. base.css exposes the family
          gradient but not a flat ink colour, so name it once here. */
@@ -501,13 +552,19 @@
       const colorOf = (c) => SCHOOL_COLOR[c] || "#94a3b8";
 
       const uniq = (a) => Array.from(new Set(a));
+      /* Only centres that actually have results — the registry may list a
+         school before any workbook for it has arrived. */
+      const netCentres = new Set(
+        (D ? D.checkpoint.subject.map((r) => r.centre).concat(D.exams.subject.map((r) => r.centre)) : [])
+      );
       const sum = (a) => a.reduce((s, x) => s + x, 0);
       const mean = (a) => (a.length ? sum(a) / a.length : null);
       const fmt = (n, d = 1) => (n === null || n === undefined ? "—" : Number(n).toFixed(d));
       const pct = (n, d = 1) => (n === null || n === undefined ? "—" : `${Number(n).toFixed(d)}%`);
       const byName = (a, b) => shortName(a).localeCompare(shortName(b));
+      const seriesRankOf = (s) => D.meta.seriesOrder.indexOf(s);
       const seriesFor = (rows) => uniq(rows.map((r) => r.series))
-        .sort((a, b) => D.meta.seriesOrder.indexOf(a) - D.meta.seriesOrder.indexOf(b));
+        .sort((a, b) => seriesRankOf(a) - seriesRankOf(b));
 
       const heatOf = (v) => {
         if (v === null || v === undefined) return null;
@@ -593,6 +650,183 @@
 
       const Dot = ({ centre }) => <span className="cx-dot" style={{ background: colorOf(centre) }} />;
 
+      /**
+       * A school can be brought forward without hiding the others: the
+       * comparison is the point of the page, so focus dims rather than filters.
+       * Opacity 1 for the chosen school, 0.22 for the rest, 1 for everyone when
+       * nothing is chosen.
+       */
+      const dim = (focus, centre) => (!focus || focus === centre ? 1 : 0.22);
+
+      /**
+       * The three or four numbers in a tab that someone should actually react
+       * to. Everything here is computed from the same rows the charts use — it
+       * is a reading of the data, never a second source.
+       */
+      const Signals = ({ items }) => {
+        if (!items.length) return null;
+        return (
+          <div className="cx-signals">
+            {items.map((s, i) => (
+              <div className="cx-signal" key={i}>
+                <div className="cx-signal__mark" style={{ background: s.tone }}>{s.mark}</div>
+                <div>
+                  <div className="cx-signal__title">{s.title}</div>
+                  <div className="cx-signal__body">{s.body}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      };
+
+      const TONE = { alert: "#b91c1c", good: "#15803d", watch: "#b45309", info: "#0f766e" };
+
+      /** Checkpoint: the widest school gap, the weakest topic, the biggest move. */
+      function checkpointSignals(level, series, rows) {
+        const out = [];
+        const subjects = uniq(rows.map((r) => r.subject));
+
+        // Widest spread within one subject.
+        let widest = null;
+        for (const s of subjects) {
+          const sr = rows.filter((r) => r.subject === s).sort((a, b) => b.meanOverall - a.meanOverall);
+          if (sr.length < 2) continue;
+          const gap = sr[0].meanOverall - sr[sr.length - 1].meanOverall;
+          if (!widest || gap > widest.gap) widest = { gap, subject: s, top: sr[0], bottom: sr[sr.length - 1] };
+        }
+        if (widest && widest.gap >= 6) {
+          out.push({
+            mark: "↔", tone: TONE.watch,
+            title: `${fmt(widest.gap, 1)} points separate the network in ${widest.subject}`,
+            body: `${shortName(widest.top.centre)} averaged ${fmt(widest.top.meanOverall, 1)} out of 50, ${shortName(widest.bottom.centre)} averaged ${fmt(widest.bottom.meanOverall, 1)}. Both sat the same paper in ${series}, so the gap is a teaching difference between schools rather than a difference in the exam.`,
+          });
+        }
+
+        // Weakest sub-strand network-wide.
+        const subs = D.checkpoint.substrand.filter((r) => r.level === level && r.series === series);
+        const bySub = uniq(subs.map((r) => r.substrand)).map((name) => {
+          const v = subs.filter((r) => r.substrand === name);
+          return { name, subject: v[0].subject, net: mean(v.map((r) => r.pct)) };
+        }).sort((a, b) => a.net - b.net);
+        if (bySub.length && bySub[0].net < 55) {
+          out.push({
+            mark: "!", tone: TONE.alert,
+            title: `${bySub[0].name} is the network's weakest topic`,
+            body: `Across every school, learners won only ${fmt(bySub[0].net, 0)}% of the marks available on this ${bySub[0].subject.split(" ")[0].toLowerCase()} topic. It is the first thing to take into the scheme of work — the full ranking is in the sub-strand table below.`,
+          });
+        }
+
+        // Biggest move since the previous series.
+        const all = D.checkpoint.subject.filter((r) => r.level === level);
+        const order = seriesFor(all);
+        const prev = order[order.indexOf(series) - 1];
+        if (prev) {
+          let move = null;
+          for (const r of rows) {
+            const before = all.find((x) => x.centre === r.centre && x.syllabus === r.syllabus && x.series === prev);
+            if (!before) continue;
+            const d = r.meanOverall - before.meanOverall;
+            if (!move || Math.abs(d) > Math.abs(move.d)) move = { d, row: r, before };
+          }
+          if (move && Math.abs(move.d) >= 3) {
+            const up = move.d > 0;
+            out.push({
+              mark: up ? "↑" : "↓", tone: up ? TONE.good : TONE.alert,
+              title: `${shortName(move.row.centre)} ${up ? "rose" : "fell"} ${fmt(Math.abs(move.d), 1)} points in ${move.row.subject}`,
+              body: `From ${fmt(move.before.meanOverall, 1)} in ${prev} to ${fmt(move.row.meanOverall, 1)} in ${series}. These are different learners, so this is a change in what the school is producing year on year, not the progress of one cohort.`,
+            });
+          }
+        }
+        return out;
+      }
+
+      /** IGCSE: where candidates are being lost, and who moved. */
+      function igcseSignals(series, rows) {
+        const out = [];
+        const worstU = rows.slice().filter((r) => r.n >= 10).sort((a, b) => b.pctU - a.pctU)[0];
+        if (worstU && worstU.pctU >= 20) {
+          out.push({
+            mark: "!", tone: TONE.alert,
+            title: `${pct(worstU.pctU)} of ${shortName(worstU.centre)}'s ${worstU.subject} candidates were ungraded`,
+            body: `${Math.round((worstU.pctU / 100) * worstU.n)} of ${worstU.n} graded candidates received no grade at all in ${worstU.syllabus}${worstU.tier === "Untiered" ? "" : ` (${worstU.tier})`}. An ungraded entry costs the candidate the subject, so this is the largest single loss in ${series}.`,
+          });
+        }
+
+        // Core/Extended gap inside one school — the entry-tier decision.
+        let tierGap = null;
+        for (const r of rows.filter((x) => x.tier === "Core")) {
+          const ext = rows.find((x) => x.centre === r.centre && x.syllabus === r.syllabus && x.tier === "Extended");
+          if (!ext) continue;
+          const g = ext.pctAC - r.pctAC;
+          if (!tierGap || g > tierGap.g) tierGap = { g, core: r, ext };
+        }
+        if (tierGap && tierGap.g >= 20) {
+          out.push({
+            mark: "◧", tone: TONE.watch,
+            title: `Entry tier changed the outcome at ${shortName(tierGap.core.centre)}`,
+            body: `In ${tierGap.ext.subject}, ${pct(tierGap.ext.pctAC)} of the ${tierGap.ext.n} Extended candidates reached A*–C against ${pct(tierGap.core.pctAC)} of the ${tierGap.core.n} Core candidates. Core cannot be awarded above C, so part of that gap is the entry decision rather than the teaching — which makes who is entered for which tier worth reviewing.`,
+          });
+        }
+
+        // Biggest A*-C movement across series.
+        const all = D.exams.subject.filter((r) => r.level === "IGCSE");
+        const order = seriesFor(all);
+        const prev = order[order.indexOf(series) - 1];
+        if (prev) {
+          let move = null;
+          for (const r of rows) {
+            const before = all.find((x) => x.centre === r.centre && x.syllabus === r.syllabus && x.tier === r.tier && x.series === prev);
+            if (!before || before.pctAC === null || r.pctAC === null) continue;
+            const d = r.pctAC - before.pctAC;
+            if (!move || Math.abs(d) > Math.abs(move.d)) move = { d, row: r, before };
+          }
+          if (move && Math.abs(move.d) >= 10) {
+            const up = move.d > 0;
+            out.push({
+              mark: up ? "↑" : "↓", tone: up ? TONE.good : TONE.alert,
+              title: `${shortName(move.row.centre)} ${up ? "gained" : "lost"} ${fmt(Math.abs(move.d), 1)} points of A*–C in ${move.row.subject}`,
+              body: `From ${pct(move.before.pctAC)} in ${prev} to ${pct(move.row.pctAC)} in ${series}${move.row.tier === "Untiered" ? "" : `, ${move.row.tier} tier`}. The trend chart at the foot of this tab shows the whole run.`,
+            });
+          }
+        }
+        return out;
+      }
+
+      /** AS & A Level: the award mix, which is the story at this level. */
+      function aLevelSignals(series, rows) {
+        const out = [];
+        const gA2 = sum(rows.map((r) => r.asA2.gradedA2));
+        const gAS = sum(rows.map((r) => r.asA2.gradedAS));
+        const gU = sum(rows.map((r) => r.asA2.ungraded));
+        const total = gA2 + gAS + gU;
+        if (!total) return out;
+
+        if (gA2 === 0 && gAS > 0) {
+          out.push({
+            mark: "?", tone: TONE.watch,
+            title: `No full A Level award was made in ${series}`,
+            body: `All ${gAS} graded candidates received an AS Level award. This report does not say which year group was entered, so a cohort sitting AS only looks exactly the same here as a cohort that failed to convert. Confirm the entry pattern before reading this as a fall.`,
+          });
+        }
+        if (gU / total >= 0.15) {
+          out.push({
+            mark: "!", tone: TONE.alert,
+            title: `${pct((gU / total) * 100)} of entries were ungraded`,
+            body: `${gU} of ${total} candidates received no grade. Cambridge writes U the same way for both awards, so this report cannot say whether they were entered for AS or for the full A Level.`,
+          });
+        }
+        const worst = rows.slice().filter((r) => r.n >= 5).sort((a, b) => b.pctU - a.pctU)[0];
+        if (worst && worst.pctU >= 20) {
+          out.push({
+            mark: "◆", tone: TONE.watch,
+            title: `${worst.subject} carried the highest ungraded rate`,
+            body: `${pct(worst.pctU)} of the ${worst.n} graded candidates at ${shortName(worst.centre)} received no grade in ${worst.syllabus}.`,
+          });
+        }
+        return out;
+      }
+
       /** Subject switcher reused by three cards; keeps the active value valid. */
       function useSubject(rows) {
         const subjects = uniq(rows.map((r) => r.subject)).sort();
@@ -604,7 +838,7 @@
       // -------------------------------------------------------------------
       // Checkpoint
       // -------------------------------------------------------------------
-      const CheckpointTab = ({ level }) => {
+      const CheckpointTab = ({ level, focus }) => {
         const levelRows = D.checkpoint.subject.filter((r) => r.level === level);
         const allSeries = seriesFor(levelRows);
         const [picked, setPicked] = useState(null);
@@ -643,6 +877,8 @@
                 tone="#b45309"
               />
             </div>
+
+            <Signals items={checkpointSignals(level, series, rows)} />
 
             {subjects.map((subject) => {
               const sr = rows.filter((r) => r.subject === subject).sort((a, b) => b.meanOverall - a.meanOverall);
@@ -697,7 +933,7 @@
                         />
                         <ReferenceLine x={subjMean} stroke="#8888a8" strokeDasharray="4 4" />
                         <Bar dataKey="overall" radius={[0, 5, 5, 0]} barSize={22} isAnimationActive={false}>
-                          {data.map((d) => <Cell key={d.centre} fill={colorOf(d.centre)} />)}
+                          {data.map((d) => <Cell key={d.centre} fill={colorOf(d.centre)} fillOpacity={dim(focus, d.centre)} />)}
                           <LabelList dataKey="overall" position="right" formatter={(v) => fmt(v, 1)}
                             style={{ fill: "#44445a", fontSize: 12, fontWeight: 700 }} />
                         </Bar>
@@ -721,7 +957,7 @@
                         {sr.map((r) => {
                           const delta = r.meanOverall - subjMean;
                           return (
-                            <tr key={r.centre}>
+                            <tr key={r.centre} className={focus === r.centre ? "cx-focus" : null}>
                               <td className="cx-school"><Dot centre={r.centre} />{fullName(r.centre)}</td>
                               <td className="cx-n">{r.n}</td>
                               <td className="cx-n" style={{ fontWeight: 700 }}>{fmt(r.meanOverall, 1)}</td>
@@ -745,20 +981,20 @@
               title="Where the marks are lost"
               desc="Two views of the same cohort. The strand profile shows which broad area of the syllabus a school is weakest in; the sub-strand table goes down to the individual objective, using the per-question marks Cambridge supplies on the component sheets."
             />
-            <StrandCard level={level} series={series} centres={centres} />
-            <SubstrandCard level={level} series={series} centres={centres} />
+            <StrandCard level={level} series={series} centres={centres} focus={focus} />
+            <SubstrandCard level={level} series={series} centres={centres} focus={focus} />
 
             <Lead
               eyebrow="Over time"
               title="Series trend"
               desc="Because the overall score is standardised, points from different series sit on the same axis and can be joined."
             />
-            <TrendCard rows={levelRows} allSeries={allSeries} level={level} />
+            <TrendCard rows={levelRows} allSeries={allSeries} level={level} focus={focus} />
           </div>
         );
       };
 
-      const StrandCard = ({ level, series, centres }) => {
+      const StrandCard = ({ level, series, centres, focus }) => {
         const rows = D.checkpoint.strand.filter((r) => r.level === level && r.series === series);
         const [subjects, subject, setSubject] = useSubject(rows);
         if (!subjects.length) return null;
@@ -813,7 +1049,7 @@
                     formatter={(v, k) => [fmt(v, 1), fullName(k)]}
                     labelFormatter={(l, p) => (p && p[0] ? p[0].payload.full : l)} />
                   <Legend formatter={(v) => shortName(v)} wrapperStyle={{ fontSize: 12 }} iconType="circle" iconSize={9} />
-                  {present.map((c) => <Bar key={c} dataKey={c} fill={colorOf(c)} radius={[3, 3, 0, 0]} isAnimationActive={false} />)}
+                  {present.map((c) => <Bar key={c} dataKey={c} fill={colorOf(c)} fillOpacity={dim(focus, c)} radius={[3, 3, 0, 0]} isAnimationActive={false} />)}
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -826,7 +1062,7 @@
        * reach. Marks scored over marks available, pooled per sub-strand from
        * the per-question data on the Cambridge component sheets.
        */
-      const SubstrandCard = ({ level, series, centres }) => {
+      const SubstrandCard = ({ level, series, centres, focus }) => {
         const rows = D.checkpoint.substrand.filter((r) => r.level === level && r.series === series);
         const [subjects, subject, setSubject] = useSubject(rows);
         if (!subjects.length) return null;
@@ -910,7 +1146,9 @@
                     <th>Sub-strand</th>
                     <th className="cx-n">Network</th>
                     <th className="cx-n">Spread</th>
-                    {present.map((c) => <th key={c} className="cx-n">{shortName(c)}</th>)}
+                    {present.map((c) => (
+                      <th key={c} className={`cx-n${focus === c ? " cx-focus-col" : ""}`}>{shortName(c)}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -922,7 +1160,8 @@
                         {r.spread === null ? "—" : `${fmt(r.spread, 0)} pt`}
                       </td>
                       {present.map((c) => (
-                        <td key={c} className={r.cells[c] === null ? "cx-n" : "cx-heat"}
+                        <td key={c}
+                          className={(r.cells[c] === null ? "cx-n" : "cx-heat") + (focus === c ? " cx-focus-col" : "")}
                           style={r.cells[c] === null ? null : { background: heatOf(r.cells[c]) }}>
                           {r.cells[c] === null ? "—" : `${fmt(r.cells[c], 0)}%`}
                         </td>
@@ -936,7 +1175,7 @@
         );
       };
 
-      const TrendCard = ({ rows, allSeries, level }) => {
+      const TrendCard = ({ rows, allSeries, level, focus }) => {
         const [subjects, subject, setSubject] = useSubject(rows);
         if (allSeries.length < 2) {
           return (
@@ -1021,8 +1260,10 @@
                     // the stroke white makes it a white disc on white — the
                     // schools that skipped a series then vanish entirely,
                     // because a gapped line draws no path either.
-                    <Line key={c} type="linear" dataKey={c} stroke={colorOf(c)} strokeWidth={2.5}
-                      dot={{ r: 5, fill: colorOf(c), stroke: "#fff", strokeWidth: 2 }}
+                    <Line key={c} type="linear" dataKey={c} stroke={colorOf(c)}
+                      strokeWidth={focus === c ? 3.5 : 2.5} strokeOpacity={dim(focus, c)}
+                      dot={{ r: 5, fill: colorOf(c), stroke: "#fff", strokeWidth: 2,
+                             fillOpacity: dim(focus, c), strokeOpacity: dim(focus, c) }}
                       activeDot={{ r: 7, fill: colorOf(c), stroke: "#fff", strokeWidth: 2 }}
                       connectNulls={false} isAnimationActive={false} />
                   ))}
@@ -1036,7 +1277,7 @@
       // -------------------------------------------------------------------
       // IGCSE
       // -------------------------------------------------------------------
-      const IgcseTab = () => {
+      const IgcseTab = ({ focus }) => {
         const all = D.exams.subject.filter((r) => r.level === "IGCSE");
         const allSeries = seriesFor(all);
         const [picked, setPicked] = useState(null);
@@ -1073,8 +1314,10 @@
               <Stat label="Ungraded" value={pct((gc("U") / graded) * 100)} tone="#b91c1c" sub={`${gc("U")} at grade U`} />
             </div>
 
+            <Signals items={igcseSignals(series, rows)} />
+
             {hasCore && (
-              <div className="cx-callout cx-callout--warn" style={{ marginBottom: 20 }}>
+              <div className="cx-callout cx-callout--warn" style={{ marginTop: 20, marginBottom: 20 }}>
                 <strong>Core and Extended are shown separately, and must stay that way.</strong> Core
                 candidates sit Papers 1 and 3 and cannot be awarded above grade&nbsp;C; Extended
                 candidates sit Papers 2 and 4 and compete for A*–E. Pooling them makes a school that
@@ -1165,7 +1408,7 @@
                       </thead>
                       <tbody>
                         {bars.map((b) => (
-                          <tr key={b.key}>
+                          <tr key={b.key} className={focus === b.centre ? "cx-focus" : null}>
                             <td className="cx-school"><Dot centre={b.centre} />{fullName(b.centre)}</td>
                             <td>
                               <span className="cx-badge" style={
@@ -1195,12 +1438,19 @@
               title="Which paper carries the loss"
               desc="A cohort that holds up on the theory paper but collapses on the practical or the extended-response paper has an exam-technique problem, not a content problem."
             />
-            <ComponentCard level="IGCSE" series={series} />
+            <ComponentCard level="IGCSE" series={series} focus={focus} />
+
+            <Lead
+              eyebrow="Over time"
+              title="Series trend"
+              desc="How each school's outcomes have moved from one series to the next. Rates, so a small cohort and a large one sit on the same axis."
+            />
+            <ExamTrendCard level="IGCSE" focus={focus} />
           </div>
         );
       };
 
-      const ComponentCard = ({ level, series }) => {
+      const ComponentCard = ({ level, series, focus }) => {
         const rows = D.exams.component.filter((r) => r.level === level && r.series === series);
         const syllabuses = uniq(rows.map((r) => r.syllabus)).sort();
         const [picked, setPicked] = useState(null);
@@ -1252,7 +1502,7 @@
                 </thead>
                 <tbody>
                   {centres.map((c) => (
-                    <tr key={c}>
+                    <tr key={c} className={focus === c ? "cx-focus" : null}>
                       <td className="cx-school"><Dot centre={c} />{fullName(c)}</td>
                       {papers.map((p) => {
                         const hit = sr.find((r) => r.centre === c && r.component === p);
@@ -1279,7 +1529,7 @@
       // -------------------------------------------------------------------
       // AS & A Level
       // -------------------------------------------------------------------
-      const ALevelTab = () => {
+      const ALevelTab = ({ focus }) => {
         const all = D.exams.subject.filter((r) => r.level === "AS & A Level");
         const allSeries = seriesFor(all);
         const [picked, setPicked] = useState(null);
@@ -1308,7 +1558,9 @@
               <Stat label="Ungraded" value={gU} sub="award not stated in the report" tone="#b91c1c" />
             </div>
 
-            <div className="cx-callout cx-callout--warn" style={{ marginBottom: 20 }}>
+            <Signals items={aLevelSignals(series, rows)} />
+
+            <div className="cx-callout cx-callout--warn" style={{ marginTop: 20, marginBottom: 20 }}>
               <strong>Grade U is shown on its own.</strong> Cambridge writes U in upper case for both
               awards, and every candidate on these sheets carries the same component set — so this
               report gives no way to tell an AS-only U from a failed A&nbsp;Level. Counting it against
@@ -1380,7 +1632,7 @@
                       </thead>
                       <tbody>
                         {sr.map((r) => [
-                          <tr key={`${r.centre}-a2`}>
+                          <tr key={`${r.centre}-a2`} className={focus === r.centre ? "cx-focus" : null}>
                             <td className="cx-school" rowSpan={2} style={{ verticalAlign: "top" }}>
                               <Dot centre={r.centre} />{fullName(r.centre)}
                             </td>
@@ -1388,7 +1640,7 @@
                             {AL_LETTERS.map((g) => <td key={g} className="cx-n">{r.asA2.A2[g] || "—"}</td>)}
                             <td className="cx-n" style={{ fontWeight: 700 }}>{r.asA2.gradedA2}</td>
                           </tr>,
-                          <tr key={`${r.centre}-as`}>
+                          <tr key={`${r.centre}-as`} className={focus === r.centre ? "cx-focus" : null}>
                             <td><span className="cx-badge" style={{ background: "#ede9fe", color: "#5b21b6" }}>AS Level</span></td>
                             {AL_LETTERS.map((g) => (
                               <td key={g} className="cx-n" style={g === "A*" ? { color: "var(--ink-3)" } : null}>
@@ -1407,7 +1659,14 @@
 
             <Lead eyebrow="Diagnosis" title="Which paper carries the loss"
               desc="Mean raw mark per paper across the AS and A Level cohort together — the report does not separate them at component level." />
-            <ComponentCard level="AS & A Level" series={series} />
+            <ComponentCard level="AS & A Level" series={series} focus={focus} />
+
+            <Lead
+              eyebrow="Over time"
+              title="Series trend"
+              desc="The ungraded rate across series. A*–C is not offered here because it would pool two different qualifications."
+            />
+            <ExamTrendCard level="AS & A Level" focus={focus} />
           </div>
         );
       };
@@ -1415,6 +1674,376 @@
       // -------------------------------------------------------------------
       // Data notes
       // -------------------------------------------------------------------
+      /**
+       * Series trend for IGCSE and AS & A Level.
+       *
+       * The Checkpoint tabs have had a trend chart from the start; the exam
+       * tabs never did, even though the data supports one — a school's movement
+       * was only visible by flipping the series chip and remembering the last
+       * number. Tiers are kept apart here for the same reason they are kept
+       * apart everywhere else: Core cannot be awarded above C, so a Core line
+       * and an Extended line are not on the same scale of possibility.
+       */
+      const ExamTrendCard = ({ level, focus }) => {
+        const rows = D.exams.subject.filter((r) => r.level === level);
+        const allSeries = seriesFor(rows);
+        const syllabuses = uniq(rows.map((r) => r.syllabus)).sort();
+        const METRICS = level === "IGCSE"
+          ? [{ key: "pctAC", label: "A*–C rate" }, { key: "pctU", label: "Ungraded rate" }]
+          : [{ key: "pctU", label: "Ungraded rate" }];
+        const [pickedSyl, setSyl] = useState(null);
+        const [pickedMetric, setMetric] = useState(null);
+        const syl = syllabuses.includes(pickedSyl) ? pickedSyl : syllabuses[0];
+        const metric = METRICS.some((m) => m.key === pickedMetric) ? pickedMetric : METRICS[0].key;
+        const metricLabel = METRICS.find((m) => m.key === metric).label;
+
+        if (allSeries.length < 2) return null;
+
+        const sr = rows.filter((r) => r.syllabus === syl);
+        // One line per school-and-tier, and only where there is a line to draw.
+        const keyOf = (r) => `${r.centre}|${r.tier}`;
+        const groups = uniq(sr.map(keyOf));
+        const drawn = groups.filter((k) => sr.filter((r) => keyOf(r) === k).length > 1);
+        const singles = groups.filter((k) => !drawn.includes(k));
+        const labelOf = (k) => {
+          const [c, t] = k.split("|");
+          return t === "Untiered" ? shortName(c) : `${shortName(c)} · ${t}`;
+        };
+
+        const data = allSeries.map((s) => {
+          const o = { series: s };
+          drawn.forEach((k) => {
+            const hit = sr.find((r) => keyOf(r) === k && r.series === s);
+            o[k] = hit ? hit[metric] : null;
+          });
+          return o;
+        });
+
+        return (
+          <Card
+            eyebrow="Trend"
+            title={(D.syllabus[syl] || {}).subject || syl}
+            sub={drawn.length
+              ? `${metricLabel} across series. ${drawn.length} school-and-tier ${drawn.length === 1 ? "group has" : "groups have"} entered this syllabus more than once.`
+              : "No school has entered this syllabus in more than one series yet."}
+            right={
+              <div className="cx-no-print" style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>
+                {METRICS.length > 1 && (
+                  <Chips options={METRICS.map((m) => m.key)} value={metric} onChange={setMetric}
+                    format={(k) => METRICS.find((m) => m.key === k).label} />
+                )}
+                <Chips options={syllabuses} value={syl} onChange={setSyl} />
+              </div>
+            }
+            foot={
+              <HowTo>
+                <p>
+                  Each line is <strong>one school in one tier</strong>. The points are the exam series,
+                  oldest on the left. For the A*–C rate a rising line is an improvement; for the
+                  ungraded rate a <strong>falling</strong> line is the improvement.
+                </p>
+                <p>
+                  Core and Extended appear as separate lines even for the same school, and should not be
+                  compared with each other — a Core entry cannot be awarded above grade C.
+                </p>
+                <p>
+                  This is a rate, not a count, so a school that entered 20 candidates and one that
+                  entered 95 sit on the same axis. The cohort size behind each point is on the grade
+                  chart above.
+                </p>
+              </HowTo>
+            }
+          >
+            {drawn.length === 0 ? (
+              <div className="cx-callout">
+                Only one series is on file for every school in this syllabus, so there is nothing to
+                join yet. The chart appears as soon as one school sits a second series.
+              </div>
+            ) : (
+              <div style={{ height: 320 }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={data} margin={{ top: 8, right: 22, left: -8, bottom: 6 }}>
+                    <CartesianGrid strokeDasharray="2 4" stroke="#e8e6e0" />
+                    <XAxis dataKey="series" tick={{ fontSize: 12, fill: "#44445a" }} tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                    <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} tick={{ fontSize: 11, fill: "#8888a8" }} tickLine={false} axisLine={false} />
+                    <Tooltip formatter={(v, k) => [pct(v), labelOf(k)]} />
+                    <Legend formatter={labelOf} wrapperStyle={{ fontSize: 12 }} iconType="circle" iconSize={9} />
+                    {drawn.map((k) => {
+                      const centre = k.split("|")[0];
+                      const on = dim(focus, centre);
+                      return (
+                        <Line key={k} type="linear" dataKey={k} stroke={colorOf(centre)}
+                          strokeWidth={focus === centre ? 3.5 : 2.5} strokeOpacity={on}
+                          strokeDasharray={k.endsWith("Core") ? "6 4" : null}
+                          dot={{ r: 5, fill: colorOf(centre), stroke: "#fff", strokeWidth: 2, fillOpacity: on, strokeOpacity: on }}
+                          activeDot={{ r: 7 }} connectNulls={false} isAnimationActive={false} />
+                      );
+                    })}
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
+            )}
+            {singles.length > 0 && (
+              <p className="cx-card__sub" style={{ marginTop: 10 }}>
+                Not plotted: {singles.map(labelOf).join(", ")} — one series each.
+              </p>
+            )}
+          </Card>
+        );
+      };
+
+      /**
+       * One school, every level it appears in, in one place.
+       *
+       * The level tabs are the right shape for a network reader and the wrong
+       * shape for a school reading about itself: "strong at Checkpoint, weak at
+       * IGCSE" is in the data and invisible while the levels sit in separate
+       * tabs. This tab is the only place the page reads down a single school.
+       */
+      const SchoolProfileTab = ({ focus, setFocus }) => {
+        const centres = uniq(
+          D.checkpoint.subject.map((r) => r.centre).concat(D.exams.subject.map((r) => r.centre))
+        ).sort(byName);
+
+        if (!focus) {
+          return (
+            <div>
+              <Lead eyebrow="School profile" title="One school, all four levels"
+                desc="Every other tab compares the network at one level. This one reads down a single school across every level it appears in — the view a school wants when it is reading about itself." />
+              <Card>
+                <div className="cx-prof-empty">
+                  <p className="cx-prof-empty__title">Choose a school to begin</p>
+                  <p className="cx-card__sub" style={{ margin: "0 auto 18px", maxWidth: "56ch" }}>
+                    Use the school picker in the bar above, or pick one here. Your choice carries across
+                    every tab — the charts will bring that school forward and dim the rest.
+                  </p>
+                  <div className="cx-filters cx-no-print" style={{ justifyContent: "center" }}>
+                    {centres.map((c) => (
+                      <button key={c} type="button" className="cx-chip" onClick={() => setFocus(c)}>
+                        {fullName(c)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </div>
+          );
+        }
+
+        const LEVELS = ["Primary Checkpoint", "Lower Secondary Checkpoint", "IGCSE", "AS & A Level"];
+        const cp = D.checkpoint.subject.filter((r) => r.centre === focus);
+        const ex = D.exams.subject.filter((r) => r.centre === focus);
+        const present = new Set([...cp.map((r) => r.level), ...ex.map((r) => r.level)]);
+
+        // Checkpoint: this school against the network mean, per subject and series.
+        const cpRows = cp.slice().sort((a, b) =>
+          LEVELS.indexOf(a.level) - LEVELS.indexOf(b.level)
+          || seriesRankOf(a.series) - seriesRankOf(b.series)
+          || a.subject.localeCompare(b.subject));
+
+        const exRows = ex.slice().sort((a, b) =>
+          LEVELS.indexOf(a.level) - LEVELS.indexOf(b.level)
+          || seriesRankOf(a.series) - seriesRankOf(b.series)
+          || a.syllabus.localeCompare(b.syllabus));
+
+        // Weakest sub-strands for this school, newest series it has.
+        const subs = D.checkpoint.substrand.filter((r) => r.centre === focus);
+        const latestSub = subs.length
+          ? seriesFor(subs)[seriesFor(subs).length - 1]
+          : null;
+        const weak = subs.filter((r) => r.series === latestSub)
+          .sort((a, b) => a.pct - b.pct).slice(0, 8);
+
+        return (
+          <div>
+            <Lead
+              eyebrow="School profile"
+              title={fullName(focus)}
+              desc={`Every level this school appears in, read in order. Centre ${focus}.`}
+              right={
+                <button type="button" className="cx-chip cx-no-print" onClick={() => setFocus(null)}>
+                  ← Back to the network
+                </button>
+              }
+            />
+
+            <div className="cx-prof-levels" style={{ marginBottom: 18 }}>
+              {LEVELS.map((l) => (
+                <span key={l} className="cx-prof-level" data-absent={present.has(l) ? "0" : "1"}>
+                  {present.has(l) ? "✓ " : "— "}{l}
+                </span>
+              ))}
+            </div>
+
+            <Card eyebrow="Checkpoint" title="Overall score against the network"
+              sub="Cambridge's standardised 0–50 score. The network column is the mean of every school that entered the same subject in the same series, so the difference is like-for-like."
+              foot={
+                <HowTo chart="table">
+                  <p>
+                    Each row is one subject in one series. <strong>School</strong> is this school's mean
+                    overall score out of 50, and <strong>Network</strong> is the mean of every school
+                    that sat the same paper in the same series.
+                  </p>
+                  <p>
+                    The <strong>Difference</strong> column is the one to read. Green means this school
+                    was above the network that series; red means below. A number close to zero means
+                    the school moved with the network, whatever the network did.
+                  </p>
+                </HowTo>
+              }>
+              {cpRows.length === 0 ? (
+                <div className="cx-callout">This school has no Checkpoint results on file.</div>
+              ) : (
+                <div className="cx-scroll">
+                  <table className="cx-table">
+                    <thead>
+                      <tr>
+                        <th>Level</th><th>Series</th><th>Subject</th>
+                        <th className="cx-n">Learners</th><th className="cx-n">School</th>
+                        <th className="cx-n">Network</th><th className="cx-n">Difference</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cpRows.map((r, i) => {
+                        const peers = D.checkpoint.subject.filter((x) =>
+                          x.level === r.level && x.series === r.series && x.syllabus === r.syllabus);
+                        const net = mean(peers.map((x) => x.meanOverall));
+                        const delta = r.meanOverall - net;
+                        return (
+                          <tr key={i}>
+                            <td>{r.level.replace(" Checkpoint", "")}</td>
+                            <td>{r.series}</td>
+                            <td className="cx-school">{r.subject}</td>
+                            <td className="cx-n">{r.n}</td>
+                            <td className="cx-n" style={{ fontWeight: 700 }}>{fmt(r.meanOverall, 1)}</td>
+                            <td className="cx-n" style={{ color: "var(--ink-3)" }}>{fmt(net, 1)}</td>
+                            <td className={`cx-n ${delta >= 0 ? "cx-up" : "cx-down"}`}>
+                              {delta >= 0 ? "+" : ""}{fmt(delta, 1)}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
+
+            <Card eyebrow="Examinations" title="IGCSE and AS & A Level outcomes"
+              sub="Grades awarded, by syllabus and series. Core and Extended are listed separately because they are not the same opportunity."
+              foot={
+                <HowTo chart="table">
+                  <p>
+                    <strong>Graded</strong> is how many candidates received a grade, and{" "}
+                    <strong>Incomplete</strong> is how many missed a paper and so received none. The
+                    percentages are shares of the graded candidates.
+                  </p>
+                  <p>
+                    At IGCSE, <strong>A*–C</strong> is the usual measure of a strong pass and{" "}
+                    <strong>U</strong> is the share who received no grade at all. A Core row cannot
+                    show an A*–C above what Core allows, so read Core rows against other Core rows.
+                  </p>
+                  <p>
+                    At AS &amp; A Level the two awards are separate qualifications, so the table shows
+                    how many reached each rather than a single pass rate.
+                  </p>
+                </HowTo>
+              }>
+              {exRows.length === 0 ? (
+                <div className="cx-callout">This school has no IGCSE or AS &amp; A Level results on file.</div>
+              ) : (
+                <div className="cx-scroll">
+                  <table className="cx-table">
+                    <thead>
+                      <tr>
+                        <th>Level</th><th>Series</th><th>Subject</th><th>Tier</th>
+                        <th className="cx-n">Graded</th><th className="cx-n">Incomplete</th>
+                        <th className="cx-n">A*–C</th><th className="cx-n">U</th><th>Awards</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {exRows.map((r, i) => (
+                        <tr key={i}>
+                          <td>{r.level}</td>
+                          <td>{r.series}</td>
+                          <td className="cx-school">{r.syllabus} · {r.subject}</td>
+                          <td>
+                            <span className="cx-badge" style={
+                              r.tier === "Core" ? { background: "#fef3c7", color: "#92400e" }
+                                : r.tier === "Extended" ? { background: "#dbeafe", color: "#1e40af" }
+                                  : { background: "#f1f5f9", color: "#475569" }
+                            }>{r.tier}</span>
+                          </td>
+                          <td className="cx-n">{r.n}</td>
+                          <td className="cx-n" style={{ color: r.incomplete ? "var(--red)" : "var(--ink-3)" }}>
+                            {r.incomplete || "—"}
+                          </td>
+                          <td className="cx-n" style={{ fontWeight: 700, color: "var(--green)" }}>
+                            {r.pctAC === null ? "—" : pct(r.pctAC)}
+                          </td>
+                          <td className="cx-n" style={{ color: "var(--red)" }}>{pct(r.pctU)}</td>
+                          <td style={{ color: "var(--ink-3)" }}>
+                            {r.asA2 ? `${r.asA2.gradedA2} A Level · ${r.asA2.gradedAS} AS · ${r.asA2.ungraded} U` : "—"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </Card>
+
+            {weak.length > 0 && (
+              <Card eyebrow="Sub-strand" title={`Weakest topics — ${latestSub}`}
+                sub="From the per-question marks on the Checkpoint component sheets. These are the topics where this school won the smallest share of the marks available."
+                foot={
+                  <HowTo chart="table">
+                    <p>
+                      <strong>School</strong> is the share of available marks this school's learners won
+                      on that topic. <strong>Network</strong> is the same figure for every school that
+                      sat it.
+                    </p>
+                    <p>
+                      A topic where the school is well <strong>below</strong> the network is a teaching
+                      and pacing question for this school. A topic where school and network are both low
+                      is a network-wide gap, and the fix belongs in the scheme of work rather than in
+                      one classroom.
+                    </p>
+                    <p>Cambridge supplies this per-question data for Checkpoint only, not for IGCSE or A Level.</p>
+                  </HowTo>
+                }>
+                <div className="cx-scroll">
+                  <table className="cx-table">
+                    <thead>
+                      <tr><th>Subject</th><th>Sub-strand</th><th className="cx-n">School</th><th className="cx-n">Network</th><th className="cx-n">Difference</th></tr>
+                    </thead>
+                    <tbody>
+                      {weak.map((r, i) => {
+                        const peers = D.checkpoint.substrand.filter((x) =>
+                          x.series === r.series && x.syllabus === r.syllabus && x.substrand === r.substrand);
+                        const net = mean(peers.map((x) => x.pct));
+                        const delta = r.pct - net;
+                        return (
+                          <tr key={i}>
+                            <td style={{ color: "var(--ink-3)" }}>{r.subject.split(" ")[0]}</td>
+                            <td className="cx-school">{r.substrand}</td>
+                            <td className="cx-heat" style={{ background: heatOf(r.pct) }}>{fmt(r.pct, 0)}%</td>
+                            <td className="cx-n" style={{ color: "var(--ink-3)" }}>{fmt(net, 0)}%</td>
+                            <td className={`cx-n ${delta >= 0 ? "cx-up" : "cx-down"}`}>
+                              {delta >= 0 ? "+" : ""}{fmt(delta, 0)} pt
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </Card>
+            )}
+          </div>
+        );
+      };
+
       const NotesTab = () => {
         const inc = D.quality.incomplete.slice().sort((a, b) => b.incomplete - a.incomplete);
         const totalMissing = sum(inc.map((r) => r.incomplete));
@@ -1691,10 +2320,11 @@
        * its left reads as a mistake, even when the second holds more data.
        */
       const TABS = [
-        { key: "primary", label: "Primary Checkpoint" },
-        { key: "lower", label: "Lower Secondary Checkpoint" },
+        { key: "primary", label: "Primary" },
+        { key: "lower", label: "Lower Secondary" },
         { key: "igcse", label: "IGCSE" },
         { key: "alevel", label: "AS & A Level" },
+        { key: "school", label: "School profile" },
         { key: "notes", label: "Data notes" },
       ];
 
@@ -1704,6 +2334,25 @@
         const fromHash = (window.location.hash || "").replace("#", "");
         const [tab, setTab] = useState(TABS.some((t) => t.key === fromHash) ? fromHash : TABS[0].key);
         const [calp, setCalp] = useState(false);
+        /* Which school is brought forward, or null for the whole network. Kept
+           in the URL so a school can be sent a link that opens on itself, and
+           remembered locally so a returning reader does not re-pick it. */
+        const params = new URLSearchParams(window.location.search);
+        const initialFocus = params.get("school")
+          || (() => { try { return window.localStorage.getItem("cx-school"); } catch (e) { return null; } })();
+        const [focus, setFocusRaw] = useState(
+          (D && D.schools.some((s) => s.centre === initialFocus)) ? initialFocus : null
+        );
+        const setFocus = (centre) => {
+          setFocusRaw(centre);
+          try {
+            if (centre) window.localStorage.setItem("cx-school", centre);
+            else window.localStorage.removeItem("cx-school");
+            const u = new URL(window.location.href);
+            if (centre) u.searchParams.set("school", centre); else u.searchParams.delete("school");
+            window.history.replaceState(null, "", u.toString());
+          } catch (e) { /* file:// or storage disabled */ }
+        };
         const go = (key) => {
           setTab(key);
           try { window.history.replaceState(null, "", `#${key}`); } catch (err) { /* file:// */ }
@@ -1734,19 +2383,30 @@
                       {t.label}
                     </button>
                   ))}
-                  <button type="button" className="cx-tab" style={{ marginLeft: "auto", color: "var(--brand)" }}
-                    onClick={() => setCalp(true)}>
-                    Understanding CALP →
-                  </button>
+                  <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12, paddingLeft: 16 }}>
+                    <select className="cx-select" data-on={focus ? "1" : "0"} aria-label="Bring one school forward"
+                      value={focus || ""} onChange={(e) => setFocus(e.target.value || null)}>
+                      <option value="">All schools</option>
+                      {D.schools
+                        .filter((s) => netCentres.has(s.centre))
+                        .sort((a, b) => a.short.localeCompare(b.short))
+                        .map((s) => <option key={s.centre} value={s.centre}>{s.short}</option>)}
+                    </select>
+                    <button type="button" className="cx-tab" style={{ color: "var(--brand)" }}
+                      onClick={() => setCalp(true)}>
+                      Understanding CALP →
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
             <div className="cx-wrap" style={{ paddingBottom: 56 }}>
-              {tab === "primary" && <CheckpointTab key="p" level="Primary Checkpoint" />}
-              {tab === "lower" && <CheckpointTab key="l" level="Lower Secondary Checkpoint" />}
-              {tab === "igcse" && <IgcseTab />}
-              {tab === "alevel" && <ALevelTab />}
+              {tab === "primary" && <CheckpointTab key="p" level="Primary Checkpoint" focus={focus} />}
+              {tab === "lower" && <CheckpointTab key="l" level="Lower Secondary Checkpoint" focus={focus} />}
+              {tab === "igcse" && <IgcseTab focus={focus} />}
+              {tab === "alevel" && <ALevelTab focus={focus} />}
+              {tab === "school" && <SchoolProfileTab focus={focus} setFocus={setFocus} />}
               {tab === "notes" && <NotesTab />}
             </div>
           </React.Fragment>
