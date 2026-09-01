@@ -142,6 +142,11 @@
         font-family: var(--font-title); font-size: var(--text-3xl);
         font-weight: 600; margin: 5px 0 0; color: var(--ink); line-height: 1.2;
       }
+      .cx-focus-note {
+        margin: 9px 0 0; padding: 8px 14px; border-radius: var(--radius);
+        background: #eefaf8; border: 1px solid #b9e3dd; color: #12433d;
+        font-size: var(--text-sm); line-height: 1.55; display: inline-block;
+      }
       .cx-lead__desc {
         margin: 7px 0 0; max-width: 74ch;
         font-size: var(--text-base); line-height: 1.62; color: var(--ink-2);
@@ -536,8 +541,15 @@
         var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
         var uniq = function (a) { return Object.keys(a.reduce(function (m, x) { m[x] = 1; return m; }, {})); };
         var all = D.checkpoint.subject.concat(D.exams.subject);
+        // An exam row is per school-syllabus-TIER, and every tier row of one
+        // syllabus repeats the same sheet-level entry count. Summing them added
+        // each tiered cohort twice — the headline read 3,376 against a true
+        // 2,990. De-duplicate on school + series + syllabus first, the way the
+        // IGCSE tab's own Entries tile already does.
+        var seen = {};
+        D.exams.subject.forEach(function (r) { seen[r.centre + '|' + r.series + '|' + r.syllabus] = r.entries; });
         var entries = D.checkpoint.subject.reduce(function (s, r) { return s + r.n; }, 0)
-          + D.exams.subject.reduce(function (s, r) { return s + r.entries; }, 0);
+          + Object.keys(seen).reduce(function (s, k) { return s + seen[k]; }, 0);
         set('kpiEntries', entries.toLocaleString('en-GB'));
         set('kpiCentres', uniq(all.map(function (r) { return r.centre; })).length);
         set('kpiSeries', uniq(all.map(function (r) { return r.series; })).length);
@@ -619,6 +631,14 @@
       // -------------------------------------------------------------------
       // Presentational pieces
       // -------------------------------------------------------------------
+      const FocusNote = ({ focus }) => focus ? (
+        <p className="cx-focus-note">
+          <span className="cx-dot" style={{ background: colorOf(focus) }} />
+          Showing <strong>{fullName(focus)}</strong> against the network. Every other school is dimmed,
+          not removed — the comparison is still there to read.
+        </p>
+      ) : null;
+
       const Lead = ({ eyebrow, title, desc, right }) => (
         <div className="cx-lead">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 20, flexWrap: "wrap" }}>
@@ -725,6 +745,14 @@
       const TONE = { alert: "#b91c1c", good: "#15803d", watch: "#b45309", info: "#0f766e" };
 
       /**
+       * A movement between two series is only worth announcing when both
+       * cohorts were big enough for the difference to mean something. Kharisma
+       * Bangsa sat 5 Biology candidates in November 2025 and 47 in June 2026;
+       * calling that an 18-point gain reads as a finding and is mostly noise.
+       */
+      const MOVE_MIN_COHORT = 10;
+
+      /**
        * Download a table as CSV.
        *
        * A coordinator taking the sub-strand table into a meeting was otherwise
@@ -805,6 +833,7 @@
           for (const r of rows) {
             const before = all.find((x) => x.centre === r.centre && x.syllabus === r.syllabus && x.series === prev);
             if (!before) continue;
+            if (r.n < MOVE_MIN_COHORT || before.n < MOVE_MIN_COHORT) continue;
             const d = r.meanOverall - before.meanOverall;
             if (!move || Math.abs(d) > Math.abs(move.d)) move = { d, row: r, before };
           }
@@ -813,7 +842,7 @@
             out.push({
               mark: up ? "↑" : "↓", tone: up ? TONE.good : TONE.alert,
               title: `${shortName(move.row.centre)} ${up ? "rose" : "fell"} ${fmt(Math.abs(move.d), 1)} points in ${move.row.subject}`,
-              body: `From ${fmt(move.before.meanOverall, 1)} in ${prev} to ${fmt(move.row.meanOverall, 1)} in ${series}. These are different learners, so this is a change in what the school is producing year on year, not the progress of one cohort.`,
+              body: `From ${fmt(move.before.meanOverall, 1)} across ${move.before.n} learners in ${prev} to ${fmt(move.row.meanOverall, 1)} across ${move.row.n} in ${series}. These are different learners, so this is a change in what the school is producing year on year, not the progress of one cohort.`,
             });
           }
         }
@@ -857,6 +886,7 @@
           for (const r of rows) {
             const before = all.find((x) => x.centre === r.centre && x.syllabus === r.syllabus && x.tier === r.tier && x.series === prev);
             if (!before || before.pctAC === null || r.pctAC === null) continue;
+            if (r.n < MOVE_MIN_COHORT || before.n < MOVE_MIN_COHORT) continue;
             const d = r.pctAC - before.pctAC;
             if (!move || Math.abs(d) > Math.abs(move.d)) move = { d, row: r, before };
           }
@@ -865,7 +895,7 @@
             out.push({
               mark: up ? "↑" : "↓", tone: up ? TONE.good : TONE.alert,
               title: `${shortName(move.row.centre)} ${up ? "gained" : "lost"} ${fmt(Math.abs(move.d), 1)} points of A*–C in ${move.row.subject}`,
-              body: `From ${pct(move.before.pctAC)} in ${prev} to ${pct(move.row.pctAC)} in ${series}${move.row.tier === "Untiered" ? "" : `, ${move.row.tier} tier`}. The trend chart at the foot of this tab shows the whole run.`,
+              body: `From ${pct(move.before.pctAC)} of ${move.before.n} candidates in ${prev} to ${pct(move.row.pctAC)} of ${move.row.n} in ${series}${move.row.tier === "Untiered" ? "" : `, ${move.row.tier} tier`}. The trend chart at the foot of this tab shows the whole run.`,
             });
           }
         }
@@ -939,6 +969,7 @@
               desc={`Cambridge reports a standardised overall score from 0 to 50 for each learner in each subject, alongside a score for every strand. That score — not the raw mark — is what holds its meaning between one series and the next.`}
               right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
             />
+            <FocusNote focus={focus} />
 
             <div className="cx-stats">
               <Stat label="Schools" value={centres.length} sub={`${allSeries.length} series on file`} />
@@ -1232,7 +1263,7 @@
               </div>
             )}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 9, flexWrap: "wrap" }}>
-              <span className="cx-count">
+              <span className="cx-count" role="status" aria-live="polite">
                 {q ? `Showing ${shown.length} of ${table.length} sub-strands` : `${table.length} sub-strands`}
               </span>
               <CsvButton
@@ -1412,6 +1443,7 @@
               desc="Grades, not marks, are the currency here: Cambridge does not publish a maximum in this report and the paper set differs by tier, so a mean mark cannot be read as a percentage."
               right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
             />
+            <FocusNote focus={focus} />
 
             <div className="cx-stats">
               <Stat label="Entries" value={totalEntries}
@@ -1672,6 +1704,7 @@
               desc="Cambridge writes the AS award in lower case and the full A Level award in upper case, in one column. They are two different qualifications and are never pooled here."
               right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
             />
+            <FocusNote focus={focus} />
 
             <div className="cx-stats">
               <Stat label="Graded" value={graded}
@@ -1985,7 +2018,7 @@
               desc={`Every level this school appears in, read in order. Centre ${focus}.`}
               right={
                 <button type="button" className="cx-chip cx-no-print" onClick={() => setFocus(null)}>
-                  ← Back to the network
+                  Choose a different school
                 </button>
               }
             />
