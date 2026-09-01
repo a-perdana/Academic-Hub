@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cambridge Results — Network Dashboard</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23042f2e'/><polygon points='10,45 50,65 50,70 10,50' fill='%230f766e'/><polygon points='90,45 50,65 50,70 90,50' fill='%2314b8a6'/><polygon points='50,25 90,45 50,65 10,45' fill='%230d9488'/><circle cx='76' cy='76' r='20' fill='%2314b8a6' stroke='%23042f2e' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>C</text></svg>">
 
     <script src="firebase-config.js"></script>
     <script>
@@ -33,10 +33,10 @@
       Every CDN dependency is PINNED.
 
       @babel/standalone must stay on a 7.x pin. The unversioned
-      unpkg.com/@babel/standalone/babel.min.js now resolves to Babel 8, whose
-      preset-react defaults to the automatic JSX runtime — it compiles JSX to
-      require("react/jsx-runtime"), and `require` does not exist in a browser,
-      so the whole page dies with an uncaught ReferenceError and renders blank.
+      unpkg URL for it now resolves to Babel 8, whose preset-react defaults to
+      the automatic JSX runtime — it compiles JSX to a require() of
+      "react/jsx-runtime", and require does not exist in a browser, so the
+      whole page dies with an uncaught ReferenceError and renders blank.
       Babel 7 defaults to the classic runtime (React.createElement), which is
       what the React 17 UMD build below expects.
     -->
@@ -46,92 +46,322 @@
     <script src="https://unpkg.com/prop-types@15.8.1/prop-types.min.js"></script>
     <script src="https://unpkg.com/recharts@1.8.5/umd/Recharts.min.js"></script>
 
+    <!--
+      build.js injects the shared base stylesheet link above this block, which
+      brings in shared-design tokens: the Eduversal palette, the Lora/DM Sans pair,
+      the spacing and radius scales, and the canonical .page-hero /
+      .page-info-strip / .page-footer chrome. This page therefore declares NO
+      palette and NO font stack of its own — it picks the Curriculum family
+      (teal) and inherits the rest.
+
+      Every page-local class is prefixed cx-. The shared stylesheet already
+      defines .card, .badge, .pill, .wrap, .eyebrow and .num, and its .card:hover
+      outranks a bare .card rule, so an unprefixed name here silently inherits
+      someone else's design. Keep the prefix on both sides — selector AND
+      className.
+
+      Do NOT write the shared stylesheet's href as a literal anywhere in this
+      file, comments included. build.js only injects the link when that exact
+      string is absent, so quoting it here would make the build skip the
+      injection and every token below would resolve to nothing — a page that
+      renders its data perfectly with no styling at all. That is precisely how
+      this page shipped once already.
+    -->
     <style>
-      :root {
-        --mor: #6c5ce7;
-        --cyan: #0891b2;
-        --cyan-deep: #0e7490;
-        --ink: #17202a;
-        --muted: #5b6b7a;
-        --line: #e3e8ef;
-        --paper: #ffffff;
-        --ground: #f4f6f9;
+      /* Body is a flex column because .page-footer is a direct child; without
+         the explicit width, <main> shrinks to its content and the 1200px rail
+         collapses (root CLAUDE.md Common Mistake #54). */
+      main { width: 100%; flex: 1; }
+
+      /* Matches .page-hero__inner exactly — same clamp, same 40px padding — so
+         body content and hero text share a left edge above 1280px
+         (Common Mistake #52). */
+      .cx-wrap { max-width: var(--container-max); margin: 0 auto; padding: 0 40px; }
+
+      /* ---- tab bar ---------------------------------------------------- */
+      .cx-tabs {
+        position: sticky; top: 0; z-index: 50;
+        background: rgba(255,255,255,0.94);
+        backdrop-filter: saturate(1.6) blur(8px);
+        border-bottom: 1px solid var(--border);
       }
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        background: var(--ground);
-        color: var(--ink);
-        font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        -webkit-font-smoothing: antialiased;
+      .cx-tabs__inner { display: flex; gap: 2px; overflow-x: auto; }
+      .cx-tab {
+        appearance: none; background: none; border: 0;
+        padding: 15px 16px 12px;
+        font-family: var(--font-body); font-size: var(--text-sm);
+        font-weight: var(--fw-semibold); letter-spacing: 0.01em;
+        color: var(--ink-3); cursor: pointer; white-space: nowrap;
+        border-bottom: 3px solid transparent;
+        transition: color 0.14s ease, border-color 0.14s ease;
       }
-      .wrap { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
-      .card {
-        background: var(--paper);
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04);
-        margin-bottom: 20px;
+      .cx-tab:hover { color: var(--ink-2); }
+      .cx-tab[aria-selected="true"] { color: var(--teal-ink); border-bottom-color: var(--teal-ink); }
+
+      /* ---- section lead ------------------------------------------------ */
+      .cx-lead { margin: 34px 0 16px; }
+      .cx-lead:first-child { margin-top: 26px; }
+      .cx-lead__eyebrow {
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.1em; text-transform: uppercase; color: var(--teal-ink);
+      }
+      .cx-lead__title {
+        font-family: var(--font-title); font-size: var(--text-3xl);
+        font-weight: 600; margin: 5px 0 0; color: var(--ink); line-height: 1.2;
+      }
+      .cx-lead__desc {
+        margin: 7px 0 0; max-width: 74ch;
+        font-size: var(--text-base); line-height: 1.62; color: var(--ink-2);
+      }
+
+      /* ---- card -------------------------------------------------------- */
+      .cx-card {
+        background: var(--white);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+        margin-bottom: var(--space-5);
         overflow: hidden;
       }
-      .card__head { padding: 18px 22px 0; }
-      .card__body { padding: 14px 22px 20px; }
-      .card__title { font-size: 17px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
-      .card__sub { font-size: 13px; color: var(--muted); margin: 4px 0 0; line-height: 1.5; }
-      .eyebrow {
-        font-size: 11px; font-weight: 700; letter-spacing: 0.09em;
-        text-transform: uppercase; color: var(--cyan-deep);
+      .cx-card__head {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        gap: var(--space-5); padding: 18px 22px 0;
       }
-      table { border-collapse: collapse; width: 100%; font-size: 13px; }
-      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
-      th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); font-weight: 700; }
-      td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
-      .scroll-x { overflow-x: auto; }
-      .pill {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 6px 14px; border-radius: 999px; border: 1px solid var(--line);
-        background: #fff; font-size: 13px; font-weight: 600; color: var(--muted);
-        cursor: pointer; transition: all 0.12s ease;
+      .cx-card__eyebrow {
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-3);
       }
-      .pill:hover { border-color: var(--cyan); color: var(--cyan-deep); }
-      .pill[aria-pressed="true"] {
-        background: var(--cyan); border-color: var(--cyan); color: #fff;
+      .cx-card__title {
+        font-family: var(--font-title); font-size: var(--text-xl);
+        font-weight: 600; margin: 4px 0 0; color: var(--ink); line-height: 1.25;
       }
-      .tabbtn {
-        padding: 12px 18px; border: none; background: none; cursor: pointer;
-        font-size: 14px; font-weight: 600; color: var(--muted);
-        border-bottom: 3px solid transparent; white-space: nowrap;
+      .cx-card__sub {
+        margin: 6px 0 0; max-width: 82ch;
+        font-size: var(--text-sm); line-height: 1.58; color: var(--ink-2);
       }
-      .tabbtn[aria-selected="true"] { color: var(--mor); border-bottom-color: var(--mor); }
-      .note {
-        border-left: 3px solid var(--cyan); background: #ecfeff;
-        padding: 12px 16px; border-radius: 0 8px 8px 0; font-size: 13px;
-        color: #164e63; line-height: 1.55;
+      .cx-card__body { padding: 14px 22px 20px; }
+      .cx-card__foot {
+        padding: 11px 22px; border-top: 1px solid var(--border);
+        background: #fbfbfa; font-size: var(--text-xs);
+        line-height: 1.55; color: var(--ink-3);
       }
-      .note--warn { border-left-color: #d97706; background: #fffbeb; color: #78350f; }
-      .badge {
-        display: inline-block; padding: 2px 8px; border-radius: 999px;
-        font-size: 11px; font-weight: 700; letter-spacing: 0.02em;
+
+      /* ---- stat tiles --------------------------------------------------- */
+      .cx-stats { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-5); }
+      .cx-stat {
+        flex: 1 1 156px; min-width: 156px;
+        background: var(--white); border: 1px solid var(--border);
+        border-radius: var(--radius); padding: 13px 16px 14px;
+      }
+      .cx-stat__lbl {
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink-3);
+      }
+      .cx-stat__num {
+        font-family: var(--font-title); font-size: var(--text-4xl);
+        font-weight: 600; line-height: 1.12; margin-top: 3px; color: var(--ink);
+        font-variant-numeric: tabular-nums;
+      }
+      .cx-stat__sub { font-size: var(--text-xs); color: var(--ink-3); margin-top: 3px; line-height: 1.45; }
+
+      /* ---- filters ------------------------------------------------------ */
+      .cx-filters { display: flex; gap: var(--space-2); flex-wrap: wrap; align-items: center; }
+      .cx-filters__lbl {
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.07em; text-transform: uppercase;
+        color: var(--ink-3); margin-right: var(--space-1);
+      }
+      .cx-chip {
+        appearance: none; cursor: pointer;
+        padding: 6px 14px; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--white);
+        font-family: var(--font-body); font-size: var(--text-sm);
+        font-weight: var(--fw-semibold); color: var(--ink-2);
+        transition: all 0.13s ease;
+      }
+      .cx-chip:hover { border-color: var(--teal-ink); color: var(--teal-ink); }
+      .cx-chip[aria-pressed="true"] {
+        background: var(--teal-ink); border-color: var(--teal-ink);
+        color: #fff; box-shadow: var(--shadow-sm);
+      }
+
+      /* ---- tables ------------------------------------------------------- */
+      .cx-scroll { overflow-x: auto; }
+      .cx-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: var(--text-sm); }
+      .cx-table th, .cx-table td {
+        text-align: left; padding: 9px 11px;
+        border-bottom: 1px solid var(--border); white-space: nowrap;
+      }
+      .cx-table th {
+        position: sticky; top: 0; z-index: 2; background: #fbfbfa;
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3);
+      }
+      .cx-table tbody tr:last-child td { border-bottom: 0; }
+      .cx-table tbody tr:hover td { background: #fcfcfb; }
+      .cx-n { text-align: right; font-variant-numeric: tabular-nums; }
+      .cx-school { font-weight: var(--fw-semibold); color: var(--ink); }
+      .cx-dot {
+        display: inline-block; width: 9px; height: 9px;
+        border-radius: 3px; margin-right: 8px; vertical-align: baseline;
+      }
+      /* First column stays put while a wide school-by-school grid scrolls. */
+      .cx-table--pinned td:first-child,
+      .cx-table--pinned th:first-child {
+        position: sticky; left: 0; z-index: 3; background: var(--white);
+        border-right: 1px solid var(--border); white-space: normal; min-width: 220px;
+      }
+      .cx-table--pinned th:first-child { z-index: 4; background: #fbfbfa; }
+      .cx-table--pinned tbody tr:hover td:first-child { background: #fcfcfb; }
+
+      /* ---- callouts ----------------------------------------------------- */
+      .cx-callout {
+        border: 1px solid #b9e3dd; border-left: 3px solid var(--teal-ink);
+        background: #f0faf8; color: #12433d;
+        padding: 13px 17px; border-radius: 0 var(--radius) var(--radius) 0;
+        font-size: var(--text-sm); line-height: 1.6;
+      }
+      .cx-callout--warn {
+        border-color: #f3dfae; border-left-color: var(--amber);
+        background: var(--amber-2); color: #6b4a05;
+      }
+      .cx-callout strong { font-weight: var(--fw-bold); }
+
+      /* ---- badges + heat ------------------------------------------------ */
+      .cx-badge {
+        display: inline-block; padding: 2px 9px; border-radius: 999px;
+        font-size: var(--text-xs); font-weight: var(--fw-bold); letter-spacing: 0.02em;
+      }
+      .cx-heat { color: #fff; font-weight: var(--fw-bold); text-align: right; }
+      .cx-legend { display: flex; align-items: center; gap: 7px; font-size: var(--text-xs); color: var(--ink-3); }
+      .cx-legend__ramp { display: flex; border-radius: 4px; overflow: hidden; }
+      .cx-legend__step { width: 26px; height: 11px; }
+
+      .cx-up { color: var(--green); font-weight: var(--fw-semibold); }
+      .cx-down { color: var(--red); font-weight: var(--fw-semibold); }
+
+      /* Family accent used by page-local chrome. base.css exposes the family
+         gradient but not a flat ink colour, so name it once here. */
+      :root { --teal-ink: #0f766e; }
+
+      @media (max-width: 720px) {
+        .cx-wrap { padding: 0 20px; }
+        .cx-card__head { flex-direction: column; gap: var(--space-3); }
       }
       @media print {
-        .no-print { display: none !important; }
-        body { background: #fff; }
-        .card { break-inside: avoid; box-shadow: none; }
+        .cx-no-print { display: none !important; }
+        .cx-card { break-inside: avoid; box-shadow: none; }
+        .cx-tabs { position: static; }
       }
     </style>
   </head>
-  <body>
+
+  <body data-page-accent="teal">
     <!--
-      The skip link and the #main-content landmark are written here by hand, in
-      React-correct form on the <main> below, rather than being left to
-      build.js's injectA11y(). That helper writes raw HTML attributes
-      (tabindex="-1") into the first <main> it finds — and on this page that
-      <main> lives inside JSX, where React expects tabIndex and warns on the
-      lowercase form. Shipping our own skip link makes injectA11y() return
-      early, so there is exactly one #main-content on the page.
+      The skip link and the #main-content landmark are written here by hand
+      rather than being left to build.js's injectA11y(): shipping our own skip
+      link makes that helper return early, so there is exactly one
+      #main-content on the page and no raw tabindex ends up inside JSX.
     -->
     <a class="skip-link" href="#main-content">Skip to main content</a>
-    <div id="root"></div>
+
+    <!--
+      Hero, info strip and footer are static HTML on purpose. They are the
+      canonical Eduversal chrome, they paint before React boots, and they
+      survive a CDN failure — if Recharts or Babel never arrives the reader
+      still gets a branded page and the message inside #root, not a blank
+      screen. Only the analysis itself is React.
+    -->
+    <header class="page-hero" data-accent="teal">
+      <div class="page-hero__inner">
+        <div class="page-hero__icon" aria-hidden="true">🎓</div>
+        <div class="page-hero__text">
+          <p class="page-hero__eyebrow">Academic Hub · Curriculum · Cambridge</p>
+          <h1 class="page-hero__title">Cambridge Results</h1>
+          <p class="page-hero__desc">
+            Every Cambridge result the network holds, read straight from the workbooks
+            Cambridge International returns to each centre — down to sub-strand and paper level.
+          </p>
+        </div>
+        <div class="page-hero__kpis" id="heroKpis">
+          <div class="page-hero__kpi page-hero__kpi--primary">
+            <div class="page-hero__kpi-num" id="kpiEntries">—</div>
+            <div class="page-hero__kpi-lbl">Results</div>
+            <div class="page-hero__kpi-sub">learner × subject</div>
+          </div>
+          <div class="page-hero__kpi">
+            <div class="page-hero__kpi-num" id="kpiCentres">—</div>
+            <div class="page-hero__kpi-lbl">Centres</div>
+          </div>
+          <div class="page-hero__kpi">
+            <div class="page-hero__kpi-num" id="kpiSeries">—</div>
+            <div class="page-hero__kpi-lbl">Series</div>
+          </div>
+          <div class="page-hero__kpi">
+            <div class="page-hero__kpi-num" id="kpiSub">—</div>
+            <div class="page-hero__kpi-lbl">Sub-strands</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main id="main-content" role="main" tabindex="-1">
+      <div class="cx-wrap">
+        <aside class="page-info-strip" data-accent="teal" role="note">
+          <div class="page-info-strip__icon" aria-hidden="true">ℹ️</div>
+          <div class="page-info-strip__text">
+            <span class="page-info-strip__title">How to read this page</span>
+            <div class="page-info-strip__body">
+              Checkpoint schools are compared on the <strong>overall score (0–50)</strong> — the
+              standardised Cambridge score, which holds its meaning across series. IGCSE
+              <strong>Core and Extended are never pooled</strong>: Core is capped at grade C, so a
+              combined figure describes neither cohort. <strong>AS and A&nbsp;Level are separate
+              awards</strong>, and a candidate who missed a paper is counted as an incomplete entry
+              rather than averaged away. Every one of those rules, and the workbooks behind them,
+              is set out under <strong>Data notes</strong>.
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div id="root"></div>
+    </main>
+
+    <footer class="page-footer" data-accent="teal" role="contentinfo">
+      <div class="page-footer__inner">
+        <div class="page-footer__cta">
+          <span class="page-footer__cta-eyebrow">Curriculum · Cambridge</span>
+          <h2 class="page-footer__cta-title">Results are the end of the story. The syllabus is the start.</h2>
+          <p class="page-footer__cta-desc">
+            The sub-strand table names what the network actually got wrong. Take it into the
+            curriculum map and the pacing schemes, where it can still change an outcome.
+          </p>
+          <a href="/curriculum-map" class="page-footer__cta-btn">Open Curriculum Map <span aria-hidden="true">→</span></a>
+        </div>
+        <nav class="page-footer__nav" aria-label="Cambridge Results footer navigation">
+          <div class="page-footer__nav-group">
+            <span class="page-footer__nav-heading">Cambridge</span>
+            <a href="/cambridge-pathway" class="page-footer__nav-link">Pathway Simulator</a>
+            <a href="/cambridge-school-quality" class="page-footer__nav-link">School Quality</a>
+            <a href="/cambridge-calendar" class="page-footer__nav-link">Exam Calendar</a>
+            <a href="/cambridge-standards" class="page-footer__nav-link">Cambridge Standards</a>
+          </div>
+          <div class="page-footer__nav-group">
+            <span class="page-footer__nav-heading">Curriculum</span>
+            <a href="/curriculum-map" class="page-footer__nav-link">Curriculum Map</a>
+            <a href="/syllabus-coverage" class="page-footer__nav-link">Syllabus Coverage</a>
+            <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
+            <a href="/school-assessment" class="page-footer__nav-link">School Assessment</a>
+          </div>
+        </nav>
+      </div>
+      <div class="page-footer__meta">
+        <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+        <span class="page-footer__meta-right" id="footMeta">
+          School-level aggregates only — no learner is identifiable on this page.
+        </span>
+      </div>
+    </footer>
 
     <script>
       /* CAMBRIDGE-DATA:START */
@@ -139,11 +369,35 @@
       /* CAMBRIDGE-DATA:END */
     </script>
 
+    <script>
+      /* Hero KPIs are plain DOM: they are the one part of the page worth
+         showing even if the React bundle never loads. */
+      (function () {
+        var D = window.CAMBRIDGE;
+        if (!D) return;
+        var set = function (id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
+        var uniq = function (a) { return Object.keys(a.reduce(function (m, x) { m[x] = 1; return m; }, {})); };
+        var all = D.checkpoint.subject.concat(D.exams.subject);
+        var entries = D.checkpoint.subject.reduce(function (s, r) { return s + r.n; }, 0)
+          + D.exams.subject.reduce(function (s, r) { return s + r.entries; }, 0);
+        set('kpiEntries', entries.toLocaleString('en-GB'));
+        set('kpiCentres', uniq(all.map(function (r) { return r.centre; })).length);
+        set('kpiSeries', uniq(all.map(function (r) { return r.series; })).length);
+        set('kpiSub', uniq(D.checkpoint.substrand.map(function (r) { return r.substrand; })).length);
+        var fm = document.getElementById('footMeta');
+        if (fm) {
+          fm.textContent = 'Generated ' + D.meta.generatedAt + ' from ' + D.meta.files.length
+            + ' Cambridge workbooks · school-level aggregates only, cohorts below n='
+            + D.meta.minReport + ' suppressed.';
+        }
+      })();
+    </script>
+
     <script type="text/babel">
-      const { useState, useMemo } = React;
+      const { useState } = React;
       const {
         ResponsiveContainer, BarChart, Bar, LineChart, Line, XAxis, YAxis,
-        CartesianGrid, Tooltip, Legend, Cell, ReferenceLine,
+        CartesianGrid, Tooltip, Legend, Cell, ReferenceLine, LabelList,
       } = Recharts;
 
       const D = window.CAMBRIDGE;
@@ -152,195 +406,199 @@
       // Palettes
       // -------------------------------------------------------------------
       const SCHOOL_COLOR = {
-        ID145: "#ef4444", // TNA Fatih
-        ID203: "#f97316", // Fatih Bilingual
-        ID244: "#a855f7", // Semesta Gunung Pati
-        ID279: "#14b8a6", // Cahaya Rancamaya
-        ID349: "#2563eb", // Kharisma Bangsa
-        ID350: "#16a34a", // Pribadi Bandung
-        ID371: "#d97706", // Kesatuan Bangsa
-        ID375: "#db2777", // Pribadi Depok
+        ID145: "#dc2626", // TNA Fatih
+        ID203: "#ea580c", // Fatih Bilingual
+        ID244: "#9333ea", // Semesta Gunung Pati
+        ID279: "#0d9488", // Cahaya Rancamaya
+        ID349: "#1d4ed8", // Kharisma Bangsa
+        ID350: "#15803d", // Pribadi Bandung
+        ID371: "#b45309", // Kesatuan Bangsa
+        ID375: "#be185d", // Pribadi Depok
         ID440: "#6c5ce7", // Pakar Belia
       };
+      // Ordered dark -> light so a stacked bar reads top grade to bottom.
       const GRADE_COLOR = {
-        "A*": "#047857", A: "#059669", B: "#34d399", C: "#a3e635",
-        D: "#fbbf24", E: "#f59e0b", F: "#fb923c", G: "#f87171", U: "#b91c1c",
+        "A*": "#065f46", A: "#047857", B: "#059669", C: "#34d399",
+        D: "#fcd34d", E: "#f59e0b", F: "#ea580c", G: "#dc2626", U: "#7f1d1d",
       };
       const GRADE_ORDER_IG = ["A*", "A", "B", "C", "D", "E", "F", "G", "U"];
-      const GRADE_ORDER_AL = ["A*", "A", "B", "C", "D", "E", "U"];
+      const AL_LETTERS = ["A*", "A", "B", "C", "D", "E"];
+      const HEAT = ["#991b1b", "#c2410c", "#b45309", "#857a00", "#4d7c0f", "#166534"];
 
       // -------------------------------------------------------------------
       // Lookups + helpers
       // -------------------------------------------------------------------
       const SCHOOL = {};
       (D.schools || []).forEach((s) => { SCHOOL[s.centre] = s; });
-      const schoolName = (c) => (SCHOOL[c] ? SCHOOL[c].short : c);
-      const schoolFull = (c) => (SCHOOL[c] ? SCHOOL[c].name : c);
+      const shortName = (c) => (SCHOOL[c] ? SCHOOL[c].short : c);
+      const fullName = (c) => (SCHOOL[c] ? SCHOOL[c].name : c);
       const colorOf = (c) => SCHOOL_COLOR[c] || "#94a3b8";
 
       const uniq = (a) => Array.from(new Set(a));
       const sum = (a) => a.reduce((s, x) => s + x, 0);
       const mean = (a) => (a.length ? sum(a) / a.length : null);
       const fmt = (n, d = 1) => (n === null || n === undefined ? "—" : Number(n).toFixed(d));
+      const pct = (n, d = 1) => (n === null || n === undefined ? "—" : `${Number(n).toFixed(d)}%`);
+      const byName = (a, b) => shortName(a).localeCompare(shortName(b));
+      const seriesFor = (rows) => uniq(rows.map((r) => r.series))
+        .sort((a, b) => D.meta.seriesOrder.indexOf(a) - D.meta.seriesOrder.indexOf(b));
 
-      /** Series present for a level, in the meta-declared chronological order. */
-      const seriesFor = (rows) =>
-        uniq(rows.map((r) => r.series)).sort(
-          (a, b) => D.meta.seriesOrder.indexOf(a) - D.meta.seriesOrder.indexOf(b)
-        );
+      const heatOf = (v) => {
+        if (v === null || v === undefined) return null;
+        const stops = [35, 50, 60, 70, 82];
+        let i = 0;
+        while (i < stops.length && v > stops[i]) i++;
+        return HEAT[i];
+      };
 
       // -------------------------------------------------------------------
-      // Small presentational pieces
+      // Presentational pieces
       // -------------------------------------------------------------------
-      const Card = ({ title, sub, eyebrow, children, right }) => (
-        <section className="cx-card">
-          {(title || eyebrow) && (
-            <div className="cx-card__head">
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 16 }}>
-                <div>
-                  {eyebrow && <div className="cx-eyebrow">{eyebrow}</div>}
-                  {title && <h3 className="cx-card__title" style={{ marginTop: eyebrow ? 4 : 0 }}>{title}</h3>}
-                  {sub && <p className="cx-card__sub">{sub}</p>}
-                </div>
-                {right}
-              </div>
+      const Lead = ({ eyebrow, title, desc, right }) => (
+        <div className="cx-lead">
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 20, flexWrap: "wrap" }}>
+            <div>
+              {eyebrow && <div className="cx-lead__eyebrow">{eyebrow}</div>}
+              <h2 className="cx-lead__title">{title}</h2>
             </div>
-          )}
-          <div className="cx-card__body">{children}</div>
-        </section>
-      );
-
-      const Kpi = ({ label, value, sub, tone }) => (
-        <div
-          style={{
-            flex: "1 1 150px", minWidth: 150, background: "#fff",
-            border: "1px solid var(--line)", borderRadius: 12, padding: "14px 16px",
-          }}
-        >
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--muted)", fontWeight: 700 }}>
-            {label}
+            {right}
           </div>
-          <div style={{ fontSize: 26, fontWeight: 800, lineHeight: 1.15, marginTop: 4, color: tone || "var(--ink)" }}>
-            {value}
-          </div>
-          {sub && <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 2 }}>{sub}</div>}
+          {desc && <p className="cx-lead__desc">{desc}</p>}
         </div>
       );
 
-      const KpiRow = ({ children }) => (
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginBottom: 20 }}>{children}</div>
+      const Card = ({ eyebrow, title, sub, right, foot, children }) => (
+        <section className="cx-card">
+          {(title || eyebrow) && (
+            <div className="cx-card__head">
+              <div>
+                {eyebrow && <div className="cx-card__eyebrow">{eyebrow}</div>}
+                {title && <h3 className="cx-card__title">{title}</h3>}
+                {sub && <p className="cx-card__sub">{sub}</p>}
+              </div>
+              {right}
+            </div>
+          )}
+          <div className="cx-card__body">{children}</div>
+          {foot && <div className="cx-card__foot">{foot}</div>}
+        </section>
       );
 
-      const SeriesPills = ({ options, value, onChange }) => (
-        <div className="cx-no-print" style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 18 }}>
-          <span style={{ fontSize: 12, color: "var(--muted)", alignSelf: "center", fontWeight: 600, marginRight: 4 }}>
-            Series
-          </span>
+      const Stat = ({ label, value, sub, tone }) => (
+        <div className="cx-stat">
+          <div className="cx-stat__lbl">{label}</div>
+          <div className="cx-stat__num" style={tone ? { color: tone } : null}>{value}</div>
+          {sub && <div className="cx-stat__sub">{sub}</div>}
+        </div>
+      );
+
+      const Chips = ({ label, options, value, onChange, format }) => (
+        <div className="cx-filters cx-no-print">
+          {label && <span className="cx-filters__lbl">{label}</span>}
           {options.map((o) => (
-            <button key={o} className="cx-pill" aria-pressed={value === o} onClick={() => onChange(o)}>
-              {o}
+            <button key={o} type="button" className="cx-chip" aria-pressed={value === o} onClick={() => onChange(o)}>
+              {format ? format(o) : o}
             </button>
           ))}
         </div>
       );
 
-      /** Colour ramp for a 0-100 mastery percentage. */
-      function heatStyle(pct) {
-        if (pct === null || pct === undefined) return {};
-        const stops = [
-          [0, "#b91c1c"], [35, "#ea580c"], [50, "#d97706"],
-          [65, "#a3a300"], [80, "#4d7c0f"], [100, "#166534"],
-        ];
-        let c = stops[stops.length - 1][1];
-        for (const [t, col] of stops) { if (pct <= t) { c = col; break; } }
-        return { color: "#fff", background: c, fontWeight: 700, textAlign: "right" };
+      const Dot = ({ centre }) => <span className="cx-dot" style={{ background: colorOf(centre) }} />;
+
+      /** Subject switcher reused by three cards; keeps the active value valid. */
+      function useSubject(rows) {
+        const subjects = uniq(rows.map((r) => r.subject)).sort();
+        const [picked, setPicked] = useState(null);
+        const active = subjects.includes(picked) ? picked : subjects[0];
+        return [subjects, active, setPicked];
       }
 
       // -------------------------------------------------------------------
-      // Checkpoint tab
+      // Checkpoint
       // -------------------------------------------------------------------
       const CheckpointTab = ({ level }) => {
-        const subjRows = D.checkpoint.subject.filter((r) => r.level === level);
-        const allSeries = seriesFor(subjRows);
-        const [series, setSeries] = useState(allSeries[allSeries.length - 1]);
+        const levelRows = D.checkpoint.subject.filter((r) => r.level === level);
+        const allSeries = seriesFor(levelRows);
+        const [picked, setPicked] = useState(null);
+        const series = allSeries.includes(picked) ? picked : allSeries[allSeries.length - 1];
 
-        const rows = subjRows.filter((r) => r.series === series);
-        const strands = D.checkpoint.strand.filter((r) => r.level === level && r.series === series);
-        const subs = D.checkpoint.substrand.filter((r) => r.level === level && r.series === series);
+        const rows = levelRows.filter((r) => r.series === series);
         const subjects = uniq(rows.map((r) => r.subject)).sort();
-        const centres = uniq(rows.map((r) => r.centre)).sort((a, b) => schoolName(a).localeCompare(schoolName(b)));
-
+        const centres = uniq(rows.map((r) => r.centre)).sort(byName);
         const netMean = mean(rows.map((r) => r.meanOverall).filter((x) => x !== null));
-        const learners = sum(rows.map((r) => r.n));
+        const best = rows.slice().sort((a, b) => b.meanOverall - a.meanOverall)[0];
 
         return (
           <div>
-            <SeriesPills options={allSeries} value={series} onChange={setSeries} />
+            <Lead
+              eyebrow={level}
+              title="Attainment"
+              desc={`Cambridge reports a standardised overall score from 0 to 50 for each learner in each subject, alongside a score for every strand. That score — not the raw mark — is what holds its meaning between one series and the next.`}
+              right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
+            />
 
-            <KpiRow>
-              <Kpi label="Schools" value={centres.length} sub={`${allSeries.length} series on file`} />
-              <Kpi label="Subject entries" value={learners} sub="learner × subject" />
-              <Kpi label="Network mean" value={fmt(netMean, 1)} sub="Cambridge overall score, out of 50" tone="var(--cyan-deep)" />
-              <Kpi label="Subjects" value={subjects.length} sub={subjects.map((s) => s.split(" ")[0]).join(" · ")} />
-            </KpiRow>
-
-            <div className="cx-note" style={{ marginBottom: 20 }}>
-              The <strong>overall score (0–50)</strong> is the metric to compare on. It is the standardised
-              Cambridge Checkpoint score and is designed to hold its meaning across series and cohorts.
-              Raw totals are shown alongside it for reference only — they sit on different maxima per
-              subject ({subjects.map((s) => {
-                const r = rows.find((x) => x.subject === s);
-                return r ? `${s.split(" ")[0]} ${r.maxTotal}` : null;
-              }).filter(Boolean).join(", ")}) and are not comparable between subjects.
+            <div className="cx-stats">
+              <Stat label="Schools" value={centres.length} sub={`${allSeries.length} series on file`} />
+              <Stat label="Results" value={sum(rows.map((r) => r.n))} sub="learner × subject" />
+              <Stat label="Network mean" value={fmt(netMean, 1)} sub="overall score, out of 50" tone="#0f766e" />
+              <Stat
+                label="Strongest"
+                value={best ? fmt(best.meanOverall, 1) : "—"}
+                sub={best ? `${shortName(best.centre)} · ${best.subject.split(" ")[0]}` : null}
+                tone="#15803d"
+              />
             </div>
 
             {subjects.map((subject) => {
-              const sr = rows.filter((r) => r.subject === subject)
-                .sort((a, b) => b.meanOverall - a.meanOverall);
+              const sr = rows.filter((r) => r.subject === subject).sort((a, b) => b.meanOverall - a.meanOverall);
               if (!sr.length) return null;
               const subjMean = mean(sr.map((r) => r.meanOverall));
-              const chartData = sr.map((r) => ({
-                name: schoolName(r.centre), centre: r.centre,
-                overall: r.meanOverall, n: r.n, total: r.meanTotal, max: r.maxTotal, pct: r.meanPct,
+              const data = sr.map((r) => ({
+                name: shortName(r.centre), centre: r.centre, overall: r.meanOverall,
+                n: r.n, raw: r.meanTotal, max: r.maxTotal, rawPct: r.meanPct,
               }));
 
               return (
                 <Card
                   key={subject}
-                  eyebrow={`${sr[0].syllabus} · ${level}`}
+                  eyebrow={`${sr[0].syllabus} · ${series}`}
                   title={subject}
-                  sub={`Mean overall score by school, ${series}. Dashed line is the ${subject.toLowerCase()} mean across participating schools (${fmt(subjMean, 1)}).`}
+                  sub={`Mean overall score by school. The dashed line is the mean across the ${sr.length} participating schools (${fmt(subjMean, 1)}).`}
+                  foot={`Raw marks are out of ${sr[0].maxTotal} for this syllabus and sit on a different scale in each subject, so they are shown for reference and never compared across subjects.`}
                 >
-                  <div style={{ height: Math.max(200, chartData.length * 46 + 40) }}>
+                  <div style={{ height: Math.max(190, data.length * 44 + 34) }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={chartData} layout="vertical" margin={{ top: 4, right: 44, left: 8, bottom: 4 }}>
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#eef2f6" />
-                        <XAxis type="number" domain={[0, 50]} tick={{ fontSize: 12 }} />
-                        <YAxis type="category" dataKey="name" width={130} tick={{ fontSize: 12 }} />
+                      <BarChart data={data} layout="vertical" margin={{ top: 2, right: 52, left: 4, bottom: 2 }}>
+                        <CartesianGrid strokeDasharray="2 4" horizontal={false} stroke="#e8e6e0" />
+                        <XAxis type="number" domain={[0, 50]} tick={{ fontSize: 11, fill: "#8888a8" }} tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                        <YAxis type="category" dataKey="name" width={132} tick={{ fontSize: 12, fill: "#44445a" }} tickLine={false} axisLine={false} />
                         <Tooltip
+                          cursor={{ fill: "rgba(15,118,110,0.05)" }}
                           formatter={(v, k, p) => [
-                            `${fmt(v, 1)} / 50   (raw ${fmt(p.payload.total, 1)}/${p.payload.max} = ${fmt(p.payload.pct, 1)}%)`,
-                            `n = ${p.payload.n}`,
+                            `${fmt(v, 1)} / 50 — raw ${fmt(p.payload.raw, 1)}/${p.payload.max} (${pct(p.payload.rawPct)})`,
+                            `${p.payload.n} learners`,
                           ]}
                         />
-                        <ReferenceLine x={subjMean} stroke="#64748b" strokeDasharray="4 4" />
-                        <Bar dataKey="overall" radius={[0, 5, 5, 0]} barSize={24}>
-                          {chartData.map((d) => <Cell key={d.centre} fill={colorOf(d.centre)} />)}
+                        <ReferenceLine x={subjMean} stroke="#8888a8" strokeDasharray="4 4" />
+                        <Bar dataKey="overall" radius={[0, 5, 5, 0]} barSize={22} isAnimationActive={false}>
+                          {data.map((d) => <Cell key={d.centre} fill={colorOf(d.centre)} />)}
+                          <LabelList dataKey="overall" position="right" formatter={(v) => fmt(v, 1)}
+                            style={{ fill: "#44445a", fontSize: 12, fontWeight: 700 }} />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="cx-scroll-x" style={{ marginTop: 12 }}>
-                    <table>
+                  <div className="cx-scroll" style={{ marginTop: 14 }}>
+                    <table className="cx-table">
                       <thead>
                         <tr>
                           <th>School</th>
-                          <th className="cx-num">Learners</th>
-                          <th className="cx-num">Overall score / 50</th>
-                          <th className="cx-num">Raw mean / {sr[0].maxTotal}</th>
-                          <th className="cx-num">Raw %</th>
-                          <th className="cx-num">vs subject mean</th>
+                          <th className="cx-n">Learners</th>
+                          <th className="cx-n">Overall / 50</th>
+                          <th className="cx-n">Raw / {sr[0].maxTotal}</th>
+                          <th className="cx-n">Raw %</th>
+                          <th className="cx-n">vs subject mean</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -348,18 +606,12 @@
                           const delta = r.meanOverall - subjMean;
                           return (
                             <tr key={r.centre}>
-                              <td style={{ fontWeight: 600 }}>
-                                <span style={{
-                                  display: "inline-block", width: 9, height: 9, borderRadius: 3,
-                                  background: colorOf(r.centre), marginRight: 8,
-                                }} />
-                                {schoolFull(r.centre)}
-                              </td>
-                              <td className="cx-num">{r.n}</td>
-                              <td className="cx-num" style={{ fontWeight: 700 }}>{fmt(r.meanOverall, 1)}</td>
-                              <td className="cx-num">{fmt(r.meanTotal, 1)}</td>
-                              <td className="cx-num">{fmt(r.meanPct, 1)}%</td>
-                              <td className="cx-num" style={{ color: delta >= 0 ? "#15803d" : "#b91c1c", fontWeight: 600 }}>
+                              <td className="cx-school"><Dot centre={r.centre} />{fullName(r.centre)}</td>
+                              <td className="cx-n">{r.n}</td>
+                              <td className="cx-n" style={{ fontWeight: 700 }}>{fmt(r.meanOverall, 1)}</td>
+                              <td className="cx-n">{fmt(r.meanTotal, 1)}</td>
+                              <td className="cx-n">{pct(r.meanPct)}</td>
+                              <td className={`cx-n ${delta >= 0 ? "cx-up" : "cx-down"}`}>
                                 {delta >= 0 ? "+" : ""}{fmt(delta, 1)}
                               </td>
                             </tr>
@@ -372,27 +624,36 @@
               );
             })}
 
-            <StrandCard strands={strands} centres={centres} series={series} />
-            <SubstrandCard subs={subs} centres={centres} series={series} level={level} />
-            <TrendCard rows={subjRows} allSeries={allSeries} level={level} />
+            <Lead
+              eyebrow="Diagnosis"
+              title="Where the marks are lost"
+              desc="Two views of the same cohort. The strand profile shows which broad area of the syllabus a school is weakest in; the sub-strand table goes down to the individual objective, using the per-question marks Cambridge supplies on the component sheets."
+            />
+            <StrandCard level={level} series={series} centres={centres} />
+            <SubstrandCard level={level} series={series} centres={centres} />
+
+            <Lead
+              eyebrow="Over time"
+              title="Series trend"
+              desc="Because the overall score is standardised, points from different series sit on the same axis and can be joined."
+            />
+            <TrendCard rows={levelRows} allSeries={allSeries} level={level} />
           </div>
         );
       };
 
-      /** Strand profile — every strand Cambridge reports, school by school. */
-      const StrandCard = ({ strands, centres, series }) => {
-        const subjects = uniq(strands.map((r) => r.subject)).sort();
-        const [subject, setSubject] = useState(subjects[0]);
-        const active = subjects.includes(subject) ? subject : subjects[0];
+      const StrandCard = ({ level, series, centres }) => {
+        const rows = D.checkpoint.strand.filter((r) => r.level === level && r.series === series);
+        const [subjects, subject, setSubject] = useSubject(rows);
         if (!subjects.length) return null;
 
-        const rows = strands.filter((r) => r.subject === active);
-        const names = uniq(rows.map((r) => r.strand)).sort();
-        const present = centres.filter((c) => rows.some((r) => r.centre === c));
-        const chartData = names.map((n) => {
-          const o = { strand: n.length > 26 ? `${n.slice(0, 25)}…` : n, full: n };
+        const sr = rows.filter((r) => r.subject === subject);
+        const names = uniq(sr.map((r) => r.strand)).sort();
+        const present = centres.filter((c) => sr.some((r) => r.centre === c));
+        const data = names.map((n) => {
+          const o = { strand: n.length > 24 ? `${n.slice(0, 23)}…` : n, full: n };
           present.forEach((c) => {
-            const hit = rows.find((r) => r.strand === n && r.centre === c);
+            const hit = sr.find((r) => r.strand === n && r.centre === c);
             o[c] = hit ? hit.mean : null;
           });
           return o;
@@ -401,29 +662,22 @@
         return (
           <Card
             eyebrow="Strand profile"
-            title={`Where the marks are won and lost — ${active}`}
-            sub={`Cambridge reports a 0–50 score per strand alongside the overall score. A school sitting well below its own overall score on one strand has a curriculum-coverage question, not a general attainment question. ${series}.`}
-            right={
-              <div className="cx-no-print" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {subjects.map((s) => (
-                  <button key={s} className="cx-pill" aria-pressed={s === active} onClick={() => setSubject(s)}>
-                    {s.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
-            }
+            title={subject}
+            sub="A school sitting well below its own overall score on a single strand has a coverage question, not a general attainment question."
+            right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
           >
-            <div style={{ height: 340 }}>
+            <div style={{ height: 330 }}>
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={chartData} margin={{ top: 8, right: 12, left: 0, bottom: 62 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eef2f6" />
-                  <XAxis dataKey="strand" tick={{ fontSize: 11 }} interval={0} angle={-24} textAnchor="end" height={70} />
-                  <YAxis domain={[0, 50]} tick={{ fontSize: 12 }} />
-                  <Tooltip formatter={(v, k) => [fmt(v, 1), schoolFull(k)]} labelFormatter={(l, p) => (p && p[0] ? p[0].payload.full : l)} />
-                  <Legend formatter={(v) => schoolName(v)} wrapperStyle={{ fontSize: 12 }} />
-                  {present.map((c) => (
-                    <Bar key={c} dataKey={c} fill={colorOf(c)} radius={[3, 3, 0, 0]} />
-                  ))}
+                <BarChart data={data} margin={{ top: 6, right: 8, left: -8, bottom: 58 }}>
+                  <CartesianGrid strokeDasharray="2 4" vertical={false} stroke="#e8e6e0" />
+                  <XAxis dataKey="strand" tick={{ fontSize: 11, fill: "#44445a" }} interval={0}
+                    angle={-22} textAnchor="end" height={66} tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                  <YAxis domain={[0, 50]} tick={{ fontSize: 11, fill: "#8888a8" }} tickLine={false} axisLine={false} />
+                  <Tooltip cursor={{ fill: "rgba(15,118,110,0.05)" }}
+                    formatter={(v, k) => [fmt(v, 1), fullName(k)]}
+                    labelFormatter={(l, p) => (p && p[0] ? p[0].payload.full : l)} />
+                  <Legend formatter={(v) => shortName(v)} wrapperStyle={{ fontSize: 12 }} iconType="circle" iconSize={9} />
+                  {present.map((c) => <Bar key={c} dataKey={c} fill={colorOf(c)} radius={[3, 3, 0, 0]} isAnimationActive={false} />)}
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -432,76 +686,81 @@
       };
 
       /**
-       * Sub-strand mastery — the layer the previous dashboard could not reach.
-       * Built from the per-question marks Cambridge supplies on the component
-       * sheets: marks scored / marks available, pooled per sub-strand.
+       * Sub-strand mastery — the layer the hand-entered dashboard could not
+       * reach. Marks scored over marks available, pooled per sub-strand from
+       * the per-question data on the Cambridge component sheets.
        */
-      const SubstrandCard = ({ subs, centres, series, level }) => {
-        const subjects = uniq(subs.map((r) => r.subject)).sort();
-        const [subject, setSubject] = useState(subjects[0]);
-        const active = subjects.includes(subject) ? subject : subjects[0];
+      const SubstrandCard = ({ level, series, centres }) => {
+        const rows = D.checkpoint.substrand.filter((r) => r.level === level && r.series === series);
+        const [subjects, subject, setSubject] = useSubject(rows);
         if (!subjects.length) return null;
 
-        const rows = subs.filter((r) => r.subject === active);
-        const present = centres.filter((c) => rows.some((r) => r.centre === c));
-        const names = uniq(rows.map((r) => r.substrand));
-
-        const table = names.map((n) => {
+        const sr = rows.filter((r) => r.subject === subject);
+        const present = centres.filter((c) => sr.some((r) => r.centre === c));
+        const table = uniq(sr.map((r) => r.substrand)).map((n) => {
           const cells = {};
           present.forEach((c) => {
-            const hit = rows.find((r) => r.substrand === n && r.centre === c);
+            const hit = sr.find((r) => r.substrand === n && r.centre === c);
             cells[c] = hit ? hit.pct : null;
           });
           const vals = Object.values(cells).filter((v) => v !== null);
-          return { name: n, cells, net: mean(vals), spread: vals.length > 1 ? Math.max(...vals) - Math.min(...vals) : null };
+          return {
+            name: n, cells, net: mean(vals),
+            spread: vals.length > 1 ? Math.max(...vals) - Math.min(...vals) : null,
+          };
         }).sort((a, b) => a.net - b.net);
 
         const weakest = table.slice(0, 3);
+        const widest = table.slice().filter((r) => r.spread !== null).sort((a, b) => b.spread - a.spread)[0];
 
         return (
           <Card
             eyebrow="Sub-strand mastery"
-            title={`What the network actually got wrong — ${active}`}
-            sub={`Marks scored as a share of marks available, pooled per sub-strand from the per-question data on the Cambridge component sheets. Sorted weakest first. ${series}.`}
-            right={
-              <div className="cx-no-print" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {subjects.map((s) => (
-                  <button key={s} className="cx-pill" aria-pressed={s === active} onClick={() => setSubject(s)}>
-                    {s.split(" ")[0]}
-                  </button>
-                ))}
+            title={subject}
+            sub="Marks scored as a share of marks available, sorted weakest first. Spread is the gap between the strongest and weakest school on that sub-strand."
+            right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
+            foot={
+              <div className="cx-legend">
+                <span>Weaker</span>
+                <span className="cx-legend__ramp">
+                  {HEAT.map((c) => <span key={c} className="cx-legend__step" style={{ background: c }} />)}
+                </span>
+                <span>Stronger</span>
+                <span style={{ marginLeft: 10 }}>· 0–35 · 35–50 · 50–60 · 60–70 · 70–82 · 82–100%</span>
               </div>
             }
           >
             {weakest.length > 0 && (
-              <div className="cx-note cx-note--warn" style={{ marginBottom: 14 }}>
+              <div className="cx-callout cx-callout--warn" style={{ marginBottom: 15 }}>
                 <strong>Weakest across the network:</strong>{" "}
-                {weakest.map((w) => `${w.name} (${fmt(w.net, 0)}%)`).join(" · ")}. These are the
-                sub-strands to take into pacing and Common Assessment planning for {level.replace(" Checkpoint", "")}.
+                {weakest.map((w) => `${w.name} (${fmt(w.net, 0)}%)`).join(" · ")}.
+                {widest && widest.spread >= 15 && (
+                  <span>{" "}Widest school-to-school gap is <strong>{widest.name}</strong> at {fmt(widest.spread, 0)} points —
+                  that one is a teaching difference between schools, not a network-wide gap.</span>
+                )}
               </div>
             )}
-            <div className="cx-scroll-x">
-              <table>
+            <div className="cx-scroll">
+              <table className="cx-table cx-table--pinned">
                 <thead>
                   <tr>
-                    <th style={{ minWidth: 230 }}>Sub-strand</th>
-                    <th className="cx-num">Network</th>
-                    <th className="cx-num">Spread</th>
-                    {present.map((c) => (
-                      <th key={c} className="cx-num" style={{ minWidth: 92 }}>{schoolName(c)}</th>
-                    ))}
+                    <th>Sub-strand</th>
+                    <th className="cx-n">Network</th>
+                    <th className="cx-n">Spread</th>
+                    {present.map((c) => <th key={c} className="cx-n">{shortName(c)}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {table.map((r) => (
                     <tr key={r.name}>
-                      <td style={{ fontWeight: 600 }}>{r.name}</td>
-                      <td className="cx-num" style={heatStyle(r.net)}>{fmt(r.net, 0)}%</td>
-                      <td className="cx-num" style={{ color: "var(--muted)" }}>
+                      <td className="cx-school">{r.name}</td>
+                      <td className="cx-heat" style={{ background: heatOf(r.net) }}>{fmt(r.net, 0)}%</td>
+                      <td className="cx-n" style={{ color: "var(--ink-3)" }}>
                         {r.spread === null ? "—" : `${fmt(r.spread, 0)} pt`}
                       </td>
                       {present.map((c) => (
-                        <td key={c} className="cx-num" style={heatStyle(r.cells[c])}>
+                        <td key={c} className={r.cells[c] === null ? "cx-n" : "cx-heat"}
+                          style={r.cells[c] === null ? null : { background: heatOf(r.cells[c]) }}>
                           {r.cells[c] === null ? "—" : `${fmt(r.cells[c], 0)}%`}
                         </td>
                       ))}
@@ -514,23 +773,26 @@
         );
       };
 
-      /** Overall score by series — only meaningful where a level has >1 series. */
       const TrendCard = ({ rows, allSeries, level }) => {
+        const [subjects, subject, setSubject] = useSubject(rows);
         if (allSeries.length < 2) {
           return (
-            <Card eyebrow="Trend" title="Series trend">
-              <div className="cx-note">
-                Only one series ({allSeries[0]}) is on file for {level}, so no trend can be drawn yet.
-                A second series makes this chart appear automatically.
+            <Card>
+              <div className="cx-callout">
+                Only one series ({allSeries[0]}) is on file for {level}, so there is nothing to join
+                yet. A second series makes this chart appear on its own.
               </div>
             </Card>
           );
         }
-        const subjects = uniq(rows.map((r) => r.subject)).sort();
-        const [subject, setSubject] = useState(subjects[0]);
-        const active = subjects.includes(subject) ? subject : subjects[0];
-        const sr = rows.filter((r) => r.subject === active);
-        const centres = uniq(sr.map((r) => r.centre));
+        const sr = rows.filter((r) => r.subject === subject);
+        // A school that entered this subject once has no trajectory. Plotting it
+        // adds a legend entry and an easily-missed single dot, so it is named in
+        // the footnote instead — otherwise the reader assumes the chart shows
+        // every school and silently misreads the gaps.
+        const all = uniq(sr.map((r) => r.centre)).sort(byName);
+        const centres = all.filter((c) => sr.filter((r) => r.centre === c).length > 1);
+        const singles = all.filter((c) => !centres.includes(c));
         const data = allSeries.map((s) => {
           const o = { series: s };
           centres.forEach((c) => {
@@ -540,32 +802,46 @@
           return o;
         });
 
+        if (!centres.length) {
+          return (
+            <Card eyebrow="Trend" title={subject}
+              right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}>
+              <div className="cx-callout">
+                No school has entered {subject} in more than one series yet, so there is no trajectory
+                to draw. The chart appears as soon as one does.
+              </div>
+            </Card>
+          );
+        }
+
         return (
           <Card
             eyebrow="Trend"
-            title={`Overall score across series — ${active}`}
-            sub="A gap in a line means the school did not enter that subject in that series. Because the overall score is standardised, these points are comparable across series."
-            right={
-              <div className="cx-no-print" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {subjects.map((s) => (
-                  <button key={s} className="cx-pill" aria-pressed={s === active} onClick={() => setSubject(s)}>
-                    {s.split(" ")[0]}
-                  </button>
-                ))}
-              </div>
-            }
+            title={subject}
+            sub={`${centres.length} of ${all.length} schools have entered ${subject} in more than one series. A break in a line means the school skipped a series — the points either side are still comparable, but nothing is drawn across the gap.`}
+            right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
+            foot={singles.length
+              ? `Not plotted: ${singles.map(fullName).join(", ")} — ${singles.length === 1 ? "this school has" : "these schools have"} only one series on file for ${subject}.`
+              : null}
           >
-            <div style={{ height: 320 }}>
+            <div style={{ height: 310 }}>
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 8, right: 20, left: 0, bottom: 8 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#eef2f6" />
-                  <XAxis dataKey="series" tick={{ fontSize: 12 }} />
-                  <YAxis domain={[0, 50]} tick={{ fontSize: 12 }} />
-                  <Tooltip formatter={(v, k) => [fmt(v, 1), schoolFull(k)]} />
-                  <Legend formatter={(v) => schoolName(v)} wrapperStyle={{ fontSize: 12 }} />
+                <LineChart data={data} margin={{ top: 8, right: 22, left: -8, bottom: 6 }}>
+                  <CartesianGrid strokeDasharray="2 4" stroke="#e8e6e0" />
+                  <XAxis dataKey="series" tick={{ fontSize: 12, fill: "#44445a" }} tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                  <YAxis domain={[0, 50]} tick={{ fontSize: 11, fill: "#8888a8" }} tickLine={false} axisLine={false} />
+                  <Tooltip formatter={(v, k) => [fmt(v, 1), fullName(k)]} />
+                  <Legend formatter={(v) => shortName(v)} wrapperStyle={{ fontSize: 12 }} iconType="circle" iconSize={9} />
                   {centres.map((c) => (
-                    <Line key={c} type="monotone" dataKey={c} stroke={colorOf(c)} strokeWidth={2.5}
-                      dot={{ r: 4 }} connectNulls={false} />
+                    // fill must be set explicitly: a Recharts dot defaults to a
+                    // white fill with the line colour as its stroke, so leaving
+                    // the stroke white makes it a white disc on white — the
+                    // schools that skipped a series then vanish entirely,
+                    // because a gapped line draws no path either.
+                    <Line key={c} type="linear" dataKey={c} stroke={colorOf(c)} strokeWidth={2.5}
+                      dot={{ r: 5, fill: colorOf(c), stroke: "#fff", strokeWidth: 2 }}
+                      activeDot={{ r: 7, fill: colorOf(c), stroke: "#fff", strokeWidth: 2 }}
+                      connectNulls={false} isAnimationActive={false} />
                   ))}
                 </LineChart>
               </ResponsiveContainer>
@@ -575,197 +851,182 @@
       };
 
       // -------------------------------------------------------------------
-      // IGCSE tab
+      // IGCSE
       // -------------------------------------------------------------------
       const IgcseTab = () => {
         const all = D.exams.subject.filter((r) => r.level === "IGCSE");
         const allSeries = seriesFor(all);
-        const [series, setSeries] = useState(allSeries[allSeries.length - 1]);
+        const [picked, setPicked] = useState(null);
+        const series = allSeries.includes(picked) ? picked : allSeries[allSeries.length - 1];
         const rows = all.filter((r) => r.series === series);
 
         const graded = sum(rows.map((r) => r.n));
-        const entries = uniq(rows.map((r) => `${r.centre}|${r.syllabus}`))
-          .map((k) => rows.find((r) => `${r.centre}|${r.syllabus}` === k).entries);
-        const totalEntries = sum(entries);
-        const missing = totalEntries - graded;
-        const gradeCount = (g) => sum(rows.map((r) => r.grades[g] || 0));
-        const ac = sum(["A*", "A", "B", "C"].map(gradeCount));
-        const ae = sum(["A*", "A", "B", "C", "D", "E"].map(gradeCount));
-
+        const totalEntries = sum(
+          uniq(rows.map((r) => `${r.centre}|${r.syllabus}`))
+            .map((k) => rows.find((r) => `${r.centre}|${r.syllabus}` === k).entries)
+        );
+        const gc = (g) => sum(rows.map((r) => r.grades[g] || 0));
+        const ac = sum(["A*", "A", "B", "C"].map(gc));
+        const ae = sum(["A*", "A", "B", "C", "D", "E"].map(gc));
         const syllabuses = uniq(rows.map((r) => r.syllabus)).sort();
-        const tiered = rows.some((r) => r.tier === "Core");
+        const hasCore = rows.some((r) => r.tier === "Core");
 
         return (
           <div>
-            <SeriesPills options={allSeries} value={series} onChange={setSeries} />
+            <Lead
+              eyebrow="Cambridge IGCSE"
+              title="Grades awarded"
+              desc="Grades, not marks, are the currency here: Cambridge does not publish a maximum in this report and the paper set differs by tier, so a mean mark cannot be read as a percentage."
+              right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
+            />
 
-            <KpiRow>
-              <Kpi label="Entries" value={totalEntries} sub={`${uniq(rows.map((r) => r.centre)).length} schools · ${syllabuses.length} syllabuses`} />
-              <Kpi label="Graded" value={graded} sub={missing ? `${missing} incomplete, excluded` : "all complete"} />
-              <Kpi label="A* – C" value={`${fmt((ac / graded) * 100, 1)}%`} tone="#15803d" sub={`${ac} of ${graded} graded`} />
-              <Kpi label="A* – E" value={`${fmt((ae / graded) * 100, 1)}%`} tone="var(--cyan-deep)" sub={`${ae} of ${graded} graded`} />
-              <Kpi label="Ungraded (U)" value={`${fmt((gradeCount("U") / graded) * 100, 1)}%`} tone="#b91c1c" sub={`${gradeCount("U")} candidates`} />
-            </KpiRow>
+            <div className="cx-stats">
+              <Stat label="Entries" value={totalEntries}
+                sub={`${uniq(rows.map((r) => r.centre)).length} schools · ${syllabuses.length} syllabuses`} />
+              <Stat label="Graded" value={graded}
+                sub={totalEntries - graded ? `${totalEntries - graded} incomplete, excluded` : "all complete"} />
+              <Stat label="A* – C" value={pct((ac / graded) * 100)} tone="#15803d" sub={`${ac} of ${graded}`} />
+              <Stat label="A* – E" value={pct((ae / graded) * 100)} tone="#0f766e" sub={`${ae} of ${graded}`} />
+              <Stat label="Ungraded" value={pct((gc("U") / graded) * 100)} tone="#b91c1c" sub={`${gc("U")} at grade U`} />
+            </div>
 
-            {tiered && (
-              <div className="cx-note cx-note--warn" style={{ marginBottom: 20 }}>
+            {hasCore && (
+              <div className="cx-callout cx-callout--warn" style={{ marginBottom: 20 }}>
                 <strong>Core and Extended are shown separately, and must stay that way.</strong> Core
                 candidates sit Papers 1 and 3 and cannot be awarded above grade&nbsp;C; Extended
                 candidates sit Papers 2 and 4 and compete for A*–E. Pooling them makes a school that
-                entered mostly Core look weaker than it is, and hides the entry-tier decision — which is
-                itself one of the most consequential choices a school makes. Tier here is derived from
-                the papers each candidate actually sat, not from the option code, because a single
-                school sheet mixes option codes.
+                entered mostly Core look weaker than it is, and hides the entry-tier decision — itself
+                one of the most consequential choices a school makes. Tier here is derived from the
+                papers each candidate actually sat, because a single school sheet mixes option codes.
               </div>
             )}
 
             {syllabuses.map((syl) => {
               const sr = rows.filter((r) => r.syllabus === syl);
               const spec = D.syllabus[syl] || {};
-              const bars = sr
-                .map((r) => {
-                  const o = {
-                    key: `${r.centre}|${r.tier}`,
-                    name: `${schoolName(r.centre)}${r.tier === "Untiered" ? "" : ` · ${r.tier}`}`,
-                    n: r.n, centre: r.centre, tier: r.tier, pctAC: r.pctAC, pctU: r.pctU,
-                    meanTotal: r.meanTotal, incomplete: r.incomplete,
-                  };
-                  GRADE_ORDER_IG.forEach((g) => { o[g] = ((r.grades[g] || 0) / r.n) * 100; });
-                  return o;
-                })
-                .sort((a, b) => b.pctAC - a.pctAC);
+              const bars = sr.map((r) => {
+                const o = {
+                  key: `${r.centre}|${r.tier}`,
+                  name: r.tier === "Untiered" ? shortName(r.centre) : `${shortName(r.centre)} · ${r.tier}`,
+                  centre: r.centre, tier: r.tier, n: r.n, pctAC: r.pctAC, pctU: r.pctU,
+                  meanTotal: r.meanTotal, incomplete: r.incomplete,
+                };
+                GRADE_ORDER_IG.forEach((g) => { o[g] = ((r.grades[g] || 0) / r.n) * 100; });
+                return o;
+              }).sort((a, b) => b.pctAC - a.pctAC);
 
               return (
                 <Card
                   key={syl}
-                  eyebrow={`${syl} · Cambridge IGCSE`}
+                  eyebrow={`${syl} · ${series}`}
                   title={spec.subject || syl}
-                  sub={`Grade distribution as a share of graded candidates, ${series}.${spec.note ? ` ${spec.note}` : ""}`}
+                  sub={`Grade distribution as a share of graded candidates.${spec.note ? ` ${spec.note}` : ""}`}
+                  foot={`Mean total is the raw syllabus mark. It compares within one tier of one syllabus and nowhere else.`}
                 >
-                  <div style={{ height: Math.max(190, bars.length * 40 + 56) }}>
+                  <div style={{ height: Math.max(160, bars.length * 38 + 52) }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={bars} layout="vertical" margin={{ top: 4, right: 16, left: 8, bottom: 4 }} stackOffset="expand">
-                        <XAxis type="number" domain={[0, 1]} tickFormatter={(v) => `${Math.round(v * 100)}%`} tick={{ fontSize: 12 }} />
-                        <YAxis type="category" dataKey="name" width={178} tick={{ fontSize: 11 }} />
-                        <Tooltip formatter={(v, k, p) => [`${fmt((v / 100) * p.payload.n, 0)} of ${p.payload.n}  (${fmt(v, 1)}%)`, `Grade ${k}`]} />
-                        <Legend wrapperStyle={{ fontSize: 11 }} />
+                      <BarChart data={bars} layout="vertical" stackOffset="expand"
+                        margin={{ top: 2, right: 12, left: 4, bottom: 2 }}>
+                        <XAxis type="number" domain={[0, 1]} tickFormatter={(v) => `${Math.round(v * 100)}%`}
+                          tick={{ fontSize: 11, fill: "#8888a8" }} tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                        <YAxis type="category" dataKey="name" width={186}
+                          tick={{ fontSize: 11, fill: "#44445a" }} tickLine={false} axisLine={false} />
+                        <Tooltip formatter={(v, k, p) => [
+                          `${Math.round((v / 100) * p.payload.n)} of ${p.payload.n}  (${fmt(v, 1)}%)`, `Grade ${k}`,
+                        ]} />
+                        <Legend wrapperStyle={{ fontSize: 11 }} iconType="square" iconSize={9} />
                         {GRADE_ORDER_IG.map((g) => (
-                          <Bar key={g} dataKey={g} stackId="g" fill={GRADE_COLOR[g]} />
+                          <Bar key={g} dataKey={g} stackId="g" fill={GRADE_COLOR[g]} isAnimationActive={false} />
                         ))}
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="cx-scroll-x" style={{ marginTop: 10 }}>
-                    <table>
+                  <div className="cx-scroll" style={{ marginTop: 12 }}>
+                    <table className="cx-table">
                       <thead>
                         <tr>
-                          <th>School</th>
-                          <th>Tier</th>
-                          <th className="cx-num">Graded</th>
-                          <th className="cx-num">Incomplete</th>
-                          <th className="cx-num">A*–C</th>
-                          <th className="cx-num">U</th>
-                          <th className="cx-num">Mean total (raw)</th>
+                          <th>School</th><th>Tier</th>
+                          <th className="cx-n">Graded</th><th className="cx-n">Incomplete</th>
+                          <th className="cx-n">A*–C</th><th className="cx-n">U</th>
+                          <th className="cx-n">Mean total</th>
                         </tr>
                       </thead>
                       <tbody>
                         {bars.map((b) => (
                           <tr key={b.key}>
-                            <td style={{ fontWeight: 600 }}>
-                              <span style={{
-                                display: "inline-block", width: 9, height: 9, borderRadius: 3,
-                                background: colorOf(b.centre), marginRight: 8,
-                              }} />
-                              {schoolFull(b.centre)}
-                            </td>
+                            <td className="cx-school"><Dot centre={b.centre} />{fullName(b.centre)}</td>
                             <td>
-                              <span className="cx-badge" style={{
-                                background: b.tier === "Core" ? "#fef3c7" : b.tier === "Extended" ? "#dbeafe" : "#f1f5f9",
-                                color: b.tier === "Core" ? "#92400e" : b.tier === "Extended" ? "#1e40af" : "#475569",
-                              }}>
-                                {b.tier}
-                              </span>
+                              <span className="cx-badge" style={
+                                b.tier === "Core" ? { background: "#fef3c7", color: "#92400e" }
+                                  : b.tier === "Extended" ? { background: "#dbeafe", color: "#1e40af" }
+                                    : { background: "#f1f5f9", color: "#475569" }
+                              }>{b.tier}</span>
                             </td>
-                            <td className="cx-num">{b.n}</td>
-                            <td className="cx-num" style={{ color: b.incomplete ? "#b91c1c" : "var(--muted)" }}>
+                            <td className="cx-n">{b.n}</td>
+                            <td className="cx-n" style={{ color: b.incomplete ? "var(--red)" : "var(--ink-3)" }}>
                               {b.incomplete || "—"}
                             </td>
-                            <td className="cx-num" style={{ fontWeight: 700, color: "#15803d" }}>{fmt(b.pctAC, 1)}%</td>
-                            <td className="cx-num" style={{ color: "#b91c1c" }}>{fmt(b.pctU, 1)}%</td>
-                            <td className="cx-num" style={{ color: "var(--muted)" }}>{fmt(b.meanTotal, 1)}</td>
+                            <td className="cx-n" style={{ fontWeight: 700, color: "var(--green)" }}>{pct(b.pctAC)}</td>
+                            <td className="cx-n" style={{ color: "var(--red)" }}>{pct(b.pctU)}</td>
+                            <td className="cx-n" style={{ color: "var(--ink-3)" }}>{fmt(b.meanTotal, 1)}</td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
-                    <p className="cx-card__sub" style={{ marginTop: 8 }}>
-                      Mean total is the raw syllabus mark. It is comparable within a tier and within this
-                      syllabus only — Cambridge does not publish a maximum in this report, and the paper
-                      set differs by tier, so it must not be read as a percentage or compared across
-                      subjects.
-                    </p>
                   </div>
                 </Card>
               );
             })}
 
+            <Lead
+              eyebrow="Diagnosis"
+              title="Which paper carries the loss"
+              desc="A cohort that holds up on the theory paper but collapses on the practical or the extended-response paper has an exam-technique problem, not a content problem."
+            />
             <ComponentCard level="IGCSE" series={series} />
           </div>
         );
       };
 
-      /** Mean raw mark per paper — isolates which component drags a cohort. */
       const ComponentCard = ({ level, series }) => {
         const rows = D.exams.component.filter((r) => r.level === level && r.series === series);
-        if (!rows.length) return null;
         const syllabuses = uniq(rows.map((r) => r.syllabus)).sort();
-        const [syl, setSyl] = useState(syllabuses[0]);
-        const active = syllabuses.includes(syl) ? syl : syllabuses[0];
-        const sr = rows.filter((r) => r.syllabus === active);
+        const [picked, setPicked] = useState(null);
+        const syl = syllabuses.includes(picked) ? picked : syllabuses[0];
+        if (!rows.length) return null;
+
+        const sr = rows.filter((r) => r.syllabus === syl);
         const papers = uniq(sr.map((r) => r.component)).sort();
-        const centres = uniq(sr.map((r) => r.centre)).sort((a, b) => schoolName(a).localeCompare(schoolName(b)));
+        const centres = uniq(sr.map((r) => r.centre)).sort(byName);
 
         return (
           <Card
             eyebrow="Paper level"
-            title={`Which paper carries the loss — ${(D.syllabus[active] || {}).subject || active}`}
-            sub="Mean raw mark per paper. A cohort that holds up on the theory paper but collapses on the practical or the extended-response paper has an exam-technique problem, not a content problem. Raw marks: papers have different maxima, so read down a column, not across a row."
-            right={
-              <div className="cx-no-print" style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                {syllabuses.map((s) => (
-                  <button key={s} className="cx-pill" aria-pressed={s === active} onClick={() => setSyl(s)}>
-                    {s}
-                  </button>
-                ))}
-              </div>
-            }
+            title={(D.syllabus[syl] || {}).subject || syl}
+            sub="Mean raw mark per paper. Papers have different maxima — read down a column, never across a row."
+            right={<Chips options={syllabuses} value={syl} onChange={setPicked} />}
           >
-            <div className="cx-scroll-x">
-              <table>
+            <div className="cx-scroll">
+              <table className="cx-table cx-table--pinned">
                 <thead>
                   <tr>
                     <th>School</th>
-                    {papers.map((p) => <th key={p} className="cx-num">{p}</th>)}
+                    {papers.map((p) => <th key={p} className="cx-n">{p}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {centres.map((c) => (
                     <tr key={c}>
-                      <td style={{ fontWeight: 600 }}>
-                        <span style={{
-                          display: "inline-block", width: 9, height: 9, borderRadius: 3,
-                          background: colorOf(c), marginRight: 8,
-                        }} />
-                        {schoolFull(c)}
-                      </td>
+                      <td className="cx-school"><Dot centre={c} />{fullName(c)}</td>
                       {papers.map((p) => {
                         const hit = sr.find((r) => r.centre === c && r.component === p);
                         return (
-                          <td key={p} className="cx-num">
+                          <td key={p} className="cx-n">
                             {hit ? (
                               <span>
-                                {fmt(hit.meanRaw, 1)}
-                                <span style={{ color: "var(--muted)", fontSize: 11 }}> (n={hit.n})</span>
+                                <strong>{fmt(hit.meanRaw, 1)}</strong>
+                                <span style={{ color: "var(--ink-3)", fontSize: 11 }}> · n={hit.n}</span>
                               </span>
                             ) : "—"}
                           </td>
@@ -781,12 +1042,13 @@
       };
 
       // -------------------------------------------------------------------
-      // AS & A Level tab
+      // AS & A Level
       // -------------------------------------------------------------------
       const ALevelTab = () => {
         const all = D.exams.subject.filter((r) => r.level === "AS & A Level");
         const allSeries = seriesFor(all);
-        const [series, setSeries] = useState(allSeries[allSeries.length - 1]);
+        const [picked, setPicked] = useState(null);
+        const series = allSeries.includes(picked) ? picked : allSeries[allSeries.length - 1];
         const rows = all.filter((r) => r.series === series);
 
         const graded = sum(rows.map((r) => r.n));
@@ -796,168 +1058,152 @@
 
         return (
           <div>
-            <SeriesPills options={allSeries} value={series} onChange={setSeries} />
+            <Lead
+              eyebrow="Cambridge International AS & A Level"
+              title="Awards reached"
+              desc="Cambridge writes the AS award in lower case and the full A Level award in upper case, in one column. They are two different qualifications and are never pooled here."
+              right={<Chips label="Series" options={allSeries} value={series} onChange={setPicked} />}
+            />
 
-            <KpiRow>
-              <Kpi label="Graded candidates" value={graded} sub={`${uniq(rows.map((r) => r.centre)).length} school(s) · ${uniq(rows.map((r) => r.syllabus)).length} syllabuses`} />
-              <Kpi label="A Level award" value={gA2} sub="upper-case A*–E" tone="#15803d" />
-              <Kpi label="AS Level award" value={gAS} sub="lower-case a–e" tone="var(--mor)" />
-              <Kpi label="Ungraded (U)" value={gU} sub="level not stated in the report" tone="#b91c1c" />
-            </KpiRow>
+            <div className="cx-stats">
+              <Stat label="Graded" value={graded}
+                sub={`${uniq(rows.map((r) => r.centre)).length} school(s) · ${uniq(rows.map((r) => r.syllabus)).length} syllabuses`} />
+              <Stat label="A Level award" value={gA2} sub="upper-case A*–E" tone="#15803d" />
+              <Stat label="AS Level award" value={gAS} sub="lower-case a–e" tone="#6c5ce7" />
+              <Stat label="Ungraded" value={gU} sub="award not stated in the report" tone="#b91c1c" />
+            </div>
 
-            <div className="cx-note cx-note--warn" style={{ marginBottom: 20 }}>
-              <strong>AS and A Level are two different qualifications and are never pooled here.</strong>{" "}
-              Cambridge writes the AS award in lower case (a–e) and the full A Level award in upper case
-              (A*–E), in the same column — so a table that sorts them together reports one distribution
-              for two awards. Grade <strong>U</strong> is upper case for both, and the component set on
-              these sheets is identical for every candidate, so this report gives no way to tell an
-              AS-only U from an A Level U. It is therefore shown as its own bucket rather than counted
-              against either award.
+            <div className="cx-callout cx-callout--warn" style={{ marginBottom: 20 }}>
+              <strong>Grade U is shown on its own.</strong> Cambridge writes U in upper case for both
+              awards, and every candidate on these sheets carries the same component set — so this
+              report gives no way to tell an AS-only U from a failed A&nbsp;Level. Counting it against
+              A&nbsp;Level would inflate that entry count and depress its pass rate, so it forms a
+              third bucket instead.
             </div>
 
             {uniq(rows.map((r) => r.syllabus)).sort().map((syl) => {
               const sr = rows.filter((r) => r.syllabus === syl);
               const spec = D.syllabus[syl] || {};
               const bars = sr.map((r) => ({
-                key: `${r.centre}|${syl}`,
-                name: schoolName(r.centre),
-                centre: r.centre,
-                n: r.n,
-                "A Level": r.asA2.gradedA2,
-                "AS Level": r.asA2.gradedAS,
-                Ungraded: r.asA2.ungraded,
+                name: shortName(r.centre), centre: r.centre, n: r.n,
+                "A Level": r.asA2.gradedA2, "AS Level": r.asA2.gradedAS, Ungraded: r.asA2.ungraded,
               }));
 
               return (
-                <Card
-                  key={syl}
-                  eyebrow={`${syl} · Cambridge International AS & A Level`}
-                  title={spec.subject || syl}
-                  sub={`Award reached, then the grade distribution within each award. ${series}.`}
-                >
-                  <div style={{ height: Math.max(150, bars.length * 46 + 60) }}>
+                <Card key={syl} eyebrow={`${syl} · ${series}`} title={spec.subject || syl}
+                  sub="Award reached, then the grade distribution within each award."
+                  foot="AS Level has no A* grade. Ungraded candidates appear in the chart but in neither grade row.">
+                  <div style={{ height: Math.max(132, bars.length * 44 + 56) }}>
                     <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={bars} layout="vertical" margin={{ top: 4, right: 20, left: 8, bottom: 4 }}>
-                        <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#eef2f6" />
-                        <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-                        <YAxis type="category" dataKey="name" width={140} tick={{ fontSize: 12 }} />
+                      <BarChart data={bars} layout="vertical" margin={{ top: 2, right: 24, left: 4, bottom: 2 }}>
+                        <CartesianGrid strokeDasharray="2 4" horizontal={false} stroke="#e8e6e0" />
+                        <XAxis type="number" allowDecimals={false} tick={{ fontSize: 11, fill: "#8888a8" }}
+                          tickLine={false} axisLine={{ stroke: "#e0ddd6" }} />
+                        <YAxis type="category" dataKey="name" width={140}
+                          tick={{ fontSize: 12, fill: "#44445a" }} tickLine={false} axisLine={false} />
                         <Tooltip formatter={(v, k, p) => [`${v} of ${p.payload.n}`, k]} />
-                        <Legend wrapperStyle={{ fontSize: 12 }} />
-                        <Bar dataKey="A Level" stackId="a" fill="#15803d" />
-                        <Bar dataKey="AS Level" stackId="a" fill="#6c5ce7" />
-                        <Bar dataKey="Ungraded" stackId="a" fill="#b91c1c" radius={[0, 4, 4, 0]} />
+                        <Legend wrapperStyle={{ fontSize: 12 }} iconType="square" iconSize={9} />
+                        <Bar dataKey="A Level" stackId="a" fill="#15803d" isAnimationActive={false} />
+                        <Bar dataKey="AS Level" stackId="a" fill="#6c5ce7" isAnimationActive={false} />
+                        <Bar dataKey="Ungraded" stackId="a" fill="#7f1d1d" radius={[0, 4, 4, 0]} isAnimationActive={false} />
                       </BarChart>
                     </ResponsiveContainer>
                   </div>
 
-                  <div className="cx-scroll-x" style={{ marginTop: 10 }}>
-                    <table>
+                  <div className="cx-scroll" style={{ marginTop: 12 }}>
+                    <table className="cx-table">
                       <thead>
                         <tr>
-                          <th>School</th>
-                          <th>Award</th>
-                          {GRADE_ORDER_AL.filter((g) => g !== "U").map((g) => (
-                            <th key={g} className="cx-num">{g}</th>
-                          ))}
-                          <th className="cx-num">Total</th>
+                          <th>School</th><th>Award</th>
+                          {AL_LETTERS.map((g) => <th key={g} className="cx-n">{g}</th>)}
+                          <th className="cx-n">Total</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {sr.flatMap((r) => ([
+                        {sr.map((r) => [
                           <tr key={`${r.centre}-a2`}>
-                            <td rowSpan={2} style={{ fontWeight: 600, verticalAlign: "top" }}>
-                              <span style={{
-                                display: "inline-block", width: 9, height: 9, borderRadius: 3,
-                                background: colorOf(r.centre), marginRight: 8,
-                              }} />
-                              {schoolFull(r.centre)}
+                            <td className="cx-school" rowSpan={2} style={{ verticalAlign: "top" }}>
+                              <Dot centre={r.centre} />{fullName(r.centre)}
                             </td>
                             <td><span className="cx-badge" style={{ background: "#dcfce7", color: "#166534" }}>A Level</span></td>
-                            {GRADE_ORDER_AL.filter((g) => g !== "U").map((g) => (
-                              <td key={g} className="cx-num">{r.asA2.A2[g] || "—"}</td>
-                            ))}
-                            <td className="cx-num" style={{ fontWeight: 700 }}>{r.asA2.gradedA2}</td>
+                            {AL_LETTERS.map((g) => <td key={g} className="cx-n">{r.asA2.A2[g] || "—"}</td>)}
+                            <td className="cx-n" style={{ fontWeight: 700 }}>{r.asA2.gradedA2}</td>
                           </tr>,
                           <tr key={`${r.centre}-as`}>
                             <td><span className="cx-badge" style={{ background: "#ede9fe", color: "#5b21b6" }}>AS Level</span></td>
-                            {GRADE_ORDER_AL.filter((g) => g !== "U").map((g) => (
-                              <td key={g} className="cx-num">{g === "A*" ? "n/a" : (r.asA2.AS[g] || "—")}</td>
+                            {AL_LETTERS.map((g) => (
+                              <td key={g} className="cx-n" style={g === "A*" ? { color: "var(--ink-3)" } : null}>
+                                {g === "A*" ? "n/a" : (r.asA2.AS[g] || "—")}
+                              </td>
                             ))}
-                            <td className="cx-num" style={{ fontWeight: 700 }}>{r.asA2.gradedAS}</td>
+                            <td className="cx-n" style={{ fontWeight: 700 }}>{r.asA2.gradedAS}</td>
                           </tr>,
-                        ]))}
+                        ])}
                       </tbody>
                     </table>
-                    <p className="cx-card__sub" style={{ marginTop: 8 }}>
-                      AS Level has no A* grade. Ungraded (U) candidates —{" "}
-                      {sum(sr.map((r) => r.asA2.ungraded))} in this syllabus — are counted in the chart
-                      above but appear in neither grade row, because the report does not say which award
-                      they were entered for.
-                    </p>
                   </div>
                 </Card>
               );
             })}
 
+            <Lead eyebrow="Diagnosis" title="Which paper carries the loss"
+              desc="Mean raw mark per paper across the AS and A Level cohort together — the report does not separate them at component level." />
             <ComponentCard level="AS & A Level" series={series} />
           </div>
         );
       };
 
       // -------------------------------------------------------------------
-      // Data quality + provenance
+      // Data notes
       // -------------------------------------------------------------------
-      const QualityTab = () => {
-        const inc = D.quality.incomplete
-          .slice()
-          .sort((a, b) => b.incomplete - a.incomplete);
+      const NotesTab = () => {
+        const inc = D.quality.incomplete.slice().sort((a, b) => b.incomplete - a.incomplete);
         const totalMissing = sum(inc.map((r) => r.incomplete));
 
         return (
           <div>
-            <KpiRow>
-              <Kpi label="Source files" value={D.meta.files.length} sub="workbooks read" />
-              <Kpi label="Incomplete entries" value={totalMissing} sub="excluded from every mean" tone="#b91c1c" />
-              <Kpi label="Suppressed cells" value={D.quality.suppressed.length} sub={`cohorts below n=${D.meta.minReport}`} tone="var(--muted)" />
-              <Kpi label="Generated" value={D.meta.generatedAt} sub="re-run the generator to refresh" />
-            </KpiRow>
+            <Lead
+              eyebrow="Provenance"
+              title="How these numbers were made"
+              desc="Nothing on this page is typed by hand. A generator reads the workbooks Cambridge International returns to each centre and aggregates them; re-running it is the only way to change what you see."
+            />
 
-            <Card
-              eyebrow="Reading rules"
-              title="Decisions applied to this dataset"
-              sub="Each of these changes what a number means. They are applied in the generator, not by hand, so they hold on every refresh."
-            >
-              <ol style={{ margin: 0, paddingLeft: 20, fontSize: 13.5, lineHeight: 1.65, color: "#334155" }}>
-                {D.meta.decisions.map((d, i) => <li key={i} style={{ marginBottom: 8 }}>{d}</li>)}
+            <div className="cx-stats">
+              <Stat label="Source files" value={D.meta.files.length} sub="Cambridge workbooks" />
+              <Stat label="Incomplete" value={totalMissing} sub="excluded from every mean" tone="#b91c1c" />
+              <Stat label="Suppressed" value={D.quality.suppressed.length} sub={`cohorts below n=${D.meta.minReport}`} />
+              <Stat label="Generated" value={D.meta.generatedAt} sub="re-run to refresh" />
+            </div>
+
+            <Card eyebrow="Reading rules" title="Decisions applied to this dataset"
+              sub="Each of these changes what a number means. They live in the generator, not in anyone's head, so they hold on every refresh.">
+              <ol style={{ margin: 0, paddingLeft: 22, fontSize: "var(--text-base)", lineHeight: 1.68, color: "var(--ink-2)" }}>
+                {D.meta.decisions.map((d, i) => <li key={i} style={{ marginBottom: 9 }}>{d}</li>)}
               </ol>
             </Card>
 
-            <Card
-              eyebrow="Data quality"
-              title="Incomplete entries"
-              sub="A candidate who missed a component receives no syllabus total and no grade. Counting them as a fail would be wrong; averaging them away silently would flatter the school. They are listed here and excluded everywhere else."
-            >
+            <Card eyebrow="Data quality" title="Incomplete entries"
+              sub="A candidate who missed a component receives no syllabus total and no grade. Counting them as a fail would be wrong; averaging them away silently would flatter the school. They are listed here and excluded everywhere else.">
               {inc.length === 0 ? (
-                <div className="cx-note">No incomplete entries in the current dataset.</div>
+                <div className="cx-callout">No incomplete entries in the current dataset.</div>
               ) : (
-                <div className="cx-scroll-x">
-                  <table>
+                <div className="cx-scroll">
+                  <table className="cx-table">
                     <thead>
                       <tr>
                         <th>School</th><th>Level</th><th>Series</th><th>Syllabus</th>
-                        <th className="cx-num">Entries</th><th className="cx-num">Incomplete</th><th className="cx-num">Share</th>
+                        <th className="cx-n">Entries</th><th className="cx-n">Incomplete</th><th className="cx-n">Share</th>
                       </tr>
                     </thead>
                     <tbody>
                       {inc.map((r, i) => (
                         <tr key={i}>
-                          <td style={{ fontWeight: 600 }}>{schoolFull(r.centre)}</td>
-                          <td>{r.level}</td>
-                          <td>{r.series}</td>
-                          <td>{r.syllabus} {r.subject}</td>
-                          <td className="cx-num">{r.entries}</td>
-                          <td className="cx-num" style={{ fontWeight: 700, color: "#b91c1c" }}>{r.incomplete}</td>
-                          <td className="cx-num">{fmt((r.incomplete / r.entries) * 100, 1)}%</td>
+                          <td className="cx-school"><Dot centre={r.centre} />{fullName(r.centre)}</td>
+                          <td>{r.level}</td><td>{r.series}</td>
+                          <td>{r.syllabus} · {r.subject}</td>
+                          <td className="cx-n">{r.entries}</td>
+                          <td className="cx-n" style={{ fontWeight: 700, color: "var(--red)" }}>{r.incomplete}</td>
+                          <td className="cx-n">{pct((r.incomplete / r.entries) * 100)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -966,114 +1212,91 @@
               )}
             </Card>
 
-            <Card
-              eyebrow="Privacy"
-              title={`Small cohorts are suppressed at n < ${D.meta.minReport}`}
+            <Card eyebrow="Privacy" title={`Small cohorts are suppressed at n < ${D.meta.minReport}`}
               sub="This page is reachable without signing in, so it carries school-level aggregates only — no learner name, no candidate number, no per-learner mark. A mean over one or two learners identifies them, so those cells are dropped rather than shown."
-            >
-              <div className="cx-scroll-x">
-                <table>
+              foot={D.quality.suppressed.length > 40 ? `Showing 40 of ${D.quality.suppressed.length} suppressed cells.` : null}>
+              <div className="cx-scroll">
+                <table className="cx-table">
                   <thead>
-                    <tr><th>Dataset</th><th>School</th><th>Series</th><th>Syllabus</th><th className="cx-num">n</th></tr>
+                    <tr><th>Dataset</th><th>School</th><th>Series</th><th>Syllabus</th><th className="cx-n">n</th></tr>
                   </thead>
                   <tbody>
                     {D.quality.suppressed.slice(0, 40).map((r, i) => (
                       <tr key={i}>
-                        <td style={{ color: "var(--muted)" }}>{r.set}</td>
-                        <td>{schoolFull(r.centre)}</td>
-                        <td>{r.series}</td>
-                        <td>{r.syllabus}</td>
-                        <td className="cx-num">{r.n}</td>
+                        <td style={{ color: "var(--ink-3)" }}>{r.set}</td>
+                        <td>{fullName(r.centre)}</td><td>{r.series}</td><td>{r.syllabus}</td>
+                        <td className="cx-n">{r.n}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
-                {D.quality.suppressed.length > 40 && (
-                  <p className="cx-card__sub" style={{ marginTop: 8 }}>
-                    …and {D.quality.suppressed.length - 40} more.
-                  </p>
-                )}
               </div>
             </Card>
 
-            <Card eyebrow="Provenance" title="Source workbooks">
-              <div className="cx-scroll-x">
-                <table>
+            <Card eyebrow="Provenance" title="Source workbooks"
+              foot={<span>Held at <code>{D.meta.sourceRoot}</code>. Aggregated by <code>{D.meta.generator}</code>.</span>}>
+              <div className="cx-scroll">
+                <table className="cx-table">
                   <thead><tr><th>Level</th><th>File</th></tr></thead>
                   <tbody>
                     {D.meta.files.map((f, i) => (
-                      <tr key={i}><td style={{ whiteSpace: "nowrap" }}>{f.level}</td><td style={{ fontFamily: "ui-monospace, monospace", fontSize: 12 }}>{f.file}</td></tr>
+                      <tr key={i}>
+                        <td>{f.level}</td>
+                        <td style={{ fontFamily: "var(--font-mono)", fontSize: 12 }}>{f.file}</td>
+                      </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <p className="cx-card__sub" style={{ marginTop: 10 }}>
-                Held at <code>{D.meta.sourceRoot}</code>. Aggregated by{" "}
-                <code>{D.meta.generator}</code>.
-              </p>
             </Card>
           </div>
         );
       };
 
       // -------------------------------------------------------------------
-      // CALP modal — pedagogical companion, carried forward unchanged.
+      // CALP modal — pedagogical companion, carried forward.
       // -------------------------------------------------------------------
       const CALPModal = ({ open, onClose }) => {
         if (!open) return null;
         const H = ({ children }) => (
-          <h2 style={{ fontSize: 19, fontWeight: 700, margin: "28px 0 10px", color: "var(--cyan-deep)" }}>{children}</h2>
+          <h2 style={{
+            fontFamily: "var(--font-title)", fontSize: "var(--text-2xl)", fontWeight: 600,
+            margin: "30px 0 10px", color: "var(--ink)",
+          }}>{children}</h2>
         );
         const P = ({ children }) => (
-          <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#334155", margin: "0 0 12px" }}>{children}</p>
-        );
-        const Box = ({ tone, title, children }) => (
-          <div style={{
-            flex: "1 1 260px", background: tone === "good" ? "#f0fdf4" : "#fffbeb",
-            border: `1px solid ${tone === "good" ? "#bbf7d0" : "#fde68a"}`,
-            borderRadius: 10, padding: 16,
-          }}>
-            <div style={{ fontWeight: 700, marginBottom: 8, color: tone === "good" ? "#166534" : "#92400e" }}>{title}</div>
-            <div style={{ fontSize: 13.5, lineHeight: 1.6, color: "#334155" }}>{children}</div>
-          </div>
+          <p style={{ fontSize: "var(--text-base)", lineHeight: 1.72, color: "var(--ink-2)", margin: "0 0 12px" }}>{children}</p>
         );
         const L = ({ items }) => (
-          <ul style={{ margin: "0 0 12px", paddingLeft: 20, fontSize: 14, lineHeight: 1.7, color: "#334155" }}>
+          <ul style={{ margin: "0 0 12px", paddingLeft: 21, fontSize: "var(--text-base)", lineHeight: 1.72, color: "var(--ink-2)" }}>
             {items.map((t, i) => <li key={i}>{t}</li>)}
           </ul>
         );
+        const Box = ({ tone, title, children }) => (
+          <div style={{
+            flex: "1 1 258px",
+            background: tone === "good" ? "#f0fdf4" : "#fffbeb",
+            border: `1px solid ${tone === "good" ? "#bbf7d0" : "#fde68a"}`,
+            borderRadius: "var(--radius)", padding: 16,
+          }}>
+            <div style={{ fontWeight: 700, marginBottom: 8, color: tone === "good" ? "#166534" : "#92400e" }}>{title}</div>
+            {children}
+          </div>
+        );
 
         return (
-          <div
-            onClick={onClose}
-            style={{
-              position: "fixed", inset: 0, background: "rgba(15,23,42,0.66)",
-              zIndex: 1000, overflow: "auto", padding: "40px 20px",
-            }}
-          >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: 900, margin: "0 auto", background: "#fff",
-                borderRadius: 16, padding: 40, position: "relative",
-              }}
-            >
-              <button
-                onClick={onClose}
-                aria-label="Close"
-                style={{
-                  position: "absolute", top: 18, right: 18, fontSize: 22,
-                  background: "none", border: "none", cursor: "pointer", color: "#64748b",
-                }}
-              >
-                ✕
-              </button>
+          <div onClick={onClose} role="dialog" aria-modal="true" aria-label="Understanding CALP"
+            style={{ position: "fixed", inset: 0, background: "rgba(16,20,30,0.68)", zIndex: 1000, overflow: "auto", padding: "40px 20px" }}>
+            <div onClick={(e) => e.stopPropagation()}
+              style={{ maxWidth: 900, margin: "0 auto", background: "#fff", borderRadius: "var(--radius-lg)", padding: 40, position: "relative" }}>
+              <button onClick={onClose} aria-label="Close"
+                style={{ position: "absolute", top: 16, right: 16, fontSize: 22, background: "none", border: 0, cursor: "pointer", color: "var(--ink-3)" }}>✕</button>
 
-              <div className="cx-eyebrow">Companion note</div>
-              <h1 style={{ fontSize: 30, fontWeight: 800, margin: "6px 0 4px", letterSpacing: "-0.02em" }}>
+              <div className="cx-lead__eyebrow">Companion note</div>
+              <h1 style={{ fontFamily: "var(--font-title)", fontSize: "var(--text-4xl)", fontWeight: 600, margin: "6px 0 4px", color: "var(--ink)" }}>
                 Understanding CALP
               </h1>
-              <p style={{ fontSize: 17, color: "#64748b", fontStyle: "italic", margin: "0 0 8px" }}>
+              <p style={{ fontSize: "var(--text-lg)", color: "var(--ink-3)", fontStyle: "italic", margin: "0 0 8px" }}>
                 The hidden barrier to Cambridge success
               </p>
 
@@ -1142,7 +1365,7 @@
               <P>This is the CALP gap in action.</P>
 
               <H>4. Key messages for principals</H>
-              <div className="cx-note" style={{ marginBottom: 14 }}>
+              <div className="cx-callout" style={{ marginBottom: 14 }}>
                 <strong>Core message:</strong> “Our students appear fluent in English but underperform in
                 Cambridge examinations. This is because conversational English (BICS) takes 1–2 years to
                 develop, while academic English (CALP) takes 5–7 years. Daily English conversations in the
@@ -1184,7 +1407,7 @@
                 "What is our strategy for students who enter our schools with BICS but no CALP foundation?",
               ]} />
 
-              <p style={{ fontSize: 12.5, color: "#64748b", marginTop: 24, borderTop: "1px solid var(--line)", paddingTop: 14 }}>
+              <p style={{ fontSize: "var(--text-xs)", color: "var(--ink-3)", marginTop: 24, borderTop: "1px solid var(--border)", paddingTop: 14 }}>
                 Reference: Cummins, J. (1979). Cognitive/academic language proficiency. · For questions or
                 clarifications, contact the Academic Division.
               </p>
@@ -1197,21 +1420,28 @@
       // Shell
       // -------------------------------------------------------------------
       const TABS = [
-        { key: "primary", label: "Primary Checkpoint" },
         { key: "lower", label: "Lower Secondary Checkpoint" },
+        { key: "primary", label: "Primary Checkpoint" },
         { key: "igcse", label: "IGCSE" },
         { key: "alevel", label: "AS & A Level" },
-        { key: "quality", label: "Data notes" },
+        { key: "notes", label: "Data notes" },
       ];
 
       const App = () => {
-        const [tab, setTab] = useState("lower");
+        // Tabs are addressable: /cambridge-exams#igcse opens the IGCSE view, so
+        // a link in an email or a report lands on the right one.
+        const fromHash = (window.location.hash || "").replace("#", "");
+        const [tab, setTab] = useState(TABS.some((t) => t.key === fromHash) ? fromHash : "lower");
         const [calp, setCalp] = useState(false);
+        const go = (key) => {
+          setTab(key);
+          try { window.history.replaceState(null, "", `#${key}`); } catch (err) { /* file:// */ }
+        };
 
         if (!D) {
           return (
-            <div className="cx-wrap" style={{ padding: "60px 24px" }}>
-              <div className="cx-note cx-note--warn">
+            <div className="cx-wrap" style={{ padding: "40px" }}>
+              <div className="cx-callout cx-callout--warn">
                 <strong>No dataset embedded.</strong> Run{" "}
                 <code>node scripts/cambridge-results/build-cambridge-dashboard-data.js</code> from the
                 monorepo root to generate and inject it.
@@ -1220,90 +1450,34 @@
           );
         }
 
-        const totals = useMemo(() => ({
-          schools: uniq(
-            D.checkpoint.subject.map((r) => r.centre).concat(D.exams.subject.map((r) => r.centre))
-          ).length,
-          series: uniq(
-            D.checkpoint.subject.map((r) => r.series).concat(D.exams.subject.map((r) => r.series))
-          ).length,
-          files: D.meta.files.length,
-        }), []);
-
         return (
           <React.Fragment>
             <CALPModal open={calp} onClose={() => setCalp(false)} />
 
-            <header style={{
-              background: "linear-gradient(135deg, #0e7490 0%, #0891b2 46%, #6c5ce7 100%)",
-              color: "#fff", padding: "34px 0 30px",
-            }}>
+            <div className="cx-tabs cx-no-print">
               <div className="cx-wrap">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 24, flexWrap: "wrap" }}>
-                  <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", opacity: 0.82 }}>
-                      Eduversal · Academic Division
-                    </div>
-                    <h1 style={{ fontSize: 32, fontWeight: 800, margin: "8px 0 6px", letterSpacing: "-0.025em" }}>
-                      Cambridge Results — Network Dashboard
-                    </h1>
-                    <p style={{ margin: 0, fontSize: 14.5, opacity: 0.92, maxWidth: 720, lineHeight: 1.6 }}>
-                      Every Cambridge result the network holds, read straight from the workbooks Cambridge
-                      International returns to each centre — {totals.files} files, {totals.schools} centres,{" "}
-                      {totals.series} series, down to sub-strand and paper level.
-                    </p>
-                  </div>
-                  <div className="cx-no-print" style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                    <button
-                      onClick={() => setCalp(true)}
-                      style={{
-                        background: "rgba(255,255,255,0.16)", border: "1px solid rgba(255,255,255,0.4)",
-                        color: "#fff", padding: "10px 18px", borderRadius: 10,
-                        fontSize: 13.5, fontWeight: 700, cursor: "pointer",
-                      }}
-                    >
-                      Understanding CALP
+                <div className="cx-tabs__inner" role="tablist">
+                  {TABS.map((t) => (
+                    <button key={t.key} type="button" role="tab" className="cx-tab"
+                      aria-selected={tab === t.key} onClick={() => go(t.key)}>
+                      {t.label}
                     </button>
-                    <button
-                      onClick={() => setTab("quality")}
-                      style={{
-                        background: "#fff", border: "none", color: "var(--cyan-deep)",
-                        padding: "10px 18px", borderRadius: 10, fontSize: 13.5, fontWeight: 700, cursor: "pointer",
-                      }}
-                    >
-                      Data notes
-                    </button>
-                  </div>
+                  ))}
+                  <button type="button" className="cx-tab" style={{ marginLeft: "auto", color: "var(--brand)" }}
+                    onClick={() => setCalp(true)}>
+                    Understanding CALP →
+                  </button>
                 </div>
               </div>
-            </header>
+            </div>
 
-            <nav className="cx-no-print" style={{ background: "#fff", borderBottom: "1px solid var(--line)", position: "sticky", top: 0, zIndex: 50 }}>
-              <div className="cx-wrap" style={{ display: "flex", gap: 4, overflowX: "auto" }}>
-                {TABS.map((t) => (
-                  <button key={t.key} className="cx-tabbtn" aria-selected={tab === t.key} onClick={() => setTab(t.key)}>
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            </nav>
-
-            <main id="main-content" role="main" tabIndex={-1} className="cx-wrap" style={{ padding: "26px 24px 60px" }}>
+            <div className="cx-wrap" style={{ paddingBottom: 56 }}>
               {tab === "primary" && <CheckpointTab key="p" level="Primary Checkpoint" />}
               {tab === "lower" && <CheckpointTab key="l" level="Lower Secondary Checkpoint" />}
               {tab === "igcse" && <IgcseTab />}
               {tab === "alevel" && <ALevelTab />}
-              {tab === "quality" && <QualityTab />}
-            </main>
-
-            <footer style={{ borderTop: "1px solid var(--line)", background: "#fff", padding: "22px 0 40px" }}>
-              <div className="cx-wrap" style={{ fontSize: 12.5, color: "var(--muted)", lineHeight: 1.7 }}>
-                School-level aggregates only — no learner is identifiable on this page, and cohorts below
-                n={D.meta.minReport} are suppressed. Generated {D.meta.generatedAt} by{" "}
-                <code>{D.meta.generator}</code>. Provisional component marks are Cambridge's own; grade
-                thresholds and enquiries about results can move them.
-              </div>
-            </footer>
+              {tab === "notes" && <NotesTab />}
+            </div>
           </React.Fragment>
         );
       };
