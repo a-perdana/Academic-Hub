@@ -119,6 +119,16 @@
         transition: color 0.14s ease, border-color 0.14s ease;
       }
       .cx-tab:hover { color: var(--ink-2); }
+      /* The picker + CALP group could not shrink (the CALP label is nowrap), so
+         at 390px it pushed the document 4px wide and produced a horizontal
+         scrollbar. It wraps onto its own line instead. */
+      .cx-tabs__right {
+        margin-left: auto; padding-left: 16px;
+        display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      }
+      @media (max-width: 720px) {
+        .cx-tabs__right { margin-left: 0; padding-left: 0; width: 100%; padding-bottom: 8px; }
+      }
       .cx-tab[aria-selected="true"] { color: var(--teal-ink); border-bottom-color: var(--teal-ink); }
 
       /* ---- section lead ------------------------------------------------ */
@@ -656,7 +666,7 @@
        * Opacity 1 for the chosen school, 0.22 for the rest, 1 for everyone when
        * nothing is chosen.
        */
-      const dim = (focus, centre) => (!focus || focus === centre ? 1 : 0.22);
+      const dim = (focus, centre) => (!focus || focus === centre ? 1 : 0.28);
 
       /**
        * The three or four numbers in a tab that someone should actually react
@@ -887,6 +897,7 @@
               const data = sr.map((r) => ({
                 name: shortName(r.centre), centre: r.centre, overall: r.meanOverall,
                 n: r.n, raw: r.meanTotal, max: r.maxTotal, rawPct: r.meanPct,
+                label: (!focus || focus === r.centre) ? fmt(r.meanOverall, 1) : "",
               }));
 
               return (
@@ -934,8 +945,8 @@
                         <ReferenceLine x={subjMean} stroke="#8888a8" strokeDasharray="4 4" />
                         <Bar dataKey="overall" radius={[0, 5, 5, 0]} barSize={22} isAnimationActive={false}>
                           {data.map((d) => <Cell key={d.centre} fill={colorOf(d.centre)} fillOpacity={dim(focus, d.centre)} />)}
-                          <LabelList dataKey="overall" position="right" formatter={(v) => fmt(v, 1)}
-                            style={{ fill: "#44445a", fontSize: 12, fontWeight: 700 }} />
+                          <LabelList dataKey="label" position="right"
+                            style={{ fill: "#44445a", fontSize: 12, fontWeight: 700, fillOpacity: 1 }} />
                         </Bar>
                       </BarChart>
                     </ResponsiveContainer>
@@ -2383,7 +2394,7 @@
                       {t.label}
                     </button>
                   ))}
-                  <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 12, paddingLeft: 16 }}>
+                  <div className="cx-tabs__right">
                     <select className="cx-select" data-on={focus ? "1" : "0"} aria-label="Bring one school forward"
                       value={focus || ""} onChange={(e) => setFocus(e.target.value || null)}>
                       <option value="">All schools</option>
