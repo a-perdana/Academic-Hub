@@ -152,10 +152,31 @@
       }
       .cx-card__body { padding: 14px 22px 20px; }
       .cx-card__foot {
-        padding: 11px 22px; border-top: 1px solid var(--border);
+        padding: 13px 22px 15px; border-top: 1px solid var(--border);
         background: #fbfbfa; font-size: var(--text-xs);
         line-height: 1.55; color: var(--ink-3);
       }
+
+      /* ---- "how to read this" strip ------------------------------------
+         Written for readers whose first language is not English: short
+         sentences, everyday words, one idea per sentence. Every chart on the
+         page carries one, because a reader meeting a 100% stacked bar or a
+         standardised 0-50 score for the first time cannot be expected to
+         infer the rules from the picture. */
+      .cx-howto__label {
+        display: flex; align-items: center; gap: 7px;
+        font-size: var(--text-xs); font-weight: var(--fw-bold);
+        letter-spacing: 0.08em; text-transform: uppercase;
+        color: var(--teal-ink); margin-bottom: 7px;
+      }
+      .cx-howto__label svg { width: 14px; height: 14px; flex-shrink: 0; }
+      .cx-howto p {
+        margin: 0 0 7px; max-width: 96ch;
+        font-size: var(--text-sm); line-height: 1.68; color: var(--ink-2);
+      }
+      .cx-howto p:last-child { margin-bottom: 0; }
+      .cx-howto strong { color: var(--ink); font-weight: var(--fw-semibold); }
+      .cx-howto__extra { margin-top: 11px; padding-top: 10px; border-top: 1px dashed var(--border); }
 
       /* ---- stat tiles --------------------------------------------------- */
       .cx-stats { display: flex; gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-5); }
@@ -210,6 +231,14 @@
       }
       .cx-table tbody tr:last-child td { border-bottom: 0; }
       .cx-table tbody tr:hover td { background: #fcfcfb; }
+      /* The hover tooltip is a sibling of the table inside the same card, and
+         the table's sticky header (z-index 2) and pinned first column
+         (z-index 3) were painting over it — the middle of a tall tooltip came
+         out with the table showing through it. Recharts sets no z-index of its
+         own on the wrapper, so one is set here: above the table's sticky
+         layers, below the sticky tab bar at 50. */
+      .recharts-tooltip-wrapper { z-index: 40; }
+
       .cx-n { text-align: right; font-variant-numeric: tabular-nums; }
       .cx-school { font-weight: var(--fw-semibold); color: var(--ink); }
       .cx-dot {
@@ -503,6 +532,28 @@
         </section>
       );
 
+      /**
+       * "How to read this" strip, shown at the foot of every chart.
+       *
+       * The audience is school leadership across the network, and English is a
+       * second language for most of them. Keep the writing at roughly CEFR
+       * B1-B2: short sentences, one idea per sentence, everyday words, no
+       * idioms, and no assumed knowledge of chart conventions. Say what one
+       * bar or one row IS before saying what it means.
+       */
+      const HowTo = ({ chart = "chart", children, extra }) => (
+        <div className="cx-howto">
+          <div className="cx-howto__label">
+            {/* camelCase attributes: this SVG is JSX, unlike the hero icon,
+                which is static HTML and correctly uses the hyphenated form. */}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z" /><circle cx="12" cy="12" r="3" /></svg>
+            How to read this {chart}
+          </div>
+          {children}
+          {extra && <div className="cx-howto__extra">{extra}</div>}
+        </div>
+      );
+
       const Stat = ({ label, value, sub, tone }) => (
         <div className="cx-stat">
           <div className="cx-stat__lbl">{label}</div>
@@ -590,7 +641,28 @@
                   eyebrow={`${sr[0].syllabus} · ${series}`}
                   title={subject}
                   sub={`Mean overall score by school. The dashed line is the mean across the ${sr.length} participating schools (${fmt(subjMean, 1)}).`}
-                  foot={`Raw marks are out of ${sr[0].maxTotal} for this syllabus and sit on a different scale in each subject, so they are shown for reference and never compared across subjects.`}
+                  foot={
+                    <HowTo>
+                      <p>
+                        {/* Not lower-cased: "English as a Second Language" is a
+                            proper name and reads wrong in lower case. */}
+                        Each bar is <strong>one school</strong>. The number at the end of the bar is that
+                        school's average score in {subject}, out of 50. A longer bar means a higher
+                        average.
+                      </p>
+                      <p>
+                        The grey dashed line is the average of all {sr.length} schools shown here. A bar that
+                        reaches past the line is <strong>above</strong> the group average. A bar that stops
+                        before the line is <strong>below</strong> it. The last column of the table gives that
+                        difference as a number.
+                      </p>
+                      <p>
+                        Use the score out of 50 when you compare schools. The raw mark next to it is out
+                        of {sr[0].maxTotal} in this subject and out of a different total in every other
+                        subject, so raw marks cannot be compared between subjects.
+                      </p>
+                    </HowTo>
+                  }
                 >
                   <div style={{ height: Math.max(190, data.length * 44 + 34) }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -691,6 +763,26 @@
             title={subject}
             sub="A school sitting well below its own overall score on a single strand has a coverage question, not a general attainment question."
             right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
+            foot={
+              <HowTo>
+                <p>
+                  Cambridge divides each subject into <strong>strands</strong> — the main parts of the
+                  subject. The names along the bottom are the strands. Each colour is one school, as
+                  shown in the key under the chart.
+                </p>
+                <p>
+                  You can read this chart in two directions. Compare the bars <strong>inside one
+                  group</strong> to see which school is stronger in that strand. Follow{" "}
+                  <strong>one colour across the groups</strong> to see which parts of the subject that
+                  school finds difficult.
+                </p>
+                <p>
+                  Every strand score is out of 50, the same scale as the overall score. So if a school's
+                  bar in one strand is much shorter than its bars elsewhere, that strand is a weak point
+                  for that school — not simply a hard strand for everyone.
+                </p>
+              </HowTo>
+            }
           >
             <div style={{ height: 330 }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -746,14 +838,41 @@
             sub="Marks scored as a share of marks available, sorted weakest first. Spread is the gap between the strongest and weakest school on that sub-strand."
             right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
             foot={
-              <div className="cx-legend">
-                <span>Weaker</span>
-                <span className="cx-legend__ramp">
-                  {HEAT.map((c) => <span key={c} className="cx-legend__step" style={{ background: c }} />)}
-                </span>
-                <span>Stronger</span>
-                <span style={{ marginLeft: 10 }}>· 0–35 · 35–50 · 50–60 · 60–70 · 70–82 · 82–100%</span>
-              </div>
+              <HowTo
+                chart="table"
+                extra={
+                  <div className="cx-legend">
+                    <span>Weaker</span>
+                    <span className="cx-legend__ramp">
+                      {HEAT.map((c) => <span key={c} className="cx-legend__step" style={{ background: c }} />)}
+                    </span>
+                    <span>Stronger</span>
+                    <span style={{ marginLeft: 10 }}>· 0–35 · 35–50 · 50–60 · 60–70 · 70–82 · 82–100%</span>
+                  </div>
+                }
+              >
+                <p>
+                  A <strong>sub-strand</strong> is a small topic inside a strand — for example, one type
+                  of question or one skill. Each row is one sub-strand.
+                </p>
+                <p>
+                  Each number is the share of the marks that learners actually won.{" "}
+                  <strong>60% means learners scored 60 marks out of every 100 available</strong> on that
+                  topic. The colour follows the number, from dark red for low to dark green for high, so
+                  you can find the problem areas without reading every figure.
+                </p>
+                <p>
+                  The rows are sorted with the <strong>weakest topic at the top</strong>. The first rows
+                  are the ones to work on first.
+                </p>
+                <p>
+                  The <strong>Network</strong> column is all the schools together. The{" "}
+                  <strong>Spread</strong> column is the distance between the best and the worst school on
+                  that row. A low Network number means the whole network finds the topic hard, and it
+                  probably belongs in the pacing scheme. A large Spread means some schools already teach
+                  it well, and those schools are worth asking.
+                </p>
+              </HowTo>
             }
           >
             {weakest.length > 0 && (
@@ -846,9 +965,29 @@
             title={subject}
             sub={`${centres.length} of ${all.length} schools have entered ${subject} in more than one series. A break in a line means the school skipped a series — the points either side are still comparable, but nothing is drawn across the gap.`}
             right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
-            foot={singles.length
-              ? `Not plotted: ${singles.map(fullName).join(", ")} — ${singles.length === 1 ? "this school has" : "these schools have"} only one series on file for ${subject}.`
-              : null}
+            foot={
+              <HowTo
+                extra={singles.length
+                  ? `Not plotted: ${singles.map(fullName).join(", ")} — ${singles.length === 1 ? "this school has" : "these schools have"} only one series on file for ${subject}, so there is no trajectory to draw.`
+                  : null}
+              >
+                <p>
+                  Each coloured line is <strong>one school</strong>. The names along the bottom are the
+                  exam series, oldest on the left. Each dot is one result. A line that rises from left to
+                  right means the school's average score went up.
+                </p>
+                <p>
+                  All the scores are out of 50, and Cambridge designs this score to keep the same meaning
+                  in every series. So you can compare a dot in one series with a dot in another, even
+                  though the papers were different.
+                </p>
+                <p>
+                  Some schools have <strong>dots but no line between them</strong>. That school did not
+                  enter this subject in the series in between. We do not draw a line across the gap,
+                  because we do not know what happened in the series we have no result for.
+                </p>
+              </HowTo>
+            }
           >
             <div style={{ height: 310 }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -947,7 +1086,35 @@
                   eyebrow={`${syl} · ${series}`}
                   title={spec.subject || syl}
                   sub={`Grade distribution as a share of graded candidates.${spec.note ? ` ${spec.note}` : ""}`}
-                  foot={`Mean total is the raw syllabus mark. It compares within one tier of one syllabus and nowhere else.`}
+                  foot={
+                    <HowTo>
+                      <p>
+                        Each bar is <strong>one school</strong>, and every bar fills the full width. The
+                        bar does not show how many candidates a school entered — it shows{" "}
+                        <strong>what share of them reached each grade</strong>. A school with 70
+                        candidates and a school with 18 both give a full-width bar.
+                      </p>
+                      <p>
+                        The colours run from dark green for A* to dark red for U, in grade order, as
+                        shown in the key. Read from the left: <strong>the more green, the more high
+                        grades</strong>. The exact numbers are in the table below.
+                      </p>
+                      {sr.some((r) => r.tier !== "Untiered") && (
+                        <p>
+                          This subject has two entry tiers, and each school appears once for each tier it
+                          entered. <strong>Do not compare a Core bar with an Extended bar.</strong> Core
+                          candidates sit easier papers and cannot be awarded a grade above C, so a Core
+                          bar has no green at the top no matter how well the candidates did.
+                        </p>
+                      )}
+                      <p>
+                        <strong>Mean total</strong> in the table is the raw mark added up across the
+                        papers. Cambridge does not publish the maximum in this report, and the papers
+                        differ by tier, so this number only compares schools within one tier of this one
+                        subject. It is not a percentage.
+                      </p>
+                    </HowTo>
+                  }
                 >
                   <div style={{ height: Math.max(160, bars.length * 38 + 52) }}>
                     <ResponsiveContainer width="100%" height="100%">
@@ -1032,6 +1199,30 @@
             title={(D.syllabus[syl] || {}).subject || syl}
             sub="Mean raw mark per paper. Papers have different maxima — read down a column, never across a row."
             right={<Chips options={syllabuses} value={syl} onChange={setPicked} />}
+            foot={
+              <HowTo chart="table">
+                <p>
+                  Each row is one school. Each column is <strong>one exam paper</strong>. The number is
+                  the average raw mark that school's candidates scored on that paper, and{" "}
+                  <strong>n</strong> is how many candidates sat it. A dash means the school did not enter
+                  that paper.
+                </p>
+                <p>
+                  <strong>Read down a column.</strong> That compares schools on the same paper, which is
+                  a fair comparison.
+                </p>
+                <p>
+                  <strong>Do not read across a row.</strong> Every paper has a different total mark, so a
+                  bigger number in one column does not mean a better result than a smaller number in
+                  another. Two papers of 40 and of 130 marks sit side by side here.
+                </p>
+                <p>
+                  This is where you can see whether one paper is pulling a cohort down. If a school looks
+                  normal on the theory paper but much weaker on the practical paper, the problem is
+                  probably exam technique or practical preparation, not the subject knowledge itself.
+                </p>
+              </HowTo>
+            }
           >
             <div className="cx-scroll">
               <table className="cx-table cx-table--pinned">
@@ -1118,7 +1309,31 @@
               return (
                 <Card key={syl} eyebrow={`${syl} · ${series}`} title={spec.subject || syl}
                   sub="Award reached, then the grade distribution within each award."
-                  foot="AS Level has no A* grade. Ungraded candidates appear in the chart but in neither grade row.">
+                  foot={
+                    <HowTo>
+                      <p>
+                        Each bar is <strong>one school</strong>. Unlike the IGCSE chart, the length of
+                        this bar is the <strong>number of candidates</strong>, not a share — read the
+                        scale along the bottom.
+                      </p>
+                      <p>
+                        The bar has three parts. <strong>Green</strong> is candidates who received a full
+                        A Level grade (A* to E). <strong>Purple</strong> is candidates who received an AS
+                        Level grade (a to e). <strong>Dark red</strong> is candidates who were ungraded.
+                      </p>
+                      <p>
+                        AS Level and A Level are two different qualifications, so the table below gives
+                        each one its own row. AS Level has no A* grade — that cell shows "n/a" rather
+                        than a zero.
+                      </p>
+                      <p>
+                        Ungraded candidates are counted in the bar but appear in neither grade row.
+                        Cambridge writes grade U the same way for both qualifications, so this report
+                        does not say which one an ungraded candidate was entered for, and we do not
+                        guess.
+                      </p>
+                    </HowTo>
+                  }>
                   <div style={{ height: Math.max(132, bars.length * 44 + 56) }}>
                     <ResponsiveContainer width="100%" height="100%">
                       <BarChart data={bars} layout="vertical" margin={{ top: 2, right: 24, left: 4, bottom: 2 }}>
