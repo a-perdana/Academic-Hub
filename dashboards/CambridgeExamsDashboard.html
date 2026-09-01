@@ -1684,9 +1684,15 @@
       // -------------------------------------------------------------------
       // Shell
       // -------------------------------------------------------------------
+      /**
+       * Ordered as a learner moves through the school: Primary Checkpoint,
+       * Lower Secondary Checkpoint, IGCSE, then AS & A Level. The page opens on
+       * the first of them — landing on the second tab while the first sits to
+       * its left reads as a mistake, even when the second holds more data.
+       */
       const TABS = [
-        { key: "lower", label: "Lower Secondary Checkpoint" },
         { key: "primary", label: "Primary Checkpoint" },
+        { key: "lower", label: "Lower Secondary Checkpoint" },
         { key: "igcse", label: "IGCSE" },
         { key: "alevel", label: "AS & A Level" },
         { key: "notes", label: "Data notes" },
@@ -1696,7 +1702,7 @@
         // Tabs are addressable: /cambridge-exams#igcse opens the IGCSE view, so
         // a link in an email or a report lands on the right one.
         const fromHash = (window.location.hash || "").replace("#", "");
-        const [tab, setTab] = useState(TABS.some((t) => t.key === fromHash) ? fromHash : "lower");
+        const [tab, setTab] = useState(TABS.some((t) => t.key === fromHash) ? fromHash : TABS[0].key);
         const [calp, setCalp] = useState(false);
         const go = (key) => {
           setTab(key);
