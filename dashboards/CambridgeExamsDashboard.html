@@ -81,9 +81,15 @@
       /* ---- tab bar ---------------------------------------------------- */
       .cx-tabs {
         position: sticky; top: 0; z-index: 50;
-        background: rgba(255,255,255,0.94);
-        backdrop-filter: saturate(1.6) blur(8px);
-        border-bottom: 1px solid var(--border);
+        /* No white band. A full-bleed white strip between the teal hero and the
+           tinted body read as a slab laid across the page rather than part of
+           it, so the bar carries the family tint instead. It still needs an
+           opaque background — content scrolls underneath — and a hairline plus
+           a shadow that only shows once it is stuck, so the bar separates from
+           the content it covers without drawing a line at rest. */
+        background: var(--paper-tinted-teal);
+        border-bottom: 1px solid rgba(15, 118, 110, 0.15);
+        box-shadow: 0 10px 16px -16px rgba(28, 28, 46, 0.9);
       }
       .cx-tabs__inner { display: flex; gap: 2px; overflow-x: auto; }
       .cx-tab {
@@ -274,7 +280,15 @@
     -->
     <header class="page-hero" data-accent="teal">
       <div class="page-hero__inner">
-        <div class="page-hero__icon" aria-hidden="true">🎓</div>
+        <!--
+          An inline SVG, not an emoji: base.css sizes this slot's contents with
+          .page-hero__icon svg { width:30px; height:30px } and colours them with
+          currentColor. A text glyph gets neither rule and renders at 16px as a
+          dark smudge inside the tile.
+        -->
+        <div class="page-hero__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 2.6 9 2.6 12 0v-5"/></svg>
+        </div>
         <div class="page-hero__text">
           <p class="page-hero__eyebrow">Academic Hub · Curriculum · Cambridge</p>
           <h1 class="page-hero__title">Cambridge Results</h1>
