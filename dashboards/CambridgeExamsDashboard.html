@@ -357,14 +357,46 @@
          gradient but not a flat ink colour, so name it once here. */
       :root { --teal-ink: #0f766e; }
 
+      /* ---- search + export ---------------------------------------------- */
+      .cx-search {
+        appearance: none; width: 200px; max-width: 100%;
+        padding: 6px 13px; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--white);
+        font-family: var(--font-body); font-size: var(--text-sm); color: var(--ink);
+      }
+      .cx-search::placeholder { color: var(--ink-3); }
+      .cx-search:focus-visible { outline: 2px solid var(--teal-ink); outline-offset: 1px; }
+      .cx-csv {
+        appearance: none; cursor: pointer;
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 6px 13px; border-radius: 999px;
+        border: 1px solid var(--border); background: var(--white);
+        font-family: var(--font-body); font-size: var(--text-sm);
+        font-weight: var(--fw-semibold); color: var(--ink-2);
+      }
+      .cx-csv:hover { border-color: var(--teal-ink); color: var(--teal-ink); }
+      .cx-csv svg { width: 13px; height: 13px; }
+      .cx-count { font-size: var(--text-xs); color: var(--ink-3); }
+
       @media (max-width: 720px) {
         .cx-wrap { padding: 0 20px; }
         .cx-card__head { flex-direction: column; gap: var(--space-3); }
       }
+
+      /* A printed copy is what goes into a meeting, so it drops the chrome,
+         keeps a card whole across a page break, and prints the URL of the view
+         it came from — a page with tabs is otherwise impossible to cite. */
       @media print {
-        .cx-no-print { display: none !important; }
-        .cx-card { break-inside: avoid; box-shadow: none; }
-        .cx-tabs { position: static; }
+        .cx-no-print, .cx-tabs { display: none !important; }
+        .cx-card { break-inside: avoid; box-shadow: none; border-color: #ccc; }
+        .cx-lead { break-after: avoid; }
+        .cx-scroll { overflow: visible !important; }
+        .cx-table { font-size: 10pt; }
+        .cx-table th { position: static; }
+        .cx-heat { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .cx-wrap { max-width: none; padding: 0 12mm; }
+        a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #666; }
+        @page { margin: 14mm; }
       }
     </style>
   </head>
@@ -455,7 +487,7 @@
 
     <footer class="page-footer" data-accent="teal" role="contentinfo">
       <div class="page-footer__inner">
-        <div class="page-footer__cta">
+        <div class="page-footer__cta cx-no-print">
           <span class="page-footer__cta-eyebrow">Curriculum · Cambridge</span>
           <h2 class="page-footer__cta-title">Results are the end of the story. The syllabus is the start.</h2>
           <p class="page-footer__cta-desc">
@@ -464,7 +496,7 @@
           </p>
           <a href="/curriculum-map" class="page-footer__cta-btn">Open Curriculum Map <span aria-hidden="true">→</span></a>
         </div>
-        <nav class="page-footer__nav" aria-label="Cambridge Results footer navigation">
+        <nav class="page-footer__nav cx-no-print" aria-label="Cambridge Results footer navigation">
           <div class="page-footer__nav-group">
             <span class="page-footer__nav-heading">Cambridge</span>
             <a href="/cambridge-pathway" class="page-footer__nav-link">Pathway Simulator</a>
@@ -691,6 +723,43 @@
       };
 
       const TONE = { alert: "#b91c1c", good: "#15803d", watch: "#b45309", info: "#0f766e" };
+
+      /**
+       * Download a table as CSV.
+       *
+       * A coordinator taking the sub-strand table into a meeting was otherwise
+       * reduced to a screenshot. Everything downloadable here is already on
+       * screen — school-level aggregates only — so this exports nothing the
+       * page does not already show.
+       */
+      function downloadCsv(filename, headers, rows) {
+        const esc = (v) => {
+          const s = v === null || v === undefined ? "" : String(v);
+          return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+        };
+        const body = [headers, ...rows].map((r) => r.map(esc).join(",")).join("\r\n");
+        // The BOM makes Excel open UTF-8 correctly — school names carry accents.
+        const blob = new Blob([`﻿${body}`], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+      }
+
+      const CsvButton = ({ filename, headers, rows, label = "Download CSV" }) => (
+        <button type="button" className="cx-csv cx-no-print"
+          onClick={() => downloadCsv(filename, headers, rows)}
+          title={`${rows.length} row${rows.length === 1 ? "" : "s"}`}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><path d="M7 10l5 5 5-5" /><path d="M12 15V3" />
+          </svg>
+          {label}
+        </button>
+      );
 
       /** Checkpoint: the widest school gap, the weakest topic, the biggest move. */
       function checkpointSignals(level, series, rows) {
@@ -1074,6 +1143,7 @@
        * the per-question data on the Cambridge component sheets.
        */
       const SubstrandCard = ({ level, series, centres, focus }) => {
+        const [query, setQuery] = useState("");
         const rows = D.checkpoint.substrand.filter((r) => r.level === level && r.series === series);
         const [subjects, subject, setSubject] = useSubject(rows);
         if (!subjects.length) return null;
@@ -1095,13 +1165,24 @@
 
         const weakest = table.slice(0, 3);
         const widest = table.slice().filter((r) => r.spread !== null).sort((a, b) => b.spread - a.spread)[0];
+        // 42 sub-strands across six schools is a lot to read for one topic, so
+        // the table is searchable. The signals above are computed from the FULL
+        // set, never from what the search happens to leave on screen.
+        const q = query.trim().toLowerCase();
+        const shown = q ? table.filter((r) => r.name.toLowerCase().includes(q)) : table;
 
         return (
           <Card
             eyebrow="Sub-strand mastery"
             title={subject}
             sub="Marks scored as a share of marks available, sorted weakest first. Spread is the gap between the strongest and weakest school on that sub-strand."
-            right={<Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />}
+            right={
+              <div className="cx-no-print" style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "flex-end", alignItems: "center" }}>
+                <input className="cx-search" type="search" value={query} placeholder="Search sub-strands…"
+                  aria-label="Search sub-strands" onChange={(e) => setQuery(e.target.value)} />
+                <Chips options={subjects} value={subject} onChange={setSubject} format={(s) => s.split(" ")[0]} />
+              </div>
+            }
             foot={
               <HowTo
                 chart="table"
@@ -1150,7 +1231,24 @@
                 )}
               </div>
             )}
-            <div className="cx-scroll">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 12, marginBottom: 9, flexWrap: "wrap" }}>
+              <span className="cx-count">
+                {q ? `Showing ${shown.length} of ${table.length} sub-strands` : `${table.length} sub-strands`}
+              </span>
+              <CsvButton
+                filename={`cambridge-substrand-${level.toLowerCase().replace(/\W+/g, "-")}-${subject.split(" ")[0].toLowerCase()}-${series.replace(/\s+/g, "-").toLowerCase()}.csv`}
+                headers={["Level", "Series", "Subject", "Sub-strand", "Network %", "Spread (pts)", ...present.map(fullName)]}
+                rows={shown.map((r) => [level, series, subject, r.name, fmt(r.net, 1), r.spread === null ? "" : fmt(r.spread, 1),
+                  ...present.map((c) => (r.cells[c] === null ? "" : fmt(r.cells[c], 1)))])}
+              />
+            </div>
+            {shown.length === 0 && (
+              <div className="cx-callout">
+                No sub-strand in {subject} matches “{query.trim()}”. Cambridge names these topics in its
+                own words — try a single word such as “fractions”, “listening” or “forces”.
+              </div>
+            )}
+            <div className="cx-scroll" hidden={shown.length === 0}>
               <table className="cx-table cx-table--pinned">
                 <thead>
                   <tr>
@@ -1163,7 +1261,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  {table.map((r) => (
+                  {shown.map((r) => (
                     <tr key={r.name}>
                       <td className="cx-school">{r.name}</td>
                       <td className="cx-heat" style={{ background: heatOf(r.net) }}>{fmt(r.net, 0)}%</td>
@@ -1450,6 +1548,20 @@
               desc="A cohort that holds up on the theory paper but collapses on the practical or the extended-response paper has an exam-technique problem, not a content problem."
             />
             <ComponentCard level="IGCSE" series={series} focus={focus} />
+
+            <Card eyebrow="A note on what is not here" title="Why there is no sub-strand table at this level"
+              sub="The Checkpoint tabs break each subject down to individual topics and show the share of marks won on each. That analysis is not possible here.">
+              <div className="cx-callout">
+                Cambridge returns a mark for <strong>every question</strong> on the Checkpoint component
+                sheets, which is what makes the sub-strand table possible. For IGCSE and AS &amp; A Level
+                it returns marks at <strong>paper level only</strong>. So the finest view available at
+                this level is the paper table above — it can tell you which paper a cohort lost marks
+                on, but not which topic within it.
+                <br /><br />
+                If you need topic-level detail for an IGCSE cohort, it has to come from the school's own
+                mock and chapter-test data, not from this report.
+              </div>
+            </Card>
 
             <Lead
               eyebrow="Over time"
@@ -1887,6 +1999,19 @@
             </div>
 
             <Card eyebrow="Checkpoint" title="Overall score against the network"
+              right={cpRows.length ? (
+                <CsvButton
+                  filename={`cambridge-${fullName(focus).toLowerCase().replace(/\W+/g, "-")}-checkpoint.csv`}
+                  headers={["School", "Level", "Series", "Subject", "Learners", "School score /50", "Network /50", "Difference"]}
+                  rows={cpRows.map((r) => {
+                    const peers = D.checkpoint.subject.filter((x) =>
+                      x.level === r.level && x.series === r.series && x.syllabus === r.syllabus);
+                    const net = mean(peers.map((x) => x.meanOverall));
+                    return [fullName(focus), r.level, r.series, r.subject, r.n,
+                      fmt(r.meanOverall, 1), fmt(net, 1), fmt(r.meanOverall - net, 1)];
+                  })}
+                />
+              ) : null}
               sub="Cambridge's standardised 0–50 score. The network column is the mean of every school that entered the same subject in the same series, so the difference is like-for-like."
               foot={
                 <HowTo chart="table">
@@ -1941,6 +2066,15 @@
             </Card>
 
             <Card eyebrow="Examinations" title="IGCSE and AS & A Level outcomes"
+              right={exRows.length ? (
+                <CsvButton
+                  filename={`cambridge-${fullName(focus).toLowerCase().replace(/\W+/g, "-")}-examinations.csv`}
+                  headers={["School", "Level", "Series", "Syllabus", "Subject", "Tier", "Graded", "Incomplete", "A*-C %", "U %", "A Level", "AS Level", "Ungraded"]}
+                  rows={exRows.map((r) => [fullName(focus), r.level, r.series, r.syllabus, r.subject, r.tier,
+                    r.n, r.incomplete, r.pctAC === null ? "" : fmt(r.pctAC, 1), fmt(r.pctU, 1),
+                    r.asA2 ? r.asA2.gradedA2 : "", r.asA2 ? r.asA2.gradedAS : "", r.asA2 ? r.asA2.ungraded : ""])}
+                />
+              ) : null}
               sub="Grades awarded, by syllabus and series. Core and Extended are listed separately because they are not the same opportunity."
               foot={
                 <HowTo chart="table">
@@ -2387,13 +2521,15 @@
 
             <div className="cx-tabs cx-no-print">
               <div className="cx-wrap">
-                <div className="cx-tabs__inner" role="tablist">
+                <div className="cx-tabs__inner">
+                  <div role="tablist" aria-label="Qualification level" style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                   {TABS.map((t) => (
                     <button key={t.key} type="button" role="tab" className="cx-tab"
                       aria-selected={tab === t.key} onClick={() => go(t.key)}>
                       {t.label}
                     </button>
                   ))}
+                  </div>
                   <div className="cx-tabs__right">
                     <select className="cx-select" data-on={focus ? "1" : "0"} aria-label="Bring one school forward"
                       value={focus || ""} onChange={(e) => setFocus(e.target.value || null)}>
