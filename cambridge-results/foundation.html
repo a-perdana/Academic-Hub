@@ -106,6 +106,7 @@
   .notes { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 18px; margin-top: 18px; font-size: 14.5px; color: var(--ink-2); }
   .notes h2 { font-size: 18px; color: var(--ink); margin: 0 0 6px; }
   .notes li { margin: 6px 0; }
+  select:disabled { opacity: 1; cursor: default; }
   footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 32px; }
 
   #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); border-radius: 10px; padding: 8px 11px; font-size: 13px; line-height: 1.45; max-width: 290px; box-shadow: 0 6px 24px rgba(0,0,0,0.25); opacity: 0; transition: opacity .08s; }
@@ -334,9 +335,13 @@ applyTheme();
 // Init
 const sel = document.getElementById('focus');
 D.schools.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach((s) => { const o = document.createElement('option'); o.value = s.centre; o.textContent = s.name; sel.appendChild(o); });
-const h = new URLSearchParams(location.hash.slice(1)).get('school') || store.get('crg-school') || '';
-if (D.schools.some((s) => s.centre === h)) sel.value = h;
-sel.onchange = () => { store.set('crg-school', sel.value); history.replaceState(null, '', sel.value ? '#school=' + sel.value : '#'); render(); };
+// Opened from a school's link (#school=IDxxx) the highlight is locked to that
+// school. This page compares every school by design, so the lock only fixes the
+// highlight; it hides nothing.
+const h = new URLSearchParams(location.hash.slice(1)).get('school') || '';
+if (D.schools.some((s) => s.centre === h)) { sel.value = h; sel.disabled = true; sel.title = 'This page was opened for your school'; }
+sel.onchange = () => { history.replaceState(null, '', sel.value ? '#school=' + sel.value : '#'); render(); };
+window.addEventListener('hashchange', () => location.reload());
 document.getElementById('heroSub').textContent = `How each Eduversal partner school did in the 2026 Cambridge exams, compared with all partner schools and with 2025. No technical knowledge needed: one number per school and subject.`;
 document.getElementById('foot').textContent = `Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-09-24. Built from the provisional result files Cambridge International sent to each partner school, and Cambridge's published worldwide statistics. Shared by Eduversal with its partner schools and their foundations; please keep it within your school or foundation.`;
 render();

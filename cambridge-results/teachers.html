@@ -236,6 +236,11 @@
   .next .builds { font-size: 12.5px; color: var(--ink-2); margin-top: 8px; }
   .link-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13.5px; font-weight: 600; color: #fff; background: var(--brand); border-radius: 8px; padding: 6px 12px; text-decoration: none; }
   .link-btn:hover { filter: brightness(1.08); }
+  .gate { max-width: 640px; margin: 40px auto; background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 26px 28px; text-align: center; box-shadow: var(--shadow); }
+  .gate h2 { margin: 0 0 8px; font-size: 22px; }
+  .gate p { color: var(--ink-2); margin: 0 0 16px; }
+  .gate a { display: inline-block; background: var(--brand); color: #fff; font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+  select:disabled { opacity: 1; cursor: default; }
   .empty { padding: 26px; text-align: center; color: var(--ink-2); background: var(--surface); border-radius: 16px; border: 1px dashed var(--axis); }
   .notes { font-size: 14px; color: var(--ink-2); }
   .notes summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 16px; }
@@ -347,13 +352,11 @@ const S = { school: null, level: null, series: null, syl: null, group: 'all', ti
 function readHash() {
   const h = new URLSearchParams(location.hash.slice(1));
   ['school', 'level', 'series', 'syl', 'group', 'tier', 'paper'].forEach((k) => { if (h.get(k)) S[k] = h.get(k); });
-  if (!S.school) S.school = store.get('ctd-school');
 }
 function writeHash() {
   const h = new URLSearchParams();
   ['school', 'level', 'series', 'syl', 'group', 'tier', 'paper'].forEach((k) => { if (S[k]) h.set(k, S[k]); });
   history.replaceState(null, '', '#' + h.toString());
-  if (S.school) store.set('ctd-school', S.school);
 }
 
 const allRows = () => D.cp.map((c) => ({ kind: 'cp', r: c })).concat(D.ex.map((e) => ({ kind: 'ex', r: e })));
@@ -398,7 +401,7 @@ function renderFilters(opt) {
   const chips = (key, items, label) => `<div class="chips" role="group" aria-label="${esc(label)}">${items.map(([v, t]) =>
     `<button type="button" class="chip" data-set="${key}" data-val="${esc(v)}" aria-pressed="${String(S[key]) === String(v)}">${esc(t)}</button>`).join('')}</div>`;
   let html = '';
-  html += `<label class="f-group"><span class="f-label">School</span><select id="fSchool">${opt.schools.map((c) =>
+  html += `<label class="f-group"><span class="f-label">School</span><select id="fSchool"${LOCKED ? ' disabled title="This page was opened for your school"' : ''}>${opt.schools.map((c) =>
     `<option value="${c}"${c === S.school ? ' selected' : ''}>${esc(schoolName(c))}</option>`).join('')}</select></label>`;
   html += `<div class="f-group"><span class="f-label">Qualification</span>${chips('level', opt.levels.map((l) => [l, l]), 'Qualification')}</div>`;
   html += `<label class="f-group"><span class="f-label">Exam series</span><select id="fSeries">${opt.series.map((s) =>
@@ -965,9 +968,22 @@ if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEven
 // ---------------------------------------------------------------------------
 document.getElementById('pillData').textContent = `Series ${D.meta.seriesOrder[0]} to ${D.meta.seriesOrder[D.meta.seriesOrder.length - 1]} · updated ${D.meta.generatedAt}`;
 document.getElementById('foot').innerHTML = `Built from the provisional result workbooks Cambridge International sent to each partner school. Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-09-24. Shared by Eduversal with its partner schools; please keep it within your school.`;
-readHash();
-render();
-window.addEventListener('hashchange', () => { readHash(); render(); });
+// This view opens for ONE school, from that school's link on the pack's start page
+// (#school=IDxxx). The school picker is then shown but locked. Opened without a
+// school link, the page shows no school at all and points back to the start page.
+// This is a courtesy lock, not access control: every school's data is in this file.
+const HOME = location.protocol === 'file:' ? '0%20Start%20here.html' : '/cambridge-results';
+const linkedSchool = () => { const c = new URLSearchParams(location.hash.slice(1)).get('school'); return c && D.schools[c] ? c : null; };
+const LOCKED = !!linkedSchool();
+function gate() {
+  document.getElementById('filters').innerHTML = '';
+  document.getElementById('main').innerHTML = `<div class="gate"><h2>Open this page from your school's link</h2><p>This view shows one school at a time. Please use the link for your school on the Cambridge Results Pack page.</p><a href="${HOME}#links">Go to the Cambridge Results Pack</a></div>`;
+}
+if (!LOCKED) { gate(); } else {
+  readHash();
+  render();
+  window.addEventListener('hashchange', () => { if (!linkedSchool()) return gate(); S.school = linkedSchool(); readHash(); render(); });
+}
 </script>
 </body>
 </html>

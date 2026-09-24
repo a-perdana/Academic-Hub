@@ -88,6 +88,11 @@
   .notes { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 18px; font-size: 14px; color: var(--ink-2); }
   .notes h3 { margin: 0 0 6px; color: var(--ink); font-size: 17px; }
   .notes li { margin: 6px 0; }
+  .gate { max-width: 640px; margin: 40px auto; background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 26px 28px; text-align: center; box-shadow: var(--shadow); }
+  .gate h2 { margin: 0 0 8px; font-size: 22px; }
+  .gate p { color: var(--ink-2); margin: 0 0 16px; }
+  .gate a { display: inline-block; background: var(--brand); color: #fff; font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+  select:disabled { opacity: 1; cursor: default; }
   footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 32px; }
   @media print {
     @page { size: A4; margin: 12mm; }
@@ -236,15 +241,24 @@ function render() {
 
 const sel = document.getElementById('school');
 Object.values(D.schools).sort((a, b) => a.name.localeCompare(b.name)).forEach((s) => { const o = document.createElement('option'); o.value = s.centre; o.textContent = s.name; sel.appendChild(o); });
-const want = new URLSearchParams(location.hash.slice(1)).get('school') || store.get('crl-school');
-if (want && D.schools[want]) sel.value = want;
-sel.onchange = () => { store.set('crl-school', sel.value); history.replaceState(null, '', '#school=' + sel.value); render(); window.scrollTo({ top: 0 }); };
+// This view opens for ONE school, from that school's link on the pack's start page
+// (#school=IDxxx); the picker is then shown but locked. Without a school link the
+// page shows no school. A courtesy lock, not access control: all data is in this file.
+const HOME = location.protocol === 'file:' ? '0%20Start%20here.html' : '/cambridge-results';
+const want = new URLSearchParams(location.hash.slice(1)).get('school');
+const LOCKED = !!(want && D.schools[want]);
+if (LOCKED) { sel.value = want; sel.disabled = true; sel.title = 'This page was opened for your school'; }
 const themeBtn = document.getElementById('themeBtn');
 let theme = store.get('crl-theme') || 'auto';
 function applyTheme() { if (theme === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', theme); themeBtn.textContent = 'Theme: ' + theme[0].toUpperCase() + theme.slice(1); }
 themeBtn.onclick = () => { theme = { auto: 'light', light: 'dark', dark: 'auto' }[theme]; store.set('crl-theme', theme); applyTheme(); };
 applyTheme();
-render();
+if (LOCKED) render();
+else {
+  document.querySelector('.tools label').style.display = 'none'; sel.style.display = 'none';
+  document.getElementById('main').innerHTML = `<div class="gate"><h2>Open this page from your school's link</h2><p>This view shows one school at a time. Please use the link for your school on the Cambridge Results Pack page.</p><a href="${HOME}#links">Go to the Cambridge Results Pack</a></div>`;
+}
+window.addEventListener('hashchange', () => location.reload());
 </script>
 </body>
 </html>
