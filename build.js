@@ -596,6 +596,16 @@ if (fs.existsSync("cambridge-results")) {
   copyDirRecursive("cambridge-results", "dist/cambridge-results");
   console.log("Copied: cambridge-results/ (Cambridge Results Pack, public)");
 }
+// Cambridge × Kurikulum Merdeka curriculum alignment dashboard — published
+// WITHOUT login (Alif, 2026-09-24) at /curriculum-alignment for school leaders.
+// Same rule as above: one self-contained page, copied verbatim, no navbar /
+// auth-guard / base.css. Written by build_dashboard.py in the curriculum
+// alignment workbook pipeline (Eduversal Sources/data-sheets/_work/build);
+// never hand-edit. noindex: page meta tag + X-Robots-Tag in vercel.json.
+if (fs.existsSync("curriculum-alignment")) {
+  copyDirRecursive("curriculum-alignment", "dist/curriculum-alignment");
+  console.log("Copied: curriculum-alignment/ (curriculum alignment dashboard, public)");
+}
 if (fs.existsSync("partials")) {
   copyDirRecursive("partials", "dist/partials");
   console.log("Copied: partials/");
