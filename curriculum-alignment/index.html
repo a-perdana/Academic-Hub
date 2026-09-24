@@ -378,6 +378,18 @@ tr:last-child td { border-bottom: 0; }
 .opt input { width: 16px; height: 16px; accent-color: var(--c, var(--brand)); margin: 0; }
 .opt:has(input:checked) { border-color: color-mix(in srgb, var(--c, var(--brand)) 55%, var(--line)); background: color-mix(in srgb, var(--c, var(--brand)) var(--tint), var(--surface)); font-weight: 600; }
 .opt.locked { cursor: default; opacity: .8; }
+details.sim-block { display: block; padding: 0; }
+details.sim-block > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; padding: 11px 36px 11px 16px; position: relative; }
+details.sim-block > summary::-webkit-details-marker { display: none; }
+details.sim-block > summary::after {
+  content: ""; position: absolute; right: 16px; top: 16px; width: 7px; height: 7px;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform .15s;
+}
+details.sim-block[open] > summary::after { transform: rotate(-135deg); top: 19px; }
+details.sim-block > summary:hover { background: color-mix(in srgb, var(--c) 6%, var(--surface)); }
+details.sim-block > summary .sum { font-size: 12.5px; font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--c); }
+details.sim-block > summary .st span { font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--muted); margin-left: 6px; }
+.sim-body { display: grid; gap: 8px; padding: 0 16px 12px; }
 .tt-weeks { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
 .tt-weeks label { font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
 .tt-weeks input { font: inherit; font-size: 14px; width: 60px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); }
@@ -542,16 +554,19 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
     <div class="sim-grid">
       <fieldset class="sim-card" style="--c:var(--cam)">
         <legend class="sim-head">Cambridge-only student</legend>
-        <div class="sim-block">
-          <div class="sim-stage">Timetable</div>
+        <details class="sim-block" id="blk-tt">
+          <summary class="sim-stage"><span class="st">Timetable</span><span class="sum" id="sum-tt"></span></summary>
+          <div class="sim-body">
           <div class="tt-weeks">
             <label for="c-weeks"><input type="number" autocomplete="off" id="c-weeks" min="20" max="44" step="1" value="35"> teaching weeks a year</label>
             <button type="button" class="tt-reset" id="c-tt-reset">Reset to the network timetable</button>
           </div>
           <p class="sim-hint">Default: the network plan (maths 6 × 40 min a week, 35 weeks). Science defaults to 4 h a week per subject; change any value to match your school.</p>
-        </div>
-        <div class="sim-block">
-          <div class="sim-stage">Grades 7–8 · Lower Secondary, Stages 7–9</div>
+          </div>
+        </details>
+        <details class="sim-block" id="blk-ls">
+          <summary class="sim-stage"><span class="st">Grades 7–8 · Lower Secondary, Stages 7–9</span><span class="sum" id="sum-ls"></span></summary>
+          <div class="sim-body">
           <div class="sim-opts">
             <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Mathematics 0862</label>
             <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Science 0893</label>
@@ -567,9 +582,11 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
             <output id="c-ls-sci-out" for="c-ls-sci-p c-ls-sci-m c-weeks"></output>
           </div>
           <p class="sim-hint guide">Cambridge guidance: 120–150 h of maths per stage; three stages in two years ≈ 180 h a year.</p>
-        </div>
-        <div class="sim-block">
-          <div class="sim-stage">Grades 9–10 · IGCSE</div>
+          </div>
+        </details>
+        <details class="sim-block" id="blk-ig">
+          <summary class="sim-stage"><span class="st">Grades 9–10 · IGCSE</span><span class="sum" id="sum-ig"></span></summary>
+          <div class="sim-body">
           <div class="sim-opts">
             <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-mat" data-sim="c.ig.mat"> Mathematics 0580</label>
             <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-bio" data-sim="c.ig.bio"> Biology 0610</label>
@@ -587,9 +604,11 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
             <output id="c-ig-sci-out" for="c-ig-sci-p c-ig-sci-m c-weeks"></output>
           </div>
           <p class="sim-hint guide">Cambridge guidance: about 130 h per subject for the whole course ≈ 65 h a year.</p>
-        </div>
-        <div class="sim-block">
-          <div class="sim-stage">Grades 11–12 · AS &amp; A Level</div>
+          </div>
+        </details>
+        <details class="sim-block" id="blk-al">
+          <summary class="sim-stage"><span class="st">Grades 11–12 · AS &amp; A Level</span><span class="sum" id="sum-al"></span></summary>
+          <div class="sim-body">
           <div class="al-rows" id="al-rows" role="group" aria-label="AS and A Level subjects"></div>
           <div class="sim-tt">
             <span class="tt-name">Maths</span>
@@ -603,23 +622,29 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
           </div>
           <p class="sim-hint guide">Cambridge guidance: about 180 h per subject for AS, 360 h for the full A Level ≈ 180 h a year.</p>
           <p class="sim-hint">AS only = Grade 11 only. Chemistry: the coursebook data has AS content only. Further Maths uses the maths timetable; its AS counts Paper 1 topics.</p>
-        </div>
+          </div>
+        </details>
       </fieldset>
       <fieldset class="sim-card" style="--c:var(--km)">
         <legend class="sim-head">KM-only student (state school)</legend>
-        <div class="sim-block">
-          <div class="sim-stage">Kelas VII–X · compulsory</div>
+        <details class="sim-block" id="blk-k1">
+          <summary class="sim-stage"><span class="st">Kelas VII–X · compulsory</span><span class="sum" id="sum-k1"></span></summary>
+          <div class="sim-body">
           <div class="sim-opts">
             <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Matematika</label>
             <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> IPA (kelas X: Fisika + Kimia + Biologi)</label>
           </div>
-        </div>
-        <div class="sim-block">
-          <div class="sim-stage">Kelas XI–XII · compulsory</div>
+          </div>
+        </details>
+        <details class="sim-block" id="blk-k2">
+          <summary class="sim-stage"><span class="st">Kelas XI–XII · compulsory</span><span class="sum" id="sum-k2"></span></summary>
+          <div class="sim-body">
           <div class="sim-opts"><label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Matematika</label></div>
-        </div>
-        <div class="sim-block">
-          <div class="sim-stage">Kelas XI–XII · electives <span>135 h in XI, 120 h in XII, each</span></div>
+          </div>
+        </details>
+        <details class="sim-block" id="blk-kel">
+          <summary class="sim-stage"><span class="st">Kelas XI–XII · electives <span>135 h in XI, 120 h in XII, each</span></span><span class="sum" id="sum-kel"></span></summary>
+          <div class="sim-body">
           <div class="sim-opts">
             <label class="opt"><input type="checkbox" autocomplete="off" id="k-tl" data-sim="k.tl"> Matematika Tingkat Lanjut</label>
             <label class="opt"><input type="checkbox" autocomplete="off" id="k-fis" data-sim="k.fis"> Fisika</label>
@@ -627,7 +652,8 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
             <label class="opt"><input type="checkbox" autocomplete="off" id="k-bio" data-sim="k.bio"> Biologi</label>
           </div>
           <p class="sim-hint">Students take 4–5 electives in all; only maths and science are shown.</p>
-        </div>
+          </div>
+        </details>
         <div class="sim-block">
           <label class="opt"><input type="checkbox" autocomplete="off" id="k-koku" data-sim="k.koku"> Add kokurikuler (project) hours</label>
         </div>
@@ -871,7 +897,23 @@ function vchart(groups, max, fmt) {
     }).join('')}</div>`).join('')}</div></div>
     <div class="vx">${groups.map(g => `<span>${g.label}</span>`).join('')}</div>`;
 }
+function renderSums() {
+  // One line per collapsed block, so the student's choices stay visible without opening it.
+  const T = SIM.c.tt, h = x => Math.round(x) + ' h', v = id => $(id).value;
+  const list = (pairs, empty) => { const on = pairs.filter(([k]) => k).map(([, n]) => n); return on.length ? on.join(', ') : empty; };
+  $('sum-tt').textContent = `${v('c-weeks')} weeks · maths ${v('c-ls-mat-p')} × ${v('c-ls-mat-m')} min`;
+  $('sum-ls').textContent = `Maths ${h(T.ls.mat)} · Science ${h(T.ls.sci)} a year`;
+  const ig = list([[SIM.c.ig.mat, 'Maths'], [SIM.c.ig.bio, 'Biology'], [SIM.c.ig.chem, 'Chemistry'], [SIM.c.ig.phys, 'Physics']], 'none');
+  $('sum-ig').textContent = ig === 'none' ? 'none' : `${ig} · ${T.ig.mat === T.ig.sci ? h(T.ig.mat) + ' each' : 'maths ' + h(T.ig.mat) + ', each science ' + h(T.ig.sci)} a year`;
+  const short = { mat: 'Maths', fm: 'Further Maths', bio: 'Biology', chem: 'Chemistry', phys: 'Physics' };
+  const al = AL_SUBJ.filter(([k]) => SIM.c.al[k]).map(([k]) => short[k] + (SIM.c.al[k] === 1 ? ' (AS)' : ''));
+  $('sum-al').textContent = al.length ? al.join(', ') : 'none';
+  $('sum-k1').textContent = 'Matematika, IPA';
+  $('sum-k2').textContent = 'Matematika';
+  $('sum-kel').textContent = list([[SIM.k.tl, 'Mat. TL'], [SIM.k.fis, 'Fisika'], [SIM.k.kim, 'Kimia'], [SIM.k.bio, 'Biologi']], 'none');
+}
 function renderSim() {
+  renderSums();
   document.querySelectorAll('#sim-presets [data-preset]').forEach(b => b.setAttribute('aria-pressed', b.dataset.preset === simPreset));
   const hours = simHours(), { C, K, name } = simTopics();
   const sum = f => hours.reduce((a, h) => a + f(h), 0);
@@ -951,6 +993,9 @@ function initSim() {
     Object.entries(TT_DEFAULT).forEach(([id, v]) => { $(id).value = v; });
     readTimetable(); renderSim();
   });
+  // Always start from the network timetable: browsers can restore stale values into number inputs on reload
+  // (seen 2026-09-24: 36 weeks from an earlier default), and autocomplete="off" does not stop every browser.
+  Object.entries(TT_DEFAULT).forEach(([id, v]) => { $(id).value = v; });
   readTimetable();
   applyPreset('heavy');
 }
