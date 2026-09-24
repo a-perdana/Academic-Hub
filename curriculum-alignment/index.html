@@ -378,6 +378,10 @@ tr:last-child td { border-bottom: 0; }
 .opt input { width: 16px; height: 16px; accent-color: var(--c, var(--brand)); margin: 0; }
 .opt:has(input:checked) { border-color: color-mix(in srgb, var(--c, var(--brand)) 55%, var(--line)); background: color-mix(in srgb, var(--c, var(--brand)) var(--tint), var(--surface)); font-weight: 600; }
 .opt.locked { cursor: default; opacity: .8; }
+.tt-weeks { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+.tt-weeks label { font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
+.tt-weeks input { font: inherit; font-size: 14px; width: 60px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); }
+.sim-hint.guide { color: var(--ink-2); font-style: italic; }
 .al-rows { display: grid; gap: 6px; }
 .al-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; }
 .al-name { font-size: 13.5px; }
@@ -391,8 +395,8 @@ tr:last-child td { border-bottom: 0; }
 .sim-tt label { font-size: 13px; color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .sim-tt .tt-wide { grid-column: span 2; }
 .sim-tt output { font-size: 13px; font-weight: 800; color: var(--c); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.sim-tt .tt-reset { justify-self: start; cursor: pointer; border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--ink-2); }
-.sim-tt .tt-reset:hover { color: var(--brand); border-color: var(--brand); }
+.tt-reset { justify-self: start; cursor: pointer; border: 1px solid var(--line-2); background: var(--surface); border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--ink-2); }
+.tt-reset:hover { color: var(--brand); border-color: var(--brand); }
 .sim-tt input { font: inherit; font-size: 14px; width: 60px; padding: 5px 8px; border-radius: 8px; border: 1px solid var(--line-2); background: var(--surface); color: var(--ink); font-variant-numeric: tabular-nums; }
 .sim-hint { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
 .sim-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
@@ -539,6 +543,14 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
       <fieldset class="sim-card" style="--c:var(--cam)">
         <legend class="sim-head">Cambridge-only student</legend>
         <div class="sim-block">
+          <div class="sim-stage">Timetable</div>
+          <div class="tt-weeks">
+            <label for="c-weeks"><input type="number" id="c-weeks" min="20" max="44" step="1" value="35"> teaching weeks a year</label>
+            <button type="button" class="tt-reset" id="c-tt-reset">Reset to the network timetable</button>
+          </div>
+          <p class="sim-hint">Default: the network plan (maths 6 × 40 min a week, 35 weeks). Science defaults to 4 h a week per subject; change any value to match your school.</p>
+        </div>
+        <div class="sim-block">
           <div class="sim-stage">Grades 7–8 · Lower Secondary, Stages 7–9</div>
           <div class="sim-opts">
             <label class="opt locked"><input type="checkbox" checked disabled> Mathematics 0862</label>
@@ -548,30 +560,49 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
             <span class="tt-name">Maths</span>
             <label for="c-ls-mat-p"><input type="number" id="c-ls-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
             <label for="c-ls-mat-m">× <input type="number" id="c-ls-mat-m" min="0" max="120" step="5" value="40"> min</label>
-            <output id="c-ls-mat-out" for="c-ls-mat-p c-ls-mat-m c-ls-weeks"></output>
+            <output id="c-ls-mat-out" for="c-ls-mat-p c-ls-mat-m c-weeks"></output>
             <span class="tt-name">Science</span>
             <label for="c-ls-sci-p"><input type="number" id="c-ls-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
             <label for="c-ls-sci-m">× <input type="number" id="c-ls-sci-m" min="0" max="120" step="5" value="60"> min</label>
-            <output id="c-ls-sci-out" for="c-ls-sci-p c-ls-sci-m c-ls-weeks"></output>
-            <span class="tt-name">School year</span>
-            <label for="c-ls-weeks" class="tt-wide"><input type="number" id="c-ls-weeks" min="20" max="44" step="1" value="36"> teaching weeks</label>
-            <button type="button" class="tt-reset" id="c-ls-reset">Reset to the network default</button>
+            <output id="c-ls-sci-out" for="c-ls-sci-p c-ls-sci-m c-weeks"></output>
           </div>
-          <p class="sim-hint">Default: the network timetable. Change it to match your school.</p>
+          <p class="sim-hint guide">Cambridge guidance: 120–150 h of maths per stage; three stages in two years ≈ 180 h a year.</p>
         </div>
         <div class="sim-block">
-          <div class="sim-stage">Grades 9–10 · IGCSE <span>about 65 h per subject per year</span></div>
+          <div class="sim-stage">Grades 9–10 · IGCSE</div>
           <div class="sim-opts">
             <label class="opt"><input type="checkbox" id="c-ig-mat" data-sim="c.ig.mat"> Mathematics 0580</label>
             <label class="opt"><input type="checkbox" id="c-ig-bio" data-sim="c.ig.bio"> Biology 0610</label>
             <label class="opt"><input type="checkbox" id="c-ig-chem" data-sim="c.ig.chem"> Chemistry 0620</label>
             <label class="opt"><input type="checkbox" id="c-ig-phys" data-sim="c.ig.phys"> Physics 0625</label>
           </div>
+          <div class="sim-tt">
+            <span class="tt-name">Maths</span>
+            <label for="c-ig-mat-p"><input type="number" id="c-ig-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
+            <label for="c-ig-mat-m">× <input type="number" id="c-ig-mat-m" min="0" max="120" step="5" value="40"> min</label>
+            <output id="c-ig-mat-out" for="c-ig-mat-p c-ig-mat-m c-weeks"></output>
+            <span class="tt-name">Each science</span>
+            <label for="c-ig-sci-p"><input type="number" id="c-ig-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
+            <label for="c-ig-sci-m">× <input type="number" id="c-ig-sci-m" min="0" max="120" step="5" value="60"> min</label>
+            <output id="c-ig-sci-out" for="c-ig-sci-p c-ig-sci-m c-weeks"></output>
+          </div>
+          <p class="sim-hint guide">Cambridge guidance: about 130 h per subject for the whole course ≈ 65 h a year.</p>
         </div>
         <div class="sim-block">
-          <div class="sim-stage">Grades 11–12 · AS &amp; A Level <span>about 180 h per subject per year</span></div>
+          <div class="sim-stage">Grades 11–12 · AS &amp; A Level</div>
           <div class="al-rows" id="al-rows" role="group" aria-label="AS and A Level subjects"></div>
-          <p class="sim-hint">AS only = Grade 11 only. Chemistry: the coursebook data has AS content only. Further Maths AS: Paper 1 topics counted.</p>
+          <div class="sim-tt">
+            <span class="tt-name">Maths</span>
+            <label for="c-al-mat-p"><input type="number" id="c-al-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
+            <label for="c-al-mat-m">× <input type="number" id="c-al-mat-m" min="0" max="120" step="5" value="40"> min</label>
+            <output id="c-al-mat-out" for="c-al-mat-p c-al-mat-m c-weeks"></output>
+            <span class="tt-name">Each science</span>
+            <label for="c-al-sci-p"><input type="number" id="c-al-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
+            <label for="c-al-sci-m">× <input type="number" id="c-al-sci-m" min="0" max="120" step="5" value="60"> min</label>
+            <output id="c-al-sci-out" for="c-al-sci-p c-al-sci-m c-weeks"></output>
+          </div>
+          <p class="sim-hint guide">Cambridge guidance: about 180 h per subject for AS, 360 h for the full A Level ≈ 180 h a year.</p>
+          <p class="sim-hint">AS only = Grade 11 only. Chemistry: the coursebook data has AS content only. Further Maths uses the maths timetable; its AS counts Paper 1 topics.</p>
         </div>
       </fieldset>
       <fieldset class="sim-card" style="--c:var(--km)">
@@ -734,18 +765,22 @@ const verdictColour = v => /^Not taught|^KM only$/.test(v) ? col(v.startsWith('K
   : /Partly|Mentioned|Not taught as a topic/.test(v) ? 'var(--sev-medium)' : 'var(--b1)';
 
 /* ---------------- student simulator (both subjects, independent of the subject switch) ---------------- */
-const SIM = { c: { lsMat: 0, lsSci: 0, ig: {}, al: {} }, k: {} };
-// Network default Lower Secondary timetable (Alif, 2026-09-24): maths 6 x 40 min, science 4 x 60 min a week.
-// Schools differ, so every value is editable. 36 weeks = the year length KM Tabel 6 assumes for kelas VII-VIII.
-const TT_DEFAULT = { 'c-ls-mat-p': 6, 'c-ls-mat-m': 40, 'c-ls-sci-p': 4, 'c-ls-sci-m': 60, 'c-ls-weeks': 36 };
+// Cambridge hours come from the school timetable at every stage (Alif, 2026-09-24), not from Cambridge's
+// guided-learning-hour guidance, which is shown beside each stage for comparison only.
+// Defaults = the network planning sheet: maths 6 x 40 min a week at every stage, 35 teaching weeks (marked
+// 'estimated' there). Science: Lower Secondary 4 x 60 min (Alif); IGCSE and A Level science have no network
+// figure yet, so each science defaults to the same 4 h a week. Every value is editable.
+const SIM = { c: { tt: { ls: {}, ig: {}, al: {} }, ig: {}, al: {} }, k: {} };
+const TT_DEFAULT = { 'c-weeks': 35 };
+for (const st of ['ls', 'ig', 'al']) Object.assign(TT_DEFAULT, { [`c-${st}-mat-p`]: 6, [`c-${st}-mat-m`]: 40, [`c-${st}-sci-p`]: 4, [`c-${st}-sci-m`]: 60 });
 function readTimetable() {
   const v = id => { const x = +$(id).value; return Number.isFinite(x) && x > 0 ? Math.min(x, +$(id).max || x) : 0; };
-  const weeks = v('c-ls-weeks');
-  SIM.c.lsMat = v('c-ls-mat-p') * v('c-ls-mat-m') / 60 * weeks;
-  SIM.c.lsSci = v('c-ls-sci-p') * v('c-ls-sci-m') / 60 * weeks;
-  const hw = (p, m) => (v(p) * v(m) / 60).toLocaleString('en-GB', { maximumFractionDigits: 1 });
-  $('c-ls-mat-out').textContent = `= ${hw('c-ls-mat-p', 'c-ls-mat-m')} h/week · ${Math.round(SIM.c.lsMat)} h/year`;
-  $('c-ls-sci-out').textContent = `= ${hw('c-ls-sci-p', 'c-ls-sci-m')} h/week · ${Math.round(SIM.c.lsSci)} h/year`;
+  const weeks = v('c-weeks');
+  for (const st of ['ls', 'ig', 'al']) for (const subj of ['mat', 'sci']) {
+    const id = `c-${st}-${subj}`, perWeek = v(id + '-p') * v(id + '-m') / 60;
+    SIM.c.tt[st][subj] = perWeek * weeks;                     // hours a year, for one subject
+    $(id + '-out').textContent = `= ${perWeek.toLocaleString('en-GB', { maximumFractionDigits: 1 })} h/week · ${Math.round(perWeek * weeks)} h/year`;
+  }
 }
 const IG_CODE = { mat: '0580', bio: '0610', chem: '0620', phys: '0625' };
 // AS & A Level: each subject is 0 = not taken, 1 = AS only (Grade 11), 2 = full A Level (Grades 11-12).
@@ -811,9 +846,10 @@ function simHours() {
   // Grade 11 = the AS year (every AS or A Level subject); Grade 12 = the A2 year (full A Levels only).
   const alCount = (keys, g) => keys.filter(x => SIM.c.al[x] >= (g === 11 ? 1 : 2)).length;
   for (let g = 7; g <= 12; g++) {
-    const c = g <= 8 ? { mat: SIM.c.lsMat, sci: SIM.c.lsSci }
-      : g <= 10 ? { mat: SIM.c.ig.mat ? H.cam.igcse : 0, sci: nIg * H.cam.igcse }
-      : { mat: alCount(['mat', 'fm'], g) * H.cam.alevel, sci: alCount(['bio', 'chem', 'phys'], g) * H.cam.alevel };
+    const T = SIM.c.tt;
+    const c = g <= 8 ? { mat: T.ls.mat, sci: T.ls.sci }
+      : g <= 10 ? { mat: SIM.c.ig.mat ? T.ig.mat : 0, sci: nIg * T.ig.sci }
+      : { mat: alCount(['mat', 'fm'], g) * T.al.mat, sci: alCount(['bio', 'chem', 'phys'], g) * T.al.sci };
     const km = H.km[g], k = { mat: km.mat[0], sci: 0, koku: km.mat[1] };
     if (km.sci) { k.sci = km.sci[0]; k.koku += km.sci[1]; }
     else { k.mat += (SIM.k.tl ? 1 : 0) * km.elective; k.sci = nEl * km.elective; }
@@ -911,7 +947,7 @@ function initSim() {
   $('s-sim').addEventListener('input', e => {
     if (e.target.id in TT_DEFAULT) { readTimetable(); renderSim(); }
   });
-  $('c-ls-reset').addEventListener('click', () => {
+  $('c-tt-reset').addEventListener('click', () => {
     Object.entries(TT_DEFAULT).forEach(([id, v]) => { $(id).value = v; });
     readTimetable(); renderSim();
   });
