@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cambridge Results at a Glance</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f5fb; --surface: #fcfcfb; --surface-2: #f3f2ee;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-3: #75736d;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11, 11, 11, 0.10);
+    --brand: #6c5ce7; --brand-2: #0891b2; --focus: #6c5ce7;
+    --b1: #86b6ef; --b2: #5598e7; --b3: #2a78d6; --b4: #1c5cab; --b5: #104281;
+    --empty: #f0efec;
+    --up: #006300; --down: #b42e2e;
+    --tip-bg: #1f1e2b; --tip-ink: #ffffff;
+    --shadow: 0 1px 2px rgba(20, 18, 40, 0.06), 0 4px 16px rgba(20, 18, 40, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10); --focus: #9085e9;
+      --b1: #184f95; --b2: #2a78d6; --b3: #5598e7; --b4: #86b6ef; --b5: #b7d3f6;
+      --empty: #232321; --up: #0ca30c; --down: #e66767;
+      --tip-bg: #f3f2ee; --tip-ink: #0b0b0b; --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10); --focus: #9085e9;
+    --b1: #184f95; --b2: #2a78d6; --b3: #5598e7; --b4: #86b6ef; --b5: #b7d3f6;
+    --empty: #232321; --up: #0ca30c; --down: #e66767;
+    --tip-bg: #f3f2ee; --tip-ink: #0b0b0b; --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15.5px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  button, select { font: inherit; color: inherit; }
+  .rail { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .hero { background: linear-gradient(120deg, #3b2fa0 0%, #6c5ce7 45%, #0891b2 100%); color: #fff; padding: 30px 0 28px; position: relative; overflow: hidden; }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(600px 240px at 85% 0%, rgba(255,255,255,0.18), transparent 70%); }
+  .hero .rail { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; margin: 0 0 6px; font-weight: 600; }
+  .hero h1 { margin: 0; font-size: clamp(26px, 3.6vw, 36px); line-height: 1.15; }
+  .hero p { margin: 8px 0 0; max-width: 720px; opacity: .93; font-size: 16px; }
+  .hero-tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .hero-tools label { font-size: 13px; opacity: .9; }
+  .hero select { background: rgba(255,255,255,0.95); color: #1b1b1b; border: 0; border-radius: 10px; padding: 7px 10px; }
+  .theme-btn { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+
+  main { padding: 22px 0 60px; }
+  .intro { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .intro div { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); font-size: 14.5px; color: var(--ink-2); }
+  .intro b { display: block; color: var(--ink); font-size: 15.5px; margin-bottom: 2px; }
+
+  section.level { background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; box-shadow: var(--shadow); padding: 18px 18px 14px; margin-bottom: 18px; }
+  .level h2 { margin: 0; font-size: 21px; line-height: 1.25; }
+  .level .what { margin: 3px 0 12px; color: var(--ink-2); font-size: 14.5px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-2); margin: 0 0 10px; align-items: center; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+
+  .tscroll { overflow-x: auto; }
+  table.grid { border-collapse: separate; border-spacing: 4px; width: 100%; min-width: 560px; }
+  .grid th { font-size: 13px; font-weight: 600; color: var(--ink-2); text-align: center; padding: 4px 6px; }
+  .grid th.school { text-align: left; }
+  .grid td.school { font-weight: 600; font-size: 14.5px; padding: 6px 8px 6px 2px; white-space: nowrap; }
+  .grid td.school small { display: block; font-weight: 400; color: var(--ink-3); font-size: 12px; }
+  .grid td.cell { border-radius: 10px; padding: 8px 8px; text-align: center; vertical-align: middle; min-width: 110px; }
+  .grid td.none { background: var(--empty); color: var(--ink-3); font-size: 12.5px; }
+  .big { font-size: 22px; font-weight: 700; line-height: 1.1; display: block; }
+  .of { font-size: 13px; font-weight: 600; opacity: .8; margin-left: 2px; }
+  .small { font-size: 12.5px; display: block; line-height: 1.3; opacity: .92; }
+  .chg { font-size: 12.5px; font-weight: 700; display: inline-block; margin-top: 3px; padding: 1px 7px; border-radius: 999px; background: rgba(255,255,255,0.88); }
+  .chg.up { color: var(--up); } .chg.down { color: var(--down); } .chg.flat { color: #3a3a3a; }
+  :root[data-theme="dark"] .chg { background: rgba(0,0,0,0.55); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .chg { background: rgba(0,0,0,0.55); } }
+  .core { display: block; margin-top: 6px; padding-top: 5px; border-top: 1px solid rgba(127,127,127,0.35); font-size: 12.5px; }
+  tr.net td.school { font-style: italic; color: var(--ink-2); }
+  tr.world td.cell { outline-style: dotted !important; }
+  tr.net td.cell { outline: 2px dashed var(--axis); outline-offset: -2px; background: var(--surface-2) !important; color: var(--ink) !important; }
+  tr.dim td { opacity: .28; }
+  tr.focus td.school { color: var(--brand); }
+  .howto { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); font-size: 14px; color: var(--ink-2); }
+  .howto b { color: var(--ink); }
+
+  .schools { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+  .sch { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); }
+  .sch.focus { border: 2px solid var(--brand); }
+  .sch h3 { margin: 0 0 6px; font-size: 16.5px; }
+  .sch ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+  .sch li { margin: 5px 0; }
+  .sch li b { color: var(--ink); }
+  h2.part { font-size: 21px; margin: 26px 0 10px; }
+  table.cov { border-collapse: collapse; width: 100%; font-size: 14px; background: var(--surface); border-radius: 14px; overflow: hidden; }
+  .cov th, .cov td { padding: 8px 10px; border-bottom: 1px solid var(--grid); text-align: left; vertical-align: top; }
+  .cov th { font-size: 13px; color: var(--ink-2); background: var(--surface-2); }
+  .cov td.nope { color: var(--ink-3); }
+  .notes { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 18px; margin-top: 18px; font-size: 14.5px; color: var(--ink-2); }
+  .notes h2 { font-size: 18px; color: var(--ink); margin: 0 0 6px; }
+  .notes li { margin: 6px 0; }
+  footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 32px; }
+
+  #tip { position: fixed; z-index: 50; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink); border-radius: 10px; padding: 8px 11px; font-size: 13px; line-height: 1.45; max-width: 290px; box-shadow: 0 6px 24px rgba(0,0,0,0.25); opacity: 0; transition: opacity .08s; }
+  #tip.on { opacity: 1; }
+
+  @media print {
+    @page { size: A4 landscape; margin: 12mm; }
+    .theme-btn, .hero-tools, #tip { display: none !important; }
+    body { background: #fff; font-size: 12.5px; }
+    .hero { padding: 14px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    section.level, .sch, .intro div { box-shadow: none; break-inside: avoid; }
+    td.cell { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="rail">
+    <div>
+      <p class="eyebrow">Eduversal · for Foundation Representatives</p>
+      <h1>Cambridge Results at a Glance</h1>
+      <p id="heroSub"></p>
+      <span style="display:inline-block;margin-top:12px;font-size:12.5px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,0.16);border:1px solid rgba(255,255,255,0.25)">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-09-24</span>
+    </div>
+    <div class="hero-tools">
+      <label for="focus">Highlight a school</label>
+      <select id="focus"><option value="">All schools</option></select>
+      <button type="button" class="theme-btn" id="themeBtn">Theme: Auto</button>
+    </div>
+  </div>
+</header>
+
+<main><div class="rail" id="main"></div></main>
+<footer><div class="rail" id="foot"></div></footer>
+<div id="tip" role="tooltip"></div>
+
+<script>
+const D = {"meta":{"generatedAt":"2026-09-24","moveMin":10,"bands":["Unclassified","Basic","Aspiring","Good","High","Outstanding"]},"schools":[{"centre":"ID145","name":"TNA Fatih School","short":"TNA Fatih"},{"centre":"ID203","name":"Fatih Bilingual School","short":"Fatih Bilingual"},{"centre":"ID244","name":"Semesta Gunung Pati","short":"Semesta GP"},{"centre":"ID279","name":"Cahaya Rancamaya","short":"Cahaya Rancamaya"},{"centre":"ID349","name":"Kharisma Bangsa School","short":"Kharisma Bangsa"},{"centre":"ID350","name":"Pribadi Bandung School","short":"Pribadi Bandung"},{"centre":"ID371","name":"Kesatuan Bangsa School","short":"Kesatuan Bangsa"},{"centre":"ID375","name":"Pribadi Depok School","short":"Pribadi Depok"},{"centre":"ID440","name":"Pakar Belia School","short":"Pakar Belia"}],"levels":[{"level":"Primary Checkpoint","kind":"checkpoint","title":"Cambridge Primary Checkpoint","latest":"March and May 2026","prevLabel":"May 2025","subjects":["English","Mathematics","Science"],"table":[{"centre":"ID349","cells":{"English":{"v":36.3,"n":41,"band":"High","series":"March 2026","net":32.1,"prev":{"v":34.2,"n":38,"series":"May 2025"},"change":2.1},"Mathematics":{"v":32.5,"n":41,"band":"High","series":"March 2026","net":29.9,"prev":{"v":30.8,"n":38,"series":"May 2025"},"change":1.7},"Science":{"v":34.8,"n":40,"band":"High","series":"March 2026","net":29.5,"prev":{"v":29.5,"n":38,"series":"May 2025"},"change":5.3}}},{"centre":"ID350","cells":{"English":{"v":28.8,"n":28,"band":"Good","series":"May 2026","net":32.1,"prev":{"v":35.4,"n":23,"series":"May 2025"},"change":-6.6},"Mathematics":{"v":28.9,"n":28,"band":"Good","series":"May 2026","net":29.9,"prev":{"v":30.2,"n":23,"series":"May 2025"},"change":-1.3},"Science":{"v":26.6,"n":28,"band":"Good","series":"May 2026","net":29.5,"prev":{"v":31.1,"n":23,"series":"May 2025"},"change":-4.4}}},{"centre":"ID375","cells":{"English":{"v":28.6,"n":23,"band":"Good","series":"May 2026","net":32.1,"prev":{"v":34.6,"n":19,"series":"May 2025"},"change":-6.1},"Mathematics":{"v":26.6,"n":23,"band":"Good","series":"May 2026","net":29.9,"prev":{"v":33.3,"n":19,"series":"May 2025"},"change":-6.7},"Science":{"v":23.6,"n":23,"band":"Good","series":"May 2026","net":29.5,"prev":{"v":34.4,"n":19,"series":"May 2025"},"change":-10.8}}}],"network":{"English":{"v":32.1,"n":92,"schools":3,"band":"High","prev":{"v":34.7,"n":80,"schools":3}},"Mathematics":{"v":29.9,"n":92,"schools":3,"band":"Good","prev":{"v":31.2,"n":80,"schools":3}},"Science":{"v":29.5,"n":91,"schools":3,"band":"Good","prev":{"v":31.1,"n":80,"schools":3}}},"small":[]},{"level":"Lower Secondary Checkpoint","kind":"checkpoint","title":"Cambridge Lower Secondary Checkpoint","latest":"May 2026","prevLabel":"May 2025","subjects":["English","Mathematics","Science"],"table":[{"centre":"ID279","cells":{"English":{"v":26.1,"n":12,"band":"Good","series":"May 2026","net":21.3,"prev":null,"change":null},"Mathematics":{"v":29.6,"n":8,"band":"Good","series":"May 2026","net":23.4,"prev":null,"change":null},"Science":{"v":19.7,"n":9,"band":"Aspiring","series":"May 2026","net":22.8,"prev":null,"change":null}}},{"centre":"ID203","cells":{"English":{"v":14,"n":23,"band":"Aspiring","series":"May 2026","net":21.3,"prev":null,"change":null},"Mathematics":{"v":16.7,"n":27,"band":"Aspiring","series":"May 2026","net":23.4,"prev":null,"change":null}}},{"centre":"ID371","cells":{"English":{"v":26.2,"n":26,"band":"Good","series":"May 2026","net":21.3,"prev":{"v":24.1,"n":57,"series":"May 2025"},"change":2.2},"Mathematics":{"v":30.8,"n":26,"band":"High","series":"May 2026","net":23.4,"prev":{"v":28.7,"n":57,"series":"May 2025"},"change":2},"Science":{"v":27.9,"n":26,"band":"Good","series":"May 2026","net":22.8,"prev":{"v":25.4,"n":57,"series":"May 2025"},"change":2.5}}},{"centre":"ID375","cells":{"English":{"v":28.5,"n":34,"band":"Good","series":"May 2026","net":21.3,"prev":null,"change":null},"Mathematics":{"v":24.9,"n":34,"band":"Good","series":"May 2026","net":23.4,"prev":null,"change":null},"Science":{"v":24.9,"n":34,"band":"Good","series":"May 2026","net":22.8,"prev":null,"change":null}}},{"centre":"ID244","cells":{"English":{"v":16.1,"n":37,"band":"Aspiring","series":"May 2026","net":21.3,"prev":null,"change":null},"Mathematics":{"v":22.4,"n":36,"band":"Good","series":"May 2026","net":23.4,"prev":null,"change":null},"Science":{"v":21.1,"n":17,"band":"Good","series":"May 2026","net":22.8,"prev":null,"change":null}}},{"centre":"ID145","cells":{"English":{"v":17.9,"n":19,"band":"Aspiring","series":"May 2026","net":21.3,"prev":{"v":22.6,"n":24,"series":"May 2025"},"change":-4.7},"Mathematics":{"v":19.2,"n":19,"band":"Aspiring","series":"May 2026","net":23.4,"prev":{"v":26.1,"n":8,"series":"May 2025"},"change":null},"Science":{"v":15,"n":19,"band":"Aspiring","series":"May 2026","net":22.8,"prev":{"v":14.3,"n":17,"series":"May 2025"},"change":0.7}}}],"network":{"English":{"v":21.3,"n":151,"schools":6,"band":"Good","prev":{"v":24.5,"n":111,"schools":3}},"Mathematics":{"v":23.4,"n":150,"schools":6,"band":"Good","prev":{"v":28.1,"n":93,"schools":3}},"Science":{"v":22.8,"n":105,"schools":5,"band":"Good","prev":{"v":23.5,"n":102,"schools":3}}},"small":[{"centre":"ID203","subject":"Science","n":2}]},{"level":"IGCSE","kind":"igcse","title":"Cambridge IGCSE","latest":"June 2026","prevLabel":"June 2025","subjects":["English","Mathematics","Biology","Chemistry","Physics"],"table":[{"centre":"ID203","cells":{"English":[{"syl":"0510","tier":"Untiered","v":27.8,"aa":5.6,"n":18,"incomplete":0,"net":{"v":31.8,"n":88,"schools":2},"prev":null,"change":null}]}},{"centre":"ID371","cells":{"English":[{"syl":"0510","tier":"Untiered","v":32.9,"aa":5.7,"n":70,"incomplete":1,"net":{"v":31.8,"n":88,"schools":2},"prev":null,"change":null}],"Mathematics":[{"syl":"0580","tier":"Extended","v":66.7,"aa":3.7,"n":27,"incomplete":3,"net":{"v":37.3,"n":169,"schools":4},"prev":null,"change":null},{"syl":"0580","tier":"Core","v":22.5,"aa":0,"n":40,"incomplete":3,"net":null,"prev":null,"change":null}],"Biology":[{"syl":"0610","tier":"Extended","v":31.6,"aa":0,"n":19,"incomplete":3,"net":{"v":35.1,"n":94,"schools":4},"prev":null,"change":null},{"syl":"0610","tier":"Core","v":8.7,"aa":0,"n":23,"incomplete":3,"net":{"v":5.6,"n":36,"schools":2},"prev":null,"change":null}],"Chemistry":[{"syl":"0620","tier":"Extended","v":50,"aa":0,"n":8,"incomplete":1,"net":{"v":37.8,"n":37,"schools":3},"prev":null,"change":null},{"syl":"0620","tier":"Core","v":20,"aa":0,"n":15,"incomplete":1,"net":null,"prev":null,"change":null}],"Physics":[{"syl":"0625","tier":"Extended","v":50,"aa":0,"n":12,"incomplete":5,"net":{"v":34.1,"n":82,"schools":3},"prev":null,"change":null},{"syl":"0625","tier":"Core","v":15,"aa":0,"n":20,"incomplete":5,"net":{"v":12,"n":25,"schools":2},"prev":null,"change":null}]}},{"centre":"ID349","cells":{"English":[{"syl":"0511","tier":"Untiered","v":67.4,"aa":25.3,"n":95,"incomplete":0,"net":{"v":51.4,"n":138,"schools":3},"prev":{"v":79.8,"n":89,"series":"June 2025"},"change":-12.4}],"Mathematics":[{"syl":"0580","tier":"Extended","v":29.5,"aa":4.2,"n":95,"incomplete":0,"net":{"v":37.3,"n":169,"schools":4},"prev":{"v":37.1,"n":89,"series":"June 2025"},"change":-7.6}],"Biology":[{"syl":"0610","tier":"Extended","v":38.3,"aa":6.4,"n":47,"incomplete":0,"net":{"v":35.1,"n":94,"schools":4},"prev":{"v":48.2,"n":56,"series":"June 2025"},"change":-9.9}],"Chemistry":[{"syl":"0620","tier":"Extended","v":40.9,"aa":4.5,"n":22,"incomplete":0,"net":{"v":37.8,"n":37,"schools":3},"prev":{"v":70.8,"n":24,"series":"June 2025"},"change":-29.9}],"Physics":[{"syl":"0625","tier":"Extended","v":29.8,"aa":4.3,"n":47,"incomplete":0,"net":{"v":34.1,"n":82,"schools":3},"prev":{"v":52.9,"n":34,"series":"June 2025"},"change":-23.2}]}},{"centre":"ID440","cells":{"English":[{"syl":"0511","tier":"Untiered","v":0,"aa":0,"n":7,"incomplete":0,"net":{"v":51.4,"n":138,"schools":3},"prev":null,"change":null}],"Mathematics":[{"syl":"0580","tier":"Extended","v":76.9,"aa":69.2,"n":13,"incomplete":0,"net":{"v":37.3,"n":169,"schools":4},"prev":null,"change":null}],"Biology":[{"syl":"0610","tier":"Extended","v":16.7,"aa":0,"n":6,"incomplete":0,"net":{"v":35.1,"n":94,"schools":4},"prev":null,"change":null}]}},{"centre":"ID145","cells":{"English":[{"syl":"0511","tier":"Untiered","v":19.4,"aa":0,"n":36,"incomplete":0,"net":{"v":51.4,"n":138,"schools":3},"prev":{"v":39.4,"n":33,"series":"June 2025"},"change":-19.9}],"Mathematics":[{"syl":"0580","tier":"Extended","v":20.6,"aa":8.8,"n":34,"incomplete":1,"net":{"v":37.3,"n":169,"schools":4},"prev":{"v":31.6,"n":19,"series":"June 2025"},"change":-11}],"Biology":[{"syl":"0610","tier":"Extended","v":36.4,"aa":4.5,"n":22,"incomplete":0,"net":{"v":35.1,"n":94,"schools":4},"prev":{"v":21.4,"n":14,"series":"June 2025"},"change":14.9},{"syl":"0610","tier":"Core","v":0,"aa":0,"n":13,"incomplete":0,"net":{"v":5.6,"n":36,"schools":2},"prev":null,"change":null}],"Chemistry":[{"syl":"0620","tier":"Extended","v":14.3,"aa":14.3,"n":7,"incomplete":0,"net":{"v":37.8,"n":37,"schools":3},"prev":{"v":42.9,"n":7,"series":"June 2025"},"change":null}],"Physics":[{"syl":"0625","tier":"Extended","v":34.8,"aa":4.3,"n":23,"incomplete":0,"net":{"v":34.1,"n":82,"schools":3},"prev":{"v":26.7,"n":15,"series":"June 2025"},"change":8.1},{"syl":"0625","tier":"Core","v":0,"aa":0,"n":5,"incomplete":0,"net":{"v":12,"n":25,"schools":2},"prev":null,"change":null}]}}],"network":{"English":[{"syl":"0510","tier":"Untiered","v":31.8,"n":88,"schools":2},{"syl":"0511","tier":"Untiered","v":51.4,"n":138,"schools":3}],"Mathematics":[{"syl":"0580","tier":"Extended","v":37.3,"n":169,"schools":4},{"syl":"0580","tier":"Core","v":22.5,"n":40,"schools":1}],"Biology":[{"syl":"0610","tier":"Extended","v":35.1,"n":94,"schools":4},{"syl":"0610","tier":"Core","v":5.6,"n":36,"schools":2}],"Chemistry":[{"syl":"0620","tier":"Extended","v":37.8,"n":37,"schools":3},{"syl":"0620","tier":"Core","v":20,"n":15,"schools":1}],"Physics":[{"syl":"0625","tier":"Extended","v":34.1,"n":82,"schools":3},{"syl":"0625","tier":"Core","v":12,"n":25,"schools":2}]},"world":{"English":{"v":71.3,"prev":71.1},"Mathematics":{"v":72.9,"prev":70.9},"Biology":{"v":77.1,"prev":75.2},"Chemistry":{"v":82.9,"prev":82.7},"Physics":{"v":81.5,"prev":81.1}},"small":[{"centre":"ID145","subject":"Mathematics","n":1},{"centre":"ID145","subject":"Chemistry","n":2},{"centre":"ID203","subject":"Mathematics","n":1},{"centre":"ID203","subject":"Biology","n":1},{"centre":"ID203","subject":"Physics","n":1},{"centre":"ID440","subject":"Chemistry","n":1},{"centre":"ID440","subject":"Physics","n":1}]},{"level":"AS & A Level","kind":"alevel","title":"Cambridge International AS & A Level","latest":"June 2026","prevLabel":"June 2025","subjects":["Mathematics","Biology","Chemistry","Physics"],"table":[{"centre":"ID349","cells":{"Mathematics":{"as":16,"asAC":12,"a2":0,"a2AC":0,"u":4,"n":20,"prev":{"as":13,"asAC":6,"a2":6,"a2AC":5,"u":5,"n":24,"series":"June 2025"}},"Biology":{"as":6,"asAC":5,"a2":0,"a2AC":0,"u":2,"n":8,"prev":{"as":6,"asAC":3,"a2":1,"a2AC":1,"u":2,"n":9,"series":"June 2025"}},"Chemistry":{"as":13,"asAC":8,"a2":0,"a2AC":0,"u":4,"n":17,"prev":{"as":12,"asAC":3,"a2":2,"a2AC":1,"u":3,"n":17,"series":"June 2025"}},"Physics":{"as":12,"asAC":8,"a2":0,"a2AC":0,"u":4,"n":16,"prev":{"as":11,"asAC":4,"a2":1,"a2AC":1,"u":5,"n":17,"series":"June 2025"}}}}],"network":null,"world":{"Mathematics":{"as":65.5,"a2":74.3},"Biology":{"as":60.7,"a2":71.5},"Chemistry":{"as":65.8,"a2":72.9},"Physics":{"as":64.6,"a2":71.1}},"small":[{"centre":"ID349","subject":"Further Mathematics","n":2},{"centre":"ID349","subject":"Economics","n":1},{"centre":"ID349","subject":"Psychology","n":1}]}],"coverage":[{"centre":"ID145","byLevel":{"Lower Secondary Checkpoint":["May 2025","May 2026"],"IGCSE":["June 2025","June 2026"]}},{"centre":"ID203","byLevel":{"Lower Secondary Checkpoint":["October 2024","May 2026"],"IGCSE":["November 2024","June 2026"]}},{"centre":"ID244","byLevel":{"Lower Secondary Checkpoint":["October 2024","May 2026"],"IGCSE":["November 2024"]}},{"centre":"ID279","byLevel":{"Lower Secondary Checkpoint":["May 2026"]}},{"centre":"ID349","byLevel":{"Primary Checkpoint":["May 2025","March and May 2026"],"Lower Secondary Checkpoint":["October 2024"],"IGCSE":["June 2025","November 2025","June 2026"],"AS & A Level":["June 2025","June 2026"]}},{"centre":"ID350","byLevel":{"Primary Checkpoint":["May 2025","March and May 2026"],"Lower Secondary Checkpoint":["May 2025"],"IGCSE":["June 2025"]}},{"centre":"ID371","byLevel":{"Lower Secondary Checkpoint":["May 2025","May 2026"],"IGCSE":["November 2024","June 2026"]}},{"centre":"ID375","byLevel":{"Primary Checkpoint":["May 2025","March and May 2026"],"Lower Secondary Checkpoint":["October 2024","May 2026"]}},{"centre":"ID440","byLevel":{"IGCSE":["June 2026"]}}],"summaries":{"ID145":["<b>Lower Secondary Checkpoint (May 2026, up to 19 students):</b> below the network average in English, Mathematics and Science. Since May 2025: English down 4.7 points.","<b>IGCSE (June 2026):</b> share of students with grade A*–C: English 19%, Mathematics 21%, Biology 36%, Biology (Core) 0%, Chemistry 14%, Physics 35% and Physics (Core) 0%. Since June 2025: English down 20 points, Mathematics down 11 points, Biology up 15 points and Physics up 8 points.","<b>IGCSE, small groups:</b> a second, very small group in Mathematics and Chemistry is not shown."],"ID203":["<b>Lower Secondary Checkpoint (May 2026, up to 27 students):</b> below the network average in English and Mathematics.","<b>IGCSE (June 2026):</b> share of students with grade A*–C: English 28%.","<b>Lower Secondary Checkpoint, small groups:</b> Science was also taken, but by fewer than 3 students, so it is not shown.","<b>IGCSE, small groups:</b> Mathematics, Biology and Physics were also taken, but by fewer than 3 students, so they are not shown."],"ID244":["<b>Lower Secondary Checkpoint (May 2026, up to 37 students):</b> below the network average in English, Mathematics and Science.","<b>Not in the 2026 tables:</b> Cambridge IGCSE: last results November 2024."],"ID279":["<b>Lower Secondary Checkpoint (May 2026, up to 12 students):</b> at or above the network average in English and Mathematics; below it in Science."],"ID349":["<b>Primary Checkpoint (March and May 2026, up to 41 students):</b> at or above the network average in English, Mathematics and Science. Since May 2025: English up 2.1 points and Science up 5.3 points.","<b>IGCSE (June 2026):</b> share of students with grade A*–C: English 67%, Mathematics 30%, Biology 38%, Chemistry 41% and Physics 30%. Since June 2025: English down 12 points, Mathematics down 8 points, Biology down 10 points, Chemistry down 30 points and Physics down 23 points.","<b>AS & A Level (June 2026):</b> 47 AS Level results, 0 full A Level results and 14 ungraded (U) across 4 subjects.","<b>AS & A Level, small groups:</b> Further Mathematics, Economics and Psychology were also taken, but by fewer than 3 students, so they are not shown.","<b>Not in the 2026 tables:</b> Cambridge Lower Secondary Checkpoint: last results October 2024."],"ID350":["<b>Primary Checkpoint (March and May 2026, up to 28 students):</b> below the network average in English, Mathematics and Science. Since May 2025: English down 6.6 points and Science down 4.4 points.","<b>Not in the 2026 tables:</b> Cambridge Lower Secondary Checkpoint: last results May 2025; Cambridge IGCSE: last results June 2025."],"ID371":["<b>Lower Secondary Checkpoint (May 2026, up to 26 students):</b> at or above the network average in English, Mathematics and Science. Since May 2025: English up 2.2 points, Mathematics up 2.0 points and Science up 2.5 points.","<b>IGCSE (June 2026):</b> share of students with grade A*–C: English 33%, Mathematics 67%, Mathematics (Core) 23%, Biology 32%, Biology (Core) 9%, Chemistry 50%, Chemistry (Core) 20%, Physics 50% and Physics (Core) 15%."],"ID375":["<b>Primary Checkpoint (March and May 2026, up to 23 students):</b> below the network average in English, Mathematics and Science. Since May 2025: English down 6.1 points, Mathematics down 6.7 points and Science down 10.8 points.","<b>Lower Secondary Checkpoint (May 2026, up to 34 students):</b> at or above the network average in English, Mathematics and Science."],"ID440":["<b>IGCSE (June 2026):</b> share of students with grade A*–C: English 0%, Mathematics 77% and Biology 17%.","<b>IGCSE, small groups:</b> Chemistry and Physics were also taken, but by fewer than 3 students, so they are not shown."]}};
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const nameOf = (c) => D.schools.find((s) => s.centre === c).name;
+const cssVar = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } } };
+function inkOn(hex) {
+  const h = hex.replace('#', '');
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 0.3 ? '#0b0b0b' : '#ffffff';
+}
+const STEP = ['--b1', '--b2', '--b3', '--b4', '--b5'];
+// Checkpoint: colour by Cambridge band of the average. IGCSE: by A*–C share in 20-point steps.
+const cpStep = (band) => ({ Unclassified: 0, Basic: 0, Aspiring: 1, Good: 2, High: 3, Outstanding: 4 }[band]);
+const igStep = (v) => Math.min(4, Math.floor(v / 20));
+const smallIn = (L, centre, subj) => (L.small || []).some((x) => x.centre === centre && x.subject === subj);
+const NONE = (L, centre, subj) => (smallIn(L, centre, subj)
+  ? `<td class="cell none"${' data-tip="' + esc('Taken by fewer than 3 students. Results for groups this small are not shown, so no single student can be identified.') + '" tabindex="0"'}>fewer than 3 students</td>`
+  : '<td class="cell none">not taken</td>');
+const tipAttr = (html) => ` data-tip="${esc(html)}" tabindex="0"`;
+
+const PLAIN = {
+  'Primary Checkpoint': 'A progress test at the end of primary school (around age 11). It is not a certificate. Cambridge gives each student a score from 0 to 50.',
+  'Lower Secondary Checkpoint': 'A progress test at the end of lower secondary (around age 14). It is not a certificate. Cambridge gives each student a score from 0 to 50.',
+  IGCSE: 'The international certificate students take around age 16. Grades run from A* (highest) to G. Grades A*–C are the usual measure of a good pass.',
+  'AS & A Level': 'The certificates students take at age 17–18 for university entry. AS Level is the first half; the full A Level is the complete course.',
+};
+
+function chg(change, unit, since, prev) {
+  if (change == null) return prev ? '' : '';
+  const r = Math.abs(change);
+  if (r < (unit === '%' ? 1 : 0.5)) return `<span class="chg flat">≈ same as ${esc(since)}</span>`;
+  return `<span class="chg ${change > 0 ? 'up' : 'down'}">${change > 0 ? '▲' : '▼'} ${unit === '%' ? r.toFixed(0) + ' pts' : r.toFixed(1) + ' pts'} since ${esc(since)}</span>`;
+}
+const yearOnly = (label) => (label ? label.replace(/^.*?(\d{4})$/, '$1') : '');
+
+// ---------------------------------------------------------------------------
+function checkpointTable(L) {
+  const head = `<tr><th class="school">School</th>${L.subjects.map((s) => `<th>${esc(s)}<br><span style="font-weight:400;color:var(--ink-3)">average score out of 50</span></th>`).join('')}</tr>`;
+  const body = L.table.map((row) => `<tr data-centre="${row.centre}"><td class="school">${esc(nameOf(row.centre))}</td>${L.subjects.map((s) => {
+    const c = row.cells[s];
+    if (!c) return NONE(L, row.centre, s);
+    const col = cssVar(STEP[cpStep(c.band)]);
+    const tip = `<b>${esc(nameOf(row.centre))} · ${esc(s)}</b><br>Average score <b>${c.v.toFixed(1)}</b> out of 50 (${esc(c.band)})<br>${c.n} students · ${esc(c.series)}${c.net != null ? `<br>All partner schools: ${c.net.toFixed(1)}` : ''}${c.prev ? `<br>${esc(c.prev.series)}: ${c.prev.v.toFixed(1)} (${c.prev.n} students)` : ''}${c.prev && c.change == null ? '<br><i>Change not shown: fewer than ' + D.meta.moveMin + ' students in one of the years.</i>' : ''}`;
+    return `<td class="cell" style="background:${col};color:${inkOn(col)}"${tipAttr(tip)}><span class="big">${c.v.toFixed(1)}<span class="of">/ 50</span></span><span class="small">${esc(c.band)} · ${c.n} students</span>${chg(c.change, 'pt', yearOnly(L.prevLabel), c.prev)}</td>`;
+  }).join('')}</tr>`).join('');
+  const net = `<tr class="net"><td class="school">All partner schools<small>average of every student</small></td>${L.subjects.map((s) => {
+    const n = L.network[s];
+    const tip = `<b>All partner schools · ${esc(s)}</b><br>${n.n} students in ${n.schools} school${n.schools > 1 ? 's' : ''}${n.prev ? `<br>${esc(L.prevLabel)}: ${n.prev.v.toFixed(1)} (${n.prev.n} students, ${n.prev.schools} schools)` : ''}`;
+    return `<td class="cell"${tipAttr(tip)}><span class="big">${n.v.toFixed(1)}<span class="of">/ 50</span></span><span class="small">${esc(n.band)} · ${n.schools} school${n.schools > 1 ? 's' : ''}</span></td>`;
+  }).join('')}</tr>`;
+  return `<div class="tscroll"><table class="grid">${head}${body}${net}</table></div>`;
+}
+
+function igcseTable(L) {
+  const head = `<tr><th class="school">School</th>${L.subjects.map((s) => `<th>${esc(s)}</th>`).join('')}</tr>`;
+  const since = yearOnly(L.prevLabel);
+  const body = L.table.map((row) => `<tr data-centre="${row.centre}"><td class="school">${esc(nameOf(row.centre))}</td>${L.subjects.map((s) => {
+    const list = row.cells[s];
+    if (!list) return NONE(L, row.centre, s);
+    const main = list.find((c) => c.tier !== 'Core');
+    const core = list.find((c) => c.tier === 'Core');
+    const lead = main || core;
+    const col = main ? cssVar(STEP[igStep(main.v)]) : cssVar('--empty');
+    const ink = main ? inkOn(col) : 'var(--ink)';
+    const line = (c) => `${c.tier === 'Core' ? 'Core' : (c.syl === '0510' || c.syl === '0511' ? `English ${c.syl}` : (c.tier === 'Extended' ? 'Extended' : ''))}: <b>${c.v.toFixed(0)}%</b> at A*–C · ${c.n} students${c.net ? ` · all schools ${c.net.v.toFixed(0)}%` : ''}${c.prev ? ` · ${esc(c.prev.series)} ${c.prev.v.toFixed(0)}%` : ''}`;
+    const tip = `<b>${esc(nameOf(row.centre))} · ${esc(s)}</b><br>${list.map(line).join('<br>')}${list.some((c) => c.incomplete) ? '<br><i>Some students missed a paper and have no grade; they are not counted.</i>' : ''}`;
+    let html = '';
+    if (main) html += `<span class="big">${main.v.toFixed(0)}%</span><span class="small">A*–C · ${main.n} students${s === 'English' ? ` · ${main.syl}` : ''}</span>${chg(main.change, '%', since, main.prev)}`;
+    if (core) html += `<span class="core"${main ? '' : ' style="border:0;margin:0;padding:0"'}>Core: <b>${core.v.toFixed(0)}%</b> A*–C · ${core.n} students</span>`;
+    else if (smallIn(L, row.centre, s)) html += '<span class="core">+ a group of fewer than 3 not shown</span>';
+    return `<td class="cell" style="background:${col};color:${ink}"${tipAttr(tip)}>${html}</td>`;
+  }).join('')}</tr>`).join('');
+  const net = `<tr class="net"><td class="school">All partner schools<small>every student counted</small></td>${L.subjects.map((s) => {
+    const list = L.network[s];
+    const txt = list.map((n) => `${n.tier === 'Core' ? 'Core ' : ''}${s === 'English' ? n.syl + ' ' : ''}<b>${n.v.toFixed(0)}%</b>`).join('<br>');
+    const tip = `<b>All partner schools · ${esc(s)}</b><br>${list.map((n) => `${n.tier === 'Core' ? 'Core' : (s === 'English' ? n.syl : n.tier === 'Extended' ? 'Extended' : '')}: ${n.v.toFixed(1)}% at A*–C · ${n.n} students, ${n.schools} school${n.schools > 1 ? 's' : ''}`).join('<br>')}`;
+    return `<td class="cell"${tipAttr(tip)}><span class="small" style="font-size:14px">${txt}</span></td>`;
+  }).join('')}</tr>`;
+  const world = `<tr class="net world"><td class="school">All Cambridge candidates<small>worldwide, June ${esc(yearOnly(L.latest))}</small></td>${L.subjects.map((s) => {
+    const w = L.world[s];
+    const tip = `<b>Worldwide · ${esc(s)}</b><br>${w.v.toFixed(1)}% of all Cambridge IGCSE candidates in the world got A*–C${w.prev != null ? ` (${w.prev.toFixed(1)}% in ${esc(since)})` : ''}.<br><i>Cambridge counts Core and Extended together here${s === 'English' ? ', and reports English as a Second Language as one figure' : ''}.</i>`;
+    return `<td class="cell"${tipAttr(tip)}><span class="big" style="font-size:18px">${w.v.toFixed(0)}%</span><span class="small">A*–C</span></td>`;
+  }).join('')}</tr>`;
+  return `<div class="tscroll"><table class="grid">${head}${body}${net}${world}</table></div>`;
+}
+
+function alevelTable(L) {
+  const head = `<tr><th class="school">School</th>${L.subjects.map((s) => `<th>${esc(s)}</th>`).join('')}</tr>`;
+  const body = L.table.map((row) => `<tr data-centre="${row.centre}"><td class="school">${esc(nameOf(row.centre))}</td>${L.subjects.map((s) => {
+    const c = row.cells[s];
+    if (!c) return NONE(L, row.centre, s);
+    const pct = (a, b) => (b >= 3 ? ` (${Math.round((100 * a) / b)}% a–c)` : '');
+    const tip = `<b>${esc(nameOf(row.centre))} · ${esc(s)}</b><br>AS Level results: ${c.as}${c.as ? `, of which ${c.asAC} at grade a–c` : ''}<br>Full A Level results: ${c.a2}<br>Ungraded (U): ${c.u}${c.prev ? `<br><br>${esc(c.prev.series)}: ${c.prev.as} AS, ${c.prev.a2} full A Level, ${c.prev.u} U` : ''}`;
+    return `<td class="cell" style="background:var(--surface-2)"${tipAttr(tip)}><span class="small" style="font-size:14px"><b>${c.as}</b> AS Level${pct(c.asAC, c.as)}<br><b>${c.a2}</b> full A Level<br><b>${c.u}</b> ungraded (U)</span>${c.prev ? `<span class="small" style="margin-top:5px;color:var(--ink-3)">${esc(yearOnly(c.prev.series))}: ${c.prev.as} AS · ${c.prev.a2} A Level · ${c.prev.u} U</span>` : ''}</td>`;
+  }).join('')}</tr>`).join('');
+  const worldRow = `<tr class="net world"><td class="school">All Cambridge candidates<small>worldwide, June ${esc(yearOnly(L.latest))}</small></td>${L.subjects.map((s) => {
+    const w = L.world[s];
+    return `<td class="cell"><span class="small" style="font-size:13.5px"><b>${w.as.toFixed(0)}%</b> of AS results at a–c<br><b>${w.a2.toFixed(0)}%</b> of A Level results at A*–C</span></td>`;
+  }).join('')}</tr>`;
+  const extra = [...new Set((L.small || []).filter((x) => !L.subjects.includes(x.subject)).map((x) => x.subject))];
+  const note = extra.length ? `<p style="margin:8px 0 0;font-size:13.5px;color:var(--ink-2)">${esc(extra.join(', '))}: also taken, each by fewer than 3 students, so not shown.</p>` : '';
+  return `<div class="tscroll"><table class="grid">${head}${body}${worldRow}</table></div>${note}`;
+}
+
+// ---------------------------------------------------------------------------
+function render() {
+  const focus = document.getElementById('focus').value;
+  const m = document.getElementById('main');
+  let html = `<div class="intro">
+    <div><b>What this page shows</b>How each partner school did in the 2026 Cambridge exams, subject by subject, next to the average of all partner schools and the year before.</div>
+    <div><b>How to read a box</b>The big number is the result. A darker box means a stronger result. <span style="color:var(--up);font-weight:700">▲</span> / <span style="color:var(--down);font-weight:700">▼</span> shows the change since last year's same exam.</div>
+    <div><b>The bottom row</b>“All partner schools” is the result of every student in every partner school counted together. Use it to see whether a school is above or below the group.</div>
+  </div>`;
+
+  for (const L of D.levels) {
+    const legend = L.kind === 'checkpoint'
+      ? `<div class="legend">${['Basic (1–10)', 'Aspiring (11–20)', 'Good (21–30)', 'High (31–40)', 'Outstanding (41–50)'].map((t, i) => `<span><i class="sw" style="background:var(${STEP[i]})"></i>${t}</span>`).join('')}</div>`
+      : L.kind === 'igcse'
+        ? `<div class="legend">${['under 20%', '20–39%', '40–59%', '60–79%', '80% or more'].map((t, i) => `<span><i class="sw" style="background:var(${STEP[i]})"></i>${t} at A*–C</span>`).join('')}</div>`
+        : '';
+    const table = L.kind === 'checkpoint' ? checkpointTable(L) : L.kind === 'igcse' ? igcseTable(L) : alevelTable(L);
+    const howto = L.kind === 'checkpoint'
+      ? `<b>How to read this:</b> each box is the <b>average score out of 50</b> for that school and subject. Cambridge describes 21–30 as <b>Good</b> (secure in most of the content) and 31–40 as <b>High</b>. The word under the number is the band the average falls in. A school with few students can move a lot from year to year, so the number of students is shown in every box.`
+      : L.kind === 'igcse'
+        ? `<b>How to read this:</b> each box is the <b>share of students who got grade A*, A, B or C</b>. Some students take the <b>Core</b> version of a subject, where the highest possible grade is C, so Core results are shown separately under the main result and never added together. English is two different exams (0510 and 0511), so the partner-schools row shows each one. The last row is <b>every Cambridge IGCSE candidate in the world</b>, published by Cambridge; it counts Core and Extended together, so compare it mainly with the main (Extended) result.`
+        : `<b>How to read this:</b> each box counts results, not percentages, because the numbers are small. Cambridge writes AS grades in small letters (a–e) and full A Level grades in capitals, so the two are counted separately. <b>U</b> means ungraded; it is written the same way for both, so it cannot be split between them. <b>No full A Level results in 2026</b> may mean that no final-year students were entered this year rather than a fall in results; the school can confirm.`;
+    html += `<section class="level" id="lv-${L.kind}-${L.level.replace(/\W+/g, '')}">
+      <h2>${esc(L.title)} · ${esc(L.latest)}</h2>
+      <p class="what">${esc(PLAIN[L.level])}${L.prevLabel ? ` Compared with ${esc(L.prevLabel)}.` : ''}</p>
+      ${legend}${table}<div class="howto">${howto}</div></section>`;
+  }
+
+  // School by school
+  const order = D.schools.map((s) => s.centre).sort((a, b) => (a === focus ? -1 : b === focus ? 1 : nameOf(a).localeCompare(nameOf(b))));
+  html += `<h2 class="part">School by school</h2><div class="schools">${order.map((c) => {
+    const lines = D.summaries[c];
+    return `<div class="sch${c === focus ? ' focus' : ''}"><h3>${esc(nameOf(c))}</h3><ul>${lines.length ? lines.map((l) => `<li>${l}</li>`).join('') : '<li>No 2026 results in these tables.</li>'}</ul></div>`;
+  }).join('')}</div>`;
+
+  // Coverage
+  const LV = ['Primary Checkpoint', 'Lower Secondary Checkpoint', 'IGCSE', 'AS & A Level'];
+  html += `<h2 class="part">Which exams each school has taken</h2><div class="tscroll"><table class="cov"><thead><tr><th>School</th>${LV.map((l) => `<th>${esc(l)}</th>`).join('')}</tr></thead><tbody>${order.map((c) => {
+    const cov = D.coverage.find((x) => x.centre === c).byLevel;
+    return `<tr${c === focus ? ' style="font-weight:600"' : ''}><td>${esc(nameOf(c))}</td>${LV.map((l) => (cov[l] ? `<td>${cov[l].map(esc).join('<br>')}</td>` : '<td class="nope">—</td>')).join('')}</tr>`;
+  }).join('')}</tbody></table></div>`;
+
+  html += `<div class="notes"><h2>Good to know</h2><ul>
+    <li><b>Worldwide figures</b> are Cambridge's own published statistics for the June series (all candidates in all countries). Cambridge does not publish worldwide figures for Checkpoint; each school's own Checkpoint report from Cambridge shows an international average.</li>
+    <li><b>Small groups:</b> a result for a group of fewer than 3 students is not shown. A change since last year is shown only when both years had at least ${D.meta.moveMin} students.</li>
+    <li><b>Same exam, same time of year:</b> 2026 is compared with 2025. Smaller November and October sittings are not included on this page.</li>
+    <li><b>Primary Checkpoint 2026:</b> one school took the test in March and two in May. Cambridge's 0–50 score is designed to compare across test dates, so they are shown together.</li>
+    <li><b>Pakar Belia School</b> took its June 2026 exams under Pribadi Bandung's Cambridge centre number, as it was newly registered. Its results are shown under its own name.</li>
+    <li>These are Cambridge's <b>provisional</b> results, sent to each school after the exams. Each school also has a detailed report, and teachers have a separate question-by-question dashboard.</li>
+  </ul></div>`;
+
+  m.innerHTML = html;
+  document.querySelectorAll('tr[data-centre]').forEach((tr) => {
+    tr.classList.toggle('dim', !!focus && tr.dataset.centre !== focus);
+    tr.classList.toggle('focus', !!focus && tr.dataset.centre === focus);
+  });
+}
+
+// Tooltip
+const tip = document.getElementById('tip');
+function showTip(el, x, y) {
+  tip.innerHTML = el.getAttribute('data-tip'); tip.classList.add('on');
+  const r = tip.getBoundingClientRect();
+  let left = x + 14; let top = y + 14;
+  if (left + r.width > innerWidth - 8) left = x - r.width - 14;
+  if (top + r.height > innerHeight - 8) top = y - r.height - 14;
+  tip.style.left = Math.max(8, left) + 'px'; tip.style.top = Math.max(8, top) + 'px';
+}
+document.addEventListener('mousemove', (e) => { const el = e.target.closest && e.target.closest('[data-tip]'); if (el) showTip(el, e.clientX, e.clientY); else tip.classList.remove('on'); });
+document.addEventListener('focusin', (e) => { const el = e.target.closest && e.target.closest('[data-tip]'); if (!el) return tip.classList.remove('on'); const r = el.getBoundingClientRect(); showTip(el, r.left + r.width / 2, r.top); });
+document.addEventListener('focusout', () => tip.classList.remove('on'));
+document.addEventListener('scroll', () => tip.classList.remove('on'), { passive: true });
+
+// Theme
+const themeBtn = document.getElementById('themeBtn');
+let theme = store.get('crg-theme') || 'auto';
+function applyTheme() {
+  if (theme === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', theme);
+  themeBtn.textContent = 'Theme: ' + theme[0].toUpperCase() + theme.slice(1);
+}
+themeBtn.onclick = () => { theme = { auto: 'light', light: 'dark', dark: 'auto' }[theme]; store.set('crg-theme', theme); applyTheme(); render(); };
+if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (theme === 'auto') render(); });
+applyTheme();
+
+// Init
+const sel = document.getElementById('focus');
+D.schools.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach((s) => { const o = document.createElement('option'); o.value = s.centre; o.textContent = s.name; sel.appendChild(o); });
+const h = new URLSearchParams(location.hash.slice(1)).get('school') || store.get('crg-school') || '';
+if (D.schools.some((s) => s.centre === h)) sel.value = h;
+sel.onchange = () => { store.set('crg-school', sel.value); history.replaceState(null, '', sel.value ? '#school=' + sel.value : '#'); render(); };
+document.getElementById('heroSub').textContent = `How each Eduversal partner school did in the 2026 Cambridge exams, compared with all partner schools and with 2025. No technical knowledge needed: one number per school and subject.`;
+document.getElementById('foot').textContent = `Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-09-24. Built from the provisional result files Cambridge International sent to each partner school, and Cambridge's published worldwide statistics. Shared by Eduversal with its partner schools and their foundations; please keep it within your school or foundation.`;
+render();
+</script>
+</body>
+</html>

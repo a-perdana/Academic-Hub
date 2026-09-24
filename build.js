@@ -586,6 +586,16 @@ if (fs.existsSync("Sections")) {
   copyDirRecursive("Sections", "dist/Sections");
   console.log("Copied: Sections/");
 }
+// Cambridge Results Pack — published WITHOUT login (Alif, 2026-09-24) at
+// /cambridge-results. Copied verbatim on purpose: these self-contained pages
+// must not receive the navbar, auth-guard or base.css this build injects into
+// the pages listed above. Written by scripts/cambridge-results/build-pack.js at
+// the monorepo root; never hand-edit. noindex comes from each page's meta tag
+// and from the X-Robots-Tag header in vercel.json.
+if (fs.existsSync("cambridge-results")) {
+  copyDirRecursive("cambridge-results", "dist/cambridge-results");
+  console.log("Copied: cambridge-results/ (Cambridge Results Pack, public)");
+}
 if (fs.existsSync("partials")) {
   copyDirRecursive("partials", "dist/partials");
   console.log("Copied: partials/");
