@@ -521,7 +521,7 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h6M8 4v6M14 7h5M14 16h5M14 19h5M5 16l5 5M10 16l-5 5"/></svg>Mathematics</button>
     </div>
     <label class="switch" id="tl-wrap" hidden>
-      <input type="checkbox" id="tl-toggle" checked>
+      <input type="checkbox" autocomplete="off" id="tl-toggle" checked>
       Count the elective Matematika Tingkat Lanjut
     </label>
     <nav class="nav" aria-label="Sections">
@@ -545,7 +545,7 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
         <div class="sim-block">
           <div class="sim-stage">Timetable</div>
           <div class="tt-weeks">
-            <label for="c-weeks"><input type="number" id="c-weeks" min="20" max="44" step="1" value="35"> teaching weeks a year</label>
+            <label for="c-weeks"><input type="number" autocomplete="off" id="c-weeks" min="20" max="44" step="1" value="35"> teaching weeks a year</label>
             <button type="button" class="tt-reset" id="c-tt-reset">Reset to the network timetable</button>
           </div>
           <p class="sim-hint">Default: the network plan (maths 6 × 40 min a week, 35 weeks). Science defaults to 4 h a week per subject; change any value to match your school.</p>
@@ -553,17 +553,17 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
         <div class="sim-block">
           <div class="sim-stage">Grades 7–8 · Lower Secondary, Stages 7–9</div>
           <div class="sim-opts">
-            <label class="opt locked"><input type="checkbox" checked disabled> Mathematics 0862</label>
-            <label class="opt locked"><input type="checkbox" checked disabled> Science 0893</label>
+            <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Mathematics 0862</label>
+            <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Science 0893</label>
           </div>
           <div class="sim-tt">
             <span class="tt-name">Maths</span>
-            <label for="c-ls-mat-p"><input type="number" id="c-ls-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
-            <label for="c-ls-mat-m">× <input type="number" id="c-ls-mat-m" min="0" max="120" step="5" value="40"> min</label>
+            <label for="c-ls-mat-p"><input type="number" autocomplete="off" id="c-ls-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
+            <label for="c-ls-mat-m">× <input type="number" autocomplete="off" id="c-ls-mat-m" min="0" max="120" step="5" value="40"> min</label>
             <output id="c-ls-mat-out" for="c-ls-mat-p c-ls-mat-m c-weeks"></output>
             <span class="tt-name">Science</span>
-            <label for="c-ls-sci-p"><input type="number" id="c-ls-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
-            <label for="c-ls-sci-m">× <input type="number" id="c-ls-sci-m" min="0" max="120" step="5" value="60"> min</label>
+            <label for="c-ls-sci-p"><input type="number" autocomplete="off" id="c-ls-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
+            <label for="c-ls-sci-m">× <input type="number" autocomplete="off" id="c-ls-sci-m" min="0" max="120" step="5" value="60"> min</label>
             <output id="c-ls-sci-out" for="c-ls-sci-p c-ls-sci-m c-weeks"></output>
           </div>
           <p class="sim-hint guide">Cambridge guidance: 120–150 h of maths per stage; three stages in two years ≈ 180 h a year.</p>
@@ -571,19 +571,19 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
         <div class="sim-block">
           <div class="sim-stage">Grades 9–10 · IGCSE</div>
           <div class="sim-opts">
-            <label class="opt"><input type="checkbox" id="c-ig-mat" data-sim="c.ig.mat"> Mathematics 0580</label>
-            <label class="opt"><input type="checkbox" id="c-ig-bio" data-sim="c.ig.bio"> Biology 0610</label>
-            <label class="opt"><input type="checkbox" id="c-ig-chem" data-sim="c.ig.chem"> Chemistry 0620</label>
-            <label class="opt"><input type="checkbox" id="c-ig-phys" data-sim="c.ig.phys"> Physics 0625</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-mat" data-sim="c.ig.mat"> Mathematics 0580</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-bio" data-sim="c.ig.bio"> Biology 0610</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-chem" data-sim="c.ig.chem"> Chemistry 0620</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="c-ig-phys" data-sim="c.ig.phys"> Physics 0625</label>
           </div>
           <div class="sim-tt">
             <span class="tt-name">Maths</span>
-            <label for="c-ig-mat-p"><input type="number" id="c-ig-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
-            <label for="c-ig-mat-m">× <input type="number" id="c-ig-mat-m" min="0" max="120" step="5" value="40"> min</label>
+            <label for="c-ig-mat-p"><input type="number" autocomplete="off" id="c-ig-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
+            <label for="c-ig-mat-m">× <input type="number" autocomplete="off" id="c-ig-mat-m" min="0" max="120" step="5" value="40"> min</label>
             <output id="c-ig-mat-out" for="c-ig-mat-p c-ig-mat-m c-weeks"></output>
             <span class="tt-name">Each science</span>
-            <label for="c-ig-sci-p"><input type="number" id="c-ig-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
-            <label for="c-ig-sci-m">× <input type="number" id="c-ig-sci-m" min="0" max="120" step="5" value="60"> min</label>
+            <label for="c-ig-sci-p"><input type="number" autocomplete="off" id="c-ig-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
+            <label for="c-ig-sci-m">× <input type="number" autocomplete="off" id="c-ig-sci-m" min="0" max="120" step="5" value="60"> min</label>
             <output id="c-ig-sci-out" for="c-ig-sci-p c-ig-sci-m c-weeks"></output>
           </div>
           <p class="sim-hint guide">Cambridge guidance: about 130 h per subject for the whole course ≈ 65 h a year.</p>
@@ -593,12 +593,12 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
           <div class="al-rows" id="al-rows" role="group" aria-label="AS and A Level subjects"></div>
           <div class="sim-tt">
             <span class="tt-name">Maths</span>
-            <label for="c-al-mat-p"><input type="number" id="c-al-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
-            <label for="c-al-mat-m">× <input type="number" id="c-al-mat-m" min="0" max="120" step="5" value="40"> min</label>
+            <label for="c-al-mat-p"><input type="number" autocomplete="off" id="c-al-mat-p" min="0" max="15" step="1" value="6"> lessons / week</label>
+            <label for="c-al-mat-m">× <input type="number" autocomplete="off" id="c-al-mat-m" min="0" max="120" step="5" value="40"> min</label>
             <output id="c-al-mat-out" for="c-al-mat-p c-al-mat-m c-weeks"></output>
             <span class="tt-name">Each science</span>
-            <label for="c-al-sci-p"><input type="number" id="c-al-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
-            <label for="c-al-sci-m">× <input type="number" id="c-al-sci-m" min="0" max="120" step="5" value="60"> min</label>
+            <label for="c-al-sci-p"><input type="number" autocomplete="off" id="c-al-sci-p" min="0" max="15" step="1" value="4"> lessons / week</label>
+            <label for="c-al-sci-m">× <input type="number" autocomplete="off" id="c-al-sci-m" min="0" max="120" step="5" value="60"> min</label>
             <output id="c-al-sci-out" for="c-al-sci-p c-al-sci-m c-weeks"></output>
           </div>
           <p class="sim-hint guide">Cambridge guidance: about 180 h per subject for AS, 360 h for the full A Level ≈ 180 h a year.</p>
@@ -610,26 +610,26 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
         <div class="sim-block">
           <div class="sim-stage">Kelas VII–X · compulsory</div>
           <div class="sim-opts">
-            <label class="opt locked"><input type="checkbox" checked disabled> Matematika</label>
-            <label class="opt locked"><input type="checkbox" checked disabled> IPA (kelas X: Fisika + Kimia + Biologi)</label>
+            <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Matematika</label>
+            <label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> IPA (kelas X: Fisika + Kimia + Biologi)</label>
           </div>
         </div>
         <div class="sim-block">
           <div class="sim-stage">Kelas XI–XII · compulsory</div>
-          <div class="sim-opts"><label class="opt locked"><input type="checkbox" checked disabled> Matematika</label></div>
+          <div class="sim-opts"><label class="opt locked"><input type="checkbox" autocomplete="off" checked disabled> Matematika</label></div>
         </div>
         <div class="sim-block">
           <div class="sim-stage">Kelas XI–XII · electives <span>135 h in XI, 120 h in XII, each</span></div>
           <div class="sim-opts">
-            <label class="opt"><input type="checkbox" id="k-tl" data-sim="k.tl"> Matematika Tingkat Lanjut</label>
-            <label class="opt"><input type="checkbox" id="k-fis" data-sim="k.fis"> Fisika</label>
-            <label class="opt"><input type="checkbox" id="k-kim" data-sim="k.kim"> Kimia</label>
-            <label class="opt"><input type="checkbox" id="k-bio" data-sim="k.bio"> Biologi</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="k-tl" data-sim="k.tl"> Matematika Tingkat Lanjut</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="k-fis" data-sim="k.fis"> Fisika</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="k-kim" data-sim="k.kim"> Kimia</label>
+            <label class="opt"><input type="checkbox" autocomplete="off" id="k-bio" data-sim="k.bio"> Biologi</label>
           </div>
           <p class="sim-hint">Students take 4–5 electives in all; only maths and science are shown.</p>
         </div>
         <div class="sim-block">
-          <label class="opt"><input type="checkbox" id="k-koku" data-sim="k.koku"> Add kokurikuler (project) hours</label>
+          <label class="opt"><input type="checkbox" autocomplete="off" id="k-koku" data-sim="k.koku"> Add kokurikuler (project) hours</label>
         </div>
       </fieldset>
     </div>
@@ -661,7 +661,7 @@ footer { padding-block: 30px 50px; font-size: 12.5px; color: var(--muted); borde
     </div>
     <div class="map-tools">
       <div class="title" id="map-title"></div>
-      <div class="search"><input type="search" id="q" placeholder="Find a topic…" aria-label="Find a topic"></div>
+      <div class="search"><input type="search" autocomplete="off" id="q" placeholder="Find a topic…" aria-label="Find a topic"></div>
     </div>
     <div id="map-body"></div>
   </section>
