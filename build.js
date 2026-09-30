@@ -25,9 +25,16 @@ const replacements = {
   __FIREBASE_STORAGE_BUCKET__:     process.env.FIREBASE_STORAGE_BUCKET     || "",
   __FIREBASE_MESSAGING_SENDER_ID__:process.env.FIREBASE_MESSAGING_SENDER_ID|| "",
   __FIREBASE_APP_ID__:             process.env.FIREBASE_APP_ID             || "",
-  __CLAUDE_API_KEY__:              process.env.CLAUDE_API_KEY              || "",
+  // SECRETS ARE NEVER WRITTEN INTO A PAGE (2026-10-01). Every AH page is a static
+  // file anyone can download without signing in, so a key substituted here was
+  // public: the Anthropic key on /academic-standards and the Railway probe token
+  // on /network-audit were both readable in the served HTML. Common Mistake #39 —
+  // secrets live server-side (Cloud Functions + Secret Manager). Both features
+  // show their "not configured" state until they are moved behind a function.
+  // Rotate both secrets; do not re-add process.env reads here.
+  __CLAUDE_API_KEY__:              "",
   __RAILWAY_API_URL__:             process.env.RAILWAY_API_URL             || "",
-  __RAILWAY_API_TOKEN__:           process.env.RAILWAY_API_TOKEN           || "",
+  __RAILWAY_API_TOKEN__:           "",
 };
 
 // -- Clean URL mapping: filename -> slug
