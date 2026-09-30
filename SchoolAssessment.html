@@ -40,6 +40,9 @@ body:has(> .page-footer) > .page-wrap {
 
 .toolbar { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 12px 14px; box-shadow: var(--shadow-sm); }
 .toolbar select { padding: 8px 12px; font-family: inherit; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--paper); }
+.toolbar .kktp-field { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); }
+.toolbar .kktp-field input { width: 72px; padding: 8px 10px; font-family: inherit; font-size: 13px; border: 1px solid var(--border); border-radius: 8px; background: var(--paper); }
+.kktp-note { font-size: 12px; color: var(--ink-3); margin: -8px 0 16px; }
 
 .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
 .class-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
@@ -92,7 +95,7 @@ body:has(> .page-footer) > .page-wrap {
       <div class="page-hero__text">
         <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
         <h1 class="page-hero__title">School Assessment</h1>
-        <p class="page-hero__desc">Chapter mastery + EASE growth roll-up across every Year 7–8 class in your school. Spot under-performing classes early and direct the right intervention.</p>
+        <p class="page-hero__desc">EASE Assessment (Common Assessment) results for every Year 7–8 class in your school. See where students score below KKTP — the mastery standard your school sets — so teachers can re-teach, reassess and support them.</p>
       </div>
       <div class="page-hero__kpis" id="heroKpis">
         <div class="page-hero__kpi page-hero__kpi--primary">
@@ -101,9 +104,9 @@ body:has(> .page-footer) > .page-wrap {
           <div class="page-hero__kpi-sub">across all classes</div>
         </div>
         <div class="page-hero__kpi">
-          <div class="page-hero__kpi-num" id="kpiPass">—</div>
-          <div class="page-hero__kpi-lbl">Pass rate</div>
-          <div class="page-hero__kpi-sub">of submissions</div>
+          <div class="page-hero__kpi-num" id="kpiBelow">—</div>
+          <div class="page-hero__kpi-lbl">Below KKTP</div>
+          <div class="page-hero__kpi-sub" id="kpiBelowSub">set your KKTP below</div>
         </div>
         <div class="page-hero__kpi">
           <div class="page-hero__kpi-num" id="kpiSubmitted">—</div>
@@ -134,7 +137,11 @@ body:has(> .page-footer) > .page-wrap {
         <option value="9">Year 9</option>
         <option value="10">Year 10</option>
       </select>
+      <label class="kktp-field" for="fKktp">Your school's KKTP
+        <input id="fKktp" type="number" min="0" max="100" step="1" inputmode="numeric" aria-describedby="kktpNote"> %
+      </label>
     </div>
+    <p class="kktp-note" id="kktpNote">KKTP (Kriteria Ketercapaian Tujuan Pembelajaran) is set by your school, not by Eduversal. Enter it to count students below the mastery standard. It is saved in this browser only.</p>
 
     <div id="classGrid" class="class-grid"></div>
   </main>
@@ -147,7 +154,7 @@ body:has(> .page-footer) > .page-wrap {
       <div class="page-footer__cta">
         <span class="page-footer__cta-eyebrow">School Leadership · Students Hub</span>
         <h2 class="page-footer__cta-title">Roll-ups guide where attention goes next.</h2>
-        <p class="page-footer__cta-desc">A class slipping below 40 % pass rate needs a conversation with the teacher and the subject leader — not another test. Walk the data into the next coordinators meeting and decide one concrete intervention.</p>
+        <p class="page-footer__cta-desc">When students score below your school's KKTP on a Common Assessment, the Gradebook remedial policy applies: re-teach first, then one short reassessment within 10 working days. The KKTP stays the same — the goal is to help students reach it, not to lower the bar.</p>
         <a href="/coordinators-meetings" class="page-footer__cta-btn">Open Coordinators Meetings <span aria-hidden="true">→</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="School Assessment footer navigation">
@@ -165,7 +172,7 @@ body:has(> .page-footer) > .page-wrap {
     </div>
     <div class="page-footer__meta">
       <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-      <span class="page-footer__meta-right">Chapter-mastery + EASE growth aggregates · live updates from chapter_test_attempts</span>
+      <span class="page-footer__meta-right">EASE Assessment (Common Assessment) · live updates from chapter_test_attempts</span>
     </div>
   </footer>
 
@@ -177,6 +184,14 @@ body:has(> .page-footer) > .page-wrap {
     let classes = [];
     let attempts = [];
     let students = [];
+    // The school's KKTP (mastery standard). The live EASE Assessment
+    // Gradebook 26-27: "KKTP ..., the mastery standard your school sets".
+    // No KKTP is stored in Firestore, so the leader enters it; it is kept
+    // per browser as a convenience. Until it is set, no below-KKTP count
+    // is shown. (Replaces a hard-coded 40% "need help" line and a pass
+    // rate computed against the test's own threshold, 2026-10-01.)
+    let kktp = null;
+    let kktpKey = 'ah-kktp';
 
     document.addEventListener('authReady', async ({ detail: { user, profile } } = { detail: window.__authReadyDetail || {} }) => {
       if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('school-assessment', { user, profile });
@@ -187,6 +202,16 @@ body:has(> .page-footer) > .page-wrap {
         document.getElementById('accessWarn').textContent = 'Set your school in your profile first.';
         return;
       }
+
+      kktpKey = 'ah-kktp:' + (profile.schoolId || 'none');
+      try {
+        const saved = localStorage.getItem(kktpKey);
+        const n = saved == null || saved === '' ? NaN : Number(saved);
+        if (Number.isFinite(n) && n >= 0 && n <= 100) {
+          kktp = n;
+          document.getElementById('fKktp').value = String(n);
+        }
+      } catch (_) {}
 
       // Load classes
       if (profile.schoolId) {
@@ -216,6 +241,23 @@ body:has(> .page-footer) > .page-wrap {
 
     document.getElementById('fSubject').addEventListener('change', render);
     document.getElementById('fGrade').addEventListener('change', render);
+    document.getElementById('fKktp').addEventListener('input', (e) => {
+      const raw = e.target.value;
+      const n = raw === '' ? NaN : Number(raw);
+      kktp = Number.isFinite(n) && n >= 0 && n <= 100 ? n : null;
+      try {
+        if (kktp == null) localStorage.removeItem(kktpKey);
+        else localStorage.setItem(kktpKey, String(kktp));
+      } catch (_) {}
+      render();
+    });
+    // Distinct students with at least one score below the school's KKTP.
+    function studentsBelow(scored) {
+      if (kktp == null) return null;
+      const ids = new Set();
+      scored.forEach(a => { if (a.rawScorePct < kktp) ids.add(a.studentUid || a.id); });
+      return ids.size;
+    }
 
     function render() {
       const subjectFilter = document.getElementById('fSubject').value;
@@ -226,10 +268,11 @@ body:has(> .page-footer) > .page-wrap {
 
       const allScored = submitted.filter(matchSubject).filter(a => typeof a.rawScorePct === 'number');
       const networkAvg = allScored.length ? Math.round(allScored.reduce((s, n) => s + n.rawScorePct, 0) / allScored.length) : null;
-      const networkPass = allScored.length ? Math.round(allScored.filter(a => a.passed).length / allScored.length * 100) : null;
+      const schoolBelow = studentsBelow(allScored);
 
       document.getElementById('kpiAvg').textContent = networkAvg == null ? '—' : networkAvg + '%';
-      document.getElementById('kpiPass').textContent = networkPass == null ? '—' : networkPass + '%';
+      document.getElementById('kpiBelow').textContent = schoolBelow == null ? '—' : schoolBelow;
+      document.getElementById('kpiBelowSub').textContent = kktp == null ? 'set your KKTP below' : 'students below ' + kktp + '%';
       document.getElementById('kpiSubmitted').textContent = allScored.length;
 
       // Per-class roll-up
@@ -244,8 +287,7 @@ body:has(> .page-footer) > .page-wrap {
         const classAttempts = submitted.filter(a => a.className === c.name).filter(matchSubject);
         const classScored = classAttempts.filter(a => typeof a.rawScorePct === 'number');
         const avg = classScored.length ? Math.round(classScored.reduce((s, n) => s + n.rawScorePct, 0) / classScored.length) : null;
-        const pass = classScored.length ? Math.round(classScored.filter(a => a.passed).length / classScored.length * 100) : null;
-        const lowCount = classScored.filter(a => a.rawScorePct < 40).length;
+        const lowCount = studentsBelow(classScored);
         const classStudents = students.filter(s => s.className === c.name).length;
 
         return `
@@ -255,8 +297,8 @@ body:has(> .page-footer) > .page-wrap {
             <div class="bar"><div style="width:${avg || 0}%"></div></div>
             <div class="row-stats">
               <div><strong>${avg == null ? '—' : avg + '%'}</strong><span>Average</span></div>
-              <div><strong style="color:#16a34a">${pass == null ? '—' : pass + '%'}</strong><span>Pass rate</span></div>
-              <div><strong style="color:${lowCount > 0 ? '#b91c1c' : 'var(--ink-3)'}">${lowCount}</strong><span>Need help</span></div>
+              <div><strong>${classScored.length}</strong><span>Scored</span></div>
+              <div><strong style="color:${lowCount > 0 ? '#b91c1c' : 'var(--ink-3)'}">${lowCount == null ? '—' : lowCount}</strong><span>Below KKTP</span></div>
             </div>
           </div>
         `;

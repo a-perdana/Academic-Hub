@@ -363,10 +363,10 @@ td.action-cell { overflow: visible; white-space: nowrap; }
       </select>
       <select id="filterLevel">
         <option value="">All levels</option>
-        <option value="Induction">Induction</option>
-        <option value="Developing">Developing</option>
-        <option value="Proficient">Proficient</option>
-        <option value="Lead">Lead</option>
+        <option value="induction">Post-Induction</option>
+        <option value="developing">Developing</option>
+        <option value="proficient">Proficient</option>
+        <option value="lead">Lead</option>
       </select>
       <select id="filterStatus">
         <option value="">All statuses</option>
@@ -496,6 +496,17 @@ import { collection, query, where, orderBy, getDocs, doc, updateDoc, serverTimes
 const FOCI_LABELS = ['Learning Intentions', 'Student Engagement', 'Classroom Climate', 'Instructional Strategy', 'Formative Monitoring'];
 
 let allAppraisals = [];
+// Stored level ids are lowercase; `induction` is the Post-Induction level
+// (Teacher Appraisal: Handbook 26-27, "Appraisal Level Visibility").
+const LEVEL_LABELS = { induction: 'Post-Induction', developing: 'Developing', proficient: 'Proficient', lead: 'Lead' };
+const LEVEL_KEYS   = { induction: 'I', developing: 'D', proficient: 'P', lead: 'L' };
+const levelLabel = (l) => LEVEL_LABELS[l] || l || 'not set';
+const recordKind = (a) => a.sessionType === 'endofyear' ? 'Annual record'
+  : `Observation${a.semester ? ' · S' + a.semester : ''}${a.voided ? ' · voided' : ''}`;
+// F1–F4 are stored as 1–4 means; only the composite is a 0–100 score.
+const meanBar = (val) => typeof val === 'number'
+  ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${Math.max(0, Math.min(100, val / 4 * 100))}%"></div></div><span class="score-pct">${val.toFixed(2)}</span></div>`
+  : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
 let allWalkthroughs = [];
 let disputeTargetId = null;
 
@@ -578,7 +589,7 @@ function renderAppraisals() {
   let rows = allAppraisals.filter(a => {
     if (search && !a.teacherName?.toLowerCase().includes(search)) return false;
     if (year   && a.academicYear !== year) return false;
-    if (level  && !a.level?.startsWith(level)) return false;
+    if (level  && a.level !== level) return false;
     if (status && a.status !== status) return false;
     return true;
   });
@@ -590,15 +601,10 @@ function renderAppraisals() {
   }
 
   tbody.innerHTML = rows.map(a => {
-    const levelKey = a.level?.[0] || 'I';
-    const levelLabel = a.level?.split(' ')[0] || '—';
+    const levelKey = LEVEL_KEYS[a.level] || 'I';
     const isDisputed = a.disputed && a.disputeStatus === 'open';
     const statusClass = isDisputed ? 'pill-disputed' : `pill-${a.status || 'draft'}`;
     const statusLabel = isDisputed ? '⚠ Disputed' : (a.status || 'draft').charAt(0).toUpperCase() + (a.status||'draft').slice(1);
-
-    const scoreBar = (val) => val != null
-      ? `<div class="score-bar-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${val}%"></div></div><span class="score-pct">${Math.round(val)}%</span></div>`
-      : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
 
     const composite = a.compositePercent != null
       ? `<span style="font-weight:700;font-size:.88rem;color:#1e293b;">${Math.round(a.compositePercent)}%</span>`
@@ -607,13 +613,13 @@ function renderAppraisals() {
     const canFlag = a.status === 'finalised' && !a.disputed;
 
     return `<tr>
-      <td style="font-weight:600;">${esc(a.teacherName||'—')}</td>
-      <td style="color:#475569;">${esc(a.schoolId||'—')} · ${esc(a.subject||'—')}</td>
+      <td style="font-weight:600;">${esc(a.teacherName||'—')}<div style="font-size:.7rem;color:#94a3b8;font-weight:500;">${esc(recordKind(a))}</div></td>
+      <td style="color:#475569;">${esc(a.school||a.schoolId||'—')} · ${esc(a.subject||'—')}</td>
       <td style="color:#64748b;">${esc(a.academicYear||'—')}</td>
-      <td><span class="level-badge level-${levelKey}">${levelLabel}</span></td>
-      <td>${scoreBar(a.f1Score)}</td>
-      <td>${scoreBar(a.f2Score)}</td>
-      <td>${scoreBar(a.f3Score)}</td>
+      <td><span class="level-badge level-${levelKey}">${esc(levelLabel(a.level))}</span></td>
+      <td>${meanBar(a.f1Score)}</td>
+      <td>${meanBar(a.f2Score)}</td>
+      <td>${meanBar(a.f3Score)}</td>
       <td>${composite}</td>
       <td><span class="status-pill ${statusClass}">${statusLabel}</span></td>
       <td class="action-cell" style="display:flex;gap:6px;align-items:center;">
@@ -686,22 +692,29 @@ function openAppraisalModal(id) {
   if (!a) return;
   document.getElementById('aModalTitle').textContent = `Appraisal — ${a.teacherName || '—'}`;
 
-  const scoreRow = (label, val) => `
+  // F1–F4 are 1–4 means (shown as x.xx / 4); the composite is a 0–100 score.
+  const scoreRow = (label, val, isPercent) => {
+    const has = typeof val === 'number';
+    const width = has ? Math.max(0, Math.min(100, isPercent ? val : val / 4 * 100)) : 0;
+    return `
     <div class="score-row-detail">
       <span class="score-label-detail">${label}</span>
-      ${val != null
-        ? `<div class="score-bar-bg" style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div class="score-bar-fill" style="width:${val}%;background:#7c3aed;height:100%;border-radius:3px;"></div></div><span class="score-pct" style="font-size:.75rem;font-weight:700;color:#475569;white-space:nowrap;">${Math.round(val)}%</span>`
+      ${has
+        ? `<div class="score-bar-bg" style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div class="score-bar-fill" style="width:${width}%;background:#7c3aed;height:100%;border-radius:3px;"></div></div><span class="score-pct" style="font-size:.75rem;font-weight:700;color:#475569;white-space:nowrap;">${isPercent ? val.toFixed(1) + '%' : val.toFixed(2) + ' / 4'}</span>`
         : '<span style="color:#cbd5e1;font-size:.78rem;flex:1;">Not scored</span>'
       }
     </div>`;
+  };
+  const ey = a.phase === 'early_years';
 
   document.getElementById('aModalBody').innerHTML = `
     <div class="detail-section">
       <div class="detail-section-title">Teacher Information</div>
       <div class="detail-grid">
         <div class="detail-item"><div class="detail-item-label">Name</div><div class="detail-item-value">${esc(a.teacherName||'—')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Level</div><div class="detail-item-value">${esc(a.level||'—')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">School</div><div class="detail-item-value">${esc(a.schoolId||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Level</div><div class="detail-item-value">${esc(levelLabel(a.level))}${ey ? ' · Early Years' : ''}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Record</div><div class="detail-item-value">${esc(recordKind(a))}</div></div>
+        <div class="detail-item"><div class="detail-item-label">School</div><div class="detail-item-value">${esc(a.school||a.schoolId||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(a.subject||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Academic Year</div><div class="detail-item-value">${esc(a.academicYear||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(a.yearGroup||'—')}</div></div>
@@ -718,9 +731,10 @@ function openAppraisalModal(id) {
     <div class="detail-section">
       <div class="detail-section-title">Scores</div>
       ${scoreRow('F1 Admin', a.f1Score)}
-      ${scoreRow('F2 Observation', a.f2Score)}
+      ${scoreRow(a.f2Annual ? 'F2 Observation (annual)' : 'F2 Observation', a.f2Score)}
       ${scoreRow('F3 Work', a.f3Score)}
-      ${scoreRow('Composite', a.compositePercent)}
+      ${ey ? '<div class="score-row-detail"><span class="score-label-detail">F4 Survey</span><span style="color:#94a3b8;font-size:.78rem;flex:1;">Not administered at Early Years</span></div>' : scoreRow('F4 Survey', a.surveyMean)}
+      ${scoreRow('Composite', a.compositePercent, true)}
       ${a.predicate ? `<div style="margin-top:6px;font-size:.83rem;font-weight:600;">Predicate: <span style="color:#7c3aed;">${esc(a.predicate)}</span></div>` : ''}
     </div>
     <div class="detail-section">

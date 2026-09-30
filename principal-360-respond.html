@@ -109,7 +109,7 @@ body { margin: 0; padding-top: 62px; font-family: 'DM Sans', system-ui, sans-ser
   <div class="page-header">
     <div class="eyebrow">Principal 360° · Anonymous feedback</div>
     <h1>Annual Leadership Review — Your Voice</h1>
-    <p>Your responses are anonymous and combined with others before any human reads them. Min 5 respondents per cohort before any aggregate is shown to anyone (framework anonymity guarantee).</p>
+    <p>Your responses are anonymous and combined with others before anyone reads them. A group's results are shown only when at least 5 people from that group have answered, and individual responses are never shared with the principal or the Foundation Representative.</p>
   </div>
   <div id="content"><div class="loading-state">Loading…</div></div>
 </div>
@@ -138,7 +138,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.body.style.display = '';
 
   if (!CYCLE_ID || !COHORT) {
-    showAccessDenied('Missing cycle or cohort parameter. Use the link emailed by your principal\'s office.');
+    showAccessDenied('Missing cycle or cohort parameter. Please use the full response link you were sent.');
     return;
   }
 
@@ -194,14 +194,18 @@ function render() {
     `;
   }).join('');
 
-  const narrativeFields = (framework.narrative_fields || []).filter(nf =>
-    !nf.cohorts || nf.cohorts.includes(COHORT) || nf.cohorts.includes('all')
-  );
+  // Framework shape: narrative_fields[].applies_to_cohorts[] + .text
+  // (principal-360-framework-v1.json). NQ3 is not asked of students.
+  const narrativeFields = (framework.narrative_fields || []).filter(nf => {
+    const cohorts = nf.applies_to_cohorts || nf.cohorts;
+    return !cohorts || cohorts.includes(COHORT) || cohorts.includes('all');
+  });
 
   root.innerHTML = `
     <div class="charter-banner">
       <strong>You are responding as: ${escapeHtml(cohortLabel)}</strong>
       ${escapeHtml(framework.question_bank?.common_instructions_to_respondents || 'Your responses are anonymous and aggregated. No individual response is identifiable.')}
+      ${cycle?.window === 'W17' ? '<br><br>This is the mid-year round. It is formative feedback for the principal only and does not count toward the appraisal score.' : ''}
     </div>
 
     ${focusCards}
@@ -211,9 +215,9 @@ function render() {
         <h2 class="focus-head">Open feedback</h2>
         ${narrativeFields.map(nf => `
           <div style="margin-bottom: 14px;">
-            <label style="display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
+            <label style="display:block;font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px;">${escapeHtml(nf.text || nf.label || nf.id)}${nf.required ? ' *' : ''}</label>
             ${nf.description ? `<p style="font-size:11.5px;color:var(--ink-3);margin:0 0 6px;line-height:1.5;">${escapeHtml(nf.description)}</p>` : ''}
-            <textarea aria-label="${escapeAttr(nf.label)}…" class="notes-area" data-narr="${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…"></textarea>
+            <textarea aria-label="${escapeAttr(nf.text || nf.label || nf.id)}" class="notes-area" data-narr="${escapeAttr(nf.id)}" placeholder="Optional…"></textarea>
           </div>
         `).join('')}
       </div>

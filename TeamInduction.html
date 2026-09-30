@@ -108,7 +108,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
       <h1 class="page-hero__title">Team Induction</h1>
-      <p class="page-hero__desc">The first-year inductions at your school. School leaders have read access to their team's progress, observation cycles, and pulse roll-up. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the mentee opts to share at school-leader level. Aggregate signals are.</p>
+      <p class="page-hero__desc">Teacher Induction at your school — a support view of each new teacher's status, observation write-ups and weekly pulse. It is not a separate tracker: the Principal assigns the colleague and an eligible mentor, and the Teacher Induction Coordinator keeps the school's live records in the central Induction Control Centre. Charter Non-Negotiable 2: individual journal entries are not visible to you unless the teacher opts to share at school-leader level.</p>
     </div>
     <div class="page-hero__kpis" id="heroKpis" style="display:none;">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -124,12 +124,12 @@ body { padding-top: 62px; }
       <div class="page-hero__kpi">
         <div class="page-hero__kpi-num" id="kpiCompleted">—</div>
         <div class="page-hero__kpi-lbl">Completed</div>
-        <div class="page-hero__kpi-sub">Y1 cohort</div>
+        <div class="page-hero__kpi-sub">inductions</div>
       </div>
       <div class="page-hero__kpi">
         <div class="page-hero__kpi-num" id="kpiAlarms">—</div>
-        <div class="page-hero__kpi-lbl">Pulse alarms</div>
-        <div class="page-hero__kpi-sub">2-week low</div>
+        <div class="page-hero__kpi-lbl">Pulse follow-ups</div>
+        <div class="page-hero__kpi-sub">two hard weeks in a row</div>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@ body { padding-top: 62px; }
 <div class="page-wrap">
 
   <div class="charter-banner">
-    <strong>Watch the pulses, not the journals.</strong> A pulse trend dropping for two consecutive weeks is the system's earliest warning that a new teacher is struggling. Aim for a 1:1 with the mentor pair within 7 days of an alarm — the Charter says induction is care, not surveillance.
+    <strong>Watch the pulses, not the journals.</strong> Two difficult weekly pulses in a row is an <strong>Amber</strong> flag: follow up with the teacher and the mentor now, before the programme becomes Red. It is care, not surveillance — a pulse is never an evaluation and never becomes appraisal evidence. Record the flag in the Induction Control Centre, not here.
   </div>
 
   <div id="loadingState" style="padding:40px;text-align:center;color:var(--ink-3);">Loading team inductions…</div>
@@ -185,7 +185,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     if (assignments.length === 0) {
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('content').style.display = '';
-      document.getElementById('content').innerHTML = `<div class="empty-state"><h3>No active inductions at your school</h3><p>The HQ Induction Coordinator at Central Hub assigns mentors and mentees together at the start of each cohort.</p></div>`;
+      document.getElementById('content').innerHTML = `<div class="empty-state"><h3>No inductions linked for your school yet</h3><p>The Principal assigns each new teacher's colleague and an eligible, certified mentor, and the Teacher Induction Coordinator records the pairing in the central Induction Control Centre. Once Eduversal links the pairing in the Hubs, the mentor can write up observations and it appears here.</p></div>`;
       return;
     }
 
@@ -244,6 +244,10 @@ function avgPulseScore(uid) {
   return (pulses.reduce((a, p) => a + p.score, 0) / pulses.length).toFixed(1);
 }
 
+// The School Leader's two checkpoints (Induction Module: Oversight Guide
+// 26-27 §11-12) exist only on the Teacher track.
+function isTeacherTrack(a) { return !a.programId || /subject_teacher/.test(a.programId); }
+
 function obsCount(uid) {
   return (observationsByMentee[uid] || []).filter(o => o.completedAt).length;
 }
@@ -276,12 +280,12 @@ function render() {
   // Alarms section first.
   let alarmHtml = '';
   if (alarms > 0) {
-    alarmHtml = `<div class="section"><h2 style="color:#991b1b;">⚠ Two-week low-pulse alarms</h2>` + assignments
+    alarmHtml = `<div class="section"><h2 style="color:#991b1b;">⚠ Pulse follow-ups (Amber)</h2>` + assignments
       .filter(a => lowPulseAlarm(a.uid))
       .map(a => {
         const m = menteeProfiles[a.uid];
         const mentor = mentorProfiles[a.mentorUid];
-        return `<div class="alarm-row"><strong>${escapeHtml(m?.displayName || a.uid)}</strong> recorded a hard or very-hard week twice in a row. Reach out to ${escapeHtml(mentor?.displayName || 'their mentor')} within 7 days.</div>`;
+        return `<div class="alarm-row"><strong>${escapeHtml(m?.displayName || a.uid)}</strong> recorded a hard or very-hard week twice in a row. Follow up now with the teacher and ${escapeHtml(mentor?.displayName || 'their mentor')} — support, not an evaluation.</div>`;
       }).join('') + `</div>`;
   }
 
@@ -319,7 +323,8 @@ function render() {
         <span class="sub">${pulseAvg ? 'avg ' + pulseAvg + '/5' : 'no pulses yet'}</span>
       </div>
       <div class="team-info">
-        <a class="action-btn" href="/observation-entry?menteeUid=${encodeURIComponent(a.uid)}&type=formal_evaluation">Q4 formal eval</a>
+        ${isTeacherTrack(a) ? `<a class="action-btn" href="/observation-entry?menteeUid=${encodeURIComponent(a.uid)}&type=integration_checkpoint">Stage 4 checkpoint</a>
+        <a class="action-btn secondary" href="/observation-entry?menteeUid=${encodeURIComponent(a.uid)}&type=completion_review">Stage 5 review</a>` : ''}
       </div>
     </div>`;
   }).join('');
@@ -334,17 +339,17 @@ function render() {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Year-1 Induction · Charter NN2</span>
+      <span class="page-footer__cta-eyebrow">Teacher Induction · Charter NN2</span>
       <h2 class="page-footer__cta-title">Watch the pulses, not the journals.</h2>
-      <p class="page-footer__cta-desc">Two consecutive low pulses are the earliest signal that a new teacher is struggling. Open the Q4 formal evaluation lane or call the mentor pair within seven days — induction is care, not surveillance.</p>
-      <a href="/observation-entry?type=formal_evaluation" class="page-footer__cta-btn">Open formal observation entry <span aria-hidden="true">→</span></a>
+      <p class="page-footer__cta-desc">Two difficult pulses in a row are an Amber flag: follow up with the teacher and the mentor. The School Leader leads the two formal checkpoints — the Stage 4 Integration Checkpoint (end of Semester 2) and the Final Induction Completion Review (end of Semester 3) — on the same developmental rubric. Induction is care, not surveillance.</p>
+      <a href="/handbook?id=handbook_subject_teacher_v2" class="page-footer__cta-btn">Open Induction Module: Teacher <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Team Induction footer navigation">
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">Induction</span>
         <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
-        <a href="/observation-entry" class="page-footer__nav-link">Observation Entry</a>
-        <a href="/handbook?id=eduversal_principal_v1" class="page-footer__nav-link">Principal Handbook</a>
+        <a href="/handbook?id=handbook_subject_teacher_v2" class="page-footer__nav-link">Induction Module: Teacher</a>
+        <a href="/handbook?id=eduversal_principal_v1" class="page-footer__nav-link">Induction Module: Principal</a>
       </div>
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">References</span>

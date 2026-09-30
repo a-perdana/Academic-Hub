@@ -374,9 +374,9 @@ body:has(> .page-footer) > .page-wrap {
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework v1.0 · Part 3</p>
+      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework 26-27 · Part Three</p>
       <h1 class="page-hero__title">AI Maturity Assessment</h1>
-      <p class="page-hero__desc">The yearly school-level look at how your school is doing with AI, across six areas of school life. Honest ratings only — the Eduversal team checks during the appraisal visit. Pick two areas to grow by one step each year, not all six. Ratings lock once you submit.</p>
+      <p class="page-hero__desc">The yearly school self-assessment of AI integration, across six areas of school life. It is developmental: it helps your school plan improvement and professional learning. It is not validated or turned into a School Appraisal rating, and it keeps six separate area levels — no single overall score. Ratings lock once you mark the profile as final.</p>
       <div id="heroStatusChip" class="hero-status" style="display:none;">—</div>
     </div>
   </div>
@@ -384,8 +384,8 @@ body:has(> .page-footer) > .page-wrap {
 
 <main class="page-wrap">
   <div id="noAccessMsg" class="no-access" style="display:none;">
-    Only the School Principal, Academic Coordinator, or Foundation Representative can fill in this
-    self-assessment. Read access is open to all school leadership.
+    Only the School Principal records the agreed ratings in the Hub. Read access is open to all
+    school leadership.
   </div>
 
   <section class="info-strip" id="infoStrip">
@@ -393,46 +393,49 @@ body:has(> .page-footer) > .page-wrap {
       <div class="info-step" data-step="draft" id="infoStepDraft">
         <div class="info-step__num">1</div>
         <div class="info-step__title">
-          You fill this in
-          <span class="info-step__title-actor">School Principal</span>
+          The school self-assesses
+          <span class="info-step__title-actor">Leadership team</span>
         </div>
         <div class="info-step__desc">
-          Rate the school across 6 areas, add evidence, name strengths and improvement areas.
-          Save anytime. Editable until you press Submit.
+          The leadership team, department heads and representative teachers rate the school across
+          6 areas, add evidence, and name strengths and improvement areas. The AI Integration
+          Coordinator coordinates it; the Principal records the agreed ratings here. Save anytime.
         </div>
       </div>
       <div class="info-step" data-step="submitted" id="infoStepSubmitted">
         <div class="info-step__num">2</div>
         <div class="info-step__title">
-          Submit for the visit
+          Mark as final
           <span class="info-step__title-actor">Locks for school</span>
         </div>
         <div class="info-step__desc">
-          Once submitted, ratings lock. Your submission goes into the Eduversal HQ queue.
-          The validation visit usually happens within the term.
+          Once marked final, the ratings lock and the profile is shared with the Eduversal
+          Academic Directorate. It is not a School Appraisal submission.
         </div>
       </div>
       <div class="info-step" data-step="appraised" id="infoStepAppraised">
         <div class="info-step__num">3</div>
         <div class="info-step__title">
-          Eduversal validates
-          <span class="info-step__title-actor">HQ Director</span>
+          Support planning
+          <span class="info-step__title-actor">Eduversal Academic Directorate</span>
         </div>
         <div class="info-step__desc">
-          The team compares your rating with what they observe, may adjust a step, writes
-          notes, and gives up to 8 concrete recommendations. You see all of it here.
+          Eduversal uses the profile to identify support needs, professional-learning priorities
+          and network trends. It does not validate your ratings or turn them into a score. Any
+          Eduversal notes appear here.
         </div>
       </div>
     </div>
     <div class="info-strip__bottom">
       <div class="info-strip__bottom-icon">i</div>
       <div class="info-strip__bottom-text" id="infoStripBottomText">
-        <strong>Be honest.</strong> Most Eduversal schools in 2026 are at Step 1 or 2 on most
-        areas — that is normal. Inflated ratings are a network-wide red line: the HQ team will
-        see the gap during the visit, and the school will set goals it cannot reach.
+        <strong>Be honest and reflective.</strong> This is a developmental self-assessment, done
+        once a year, usually at the start of the academic year. School Appraisal does not score it;
+        where AI practice is relevant, appraisers look at the same evidence inside the five School
+        Appraisal domains instead.
         <span class="info-meta">
-          5 steps (Emerging → Leading) · 6 areas · annual cycle · read access: School Principal,
-          Academic Coordinator, Foundation Rep, Cambridge Coordinator.
+          5 levels (Emerging → Leading) · 6 areas · annual cycle · no single overall score ·
+          read access: School Principal, Academic Coordinator, Foundation Rep, Cambridge Coordinator.
         </span>
       </div>
     </div>
@@ -457,9 +460,9 @@ body:has(> .page-footer) > .page-wrap {
     <div class="priority-card">
       <h3>Priority Actions for Next Year</h3>
       <p>
-        Two-area rule from the Eduversal Leader Playbook: pick a small number (1-4) of specific
-        actions your school will take. Each should be plain, doable, and tied to one of the two
-        areas you are growing. Up to 6 items, each up to 280 characters.
+        Identify the priority actions for the coming year from your assessment results. Keep each
+        one plain and doable, and link it to the area it will improve. Up to 6 items, each up to
+        280 characters.
       </p>
       <div id="priorityList"></div>
       <button class="list-add-btn" id="btnAddPriority">+ Add priority action</button>
@@ -471,7 +474,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="save-status" id="saveStatus">—</div>
     <div class="submit-btns">
       <button class="btn-save" id="btnSave">Save draft</button>
-      <button class="btn-submit" id="btnSubmit">Submit for appraisal</button>
+      <button class="btn-submit" id="btnSubmit">Mark as final</button>
     </div>
   </div>
 </main>
@@ -482,9 +485,9 @@ body:has(> .page-footer) > .page-wrap {
       <span class="page-footer__cta-eyebrow">AICF · Institutional Track</span>
       <h2 class="page-footer__cta-title">Once a year. Honestly. Across all six areas.</h2>
       <p class="page-footer__cta-desc">
-        This is the school's annual conversation with Eduversal HQ about AI maturity. Save drafts
-        as the leadership team agrees, submit when the Principal signs off, see the validated
-        view after the appraisal visit.
+        A developmental self-assessment, not an appraisal. Save drafts as the leadership team
+        agrees and mark the profile final when the Principal signs off. Eduversal uses it to plan
+        support and professional learning; it never becomes a School Appraisal score or a ranking.
       </p>
       <a href="/references?doc=aicf-v1-part3-institutional" class="page-footer__cta-btn">
         Read the framework verbatim <span aria-hidden="true">→</span>
@@ -508,7 +511,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">AI Competency Framework v1.0 · Part 3 — Institutional</span>
+    <span class="page-footer__meta-right">AI Competency Framework 26-27 · Part Three — Institutional</span>
   </div>
 </footer>
 
@@ -516,7 +519,7 @@ body:has(> .page-footer) > .page-wrap {
 
 <script type="module">
 import {
-  getFirestore, doc, getDoc, setDoc, serverTimestamp
+  getFirestore, doc, getDoc, setDoc, serverTimestamp, deleteField
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 // Set in authReady from calendar_settings/current (single source of truth).
@@ -639,7 +642,6 @@ function blankDoc() {
     submittedBy: state.user.uid,
     status: 'draft',
     domainRatings,
-    overallLevel: null,
     priorityActions: []
   };
 }
@@ -653,8 +655,8 @@ function renderHeroStatus() {
   }
   const map = {
     draft:     { label: '○ Draft — not yet submitted', cls: 'draft' },
-    submitted: { label: '◐ Submitted — waiting for the Eduversal appraisal visit', cls: 'submitted' },
-    appraised: { label: '✓ Validated by the Eduversal team', cls: 'appraised' }
+    submitted: { label: '◐ Final — shared with Eduversal', cls: 'submitted' },
+    appraised: { label: '✓ Eduversal notes added', cls: 'appraised' }
   };
   const m = map[state.status] || { label: state.status, cls: '' };
   el.className = 'hero-status ' + m.cls;
@@ -699,31 +701,31 @@ function renderInfoStrip() {
   if (!bottom) return;
   if (state.status === 'submitted') {
     bottom.innerHTML = `
-      <strong>Submitted on ${state.doc?.submittedAt?.toDate ? state.doc.submittedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
-      Your ratings are locked until the Eduversal appraisal visit. You can still read everything
-      here. The HQ team will validate during the next on-site visit; no action needed from your side.
+      <strong>Marked final on ${state.doc?.submittedAt?.toDate ? state.doc.submittedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
+      Your ratings are locked and shared with the Eduversal Academic Directorate for support
+      planning. You can still read everything here. No action is needed from your side.
       <span class="info-meta">
-        Want to amend something before the visit? Email the HQ team and they can reopen the draft.
+        Want to change something? Email the Eduversal team and they can reopen the draft.
       </span>
     `;
   } else if (state.status === 'appraised') {
     bottom.innerHTML = `
-      <strong>Validated by Eduversal on ${state.doc?.appraisal?.appraisedAt?.toDate ? state.doc.appraisal.appraisedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
-      Scroll any area to see the validated step, observed evidence, and the team's notes.
-      The Eduversal recommendations card at the bottom lists the concrete actions HQ will support
-      the school with this year.
+      <strong>Eduversal notes added on ${state.doc?.appraisal?.appraisedAt?.toDate ? state.doc.appraisal.appraisedAt.toDate().toLocaleDateString('en-GB') : '—'}.</strong>
+      Scroll any area to see the Eduversal team's notes. They are developmental support notes —
+      not a validation of your ratings and not a School Appraisal rating.
       <span class="info-meta">
         Next year you reopen a fresh assessment for the new academic year — this one stays as a record.
       </span>
     `;
   } else {
     bottom.innerHTML = `
-      <strong>Be honest.</strong> Most Eduversal schools in 2026 are at Step 1 or 2 on most
-      areas — that is normal. Inflated ratings are a network-wide red line: the HQ team will
-      see the gap during the visit, and the school will set goals it cannot reach.
+      <strong>Be honest and reflective.</strong> This is a developmental self-assessment, done
+      once a year, usually at the start of the academic year. School Appraisal does not score it;
+      where AI practice is relevant, appraisers look at the same evidence inside the five School
+      Appraisal domains instead.
       <span class="info-meta">
-        5 steps (Emerging → Leading) · 6 areas · annual cycle · read access: School Principal,
-        Academic Coordinator, Foundation Rep, Cambridge Coordinator.
+        5 levels (Emerging → Leading) · 6 areas · annual cycle · no single overall score ·
+        read access: School Principal, Academic Coordinator, Foundation Rep, Cambridge Coordinator.
       </span>
     `;
   }
@@ -758,7 +760,7 @@ function renderDomains() {
       <div class="target-row-label">Target step for next year</div>
       <div class="target-row" data-target="targetLevel"></div>
 
-      <div class="sub-label">Evidence <span class="sub-hint">(2-4 short sentences — what we can show the appraisal team)</span></div>
+      <div class="sub-label">Evidence <span class="sub-hint">(2-4 short sentences — what the school can point to)</span></div>
       <div class="evidence-list"></div>
       <button class="list-add-btn" data-add="evidence" ${locked || r.evidence.length >= MAX_EVIDENCE ? 'disabled' : ''}>+ Add evidence</button>
       <span class="list-counter ${r.evidence.length > MAX_EVIDENCE ? 'over' : ''}">${r.evidence.length} / ${MAX_EVIDENCE}</span>
@@ -844,19 +846,19 @@ function renderAppraisalBlock(av, domainId) {
   const evi = Array.isArray(av.evidence) ? av.evidence : [];
   const str = Array.isArray(av.strengths) ? av.strengths : [];
   const imp = Array.isArray(av.improvementAreas) ? av.improvementAreas : [];
-  const myCur = state.doc.domainRatings[domainId]?.currentLevel;
-  const adjustNote = (av.currentLevel != null && myCur != null && av.currentLevel !== myCur)
-    ? `<p><strong>Adjusted:</strong> Your team marked ${myCur}, Eduversal validated as ${av.currentLevel}.</p>` : '';
+  // Older records carry an Eduversal "appraisal" block. The live AICF 26-27:
+  // the self-assessment "is not validated or converted into a School Appraisal
+  // rating" — so it is shown as developmental support notes only.
   return `
     <div class="appraisal-block">
-      <h4>✓ Validated by Eduversal team</h4>
-      ${adjustNote}
+      <h4>Eduversal notes</h4>
+      <p style="font-size:12px;">Developmental support notes. They do not validate or change your ratings and are not a School Appraisal rating.</p>
       <div class="av-row">
-        <div><span class="av-label">Validated current step:</span> ${av.currentLevel ?? '—'}</div>
-        <div><span class="av-label">Validated target:</span> ${av.targetLevel ?? '—'}</div>
+        <div><span class="av-label">Step noted:</span> ${av.currentLevel ?? '—'}</div>
+        <div><span class="av-label">Target noted:</span> ${av.targetLevel ?? '—'}</div>
       </div>
-      ${evi.length ? `<p style="margin-top:8px;"><strong>Evidence observed:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${evi.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
-      ${str.length ? `<p style="margin-top:8px;"><strong>Validated strengths:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${str.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
+      ${evi.length ? `<p style="margin-top:8px;"><strong>Evidence noted:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${evi.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
+      ${str.length ? `<p style="margin-top:8px;"><strong>Strengths noted:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${str.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
       ${imp.length ? `<p style="margin-top:8px;"><strong>Improvement areas:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${imp.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
     </div>
   `;
@@ -956,12 +958,12 @@ function renderSaveStatus() {
   }
   if (state.status === 'submitted') {
     el.className = 'save-status';
-    el.textContent = 'Submitted — waiting for the Eduversal appraisal visit. Locked.';
+    el.textContent = 'Final — shared with Eduversal. Locked.';
     return;
   }
   if (state.status === 'appraised') {
     el.className = 'save-status';
-    el.textContent = 'Validated by the Eduversal team. Read-only.';
+    el.textContent = 'Eduversal notes added. Read-only.';
     return;
   }
   if (state.dirty) {
@@ -974,7 +976,6 @@ function renderSaveStatus() {
 }
 
 function renderAll() {
-  computeOverallLevel();
   renderHeroStatus();
   renderInfoStrip();
   renderDomains();
@@ -987,24 +988,19 @@ function renderAll() {
   // Doc stat — colour-coded status pill
   const stat = document.getElementById('docStat');
   const S = {
-    appraised: ['st-validated', 'Validated', 'by Eduversal HQ'],
-    submitted: ['st-submitted', 'Submitted', '— awaiting validation'],
+    appraised: ['st-validated', 'Final', '— Eduversal notes added'],
+    submitted: ['st-submitted', 'Final', '— shared with Eduversal'],
     draft:     ['st-draft', 'Draft', 'in progress'],
   }[state.status] || ['st-none', 'Not started', ''];
   stat.className = 'stat status-pill ' + S[0];
   stat.innerHTML = `<span class="status-dot"></span><strong>${S[1]}</strong>${S[2] ? ' ' + S[2] : ''}`;
 }
 
-function computeOverallLevel() {
-  const vals = DOMAINS
-    .map(d => state.doc.domainRatings[d.id]?.currentLevel)
-    .filter(v => typeof v === 'number');
-  if (!vals.length) {
-    state.doc.overallLevel = null;
-  } else {
-    state.doc.overallLevel = Math.round(vals.reduce((s, v) => s + v, 0) / vals.length);
-  }
-}
+// No overall level (2026-10-01). The live AICF 26-27, Annex 4: "Schools
+// should retain a six-domain maturity profile rather than reducing the
+// framework to a single official score." The page used to average the six
+// current levels into overallLevel; it no longer computes, shows or stores it,
+// and a save removes the stale value from older records.
 
 function canSubmit() {
   // All 6 domains must have currentLevel + targetLevel + ≥1 evidence + ≥1 strength + ≥1 improvement
@@ -1025,7 +1021,6 @@ function canSubmit() {
 async function saveDraft(silent = false) {
   if (!state.canEdit) return;
   if (state.status === 'submitted' || state.status === 'appraised') return;
-  computeOverallLevel();
   const docId = `${state.schoolId}_${state.academicYear}`;
   const ref = doc(window.db, 'ai_maturity_assessments', docId);
   // Trim empty strings out of lists before writing
@@ -1049,7 +1044,7 @@ async function saveDraft(silent = false) {
     submittedBy: state.user.uid,
     status: state.status === null ? 'draft' : state.status,
     domainRatings: cleanedDomains,
-    overallLevel: state.doc.overallLevel,
+    overallLevel: deleteField(),
     priorityActions: cleanedPriorities,
     updatedAt: serverTimestamp()
   };
@@ -1075,7 +1070,7 @@ async function submitForAppraisal() {
     showToast('Some areas are missing required information.', 'error');
     return;
   }
-  if (!confirm('Submit for the Eduversal appraisal visit?\n\nAfter submitting, the ratings lock. Only the Eduversal team can change them.')) return;
+  if (!confirm('Mark this self-assessment as final?\n\nThe ratings lock and the profile is shared with the Eduversal Academic Directorate for support planning. It is not a School Appraisal submission. Only the Eduversal team can reopen it.')) return;
   // Save first to lock current state, then flip status
   await saveDraft(true);
   const docId = `${state.schoolId}_${state.academicYear}`;
@@ -1084,10 +1079,10 @@ async function submitForAppraisal() {
     await setDoc(ref, { status: 'submitted', submittedAt: serverTimestamp() }, { merge: true });
     state.status = 'submitted';
     renderAll();
-    showToast('Submitted. The Eduversal team will be notified at the next appraisal cycle.', 'success');
+    showToast('Marked final and shared with Eduversal.', 'success');
   } catch (err) {
     console.error('[ai-maturity] submit failed', err);
-    showToast('Submit failed: ' + (err.code || err.message), 'error');
+    showToast('Could not mark as final: ' + (err.code || err.message), 'error');
   }
 }
 
@@ -1121,7 +1116,7 @@ document.addEventListener('authReady', async ({ detail }) => {
   }
   if (!state.schoolId) {
     document.getElementById('loadingState').textContent =
-      'Your profile does not have a school yet. Ask Eduversal HQ to set your school in /console.';
+      'Your profile does not have a school yet. Ask the Eduversal team to set your school.';
     return;
   }
 

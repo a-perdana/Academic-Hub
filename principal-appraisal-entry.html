@@ -189,6 +189,18 @@ body:has(> .page-footer) > .page-wrap {
   .page-wrap { padding-left: 14px; padding-right: 14px; }
 }
 
+/* Set-up, evidence and confidential blocks (2026-10-01 live-doc alignment) */
+.help-line { font-size: 12.5px; color: var(--ink-3); line-height: 1.55; margin: 0 0 12px; }
+.setup-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; margin-bottom: 8px; }
+.setup-grid .narr-field { font-size: 12px; font-weight: 600; color: var(--ink); display: flex; flex-direction: column; gap: 6px; margin: 0; }
+.notes-select { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; font-size: 13px; background: var(--white); color: var(--ink); }
+.notes-select:focus { outline: none; border-color: var(--accent); }
+.evidence-list { margin: 6px 0 0 18px; font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.narr-field label.check-line { display: flex; gap: 8px; align-items: center; font-weight: 500; font-size: 13px; color: var(--ink-2); margin: 4px 0; }
+.readonly-text { white-space: pre-wrap; font-size: 13.5px; color: var(--ink); background: var(--paper); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; line-height: 1.55; }
+.confidential-card { border-color: #fecaca; background: #fffafa; }
+.private-tag { font-size: 11px; font-weight: 700; color: #991b1b; background: #fee2e2; border-radius: 999px; padding: 2px 9px; margin-left: 6px; vertical-align: middle; font-family: 'DM Sans', sans-serif; }
+
 /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
@@ -244,7 +256,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
       <h1 class="page-hero__title">Principal Appraisal</h1>
-      <p class="page-hero__desc">The formal yearly review. Score the principal across F1–F5 plus the leadership composite (F_LEAD); the weighted total maps to an A–F band. F1–F3 draw on cadence, observation, and 360° evidence; F4, F5, and the leadership rows are entered here.</p>
+      <p class="page-hero__desc">The formal yearly review of a principal's leadership, led by the Chief Academic Officer / designated Academic Director (Eduversal). Level-aware weights turn F1–F5 — plus F_LEAD at Lead level — into a composite score (0–100) and an A–F band.</p>
     </div>
   </div>
 </header>
@@ -253,21 +265,22 @@ body:has(> .page-footer) > .page-wrap {
   <aside class="info-strip" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">📝</div>
     <div class="info-strip__body">
-      <h2 class="info-strip__title">The formal once-a-year Principal appraisal</h2>
-      <p class="info-strip__lede">Score the Principal across F1–F5 plus a leadership area. The page adds the weights, works out a composite score, and turns it into an A–F band. You write 6 short narrative paragraphs.</p>
+      <h2 class="info-strip__title">The once-a-year Principal Appraisal</h2>
+      <p class="info-strip__lede">The <strong>Chief Academic Officer / designated Academic Director</strong> (Eduversal) is the primary appraiser: they review the F1–F5 evidence, write the record and sign it off. The <strong>Foundation Representative / General Manager</strong> co-reviews for fairness and co-signs the summary only. The principal reads their own record after sign-off and can add a reflection.</p>
       <ol class="info-strip__flow">
-        <li><strong>Gather your evidence</strong> — your term observations + the 360 results</li>
-        <li><strong>Score F1–F5 + leadership</strong> — the composite + band update live</li>
-        <li><strong>Submit</strong> — one per Principal per academic year; it locks</li>
+        <li><strong>Confirm the set-up</strong> — the level (Developing, Proficient or Lead), the formal launch date, two valid F2 visits (Sept–Oct and Feb–Apr), the year-end 360 and F5</li>
+        <li><strong>Rate and write</strong> — no composite, band or recommendation appears until F5 is complete and two valid F2 records exist</li>
+        <li><strong>Sign off</strong> — the record locks; the FR/GM and the yayasan receive only the composite, band, recommendation and agreed goals</li>
       </ol>
       <div class="info-strip__callout">
         <span class="info-strip__callout-icon" aria-hidden="true">⚠️</span>
-        <span><strong>Submitted appraisals are immutable.</strong> A fair grade with clear narrative helps the Principal grow — be honest, and re-read before you submit.</span>
+        <span><strong>Year 1 is protected Principal Induction — no appraisal.</strong> Coaching records never feed the appraisal, and a signed-off appraisal cannot be changed.</span>
       </div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Foundation Representative</span>
-        <span class="info-strip__pill"><b>Scope:</b> One Principal / year</span>
-        <span class="info-strip__pill"><b>Output:</b> A–F band</span>
+        <span class="info-strip__pill"><b>Writes:</b> Eduversal primary appraiser</span>
+        <span class="info-strip__pill"><b>Co-signs:</b> FR/GM (summary only)</span>
+        <span class="info-strip__pill"><b>Reads own:</b> Principal, after sign-off</span>
+        <span class="info-strip__pill"><b>Source:</b> Principal Appraisal: Handbook 26-27</span>
       </div>
     </div>
   </aside>
@@ -280,9 +293,9 @@ body:has(> .page-footer) > .page-wrap {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Principal Evaluation · Foundation Rep</span>
-      <h2 class="page-footer__cta-title">F3 comes from the 360°.</h2>
-      <p class="page-footer__cta-desc">The 360° row of this appraisal is driven by anonymous staff, parent, and student feedback. Review the aggregated results before you settle the composite and the band.</p>
+      <span class="page-footer__cta-eyebrow">Principal Evaluation</span>
+      <h2 class="page-footer__cta-title">F3 comes from the year-end 360°.</h2>
+      <p class="page-footer__cta-desc">Only the late-year / year-end 360 cycle feeds F3; the mid-year cycle is formative feedback only. Staff 60% · parent representatives 25% · student-council representatives 15%, and a cohort needs 5 or more responses.</p>
       <a href="/principal-360-results" class="page-footer__cta-btn">Open 360° Results <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Principal Appraisal footer navigation">
@@ -301,7 +314,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Submitted appraisals are immutable · composite → A–F predicate band</span>
+    <span class="page-footer__meta-right">Signed-off appraisals are immutable · FR/GM and yayasan receive the summary only</span>
   </div>
 </footer>
 
@@ -310,49 +323,106 @@ body:has(> .page-footer) > .page-wrap {
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
 <script type="module">
-import { collection, doc, getDoc, setDoc, serverTimestamp }
+import { collection, doc, getDoc, getDocs, query, where, limit, writeBatch, updateDoc, deleteField, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// URL params: ?principalUid=X[&academicYear=2025-2026]
-// ACADEMIC_YEAR/DOC_ID are finalised in authReady from the single source of
-// truth (calendar_settings/current) unless the URL pins a specific year.
+// ─── Principal Annual Appraisal ───────────────────────────────────────
+// Policy source: "Principal Appraisal: Handbook 26-27" (canonical) +
+// Principal Guide 26-27 + Appraiser Guide 26-27. Technical source:
+// resources/principal-appraisal-framework-v1.json (must match the Handbook).
+//
+// Three modes (Handbook §7, §10, §13; Appraiser Guide §8 confidentiality matrix):
+//   appraiser — Chief Academic Officer / designated Academic Director
+//               (AH academic_admin, or central_admin): writes the full record,
+//               signs it off. PNF6 is stored in a separate Eduversal-only doc.
+//   principal — reads their own record after sign-off (never PNF6) and may
+//               add their reflection (PNF5) once.
+//   fr        — Foundation Representative / General Manager: reads ONLY the
+//               governance summary (composite + band + recommendation + agreed
+//               goals) and co-signs it. Never item-level data.
+//
+// Data layout:
+//   principal_annual_appraisals/{principalUid}_{academicYear}          full record
+//   principal_annual_appraisals/{id}/confidential/note                 PNF6
+//   principal_annual_appraisals/{id}/governance/summary                triplet + goals + frCoSign
+//
+// URL params: ?principalUid=X[&academicYear=2026-2027]
 const params = new URLSearchParams(window.location.search);
-const PRINCIPAL_UID = params.get('principalUid');
+let PRINCIPAL_UID = params.get('principalUid');
 let ACADEMIC_YEAR = params.get('academicYear') || '';
 let DOC_ID = null;
 
+// Handbook §6 — used only if the loaded framework predates weights.by_level.
+const FALLBACK_LEVEL_WEIGHTS = {
+  developing: { F1: 0.20, F2: 0.45, F3: 0.15, F4: 0.15, F5: 0.05 },
+  proficient: { F1: 0.25, F2: 0.40, F3: 0.15, F4: 0.15, F5: 0.05 },
+  lead:       { F1: 0.20, F2: 0.35, F3: 0.15, F4: 0.15, F5: 0.05, F_LEAD: 0.10 },
+};
+const LEVELS = [
+  { id: 'developing', label: 'Developing (roughly Years 2–3)' },
+  { id: 'proficient', label: 'Proficient (roughly Years 4–6)' },
+  { id: 'lead',       label: 'Lead (roughly Year 7+)' },
+];
+const E_D_VALUE = { E: 4, D: 2 };                      // Handbook §5: Not Observed is excluded
+const F2_WINDOWS = ['visit_1_sep_oct', 'visit_2_feb_apr'];
+const RECOMMENDATION_LABELS = {
+  continue: 'Continue',
+  development_plan: 'Development plan',
+  non_renewal: 'Non-renewal',
+};
+
 let framework = null;
 let principal = null;
-let observerProfile = null;
+let me = null;
+let mode = null;
+let observations = [];       // valid F2 records (Handbook §14)
+let otherObservations = [];  // submitted visits that are formative context only
+let cycles = [];             // year-end (W38) 360 cycles for this principal + year
+let aggregate = null;        // principal_360_aggregates for the chosen cycle
+let frCandidates = [];
+let confidentialNote = '';
+let hadConfidentialNote = false;
+let governance = null;
 let formData = {
-  scores: {},     // { 'F1-1': 3, 'F2-1': 4, ... }
-  narratives: {}, // { PNF1: '...', ... }
+  scores: {},
+  narratives: {},
   status: 'draft',
+  appraisalLevel: '',
+  yearsInRole: '',
+  formalLaunchDate: '',
+  coReviewerUid: '',
+  coReviewerName: '',
+  f5Completion: { selfAssessment1: false, selfAssessment2: false, annualReflection: false },
+  f3CycleId: '',
+  f2FallbackDates: '',
+  f2FallbackNote: '',
 };
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   if (typeof window.__loadAcademicNavbar === 'function') {
     window.__loadAcademicNavbar('principal-appraisal-entry', { user, profile });
   }
-  observerProfile = profile;
+  me = { user, profile };
   document.body.style.display = '';
 
-  // Audience: HQ Director / Foundation Rep / academic_admin / central_admin.
-  // The Principal themselves can read but not edit (rule-level).
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
-  const eligible = isAdmin || ahSubs.includes('foundation_representative');
-  if (!eligible) {
-    showAccessDenied('This appraisal form is restricted to Foundation Representatives and Academic Admins.');
-    return;
-  }
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isFR = ahSubs.includes('foundation_representative');
+  const isPrincipal = ahSubs.includes('school_principal');
 
+  if (!PRINCIPAL_UID && isPrincipal && !isAppraiser) PRINCIPAL_UID = user.uid;
   if (!PRINCIPAL_UID) {
-    showAccessDenied('Missing principalUid in URL. Open this form from the principal\'s record or the appraisal cycle.');
+    showAccessDenied('Missing principalUid in the URL. Open this page from the Principal Evaluation hub.');
+    return;
+  }
+  if (isAppraiser) mode = 'appraiser';
+  else if (user.uid === PRINCIPAL_UID) mode = 'principal';
+  else if (isFR) mode = 'fr';
+  else {
+    showAccessDenied('The annual appraisal record is written by the Chief Academic Officer / designated Academic Director. The principal reads their own record after sign-off, and the Foundation Representative / General Manager reads the governance summary only.');
     return;
   }
 
-  // Finalise academic year: URL param wins; otherwise calendar_settings/current.
   if (!ACADEMIC_YEAR) {
     ACADEMIC_YEAR = (window.getCurrentAcademicYear && window.getCurrentAcademicYear())
       || (() => { const n = new Date(), y = n.getFullYear(); return n.getMonth() >= 6 ? `${y}-${y+1}` : `${y-1}-${y}`; })();
@@ -360,97 +430,375 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   DOC_ID = `${PRINCIPAL_UID}_${ACADEMIC_YEAR}`;
 
   try {
-    // Fetch the framework cross-origin from CH /references-data
-    const fwRes = await fetch('https://centralhub.eduversal.org/references-data/frameworks/principal-appraisal-framework-v1.json');
-    if (!fwRes.ok) throw new Error('Could not load framework (HTTP ' + fwRes.status + ')');
-    framework = await fwRes.json();
+    try {
+      const pSnap = await getDoc(doc(window.db, 'users', PRINCIPAL_UID));
+      if (pSnap.exists()) principal = pSnap.data();
+    } catch (_) { /* profile is display-only */ }
 
-    // Fetch principal profile
-    const pSnap = await getDoc(doc(window.db, 'users', PRINCIPAL_UID));
-    if (pSnap.exists()) principal = pSnap.data();
-
-    // Load existing draft / submitted appraisal
-    const aSnap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID));
-    if (aSnap.exists()) {
-      const d = aSnap.data();
-      formData = { ...formData, ...d };
-      if (d.status === 'submitted') {
-        showAccessDenied('This appraisal is submitted and immutable. Open the next year cycle to record a new appraisal.');
-        return;
-      }
-    }
-
-    render();
+    if (mode === 'fr') { await bootFR(); return; }
+    framework = await loadFramework();
+    if (mode === 'principal') { await bootPrincipal(); return; }
+    await bootAppraiser();
   } catch (err) {
     console.error('boot', err);
     document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown error')}</p></div>`;
   }
 });
 
+async function loadFramework() {
+  // Local copy first (ships with this hub's build); Central Hub mirror as fallback.
+  const urls = [
+    '/resources/principal-appraisal-framework-v1.json',
+    'https://centralhub.eduversal.org/references-data/frameworks/principal-appraisal-framework-v1.json',
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return await res.json();
+    } catch (_) { /* try the next source */ }
+  }
+  throw new Error('Could not load the Principal Appraisal Framework.');
+}
+
+// ─── Appraiser mode ───────────────────────────────────────────────────
+async function bootAppraiser() {
+  const aSnap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID));
+  if (aSnap.exists()) {
+    const d = aSnap.data();
+    formData = {
+      ...formData, ...d,
+      scores: { ...(d.scores || {}) },
+      narratives: { ...(d.narratives || {}) },
+      f5Completion: { ...formData.f5Completion, ...(d.f5Completion || {}) },
+    };
+    // Records saved before 2026-10-01 kept PNF6 on the main document.
+    if (d.narratives?.PNF6) { confidentialNote = d.narratives.PNF6; hadConfidentialNote = true; }
+    if (Array.isArray(d.f2FallbackVisitDates)) formData.f2FallbackDates = d.f2FallbackVisitDates.join(', ');
+  }
+  try {
+    const cSnap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'confidential', 'note'));
+    if (cSnap.exists()) { confidentialNote = cSnap.data().text || confidentialNote; hadConfidentialNote = true; }
+  } catch (_) { /* no note yet */ }
+
+  await Promise.all([loadObservations(), loadCycles(), loadFRCandidates()]);
+
+  if (formData.status === 'submitted') {
+    try {
+      const gSnap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'governance', 'summary'));
+      if (gSnap.exists()) governance = gSnap.data();
+    } catch (_) { /* summary not written (legacy record) */ }
+    renderRecord();
+    return;
+  }
+  render();
+}
+
+async function loadObservations() {
+  observations = []; otherObservations = [];
+  try {
+    const snap = await getDocs(query(collection(window.db, 'principal_observations'), where('principalUid', '==', PRINCIPAL_UID)));
+    const [y1, y2] = ACADEMIC_YEAR.split('-').map(Number);
+    const start = `${y1}-07-01`, end = `${y2}-06-30`;
+    const inYear = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(o => o.status === 'submitted' && o.visitDate && o.visitDate >= start && o.visitDate <= end)
+      .sort((a, b) => String(a.visitDate).localeCompare(String(b.visitDate)));
+    observations = inYear.filter(isValidF2);
+    otherObservations = inYear.filter(o => !isValidF2(o));
+  } catch (err) {
+    console.warn('observations', err);
+  }
+}
+
+// Handbook §14 + Appraiser Guide §3: a visit counts toward F2 only if it is a
+// scheduled appraisal visit in one of the two windows and the principal was
+// told in advance that it contributes to Principal Appraisal.
+function isValidF2(o) {
+  return o.visitType === 'scheduled_appraisal_visit' && o.countsTowardF2 === true && F2_WINDOWS.includes(o.f2Window);
+}
+
+async function loadCycles() {
+  cycles = [];
+  try {
+    const snap = await getDocs(query(collection(window.db, 'principal_360_cycles'), where('principalUid', '==', PRINCIPAL_UID)));
+    // Only the late-year / year-end cycle (W38) feeds F3; mid-year (W17) is formative (Handbook §7).
+    cycles = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .filter(c => c.academicYear === ACADEMIC_YEAR && c.window === 'W38');
+  } catch (err) {
+    console.warn('cycles', err);
+  }
+  if (!formData.f3CycleId && cycles.length === 1) formData.f3CycleId = cycles[0].id;
+  await loadAggregate();
+}
+
+async function loadAggregate() {
+  aggregate = null;
+  if (!formData.f3CycleId) return;
+  try {
+    const aSnap = await getDoc(doc(window.db, 'principal_360_aggregates', formData.f3CycleId));
+    if (aSnap.exists()) aggregate = aSnap.data();
+  } catch (_) { /* no aggregate yet */ }
+}
+
+async function loadFRCandidates() {
+  frCandidates = [];
+  try {
+    const snap = await getDocs(query(collection(window.db, 'users'), where('ah_sub_roles', 'array-contains', 'foundation_representative'), limit(300)));
+    frCandidates = snap.docs.map(d => ({ uid: d.id, ...d.data() }))
+      .filter(u => !principal?.schoolId || u.schoolId === principal.schoolId)
+      .sort((a, b) => String(a.displayName || '').localeCompare(String(b.displayName || '')));
+  } catch (err) {
+    console.warn('fr candidates', err);
+  }
+}
+
+// ─── Scoring (Handbook §4–§6; Master Overview 26-27 conversion) ───────
+function fwById(id) { return (framework.frameworks || []).find(f => f.id === id) || null; }
+function avg(a) { return a.reduce((x, y) => x + y, 0) / a.length; }
+function round2(n) { return Math.round(n * 100) / 100; }
+
+function levelWeights() {
+  const lvl = formData.appraisalLevel;
+  if (!lvl) return null;
+  const w = framework?.weights?.by_level?.[lvl] || FALLBACK_LEVEL_WEIGHTS[lvl] || null;
+  if (!w) return null;
+  const out = {};
+  Object.keys(w).forEach(k => { if (!k.startsWith('_')) out[k] = Number(w[k]); });
+  return out;
+}
+
+function visibleAreas() {
+  const w = levelWeights();
+  if (w) return (framework.frameworks || []).filter(fw => (w[fw.id] || 0) > 0);
+  return (framework.frameworks || []).filter(fw => fw.id !== 'F_LEAD');
+}
+
+function focusOf(item) { return String(item.title || '').split(' ')[0]; }   // "P1 — …" → "P1"
+
+// F2 focus means from valid visit records: E = 4, D = 2, N excluded.
+function f2FocusValues() {
+  const out = {};
+  (fwById('F2')?.items || []).forEach(it => {
+    const p = focusOf(it);
+    const vals = observations.map(o => E_D_VALUE[o.foci?.[p]?.code]).filter(v => typeof v === 'number');
+    if (vals.length) out[it.id] = { mean: avg(vals), n: vals.length };
+  });
+  return out;
+}
+
+function f2UsesFallback() { return observations.length === 0; }
+
+function parseDates(s) {
+  return String(s || '').split(/[,\s]+/).map(x => x.trim()).filter(x => /^\d{4}-\d{2}-\d{2}$/.test(x));
+}
+
+function f2RecordCount() {
+  return f2UsesFallback() ? parseDates(formData.f2FallbackDates).length : observations.length;
+}
+
+function aggregateF3() {
+  const v = aggregate?.composite?.F3_360_score;
+  return Number.isFinite(v) ? v : null;
+}
+
+function areaMean(fw) {
+  if (fw.id === 'F2') {
+    if (!f2UsesFallback()) {
+      const vals = Object.values(f2FocusValues()).map(x => x.mean);
+      return vals.length ? avg(vals) : null;
+    }
+  }
+  if (fw.id === 'F3') {
+    const agg = aggregateF3();
+    if (agg !== null) return agg;
+    // Controlled fallback: cohort ratings weighted 60/25/15, below-threshold
+    // (unrated) cohorts redistributed proportionally (Handbook §8).
+    let ws = 0, acc = 0;
+    (fw.items || []).forEach(it => {
+      const v = formData.scores[it.id];
+      if (Number.isFinite(v)) { const w = Number(it.weight_within_f3) || 0; ws += w; acc += w * v; }
+    });
+    return ws > 0 ? acc / ws : null;
+  }
+  const vals = (fw.items || []).map(it => formData.scores[it.id]).filter(Number.isFinite);
+  return vals.length ? avg(vals) : null;
+}
+
+function bandFor(score) {
+  const bands = [...(framework.predicate_bands || [])].sort((a, b) => b.min - a.min);
+  return bands.find(b => score >= b.min) || null;   // half-open: 86 → A, 85.99 → B
+}
+
+function f5Complete() {
+  const f = formData.f5Completion || {};
+  return !!(f.selfAssessment1 && f.selfAssessment2 && f.annualReflection);
+}
+
+function computeComposite() {
+  const w = levelWeights();
+  const areas = {};
+  const reasons = [];
+  if (!w) return { ready: false, reasons: ['choose the appraisal level'], areas };
+  const missing = [];
+  Object.keys(w).forEach(fid => {
+    const fw = fwById(fid);
+    const m = fw ? areaMean(fw) : null;
+    if (m === null) { missing.push(fid); return; }
+    areas[fid] = { mean: m, score: (m / 4) * 100, weight: w[fid] };
+  });
+  if (missing.length) reasons.push('no rating yet for ' + missing.join(', '));
+  if (!f5Complete()) reasons.push('F5 is incomplete — both termly self-assessments and the annual reflection are required');
+  const nF2 = f2RecordCount();
+  if (nF2 < 2) reasons.push(`${nF2} valid F2 record${nF2 === 1 ? '' : 's'} — at least two are required`);
+  if (reasons.length) return { ready: false, reasons, areas };
+  const score = round2(Object.values(areas).reduce((a, x) => a + x.weight * x.score, 0));
+  return { ready: true, reasons, areas, score, band: bandFor(score) };
+}
+
+// ─── Appraiser form ───────────────────────────────────────────────────
 function render() {
   const root = document.getElementById('content');
+  const isYear1 = formData.appraisalLevel === 'year_1_induction';
   root.innerHTML = `
-    <div class="context-card">
-      <div class="ctx-row">
-        <span class="ctx-label">Principal</span>
-        <span class="ctx-value">${escapeHtml(principal?.displayName || PRINCIPAL_UID)}</span>
+    ${contextCard()}
+    <div class="narrative-card">
+      <h3>Appraisal set-up</h3>
+      <p class="help-line">Confirm these before scored evidence is used (Appraiser Guide §2 — "do not score a principal against a process they were not told would be scored").</p>
+      <div class="setup-grid">
+        <label class="narr-field">Appraisal level *
+          <select id="lvlSelect" class="notes-select">
+            <option value="">— choose —</option>
+            ${LEVELS.map(l => `<option value="${l.id}"${formData.appraisalLevel === l.id ? ' selected' : ''}>${escapeHtml(l.label)}</option>`).join('')}
+            <option value="year_1_induction"${isYear1 ? ' selected' : ''}>Year 1 — protected Principal Induction</option>
+          </select>
+        </label>
+        <label class="narr-field">Years in the principal role
+          <input id="yearsInRole" class="notes-select" type="number" min="0" max="40" value="${escapeAttr(formData.yearsInRole ?? '')}">
+        </label>
+        <label class="narr-field">Formal launch date *
+          <input id="launchDate" class="notes-select" type="date" value="${escapeAttr(formData.formalLaunchDate || '')}">
+        </label>
+        <label class="narr-field">Co-reviewer (Foundation Representative / General Manager) *
+          <select id="coReviewer" class="notes-select">
+            <option value="">— choose —</option>
+            ${frCandidates.map(u => `<option value="${escapeAttr(u.uid)}"${formData.coReviewerUid === u.uid ? ' selected' : ''}>${escapeHtml(u.displayName || u.email || u.uid)}</option>`).join('')}
+          </select>
+        </label>
+        <div class="narr-field">Primary appraiser
+          <div class="ctx-value">${escapeHtml(me.profile?.displayName || me.user.email || '—')} · Chief Academic Officer / designated Academic Director</div>
+        </div>
       </div>
-      <div class="ctx-row">
-        <span class="ctx-label">School</span>
-        <span class="ctx-value">${escapeHtml(principal?.school || '—')}</span>
-      </div>
-      <div class="ctx-row">
-        <span class="ctx-label">Academic year</span>
-        <span class="ctx-value">${escapeHtml(ACADEMIC_YEAR)}</span>
-      </div>
-      <div class="ctx-row">
-        <span class="ctx-label">Framework version</span>
-        <span class="ctx-value">${escapeHtml(framework.version || '1.0')}</span>
-      </div>
+      <p class="help-line">Level weights (Handbook §6): Developing F1 20 · F2 45 · F3 15 · F4 15 · F5 5 — Proficient 25 · 40 · 15 · 15 · 5 — Lead 20 · 35 · 15 · 15 · 5 + F_LEAD 10.</p>
     </div>
 
-    <div class="summary-card" id="summaryCard">
-      <div>
-        <div class="label">Composite</div>
-        <div class="value" id="compositeValue">—</div>
+    ${isYear1 ? `
+      <div class="access-denied" style="padding:40px 20px;">
+        <h2>Not yet — protect the induction year</h2>
+        <p>A Year-1 principal receives no formal appraisal (Induction Charter NN1). The end of Year 1 is recorded through the binary Induction Completion Certificate, and the first formal appraisal is at the end of Year 2, at the Developing level (Handbook §6).</p>
       </div>
-      <div></div>
-      <div>
-        <div class="label">Percent</div>
-        <div class="pct" id="compositePct">—</div>
+    ` : `
+      <div class="summary-card" id="summaryCard">
+        <div>
+          <div class="label">Composite (0–100)</div>
+          <div class="value" id="compositeValue">—</div>
+        </div>
+        <div>
+          <div class="label">Status</div>
+          <div class="pct" id="compositeStatus" style="font-size:0.85rem;line-height:1.4;">—</div>
+        </div>
+        <div></div>
+        <div class="band" id="bandLetter">—</div>
       </div>
-      <div class="band" id="bandLetter">—</div>
-    </div>
 
-    ${(framework.frameworks || []).map(fw => renderFramework(fw)).join('')}
-    ${renderNarrativeSection()}
+      ${evidenceCard()}
+      ${visibleAreas().map(fw => renderFramework(fw)).join('')}
+      ${renderNarrativeSection()}
+      ${renderConfidentialSection()}
 
-    <div class="action-bar">
-      <div class="progress-info" id="progressInfo">—</div>
-      <button class="btn btn-secondary" id="btnSaveDraft">Save draft</button>
-      <button class="btn btn-primary" id="btnSubmit">Submit appraisal</button>
-    </div>
+      <div class="action-bar">
+        <div class="progress-info" id="progressInfo">—</div>
+        <button class="btn btn-secondary" id="btnSaveDraft">Save draft</button>
+        <button class="btn btn-primary" id="btnSubmit">Sign off appraisal</button>
+      </div>
+    `}
   `;
 
-  // Wire framework items + score pills
-  (framework.frameworks || []).forEach(fw => wireFramework(fw));
-  (framework.narrative_fields || []).forEach(nf => {
-    const ta = document.getElementById('narr-' + nf.id);
-    if (ta) ta.addEventListener('input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
+  document.getElementById('lvlSelect').addEventListener('change', e => { formData.appraisalLevel = e.target.value; render(); });
+  document.getElementById('yearsInRole').addEventListener('input', e => { formData.yearsInRole = e.target.value; });
+  document.getElementById('launchDate').addEventListener('change', e => { formData.formalLaunchDate = e.target.value; updateProgress(); });
+  document.getElementById('coReviewer').addEventListener('change', e => {
+    formData.coReviewerUid = e.target.value;
+    const u = frCandidates.find(x => x.uid === e.target.value);
+    formData.coReviewerName = u ? (u.displayName || u.email || u.uid) : '';
+    updateProgress();
   });
+  if (isYear1) return;
+
+  visibleAreas().forEach(fw => wireFramework(fw));
+  (framework.narrative_fields || []).filter(nf => nf.id !== 'PNF5' && nf.id !== 'PNF6').forEach(nf => {
+    const el = document.getElementById('narr-' + nf.id);
+    if (el) el.addEventListener(nf.type === 'select' ? 'change' : 'input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
+  });
+  const cn = document.getElementById('confidentialNote');
+  if (cn) cn.addEventListener('input', e => { confidentialNote = e.target.value; });
+  ['selfAssessment1', 'selfAssessment2', 'annualReflection'].forEach(k => {
+    const cb = document.getElementById('f5-' + k);
+    if (cb) cb.addEventListener('change', e => { formData.f5Completion[k] = e.target.checked; updateProgress(); });
+  });
+  const fb = document.getElementById('f2Fallback');
+  if (fb) fb.addEventListener('input', e => { formData.f2FallbackDates = e.target.value; updateProgress(); });
+  const fbn = document.getElementById('f2FallbackNote');
+  if (fbn) fbn.addEventListener('input', e => { formData.f2FallbackNote = e.target.value; });
+  const cyc = document.getElementById('f3Cycle');
+  if (cyc) cyc.addEventListener('change', async e => { formData.f3CycleId = e.target.value; await loadAggregate(); render(); });
   document.getElementById('btnSaveDraft').addEventListener('click', () => save('draft'));
   document.getElementById('btnSubmit').addEventListener('click', () => save('submitted'));
-
   updateProgress();
 }
 
+function contextCard() {
+  return `
+    <div class="context-card">
+      <div class="ctx-row"><span class="ctx-label">Principal</span><span class="ctx-value">${escapeHtml(principal?.displayName || PRINCIPAL_UID)}</span></div>
+      <div class="ctx-row"><span class="ctx-label">School</span><span class="ctx-value">${escapeHtml(principal?.school || '—')}</span></div>
+      <div class="ctx-row"><span class="ctx-label">Academic year</span><span class="ctx-value">${escapeHtml(ACADEMIC_YEAR)}</span></div>
+      <div class="ctx-row"><span class="ctx-label">Framework version</span><span class="ctx-value">${escapeHtml(framework?.version || '1.0')}</span></div>
+    </div>`;
+}
+
+function evidenceCard() {
+  const obsRow = o => `<li>${escapeHtml(o.visitDate)} · ${escapeHtml(String(o.f2Window || o.visitType || '').replace(/_/g, ' '))}${o.observerName ? ' · ' + escapeHtml(o.observerName) : ''}</li>`;
+  const f = formData.f5Completion || {};
+  return `
+    <div class="narrative-card">
+      <h3>Evidence check</h3>
+      <div class="narr-field">
+        <label>F2 — valid leadership-observation records (${observations.length})</label>
+        <div class="help">A record counts when it is a submitted scheduled appraisal visit in the Sept–Oct (Visit 1) or Feb–Apr (Visit 2) window and the principal was told in advance that it contributes to Principal Appraisal. At least two are required (Handbook §14).</div>
+        ${observations.length ? `<ul class="evidence-list">${observations.map(obsRow).join('')}</ul>` : `<div class="help"><strong>No valid record in Academic Hub.</strong> If the visits were recorded through the controlled manual fallback (Handbook §14 — digital-readiness fallback), enter their dates and the record location below; rate F2 from those records.</div>
+          <input id="f2Fallback" class="notes-select" type="text" placeholder="Visit dates, e.g. 2026-10-06, 2027-03-02" value="${escapeAttr(formData.f2FallbackDates || '')}">
+          <textarea id="f2FallbackNote" class="notes-area" placeholder="Where the controlled fallback records are kept (file / record location, reviewer, sign-off status)">${escapeHtml(formData.f2FallbackNote || '')}</textarea>`}
+        ${otherObservations.length ? `<div class="help" style="margin-top:6px;">Formative context only — not F2 evidence: ${otherObservations.map(o => escapeHtml(o.visitDate)).join(', ')}.</div>` : ''}
+      </div>
+      <div class="narr-field">
+        <label for="f3Cycle">F3 — the late-year / year-end 360 cycle</label>
+        <div class="help">Only the summative year-end cycle (W38) enters F3. The mid-year cycle is formative coaching input only.</div>
+        ${cycles.length ? `<select id="f3Cycle" class="notes-select"><option value="">— choose —</option>${cycles.map(c => `<option value="${escapeAttr(c.id)}"${formData.f3CycleId === c.id ? ' selected' : ''}>${escapeHtml(c.id)} · ${escapeHtml(c.status || '')}</option>`).join('')}</select>` : `<div class="help"><strong>No year-end 360 cycle found for ${escapeHtml(ACADEMIC_YEAR)}.</strong> Rate the F3 cohorts below only from a controlled fallback record.</div>`}
+        ${aggregateF3() !== null ? `<div class="help" style="margin-top:6px;">Year-end 360 result: <strong>${aggregateF3().toFixed(2)}</strong> of 4 (cohort-weighted; below-threshold cohorts redistributed).</div>` : ''}
+      </div>
+      <div class="narr-field">
+        <label>F5 — required evidence (no composite, band or recommendation until all three are complete)</label>
+        <label class="check-line"><input type="checkbox" id="f5-selfAssessment1"${f.selfAssessment1 ? ' checked' : ''}> Termly self-assessment 1 completed</label>
+        <label class="check-line"><input type="checkbox" id="f5-selfAssessment2"${f.selfAssessment2 ? ' checked' : ''}> Termly self-assessment 2 completed</label>
+        <label class="check-line"><input type="checkbox" id="f5-annualReflection"${f.annualReflection ? ' checked' : ''}> Annual evidence-grounded reflection completed</label>
+      </div>
+    </div>`;
+}
+
 function renderFramework(fw) {
-  const itemsHtml = (fw.items || []).map(it => renderItem(it)).join('');
+  const w = levelWeights();
+  const weightTxt = w && w[fw.id] ? `weight ${(w[fw.id] * 100).toFixed(0)}%` : 'weight set by level';
   const cambridgeRefs = (fw.cambridge_school_leader_refs || []).map(r => {
     // Cambridge School Leader Standards — CSLS chip family (NOT CTS).
-    // Source strings: bare "X.Y" (JSON convention) OR "CTS X.Y" / "CSLS X.Y"
-    // (legacy). All forms get normalised to the CSLS chip so
-    // cambridge-crossref.js wires the School-Leader popover.
     // (memory/feedback_ah_csls_not_cts.md)
     const m = String(r).match(/(\d+\.\d+)/);
     return m
@@ -458,16 +806,36 @@ function renderFramework(fw) {
       : `<span class="csls-pill" title="${escapeAttr(r)}">${escapeHtml(r)}</span>`;
   }).join(' ');
 
+  let itemsHtml;
+  if (fw.id === 'F2' && !f2UsesFallback()) {
+    const vals = f2FocusValues();
+    itemsHtml = (fw.items || []).map(it => {
+      const v = vals[it.id];
+      return `<div class="item-row"><div class="item-info"><div class="item-title">${escapeHtml(it.title || it.id)}</div>
+        <div class="item-source">From ${observations.length} valid visit record${observations.length === 1 ? '' : 's'} (E = 4, D = 2, Not Observed excluded).</div></div>
+        <div class="score-row"><span class="score-pill active s${v ? Math.max(1, Math.min(4, Math.round(v.mean))) : 1}" style="cursor:default;">${v ? v.mean.toFixed(2) : 'Not observed'}</span></div></div>`;
+    }).join('');
+  } else if (fw.id === 'F3' && aggregateF3() !== null) {
+    const labels = { staff: 'Staff (60%)', parent: 'Parent representatives (25%)', student: 'Student-council representatives (15%)' };
+    itemsHtml = ['staff', 'parent', 'student'].map(c => {
+      const above = aggregate?.aboveThreshold?.[c];
+      return `<div class="item-row"><div class="item-info"><div class="item-title">${escapeHtml(labels[c])}</div>
+        <div class="item-source">${above ? 'Counted in the cohort-weighted F3 result.' : 'Insufficient response (fewer than 5) — weight redistributed to the other cohorts.'}</div></div></div>`;
+    }).join('');
+  } else {
+    itemsHtml = (fw.items || []).map(it => renderItem(it)).join('');
+  }
+
   return `
     <div class="framework-card">
       <div class="fw-head">
         <span class="fw-id">${escapeHtml(fw.id)}</span>
         <h2 class="fw-title">${escapeHtml(fw.title || '')}</h2>
-        <span class="fw-weight">weight ${(fw.weight * 100).toFixed(0)}%</span>
+        <span class="fw-weight">${weightTxt}</span>
       </div>
       ${fw.description ? `<div class="fw-desc">${escapeHtml(fw.description)}</div>` : ''}
       ${cambridgeRefs ? `<div class="fw-cambridge"><strong style="color:var(--ink-2);">Cambridge anchors:</strong> ${cambridgeRefs}</div>` : ''}
-      ${itemsHtml || '<div class="item-source">No items defined for this framework yet.</div>'}
+      ${itemsHtml || '<div class="item-source">No items defined for this area yet.</div>'}
     </div>
   `;
 }
@@ -475,9 +843,11 @@ function renderFramework(fw) {
 function renderItem(it) {
   const cur = formData.scores[it.id] || null;
   const rubric = it.rubric || {};
-  const rubricRows = [4,3,2,1].map(n => `<div class="lvl"><strong>${n}</strong><span>${escapeHtml(rubric[n] || rubric[String(n)] || '')}</span></div>`).join('');
-
-  const pills = [4,3,2,1].map(n => {
+  const hasRubric = [1, 2, 3, 4].some(n => rubric[n] || rubric[String(n)]);
+  const rubricRows = hasRubric
+    ? [4, 3, 2, 1].map(n => `<div class="lvl"><strong>${n}</strong><span>${escapeHtml(rubric[n] || rubric[String(n)] || '')}</span></div>`).join('')
+    : `<div>${escapeHtml(it.rating_guidance || 'Rate on the 4-point scale from the evidence.')}</div>`;
+  const pills = [4, 3, 2, 1].map(n => {
     const lbl = (framework.scoring_scale || []).find(s => s.value === n)?.label || `Level ${n}`;
     return `<button class="score-pill s${n} ${cur === n ? 'active' : ''}" data-item="${escapeAttr(it.id)}" data-score="${n}" type="button">
       <span class="num">${n}</span>
@@ -488,9 +858,9 @@ function renderItem(it) {
   return `
     <div class="item-row" id="item-${escapeAttr(it.id)}">
       <div class="item-info">
-        <div class="item-title">${escapeHtml(it.title || it.id)}</div>
+        <div class="item-title">${escapeHtml(it.title || it.id)}${it.applies_when ? ` <span class="item-source">(applies when ${escapeHtml(it.applies_when)})</span>` : ''}</div>
         ${it.data_source ? `<div class="item-source">Source: ${escapeHtml(it.data_source)}</div>` : ''}
-        <button class="item-rubric-toggle" data-rubric-toggle="${escapeAttr(it.id)}" type="button">▸ Show rubric</button>
+        <button class="item-rubric-toggle" data-rubric-toggle="${escapeAttr(it.id)}" type="button">▸ Show ${hasRubric ? 'rubric' : 'rating guidance'}</button>
         <div class="item-rubric" id="rubric-${escapeAttr(it.id)}">${rubricRows}</div>
       </div>
       <div class="score-row" style="flex-wrap:wrap;">${pills}</div>
@@ -502,8 +872,7 @@ function wireFramework(fw) {
   (fw.items || []).forEach(it => {
     document.querySelectorAll(`[data-item="${cssEsc(it.id)}"]`).forEach(btn => {
       btn.addEventListener('click', () => {
-        const score = Number(btn.dataset.score);
-        formData.scores[it.id] = score;
+        formData.scores[it.id] = Number(btn.dataset.score);
         btn.parentElement.querySelectorAll('.score-pill').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         updateProgress();
@@ -514,101 +883,124 @@ function wireFramework(fw) {
       const r = document.getElementById('rubric-' + it.id);
       if (!r) return;
       const open = r.classList.toggle('show');
-      rt.textContent = (open ? '▾' : '▸') + ' ' + (open ? 'Hide rubric' : 'Show rubric');
+      rt.textContent = (open ? '▾ Hide' : '▸ Show') + rt.textContent.replace(/^[▾▸] (Hide|Show)/, '');
     });
   });
 }
 
 function renderNarrativeSection() {
+  const fields = (framework.narrative_fields || []).filter(nf => nf.id !== 'PNF6');
   return `
     <div class="narrative-card">
-      <h3>Narrative</h3>
-      ${(framework.narrative_fields || []).map(nf => `
-        <div class="narr-field">
-          <label for="narr-${escapeAttr(nf.id)}">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
-          ${nf.description ? `<div class="help">${escapeHtml(nf.description)}</div>` : ''}
-          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(formData.narratives[nf.id] || '')}</textarea>
-        </div>
-      `).join('')}
+      <h3>The leadership conversation (PNF1–PNF5)</h3>
+      ${fields.map(nf => {
+        const help = nf.description ? `<div class="help">${escapeHtml(nf.description)}</div>` : '';
+        if (nf.id === 'PNF5') {
+          return `<div class="narr-field"><label>${escapeHtml(nf.label)}</label>${help}
+            <div class="readonly-text">${formData.principalReflection ? escapeHtml(formData.principalReflection) : '<em>Written by the principal after sign-off.</em>'}</div></div>`;
+        }
+        if (nf.type === 'select') {
+          return `<div class="narr-field"><label for="narr-${escapeAttr(nf.id)}">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>${help}
+            <select class="notes-select" id="narr-${escapeAttr(nf.id)}"><option value="">— choose —</option>
+            ${(nf.options || []).map(o => `<option value="${escapeAttr(o)}"${formData.narratives[nf.id] === o ? ' selected' : ''}>${escapeHtml(RECOMMENDATION_LABELS[o] || o)}</option>`).join('')}</select></div>`;
+        }
+        return `<div class="narr-field"><label for="narr-${escapeAttr(nf.id)}">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>${help}
+          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(formData.narratives[nf.id] || '')}</textarea></div>`;
+      }).join('')}
     </div>
   `;
 }
 
-function computeComposite() {
-  // Weighted average of framework means.
-  const weights = framework.weights || {};
-  let totalWeight = 0;
-  let weightedSum = 0;
-  let unscoredFw = [];
-  (framework.frameworks || []).forEach(fw => {
-    const items = fw.items || [];
-    const scored = items.filter(it => Number.isFinite(formData.scores[it.id]));
-    if (!items.length || !scored.length) {
-      unscoredFw.push(fw.id);
-      return;
-    }
-    const fwMean = scored.reduce((a, it) => a + formData.scores[it.id], 0) / scored.length;
-    const w = weights[fw.id] || 0;
-    weightedSum += fwMean * w;
-    totalWeight += w;
-  });
-  if (totalWeight === 0) return { composite: null, pct: null, band: null, unscoredFw };
-  const composite = weightedSum / totalWeight; // 1-4 scale
-  const pct = ((composite - 1) / 3) * 100;     // map 1->0%, 4->100%
-  const bands = framework.predicate_bands || [];
-  const band = bands.find(b => pct >= b.min && pct <= b.max);
-  return { composite, pct, band, unscoredFw };
+function renderConfidentialSection() {
+  const nf = (framework.narrative_fields || []).find(n => n.id === 'PNF6');
+  if (!nf) return '';
+  return `
+    <div class="narrative-card confidential-card">
+      <h3>${escapeHtml(nf.id)} — ${escapeHtml(nf.label)} <span class="private-tag">Eduversal only</span></h3>
+      <div class="help">${escapeHtml(nf.description || '')}</div>
+      <textarea class="notes-area" id="confidentialNote" placeholder="Leave empty unless genuinely needed.">${escapeHtml(confidentialNote)}</textarea>
+    </div>
+  `;
 }
 
 function updateProgress() {
   const r = computeComposite();
-  const totalItems = (framework.frameworks || []).reduce((a, fw) => a + (fw.items || []).length, 0);
-  const scoredItems = Object.keys(formData.scores).filter(k => Number.isFinite(formData.scores[k])).length;
-  const requiredNarr = (framework.narrative_fields || []).filter(n => n.required);
-  const filledNarr = requiredNarr.filter(n => (formData.narratives[n.id] || '').trim().length > 0).length;
-
-  document.getElementById('compositeValue').textContent = r.composite !== null ? r.composite.toFixed(2) : '—';
-  document.getElementById('compositePct').textContent   = r.pct !== null ? r.pct.toFixed(0) + '%' : '—';
-  document.getElementById('bandLetter').textContent     = r.band ? r.band.label : '—';
-
+  const val = document.getElementById('compositeValue');
+  if (!val) return;
+  val.textContent = r.ready ? r.score.toFixed(2) : '—';
+  document.getElementById('bandLetter').textContent = r.ready && r.band ? r.band.label : '—';
+  document.getElementById('compositeStatus').textContent = r.ready
+    ? `Band ${r.band ? r.band.label + ' — ' + (r.band.description || '') : '—'} · preview until sign-off`
+    : 'Incomplete — ' + r.reasons.join('; ');
+  const requiredNarr = (framework.narrative_fields || []).filter(n => n.required && n.id !== 'PNF5' && n.id !== 'PNF6');
+  const filledNarr = requiredNarr.filter(n => String(formData.narratives[n.id] || '').trim()).length;
+  const areaTxt = Object.entries(r.areas).map(([k, a]) => `${k} ${a.score.toFixed(0)}`).join(' · ');
   document.getElementById('progressInfo').innerHTML =
-    `<strong>${scoredItems}/${totalItems}</strong> items scored · <strong>${filledNarr}/${requiredNarr.length}</strong> required narratives` +
-    (r.unscoredFw.length ? ` · framework(s) without any score: ${r.unscoredFw.join(', ')}` : '');
+    `<strong>${filledNarr}/${requiredNarr.length}</strong> required narratives · valid F2 records <strong>${f2RecordCount()}</strong>/2` +
+    (areaTxt ? ` · area scores ${escapeHtml(areaTxt)}` : '');
 }
 
 async function save(targetStatus) {
+  const r = computeComposite();
+  const w = levelWeights();
   if (targetStatus === 'submitted') {
-    const r = computeComposite();
     const missing = [];
-    if (r.composite === null) missing.push('at least one item per framework');
-    const requiredNarr = (framework.narrative_fields || []).filter(n => n.required);
-    requiredNarr.forEach(n => { if (!(formData.narratives[n.id] || '').trim()) missing.push(`"${n.label}"`); });
-    if (missing.length) {
-      toast('Missing: ' + missing.join(', '), true);
-      return;
-    }
-    if (!confirm(`Submit annual appraisal for ${principal?.displayName || 'this principal'}? Composite ${r.composite.toFixed(2)} (band ${r.band ? r.band.label : '—'}). Submitted appraisals are immutable.`)) return;
+    if (!formData.appraisalLevel || formData.appraisalLevel === 'year_1_induction') missing.push('appraisal level');
+    if (!formData.formalLaunchDate) missing.push('formal launch date');
+    if (!formData.coReviewerUid) missing.push('co-reviewer (Foundation Representative / General Manager)');
+    if (!r.ready) missing.push(...r.reasons);
+    (framework.narrative_fields || []).filter(n => n.required && n.id !== 'PNF5' && n.id !== 'PNF6')
+      .forEach(n => { if (!String(formData.narratives[n.id] || '').trim()) missing.push(`"${n.label}"`); });
+    if (f2UsesFallback() && !String(formData.f2FallbackNote || '').trim()) missing.push('the location of the controlled fallback F2 records');
+    if (missing.length) { toast('Missing: ' + missing.join('; '), true); return; }
+    if (!confirm(`Sign off the annual appraisal for ${principal?.displayName || 'this principal'}? Composite ${r.score.toFixed(2)}, band ${r.band ? r.band.label : '—'}, recommendation "${RECOMMENDATION_LABELS[formData.narratives.PNF3] || formData.narratives.PNF3}". A signed-off appraisal cannot be changed. The Foundation Representative / General Manager will receive only the composite, band, recommendation and agreed goals.`)) return;
   }
 
-  const r = computeComposite();
+  const areaScores = {};
+  Object.entries(r.areas).forEach(([k, a]) => { areaScores[k] = round2(a.score); });
+  const narratives = {};
+  ['PNF1', 'PNF2', 'PNF3', 'PNF4'].forEach(k => { narratives[k] = formData.narratives[k] || ''; });
+  if (hadConfidentialNote) narratives.PNF6 = deleteField();   // legacy location — moved to confidential/note
+
+  const issued = targetStatus === 'submitted';
   const payload = {
     principalUid: PRINCIPAL_UID,
     schoolId: principal?.schoolId || null,
     academicYear: ACADEMIC_YEAR,
     appraiserUid: window.currentUser.uid,
-    appraiserName: observerProfile?.displayName || null,
-    appraiserRole: observerProfile?.ah_sub_roles?.includes('foundation_representative') ? 'foundation_representative'
-                 : (observerProfile?.role_academichub === 'academic_admin' ? 'academic_admin' : 'central_admin'),
+    appraiserName: me.profile?.displayName || null,
+    appraiserRole: 'chief_academic_officer',
+    appraisalLevel: formData.appraisalLevel || null,
+    levelWeights: w,
+    yearsInRole: formData.yearsInRole === '' || formData.yearsInRole === null ? null : Number(formData.yearsInRole),
+    formalLaunchDate: formData.formalLaunchDate || null,
+    coReviewerUid: formData.coReviewerUid || null,
+    coReviewerName: formData.coReviewerName || null,
     scores: { ...formData.scores },
-    narratives: { ...formData.narratives },
-    composite: r.composite,
-    compositePercent: r.pct,
-    band: r.band ? r.band.label : null,
+    narratives,
+    f5Completion: { ...formData.f5Completion },
+    f2ObservationIds: observations.map(o => o.id),
+    f2VisitDates: f2UsesFallback() ? parseDates(formData.f2FallbackDates) : observations.map(o => o.visitDate),
+    f2FallbackVisitDates: f2UsesFallback() ? parseDates(formData.f2FallbackDates) : [],
+    f2FallbackNote: formData.f2FallbackNote || null,
+    f3CycleId: formData.f3CycleId || null,
+    frameworkScores: areaScores,
+    compositeScore: issued ? r.score : null,
+    predicateBand: issued && r.band ? r.band.label : null,
+    recommendation: issued ? (formData.narratives.PNF3 || null) : null,
+    // Legacy fields read by Central Hub pages (composite on the 1–4 scale).
+    composite: issued ? round2(r.score / 25) : null,
+    compositePercent: issued ? r.score : null,
+    band: issued && r.band ? r.band.label : null,
     frameworkVersion: framework.version || '1.0',
     status: targetStatus,
     updatedAt: serverTimestamp(),
   };
-  if (targetStatus === 'submitted') payload.submittedAt = serverTimestamp();
+  if (issued) {
+    payload.submittedAt = serverTimestamp();
+    payload.signedOffAt = serverTimestamp();
+    payload.signedOffBy = window.currentUser.uid;
+  }
 
   const btnSubmit = document.getElementById('btnSubmit');
   const btnDraft  = document.getElementById('btnSaveDraft');
@@ -616,9 +1008,38 @@ async function save(targetStatus) {
   if (btnDraft)  btnDraft.disabled  = true;
 
   try {
-    await setDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID), payload, { merge: true });
-    toast(targetStatus === 'submitted' ? 'Appraisal submitted ✓' : 'Draft saved ✓');
-    if (targetStatus === 'submitted') setTimeout(() => { window.location.href = '/team-induction'; }, 1500);
+    const batch = writeBatch(window.db);
+    const mainRef = doc(window.db, 'principal_annual_appraisals', DOC_ID);
+    batch.set(mainRef, payload, { merge: true });
+    if (confidentialNote.trim() || hadConfidentialNote) {
+      batch.set(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'confidential', 'note'), {
+        principalUid: PRINCIPAL_UID,
+        academicYear: ACADEMIC_YEAR,
+        text: confidentialNote,
+        updatedBy: window.currentUser.uid,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+    }
+    if (issued) {
+      batch.set(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'governance', 'summary'), {
+        principalUid: PRINCIPAL_UID,
+        principalName: principal?.displayName || null,
+        schoolId: principal?.schoolId || null,
+        academicYear: ACADEMIC_YEAR,
+        compositeScore: r.score,
+        predicateBand: r.band ? r.band.label : null,
+        recommendation: formData.narratives.PNF3 || null,
+        agreedGoals: formData.narratives.PNF4 || '',
+        coReviewerUid: formData.coReviewerUid || null,
+        coReviewerName: formData.coReviewerName || null,
+        signedOffBy: window.currentUser.uid,
+        signedOffAt: serverTimestamp(),
+      });
+    }
+    await batch.commit();
+    hadConfidentialNote = hadConfidentialNote || !!confidentialNote.trim();
+    toast(issued ? 'Appraisal signed off ✓' : 'Draft saved ✓');
+    if (issued) setTimeout(() => { window.location.href = '/principal-evaluation'; }, 1500);
   } catch (err) {
     console.error('save', err);
     toast('Could not save: ' + (err.message || err.code), true);
@@ -628,9 +1049,148 @@ async function save(targetStatus) {
   }
 }
 
+// ─── Signed-off record (appraiser read-back + principal view) ─────────
+function renderRecord() {
+  const d = formData;
+  const root = document.getElementById('content');
+  const scoreTxt = Number.isFinite(d.compositeScore) ? d.compositeScore.toFixed(2)
+                 : (Number.isFinite(d.compositePercent) ? d.compositePercent.toFixed(2) : '—');
+  const bandTxt = d.predicateBand || d.band || '—';
+  const rec = d.recommendation || d.narratives?.PNF3 || '';
+  const fs = d.frameworkScores || {};
+  const scoresRows = (framework.frameworks || []).map(fw => {
+    const items = (fw.items || []).filter(it => Number.isFinite(d.scores?.[it.id]));
+    if (!items.length && !Number.isFinite(fs[fw.id])) return '';
+    return `<div class="framework-card"><div class="fw-head"><span class="fw-id">${escapeHtml(fw.id)}</span><h2 class="fw-title">${escapeHtml(fw.title || '')}</h2>
+      <span class="fw-weight">${Number.isFinite(fs[fw.id]) ? 'area score ' + fs[fw.id].toFixed(0) : ''}</span></div>
+      ${items.map(it => `<div class="item-row"><div class="item-info"><div class="item-title">${escapeHtml(it.title || it.id)}</div></div><div class="score-row"><span class="score-pill active s${d.scores[it.id]}" style="cursor:default;"><span class="num">${d.scores[it.id]}</span></span></div></div>`).join('')}
+    </div>`;
+  }).join('');
+  const narr = ['PNF1', 'PNF2', 'PNF4'].map(k => {
+    const nf = (framework.narrative_fields || []).find(n => n.id === k);
+    return `<div class="narr-field"><label>${escapeHtml(nf?.label || k)}</label><div class="readonly-text">${escapeHtml(d.narratives?.[k] || '—')}</div></div>`;
+  }).join('');
+  const canReflect = mode === 'principal' && !d.principalReflection;
+
+  root.innerHTML = `
+    ${contextCard()}
+    <div class="summary-card">
+      <div><div class="label">Composite (0–100)</div><div class="value">${escapeHtml(scoreTxt)}</div></div>
+      <div><div class="label">Recommendation</div><div class="pct">${escapeHtml(RECOMMENDATION_LABELS[rec] || rec || '—')}</div></div>
+      <div><div class="label">Level</div><div class="pct">${escapeHtml(d.appraisalLevel || '—')}</div></div>
+      <div class="band">${escapeHtml(bandTxt)}</div>
+    </div>
+    ${mode === 'appraiser' ? `<div class="context-card"><div class="ctx-row"><span class="ctx-label">Governance co-sign (FR/GM)</span><span class="ctx-value">${governance?.frCoSign ? 'Co-signed by ' + escapeHtml(governance.frCoSign.byName || governance.frCoSign.byUid) : (governance ? 'Awaiting co-sign' + (d.coReviewerName ? ' — ' + escapeHtml(d.coReviewerName) : '') : 'No governance summary on this record')}</span></div></div>` : ''}
+    ${scoresRows}
+    <div class="narrative-card"><h3>The leadership conversation</h3>${narr}
+      <div class="narr-field"><label>Principal's Reflection (PNF5)</label>
+        ${canReflect
+          ? `<div class="help">Your own response. Acknowledging the appraisal is not the same as agreeing with it — you keep the right to dispute. You can add it once.</div>
+             <textarea class="notes-area" id="reflection" placeholder="Your reflection…"></textarea>
+             <div class="action-bar"><button class="btn btn-primary" id="btnReflect">Add my reflection</button></div>`
+          : `<div class="readonly-text">${d.principalReflection ? escapeHtml(d.principalReflection) : '<em>Not added.</em>'}</div>`}
+      </div>
+    </div>
+    ${mode === 'appraiser' && confidentialNote ? `<div class="narrative-card confidential-card"><h3>PNF6 — Confidential Note <span class="private-tag">Eduversal only</span></h3><div class="readonly-text">${escapeHtml(confidentialNote)}</div></div>` : ''}
+  `;
+  const btn = document.getElementById('btnReflect');
+  if (btn) btn.addEventListener('click', saveReflection);
+}
+
+async function bootPrincipal() {
+  let snap = null;
+  try { snap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID)); } catch (_) { snap = null; }
+  if (!snap || !snap.exists() || snap.data().status !== 'submitted') {
+    showAccessDenied(`Your ${ACADEMIC_YEAR} appraisal has not been signed off yet. You can read it here once the primary appraiser signs it off.`);
+    return;
+  }
+  const d = snap.data();
+  formData = { ...formData, ...d, narratives: { ...(d.narratives || {}) } };
+  delete formData.narratives.PNF6;   // never shown to the principal (Handbook §10)
+  renderRecord();
+}
+
+async function saveReflection() {
+  const ta = document.getElementById('reflection');
+  const text = String(ta?.value || '').trim();
+  if (!text) { toast('Write your reflection first.', true); return; }
+  if (!confirm('Add your reflection to the record? You can add it once.')) return;
+  try {
+    await updateDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID), {
+      principalReflection: text,
+      principalReflectionAt: serverTimestamp(),
+    });
+    formData.principalReflection = text;
+    toast('Reflection added ✓');
+    renderRecord();
+  } catch (err) {
+    console.error('reflection', err);
+    toast('Could not save: ' + (err.message || err.code), true);
+  }
+}
+
+// ─── Foundation Representative / General Manager: summary + co-sign ───
+async function bootFR() {
+  let s = null;
+  try { s = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'governance', 'summary')); } catch (_) { s = null; }
+  if (!s || !s.exists()) {
+    showAccessDenied(`There is no signed-off appraisal summary for ${principal?.displayName || 'this principal'} in ${ACADEMIC_YEAR} yet. The Chief Academic Officer / designated Academic Director signs the record off first; you then receive the summary to co-sign.`);
+    return;
+  }
+  governance = s.data();
+  renderFRSummary();
+}
+
+function renderFRSummary() {
+  const g = governance;
+  const root = document.getElementById('content');
+  const signed = !!g.frCoSign;
+  root.innerHTML = `
+    <div class="context-card">
+      <div class="ctx-row"><span class="ctx-label">Principal</span><span class="ctx-value">${escapeHtml(g.principalName || principal?.displayName || PRINCIPAL_UID)}</span></div>
+      <div class="ctx-row"><span class="ctx-label">Academic year</span><span class="ctx-value">${escapeHtml(g.academicYear || ACADEMIC_YEAR)}</span></div>
+      <div class="ctx-row"><span class="ctx-label">Signed off by</span><span class="ctx-value">Chief Academic Officer / designated Academic Director</span></div>
+    </div>
+    <div class="summary-card">
+      <div><div class="label">Composite (0–100)</div><div class="value">${Number.isFinite(g.compositeScore) ? g.compositeScore.toFixed(2) : '—'}</div></div>
+      <div><div class="label">Recommendation</div><div class="pct">${escapeHtml(RECOMMENDATION_LABELS[g.recommendation] || g.recommendation || '—')}</div></div>
+      <div></div>
+      <div class="band">${escapeHtml(g.predicateBand || '—')}</div>
+    </div>
+    <div class="narrative-card">
+      <h3>Agreed next-year goals</h3>
+      <div class="readonly-text">${escapeHtml(g.agreedGoals || '—')}</div>
+    </div>
+    <div class="narrative-card">
+      <h3>Governance co-sign</h3>
+      <p class="help-line">You check that the process was fair and evidence-based, then co-sign this summary. You do not see item-level scores, observation notes, F3 area scores or individual 360 responses, and you do not re-score evidence (Principal Appraisal: Handbook 26-27 §7, §10, §13).</p>
+      ${signed
+        ? `<div class="readonly-text">Co-signed by ${escapeHtml(g.frCoSign.byName || g.frCoSign.byUid)}.</div>`
+        : `<div class="action-bar"><button class="btn btn-primary" id="btnCoSign">Co-sign the summary</button></div>`}
+    </div>
+  `;
+  const btn = document.getElementById('btnCoSign');
+  if (btn) btn.addEventListener('click', coSign);
+}
+
+async function coSign() {
+  if (!confirm('Co-sign this appraisal summary? A co-signature cannot be changed.')) return;
+  try {
+    await updateDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID, 'governance', 'summary'), {
+      frCoSign: { byUid: window.currentUser.uid, byName: me.profile?.displayName || null, at: serverTimestamp() },
+    });
+    governance.frCoSign = { byUid: window.currentUser.uid, byName: me.profile?.displayName || null };
+    toast('Summary co-signed ✓');
+    renderFRSummary();
+  } catch (err) {
+    console.error('co-sign', err);
+    toast('Could not co-sign: ' + (err.message || err.code), true);
+  }
+}
+
 function showAccessDenied(msg) {
   document.body.style.display = '';
-  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open form</h2><p>${escapeHtml(msg)}</p></div>`;
+  document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open</h2><p>${escapeHtml(msg)}</p></div>`;
 }
 
 function toast(msg, isErr) {
@@ -638,7 +1198,7 @@ function toast(msg, isErr) {
   t.textContent = msg;
   t.classList.toggle('error', !!isErr);
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 3500);
 }
 
 function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }

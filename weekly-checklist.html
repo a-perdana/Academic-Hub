@@ -723,7 +723,7 @@ body { padding-top: 62px; }
       <button class="checklist-tab" data-tab="academic_coordinator" id="tabCoordinator" style="display:none">Academic Coordinator</button>
       <button class="checklist-tab" data-tab="cambridge_coordinator" id="tabCambridge" style="display:none">Cambridge Coordinator</button>
     </nav>
-    <!-- Cross-link to the matching 90-day handbook for the active tab.
+    <!-- Cross-link to the matching live role guide for the active tab.
          Updated by JS whenever currentPlatform changes; CSS keeps it
          hidden until updatePairedHandbookLink() flips display. Handbook
          lives on CH (centralhub.eduversal.org/handbook) so this is a
@@ -731,7 +731,7 @@ body { padding-top: 62px; }
     <a id="pairedHandbookLink" class="wc-paired-handbook"
        href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener">
       <span aria-hidden="true">📕</span>
-      <span id="pairedHandbookLabel">Open paired 90-day handbook</span>
+      <span id="pairedHandbookLabel">Open the paired role guide</span>
       <span aria-hidden="true" style="opacity:.7;">↗</span>
     </a>
   </div>
@@ -993,10 +993,10 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   // new tab (target=_blank). Handbook host hardcoded to
   // centralhub.eduversal.org since handbooks live in CH dist.
   const PAIRED_HANDBOOK_AH = {
-    foundation_representative: { id: 'eduversal_foundation_rep_first_90_days_v1',         label: 'Foundation Rep · 90-day handbook' },
-    school_principal:          { id: 'eduversal_principal_v1',                            label: 'School Principal · Year-1 induction handbook' },
-    academic_coordinator:      { id: 'eduversal_academic_coordinator_first_90_days_v1',   label: 'Academic Coordinator · 90-day handbook' },
-    cambridge_coordinator:     { id: 'eduversal_cambridge_coordinator_first_90_days_v1',  label: 'Cambridge Coordinator · 90-day handbook' },
+    foundation_representative: { id: 'eduversal_foundation_rep_first_90_days_v1',         label: 'Foundation Rep · role guide (live document)' },
+    school_principal:          { id: 'eduversal_principal_v1',                            label: 'School Principal · Induction Module: Principal' },
+    academic_coordinator:      { id: 'eduversal_academic_coordinator_first_90_days_v1',   label: 'Academic Coordinator · Induction Module: Academic Coordinators' },
+    cambridge_coordinator:     { id: 'eduversal_cambridge_coordinator_first_90_days_v1',  label: 'Cambridge Coordinator · Exams Officer Handbook' },
   };
   function updatePairedHandbookLink(platform) {
     const link = document.getElementById('pairedHandbookLink');
@@ -1996,8 +1996,8 @@ document.addEventListener('keydown', e => {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Leadership CPD · Year-round</span>
       <h2 class="page-footer__cta-title">Finish the week on the right thing.</h2>
-      <p class="page-footer__cta-desc">The checklist is the operating rhythm; the handbook is the why. If a week feels heavy, open the paired 90-day handbook for your sub-role and skim the stage you are in — most "too much to do" weeks are really "wrong order" weeks.</p>
-      <a href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener" class="page-footer__cta-btn">Open the paired 90-day handbook <span aria-hidden="true">↗</span></a>
+      <p class="page-footer__cta-desc">The checklist is the operating rhythm; the role guide is the why. If a week feels heavy, open the paired live role guide for your sub-role — most "too much to do" weeks are really "wrong order" weeks.</p>
+      <a href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener" class="page-footer__cta-btn">Open the paired role guide <span aria-hidden="true">↗</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Weekly Checklist footer navigation">
       <div class="page-footer__nav-group">

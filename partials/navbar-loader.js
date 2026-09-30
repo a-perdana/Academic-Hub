@@ -725,12 +725,11 @@ const NAV_ITEMS = [
     { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
     { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
     { key: 'principal-360-results',       href: '/principal-360-results',       label: 'Principal 360 Results' },
-    // For School Principal (school-level appraisal/KPI + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
+    // For School Principal (school-level appraisal + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
     { key: 'admin-read-me-school-principal',  href: '/admin-read-me-school-principal',  label: 'Read Me First' },
     { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
-    { key: 'school-performance-kpi',          href: '/school-performance-kpi',          label: 'School KPI Entry' },
     { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'Principal Coaching' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'AI Validity Assessment' },
+    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Teacher AI Self-Assessments' },
     { key: 'ai-maturity-self-assessment',     href: '/ai-maturity-self-assessment',     label: 'AI Maturity Assessment' },
     { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
     { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
@@ -739,7 +738,6 @@ const NAV_ITEMS = [
     { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
     { key: 'teacher-levels',              href: '/teacher-levels',              label: 'Teacher Levels' },
     { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
-    { key: 'teacher-kpi-evaluation',      href: '/teacher-kpi-evaluation',      label: 'Teacher KPI Evaluation' },
     { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
     { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
     // NB: 'surveys' (Shared Surveys) moved to the comms group 2026-06-27.
@@ -766,7 +764,7 @@ const NAV_ITEMS = [
     // My CPD + Induction (weekly-checklist + team-induction moved to School Leaders 2026-05-21)
     { key: 'learning-path',        href: '/learning-path',        label: 'Learning Path' },
     { key: 'my-portfolio',         href: '/my-portfolio',         label: 'My Portfolio' },
-    { key: 'my-certificates',      href: '/my-certificates',      label: 'My Certificates' },
+    { key: 'my-certificates',      href: '/my-certificates',      label: 'My Progress Record' },
     { key: 'my-induction',         href: '/my-induction',         label: 'My Induction' },
   ]},
 ];

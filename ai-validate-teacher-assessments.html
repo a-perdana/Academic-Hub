@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Validate Teacher AI Self-Assessments — Academic Hub</title>
+<title>Teacher AI Self-Assessments — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -235,9 +235,9 @@ body:has(> .page-footer) > .page-wrap {
 <header class="page-hero" data-accent="dark">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework v1.0</p>
-      <h1 class="page-hero__title">AI Validity Assessment</h1>
-      <p class="page-hero__desc">Review and validate each teacher's annual AI Competency Part 1 self-assessment. Adjust the agreed level if the evidence doesn't match the self-rating — the notes you leave become the line-manager record.</p>
+      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework 26-27 · Part One</p>
+      <h1 class="page-hero__title">Teacher AI Self-Assessments</h1>
+      <p class="page-hero__desc">Read each teacher's annual AI Competency self-assessment before your professional development conversation, then record the focus you agreed and short notes. It is developmental: it is not a performance judgement, an appraisal score or a level certificate.</p>
     </div>
   </div>
 </header>
@@ -246,10 +246,10 @@ body:has(> .page-footer) > .page-wrap {
   <aside class="info-strip" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">🛡️</div>
     <div class="info-strip__body">
-      <h2 class="info-strip__title">Validate your teachers' AI self-assessments</h2>
-      <p class="info-strip__lede">Teachers rate their own AI skills first. As line manager, you check each self-assessment and agree or adjust the level they claimed — a fair second pair of eyes.</p>
-      <ol class="info-strip__flow"><li><strong>Teachers submit</strong> their AI Competency Part 1 self-assessment</li><li><strong>You review</strong> each one in this queue</li><li><strong>Approve the agreed level</strong> or note where you see it differently — kindly and clearly</li></ol>
-      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>This keeps AI-skill ratings fair and consistent</strong> across your school. It is the Part 1 validation step of the AI Competency Framework.</span></div>
+      <h2 class="info-strip__title">Talk through your teachers' AI self-assessments</h2>
+      <p class="info-strip__lede">Teachers rate their own AI skills first. The framework asks line managers to discuss each self-assessment during a professional development conversation. You may look at AI-enhanced materials, an AI-integrated lesson or colleague feedback as part of that conversation.</p>
+      <ol class="info-strip__flow"><li><strong>Teachers submit</strong> their AI Competency self-assessment</li><li><strong>You read it</strong> before the professional development conversation</li><li><strong>Record the conversation</strong> — the focus you agreed and short notes</li></ol>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>Developmental only.</strong> Formal level certification is not required. This record does not replace or change the Teacher Appraisal, and only aggregate, non-identifiable figures are reported beyond the school.</span></div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
@@ -266,8 +266,8 @@ body:has(> .page-footer) > .page-wrap {
     <label>Status</label>
     <select id="statusFilter">
       <option value="all" selected>All</option>
-      <option value="submitted">Awaiting my review</option>
-      <option value="validated">Validated</option>
+      <option value="submitted">Awaiting conversation</option>
+      <option value="validated">Conversation recorded</option>
     </select>
     <div class="stats" id="stats">—</div>
   </div>
@@ -284,11 +284,11 @@ body:has(> .page-footer) > .page-wrap {
   <div class="page-footer__inner">
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">School Leadership · AI Competency Framework</span>
-      <h2 class="page-footer__cta-title">Validate honestly — the level only means something if the evidence backs it.</h2>
-      <p class="page-footer__cta-desc">Adjust each teacher's agreed level where the self-rating overshoots the evidence, and leave notes that point to next year's focus. Track your own school's readiness in the AI Maturity assessment.</p>
+      <h2 class="page-footer__cta-title">A conversation about growth, not a judgement.</h2>
+      <p class="page-footer__cta-desc">Agree one focus with each teacher and leave notes that point to their professional learning. Track your own school's AI integration in the AI Maturity self-assessment.</p>
       <a href="/ai-maturity-self-assessment" class="page-footer__cta-btn">Open AI Maturity Assessment <span aria-hidden="true">→</span></a>
     </div>
-    <nav class="page-footer__nav" aria-label="AI Validity Assessment footer navigation">
+    <nav class="page-footer__nav" aria-label="Teacher AI Self-Assessments footer navigation">
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">AI Competency</span>
         <a href="/ai-maturity-self-assessment" class="page-footer__nav-link">AI Maturity Assessment</a>
@@ -303,11 +303,11 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">AI Competency Framework v1.0 · line-manager validation feeds the teacher record + Eduversal appraisers</span>
+    <span class="page-footer__meta-right">AI Competency Framework 26-27 · developmental · only aggregate figures leave the school</span>
   </div>
 </footer>
 
-<!-- Detail / validate modal -->
+<!-- Detail / conversation-record modal -->
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-head">
@@ -322,7 +322,7 @@ body:has(> .page-footer) > .page-wrap {
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal()">Close</button>
-      <button class="btn-primary" id="btnValidate" onclick="submitValidation()" style="display:none;">Save validation</button>
+      <button class="btn-primary" id="btnValidate" onclick="submitValidation()" style="display:none;">Save conversation record</button>
     </div>
   </div>
 </div>
@@ -332,6 +332,11 @@ import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimest
 
 const DOMAIN_LABELS = {
   domainA: 'Knowledge', domainB: 'Application', domainC: 'Pedagogical', domainD: 'Critical Eval', domainE: 'Professional'
+};
+// Full domain names (AI Competency Framework 26-27, Part One) for the agreed focus.
+const DOMAIN_NAMES = {
+  domainA: 'A · AI Knowledge and Understanding', domainB: 'B · Practical Application',
+  domainC: 'C · Pedagogical Integration', domainD: 'D · Critical Evaluation', domainE: 'E · Professional Contribution'
 };
 const RATING_LABELS = { not_yet: 'Not Yet', developing: 'Developing', achieved: 'Achieved' };
 const LEVEL_LABELS = { foundation: 'Foundation', practitioner: 'Practitioner', leader: 'Leader' };
@@ -407,7 +412,7 @@ function renderList() {
   const rows = state.rows.filter(r => state.filterStatus === 'all' || r.status === state.filterStatus);
   const submittedCount = state.rows.filter(r => r.status === 'submitted').length;
   const validatedCount = state.rows.filter(r => r.status === 'validated').length;
-  document.getElementById('stats').textContent = `${submittedCount} awaiting · ${validatedCount} validated`;
+  document.getElementById('stats').textContent = `${submittedCount} awaiting · ${validatedCount} recorded`;
 
   if (rows.length === 0) {
     container.innerHTML = '<div class="empty-state">No assessments match the current filters.</div>';
@@ -429,7 +434,7 @@ function renderList() {
       <div class="name">${escapeHtml(r.displayName || r.userEmail || '—')}<small>${escapeHtml(r.userEmail || '')}</small></div>
       <div class="submitted">${submittedDate}</div>
       <div><span class="level-chip ${level}">${LEVEL_LABELS[level] || level}</span></div>
-      <div><span class="status-chip ${r.status}">${r.status === 'submitted' ? 'Awaiting review' : 'Validated'}</span></div>
+      <div><span class="status-chip ${r.status}">${r.status === 'submitted' ? 'Awaiting conversation' : 'Conversation recorded'}</span></div>
       <div style="text-align:right;color:#94a3b8;font-size:18px;">›</div>
     </div>`;
   }).join('');
@@ -488,18 +493,17 @@ window.openRow = async function(docId) {
       ${list(row.professionalLearningGoals)}
     </div>
     <div class="detail-section">
-      <div class="detail-label">Line-manager validation</div>
+      <div class="detail-label">Professional development conversation</div>
       <div class="validation-form">
-        <label>Agreed level</label>
-        <select id="agreedLevel" ${alreadyValidated ? 'disabled' : ''}>
-          <option value="foundation"   ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'foundation' ? 'selected' : ''}>Foundation</option>
-          <option value="practitioner" ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'practitioner' ? 'selected' : ''}>Practitioner</option>
-          <option value="leader"       ${(existingValidation.agreedLevel || row.selfDeclaredLevel) === 'leader' ? 'selected' : ''}>Leader</option>
+        <label>Agreed focus</label>
+        <select id="agreedFocus" ${alreadyValidated ? 'disabled' : ''}>
+          ${Object.keys(DOMAIN_NAMES).map(k => `<option value="${k}" ${existingValidation.agreedFocus === k ? 'selected' : ''}>${DOMAIN_NAMES[k]}</option>`).join('')}
         </select>
+        ${existingValidation.agreedLevel ? `<div class="hint">Earlier record: a level of ${LEVEL_LABELS[existingValidation.agreedLevel] || escapeHtml(existingValidation.agreedLevel)} was noted. Levels are no longer agreed here.</div>` : ''}
         <label>Notes</label>
         <textarea aria-label="What you discussed, what you agreed, what they'll focus on next year" id="managerNotes" placeholder="What you discussed, what you agreed, what they'll focus on next year." ${alreadyValidated ? 'disabled' : ''}>${escapeHtml(existingValidation.managerNotes || '')}</textarea>
-        <div class="hint">Max 1000 characters. Notes are visible to the teacher and to CH appraisers.</div>
-        ${alreadyValidated ? `<div style="margin-top:12px;font-size:12px;color:#166534;">✓ Already validated on ${existingValidation.validatedAt?.toDate ? existingValidation.validatedAt.toDate().toLocaleDateString('en-GB') : '—'}.</div>` : ''}
+        <div class="hint">Max 1000 characters. Notes are shared with the teacher. Only aggregate, non-identifiable figures are reported beyond the school.</div>
+        ${alreadyValidated ? `<div style="margin-top:12px;font-size:12px;color:#166534;">✓ Conversation recorded on ${existingValidation.validatedAt?.toDate ? existingValidation.validatedAt.toDate().toLocaleDateString('en-GB') : '—'}.</div>` : ''}
       </div>
     </div>
   `;
@@ -514,9 +518,9 @@ window.closeModal = function() {
 
 window.submitValidation = async function() {
   if (!state.openDoc) return;
-  const agreedLevel = document.getElementById('agreedLevel').value;
+  const agreedFocus = document.getElementById('agreedFocus').value;
   const managerNotes = (document.getElementById('managerNotes').value || '').trim().slice(0, 1000);
-  if (!confirm(`Validate ${state.openDoc.displayName || 'this teacher'}'s self-assessment with agreed level: ${LEVEL_LABELS[agreedLevel]}?`)) return;
+  if (!confirm(`Save the conversation record for ${state.openDoc.displayName || 'this teacher'} with agreed focus: ${DOMAIN_NAMES[agreedFocus]}?`)) return;
 
   try {
     const ref = doc(window.db, 'ai_competency_self_assessments', state.openDoc.id);
@@ -525,7 +529,7 @@ window.submitValidation = async function() {
       validation: {
         validatedBy: state.userId,
         validatedAt: serverTimestamp(),
-        agreedLevel: agreedLevel,
+        agreedFocus: agreedFocus,
         managerNotes: managerNotes,
       },
     });
@@ -533,7 +537,7 @@ window.submitValidation = async function() {
     await loadRows();
   } catch (err) {
     console.error('[ai-validate] save failed', err);
-    alert('Validation failed: ' + err.message);
+    alert('Could not save the conversation record: ' + err.message);
   }
 };
 

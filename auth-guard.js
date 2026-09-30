@@ -285,8 +285,10 @@ const DASHBOARD_SLUGS = new Set([
   // Cambridge School Quality, school appraisals, accreditation, partner /
   // Islamic schools, surveys, Rapor Pendidikan 2025) were archived
   // 2026-09-30 — no longer built, so they are gone from this list too.
+  // School Performance KPI was retired 2026-10-01 (archive/kpi/): the live
+  // pack embeds operational indicators in the Appraisal Suite instead.
   'cambridge-exams', 'cambridge-pathway',
-  'school-performance-kpi', 'network-audit', 'ai-prompts',
+  'network-audit', 'ai-prompts',
   'academic-standards', 'academic-standards-public',
 ]);
 function onDashboardSlug() {
@@ -304,9 +306,9 @@ const PAGE_ACCESS_TTL_MS = 5 * 60 * 1000; // 5 min sessionStorage cache
 // system. Pilot-irrelevant slugs (EASE, Cambridge dashboards, surveys,
 // communications) are absent — they're always reachable.
 const PILOT_SLUG_MAP = {
-  // KPI track
-  'school-performance-kpi':  'kpi',
-  'teacher-kpi-evaluation':  'kpi',
+  // KPI track — both pages retired 2026-10-01 (archive/kpi/). The live
+  // pack has no standalone KPI system: "Quantitative operational indicators
+  // are embedded within the Appraisal Suite" (Academic Services Start Here).
   // Appraisal track
   'school-self-appraisal':     'appraisal',
   'teacher-appraisal-entry':   'appraisal',

@@ -144,7 +144,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
       <h1 class="page-hero__title">Principal Evaluation</h1>
-      <p class="page-hero__desc">The launch hub for the leadership-evaluation cycle. Open an observation, an annual appraisal, the 360° results, or a coaching session for any school principal in the network — each form opens with the principal already selected.</p>
+      <p class="page-hero__desc">The launch hub for the Principal Appraisal cycle. The Chief Academic Officer / designated Academic Director opens a principal's observation visits, annual appraisal and 360° results from here; the Foundation Representative / General Manager opens the appraisal summary to co-sign.</p>
     </div>
   </div>
 </header>
@@ -153,20 +153,20 @@ body:has(> .page-footer) > .page-wrap {
   <aside class="info-strip" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">🚀</div>
     <div class="info-strip__body">
-      <h2 class="info-strip__title">Your launch hub for evaluating Principals</h2>
-      <p class="info-strip__lede">This page lists every School Principal in the network. Pick one, then jump straight into their observation, appraisal, 360, or coaching record — with the Principal already selected for you.</p>
+      <h2 class="info-strip__title">Launch hub for the Principal Appraisal</h2>
+      <p class="info-strip__lede">Pick a principal, then open the right record with that principal already selected. What you can open depends on your role in the appraisal (Principal Appraisal: Handbook 26-27 §7, §13).</p>
       <ol class="info-strip__flow">
-        <li><strong>Start here</strong> — choose the Principal you are evaluating</li>
-        <li><strong>Pick the form</strong> — observation, appraisal, or 360 results open with that Principal pre-bound</li>
-        <li><strong>Come back any time</strong> to see who has been observed, appraised, or surveyed this year</li>
+        <li><strong>Primary appraiser</strong> (Chief Academic Officer / designated Academic Director) — record the observation visits, write and sign off the annual appraisal, read the 360</li>
+        <li><strong>Foundation Representative / General Manager</strong> — open the signed-off summary (composite, band, recommendation, agreed goals) for principals at your school and co-sign it</li>
+        <li><strong>Year 1</strong> — a principal in their protected induction year is not appraised</li>
       </ol>
       <div class="info-strip__callout">
         <span class="info-strip__callout-icon" aria-hidden="true">⚠️</span>
-        <span><strong>New here?</strong> Read the <a href="/admin-read-me-foundation-rep" style="color:#92400e;font-weight:700;">Foundation Rep guide</a> for the full yearly evaluation rhythm before you begin.</span>
+        <span><strong>The FR/GM never sees item-level scores,</strong> observation notes, F3 area scores or individual 360 responses — only the summary. Read the <a href="/admin-read-me-foundation-rep" style="color:#92400e;font-weight:700;">Foundation Rep guide</a> for the yearly rhythm.</span>
       </div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Foundation Representative</span>
-        <span class="info-strip__pill"><b>Scope:</b> Network-wide</span>
+        <span class="info-strip__pill"><b>For:</b> Eduversal appraiser · FR/GM</span>
+        <span class="info-strip__pill"><b>Scope:</b> Network (appraiser) · own school (FR/GM)</span>
         <span class="info-strip__pill"><b>Role:</b> Launch hub</span>
       </div>
     </div>
@@ -180,9 +180,9 @@ body:has(> .page-footer) > .page-wrap {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Principal Evaluation · Foundation Rep</span>
-      <h2 class="page-footer__cta-title">New to the leadership-evaluation cycle?</h2>
-      <p class="page-footer__cta-desc">The Foundation Rep guide walks you through when to observe, when to appraise, and how the 360° feedback fits the year. Start there before you open your first form.</p>
+      <span class="page-footer__cta-eyebrow">Principal Evaluation</span>
+      <h2 class="page-footer__cta-title">New to the Principal Appraisal cycle?</h2>
+      <p class="page-footer__cta-desc">The Foundation Rep guide explains who appraises the principal, what the FR/GM co-reviews and co-signs, and what stays confidential. Start there before you open your first summary.</p>
       <a href="/admin-read-me-foundation-rep" class="page-footer__cta-btn">Read the Foundation Rep guide <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Principal Evaluation footer navigation">
@@ -201,7 +201,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Submitted observations + appraisals are immutable · 360° results are anonymous</span>
+    <span class="page-footer__meta-right">Submitted observations + appraisals are immutable · FR/GM receives the summary only</span>
   </div>
 </footer>
 
@@ -217,12 +217,18 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   }
   document.body.style.display = '';
 
+  // Principal Appraisal: Handbook 26-27 §7 / §13 — the Chief Academic Officer /
+  // designated Academic Director (AH academic_admin, or central_admin) is the
+  // primary appraiser; the Foundation Representative / General Manager is the
+  // governance-side co-reviewer and summary co-signer for their own school.
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
-  if (!isAdmin && !ahSubs.includes('foundation_representative')) {
-    showAccessDenied('Restricted to Foundation Representatives and admins.');
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isFR = ahSubs.includes('foundation_representative');
+  if (!isAppraiser && !isFR) {
+    showAccessDenied('Restricted to the Eduversal primary appraiser and Foundation Representatives / General Managers.');
     return;
   }
+  hubMode = isAppraiser ? 'appraiser' : 'fr';
 
   try {
     // Find users with school_principal sub-role.
@@ -232,6 +238,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     );
     const snap = await getDocs(q);
     let principals = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+    // FR/GM: principals at their own school only.
+    if (hubMode === 'fr') principals = principals.filter(p => p.schoolId && p.schoolId === profile?.schoolId);
 
     // Fetch school names for display
     const schoolIds = [...new Set(principals.map(p => p.schoolId).filter(Boolean))];
@@ -253,11 +261,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 });
 
 let allPrincipals = [];
+let hubMode = 'appraiser';
 function render(principals) {
   allPrincipals = principals;
   const root = document.getElementById('content');
   if (!principals.length) {
-    root.innerHTML = `<div class="empty">No school principals found across the network.</div>`;
+    root.innerHTML = `<div class="empty">${hubMode === 'fr' ? 'No school principal found at your school.' : 'No school principals found across the network.'}</div>`;
     return;
   }
   root.innerHTML = `
@@ -289,18 +298,23 @@ function renderCard(p) {
         <div class="email">${escapeHtml(p.email || '')}</div>
       </div>
       <div class="actions">
-        <a class="action-btn" href="/principal-observation-entry?principalUid=${uid}" title="Log a new observation visit">
+        ${hubMode === 'fr' ? `
+        <a class="action-btn" href="/principal-appraisal-entry?principalUid=${uid}" title="Signed-off summary (composite, band, recommendation, agreed goals) — co-sign">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          Summary &amp; co-sign
+        </a>` : `
+        <a class="action-btn" href="/principal-observation-entry?principalUid=${uid}" title="Record a leadership-observation visit">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           Observe
         </a>
-        <a class="action-btn" href="/principal-appraisal-entry?principalUid=${uid}" title="Open / draft annual appraisal">
+        <a class="action-btn" href="/principal-appraisal-entry?principalUid=${uid}" title="Open / draft the annual appraisal">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
           Appraise
         </a>
-        <a class="action-btn" href="/principal-360-results?cycle=${uid}_2025-2026_W17" title="Aggregated 360° results (most recent cycle)">
+        <a class="action-btn" href="/principal-360-results?principalUid=${uid}" title="Aggregated 360° results — choose the cycle on the next page">
           <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
           360°
-        </a>
+        </a>`}
       </div>
     </div>
   `;

@@ -228,7 +228,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
       <h1 class="page-hero__title">My Portfolio</h1>
-      <p class="page-hero__desc">Submit proof of a leadership competency at a stage. Each submission carries a short narrative and an optional file; a central reviewer reads the evidence before granting the stage on your <a href="/learning-path" style="color:rgba(255,255,255,.95);text-decoration:underline;">Learning Path</a>.</p>
+      <p class="page-hero__desc">Add evidence of your growth in a leadership competency at a stage. Each submission carries a short narrative and an optional file; an Eduversal reviewer reads it before the stage shows on your <a href="/learning-path" style="color:rgba(255,255,255,.95);text-decoration:underline;">Learning Path</a>. This is developmental: no stage here is a Career Growth Role Register level, a promotion step or a certification.</p>
     </div>
     <div class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -254,25 +254,25 @@ body { padding-top: 62px; }
   <div class="page-intro" data-intro-key="my-portfolio">
     <div class="page-intro-icon">📁</div>
     <div class="page-intro-body">
-      <div class="page-intro-title">Portfolio — your official leadership CPD record</div>
+      <div class="page-intro-title">Portfolio — your leadership growth evidence</div>
       <div class="page-intro-text">
-        This is where you <strong>submit proof</strong> of a leadership competency at a level. HQ reviews every submission before granting the level.
+        This is where you <strong>add evidence</strong> of a leadership competency at a level. An Eduversal reviewer reads every submission before the level shows on your Learning Path. It is a developmental record: it is not formal appraisal evidence, a promotion step or a certification.
       </div>
 
       <ol class="page-intro__flow">
         <li><strong>Pick</strong> the competency + level (Awareness / Practitioner / Advanced / Lead) you want to claim</li>
         <li><strong>Write a short story</strong> (≥80 chars) about what you actually did — initiative led, decision made, outcome observed — attach a file if it helps</li>
-        <li><strong>Track the status</strong> next to your submission: <span class="page-intro__pill page-intro__pill--pending">Pending</span> waiting for review · <span class="page-intro__pill page-intro__pill--review">Under Review</span> HQ has opened it · <span class="page-intro__pill page-intro__pill--approved">Approved</span> lands on your Learning Path · <span class="page-intro__pill page-intro__pill--rejected">Revise &amp; Resubmit</span> HQ left a note</li>
+        <li><strong>Track the status</strong> next to your submission: <span class="page-intro__pill page-intro__pill--pending">Pending</span> waiting for review · <span class="page-intro__pill page-intro__pill--review">Under Review</span> the reviewer has opened it · <span class="page-intro__pill page-intro__pill--approved">Approved</span> lands on your Learning Path · <span class="page-intro__pill page-intro__pill--rejected">Revise &amp; Resubmit</span> the reviewer left a note</li>
       </ol>
 
       <div class="page-intro__callout">
         <span class="page-intro__callout-icon" aria-hidden="true">⏳</span>
-        <span><strong>Don't submit on day 1.</strong> Do the real work first, then come back. Self-assessment ratings live on the <a href="/competency-framework">Competency Framework</a> page and are private — this page is for the official record.</span>
+        <span><strong>Don't submit on day 1.</strong> Do the real work first, then come back. Self-assessment ratings live on the <a href="/competency-framework">Competency Framework</a> page and are private — this page holds the evidence you choose to have reviewed.</span>
       </div>
 
       <div class="page-intro__foot">
-        <span><strong>Where it lands:</strong> approved levels show on <a href="/learning-path">Learning Path</a> + <a href="/my-certificates">My Certificates</a></span>
-        <span><strong>Reviewer:</strong> HQ (central_admin) reads everything before deciding</span>
+        <span><strong>Where it lands:</strong> approved levels show on <a href="/learning-path">Learning Path</a> + <a href="/my-certificates">My Progress Record</a></span>
+        <span><strong>Reviewer:</strong> an Eduversal reviewer reads everything before deciding</span>
       </div>
 
       <a class="page-intro-link" href="/my-hub-read-me#page-portfolio">📘 Open the My Hub Read Me First guide →</a>
@@ -282,7 +282,7 @@ body { padding-top: 62px; }
 
   <div class="submit-card">
     <div class="submit-card-title">Submit Evidence</div>
-    <div class="submit-card-sub">Upload evidence to demonstrate a leadership competency level. Your submission will be reviewed by a central administrator.</div>
+    <div class="submit-card-sub">Upload evidence of your growth at a leadership competency level. An Eduversal reviewer will read your submission.</div>
     <div class="form-row"><label class="form-label">Competency *</label><select class="form-select" id="compSelect"></select></div>
     <div class="form-row"><label class="form-label">Level Claiming *</label><select class="form-select" id="levelSelect"><option value="">— select competency first —</option></select></div>
     <div class="form-row"><label class="form-label">Evidence Description *</label><textarea aria-label="Describe what initiative or action you undertook, what evidence you have, and what impact it had. Be specific" class="form-textarea" id="evidenceDesc" placeholder="Describe what initiative or action you undertook, what evidence you have, and what impact it had. Be specific."></textarea><div class="form-hint">Minimum 80 characters.</div></div>
@@ -302,7 +302,7 @@ body { padding-top: 62px; }
       </div>
     </div>
     <div class="form-error" id="formError"></div>
-    <div class="form-success" id="formSuccess">Evidence submitted successfully! A central admin will review it shortly.</div>
+    <div class="form-success" id="formSuccess">Evidence submitted. An Eduversal reviewer will read it shortly.</div>
     <button class="submit-btn" id="submitBtn" onclick="submitEvidence()">📤 Submit Evidence</button>
   </div>
 
@@ -454,7 +454,7 @@ async function loadSubmissions(){
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Leadership · Evidence</span>
       <h2 class="page-footer__cta-title">Have you done the work?</h2>
-      <p class="page-footer__cta-desc">Pick the competency, pick the stage, write 80+ characters about what you actually did, attach a file if it helps. A central reviewer reads each submission before granting the stage on your Learning Path.</p>
+      <p class="page-footer__cta-desc">Pick the competency, pick the stage, write 80+ characters about what you actually did, attach a file if it helps. An Eduversal reviewer reads each submission before the stage shows on your Learning Path. Stages are developmental — not a promotion step or a certification.</p>
       <a href="/learning-path" class="page-footer__cta-btn">Open Learning Path <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="My Portfolio footer navigation">
@@ -462,7 +462,7 @@ async function loadSubmissions(){
         <span class="page-footer__nav-heading">My Hub</span>
         <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
         <a href="/competency-framework" class="page-footer__nav-link">Framework Map</a>
-        <a href="/my-certificates" class="page-footer__nav-link">My Certificates</a>
+        <a href="/my-certificates" class="page-footer__nav-link">My Progress Record</a>
         <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
       </div>
       <div class="page-footer__nav-group">
@@ -476,7 +476,7 @@ async function loadSubmissions(){
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">PDF / Word / image · max 10 MB · central admin review</span>
+    <span class="page-footer__meta-right">PDF / Word / image · max 10 MB · Eduversal review · developmental record</span>
   </div>
 </footer>
 

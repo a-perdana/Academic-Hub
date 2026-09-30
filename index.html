@@ -542,27 +542,29 @@
         { id: 'my-observations', href: '/my-observations', icon: 'list', title: 'My Observations', desc: 'Every appraisal and walkthrough you have recorded.' },
         { id: 'appraiser-calibration', href: '/appraiser-calibration', icon: 'scale', title: 'Appraiser Calibration', desc: 'Compare appraisers’ scores on the same lesson.' },
         { id: 'teacher-levels', href: '/teacher-levels', icon: 'ladder', title: 'Teacher Levels', desc: 'Your teachers and the appraisal level each one holds.' },
-        { id: 'school-performance-kpi', href: '/school-performance-kpi', icon: 'star', title: 'School Performance KPI', desc: 'Your school’s KPI scorecard.' },
-        { id: 'teacher-kpi-evaluation', href: '/teacher-kpi-evaluation', icon: 'star', title: 'Teacher KPI Evaluation', desc: 'Review and score teacher KPI submissions.' },
+        // School Performance KPI + Teacher KPI Evaluation retired 2026-10-01
+        // (archive/kpi/): the live pack has no standalone KPI system.
         { id: 'principal-evaluation', href: '/principal-evaluation', icon: 'award', title: 'Principal Evaluation', desc: 'Observation, annual appraisal, 360° and coaching for the principal.', tags: ['Foundation Rep'] },
         { id: 'principal-observation-entry', href: '/principal-observation-entry', icon: 'eye', title: 'Principal Observation', desc: 'Formative observation of the principal across eight leadership foci.' },
         { id: 'principal-appraisal-entry', href: '/principal-appraisal-entry', icon: 'person', title: 'Principal Annual Appraisal', desc: 'The weighted annual appraisal of the principal.' },
         { id: 'principal-360-results', href: '/principal-360-results', icon: 'users', title: 'Principal 360° Results', desc: 'Grouped 360° feedback, shown only above the respondent threshold.' },
         { id: 'principal-coaching-view', href: '/principal-coaching-view', icon: 'msg', title: 'My Coaching', desc: 'Coaching sessions logged by your Eduversal Director.', tags: ['For you'] },
 
-        // Career Growth
-        { id: 'competency-framework', href: '/competency-framework', icon: 'layers', title: 'Leadership Competency Framework', desc: 'Six domains of school leadership, each described at four levels.' },
-        { id: 'learning-path', href: '/learning-path', icon: 'route', title: 'My Learning Path', desc: 'Your next competency steps and the evidence each one needs.', tags: ['For you'] },
-        { id: 'my-portfolio', href: '/my-portfolio', icon: 'folder', title: 'My Evidence Portfolio', desc: 'The evidence you have submitted for your competencies.', tags: ['For you'] },
-        { id: 'my-certificates', href: '/my-certificates', icon: 'badge', title: 'My Certificates', desc: 'The certificates you have earned.', tags: ['For you'] },
+        // Leadership self-reflection tools. Not part of the live Career Growth
+        // module (no Role Register level, promotion step or certification);
+        // which home section shows them is set by ah_categories.cardIds.
+        { id: 'competency-framework', href: '/competency-framework', icon: 'layers', title: 'Leadership Competency Framework', desc: 'Six domains of school leadership for developmental self-reflection.', tags: ['Developmental'] },
+        { id: 'learning-path', href: '/learning-path', icon: 'route', title: 'My Learning Path', desc: 'Short lessons and practice tasks for your own leadership growth.', tags: ['For you'] },
+        { id: 'my-portfolio', href: '/my-portfolio', icon: 'folder', title: 'My Evidence Portfolio', desc: 'The reflection evidence you have added for your competencies.', tags: ['For you'] },
+        { id: 'my-certificates', href: '/my-certificates', icon: 'badge', title: 'My Progress Record', desc: 'Your self-reflection progress by domain. Not a certificate.', tags: ['For you'] },
 
         // Teaching & Learning
         { id: 'library', href: '/library', icon: 'book', title: 'Academic Library', desc: 'Books, articles and resources for teachers and leaders.' },
 
         // Digital Citizenship & AI
         { id: 'ai-prompts', href: '/ai-prompts', icon: 'bulb', title: 'AI Prompt Library', desc: 'Tested prompts for planning, feedback and school admin.' },
-        { id: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', icon: 'chip', title: 'AI Maturity Self-Assessment', desc: 'Where your school stands on the AI Competency Framework.', tags: ['Developmental'] },
-        { id: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', icon: 'check', title: 'Validate Teacher AI Self-Assessments', desc: 'Review your teachers’ AI Competency self-assessments.' },
+        { id: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', icon: 'chip', title: 'AI Maturity Self-Assessment', desc: 'Your school’s yearly six-area AI self-assessment. Not an appraisal score.', tags: ['Developmental'] },
+        { id: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', icon: 'check', title: 'Teacher AI Self-Assessments', desc: 'Record the professional development conversation on each teacher’s AI self-assessment.', tags: ['Developmental'] },
         { id: 'network-audit', href: '/network-audit', icon: 'shield', title: 'Network Security Audit', desc: 'Device, account and network security checks for your school.' },
 
         // Academic Insights (the AY 2025-26 dashboards — EASE I-III, A-EASE,
@@ -585,11 +587,13 @@
       // page_access_config keys that must never become auto tiles.
       const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'handbook', 'school-handbook-teacher', 'school-handbook-student', 'school-handbook-parent', 'school-handbook-staff-coc',
         // Shared with CH's own /school-appraisals; the AH page was archived 2026-09-30.
-        'school-appraisals']);
+        'school-appraisals',
+        // Retired 2026-10-01 (archive/kpi/) — a leftover page_access_config row
+        // must not bring them back as auto tiles.
+        'school-performance-kpi', 'teacher-kpi-evaluation']);
       // Tools that belong to a pilot system (mirrors auth-guard PILOT_SLUG_MAP
       // for the tiles whose href slug is not the page slug).
       const TOOL_PILOT = {
-        'school-performance-kpi': 'kpi', 'teacher-kpi-evaluation': 'kpi',
         'school-self-appraisal': 'appraisal', 'teacher-appraisal-entry': 'appraisal',
         'teacher-walkthrough-entry': 'appraisal', 'appraiser-calibration': 'appraisal', 'my-observations': 'appraisal',
         'competency-framework': 'competency', 'learning-path': 'competency', 'my-portfolio': 'competency', 'my-certificates': 'competency',

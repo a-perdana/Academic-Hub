@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Certificates — Academic Hub</title>
+<title>My Progress Record — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="firebase-config.js"></script>
@@ -179,24 +179,24 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-siz
   <div class="page-hero__inner">
     <div class="page-hero__text">
       <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
-      <h1 class="page-hero__title">My Certificates</h1>
-      <p class="page-hero__desc">Earned certificates and per-domain progress towards certification. A certificate is awarded when every competency in a domain reaches the top stage (Lead). Open the <a href="/competency-framework" style="color:rgba(255,255,255,.95);text-decoration:underline;">framework</a> for the full criteria.</p>
+      <h1 class="page-hero__title">My Progress Record</h1>
+      <p class="page-hero__desc">Your self-reflection progress on the <a href="/competency-framework" style="color:rgba(255,255,255,.95);text-decoration:underline;">Leadership Competency Framework</a>, by domain. This is a developmental record, not a certificate or a credential. No level here is a Career Growth Role Register level, a promotion step or a certification.</p>
     </div>
     <div class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
-        <div class="page-hero__kpi-num" id="heroKpiCerts">—</div>
-        <div class="page-hero__kpi-lbl">Certificates</div>
-        <div class="page-hero__kpi-sub">issued</div>
-      </div>
-      <div class="page-hero__kpi">
         <div class="page-hero__kpi-num" id="heroKpiEarnedComps">—</div>
         <div class="page-hero__kpi-lbl">Competencies</div>
-        <div class="page-hero__kpi-sub">earned</div>
+        <div class="page-hero__kpi-sub">with a recorded stage</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="heroKpiStarted">—</div>
+        <div class="page-hero__kpi-lbl">Domains</div>
+        <div class="page-hero__kpi-sub">of 6 started</div>
       </div>
       <div class="page-hero__kpi">
         <div class="page-hero__kpi-num" id="heroKpiDomains">—</div>
-        <div class="page-hero__kpi-lbl">Domains Lead</div>
-        <div class="page-hero__kpi-sub">of 6 complete</div>
+        <div class="page-hero__kpi-lbl">Domains</div>
+        <div class="page-hero__kpi-sub">every competency at Lead</div>
       </div>
     </div>
   </div>
@@ -206,9 +206,9 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-siz
   <div class="page-intro" data-intro-key="my-certificates">
     <div class="page-intro-icon">🏆</div>
     <div class="page-intro-body">
-      <div class="page-intro-title">First time on My Certificates?</div>
+      <div class="page-intro-title">First time on My Progress Record?</div>
       <div class="page-intro-text">
-        This page shows what you have <strong>earned so far</strong>: your certificates and a progress bar for each of the 6 leadership domains. A certificate is given when <strong>every skill in a domain reaches the top stage (Lead)</strong>. On day 1, everything is at 0 — that is normal.
+        This page shows a progress bar for each of the 6 leadership domains, based on the stages recorded on your <strong>Learning Path</strong>. It is for your own reflection and growth. It is <strong>not a certificate</strong>: Academic Services certification credentials are recorded only in the Educamp Certificate Tracker, the central certificate register, and career progression follows the Career Growth Framework. On day 1, everything is at 0 — that is normal.
       </div>
       <a class="page-intro-link" href="/my-hub-read-me#page-certificates">📘 Open the My Hub Read Me First guide →</a>
     </div>
@@ -216,34 +216,26 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-siz
   </div>
 
   <div class="section-title">
-    <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm2 10H7v-1.5l3-1.5V7h2v3.5l-1 .5V12z"/></svg>
-    Earned Certificates
-  </div>
-  <div class="cert-grid" id="certGrid"><div class="skel" style="height:220px;border-radius:18px;"></div></div>
-  <div class="section-title">
     <svg viewBox="0 0 20 20" fill="currentColor"><path d="M2 10a8 8 0 1116 0A8 8 0 012 10zm9-3a1 1 0 10-2 0v3a1 1 0 00.293.707l2 2a1 1 0 001.414-1.414L11 9.586V7z"/></svg>
-    Domain Progress Towards Certification
+    Domain Progress
   </div>
   <div class="domain-progress-list" id="domainProgressList">
     <div class="skel" style="height:56px;border-radius:12px;margin-bottom:8px;"></div>
     <div class="skel" style="height:56px;border-radius:12px;"></div>
   </div>
-</div>
-
-<div class="cert-modal-overlay" id="certModal">
-  <div class="cert-modal">
-    <div class="cert-preview">
-      <div class="cert-preview-inner">
-        <div class="cert-preview-emblem" id="cModalIcon">🎓</div>
-        <div class="cert-preview-org">Eduversal · Academic Hub</div>
-        <div class="cert-preview-title">Certificate of Leadership Competency</div>
-        <div class="cert-preview-domain" id="cModalDomain"></div>
-        <div class="cert-preview-name" id="cModalName"></div>
-        <div class="cert-preview-date" id="cModalDate"></div>
-        <div class="cert-preview-id" id="cModalId"></div>
-      </div>
+  <!-- Earlier domain records (competency_certificates, platform 'academic').
+       Shown only when some exist. Since 2026-10-01 they are presented as
+       records, not certificates, and carry no certificate ID: the live
+       Certification Programme Overview 26-27 — "Certificate IDs are assigned
+       through the central certificate register. Do not create a parallel
+       module-specific certificate-ID sequence." -->
+  <div id="legacyRecords" style="display:none;">
+    <div class="section-title">
+      <svg viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a7 7 0 100 14A7 7 0 009 2zm2 10H7v-1.5l3-1.5V7h2v3.5l-1 .5V12z"/></svg>
+      Earlier Domain Records
     </div>
-    <div class="cert-modal-footer"><button class="cert-modal-close" onclick="closeCertModal()">Close</button></div>
+    <p style="font-size:13px;color:var(--ink-2);margin:-6px 0 12px;">These were recorded under an earlier version of this page. They are progress records, not certificates or credentials.</p>
+    <div class="cert-grid" id="certGrid"></div>
   </div>
 </div>
 
@@ -252,25 +244,29 @@ import { collection, doc, getDoc, getDocs, query, where, orderBy } from 'https:/
 // Aligned with Cambridge School Leader Standards-grounded framework defined
 // in CompetencyFramework.html — same 6 domain IDs (evsi/cial/pdpc/ewsc/eao/
 // fcep) and same competency IDs that user_competencies.earned_academic and
-// competency_certificates.domainId actually use.
+// competency_certificates.domainId actually use. 29 competencies, matching
+// LearningPath.html and scripts/competency/seed-ah-competency-framework.js
+// (this list held 24 until 2026-10-01 — the five "-5" ids were missing).
 const FRAMEWORK=[
-  {id:'evsi',name:'Educational Vision & School Improvement',     icon:'🎯',color:'#0d9488',bannerFrom:'#0a2e2c',bannerTo:'#061616',comps:['evsi-1','evsi-2','evsi-3','evsi-4']},
-  {id:'cial',name:'Curriculum, Instruction & Assessment Leadership', icon:'📚',color:'#2563eb',bannerFrom:'#0a1e3c',bannerTo:'#060d1e',comps:['cial-1','cial-2','cial-3','cial-4']},
-  {id:'pdpc',name:'People Development & Professional Capacity',  icon:'🌱',color:'#16a34a',bannerFrom:'#0a3c1e',bannerTo:'#062010',comps:['pdpc-1','pdpc-2','pdpc-3','pdpc-4']},
-  {id:'ewsc',name:'Equity, Wellbeing & School Culture',          icon:'🤝',color:'#d97706',bannerFrom:'#3c1e0a',bannerTo:'#1e0c06',comps:['ewsc-1','ewsc-2','ewsc-3','ewsc-4']},
-  {id:'eao',name:'Ethics, Accountability & Operations',          icon:'⚖️',color:'#7c3aed',bannerFrom:'#1e0a3c',bannerTo:'#0c0820',comps:['eao-1','eao-2','eao-3','eao-4']},
+  {id:'evsi',name:'Educational Vision & School Improvement',     icon:'🎯',color:'#0d9488',bannerFrom:'#0a2e2c',bannerTo:'#061616',comps:['evsi-1','evsi-2','evsi-3','evsi-4','evsi-5']},
+  {id:'cial',name:'Curriculum, Instruction & Assessment Leadership', icon:'📚',color:'#2563eb',bannerFrom:'#0a1e3c',bannerTo:'#060d1e',comps:['cial-1','cial-2','cial-3','cial-4','cial-5']},
+  {id:'pdpc',name:'People Development & Professional Capacity',  icon:'🌱',color:'#16a34a',bannerFrom:'#0a3c1e',bannerTo:'#062010',comps:['pdpc-1','pdpc-2','pdpc-3','pdpc-4','pdpc-5']},
+  {id:'ewsc',name:'Equity, Wellbeing & School Culture',          icon:'🤝',color:'#d97706',bannerFrom:'#3c1e0a',bannerTo:'#1e0c06',comps:['ewsc-1','ewsc-2','ewsc-3','ewsc-4','ewsc-5']},
+  {id:'eao',name:'Ethics, Accountability & Operations',          icon:'⚖️',color:'#7c3aed',bannerFrom:'#1e0a3c',bannerTo:'#0c0820',comps:['eao-1','eao-2','eao-3','eao-4','eao-5']},
   {id:'fcep',name:'Family, Community & External Partnerships',   icon:'🌐',color:'#e11d48',bannerFrom:'#3c0a1a',bannerTo:'#200614',comps:['fcep-1','fcep-2','fcep-3','fcep-4']},
 ];
-let uid='',userName='',earned={},myCerts=[];
+let uid='',earned={},myCerts=[];
 
 document.addEventListener('authReady',async({detail:{user,profile}})=>{
   window.__loadAcademicNavbar('competency-framework',{user,profile});
-  uid=user.uid;userName=profile?.displayName||user.displayName||'Administrator';
+  uid=user.uid;
   const snap=await getDoc(doc(window.db,'user_competencies',uid));
   if(snap.exists())earned=snap.data().earned_academic||{};
-  const certQ=query(collection(window.db,'competency_certificates'),where('userId','==',uid),where('platform','==','academic'),orderBy('issuedAt','desc'));
-  const certSnap=await getDocs(certQ);
-  myCerts=certSnap.docs.map(d=>({id:d.id,...d.data()}));
+  try{
+    const certQ=query(collection(window.db,'competency_certificates'),where('userId','==',uid),where('platform','==','academic'),orderBy('issuedAt','desc'));
+    const certSnap=await getDocs(certQ);
+    myCerts=certSnap.docs.map(d=>({id:d.id,...d.data()}));
+  }catch(err){ console.warn('[my-progress] earlier records not loaded',err); myCerts=[]; }
   render();
 });
 
@@ -278,55 +274,49 @@ function isLeadOnAll(comps){return comps.every(c=>earned[c]?.level==='lead');}
 function getEarned(comps){return comps.filter(c=>earned[c]?.level).length;}
 
 function render(){
-  const totalCerts=myCerts.length;
   let total=0,earnedCount=0;
   FRAMEWORK.forEach(d=>{d.comps.forEach(c=>{total++;if(earned[c]?.level)earnedCount++;});});
   const domainsComplete=FRAMEWORK.filter(d=>isLeadOnAll(d.comps)).length;
-  const elCerts=document.getElementById('heroKpiCerts');
+  const domainsStarted=FRAMEWORK.filter(d=>getEarned(d.comps)>0).length;
   const elEarnedComps=document.getElementById('heroKpiEarnedComps');
+  const elStarted=document.getElementById('heroKpiStarted');
   const elDomains=document.getElementById('heroKpiDomains');
-  if(elCerts)elCerts.textContent=totalCerts;
   if(elEarnedComps)elEarnedComps.textContent=`${earnedCount} / ${total}`;
+  if(elStarted)elStarted.textContent=domainsStarted;
   if(elDomains)elDomains.textContent=domainsComplete;
+  // Earlier domain records — shown as records only: no certificate title,
+  // no certificate ID, no certificate view.
+  const legacy=document.getElementById('legacyRecords');
   const grid=document.getElementById('certGrid');
-  if(!myCerts.length){
-    grid.innerHTML=`<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🎓</div><div class="empty-title">No certificates yet</div><div class="empty-sub">Complete all competencies in a domain at Lead level to earn your certificate.</div><a href="/learning-path" class="empty-cta">Start My Learning Path</a></div>`;
-  }else{
+  if(myCerts.length){
+    legacy.style.display='block';
     grid.innerHTML=myCerts.map(cert=>{
       const d=FRAMEWORK.find(f=>f.id===cert.domainId)||{};
       const date=cert.issuedAt?.toDate?.()?.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})||'';
-      return `<div class="cert-card"><div class="cert-card-banner" style="--banner-from:${d.bannerFrom||'#0f1e1a'};--banner-to:${d.bannerTo||'#071814'}"><div class="banner-icon">${d.icon||'🎓'}</div></div><div class="cert-card-body"><div class="cert-domain-tag" style="color:${d.color||'var(--accent)'};">${d.name||cert.domainName}</div><div class="cert-name">Certificate of Leadership Competency</div><div class="cert-meta">Issued ${date}</div><div class="cert-verify-id">${cert.id.substring(0,8).toUpperCase()}</div><div class="cert-card-actions"><button class="cert-btn cert-btn-primary" onclick='showCert(${JSON.stringify(cert)},${JSON.stringify(d)})'>🎓 View</button></div></div></div>`;
+      return `<div class="cert-card"><div class="cert-card-banner" style="--banner-from:${d.bannerFrom||'#0f1e1a'};--banner-to:${d.bannerTo||'#071814'}"><div class="banner-icon">${d.icon||'📘'}</div></div><div class="cert-card-body"><div class="cert-domain-tag" style="color:${d.color||'var(--accent)'};">${d.name||cert.domainName||''}</div><div class="cert-name">Domain progress record</div><div class="cert-meta">Recorded ${date}</div><div class="cert-meta">Not a certificate or credential.</div></div></div>`;
     }).join('');
+  }else{
+    legacy.style.display='none';
+    grid.innerHTML='';
   }
   document.getElementById('domainProgressList').innerHTML=FRAMEWORK.map(d=>{
     const de=getEarned(d.comps),t=d.comps.length,pct=Math.round(de/t*100);
     const isC=isLeadOnAll(d.comps),hasA=de>0;
-    return `<div class="dp-row"><div class="dp-icon">${d.icon}</div><div class="dp-name">${d.name}</div><div class="dp-bar-wrap"><div class="dp-bar"><div class="dp-fill" style="width:${pct}%;background:${d.color};"></div></div></div><div class="dp-pct">${pct}%</div><span class="dp-badge ${isC?'complete':hasA?'in-progress':'not-started'}">${isC?'✓ Certified':hasA?'In Progress':'Not Started'}</span></div>`;
+    return `<div class="dp-row"><div class="dp-icon">${d.icon}</div><div class="dp-name">${d.name}</div><div class="dp-bar-wrap"><div class="dp-bar"><div class="dp-fill" style="width:${pct}%;background:${d.color};"></div></div></div><div class="dp-pct">${pct}%</div><span class="dp-badge ${isC?'complete':hasA?'in-progress':'not-started'}">${isC?'✓ All at Lead':hasA?'In Progress':'Not Started'}</span></div>`;
   }).join('');
 }
 
-window.showCert=function(cert,d){
-  document.getElementById('cModalIcon').textContent=d.icon||'🎓';
-  document.getElementById('cModalDomain').textContent=d.name||cert.domainName;
-  document.getElementById('cModalName').textContent=userName;
-  const date=cert.issuedAt?.toDate?.()?.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})||'';
-  document.getElementById('cModalDate').textContent='Issued '+date;
-  document.getElementById('cModalId').textContent='CERT-'+cert.id.substring(0,8).toUpperCase();
-  document.getElementById('certModal').classList.add('open');
-};
-window.closeCertModal=function(){document.getElementById('certModal').classList.remove('open');};
-document.getElementById('certModal').addEventListener('click',e=>{if(e.target===document.getElementById('certModal'))closeCertModal();});
 </script>
 
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Certification Pathway</span>
-      <h2 class="page-footer__cta-title">Close out the next domain.</h2>
-      <p class="page-footer__cta-desc">A certificate is awarded only when every competency in a domain reaches Lead. Use the progress bars to find your nearest domain, then push the remaining competencies up one stage at a time.</p>
+      <span class="page-footer__cta-eyebrow">Developmental Record</span>
+      <h2 class="page-footer__cta-title">Growth, not a credential.</h2>
+      <p class="page-footer__cta-desc">Use the progress bars to choose your next focus, then work through it on your Learning Path one stage at a time. Academic Services certification credentials are recorded only in the Educamp Certificate Tracker, the central certificate register.</p>
       <a href="/learning-path" class="page-footer__cta-btn">Continue Learning Path <span aria-hidden="true">→</span></a>
     </div>
-    <nav class="page-footer__nav" aria-label="My Certificates footer navigation">
+    <nav class="page-footer__nav" aria-label="My Progress Record footer navigation">
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">My Hub</span>
         <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
@@ -345,7 +335,7 @@ document.getElementById('certModal').addEventListener('click',e=>{if(e.target===
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">6 domains · Lead-on-all-competencies = certificate · verify by id</span>
+    <span class="page-footer__meta-right">6 domains · 29 competencies · developmental record, not a certificate</span>
   </div>
 </footer>
 

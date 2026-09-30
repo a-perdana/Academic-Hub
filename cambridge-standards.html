@@ -355,7 +355,7 @@ const TRACK_LABELS  = { teachers: 'Teachers', leaders: 'Leaders (AH)', specialis
 const HUB = 'ah';
 const HUB_ROUTES = {
   ah: {
-    kpi:        () => '/teacher-kpi-evaluation',
+    kpi:        () => null,   // Teacher KPI Evaluation retired 2026-10-01 (archive/kpi/) — chip is not clickable
     appraisal:  () => '/teacher-appraisal-entry',
     competency: (track) => track === 'leaders' ? '/learning-path' : null,
     induction:  (track) => track === 'principal' ? '/my-induction' : null,

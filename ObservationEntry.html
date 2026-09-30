@@ -159,8 +159,10 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); }
   <div class="page-header">
     <p class="eyebrow">Induction Module · Mentor / School Leader</p>
     <h1>Observation Entry</h1>
-    <p>Record a structured observation against the four-domain rubric (Planning, Management, Instruction, Assessment). Charter Non-Negotiable 1: this collection is induction-scope only and does NOT propagate to the network appraisal scoring engine.</p>
+    <p>Write up a Teacher Induction observation on the four-domain induction rubric (Planning, Management, Instruction, Assessment). Each domain gets a developmental placement — Emerging, Developing, Embedding or Extending — never a score. Charter Non-Negotiable 1: induction observations stay inside the induction system and never feed Teacher Appraisal.</p>
   </div>
+
+  <div class="alert info">This form keeps the observation write-up only. It is not the school's induction tracker: the Teacher Induction Coordinator keeps the school's records (stage, RAG status, checkpoint dates) in the central Induction Control Centre, and schools do not create a separate Teacher Induction tracker.</div>
 
   <div id="loadingState" style="padding:40px;text-align:center;color:var(--ink-3);">Loading mentee context…</div>
 
@@ -188,15 +190,15 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); }
 
     <!-- RUBRIC -->
     <div class="section" id="rubricSection">
-      <h2>Four-domain rubric</h2>
-      <p class="help">Click a level cell for each domain. Levels: 1 = Unsatisfactory, 2 = Basic, 3 = Proficient, 4 = Distinguished. The four domains are anchored to PIGP Lampiran D (kompetensi pedagogik / kepribadian / sosial / profesional applied at lesson-observation level).</p>
+      <h2>Developmental placement — four induction domains</h2>
+      <p class="help">Choose one placement for each domain: Emerging → Developing → Embedding → Extending. The placement is a current photograph, not a permanent label. It is not a score: do not add, average or convert it into a percentage, an A–F grade, an appraisal score or a ranking between teachers. The four domains are anchored to the Cambridge ICTL 5881 syllabus (Units 1–3).</p>
 
       <div class="rubric-headers">
         <div>Domain</div>
-        <div>Unsatisfactory</div>
-        <div>Basic</div>
-        <div>Proficient</div>
-        <div>Distinguished</div>
+        <div>Emerging</div>
+        <div>Developing</div>
+        <div>Embedding</div>
+        <div>Extending</div>
       </div>
 
       <div id="rubricGrid"><!-- domain rows rendered here --></div>
@@ -253,27 +255,40 @@ const OBSERVATION_TYPE = params.get('type') || 'mentor_observes_mentee';
 const OBSERVATION_NUMBER = parseInt(params.get('number') || '0', 10) || null;
 const EXISTING_OBS_ID = params.get('obsId') || null;
 
+// Induction developmental rubric — Induction Module: Teacher 26-27 §3.4
+// ("Emerging → Developing → Embedding → Extending", no numeric score) and
+// docs/induction/induction-observation-rubric-v1.json → developmentalLevels.
+// Placements are stored as level codes in `domainLevels`; they are never
+// summed, averaged or converted into a score.
+const RUBRIC_ID = 'induction_observation_rubric_v1';
 const RUBRIC_DOMAINS = [
-  { id: 'planning',    label: 'Planning & Organization',  helper: 'Lesson plan clarity, learning objectives, content alignment, differentiation.' },
-  { id: 'management',  label: 'Classroom Management',     helper: 'Positive learning atmosphere, time and resource management, classroom dynamics.' },
-  { id: 'instruction', label: 'Instructional Process',    helper: 'Punctuality, student engagement, subject mastery, teaching strategies, questioning.' },
-  { id: 'assessment',  label: 'Assessment',               helper: 'Communicates assessment criteria, uses formative assessment, maintains records.' },
+  { id: 'planning',    label: 'Planning',              helper: 'Lesson plan clarity, learning objectives, content alignment, differentiation.' },
+  { id: 'management',  label: 'Classroom Management',  helper: 'Positive learning atmosphere, time and resource management, classroom dynamics.' },
+  { id: 'instruction', label: 'Instruction',           helper: 'Student engagement, subject mastery, teaching strategies, questioning.' },
+  { id: 'assessment',  label: 'Assessment',            helper: 'Communicates assessment criteria, uses formative assessment, maintains records.' },
 ];
 
 const LEVELS = [
-  { num: 1, label: 'Unsatisfactory' },
-  { num: 2, label: 'Basic' },
-  { num: 3, label: 'Proficient' },
-  { num: 4, label: 'Distinguished' },
+  { code: 'emerging',   label: 'Emerging' },
+  { code: 'developing', label: 'Developing' },
+  { code: 'embedding',  label: 'Embedding' },
+  { code: 'extending',  label: 'Extending' },
 ];
+const LEVEL_CODES = LEVELS.map(l => l.code);
 
+// `scored: true` keeps its historic name: it means "this touch records a
+// developmental placement" (the live handbook's "Scored? Yes" column),
+// never a number.
+const CHECKPOINT_TYPES = ['integration_checkpoint', 'completion_review'];
 const TYPE_DESCRIPTIONS = {
-  co_teach: { label: 'Co-teach observation', scored: false, note: 'Co-teach observations are unscored. Capture narrative reflections only — the rubric below is hidden.' },
-  mentor_observes_mentee: { label: 'Mentor observes mentee', scored: true, note: '' },
-  mentee_observes_mentor: { label: 'Mentee observes mentor', scored: false, note: 'In this observation type the mentee is the observer and the mentor is the observed. The mentee writes a structured reflection — the rubric below is hidden for this entry.' },
+  co_teach: { label: 'Co-teach (Touch 1 or 2)', scored: false, note: 'Co-teach touches record a reflection only, with no developmental placement — the rubric below is hidden.' },
+  mentor_observes_mentee: { label: 'Mentor observes mentee', scored: true, note: 'Use all four induction domains and agree one priority focus in advance. Give Glow / Grow / Go feedback and a developmental placement for each domain — no score and no grade.' },
+  mentee_observes_mentor: { label: 'Mentee observes mentor', scored: false, note: 'In this observation type the mentee is the observer and the mentor is the observed. The mentee writes a short reflection: three things noticed, one thing to try, one thing to do differently. The rubric below is hidden for this entry.' },
   mentee_observes_other_teacher: { label: 'Mentee observes another experienced teacher', scored: false, note: 'In this observation type the mentee is the observer. The rubric below is hidden.' },
-  formal_evaluation: { label: 'Q4 formal evaluation', scored: true, note: 'This is the school leader-led formal evaluation. Per Charter Principle 3, this evaluation does NOT feed network appraisal scoring; it is the mentee\'s induction-completion observation.' },
-  specialist_walkthrough: { label: 'Specialist walkthrough', scored: true, note: 'A walkthrough conducted by an HQ Subject Specialist (Stage 2 of the specialist induction).' },
+  integration_checkpoint: { label: 'Stage 4 — Integration Checkpoint (end of Semester 2)', scored: true, note: 'Led by the School Leader. Agree the focus with the teacher, covering all four induction domains; observe one full lesson with this induction rubric (not the Teacher Appraisal F2 form); give Glow / Grow / Go feedback within 14 days, in person. The checkpoint is developmental, not an appraisal event: do not export the result into the appraisal system.' },
+  completion_review: { label: 'Stage 5 — Final Induction Completion Review (end of Semester 3)', scored: true, note: 'Led by the School Leader, with the same structure and rubric as the Stage 4 checkpoint. After the review the School Leader signs off the induction as completed, extended or withdrew. The result stays inside the induction system and never feeds Teacher Appraisal.' },
+  formal_evaluation: { label: 'Formal induction checkpoint (older record)', scored: true, note: 'This record was started under the retired "Q4 formal evaluation" label. The live programme has two School Leader checkpoints instead: the Stage 4 Integration Checkpoint (end of Semester 2) and the Final Induction Completion Review (end of Semester 3), both on this developmental rubric.' },
+  specialist_walkthrough: { label: 'Specialist walkthrough', scored: true, note: 'A walkthrough conducted by an Eduversal Subject Specialist (Phase 2 — Shadow Visits — of the Specialist induction).' },
 };
 
 // ──────────────────────────────────────────────────────────
@@ -282,8 +297,9 @@ const TYPE_DESCRIPTIONS = {
 let assignment = null;
 let menteeProfile = null;
 let programDoc = null;
-let domainScores = { planning: null, management: null, instruction: null, assessment: null };
+let domainLevels = { planning: null, management: null, instruction: null, assessment: null };
 let existingObs = null;
+let viewerIsMentor = false, viewerIsSchoolLeader = false, viewerIsAdmin = false;
 
 // ──────────────────────────────────────────────────────────
 // BOOT
@@ -312,6 +328,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const isMentor = assignment.mentorUid === user.uid;
     const isSchoolLeader = assignment.schoolLeaderUid === user.uid;
     const isAdminUser = profile?.role_centralhub === 'central_admin';
+    viewerIsMentor = isMentor; viewerIsSchoolLeader = isSchoolLeader; viewerIsAdmin = isAdminUser;
     if (!isMentor && !isSchoolLeader && !isAdminUser) {
       showLoadingError('You are not the assigned mentor, school leader, or admin for this induction.');
       return;
@@ -389,8 +406,22 @@ function renderForm() {
     document.getElementById('grow').value = existingObs.narrativeGrow || '';
     document.getElementById('go').value = existingObs.narrativeGo || '';
     document.getElementById('actionPlan').value = existingObs.actionPlan || '';
-    if (existingObs.domainScores) {
-      domainScores = { ...domainScores, ...existingObs.domainScores };
+    if (existingObs.domainLevels) {
+      for (const d of RUBRIC_DOMAINS) {
+        const v = existingObs.domainLevels[d.id];
+        const code = typeof v === 'string' ? v : v?.level;
+        if (LEVEL_CODES.includes(code)) domainLevels[d.id] = code;
+      }
+    } else if (existingObs.domainScores && Object.values(existingObs.domainScores).some(v => typeof v === 'number')) {
+      // Older draft on the retired 1–4 scale. Show the old values as they
+      // were recorded, but do not translate them into placements.
+      const old = RUBRIC_DOMAINS
+        .map(d => `${d.label}: ${existingObs.domainScores[d.id] ?? '—'}`)
+        .join(' · ');
+      const legacy = document.createElement('div');
+      legacy.className = 'alert warning';
+      legacy.textContent = `This draft was started on the retired 1–4 scale (${old}). The induction rubric now uses developmental placements only. Choose a placement for each domain before you complete it; the old values stay on the record unchanged.`;
+      document.getElementById('rubricSection').prepend(legacy);
     }
   } else {
     document.getElementById('obsDate').value = new Date().toISOString().slice(0, 10);
@@ -413,10 +444,9 @@ function renderRubric() {
         <small>${escapeHtml(d.helper)}</small>
       </div>
       ${LEVELS.map(l => `
-        <div class="rubric-cell ${domainScores[d.id] === l.num ? 'selected' : ''}"
-             data-domain="${d.id}" data-num="${l.num}">
+        <div class="rubric-cell ${domainLevels[d.id] === l.code ? 'selected' : ''}"
+             data-domain="${d.id}" data-level="${l.code}">
           <span class="rubric-cell-label">${escapeHtml(l.label)}</span>
-          <span class="rubric-cell-num">${l.num}</span>
         </div>
       `).join('')}
     </div>
@@ -425,8 +455,7 @@ function renderRubric() {
   grid.querySelectorAll('.rubric-cell').forEach(cell => {
     cell.addEventListener('click', () => {
       const domainId = cell.dataset.domain;
-      const num = parseInt(cell.dataset.num, 10);
-      domainScores[domainId] = num;
+      domainLevels[domainId] = cell.dataset.level;
       grid.querySelectorAll(`.rubric-cell[data-domain="${domainId}"]`).forEach(c => c.classList.remove('selected'));
       cell.classList.add('selected');
     });
@@ -452,8 +481,13 @@ function buildPayload(markComplete) {
     observationDate: obsDateStr ? Timestamp.fromDate(new Date(obsDateStr)) : null,
     preObservationFocus: document.getElementById('preFocus').value.trim(),
     scored: !!td.scored,
-    domainScores: td.scored ? domainScores : null,
-    overallRubricLevel: td.scored ? overallRubricLevel(domainScores) : null,
+    rubricId: RUBRIC_ID,
+    // domainId -> { level } — level codes only, no numbers and no overall
+    // level (Induction Module: Mentor Guide 26-27 §8.4). Older drafts keep
+    // their legacy `domainScores` field untouched.
+    domainLevels: td.scored
+      ? Object.fromEntries(RUBRIC_DOMAINS.map(d => [d.id, { level: domainLevels[d.id] || null }]))
+      : null,
     narrativeGlow: document.getElementById('glow').value.trim(),
     narrativeGrow: document.getElementById('grow').value.trim(),
     narrativeGo:   document.getElementById('go').value.trim(),
@@ -464,24 +498,17 @@ function buildPayload(markComplete) {
   return payload;
 }
 
-function overallRubricLevel(scores) {
-  const vals = Object.values(scores).filter(v => typeof v === 'number');
-  if (vals.length === 0) return null;
-  const avg = vals.reduce((a, b) => a + b, 0) / vals.length;
-  if (avg >= 3.5) return 'distinguished';
-  if (avg >= 2.5) return 'proficient';
-  if (avg >= 1.5) return 'basic';
-  return 'unsatisfactory';
-}
-
 function validate(markComplete) {
   const td = TYPE_DESCRIPTIONS[OBSERVATION_TYPE] || { scored: true };
+  if (CHECKPOINT_TYPES.includes(OBSERVATION_TYPE) && !viewerIsSchoolLeader && !viewerIsAdmin) {
+    return 'The Stage 4 and Stage 5 checkpoints are led by the School Leader, not the mentor.';
+  }
   if (!document.getElementById('obsDate').value) return 'Observation date is required.';
   if (!document.getElementById('preFocus').value.trim()) return 'Pre-conference focus is required.';
   if (markComplete) {
     if (td.scored) {
       for (const d of RUBRIC_DOMAINS) {
-        if (!domainScores[d.id]) return `Score for "${d.label}" is required.`;
+        if (!domainLevels[d.id]) return `Choose a developmental placement for "${d.label}".`;
       }
     }
     if (!document.getElementById('glow').value.trim()) return 'Glow narrative is required to complete.';

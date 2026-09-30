@@ -165,7 +165,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
       <h1 class="page-hero__title">Principal 360° Results</h1>
-      <p class="page-hero__desc">Anonymous feedback from staff, parents, and students, shown as group averages per focus. A cohort only appears once it has 5 or more responses (framework anonymity guarantee) — below that, results stay hidden to protect anonymity.</p>
+      <p class="page-hero__desc">Anonymous feedback from staff, parent representatives and student-council representatives, shown as group averages per focus. A cohort only appears once it has 5 or more responses — below that it is reported as insufficient response. Only the year-end cycle feeds F3; the mid-year cycle is formative.</p>
     </div>
   </div>
 </header>
@@ -175,20 +175,20 @@ body:has(> .page-footer) > .page-wrap {
     <div class="info-strip__icon" aria-hidden="true">🔄</div>
     <div class="info-strip__body">
       <h2 class="info-strip__title">Anonymous all-round feedback on the Principal</h2>
-      <p class="info-strip__lede">Read the feedback gathered from three groups — staff, parents, and students. You see group averages only, never who said what.</p>
+      <p class="info-strip__lede">Read the feedback gathered from three groups — staff (60% of F3), parent representatives (25%) and student-council representatives (15%). You see group averages only, never who said what.</p>
       <ol class="info-strip__flow">
-        <li><strong>A cycle is opened</strong> by an Eduversal admin, who shares the response links</li>
+        <li><strong>Two cycles a year</strong> — the mid-year cycle is formative feedback only; the late-year / year-end cycle is the official F3 evidence</li>
         <li><strong>Respondents answer anonymously</strong> — no name is ever stored</li>
-        <li><strong>You read the patterns here</strong> — then use them when writing the yearly appraisal</li>
+        <li><strong>The principal and the primary appraiser read the patterns here</strong> — the appraiser uses the year-end result for F3</li>
       </ol>
       <div class="info-strip__callout">
         <span class="info-strip__callout-icon" aria-hidden="true">⚠️</span>
-        <span><strong>A group's results stay hidden until 5+ people answer (framework anonymity guarantee).</strong> This protects honest feedback — never try to guess who said what.</span>
+        <span><strong>A group's results stay hidden until 5+ people answer.</strong> Never try to guess who said what. No 360 score is shared with the Foundation Representative / General Manager or the yayasan — they receive only the appraisal summary.</span>
       </div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Foundation Rep + Principal</span>
+        <span class="info-strip__pill"><b>For:</b> Principal (own) · Eduversal appraiser</span>
         <span class="info-strip__pill"><b>Scope:</b> Read-only</span>
-        <span class="info-strip__pill"><b>Privacy:</b> anonymous by framework guarantee</span>
+        <span class="info-strip__pill"><b>Source:</b> Principal Appraisal: Handbook 26-27 §8</span>
       </div>
     </div>
   </aside>
@@ -201,9 +201,9 @@ body:has(> .page-footer) > .page-wrap {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Principal Evaluation · Foundation Rep</span>
+      <span class="page-footer__cta-eyebrow">Principal Evaluation</span>
       <h2 class="page-footer__cta-title">Back to the evaluation hub.</h2>
-      <p class="page-footer__cta-desc">These cohort averages feed the F3 row of the annual appraisal. From the evaluation hub you can pick another principal or open the next form in the cycle.</p>
+      <p class="page-footer__cta-desc">Only the late-year / year-end cycle feeds F3 of the annual appraisal; the mid-year cycle stays formative. From the hub you can pick another principal or open the next record.</p>
       <a href="/principal-evaluation" class="page-footer__cta-btn">Open Evaluation Hub <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Principal 360 Results footer navigation">
@@ -228,11 +228,21 @@ body:has(> .page-footer) > .page-wrap {
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
 <script type="module">
-import { collection, doc, getDoc }
+import { collection, doc, getDoc, getDocs, query, where }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Principal Appraisal: Handbook 26-27 §7-§8, §10. Readers: the principal
+// (own cycles) and the Eduversal primary appraiser (AH academic_admin /
+// central_admin). The Foundation Representative / General Manager receives
+// only the appraisal summary triplet + goals — never a 360 or F3 score.
+// URL: ?cycle=<cycleId>  or  ?principalUid=<uid> (lists that principal's cycles)
 const params = new URLSearchParams(window.location.search);
-const CYCLE_ID = params.get('cycle');
+let CYCLE_ID = params.get('cycle');
+const PRINCIPAL_PARAM = params.get('principalUid');
+const WINDOW_LABELS = {
+  W17: 'Mid-year cycle — formative only; does not enter F3',
+  W38: 'Late-year / year-end cycle — the official F3 evidence',
+};
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   if (typeof window.__loadAcademicNavbar === 'function') {
@@ -240,42 +250,83 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   }
   document.body.style.display = '';
 
-  if (!CYCLE_ID) { showAccessDenied('Missing cycle parameter.'); return; }
+  const ahSubs = profile?.ah_sub_roles || [];
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isPrincipal = ahSubs.includes('school_principal');
+  if (!isAppraiser && !isPrincipal) {
+    showAccessDenied('360 results are read by the principal and the Eduversal primary appraiser. The Foundation Representative / General Manager receives only the appraisal summary (composite, band, recommendation and agreed goals).');
+    return;
+  }
+  const principalUid = isAppraiser ? PRINCIPAL_PARAM : user.uid;
 
   try {
-    const aSnap = await getDoc(doc(window.db, 'principal_360_aggregates', CYCLE_ID));
+    let cycles = [];
+    if (principalUid) {
+      const snap = await getDocs(query(collection(window.db, 'principal_360_cycles'), where('principalUid', '==', principalUid)));
+      cycles = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+        .sort((a, b) => `${b.academicYear || ''}_${b.window || ''}`.localeCompare(`${a.academicYear || ''}_${a.window || ''}`));
+      if (!CYCLE_ID && cycles.length) CYCLE_ID = cycles[0].id;
+    }
+    if (!CYCLE_ID) { showAccessDenied('No 360 cycle found yet.'); return; }
+
     const cSnap = await getDoc(doc(window.db, 'principal_360_cycles', CYCLE_ID));
-    if (!aSnap.exists()) {
-      showAccessDenied('No aggregate yet. Cloud Function compiles aggregates as responses arrive — check back later.');
+    const cycle = cSnap.exists() ? cSnap.data() : null;
+    if (!isAppraiser && cycle && cycle.principalUid !== user.uid) {
+      showAccessDenied('You can read your own 360 results only.');
       return;
     }
-    render(aSnap.data(), cSnap.exists() ? cSnap.data() : null);
+    let aSnap = null;
+    try { aSnap = await getDoc(doc(window.db, 'principal_360_aggregates', CYCLE_ID)); } catch (_) { aSnap = null; }
+    if (!aSnap || !aSnap.exists()) {
+      showAccessDenied('No aggregate yet. Results are compiled as responses arrive — check back later.');
+      renderCyclePicker(cycles);
+      return;
+    }
+    render(aSnap.data(), cycle);
+    renderCyclePicker(cycles);
   } catch (err) {
     console.error('boot', err);
     showAccessDenied(err.message || 'Could not load results.');
   }
 });
 
+function renderCyclePicker(cycles) {
+  if (!cycles || cycles.length < 2) return;
+  const root = document.getElementById('content');
+  const wrap = document.createElement('div');
+  wrap.className = 'context-card';
+  wrap.innerHTML = `<div class="ctx-row"><label class="ctx-label" for="cyclePick">Other cycles</label>
+    <select id="cyclePick">${cycles.map(c => `<option value="${escapeHtml(c.id)}"${c.id === CYCLE_ID ? ' selected' : ''}>${escapeHtml(c.academicYear || '')} · ${escapeHtml(WINDOW_LABELS[c.window] || c.window || '')}</option>`).join('')}</select></div>`;
+  root.prepend(wrap);
+  wrap.querySelector('#cyclePick').addEventListener('change', e => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('cycle', e.target.value);
+    window.location.href = url.toString();
+  });
+}
+
 function render(agg, cycle) {
   const root = document.getElementById('content');
   const cohorts = ['staff', 'parent', 'student'];
-  const cohortLabels = { staff: 'Teaching Staff', parent: 'Parents', student: 'Students' };
+  const cohortLabels = { staff: 'Staff', parent: 'Parent representatives', student: 'Student-council representatives' };
 
   const compositeF3 = agg.composite?.F3_360_score;
-  const compositeStr = (typeof compositeF3 === 'number') ? compositeF3.toFixed(2) : '—';
+  const compositeStr = (typeof compositeF3 === 'number') ? compositeF3.toFixed(2) + ' of 4' : '—';
+  const isYearEnd = cycle?.window === 'W38';
+  const isMidYear = cycle?.window === 'W17';
 
   root.innerHTML = `
     <div class="charter-banner">
       <strong>Anonymity guarantee in effect</strong>
-      Below-threshold cohorts (fewer than 5 respondents) are hidden until more voices come in. Aggregation is a Cloud Function output — no individual response is identifiable here or anywhere else.
+      Below-threshold cohorts (fewer than 5 respondents) are reported as insufficient response and their weight is redistributed to the other cohorts. No individual response is identifiable here or anywhere else.
     </div>
 
     <div class="composite-banner">
       <div>
-        <div class="label">Composite F3 (360°) score</div>
+        <div class="label">${isMidYear ? 'Mid-year 360° average (formative)' : 'Cohort-weighted 360° score'}</div>
         <div class="value">${escapeHtml(compositeStr)}</div>
       </div>
-      <div class="helper">Weighted across cohorts per framework. Feeds the F3 row of the principal annual appraisal.</div>
+      <div class="helper">${isYearEnd ? 'Year-end cycle — this is the official F3 evidence for the annual appraisal.' : (isMidYear ? 'Mid-year cycle — formative feedback only. It does not enter F3.' : 'Only the late-year / year-end cycle enters F3.')} Staff 60% · parent representatives 25% · student-council representatives 15%.</div>
     </div>
 
     <div class="cohort-grid">
@@ -284,7 +335,7 @@ function render(agg, cycle) {
 
     ${cycle ? `
       <div class="context-card">
-        <div class="ctx-row"><span class="ctx-label">Cycle</span><span class="ctx-value">${escapeHtml(cycle.window || CYCLE_ID)} · ${escapeHtml(cycle.academicYear || '')}</span></div>
+        <div class="ctx-row"><span class="ctx-label">Cycle</span><span class="ctx-value">${escapeHtml(WINDOW_LABELS[cycle.window] || cycle.window || CYCLE_ID)} · ${escapeHtml(cycle.academicYear || '')}</span></div>
         <div class="ctx-row"><span class="ctx-label">Status</span><span class="ctx-value">${escapeHtml(cycle.status || '—')}</span></div>
         <div class="ctx-row"><span class="ctx-label">Last aggregated</span><span class="ctx-value">${agg.lastAggregatedAt?.toDate ? new Date(agg.lastAggregatedAt.toDate()).toLocaleString('en-GB') : '—'}</span></div>
       </div>

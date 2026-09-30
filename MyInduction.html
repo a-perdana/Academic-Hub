@@ -192,9 +192,9 @@ body { padding-top: 62px; }
 <header class="page-hero" data-accent="induction">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · Principal Induction · Year 1</div>
+      <div class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · Induction Module</div>
       <h1 class="page-hero__title" id="heroTitle">My Induction</h1>
-      <p class="page-hero__desc" id="heroDesc">A year-long, mentor-paired growth arc for first-year School Principals across four windows: Listen → Diagnose → Act → Anchor. The first 30 days are deliberately listen-only — read the school before you act.</p>
+      <p class="page-hero__desc" id="heroDesc">Your protected induction track — tasks, your named mentor or guide, and a weekly pulse. On Academic Hub this is usually Principal Induction (12 months, four windows: Listen → Diagnose → Act → Anchor, with Window 1 — Listen running days 1–90), Academic Coordinator Induction (one academic year) or Exams Officer Induction (one examination cycle). Induction data never feeds a formal score.</p>
     </div>
     <div class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -210,7 +210,7 @@ body { padding-top: 62px; }
       <div class="page-hero__kpi">
         <div class="page-hero__kpi-num" id="heroKpiWindow" style="font-size:1.4rem;line-height:1.3;">—</div>
         <div class="page-hero__kpi-lbl">Current Window</div>
-        <div class="page-hero__kpi-sub">Listen · Diagnose · Act · Anchor</div>
+        <div class="page-hero__kpi-sub" id="heroKpiWindowSub">of your track</div>
       </div>
     </div>
   </div>
@@ -222,7 +222,7 @@ body { padding-top: 62px; }
     <div class="page-intro-body">
       <div class="page-intro-title">First time on My Induction?</div>
       <div class="page-intro-text">
-        This is a guide for <strong>first-year School Principals</strong>. The year is split into 4 windows (Listen → Diagnose → Act → Anchor), and you get a mentor. The first 30 days are deliberately listen-only — you read the school before you act. <strong>If you are not a year-1 Principal</strong>, you will see "You don't have an active induction" below — that is correct.
+        This page follows the induction track you are assigned to. Eduversal runs six tracks — Teacher, Principal, Subject Specialist, School, Academic Coordinator and Exams Officer. On Academic Hub you will usually see <strong>Principal Induction</strong> (12 months; four windows — Listen, days 1–90 · Diagnose, 91–180 · Act, 181–270 · Anchor, 271–365 — with an external mentor), <strong>Academic Coordinator Induction</strong> (one academic year with a cross-school guide) or <strong>Exams Officer Induction</strong> (one examination cycle with a cross-school guide). <strong>If you are not in an induction track</strong>, you will see "You don't have an active induction" below — that is correct.
       </div>
       <a class="page-intro-link" href="/my-hub-read-me#page-induction">📘 Open the My Hub Read Me First guide →</a>
     </div>
@@ -262,6 +262,78 @@ const db = window.db;
 
 let assignment = null, program = null, mentorProfile = null;
 let progressMap = {}, dayOfInduction = 0, currentWindow = null, allTasks = [];
+let track = null;
+
+// ──────────────────────────────────────────────────────────
+// Track-aware copy. Wording follows the live Induction Module documents
+// (Overview 26-27 §2 + each track's handbook). The track comes from the
+// assigned induction_programs doc — never assume Principal.
+// ──────────────────────────────────────────────────────────
+const TRACKS = {
+  principal: {
+    name: 'Principal Induction', units: 'windows', guideRole: 'Principal Mentor',
+    guideNote: 'Your mentor is deliberately external — not from your school — for objectivity. Eduversal selects and assigns your mentor. Mentor contact is weekly in Window 1, bi-weekly in Windows 2 and 3, and monthly in Window 4.',
+    banner: '<strong>The first 90 days are about listening, not acting.</strong> Window 1 — Listen (days 1–90) is for learning the school, not changing it. Research — and our own pilot data — tells us that the principals who wait, watch, and understand the school first are the ones who build something that lasts. A Year-1 principal receives no formal appraisal.',
+    journal: true,
+    deliverables: /school state report|3-priority|mid-year reflection|end-of-year/i,
+    after: 'After induction you enter the Principal Appraisal cycle. Your induction year itself is never scored. Contact your Foundation Representative / General Manager (FR/GM) for next steps.',
+  },
+  academic_coordinator: {
+    name: 'Academic Coordinator Induction', units: 'parts of the yearly rhythm', guideRole: 'Induction guide',
+    guideNote: 'Your guide is an experienced Academic Coordinator from another partner school, assigned by the Eduversal Academic Board. Your guide supports you and is never your evaluator (AC-NN3).',
+    banner: '<strong>One full academic year, built on a rhythm that repeats every semester.</strong> The four EASE Weeks, the pacing check, results analysis, classroom observation and subject counselling. It ends at the Readiness Checkpoint: Ready, or Extended support into a second cycle.',
+    journal: false,
+    deliverables: /results analysis|reflection|ready or extended/i,
+    after: 'You now continue in the role\x27s normal ongoing arrangements. Your induction data never feeds your appraisal (AC-NN1).',
+  },
+  exams_officer: {
+    name: 'Exams Officer Induction', units: 'phases', guideRole: 'Induction guide',
+    guideNote: 'Your guide is an experienced Exams Officer from another partner school, assigned by Eduversal. Your Principal / Head of Centre keeps final accountability for exam administration.',
+    banner: '<strong>One complete examination cycle — entries, exam days, results.</strong> About 12 months with full protective support. It ends at the Readiness Checkpoint: Certified or Extended, and it creates no separate Exams Officer appraisal.',
+    journal: false,
+    deliverables: /evidence file|reflection|certified or extended/i,
+    after: 'You now continue in the role\x27s normal ongoing arrangements. Your induction data never feeds a formal score.',
+  },
+  teacher: {
+    name: 'Teacher Induction', units: 'stages', guideRole: 'Mentor',
+    guideNote: 'Your Principal assigns your colleague and a certified mentor. Teacher Induction runs for 3 semesters (about 18 months).',
+    banner: '<strong>Three semesters, five stages.</strong> Familiarization → Foundation → Growth → Integration Checkpoint (end of Semester 2) → Consolidation (Semester 3). Induction-period data never feeds appraisal scoring.',
+    journal: false, deliverables: null,
+    after: 'After induction you enter the Teacher Appraisal cycle. Your induction data is never carried into it.',
+  },
+  specialist: {
+    name: 'Specialist Induction', units: 'phases', guideRole: 'Mentor Specialist',
+    guideNote: 'Your Mentor Specialist is your guide; the Academic Director signs off readiness.',
+    banner: '<strong>A 12-month protected first year.</strong> Mentor-review content is never used as evidence in your professional review.',
+    journal: false, deliverables: null,
+    after: 'You now move into your normal ongoing role arrangements.',
+  },
+  school: {
+    name: 'School Induction', units: 'phases', guideRole: 'Onboarding Supervisor',
+    guideNote: 'School Induction is for a new partner school, supported by an Onboarding Supervisor and Domain Guides.',
+    banner: '<strong>One academic year for a new partner school.</strong> Foundations Mapping → Core Systems Build → Embedding &amp; Practice → Readiness Checkpoint. Induction-year evidence never carries into the first Development Rating.',
+    journal: false, deliverables: null,
+    after: 'A Ready school enters Phase 0 — Kickoff of the standard School Appraisal cycle.',
+  },
+  generic: {
+    name: 'Induction', units: 'stages', guideRole: 'Mentor / guide',
+    guideNote: 'Your named mentor or guide supports you and is not your later formal evaluator.',
+    banner: '<strong>Protected time to learn the role.</strong> Induction data never feeds a formal score, and the outcome is categorical, never a score.',
+    journal: false, deliverables: null,
+    after: 'Contact your Principal for next steps.',
+  },
+};
+
+function detectTrack() {
+  const id = String(program?.handbookId || assignment?.programId || '');
+  if (/academic_coordinator/.test(id)) return 'academic_coordinator';
+  if (/exams_officer/.test(id)) return 'exams_officer';
+  if (/school_induction/.test(id)) return 'school';
+  if (/specialist/.test(id)) return 'specialist';
+  if (/subject_teacher/.test(id)) return 'teacher';
+  if (/principal/.test(id)) return 'principal';
+  return 'generic';
+}
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   if (typeof window.__loadAcademicNavbar === 'function') {
@@ -283,6 +355,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     }
     const hire = assignment.hireDate?.toDate ? assignment.hireDate.toDate() : new Date(assignment.hireDate);
     dayOfInduction = Math.floor((Date.now() - hire.getTime()) / (1000 * 60 * 60 * 24));
+    track = TRACKS[detectTrack()];
     flattenTasks();
     if (program?.stages) currentWindow = program.stages.find(s => dayOfInduction >= s.dayStart && dayOfInduction <= s.dayEnd) || program.stages[0];
 
@@ -314,12 +387,13 @@ function isCompleted(taskId) { return !!progressMap[taskId]?.completedAt; }
 function showNoInduction() {
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('mainContent').style.display = '';
-  document.getElementById('mainContent').innerHTML = `<div class="no-induction"><h2>You don't have an active induction</h2><p>Principal induction is for first-year school principals at Eduversal partner schools. If you should have an active induction, ask your Foundation Representative to contact the HQ Induction Coordinator.</p></div>`;
+  document.getElementById('mainContent').innerHTML = `<div class="no-induction"><h2>You don't have an active induction</h2><p>Induction tracks on Academic Hub are for newly appointed Principals, Academic Coordinators and Exams Officers at Eduversal partner schools. If you should have an active induction, ask your Principal — or, if you are a new Principal, your Foundation Representative / General Manager (FR/GM) — to contact the Eduversal Induction Coordinator.</p></div>`;
 }
 function showCompletedOrWithdrawn() {
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('mainContent').style.display = '';
-  document.getElementById('mainContent').innerHTML = `<div class="no-induction"><h2>Your induction is ${escapeHtml(assignment.status)}</h2><p>Year-2 development continues through the network competency framework, KPI cycle, and appraisal system. Contact your Foundation Representative for next steps.</p></div>`;
+  const t = TRACKS[detectTrack()];
+  document.getElementById('mainContent').innerHTML = `<div class="no-induction"><h2>Your induction is ${escapeHtml(assignment.status)}</h2><p>${escapeHtml(t.after)}</p></div>`;
 }
 
 function render() {
@@ -328,10 +402,10 @@ function render() {
   const total = allTasks.length;
   const stageLabel = currentWindow?.label || 'Pre-arrival';
   const displayName = window.userProfile?.displayName || 'colleague';
-  const programTitle = program?.title || 'Listen → Diagnose → Act → Anchor';
+  const programTitle = program?.title || track.name;
   const programId = program?.id || assignment.programId;
   const handbookLink = programId
-    ? ` · <a href="/handbook?id=${encodeURIComponent(programId)}" style="color:rgba(255,255,255,.95);text-decoration:underline;">View full handbook</a>`
+    ? ` · <a href="/handbook?id=${encodeURIComponent(programId)}" style="color:rgba(255,255,255,.95);text-decoration:underline;">Open the live handbook</a>`
     : '';
 
   const heroTitle = document.getElementById('heroTitle');
@@ -348,16 +422,23 @@ function render() {
   if (heroTasks) heroTasks.textContent = `${completed} / ${total}`;
   if (heroTasksSub) heroTasksSub.textContent = 'completed';
   if (heroWindow) heroWindow.textContent = stageLabel;
+  const heroEyebrow = document.getElementById('heroEyebrow');
+  if (heroEyebrow) heroEyebrow.textContent = `Academic Hub · ${track.name}`;
+  const heroWindowSub = document.getElementById('heroKpiWindowSub');
+  if (heroWindowSub) heroWindowSub.textContent = track.name;
+  const footerLink = document.getElementById('footerHandbookLink');
+  if (footerLink && programId) footerLink.href = `/handbook?id=${encodeURIComponent(programId)}`;
+  const stagePills = (program?.stages || []).filter(s => s.dayStart >= 1).map(s => String(s.label || '').replace(/^(Window|Phase|Stage) \d+ — /, '')).join(' · ');
 
   document.getElementById('mainContent').innerHTML = `
     <div class="charter-banner">
-      <strong>The first 90 days are about listening, not acting.</strong> Wallace Foundation principal pipeline research and our own pilot data both point the same way: the new principals who waited before launching changes had stronger Year-1 retention. Your induction is structured around that discipline.
+      ${track.banner}
     </div>
 
     <div class="layout">
       <div>
         <div class="section">
-          <h2>Your four windows <span class="pill">Listen · Diagnose · Act · Anchor</span></h2>
+          <h2>Your ${escapeHtml(track.units)} ${stagePills ? `<span class="pill">${escapeHtml(stagePills)}</span>` : ''}</h2>
           <div class="window-grid" id="windowGrid"></div>
         </div>
 
@@ -372,25 +453,25 @@ function render() {
         </div>
 
         <div class="section">
-          <h2>Window deliverables</h2>
+          <h2>Key deliverables</h2>
           <div id="deliverableList"></div>
         </div>
       </div>
 
       <aside>
         <div class="section sidebar-section">
-          <h3>Your mentor</h3>
+          <h3>Your ${escapeHtml(track.guideRole.toLowerCase())}</h3>
           <div class="mentor-card">
             <div class="mentor-avatar">${escapeHtml(((mentorProfile?.displayName || '?').match(/\b([A-Z])/g) || ['?']).slice(0,2).join(''))}</div>
             <div>
               <div class="mentor-name">${escapeHtml(mentorProfile?.displayName || assignment.mentorUid)}</div>
-              <div class="mentor-role">External — ${escapeHtml(mentorProfile?.email || 'HQ-assigned')}</div>
+              <div class="mentor-role">${escapeHtml(track.guideRole)} — ${escapeHtml(mentorProfile?.email || 'assigned by Eduversal')}</div>
             </div>
           </div>
-          <div style="font-size:11px;color:var(--ink-3);margin-top:8px;">Per the Principal Handbook, your mentor is from outside your school for objectivity.</div>
+          <div style="font-size:11px;color:var(--ink-3);margin-top:8px;">${escapeHtml(track.guideNote)}</div>
         </div>
 
-        <div class="section sidebar-section">
+        <div class="section sidebar-section" ${track.journal ? '' : 'style="display:none;"'}>
           <h3>This week's reflection</h3>
           <div class="journal-prompt"><label>What did I hear this week?</label><textarea id="jp1" rows="3"></textarea></div>
           <div class="journal-prompt" style="margin-top:8px;"><label>What surprised me?</label><textarea id="jp2" rows="2"></textarea></div>
@@ -408,7 +489,7 @@ function render() {
             <div class="pulse-emoji" data-score="4">🙂<span>Good</span></div>
             <div class="pulse-emoji" data-score="5">😊<span>Great</span></div>
           </div>
-          <div style="font-size:11px;color:var(--ink-3);" id="pulseMeta">One question per week. Anonymised for HQ.</div>
+          <div style="font-size:11px;color:var(--ink-3);" id="pulseMeta">One question per week — support, never appraisal. Eduversal's network reporting uses aggregate trends only.</div>
         </div>
       </aside>
     </div>
@@ -418,7 +499,7 @@ function render() {
   renderToday();
   renderThisWeek();
   renderDeliverables();
-  setupJournal();
+  if (track.journal) setupJournal();
   setupPulse();
 }
 
@@ -478,10 +559,9 @@ function renderThisWeek() {
 function renderDeliverables() {
   const el = document.getElementById('deliverableList');
   if (!program?.stages) { el.innerHTML = ''; return; }
-  // Look for tasks with "report" or "plan" in their title — they are usually the 4 windows' deliverables.
-  const deliverables = allTasks.filter(t =>
-    /school state report|3-priority|mid-year reflection|end-of-year/i.test(t.title || ''));
-  if (deliverables.length === 0) { el.innerHTML = '<div style="padding:14px;color:var(--ink-3);font-size:13px;">Window deliverables will appear as you progress.</div>'; return; }
+  // Each track names its own deliverables (see TRACKS[*].deliverables).
+  const deliverables = track.deliverables ? allTasks.filter(t => track.deliverables.test(t.title || '')) : [];
+  if (deliverables.length === 0) { el.innerHTML = '<div style="padding:14px;color:var(--ink-3);font-size:13px;">Deliverables will appear as you progress.</div>'; return; }
   el.innerHTML = deliverables.map(t => {
     const done = isCompleted(t.taskId);
     const due = !done && (t.stageDayEnd || 0) < dayOfInduction;
@@ -609,10 +689,10 @@ function isoWeekStart(d) {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Year-1 Principal Induction</span>
-      <h2 class="page-footer__cta-title">Listen before you act.</h2>
-      <p class="page-footer__cta-desc">The first 90 days are deliberately listen-only — read the school before you change it. Mentor pairing, weekly journal, and pulse checks are confidential to you and your mentor (Charter NN2).</p>
-      <a href="/handbook?id=eduversal_principal_v1" class="page-footer__cta-btn">Open Principal Handbook <span aria-hidden="true">→</span></a>
+      <span class="page-footer__cta-eyebrow">Induction Module</span>
+      <h2 class="page-footer__cta-title">Protected time to learn the role.</h2>
+      <p class="page-footer__cta-desc">Induction data — tasks, journal, weekly pulse — never feeds a formal score, and every track ends with a categorical outcome, never a score. Your journal is confidential to you and your mentor or guide (Charter NN2).</p>
+      <a href="/handbook?id=eduversal_principal_v1" id="footerHandbookLink" class="page-footer__cta-btn">Open your induction handbook <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="My Induction footer navigation">
       <div class="page-footer__nav-group">
@@ -633,7 +713,7 @@ function isoWeekStart(d) {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Listen → Diagnose → Act → Anchor · Charter NN1 + NN2 honoured</span>
+    <span class="page-footer__meta-right">Induction Module · Charter NN1 + NN2 honoured</span>
   </div>
 </footer>
 </body>

@@ -169,6 +169,11 @@ body:has(> .page-footer) > .page-wrap {
   .page-wrap { padding-left: 14px; padding-right: 14px; }
 }
 
+/* F2 validity + confidential note (2026-10-01 live-doc alignment) */
+.ctx-check { display: flex; gap: 8px; align-items: center; font-size: 13px; font-weight: 600; color: var(--ink); }
+.ctx-hint { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
+.confidential-block { border: 1px solid #fecaca; background: #fffafa; border-radius: 10px; padding: 12px 14px; }
+
 /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
   background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
@@ -224,7 +229,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
       <h1 class="page-hero__title">Principal Observation</h1>
-      <p class="page-hero__desc">A formative, termly note across the 8 foci of the Principal Observation Rubric. You code each focus Established, Developing, or Not yet — no score is computed. The coding plus your narrative feeds the annual appraisal conversation.</p>
+      <p class="page-hero__desc">The record of a scheduled leadership-observation visit across the 8 foci (P1–P8). Code each focus Established, Developing or Not Observed and write the evidence. The visit itself is not scored; the E / D ratings of valid scheduled visits feed F2 of the annual Principal Appraisal.</p>
     </div>
   </div>
 </header>
@@ -233,21 +238,21 @@ body:has(> .page-footer) > .page-wrap {
   <aside class="info-strip" role="note" aria-label="How this page works">
     <div class="info-strip__icon" aria-hidden="true">👁️</div>
     <div class="info-strip__body">
-      <h2 class="info-strip__title">A formative note from a Principal visit</h2>
-      <p class="info-strip__lede">After spending time with the Principal — a school walk, a leadership meeting, a parent event — record what you saw across 8 focus areas. This builds the evidence base for the yearly appraisal.</p>
+      <h2 class="info-strip__title">A leadership-observation visit record</h2>
+      <p class="info-strip__lede">The <strong>Chief Academic Officer / designated Academic Director</strong> (or an assigned Eduversal observer) records what they saw during a scheduled visit. There are at least two visits a year: <strong>Visit 1 in Sept–Oct</strong> (paired with an on-site School Appraisal visit where practicable) and <strong>Visit 2 in Feb–Apr</strong>.</p>
       <ol class="info-strip__flow">
-        <li><strong>Rate 8 focus areas</strong> as Established, Developing, or Not Observed</li>
-        <li><strong>Add short comments</strong> — be specific and kind</li>
-        <li><strong>Submit</strong> — the note locks, so re-read first</li>
+        <li><strong>Set the visit</strong> — date, visit type, F2 window, and whether the principal was told in advance that it counts</li>
+        <li><strong>Code the 8 foci</strong> — Established, Developing or Not Observed, with the evidence you saw</li>
+        <li><strong>Submit</strong> — the record locks; valid scheduled visits feed F2 of the annual appraisal</li>
       </ol>
       <div class="info-strip__callout">
         <span class="info-strip__callout-icon" aria-hidden="true">⚠️</span>
-        <span><strong>Observation is about growth, not grading.</strong> There is no number score here — aim for at least one observation per term.</span>
+        <span><strong>Keep the two systems separate.</strong> A trip may serve School Appraisal too, but the School Appraisal reviews the school and this visit reviews the principal's leadership. The Foundation Representative / General Manager and the yayasan do not see these notes.</span>
       </div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Foundation Representative</span>
-        <span class="info-strip__pill"><b>Scope:</b> One Principal</span>
-        <span class="info-strip__pill"><b>Note:</b> Immutable once submitted</span>
+        <span class="info-strip__pill"><b>Writes:</b> CAO / assigned observer</span>
+        <span class="info-strip__pill"><b>Reads own:</b> Principal, after submission</span>
+        <span class="info-strip__pill"><b>Feeds:</b> F2 (valid visits only)</span>
       </div>
     </div>
   </aside>
@@ -260,9 +265,9 @@ body:has(> .page-footer) > .page-wrap {
 <footer class="page-footer" role="contentinfo">
   <div class="page-footer__inner">
     <div class="page-footer__cta">
-      <span class="page-footer__cta-eyebrow">Principal Evaluation · Foundation Rep</span>
-      <h2 class="page-footer__cta-title">Observation feeds the appraisal.</h2>
-      <p class="page-footer__cta-desc">Once you have coded the 8 foci and written your narrative, carry the evidence into the formal annual appraisal — where the F1–F5 scores and the A–F band are settled.</p>
+      <span class="page-footer__cta-eyebrow">Principal Evaluation</span>
+      <h2 class="page-footer__cta-title">Valid visits feed F2.</h2>
+      <p class="page-footer__cta-desc">The annual appraisal needs at least two valid scheduled visits. Their E / D ratings are combined into F2 (E = 4, D = 2, Not Observed excluded); one visit is never the whole appraisal.</p>
       <a href="/principal-appraisal-entry" class="page-footer__cta-btn">Open Annual Appraisal <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Principal Observation footer navigation">
@@ -281,7 +286,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Submitted observations are immutable · narrative beats scores</span>
+    <span class="page-footer__meta-right">Submitted observations are immutable · no numeric visit score</span>
   </div>
 </footer>
 
@@ -290,23 +295,52 @@ body:has(> .page-footer) > .page-wrap {
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
 <script type="module">
-import { collection, doc, getDoc, setDoc, serverTimestamp }
+import { collection, doc, getDoc, getDocs, query, where, writeBatch, deleteField, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// ─── Principal Leadership Observation ────────────────────────────────
+// Policy: "Principal Appraisal: Handbook 26-27" §2, §5, §7, §10, §14 and
+// "Principal Appraisal: Appraiser Guide 26-27" §5.
+//   • Written by the Chief Academic Officer / designated Academic Director or
+//     an assigned observer (AH academic_admin, or central_admin).
+//   • The visit record is formative and carries no numeric visit score; the
+//     E / D ratings of VALID scheduled visits feed F2 of the annual appraisal.
+//   • Valid F2 visit = scheduled appraisal visit, in the Sept–Oct (Visit 1) or
+//     Feb–Apr (Visit 2) window, principal told in advance (Handbook §14).
+//   • The Foundation Representative / General Manager and the yayasan do not
+//     see P1–P8 observation notes (Handbook §10).
+//   • The confidential note is stored in principal_observations/{id}/confidential/note.
+//   • The principal reads their own submitted visit records (no confidential note).
+//
 // URL params: ?principalUid=X[&visitType=...&obsId=...]
 const params = new URLSearchParams(window.location.search);
 const PRINCIPAL_UID = params.get('principalUid');
 const VISIT_TYPE   = params.get('visitType') || 'scheduled_appraisal_visit';
-const OBS_ID       = params.get('obsId'); // present when editing existing draft
+const OBS_ID       = params.get('obsId'); // present when editing an existing draft
+
+const F2_WINDOWS = [
+  { id: 'visit_1_sep_oct', label: 'Visit 1 — Sept–Oct' },
+  { id: 'visit_2_feb_apr', label: 'Visit 2 — Feb–Apr' },
+  { id: 'outside_f2_windows', label: 'Outside the F2 windows — formative context only' },
+];
+const OBSERVER_ROLES = [
+  { id: 'chief_academic_officer', label: 'Chief Academic Officer / designated Academic Director' },
+  { id: 'assigned_observer', label: 'Assigned observer (Eduversal)' },
+];
 
 let rubric = null;
 let principal = null;
 let observerProfile = null;
+let confidentialNote = '';
+let hadConfidentialNote = false;
 let formData = {
   foci: {},          // { P1: { code: 'E', notes: '...' }, ... }
-  narratives: {},    // { PNF1: '...', ... }
+  narratives: {},    // { PNF1: '...', ... } — PNF5 (confidential) is kept apart
   visitDate: '',
   visitType: VISIT_TYPE,
+  f2Window: '',
+  informedInAdvance: false,
+  observerRoleChoice: 'chief_academic_officer',
   status: 'draft',
 };
 
@@ -317,33 +351,25 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   observerProfile = profile;
   document.body.style.display = '';
 
-  // Access check — must be observer-eligible role for principals.
-  // Allowed: academic_admin, foundation_representative, central_admin (cross-platform).
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAdmin = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
-  const eligible = isAdmin || ahSubs.includes('foundation_representative');
-  if (!eligible) {
-    showAccessDenied('This observation form is restricted to Foundation Representatives and Academic Admins.');
-    return;
-  }
-
-  if (!PRINCIPAL_UID) {
-    showAccessDenied('Missing principalUid in URL. Open this form from the principal\'s record or the appraisal cycle.');
-    return;
-  }
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isPrincipal = ahSubs.includes('school_principal');
 
   try {
-    // 1. Fetch the rubric (cross-origin from CH /references-data so we don't
-    //    have to mirror the JSON into AH's repo).
-    const rubricRes = await fetch('https://centralhub.eduversal.org/references-data/frameworks/principal-observation-rubric.json');
-    if (!rubricRes.ok) throw new Error('Could not load rubric (HTTP ' + rubricRes.status + ')');
-    rubric = await rubricRes.json();
+    rubric = await loadRubric();
+    if (!isAppraiser) {
+      if (isPrincipal && (!PRINCIPAL_UID || PRINCIPAL_UID === user.uid)) { await renderOwnVisits(user.uid); return; }
+      showAccessDenied('Leadership-observation visits are recorded by the Chief Academic Officer / designated Academic Director or an assigned Eduversal observer. A principal can read their own submitted visit records here. The Foundation Representative / General Manager does not see P1–P8 observation notes.');
+      return;
+    }
+    if (!PRINCIPAL_UID) {
+      showAccessDenied('Missing principalUid in the URL. Open this form from the Principal Evaluation hub.');
+      return;
+    }
 
-    // 2. Fetch principal profile for context display
     const pSnap = await getDoc(doc(window.db, 'users', PRINCIPAL_UID));
     if (pSnap.exists()) principal = pSnap.data();
 
-    // 3. If editing existing draft, load it
     if (OBS_ID) {
       const oSnap = await getDoc(doc(window.db, 'principal_observations', OBS_ID));
       if (oSnap.exists()) {
@@ -352,11 +378,17 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
           showAccessDenied('Observation does not match principalUid in URL.');
           return;
         }
-        formData = { ...formData, ...d };
+        formData = { ...formData, ...d, foci: { ...(d.foci || {}) }, narratives: { ...(d.narratives || {}) } };
+        if (d.observerRole && OBSERVER_ROLES.some(r => r.id === d.observerRole)) formData.observerRoleChoice = d.observerRole;
+        if (d.narratives?.PNF5) { confidentialNote = d.narratives.PNF5; hadConfidentialNote = true; delete formData.narratives.PNF5; }
         if (d.status === 'submitted') {
-          showAccessDenied('This observation is already submitted and immutable. Open the next visit\'s form to record a new observation.');
+          showAccessDenied('This observation is already submitted and cannot be changed. Open a new form to record the next visit.');
           return;
         }
+        try {
+          const cSnap = await getDoc(doc(window.db, 'principal_observations', OBS_ID, 'confidential', 'note'));
+          if (cSnap.exists()) { confidentialNote = cSnap.data().text || confidentialNote; hadConfidentialNote = true; }
+        } catch (_) { /* no note yet */ }
       }
     }
 
@@ -366,6 +398,27 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Could not load</h2><p>${escapeHtml(err.message || 'unknown error')}</p></div>`;
   }
 });
+
+async function loadRubric() {
+  // Local copy first (ships with this hub's build); Central Hub mirror as fallback.
+  const urls = [
+    '/resources/principal-observation-rubric.json',
+    'https://centralhub.eduversal.org/references-data/frameworks/principal-observation-rubric.json',
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return await res.json();
+    } catch (_) { /* try the next source */ }
+  }
+  throw new Error('Could not load the Principal Leadership Observation Guide.');
+}
+
+function countsTowardF2() {
+  return formData.visitType === 'scheduled_appraisal_visit'
+    && (formData.f2Window === 'visit_1_sep_oct' || formData.f2Window === 'visit_2_feb_apr')
+    && formData.informedInAdvance === true;
+}
 
 function render() {
   const root = document.getElementById('content');
@@ -389,6 +442,23 @@ function render() {
           ${(rubric.visit_types || []).map(t => `<option value="${escapeHtml(t)}"${formData.visitType === t ? ' selected' : ''}>${escapeHtml(t.replace(/_/g, ' '))}</option>`).join('')}
         </select>
       </div>
+      <div class="ctx-row">
+        <label class="ctx-label" for="f2Window">F2 window</label>
+        <select id="f2Window">
+          <option value="">— choose —</option>
+          ${F2_WINDOWS.map(w => `<option value="${w.id}"${formData.f2Window === w.id ? ' selected' : ''}>${escapeHtml(w.label)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="ctx-row">
+        <label class="ctx-label" for="observerRole">Observer</label>
+        <select id="observerRole">
+          ${OBSERVER_ROLES.map(r => `<option value="${r.id}"${formData.observerRoleChoice === r.id ? ' selected' : ''}>${escapeHtml(r.label)}</option>`).join('')}
+        </select>
+      </div>
+      <div class="ctx-row" style="grid-column: 1 / -1;">
+        <label class="ctx-check"><input type="checkbox" id="informedInAdvance"${formData.informedInAdvance ? ' checked' : ''}> The principal was told in advance that this visit contributes to Principal Appraisal</label>
+        <span class="ctx-hint" id="f2Hint"></span>
+      </div>
     </div>
 
     ${(rubric.foci || []).map(f => renderFocus(f)).join('')}
@@ -401,16 +471,18 @@ function render() {
     </div>
   `;
 
-  // Wire visit context
   document.getElementById('visitDate').addEventListener('change', e => { formData.visitDate = e.target.value; updateProgress(); });
-  document.getElementById('visitType').addEventListener('change', e => { formData.visitType = e.target.value; });
+  document.getElementById('visitType').addEventListener('change', e => { formData.visitType = e.target.value; updateProgress(); });
+  document.getElementById('f2Window').addEventListener('change', e => { formData.f2Window = e.target.value; updateProgress(); });
+  document.getElementById('observerRole').addEventListener('change', e => { formData.observerRoleChoice = e.target.value; });
+  document.getElementById('informedInAdvance').addEventListener('change', e => { formData.informedInAdvance = e.target.checked; updateProgress(); });
 
-  // Wire each focus
   (rubric.foci || []).forEach(f => wireFocus(f));
-  // Wire narratives
   (rubric.narrative_fields || []).forEach(nf => {
     const ta = document.getElementById('narr-' + nf.id);
-    if (ta) ta.addEventListener('input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
+    if (!ta) return;
+    if (nf.visibility === 'eduversal_internal_only') ta.addEventListener('input', e => { confidentialNote = e.target.value; });
+    else ta.addEventListener('input', e => { formData.narratives[nf.id] = e.target.value; updateProgress(); });
   });
 
   document.getElementById('btnSaveDraft').addEventListener('click', () => save('draft'));
@@ -475,33 +547,29 @@ function regChip(ref) {
 }
 
 function wireFocus(f) {
-  // Code pills
   document.querySelectorAll(`[data-focus="${cssEsc(f.id)}"]`).forEach(btn => {
     btn.addEventListener('click', () => {
       const code = btn.dataset.code;
       formData.foci[f.id] = { ...(formData.foci[f.id] || {}), code };
-      // toggle active style without full re-render
       btn.parentElement.querySelectorAll('.code-pill').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       updateProgress();
     });
   });
 
-  // Notes textarea
   const ta = document.getElementById('notes-' + f.id);
   if (ta) ta.addEventListener('input', e => {
     formData.foci[f.id] = { ...(formData.foci[f.id] || {}), notes: e.target.value };
     updateProgress();
   });
 
-  // Indicator list toggle
   const tBtn = document.querySelector(`[data-toggle-ind="${cssEsc(f.id)}"]`);
   if (tBtn) tBtn.addEventListener('click', () => {
     const list = document.getElementById('ind-' + f.id);
     if (!list) return;
     const open = list.style.display !== 'none';
     list.style.display = open ? 'none' : 'block';
-    tBtn.textContent = (open ? '▸' : '▾') + ' ' + tBtn.textContent.slice(2);
+    tBtn.textContent = (open ? '▸' : '▾') + ' ' + tBtn.textContent.trim().slice(2);
     formData.foci[f.id] = { ...(formData.foci[f.id] || {}), _indOpen: !open };
   });
 }
@@ -510,14 +578,17 @@ function renderNarrativeSection() {
   return `
     <div class="narrative-card">
       <h3>Narrative</h3>
-      <p class="help">The conversation lives here. Specific, evidence-anchored observations always beat scores.</p>
-      ${(rubric.narrative_fields || []).map(nf => `
-        <div style="margin-bottom:14px;">
-          <label class="ctx-label" for="narr-${escapeAttr(nf.id)}" style="display:block;margin-bottom:6px;">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}</label>
+      <p class="help">The conversation lives here. Specific, evidence-anchored notes matter more than the codes. Do not invent a numeric visit score.</p>
+      ${(rubric.narrative_fields || []).map(nf => {
+        const internal = nf.visibility === 'eduversal_internal_only';
+        const val = internal ? confidentialNote : (formData.narratives[nf.id] || '');
+        return `
+        <div style="margin-bottom:14px;"${internal ? ' class="confidential-block"' : ''}>
+          <label class="ctx-label" for="narr-${escapeAttr(nf.id)}" style="display:block;margin-bottom:6px;">${escapeHtml(nf.label)}${nf.required ? ' *' : ''}${internal ? ' · Eduversal only' : ''}</label>
           <p style="font-size:12px;color:var(--ink-3);margin:0 0 6px;line-height:1.5;">${escapeHtml(nf.description || '')}</p>
-          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(formData.narratives[nf.id] || '')}</textarea>
-        </div>
-      `).join('')}
+          <textarea class="notes-area" id="narr-${escapeAttr(nf.id)}" placeholder="${escapeAttr(nf.label)}…">${escapeHtml(val)}</textarea>
+        </div>`;
+      }).join('')}
     </div>
   `;
 }
@@ -525,41 +596,51 @@ function renderNarrativeSection() {
 function updateProgress() {
   const totalFoci = (rubric.foci || []).length;
   const codedFoci = Object.values(formData.foci).filter(v => v && v.code).length;
-  const totalNarr = (rubric.narrative_fields || []).filter(n => n.required).length;
-  const filledNarr = (rubric.narrative_fields || []).filter(n => n.required && (formData.narratives[n.id] || '').trim().length > 0).length;
+  const reqNarr = (rubric.narrative_fields || []).filter(n => n.required && n.visibility !== 'eduversal_internal_only');
+  const filledNarr = reqNarr.filter(n => (formData.narratives[n.id] || '').trim().length > 0).length;
   const dateOk = !!formData.visitDate;
+  const counts = countsTowardF2();
   const info = document.getElementById('progressInfo');
-  if (info) info.innerHTML = `<strong>${codedFoci}/${totalFoci}</strong> foci coded · <strong>${filledNarr}/${totalNarr}</strong> required narratives · visit date ${dateOk ? '✓' : '⌛'}`;
+  if (info) info.innerHTML = `<strong>${codedFoci}/${totalFoci}</strong> foci coded · <strong>${filledNarr}/${reqNarr.length}</strong> required narratives · visit date ${dateOk ? '✓' : '⌛'} · ${counts ? '<strong>counts toward F2</strong>' : 'formative context only'}`;
+  const hint = document.getElementById('f2Hint');
+  if (hint) hint.textContent = counts
+    ? 'This visit counts toward F2 of the annual appraisal.'
+    : 'Counts toward F2 only when it is a scheduled appraisal visit in the Sept–Oct or Feb–Apr window and the principal was told in advance (Handbook §14). Otherwise it stays formative context.';
 }
 
 async function save(targetStatus) {
   if (targetStatus === 'submitted') {
-    // Validate
     const missing = [];
     if (!formData.visitDate) missing.push('visit date');
-    const requiredNarr = (rubric.narrative_fields || []).filter(n => n.required);
-    requiredNarr.forEach(n => {
+    if (!formData.f2Window) missing.push('F2 window');
+    (rubric.narrative_fields || []).filter(n => n.required && n.visibility !== 'eduversal_internal_only').forEach(n => {
       if (!(formData.narratives[n.id] || '').trim()) missing.push(`"${n.label}"`);
     });
     if (missing.length) {
       toast('Missing: ' + missing.join(', '), true);
       return;
     }
-    if (!confirm('Submitting will lock this observation (immutable). Continue?')) return;
+    if (!confirm(`Submitting locks this observation. It ${countsTowardF2() ? 'WILL count toward F2' : 'will be formative context only (not F2 evidence)'}. Continue?`)) return;
   }
 
   const id = OBS_ID || `${PRINCIPAL_UID}_${Date.now()}`;
+  const narratives = { ...formData.narratives };
+  if (hadConfidentialNote) narratives.PNF5 = deleteField();   // legacy location — moved to confidential/note
+  const academicYear = (window.getCurrentAcademicYear && window.getCurrentAcademicYear()) || null;
   const payload = {
     principalUid: PRINCIPAL_UID,
     schoolId: principal?.schoolId || null,
     observerUid: window.currentUser.uid,
     observerName: observerProfile?.displayName || null,
-    observerRole: observerProfile?.ah_sub_roles?.includes('foundation_representative') ? 'foundation_representative'
-                : (observerProfile?.role_academichub === 'academic_admin' ? 'academic_admin' : 'central_admin'),
+    observerRole: formData.observerRoleChoice,
+    academicYear,
     visitDate: formData.visitDate,
     visitType: formData.visitType,
+    f2Window: formData.f2Window || null,
+    informedInAdvance: formData.informedInAdvance === true,
+    countsTowardF2: countsTowardF2(),
     foci: cleanFoci(formData.foci),
-    narratives: { ...formData.narratives },
+    narratives,
     rubricVersion: rubric.version || '1.0',
     status: targetStatus,
     updatedAt: serverTimestamp(),
@@ -572,10 +653,27 @@ async function save(targetStatus) {
   if (btnDraft)  btnDraft.disabled  = true;
 
   try {
-    await setDoc(doc(window.db, 'principal_observations', id), payload, { merge: true });
+    const batch = writeBatch(window.db);
+    batch.set(doc(window.db, 'principal_observations', id), payload, { merge: true });
+    if (confidentialNote.trim() || hadConfidentialNote) {
+      batch.set(doc(window.db, 'principal_observations', id, 'confidential', 'note'), {
+        principalUid: PRINCIPAL_UID,
+        text: confidentialNote,
+        updatedBy: window.currentUser.uid,
+        updatedAt: serverTimestamp(),
+      }, { merge: true });
+    }
+    await batch.commit();
+    hadConfidentialNote = hadConfidentialNote || !!confidentialNote.trim();
     toast(targetStatus === 'submitted' ? 'Observation submitted ✓' : 'Draft saved ✓');
     if (targetStatus === 'submitted') {
-      setTimeout(() => { window.location.href = '/team-induction'; }, 1200);
+      setTimeout(() => { window.location.href = '/principal-evaluation'; }, 1200);
+    } else if (!OBS_ID) {
+      // Keep editing the same draft instead of creating a new one on the next save.
+      const url = new URL(window.location.href);
+      url.searchParams.set('obsId', id);
+      window.history.replaceState(null, '', url.toString());
+      setTimeout(() => window.location.reload(), 600);
     }
   } catch (err) {
     console.error('save', err);
@@ -596,6 +694,36 @@ function cleanFoci(foci) {
   return out;
 }
 
+// ─── Principal: own submitted visit records (read-only) ───────────────
+async function renderOwnVisits(uid) {
+  const snap = await getDocs(query(
+    collection(window.db, 'principal_observations'),
+    where('principalUid', '==', uid),
+    where('status', '==', 'submitted')
+  ));
+  const visits = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+    .sort((a, b) => String(b.visitDate || '').localeCompare(String(a.visitDate || '')));
+  const root = document.getElementById('content');
+  if (!visits.length) {
+    root.innerHTML = `<div class="access-denied" style="color:var(--ink-3);"><h2 style="color:var(--ink-2);">No visit records yet</h2><p>Your leadership-observation visits will appear here once the observer submits them. There are at least two a year: Visit 1 in Sept–Oct and Visit 2 in Feb–Apr.</p></div>`;
+    return;
+  }
+  const labels = Object.fromEntries((rubric.response_options || []).map(o => [o.code, o.label]));
+  const focusTitle = Object.fromEntries((rubric.foci || []).map(f => [f.id, f.title]));
+  const narrLabel = Object.fromEntries((rubric.narrative_fields || []).map(n => [n.id, n.label]));
+  root.innerHTML = visits.map(v => `
+    <div class="narrative-card">
+      <h3>${escapeHtml(v.visitDate || '—')} · ${escapeHtml(String(v.visitType || '').replace(/_/g, ' '))}</h3>
+      <p class="help">${v.countsTowardF2 ? 'This visit counts toward F2 of your annual appraisal.' : 'Formative feedback — not F2 evidence.'}${v.observerName ? ' Observer: ' + escapeHtml(v.observerName) + '.' : ''}</p>
+      ${Object.keys(v.foci || {}).sort().map(k => `
+        <div style="margin-bottom:10px;"><strong>${escapeHtml(k)} ${escapeHtml(focusTitle[k] || '')}</strong> — ${escapeHtml(labels[v.foci[k].code] || v.foci[k].code || '—')}
+          ${v.foci[k].notes ? `<div style="font-size:13px;color:var(--ink-2);white-space:pre-wrap;">${escapeHtml(v.foci[k].notes)}</div>` : ''}</div>`).join('')}
+      ${Object.keys(v.narratives || {}).filter(k => k !== 'PNF5').sort().map(k => `
+        <div style="margin-top:10px;"><span class="ctx-label">${escapeHtml(narrLabel[k] || k)}</span><div style="font-size:13px;white-space:pre-wrap;">${escapeHtml(v.narratives[k])}</div></div>`).join('')}
+    </div>
+  `).join('');
+}
+
 function showAccessDenied(msg) {
   document.body.style.display = '';
   document.getElementById('content').innerHTML = `
@@ -611,7 +739,7 @@ function toast(msg, isErr) {
   t.textContent = msg;
   t.classList.toggle('error', !!isErr);
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 function escapeHtml(s) { return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }

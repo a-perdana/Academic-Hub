@@ -114,6 +114,32 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   border: 1px solid #fecaca; color: #991b1b; font-size: .86rem; margin-bottom: 18px;
 }
 .gate-msg[hidden] { display: none; }
+/* Level-change dialog. Teacher Appraisal: Handbook 26-27, "Level Progression
+   Criteria": a level moves up only on the appraiser's formal recommendation,
+   confirmed by school management in consultation with Eduversal; never down. */
+.lv-dlg-back {
+  position: fixed; inset: 0; z-index: 1200; background: rgba(15,23,42,.45);
+  display: none; align-items: center; justify-content: center; padding: 16px;
+}
+.lv-dlg-back.is-open { display: flex; }
+.lv-dlg {
+  background: #fff; border-radius: 14px; max-width: 540px; width: 100%;
+  box-shadow: 0 12px 40px rgba(0,0,0,.2); overflow: hidden;
+}
+.lv-dlg__head { padding: 16px 20px; border-bottom: 1px solid #f1f5f9; font-weight: 800; color: #1e293b; }
+.lv-dlg__body { padding: 16px 20px; font-size: .84rem; color: #374151; line-height: 1.6; }
+.lv-dlg__body blockquote {
+  margin: 10px 0; padding: 10px 14px; background: #f8fafc; border-left: 3px solid #e11d48;
+  border-radius: 6px; font-size: .8rem; color: #475569;
+}
+.lv-dlg__body label { display: flex; gap: 9px; align-items: flex-start; margin-top: 10px; cursor: pointer; }
+.lv-dlg__foot { padding: 12px 20px; border-top: 1px solid #f1f5f9; display: flex; justify-content: flex-end; gap: 8px; }
+.lv-btn {
+  font-family: inherit; font-size: .8rem; font-weight: 700; padding: 8px 14px; border-radius: 9px;
+  border: 1px solid #e2e8f0; background: #fff; color: #475569; cursor: pointer;
+}
+.lv-btn--go { background: #e11d48; border-color: #e11d48; color: #fff; }
+.lv-btn[disabled] { opacity: .45; cursor: not-allowed; }
 
 @media (max-width: 760px) {
   .page-wrap { padding: 20px 16px 40px; }
@@ -153,15 +179,19 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <span class="page-info-strip__title">About this page</span>
       <div class="page-info-strip__body">
         The appraisal level decides how much of the F2 Class Observation rubric applies to a
-        teacher &mdash; 30 items at Induction, 37 at Developing, 44 at Proficient, 45 at Lead.
-        It is worth setting before an observation, on
-        <a href="/teacher-appraisal-entry">Teacher Appraisal Entry</a>.
+        teacher &mdash; 30 items at Post-Induction, 37 at Developing, 44 at Proficient, 45 at Lead
+        (Early Years teachers use the 17-item Early Years instrument at every level).
+        Post-Induction is the first appraisal cycle after the three-semester induction programme;
+        teachers still in induction are not formally appraised.
         <br>
-        <em id="editHint" hidden>As a school leader you can change the level for your own
-        teachers &mdash; the dropdowns write straight to the teacher's profile. A teacher left at
-        <strong>not set</strong> is assessed as Induction.</em>
-        <em id="readonlyHint" hidden>Levels are set by your school principal or academic
-        coordinator. A teacher showing <strong>not set</strong> is assessed as Induction.</em>
+        <em id="editHint" hidden>A level is never assigned automatically and never moves down. It moves
+        up one level at a time, when the appraiser's formal recommendation is on the teacher's
+        finalised annual record in <a href="/teacher-appraisal-entry">Teacher Appraisal Entry</a>
+        and school management confirms it here, in consultation with Eduversal. A teacher whose
+        level is <strong>not set</strong> cannot be appraised until you record it.</em>
+        <em id="readonlyHint" hidden>Levels are recorded by your school principal or academic
+        coordinator. A teacher showing <strong>not set</strong> cannot be appraised until the level
+        is recorded.</em>
       </div>
     </div>
   </aside>
@@ -175,7 +205,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
       <input class="tl-search" id="search" type="text" autocomplete="off"
              placeholder="Search by name, email or subject…">
       <button type="button" class="tl-chip is-on" data-lv="all">All</button>
-      <button type="button" class="tl-chip" data-lv="induction">Induction</button>
+      <button type="button" class="tl-chip" data-lv="induction">Post-Induction</button>
       <button type="button" class="tl-chip" data-lv="developing">Developing</button>
       <button type="button" class="tl-chip" data-lv="proficient">Proficient</button>
       <button type="button" class="tl-chip" data-lv="lead">Lead</button>
@@ -191,7 +221,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">People · Appraisal</span>
       <h2 class="page-footer__cta-title">Set the level before you observe, not after.</h2>
-      <p class="page-footer__cta-desc">The level decides how much of the F2 rubric a teacher is assessed against — 30 items at Induction, 45 at Lead. Getting it right up front means the observation you record is the one the teacher expects.</p>
+      <p class="page-footer__cta-desc">The level decides how much of the F2 rubric a teacher is assessed against — 30 items at Post-Induction, 45 at Lead. It changes only on the appraiser's formal recommendation, confirmed by school management.</p>
       <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Teacher Levels footer navigation">
@@ -212,22 +242,36 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Levels are set by your school's leadership</span>
+    <span class="page-footer__meta-right">Levels are recorded by your school's leadership</span>
   </div>
 </footer>
+
+<div class="lv-dlg-back" id="lvDlg" role="dialog" aria-modal="true" aria-labelledby="lvDlgTitle">
+  <div class="lv-dlg">
+    <div class="lv-dlg__head" id="lvDlgTitle">Change appraisal level</div>
+    <div class="lv-dlg__body" id="lvDlgBody"></div>
+    <div class="lv-dlg__foot">
+      <button type="button" class="lv-btn" id="lvDlgCancel">Cancel</button>
+      <button type="button" class="lv-btn lv-btn--go" id="lvDlgGo" disabled>Record the level</button>
+    </div>
+  </div>
+</div>
 
 <script type="module">
 import {
   collection, query, where, getDocs, limit, doc, updateDoc, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+// Level rules: Teacher Appraisal: Handbook 26-27, "Level Progression Criteria"
+// (mirrored in resources/appraisal-levels.json → level_determination, progression).
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => (
   { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
 ));
 
+// The stored id `induction` is the Post-Induction level.
 const LEVELS = [
-  { id: 'induction',  label: 'Induction',  col: '#2563eb' },
+  { id: 'induction',  label: 'Post-Induction',  col: '#2563eb' },
   { id: 'developing', label: 'Developing', col: '#ea580c' },
   { id: 'proficient', label: 'Proficient', col: '#ca8a04' },
   { id: 'lead',       label: 'Lead',       col: '#16a34a' },
@@ -237,6 +281,7 @@ let teachers  = [];
 let filterLv  = 'all';
 let filterQ   = '';
 let canEdit   = false;
+let isAhAdmin = false;
 let schoolName = '';
 
 // ── Data ─────────────────────────────────────────────────────
@@ -317,8 +362,8 @@ function flash(el, cls) {
   if (cls !== 'is-saving') setTimeout(() => el.classList.remove(cls), 1600);
 }
 
-// Optimistic write, reverted if the rule rejects it.
-async function setLevel(uid, next, selectEl) {
+// Writes the level. Only reached through the confirm dialog below.
+async function writeLevel(uid, next, selectEl) {
   const t = teachers.find(x => x.uid === uid);
   if (!t) return;
   const prev = t.level;
@@ -326,7 +371,6 @@ async function setLevel(uid, next, selectEl) {
   selectEl.className = `lv-select lv-${next || 'unset'}`;
   renderStats();
   flash(selectEl, 'is-saving');
-
   try {
     await updateDoc(doc(window.db, 'users', uid), {
       appraisal_level: next || null,
@@ -347,6 +391,114 @@ async function setLevel(uid, next, selectEl) {
     $('gateMsg').hidden = false;
     setTimeout(() => { $('gateMsg').hidden = true; }, 6000);
   }
+}
+
+const ORDER = LEVELS.map(l => l.id);
+const labelOf = (id) => (LEVELS.find(l => l.id === id) || {}).label || 'not set';
+
+// The appraiser's recommendation lives on the teacher's finalised annual record
+// (teacher_appraisals, sessionType 'endofyear', levelProgression). The rule lets
+// a plain academic user read only records they appraised, so fall back to those.
+async function findRecommendation(uid, from, to) {
+  const coll = collection(window.db, 'teacher_appraisals');
+  let docs = [];
+  let scope = 'all';
+  try {
+    docs = (await getDocs(query(coll, where('teacherUid', '==', uid)))).docs;
+  } catch (e) {
+    scope = 'own';
+    try {
+      docs = (await getDocs(query(coll, where('teacherUid', '==', uid),
+        where('appraiserUid', '==', window.currentUser?.uid || '')))).docs;
+    } catch (e2) { console.warn('recommendation lookup failed', e2); }
+  }
+  const hit = docs.map(d => ({ id: d.id, ...d.data() }))
+    .filter(r => r.sessionType === 'endofyear' && r.status === 'finalised'
+              && r.levelProgression?.recommendation === 'recommend'
+              && r.levelProgression?.targetLevel === to
+              && (r.levelProgression?.fromLevel || r.level) === from)
+    .sort((a, b) => (b.updatedAt?.seconds || 0) - (a.updatedAt?.seconds || 0))[0] || null;
+  return { hit, scope };
+}
+
+let pending = null;   // { uid, next, selectEl, prev }
+function closeDialog(revert) {
+  $('lvDlg').classList.remove('is-open');
+  if (revert && pending) pending.selectEl.value = pending.prev || '';
+  pending = null;
+}
+
+function openDialog(title, bodyHtml, { canConfirm, confirmLabel } = {}) {
+  $('lvDlgTitle').textContent = title;
+  $('lvDlgBody').innerHTML = bodyHtml;
+  const go = $('lvDlgGo');
+  go.textContent = confirmLabel || 'Record the level';
+  const box = $('lvDlgBody').querySelector('input[type="checkbox"]');
+  go.disabled = !canConfirm || !!(box && !box.checked);
+  go.style.display = canConfirm ? '' : 'none';
+  if (box) box.addEventListener('change', () => { go.disabled = !box.checked; });
+  $('lvDlg').classList.add('is-open');
+}
+
+async function requestLevelChange(uid, next, selectEl) {
+  const t = teachers.find(x => x.uid === uid);
+  if (!t) return;
+  const prev = t.level || '';
+  if (next === prev) return;
+  pending = { uid, next, selectEl, prev };
+  const name = esc(t.name);
+  const iPrev = ORDER.indexOf(prev), iNext = ORDER.indexOf(next);
+
+  // 1. First recording of a level.
+  if (!prev) {
+    openDialog('Record the appraisal level', `
+      <p>You are recording <strong>${name}</strong>'s appraisal level as <strong>${esc(labelOf(next))}</strong>.</p>
+      <blockquote>Post-Induction is the first appraisal cycle after the three-semester induction programme. Teachers still in induction remain in Teacher Induction and are not formally appraised. Teachers who complete induction outside the normal August start begin their first appraisal cycle at the next appraisal visit window after their Induction Completion Certificate is issued.</blockquote>
+      <label><input type="checkbox"> School management records this level for the teacher's current appraisal cycle.</label>`,
+      { canConfirm: true });
+    return;
+  }
+  // 2. Down, or back to "not set" — never a demotion.
+  if (!next || iNext < iPrev) {
+    if (!isAhAdmin) {
+      openDialog('Levels never move down', `
+        <p>A teacher who does not yet meet the progression thresholds <strong>continues at their current level</strong>. This is a developmental status, not a disciplinary matter, and never a demotion.</p>
+        <p>If the level was recorded by mistake, ask an Academic Hub administrator to correct it.</p>`);
+      return;
+    }
+    openDialog('Correct a recording error', `
+      <p>You are changing <strong>${name}</strong> from <strong>${esc(labelOf(prev))}</strong> to <strong>${esc(labelOf(next))}</strong>.</p>
+      <blockquote>Levels never move down as an appraisal outcome. Use this only to correct a level that was recorded by mistake.</blockquote>
+      <label><input type="checkbox"> I am correcting a recording error — this is not a demotion.</label>`,
+      { canConfirm: true, confirmLabel: 'Correct the record' });
+    return;
+  }
+  // 3. Up more than one level.
+  if (iNext - iPrev > 1) {
+    openDialog('One level at a time', `
+      <p>Progression runs one level at a time: Post-Induction → Developing → Proficient → Lead. <strong>${name}</strong> is at ${esc(labelOf(prev))}; the next level is ${esc(labelOf(ORDER[iPrev + 1]))}.</p>`);
+    return;
+  }
+  // 4. Up one level — needs the appraiser's recorded recommendation.
+  openDialog('Confirm a level progression', '<p>Looking for the appraiser’s recommendation…</p>');
+  const { hit, scope } = await findRecommendation(uid, prev, next);
+  if (!pending || pending.uid !== uid) return;   // dialog was closed meanwhile
+  if (!hit) {
+    openDialog('No recorded recommendation', `
+      <p>Teacher levels are not assigned automatically. Progression from ${esc(labelOf(prev))} to ${esc(labelOf(next))} needs a <strong>formal recommendation from the appraiser</strong>, supported by appraisal evidence, and confirmed by school management in consultation with Eduversal.</p>
+      <p>No finalised annual record with that recommendation was found for <strong>${name}</strong>. The appraiser records it in the Level progression section of the teacher's End-of-Year annual record in <a href="/teacher-appraisal-entry">Teacher Appraisal Entry</a>.</p>
+      ${scope === 'own' ? '<p style="color:#92400e;">Your account can read only the records you appraised yourself. If another appraiser recorded the recommendation, ask an Academic Hub administrator to confirm the level.</p>' : ''}`);
+    return;
+  }
+  const lp = hit.levelProgression || {};
+  openDialog('Confirm a level progression', `
+    <p><strong>${name}</strong>: ${esc(labelOf(prev))} → <strong>${esc(labelOf(next))}</strong></p>
+    <blockquote>
+      Recommended by the appraiser on the ${esc(hit.academicYear || '')} annual record${typeof hit.compositePercent === 'number' ? ` (composite ${hit.compositePercent.toFixed(1)}, predicate ${esc(hit.predicate || '—')})` : ''}.
+      ${lp.rationale ? `<br><br><strong>Rationale:</strong> ${esc(lp.rationale)}` : ''}
+    </blockquote>
+    <label><input type="checkbox"> School management confirms this recommendation, in consultation with Eduversal.</label>`,
+    { canConfirm: true, confirmLabel: 'Confirm progression' });
 }
 
 function render() {
@@ -373,7 +525,7 @@ function render() {
     </div>`;
 
   document.querySelectorAll('[data-lv-set]').forEach(sel => {
-    sel.addEventListener('change', (e) => setLevel(sel.dataset.lvSet, e.target.value, sel));
+    sel.addEventListener('change', (e) => requestLevelChange(sel.dataset.lvSet, e.target.value, sel));
   });
 }
 
@@ -385,9 +537,18 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   const subs = Array.isArray(profile?.ah_sub_roles) ? profile.ah_sub_roles : [];
   // Mirrors the firestore rule: principal / academic coordinator write their
   // own school's levels; AH admin writes anything. Everyone else reads.
-  canEdit = profile?.role_academichub === 'academic_admin'
+  isAhAdmin = profile?.role_academichub === 'academic_admin';
+  canEdit = isAhAdmin
          || subs.includes('school_principal')
          || subs.includes('academic_coordinator');
+  $('lvDlgCancel').addEventListener('click', () => closeDialog(true));
+  $('lvDlg').addEventListener('click', (e) => { if (e.target === $('lvDlg')) closeDialog(true); });
+  $('lvDlgGo').addEventListener('click', async () => {
+    if (!pending) return;
+    const { uid, next, selectEl } = pending;
+    closeDialog(false);
+    await writeLevel(uid, next, selectEl);
+  });
   $('editHint').hidden = !canEdit;
   $('readonlyHint').hidden = canEdit;
 

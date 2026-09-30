@@ -132,7 +132,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Principal Coaching</p>
       <h1 class="page-hero__title">My Coaching</h1>
-      <p class="page-hero__desc">Read-only view of the coaching sessions logged by your Eduversal Director mentor. Each session's notes, commitments, and agreed next steps are confidential — visible only to you and your mentor.</p>
+      <p class="page-hero__desc">Read-only view of the coaching sessions logged by your coach / mentor. Each session's notes, commitments and agreed next steps are confidential — visible only to you and your mentor.</p>
     </div>
   </div>
 </header>
@@ -142,9 +142,9 @@ body:has(> .page-footer) > .page-wrap {
     <div class="info-strip__icon" aria-hidden="true">💬</div>
     <div class="info-strip__body">
       <h2 class="info-strip__title">Your private coaching record</h2>
-      <p class="info-strip__lede">This is a read-only view of your coaching sessions — the notes your Eduversal Director mentor logs after each conversation with you. Coaching is support, not judgement.</p>
+      <p class="info-strip__lede">This is a read-only view of your coaching sessions — the notes your coach / mentor logs after each conversation with you. In your first year this is your Eduversal-assigned Principal Mentor, always from outside your school. Coaching is support, not judgement.</p>
       <ol class="info-strip__flow"><li><strong>Your mentor writes</strong> a short record after each coaching session</li><li><strong>You read it here</strong> — revisit what you agreed, see your growth over time</li><li><strong>Prepare</strong> for your next session using these notes</li></ol>
-      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>This is confidential to you and your mentor.</strong> Your Foundation Rep cannot see it — coaching is a safe space, kept separate from the appraisal that decides your grade.</span></div>
+      <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>This is confidential to you and your mentor.</strong> Your Foundation Representative / General Manager cannot see it, and your appraiser does not see it. Coaching never feeds your Principal Appraisal — neither what you discuss nor how many sessions you have counts toward any score or F5.</span></div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal</span>
         <span class="info-strip__pill"><b>Scope:</b> Your own sessions</span>
@@ -181,7 +181,7 @@ body:has(> .page-footer) > .page-wrap {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Coaching confidentiality (framework access rule) · sessions logged by your Eduversal Director mentor</span>
+    <span class="page-footer__meta-right">Coaching confidentiality (Principal Appraisal: Handbook 26-27 §10) · sessions logged by your coach / mentor</span>
   </div>
 </footer>
 
@@ -222,7 +222,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 function render(sessions) {
   const root = document.getElementById('content');
   if (!sessions.length) {
-    root.innerHTML = `<div class="empty">No logged coaching sessions yet. Your first session will appear here once your HQ Director mentor logs it.</div>`;
+    root.innerHTML = `<div class="empty">No logged coaching sessions yet. Your first session will appear here once your coach / mentor logs it.</div>`;
     return;
   }
   root.innerHTML = sessions.map(renderSession).join('');
