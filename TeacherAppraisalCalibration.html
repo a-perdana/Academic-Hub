@@ -430,8 +430,8 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
       <h1 class="page-hero__title">Appraisal Calibration</h1>
-      <p class="page-hero__desc">Compare your scoring with other appraisers and expert consensus to keep appraisals fair across the network. Score each lesson vignette independently, then check your inter-rater agreement. Complete all scenarios before conducting formal appraisals.</p>
-      <span class="hero-notice">&#x2139;&#xFE0F; Formative exercise — results saved to your profile. Target: ≥85% adjacent agreement (±1 point).</span>
+      <p class="page-hero__desc">Compare your scoring with other appraisers and expert consensus to keep appraisals fair across the network. Score each lesson vignette independently against the Teacher Appraisal rubric, then see where you differ from the reference scores.</p>
+      <span class="hero-notice">&#x2139;&#xFE0F; Developmental practice — not the Appraisal Certification and not a gate for appraising.</span>
     </div>
   </div>
 </header>
@@ -450,7 +450,7 @@ body:has(> .page-footer) > .page-wrap {
       </ol>
       <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Calibration is not a competition.</strong> It is about fairness for teachers &mdash; so 'a 4' means the same thing for everyone, whoever the appraiser is.</span></div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Academic Coordinator (+ SP)</span>
+        <span class="info-strip__pill"><b>For:</b> School appraisers</span>
         <span class="info-strip__pill"><b>Scope:</b> Cross-appraiser</span>
         <span class="info-strip__pill"><b>Goal:</b> Inter-rater fairness</span>
       </div>
@@ -460,7 +460,6 @@ body:has(> .page-footer) > .page-wrap {
   <div class="mode-tabs">
     <button class="mode-tab active" onclick="setMode('solo')">&#x1F464; Solo Calibration</button>
     <button class="mode-tab" onclick="setMode('group')">&#x1F465; Group Session</button>
-    <button class="mode-tab" id="adminTabBtn" style="display:none;" onclick="setMode('leaderboard')">&#x1F4CA; Leaderboard</button>
   </div>
 
   <!-- SOLO MODE -->
@@ -495,7 +494,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Appraisal · Calibration</span>
       <h2 class="page-footer__cta-title">Calibrated appraisers score the same lesson the same way.</h2>
-      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through every vignette, compare with the expert consensus, and aim for ≥85% adjacent agreement before you run a formal appraisal.</p>
+      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through the vignettes and look closely at any item where you differ by two or more points. Formal authorisation to appraise comes from your role and the Appraisal Certification, not from this exercise.</p>
       <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Appraisal Calibration footer navigation">
@@ -529,120 +528,23 @@ const db = window.db;
 /* ─────────────────────────────────────────────
    RUBRIC ANCHOR DESCRIPTORS
    ───────────────────────────────────────────── */
-const ANCHORS = {
-  'D3.3': {
-    name: 'Making Learning Intentions Visible',
-    anchors: [
-      'Objective is absent, unclear, or completely unrelated to what is taught.',
-      'Objective is posted but not stated aloud, not referred to, or too vague for students to use.',
-      'Learning intention is stated and referred to at key moments; most students can articulate it.',
-      'Learning intention and success criteria are co-constructed or made explicit; students reference them throughout; closure links back.'
-    ]
-  },
-  'D3.4': {
-    name: 'Activity–Objective Alignment',
-    anchors: [
-      'Activities bear no clear relationship to the stated objective.',
-      'Some activities align but others are filler or off-objective; alignment is incidental.',
-      'All activities clearly serve the objective; minor gaps in difficulty range or real-world connection.',
-      'Every activity deliberately scaffolds toward the objective with purposeful variation in complexity and authentic application.'
-    ]
-  },
-  'D2.4': {
-    name: 'Time Management and Instructional Pace',
-    anchors: [
-      'Significant time wasted on transitions, unclear directions, or off-task activity (>10 min).',
-      'Pacing is uneven; one phase disproportionately long or short; teacher not circulating during work time.',
-      'Transitions are efficient; time allocation is appropriate; teacher circulates actively.',
-      'Every minute is purposeful; flexible pacing responds to student need; zero dead time.'
-    ]
-  },
-  'D2.1': {
-    name: 'Awareness of Classroom Dynamics',
-    anchors: [
-      'Teacher is unaware of off-task or disruptive students; disruptions escalate without response.',
-      'Teacher notices disruptions only after escalation; response is reactive rather than preventive.',
-      'Teacher scans continuously; uses proximity or quiet redirection before disruption escalates.',
-      'Proactive classroom management; students are self-regulating; teacher anticipates and prevents issues.'
-    ]
-  },
-  'D3.13': {
-    name: 'Guiding Concept and Skill Acquisition',
-    anchors: [
-      'No scaffolding; students are given tasks without modelling or guided practice.',
-      'Teacher models but immediately releases to independent work; no check for readiness.',
-      'Clear I Do–We Do–You Do sequence; re-teaching visible when misconception detected.',
-      'Gradual release is explicit and adaptive; students articulate the learning process; peer scaffolding encouraged.'
-    ]
-  },
-  'D3.5': {
-    name: 'Activating Higher-Order Thinking',
-    anchors: [
-      'All questions are recall-level; no analysis, evaluation, or creation demanded.',
-      'Occasional higher-order question but it is not followed up; majority remain recall.',
-      'Regular analysis and application questions; students challenged to justify or compare.',
-      'Consistent demand for evaluation, synthesis, or creation; student questioning evident; teacher responds with further probing.'
-    ]
-  },
-  'D3.19': {
-    name: 'Monitoring Student Understanding',
-    anchors: [
-      'No evidence teacher checks for understanding during lesson; feedback is post-lesson only.',
-      'Single whole-class check (e.g., "any questions?"); does not adjust based on response.',
-      'Multiple formative checks (mini-whiteboards, exit slips, targeted questioning); teacher adjusts in the moment.',
-      'Continuous, varied monitoring; real-time data drives re-teaching; every student\'s understanding is tracked.'
-    ]
-  },
-  'D1.8': {
-    name: 'Formative Assessment Planning',
-    anchors: [
-      'No planned formative assessment; lesson relies entirely on summative or no assessment.',
-      'One assessment method placed only at lesson end; no provision for mid-lesson data.',
-      'Two or more formative checkpoints planned; assessment is embedded, not bolted on.',
-      'Assessment is woven throughout; varied methods; data collection is systematic and feeds directly into planning.'
-    ]
-  },
-  'D1.3': {
-    name: 'Knowledge of Students',
-    anchors: [
-      'Instruction is entirely undifferentiated; no evidence of knowing individual learners.',
-      'Teacher acknowledges mixed ability but does not adjust materials or grouping.',
-      'Grouping or resources are differentiated; teacher checks in with specific students based on prior data.',
-      'Deep knowledge of individual learners drives every design decision; student strengths and gaps are explicitly leveraged.'
-    ]
-  },
-  'D3.10': {
-    name: 'Student Engagement',
-    anchors: [
-      'Most students are passive recipients; off-task behaviour is prevalent.',
-      'Students are compliant but not cognitively engaged; tasks are procedural only.',
-      'Students are on-task and actively participating; discussion and collaboration evident.',
-      'Students are intellectually absorbed; they initiate questions and extend thinking independently.'
-    ]
-  },
-  'D3.7': {
-    name: 'Feedback Quality',
-    anchors: [
-      'Feedback is absent or only evaluative ("good", "wrong") with no guidance for improvement.',
-      'Feedback identifies what is wrong but does not explain how to improve.',
-      'Feedback is specific and actionable; students are given strategies to close the gap.',
-      'Feedback is dialogic; teacher checks for uptake; students use feedback to self-correct in real time.'
-    ]
-  },
-  'D2.3': {
-    name: 'Classroom Environment and Respect',
-    anchors: [
-      'Dismissive or punitive tone; students appear reluctant to participate.',
-      'Neutral climate; teacher is polite but interactions are transactional.',
-      'Warm, respectful climate; mistakes are treated as learning opportunities; student contributions are valued.',
-      'Students feel psychologically safe to take risks; teacher actively celebrates effort and diversity of thought.'
-    ]
-  }
-};
+// Item names and the four level descriptors come from the Teacher Appraisal
+// framework (resources/appraisal-framework-v2.json), whose F2 items follow the
+// live Teacher Appraisal: Rating Rubric 26-27. Until 2026-10-01 this page carried
+// twelve hand-written anchors, three of them under the wrong item codes
+// (D1.3 "Knowledge of Students", D3.10 "Student Engagement", D3.7 "Feedback
+// Quality" are not those items in the rubric).
+let ANCHORS = {};
+async function loadAnchors() {
+  try {
+    const fw = await (await fetch('/resources/appraisal-framework-v2.json')).json();
+    const f2 = (fw.frameworks || []).find(f => f.id === 'F2');
+    (f2?.domains || []).forEach(d => (d.items || []).forEach(it => {
+      ANCHORS[it.id] = { name: it.title, anchors: [1, 2, 3, 4].map(n => it.rubric?.[n] || it.rubric?.[String(n)] || '') };
+    }));
+  } catch (e) { console.warn('Could not load the appraisal framework', e); }
+}
 
-/* ─────────────────────────────────────────────
-   SCENARIOS  (8 total)
-   ───────────────────────────────────────────── */
 const SCENARIOS = [
   {
     id: 'S1',
@@ -695,48 +597,48 @@ const SCENARIOS = [
   {
     id: 'S4',
     title: 'Grade 5 Mathematics — Fractions on a Number Line',
-    level: 'induction',
-    items: ['D3.13','D3.10','D3.7'],
+    level: 'developing',
+    items: ['D3.13','D3.12','D3.20'],
     vignette: [
       'The observer enters at 09:05. The teacher writes "3/4" on the board and asks, "Who can tell me what this means?" One student answers correctly. The teacher says "Good" and moves immediately to distributing worksheets. No physical model or visual representation is used. Students work individually for 22 minutes; the teacher circulates briefly in the first 5 minutes then returns to the front.',
       'At 09:34, the teacher reviews the answers: "Number 1 — who got ¼?" Hands go up. "Good, it\'s the point halfway between 0 and ½." No explanation of why is offered. A student says, "But I put it on the ½ mark." The teacher replies, "That\'s wrong — the answer is ¼, not ½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems — the teacher does not return to them.'
     ],
-    expertScores: { 'D3.13': 1, 'D3.10': 2, 'D3.7': 1 },
+    expertScores: { 'D3.13': 1, 'D3.12': 2, 'D3.20': 1 },
     rationale: {
       'D3.13': 'No modelling, no guided practice, no check for readiness before independent work. Students given the task without scaffolding — a score of 1 is appropriate.',
-      'D3.10': 'Students are mostly compliant but not cognitively engaged. Independent work is procedural; no discussion or collaborative sense-making. Score 2.',
-      'D3.7': 'Feedback is purely evaluative ("good", "that\'s wrong") with no strategy offered for improvement. The student who misplaced the fraction receives no actionable guidance. Score 1.'
+      'D3.12': 'Students are mostly compliant but only a few take part; independent work is procedural, with no discussion or collaborative sense-making and no deliberate step to widen participation. Score 2.',
+      'D3.20': 'Feedback is purely evaluative ("good", "that\'s wrong") with no strategy offered for improvement. The student who misplaced the fraction receives no actionable guidance. Score 1.'
     }
   },
   {
     id: 'S5',
     title: 'Grade 11 Chemistry — Equilibrium and Le Chatelier\'s Principle',
     level: 'lead',
-    items: ['D3.5','D3.3','D1.3'],
+    items: ['D3.5','D3.3','D1.4'],
     vignette: [
       'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress — and by the end you\'ll be able to design an industrial process that maximises yield."',
       'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early — these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task — watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
     ],
-    expertScores: { 'D3.5': 4, 'D3.3': 4, 'D1.3': 4 },
+    expertScores: { 'D3.5': 4, 'D3.3': 4, 'D1.4': 4 },
     rationale: {
       'D3.5': 'Every teacher question demands application, analysis, or evaluation. Students debate real industrial trade-offs. Consistently Distinguished-level questioning throughout. Score 4.',
       'D3.3': 'Objective is delayed but then made explicit and ambitious; students clearly understand what success looks like by the end; referred back to at closure debate. Score 4.',
-      'D1.3': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards — all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
+      'D1.4': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards — all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
     }
   },
   {
     id: 'S6',
     title: 'Grade 8 History — Causes of World War I',
     level: 'developing',
-    items: ['D2.3','D3.10','D3.19'],
+    items: ['D2.3','D3.12','D3.19'],
     vignette: [
       'The observer enters at 14:00. The teacher is reading from printed notes at the front. He pauses occasionally to ask recall questions: "Who was assassinated in Sarajevo?" One student answers correctly. Another student answers a different question incorrectly: "That\'s not right — we covered this last week. Were you paying attention?" The student lowers his head and does not volunteer again for the rest of the lesson.',
       'At 14:25 the teacher puts students into pairs to discuss the MAIN acronym (Militarism, Alliances, Imperialism, Nationalism). The room becomes louder. The teacher waits at the front rather than circulating. At 14:35 he calls for quiet and asks, "Does everyone understand?" The class is silent. He says, "Good, we\'ll pick this up next lesson." No formative check was conducted. Three students were observed reading an unrelated book during the teacher\'s lecture phase.'
     ],
-    expertScores: { 'D2.3': 2, 'D3.10': 2, 'D3.19': 1 },
+    expertScores: { 'D2.3': 2, 'D3.12': 2, 'D3.19': 1 },
     rationale: {
       'D2.3': 'The public correction ("were you paying attention?") is potentially damaging to psychological safety. Climate is functional but not warm; the student\'s retreat into silence signals risk aversion. Score 2.',
-      'D3.10': 'Students are mostly compliant but passive. Pair discussion is a positive moment but unmonitored. Overall engagement is procedural, not intellectual. Score 2.',
+      'D3.12': 'Participation is uneven: a few students answer recall questions while most stay passive, and the pair discussion is not monitored. Score 2.',
       'D3.19': '"Does everyone understand?" is not a formative check — it yields no usable data. No other monitoring strategy was deployed. Score 1.'
     }
   },
@@ -760,14 +662,14 @@ const SCENARIOS = [
     id: 'S8',
     title: 'Grade 10 English Literature — The Great Gatsby',
     level: 'lead',
-    items: ['D3.7','D2.3','D3.5'],
+    items: ['D3.20','D2.3','D3.5'],
     vignette: [
       'The observer enters at 10:05. A student is mid-sentence: "…so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move — \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far — write that sentence down verbatim. You\'ll want it in your essay. What do others think — fake, or aspirational but unattainable?"',
       'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that — it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim — try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
     ],
-    expertScores: { 'D3.7': 4, 'D2.3': 4, 'D3.5': 4 },
+    expertScores: { 'D3.20': 4, 'D2.3': 4, 'D3.5': 4 },
     rationale: {
-      'D3.7': 'Feedback is dialogic, specific, and acted on in real time ("write that sentence verbatim"; margin annotation with precise vocabulary suggestion). Students use feedback to self-correct immediately. Score 4.',
+      'D3.20': 'Feedback is dialogic, specific, and acted on in real time ("write that sentence verbatim"; margin annotation with precise vocabulary suggestion). Students use feedback to self-correct immediately. Score 4.',
       'D2.3': 'The tentative student\'s contribution is publicly celebrated; counter-argument task normalises intellectual risk. Climate is psychologically safe — students openly revise their own positions. Score 4.',
       'D3.5': 'Every teacher utterance extends student thinking — from "performing wealth" to the philosophical question of whether the American Dream is inherently performative. All students are challenged to evaluate and argue, not recall. Score 4.'
     }
@@ -793,9 +695,7 @@ let activeTab = 'vignette'; // persists across score clicks
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   window.__loadAcademicNavbar('calibration', { user, profile });
   isAdmin = profile?.role_academichub === 'academic_admin';
-  if (isAdmin) document.getElementById('adminTabBtn').style.display = '';
-  renderStepDots();
-  renderScenario(0);
+  loadAnchors().then(() => { renderStepDots(); renderScenario(0); });
 });
 
 /* ─────────────────────────────────────────────
@@ -878,7 +778,7 @@ function renderScenario(idx) {
       <div class="card-head">
         <div>
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
-            <span class="level-badge ${sc.level}">${sc.level.charAt(0).toUpperCase()+sc.level.slice(1)}</span>
+            <span class="level-badge ${sc.level}">${({ induction: 'Post-Induction' })[sc.level] || (sc.level.charAt(0).toUpperCase()+sc.level.slice(1))}</span>
             <span style="font-size:.72rem;color:#94a3b8;">${sc.items.join(' · ')}</span>
           </div>
           <h2>${sc.title}</h2>
@@ -995,9 +895,9 @@ function renderResults(idx) {
             <div class="irr-sub">${adj} of ${sc.items.length} items</div>
           </div>
           <div class="irr-card">
-            <div class="irr-label">Target</div>
-            <div class="irr-val">≥85%</div>
-            <div class="irr-sub">adjacent agreement</div>
+            <div class="irr-label">Differed by 2+</div>
+            <div class="irr-val">${sc.items.filter(id => Math.abs(myScores[id]-sc.expertScores[id]) >= 2).length}</div>
+            <div class="irr-sub">items to review</div>
           </div>
         </div>
       </div>
@@ -1042,7 +942,7 @@ function showSummary() {
 
   const overallAdj   = Math.round(adjTotal / itemTotal * 100);
   const overallExact = Math.round(exactTotal / itemTotal * 100);
-  const passed = overallAdj >= 85;
+  const passed = null;   // no pass mark: the live pack sets none (2026-10-01)
 
   document.getElementById('resultsView').innerHTML = `
     <div class="card">
@@ -1065,17 +965,14 @@ function showSummary() {
             <div class="irr-sub">${adjTotal}/${itemTotal} items</div>
           </div>
           <div class="irr-card">
-            <div class="irr-label">Result</div>
-            <div class="irr-val" style="color:${passed?'#16a34a':'#b45309'};">${passed ? 'Pass' : 'Retry'}</div>
-            <div class="irr-sub">≥85% required</div>
+            <div class="irr-label">Scenarios</div>
+            <div class="irr-val">${SCENARIOS.length}</div>
+            <div class="irr-sub">completed</div>
           </div>
         </div>
         <div style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;margin-bottom:12px;">Per scenario</div>
         ${bars}
-        ${passed
-          ? `<div class="badge-pass">&#x2713; Calibrated — ready to conduct formal appraisals</div>`
-          : `<div class="badge-retry">&#x26A0; Review rubric descriptors and retry before appraising</div>`
-        }
+        <div class="badge-retry" style="background:#f1f5f9;color:#334155;border-color:#cbd5e1;">&#x2139;&#xFE0F; Developmental practice only — it is not the Appraisal Certification and does not authorise or bar anyone from appraising. Re-read the rubric descriptors for any item where you differed by two or more points.</div>
       </div>
       <div class="action-row">
         <span class="action-hint" id="saveStatus2"></span>
@@ -1103,8 +1000,8 @@ async function saveResult(passed, adjPct, exactPct) {
       academicYear: new Date().getFullYear() + '/' + (new Date().getFullYear() + 1),
       completedAt:  serverTimestamp(),
       scenarioIds:  SCENARIOS.map(s => s.id),
-      adjPct, exactPct, passed,
-      status: passed ? 'calibrated' : 'needs_retry',
+      adjPct, exactPct,
+      status: 'completed',
       userScores: userScores.map((sc, i) => ({
         scenarioId: SCENARIOS[i].id,
         scores: sc,
@@ -1114,7 +1011,7 @@ async function saveResult(passed, adjPct, exactPct) {
     if (uid) {
       const ref = doc(db, 'calibration_sessions', `${uid}_${new Date().getFullYear()}`);
       await setDoc(ref, payload, { merge: true });
-      if (statusEl) statusEl.textContent = `Result saved — ${passed ? 'Calibrated ✓' : 'Needs retry'}`;
+      if (statusEl) statusEl.textContent = 'Practice saved to your profile';
     } else {
       if (statusEl) statusEl.textContent = 'Not logged in — result not saved.';
     }

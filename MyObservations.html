@@ -760,11 +760,11 @@ function openWalkthroughModal(id) {
 
   const visitDate = w.visitDate?.toDate ? w.visitDate.toDate().toLocaleDateString('en-GB') : '—';
   const foci = w.fociResponses || {};
-  const codeColors = { E: '#15803d', D: '#92400e', N: '#64748b' };
-  const codeLabels = { E: 'Evident', D: 'Developing', N: 'Not Observed' };
+  const codeColors = { E: '#15803d', D: '#92400e', N: '#64748b', '': '#94a3b8' };
+  const codeLabels = { E: 'Evident', D: 'Developing', N: 'Not Observed', '': '—' };
   const fociRows = [1,2,3,4,5].map(n => {
     const resp = foci[`W${n}`] || {};
-    const code = resp.code || 'N';
+    const code = resp.code || '';   // unmarked is not the same as Not Observed
     return `<div class="detail-item">
       <div class="detail-item-label">W${n} — ${FOCI_LABELS[n-1]}</div>
       <div class="detail-item-value" style="font-size:.8rem;color:${codeColors[code]};">${codeLabels[code]}${resp.note ? ` — <span style="color:#475569;font-weight:400;">${esc(resp.note)}</span>` : ''}</div>
@@ -777,7 +777,7 @@ function openWalkthroughModal(id) {
       <div class="detail-grid">
         <div class="detail-item"><div class="detail-item-label">Teacher</div><div class="detail-item-value">${esc(w.metadata?.teacherName||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Subject</div><div class="detail-item-value">${esc(w.metadata?.subject||'—')}</div></div>
-        <div class="detail-item"><div class="detail-item-label">Year Group</div><div class="detail-item-value">${esc(w.metadata?.yearGroup||'—')}</div></div>
+        <div class="detail-item"><div class="detail-item-label">Class Observed</div><div class="detail-item-value">${esc(w.metadata?.yearGroup||'—')}</div></div>
         <div class="detail-item"><div class="detail-item-label">Visit Date</div><div class="detail-item-value">${visitDate}</div></div>
         <div class="detail-item"><div class="detail-item-label">Duration</div><div class="detail-item-value">${w.duration ? w.duration + ' min' : '—'}</div></div>
         <div class="detail-item"><div class="detail-item-label">Lesson Phase</div><div class="detail-item-value">${esc(w.metadata?.lessonPhase||'—')}</div></div>
@@ -786,7 +786,7 @@ function openWalkthroughModal(id) {
       </div>
     </div>
     <div class="detail-section">
-      <div class="detail-section-title">Foci Responses</div>
+      <div class="detail-section-title">Foci Responses <span style="font-weight:500;text-transform:none;letter-spacing:0;color:#94a3b8;">· formative, no score — not part of F2 or the composite</span></div>
       <div class="detail-grid">${fociRows}</div>
     </div>
     ${(w.narrative?.glow || w.narrative?.grow || w.narrative?.go) ? `<div class="detail-section">

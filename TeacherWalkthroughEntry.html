@@ -550,8 +550,8 @@ body:has(> .page-footer) > .page-wrap {
   <div class="page-hero__inner">
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
-      <h1 class="page-hero__title">Teacher Walkthrough</h1>
-      <p class="page-hero__desc">Short, frequent classroom-visit notes (5–10 min, unannounced) that build the evidence base over time. Formative only — no score assigned. Findings are shared with the teacher as developmental feedback.</p>
+      <h1 class="page-hero__title">Teaching Practice Walkthrough</h1>
+      <p class="page-hero__desc">Short, unannounced classroom visits of about 10–15 minutes. Formative only — no score, not used in annual appraisal calculations. School-led walkthroughs are shared with the teacher as developmental feedback.</p>
       <div class="wt-hero-meta">
         <span class="formative-notice">&#x2139;&#xFE0F; This observation does not contribute to the teacher's formal appraisal score.</span>
         <span class="walkthrough-count-badge" id="walkthroughCountBadge" style="display:none;">
@@ -587,16 +587,16 @@ body:has(> .page-footer) > .page-wrap {
         <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="info-strip__explainer" id="infoStripExplainer">
-        <p class="info-strip__lede">Walkthroughs are quick (a few minutes), frequent, and lower-stakes than a full appraisal. Jot what you saw &mdash; these notes build a fair picture over time and become your evidence base.</p>
+        <p class="info-strip__lede">A walkthrough is a short, unannounced visit of about 10&ndash;15 minutes, recorded with the Teaching Practice Walkthrough Form. The Principal walks through every classroom weekly; other school appraisers add their own walkthroughs through the year.</p>
         <ol class="info-strip__flow">
-          <li><strong>Visit a classroom</strong> for a few minutes</li>
-          <li><strong>Note the focus + quick observations</strong> while it is fresh</li>
-          <li><strong>Repeat often</strong> &mdash; several across a term beats one big push</li>
+          <li><strong>Visit a classroom</strong> for about 10&ndash;15 minutes, unannounced</li>
+          <li><strong>Mark each focus E / D / N</strong> and note what you saw while it is fresh</li>
+          <li><strong>Write one Key Observation</strong> &mdash; a strength, a pattern, or something worth discussing &mdash; and, if useful, one Suggested Focus</li>
         </ol>
-        <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Little and often beats one rushed note at year end.</strong> Your walkthrough notes feed the formal Teacher Appraisal.</span></div>
+        <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Walkthroughs are developmental evidence only.</strong> They are not valid F2 observations and are not included in the F2 calculation or the appraisal composite (Teacher Appraisal: Handbook 26-27).</span></div>
       </div>
       <div class="info-strip__pills">
-        <span class="info-strip__pill"><b>For:</b> Academic Coordinator (+ SP, CC)</span>
+        <span class="info-strip__pill"><b>For:</b> School Principal · Academic Coordinator · Cambridge Coordinator</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
         <span class="info-strip__pill"><b>Stakes:</b> Low / formative</span>
       </div>
@@ -671,7 +671,7 @@ body:has(> .page-footer) > .page-wrap {
             <input aria-label="e.g. Mathematics" type="text" id="subject" placeholder="e.g. Mathematics" autocomplete="off">
           </div>
           <div class="field">
-            <label>Year Group / Class <span style="color:#dc2626;">*</span></label>
+            <label>Class Observed <span style="color:#dc2626;">*</span></label>
             <input aria-label="e.g. Year 9B" type="text" id="yearGroup" placeholder="e.g. Year 9B" autocomplete="off">
           </div>
           <div class="field">
@@ -697,11 +697,10 @@ body:has(> .page-footer) > .page-wrap {
           <div class="field">
             <label>Observer Role</label>
             <select id="observerRole">
-              <option value="Subject Leader">Subject Leader</option>
               <option value="School Principal">School Principal</option>
               <option value="Academic Coordinator">Academic Coordinator</option>
               <option value="Cambridge Coordinator">Cambridge Coordinator</option>
-              <option value="Eduversal Representative">Eduversal Representative</option>
+              <option value="Subject Leader">Subject Leader</option>
             </select>
           </div>
           <div class="field">
@@ -745,56 +744,39 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
-    <!-- NARRATIVE — Glow / Grow / Go -->
+    <!-- NARRATIVE — the live form's two fields (Teacher Appraisal: Walkthrough Form 26-27) -->
     <div class="narrative-card">
       <div class="narrative-head">
         <div>
           <h2>&#x270F;&#xFE0F; Observation Narrative</h2>
-          <div style="font-size:.73rem;color:#94a3b8;margin-top:2px;">Glow · Grow · Go — structured coaching feedback</div>
+          <div style="font-size:.73rem;color:#94a3b8;margin-top:2px;">Key Observation (required) · Suggested Focus (optional)</div>
         </div>
       </div>
       <div class="narrative-body">
-        <div class="narrative-tabs" id="narrativeTabs">
-          <button class="narr-tab active" data-tab="glow" onclick="switchNarrTab('glow')">&#x2728; Glow</button>
-          <button class="narr-tab" data-tab="grow" onclick="switchNarrTab('grow')">&#x1F331; Grow</button>
-          <button class="narr-tab" data-tab="go" onclick="switchNarrTab('go')">&#x1F3AF; Go</button>
-        </div>
-
-        <!-- GLOW -->
         <div class="narr-tab-pane active" id="pane-glow">
           <div class="narr-prompt">
-            <strong>Glow</strong> — What did you see the teacher doing well? Name a specific strength observed during this visit. Be concrete: describe the behaviour, not just the outcome.
+            <strong>Key Observation</strong> — A brief, specific observation — a strength, a pattern, or something worth discussing.
           </div>
           <div class="narr-field">
-            <label>Key Strength Observed <span style="color:#dc2626;">*</span></label>
-            <textarea aria-label="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase" id="narr_glow" rows="3" placeholder="e.g. The teacher consistently cold-called students by name, maintaining high engagement across the room even during a predominantly teacher-led phase." oninput="updateNarrChar(this,'glow-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <label>Key Observation <span style="color:#dc2626;">*</span></label>
+            <textarea aria-label="Key Observation" id="narr_glow" rows="3" placeholder="A strength, a pattern, or something worth discussing." oninput="updateNarrChar(this,'glow-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="narr-field"><div class="char-count-inline" id="glow-count">0 / 300</div></div>
           </div>
         </div>
-
-        <!-- GROW -->
-        <div class="narr-tab-pane" id="pane-grow">
+        <div class="narr-tab-pane active" id="pane-go">
           <div class="narr-prompt">
-            <strong>Grow</strong> — What one area, if strengthened, would most improve student learning in this context? Frame it as a professional question or an observation, not a judgment.
+            <strong>Suggested Focus</strong> — One specific, actionable suggestion or professional learning focus for the teacher to consider before the next visit — framed as an invitation to reflect, not a directive.
           </div>
           <div class="narr-field">
-            <label>Area for Development</label>
-            <textarea aria-label="e.g. Formative checks were rare in this lesson phase — students may benefit from more frequent low-stakes opportunities to signal understanding before moving on" id="narr_grow" rows="3" placeholder="e.g. Formative checks were rare in this lesson phase — students may benefit from more frequent low-stakes opportunities to signal understanding before moving on." oninput="updateNarrChar(this,'grow-count');updateNarrTabState();autosaveDraft();"></textarea>
-            <div class="char-count-inline" id="grow-count">0 / 300</div>
-          </div>
-        </div>
-
-        <!-- GO -->
-        <div class="narr-tab-pane" id="pane-go">
-          <div class="narr-prompt">
-            <strong>Go</strong> — One specific, actionable next step. Framed as an invitation, not a mandate. Should be achievable before the next walkthrough visit.
-          </div>
-          <div class="narr-field">
-            <label>Suggested Next Step</label>
-            <textarea aria-label="e.g. Try one exit-ticket technique at the end of the next lesson — a quick show-of-hands, mini-whiteboard response, or traffic-light card — to gauge understanding before closure" id="narr_go" rows="3" placeholder="e.g. Try one exit-ticket technique at the end of the next lesson — a quick show-of-hands, mini-whiteboard response, or traffic-light card — to gauge understanding before closure." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
+            <label>Suggested Focus</label>
+            <textarea aria-label="Suggested Focus" id="narr_go" rows="3" placeholder="An invitation to reflect, not a directive." oninput="updateNarrChar(this,'go-count');updateNarrTabState();autosaveDraft();"></textarea>
             <div class="char-count-inline" id="go-count">0 / 300</div>
           </div>
         </div>
+        <!-- legacy: drafts saved before 2026-10-01 may hold a Grow note -->
+        <div hidden><textarea id="narr_grow"></textarea><div id="grow-count"></div></div>
+      </div>
+    </div>
       </div>
     </div>
   </div>
@@ -991,7 +973,7 @@ document.addEventListener('click', e => {
 
 // ── RUBRIC DATA ───────────────────────────────────────────
 //
-// SIBLING FORM: Central Hub/walkthrough-entry.html renders the same rubric
+// SIBLING FORM: Central Hub/classroom-walkthrough-entry.html renders the same rubric
 // into the same teacher_walkthroughs shape (all 13 payload fields match) — the
 // two exist only because the hubs have separate auth models, so a school
 // leader (role_academichub) cannot reach the CH form and an Eduversal
@@ -1324,16 +1306,6 @@ function buildFoci() {
           `).join('')}
         </div>
 
-        <div class="confidence-row">
-          <div class="confidence-label">Observer Confidence</div>
-          <div class="confidence-opts">
-            <button class="conf-btn" data-focus="${focus.id}" data-conf="high"
-              onclick="event.stopPropagation();setConfidence('${focus.id}','high',this)">High</button>
-            <button class="conf-btn" data-focus="${focus.id}" data-conf="low"
-              onclick="event.stopPropagation();setConfidence('${focus.id}','low',this)">Limited view</button>
-          </div>
-        </div>
-
         <div style="margin-top:12px;">
           <div class="focus-note-label">${focus.prompt_for_observer}</div>
           <div class="focus-note-wrap">
@@ -1585,7 +1557,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const payload = {
       teacherUid: document.getElementById('teacherUid').value.trim() || null,
       observerUid: user.uid,
-      schoolId: profile?.school || null,
+      schoolId: profile?.schoolId || null,       // partner_schools id (was the school NAME until 2026-10-01)
       academicYear: document.getElementById('academicYear').value,
       visitDate: visitDateObj,
       duration: parseInt(document.getElementById('duration').value) || 10,
@@ -1598,13 +1570,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
         lessonPhase: document.getElementById('lessonPhase').value,
       },
       fociResponses: JSON.parse(JSON.stringify(fociResponses)),
-      narrative: {
-        glow: glowVal,
-        grow: growVal,
-        go: goVal,
-        glowGrowGoComplete: !!(glowVal && growVal && goVal),
-      },
-      // Legacy fields for backward compatibility
+      // The two narrative fields of the live Teaching Practice Walkthrough Form.
+      // Glow / Grow / Go belongs to the post-appraisal conference, not to a
+      // walkthrough; records written before 2026-10-01 still carry `narrative`.
       keyObservation: glowVal,
       suggestedFocus: goVal,
       contributes_to_formal_score: false,
@@ -1618,7 +1586,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       const subject = document.getElementById('subject').value.trim();
       document.getElementById('successSub').innerHTML =
         `Walkthrough for <strong>${teacherName}</strong> (${subject}) has been saved. ` +
-        `${glowVal && growVal && goVal ? 'Full Glow·Grow·Go narrative recorded.' : 'Partial narrative saved.'}`;
+        `${goVal ? 'Key Observation and Suggested Focus recorded.' : 'Key Observation recorded.'}`;
       document.getElementById('formView').style.display = 'none';
       document.getElementById('progressTracker').style.display = 'none';
       document.getElementById('successState').style.display = 'block';
