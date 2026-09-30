@@ -270,6 +270,17 @@
       .page-footer { margin-top: 0; }
     </style>
     <script src="firebase-config.js"></script>
+    <script>
+      // Firebase config for auth-guard.js — build.js replaces the placeholders.
+      if (!window.ENV) window.ENV = {
+        FIREBASE_API_KEY:            "__FIREBASE_API_KEY__",
+        FIREBASE_AUTH_DOMAIN:        "__FIREBASE_AUTH_DOMAIN__",
+        FIREBASE_PROJECT_ID:         "__FIREBASE_PROJECT_ID__",
+        FIREBASE_STORAGE_BUCKET:     "__FIREBASE_STORAGE_BUCKET__",
+        FIREBASE_MESSAGING_SENDER_ID:"__FIREBASE_MESSAGING_SENDER_ID__",
+        FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
+      };
+    </script>
   </head>
   <!-- No data-page-accent on the body element: base.css would tint the page
        lavender and repaint every shared .card on hover in one family colour,
