@@ -54,7 +54,7 @@ Steps (in order):
 
 **Globals after `authReady`:** `window.firebaseApp`, `window.auth`, `window.db`, `window.storage`, `window.currentUser`, `window.userProfile`.
 
-`index.html` is the LOGIN page (no auth-guard). `waiting.html` polls every 30s.
+`login.html` is the LOGIN page (no auth-guard); `index.html` is the home page (auth-guarded — see Dashboard Pattern). `waiting.html` polls every 30s.
 
 ---
 
@@ -73,7 +73,7 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 
 **Sub-roles control:**
 - `weekly-checklist.html` tab visibility (one tab per sub-role; admin sees all)
-- `index.html` dashboard category filter (categories with `visible_to[]` filtered to matching sub-roles)
+- `index.html` home sections (`ah_categories` with `visible_to[]` filtered to matching sub-roles)
 - Per-page access via `page_access_config/{slug}` (see below)
 
 `weekly-checklist.html` Firestore IDs: `${ACADEMIC_YEAR}_w${week}_${currentPlatform}` where `currentPlatform ∈ {foundation_representative, school_principal, academic_coordinator}`.
@@ -93,7 +93,7 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
    - empty `.nav-dropdown-wrap` / `.nav-dd-col` / `.mob-nav-section` get `data-pa-hidden="1"` too
    - empty `.ah-mobile-section-header` siblings (mobile drawer doesn't wrap groups in containers — auth-guard walks forward from each header until next header/divider; if every interactive sibling is hidden, hide the header)
    - `MutationObserver` re-runs gating on async navbar mount or new card insertion
-3. **Auto-cards** (in `index.html` `renderOtherAvailablePages()`) — for accessible pages without a hand-crafted card, builds minimal cards INTO the Uncategorized grid (de-duped against existing `<a class="card" href]`). See Dashboard Pattern below.
+3. **Auto tiles** (in `index.html` `addAutoTools()`) — accessible pages with no `TOOLS` registry entry become tiles in "Other tools". See Dashboard Pattern below.
 
 **Bypass list** (`PAGE_ACCESS_BYPASS`): `''`, `'index'`, `'login'`, `'waiting'`.
 
@@ -119,7 +119,7 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 | `competency_evidence/{docId}` | AH submissions with `platform: 'academic'`. Storage: `competency_evidence/academic/{uid}/{ts}_{filename}` (≤25 MB). | owner create / central_admin review |
 | `competency_certificates/{certId}` | Filtered `where('platform','==','academic')` | central_admin |
 | `cambridge_crossref/index` | Single CTS aggregator. Read by `cambridge-crossref.js` runtime (build-injected) when CTS chips are clicked. | central_admin |
-| `ah_categories/{catId}` | Dashboard category collection. Each: `{name, color, cardIds[], visible_to[], hidden_for_users, pilot_systems[], order, createdAt}`. **Meta doc** `_uncategorized_settings_` (`isMeta:true`, `order:-1`, `visible_to_users:bool`) gates the Uncategorized accordion for non-admins. Non-admin path subscribes via direct `onSnapshot(doc(..., '_uncategorized_settings_'))` (the meta doc lacks `visible_to`, so the open-to-all + sub-role queries miss it). `pilot_systems[]` (added 2026-05-10) optional — admin tags a collection with one or more of `kpi`/`appraisal`/`competency`/`induction` from the Manage Cards modal so the entire collection (header included) hides when ANY of those systems is opted out at the user's school. Untagged (`[]`) collections fall back to per-card pilot gating only; admins always bypass. | academic_admin / central_admin |
+| `ah_categories/{catId}` | Home page sections. Each: `{name, module, color, cardIds[], visible_to[], hidden_for_users, pilot_systems[], order, createdAt}`. **Meta doc** `_uncategorized_settings_` (`isMeta:true`, `order:-1`, `visible_to_users:bool`) gates the Uncategorized accordion for non-admins. Non-admin path subscribes via direct `onSnapshot(doc(..., '_uncategorized_settings_'))` (the meta doc lacks `visible_to`, so the open-to-all + sub-role queries miss it). `pilot_systems[]` (added 2026-05-10) optional — admin tags a collection with one or more of `kpi`/`appraisal`/`competency`/`induction` from the Manage Cards modal so the entire collection (header included) hides when ANY of those systems is opted out at the user's school. Untagged (`[]`) collections fall back to per-card pilot gating only; admins always bypass. | academic_admin / central_admin |
 | `page_access_config/{slug}` | Per-page sub-role visibility. Cache key `pac:__all__`. | central_admin via CH `/page-access` |
 | `nav_config/academichub` | Admin-editable navbar config (label/order/hidden). Read on `authReady` by `partials/navbar-loader.js`; editor in shared `/nav-edit-simple.js`. Shape: `{platform, items:[{key,label,hidden}], updatedAt}`. | academic_admin |
 | `feedbacks/{fbId}` | Single canonical feedback collection. AH writers stamp `__src: 'academichub'`. | any auth (create); central_admin (read/update/delete) |
@@ -162,7 +162,7 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 ## Pages
 
 **Auth + landing:**
-- `index.html` (`/`) — LOGIN page, no auth-guard
+- `index.html` (`/`) — home page (ecosystem map + module sections), auth-guarded
 - `login.html` / `waiting.html` — auth flow
 
 **Dashboards (legacy hardcoded — Assessments dropdown):**
@@ -195,19 +195,19 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 
 ---
 
-## Dashboard Pattern (`index.html`)
+## Dashboard Pattern (`index.html`) — home v2 (2026-09-30)
 
-Single accordion-based dashboard. Cards = static `<a class="card">` (image + content + stats). Categories managed by admin from the dashboard itself.
+The home page is organised around the **Academic Quality Ecosystem**: a hero (greeting, sub-role + school chips, search), an ecosystem map (six cycle steps Curriculum → Induction → EASE → Student Learning *layer* → Appraisal → Career Growth, plus the two cross-cutting areas), "Pick up where you left off", then one section per `ah_categories` doc with a sticky side nav. v1 (dark background, orbs, accordion image cards) is archived at [`archive/home-v1.html`](archive/home-v1.html) — **not built or deployed**.
 
-- **Category collection:** `ah_categories`. Each: `{ name, color, cardIds[], visible_to[], hidden_for_users, pilot_systems[], order, createdAt }` (`pilot_systems[]` added 2026-05-10 — see collection table above for hybrid-gating semantics)
-- **Admin actions per category** (only when `body.is-admin`): move-up · move-down · manage-cards · **eye-toggle** (`hidden_for_users` boolean) · rename · delete
-- **Uncategorized accordion** = hand-crafted cards not assigned to a category PLUS auto-cards (merged into the same grid). The eye-toggle on the Uncategorized header writes meta doc `_uncategorized_settings_` (carries `isMeta:true`, `order:-1`, `visible_to_users` flag). **Non-admin path subscribes to the meta doc DIRECTLY by ID** because the open-to-all (`visible_to == []`) and sub-role (`array-contains-any`) queries miss it (no `visible_to` field on the meta doc).
-- **Visual cue** for admins on hidden sections: `body.is-admin .category-section.is-hidden-for-users > .category-header` gets `opacity: 0.55` + appended " (hidden)" in red.
-- **Auto-cards** are generated by `renderOtherAvailablePages(db, profile)` BEFORE `initCategorySystem` so `getAllCards()`'s first read picks them up. Each auto-card carries `class="card card-auto"` + `data-theme="auto"` + `data-card-id="auto_<slug>"` so admins can sweep them into a category via the Manage Cards modal. Visual treatment scoped to `.card.card-auto` only — hand-crafted cards untouched.
-  - Auto-card template: 110px gradient `card-image-strip` header (radial-light + bottom-shadow decoration) + slug-mapped emoji `card-image-glyph` (induction→🌱, library→📚, calendar→🗓️, etc.) + brand mor+cyan accent + 2 `card-stats` (Page · Type / sub-role visibility count)
-  - SKIP slugs: `''`, `'index'`, `'login'`, `'waiting'`, `'observation-entry'` (URL-params subpage), `'academic-standards-public'` (public)
+- **Sections = `ah_categories` docs.** Each: `{ name, module, color, cardIds[], visible_to[], hidden_for_users, pilot_systems[], order }`. **`module`** (added 2026-09-30) is a key of `HOME_FAMILIES` in `index.html` — `school_workspace` · `curriculum` · `induction` · `ease` · `student_learning` · `appraisal` · `career_growth` · `teaching_learning` · `digital_citizenship` · `academic_insights` · `quality_ecosystem` — and gives the section its colour, its question and its Drive entry document. No/unknown module = neutral slate section. Colours are the Drive document families from `scripts/gdocs/module-theme.js` (cover / mid / tint) — change them there first. Starting layout: `node scripts/dashboard/seed-ah-home-v2.js [--apply]` (backs up `ah_categories` first; refuses unresolved card ids).
+- **Tiles come from the `TOOLS` registry in `index.html`**, not from HTML cards. `id` = what `cardIds[]` stores = the clean-URL slug for AH pages (so v1 ids still resolve); handbook/external tiles use their own ids (`hb-*`, `https___…_csb_app`). Adding a page: add a registry entry, then place it with ☰ in Edit layout (or in the seed). Pages in `page_access_config` without a registry entry become **auto tiles** (`auto_<slug>`) in "Other tools".
+- **Gating:** tiles are `<a class="card" href>`, so auth-guard's page-access + pilot gating (`data-pa-hidden`, re-run via `window.__paGate`) applies unchanged; the page then drops sections left empty and recounts. Section-level `visible_to[]` / `hidden_for_users` / `pilot_systems[]` work as before (rule-enforced two-query read for non-admins).
+- **"Other tools"** = registry + auto tiles in no section. Visible to non-admins only when meta doc `_uncategorized_settings_.visible_to_users !== false` (subscribed directly by id — the `visible_to` queries miss it; writes must keep `order: -1`).
+- **Admin "Edit layout"** (side nav button, `body.edit-mode`): new section (name + module + visible_to), per-section ▲ ▼ · ☰ manage (module, tools + order, visible_to, pilot_systems) · eye · rename · delete.
+- **Recently opened** = `localStorage['ah-home-recent-v2']`, recorded when a tile on the home page is clicked (per browser, not synced).
+- **Build trap:** never write the literal body tag inside an HTML comment in this file — `build.js` injects the skip link after its first match (happened 2026-09-30).
 
-**Pilot enrolment filter:** non-admin AH user with a `schoolId` → reads `partner_schools/{schoolId}.enabled_systems[]` and hides cards by `data-theme` (kpi / appraisal / leadership-framework). Missing field = all enabled. Empty = all disabled. Admin + HQ users (no schoolId) bypass.
+**Pilot enrolment filter:** non-admin AH user with a `schoolId` → reads `partner_schools/{schoolId}.enabled_systems[]` and hides tiles through auth-guard's `PILOT_SLUG_MAP` (plus `TOOL_PILOT` in `index.html` for tiles whose href is not the page slug) and hides sections tagged with a disabled `pilot_systems[]`. Missing field = all enabled. Empty = all disabled. Admin + HQ users (no schoolId) bypass.
 
 ---
 
