@@ -279,14 +279,14 @@ const PAGE_ACCESS_BYPASS = new Set(['', 'index', 'login', 'waiting', 'settings']
 // reach any non-dashboard AH surface. A TH-only teacher trying to load
 // academichub.eduversal.org/ ends up at /waiting just like before — the
 // approval gate still kicks in for the root index. The whitelist is
-// narrowly the 22 dashboard slugs and nothing else.
+// narrowly the dashboard slugs below and nothing else.
 const DASHBOARD_SLUGS = new Set([
-  'ease-1', 'ease-2', 'ease-3', 'a-ease-1', 'ease-analytics', 'ease-archive',
-  'cambridge-exams', 'cambridge-pathway', 'cambridge-school-quality',
-  'school-appraisals', 'school-performance-kpi',
-  'accreditation-dashboard', 'network-audit', 'partner-schools', 'islamic-schools',
-  'student-survey', 'staff-survey', 'parent-survey',
-  'rapor-pendidikan-2025', 'ai-prompts',
+  // The AY 2025-26 panels (EASE I-III, A-EASE, EASE Analytics/Archive,
+  // Cambridge School Quality, school appraisals, accreditation, partner /
+  // Islamic schools, surveys, Rapor Pendidikan 2025) were archived
+  // 2026-09-30 — no longer built, so they are gone from this list too.
+  'cambridge-exams', 'cambridge-pathway',
+  'school-performance-kpi', 'network-audit', 'ai-prompts',
   'academic-standards', 'academic-standards-public',
 ]);
 function onDashboardSlug() {
@@ -308,7 +308,6 @@ const PILOT_SLUG_MAP = {
   'school-performance-kpi':  'kpi',
   'teacher-kpi-evaluation':  'kpi',
   // Appraisal track
-  'school-appraisals':         'appraisal',
   'school-self-appraisal':     'appraisal',
   'teacher-appraisal-entry':   'appraisal',
   'teacher-walkthrough-entry': 'appraisal',

@@ -674,14 +674,12 @@ function ensureNavbarSharedStyles() {
 // Groups have a `group` key with `label` and `items[]`
 const NAV_ITEMS = [
   { group: 'assessments', label: 'Assessments', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
-    { key: 'ease-1',               href: '/ease-1',                label: 'EASE I Results' },
-    { key: 'ease-2',               href: '/ease-2',                label: 'EASE II Results' },
-    { key: 'ease-3',               href: '/ease-3',                label: 'EASE III Results' },
-    { key: 'a-ease-1',             href: '/a-ease-1',              label: 'A-EASE I Results' },
-    { key: 'ease-analytics',       href: '/ease-analytics',        label: 'EASE Analytics' },
-    { key: 'ease-archive',         href: '/ease-archive',          label: 'EASE Archive' },
+    // AY 2025-26 EASE dashboards archived 2026-09-30 (archive/dashboards/).
+    { key: 'ease-growth-results',  href: '/ease-growth-results',   label: 'EASE Growth Results' },
+    { key: 'cambridge-results',    href: '/cambridge-results',     label: 'Cambridge Results' },
     { key: 'cambridge-exams',      href: '/cambridge-exams',       label: 'Cambridge Exams' },
     { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
+    { key: 'network-audit',        href: '/network-audit',         label: 'Network Audit' },
   ]},
   { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
     // NB: academic-calendar + school-events moved to the PD group's Standards

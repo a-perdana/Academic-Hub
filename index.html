@@ -537,14 +537,6 @@
         { id: 'ease-growth-results', href: '/ease-growth-results', icon: 'chart', title: 'EASE Growth Results', desc: 'Baseline results in Mathematical Reasoning, Science Literacy and English Reading, your school against the network.', tags: ['New', 'Baseline'] },
         { id: 'school-assessment', href: '/school-assessment', icon: 'table', title: 'Common Assessment Results', desc: 'Class averages, mastery bands and students who need support.' },
         { id: 'student-roster', href: '/student-roster', icon: 'users', title: 'Student Roster', desc: 'Students Hub accounts at your school: approve, graduate or reactivate.' },
-        { id: 'ease-analytics', href: '/ease-analytics', icon: 'bars', title: 'EASE Analytics', desc: 'Results across EASE cycles by subject, grade and strand.' },
-        { id: 'ease-3', href: '/ease-3', icon: 'table', title: 'EASE III Results', desc: 'Results from EASE Cycle III.', tags: ['Earlier cycle'] },
-        { id: 'ease-2', href: '/ease-2', icon: 'table', title: 'EASE II Results', desc: 'Results from EASE Cycle II.', tags: ['Earlier cycle'] },
-        { id: 'ease-1', href: '/ease-1', icon: 'table', title: 'EASE I Results', desc: 'Results from EASE Cycle I.', tags: ['Earlier cycle'] },
-        { id: 'a-ease-1', href: '/a-ease-1', icon: 'pen', title: 'EASE Academic Results', desc: 'The teacher subject and pedagogy exam, Cycle I (formerly A-EASE). Formative only.', tags: ['Teachers'] },
-        { id: 'https___4ltxxg_csb_app', href: 'https://4ltxxg.csb.app/', ext: true, icon: 'pen', title: 'EASE Academic — Primary', desc: 'Primary teacher exam results. Opens in a new tab.', tags: ['Primary'] },
-        { id: 'https___yrqqkh_csb_app', href: 'https://yrqqkh.csb.app/', ext: true, icon: 'table', title: 'EASE I — Primary', desc: 'Primary EASE Cycle I results. Opens in a new tab.', tags: ['Primary'] },
-        { id: 'ease-archive', href: '/ease-archive', icon: 'archive', title: 'EASE Archive', desc: 'Earlier EASE cycles, kept for comparison.' },
         { id: 'hb-ease', href: HB('eduversal_ease_framework_guide_v1'), icon: 'doc', title: 'EASE Framework Guide', desc: 'EASE Growth, EASE Assessment and EASE Academic, and how they fit together.', tags: ['Guide'] },
 
         // Student Learning
@@ -552,7 +544,6 @@
 
         // Appraisal
         { id: 'school-self-appraisal', href: '/school-self-appraisal', icon: 'check', title: 'School Self-Appraisal', desc: 'Rate your school on the five domains before the Validation Visit.' },
-        { id: 'school-appraisals', href: '/school-appraisals', icon: 'chart', title: 'School Appraisal Dashboard', desc: 'A Development Rating for each domain. The domains are never averaged into one score.', tags: ['Per domain'] },
         { id: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', icon: 'person', title: 'Teacher Formal Appraisal', desc: 'Record F1-F4 evidence and scores for each teacher.', tags: ['F1-F4'] },
         { id: 'teacher-walkthrough-entry', href: '/teacher-walkthrough-entry', icon: 'eye', title: 'Classroom Walkthrough', desc: 'Short classroom visits recorded against the walkthrough rubric.' },
         { id: 'my-observations', href: '/my-observations', icon: 'list', title: 'My Observations', desc: 'Every appraisal and walkthrough you have recorded.' },
@@ -585,17 +576,12 @@
         { id: 'network-audit', href: '/network-audit', icon: 'shield', title: 'Network Security Audit', desc: 'Device, account and network security checks for your school.' },
         { id: 'hb-digital-citizenship', href: HB('eduversal_digital_citizenship_policy_v1'), icon: 'doc', title: 'Digital Citizenship Policy', desc: 'Academic integrity, AI use, acceptable use and social media.', tags: ['Policy'] },
 
-        // Academic Insights
+        // Academic Insights (the AY 2025-26 dashboards — EASE I-III, A-EASE,
+        // surveys, accreditation, partner/Islamic schools, school appraisals,
+        // Cambridge School Quality, Rapor Pendidikan 2025 — were archived
+        // 2026-09-30 and are not listed.)
         { id: 'cambridge-results', href: '/cambridge-results', icon: 'cap', title: 'Cambridge Results', desc: 'Cambridge results by school and subject, with the network for comparison.', tags: ['New'] },
         { id: 'cambridge-exams', href: '/cambridge-exams', icon: 'bars', title: 'Cambridge Exams Dashboard', desc: 'Series results, grade distributions and trends.' },
-        { id: 'cambridge-school-quality', href: '/cambridge-school-quality', icon: 'award', title: 'Cambridge School Quality', desc: 'Cambridge centre quality indicators.' },
-        { id: 'partner-schools', href: '/partner-schools', icon: 'globe', title: 'Partner Schools Performance', desc: 'Performance indicators across the partner-school network.' },
-        { id: 'islamic-schools', href: '/islamic-schools', icon: 'globe', title: 'Islamic Schools Performance', desc: 'The same indicators for the network’s Islamic schools.' },
-        { id: 'accreditation-dashboard', href: '/accreditation-dashboard', icon: 'award', title: 'Accreditation Dashboard', desc: 'BAN-S/M accreditation status and readiness.' },
-        { id: 'rapor-pendidikan-2025', href: '/rapor-pendidikan-2025', icon: 'table', title: 'Rapor Pendidikan 2025', desc: 'Indicators from Indonesia’s national education report.', tags: ['Indonesia'] },
-        { id: 'student-survey', href: '/student-survey', icon: 'msg', title: 'Student Satisfaction Survey', desc: 'What students said about their school.' },
-        { id: 'parent-survey', href: '/parent-survey', icon: 'msg', title: 'Parent Satisfaction Survey', desc: 'What parents said about their school.' },
-        { id: 'staff-survey', href: '/staff-survey', icon: 'msg', title: 'Staff Satisfaction Survey', desc: 'What staff said about their school.' },
         { id: 'surveys', href: '/surveys', icon: 'list', title: 'Surveys to Complete', desc: 'Surveys that are waiting for your answers.' },
 
         // Quality Ecosystem & Standards
@@ -611,12 +597,14 @@
         { id: 'school-handbook-staff-coc', href: HB('eduversal_staff_code_of_conduct_v1'), icon: 'doc', title: 'Staff Code of Conduct', desc: 'The school-facing code of conduct for staff.', tags: ['Handbook'] },
       ];
       // page_access_config keys that must never become auto tiles.
-      const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'school-handbook-teacher']);
+      const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'school-handbook-teacher',
+        // Shared with CH's own /school-appraisals; the AH page was archived 2026-09-30.
+        'school-appraisals']);
       // Tools that belong to a pilot system (mirrors auth-guard PILOT_SLUG_MAP
       // for the tiles whose href slug is not the page slug).
       const TOOL_PILOT = {
         'school-performance-kpi': 'kpi', 'teacher-kpi-evaluation': 'kpi',
-        'school-appraisals': 'appraisal', 'school-self-appraisal': 'appraisal', 'teacher-appraisal-entry': 'appraisal',
+        'school-self-appraisal': 'appraisal', 'teacher-appraisal-entry': 'appraisal',
         'teacher-walkthrough-entry': 'appraisal', 'appraiser-calibration': 'appraisal', 'my-observations': 'appraisal',
         'competency-framework': 'competency', 'learning-path': 'competency', 'my-portfolio': 'competency', 'my-certificates': 'competency',
         'ai-validate-teacher-assessments': 'aicf', 'ai-maturity-self-assessment': 'aicf',

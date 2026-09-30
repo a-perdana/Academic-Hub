@@ -4,7 +4,7 @@
 
 Partner school **leadership** portal. Audiences: **Foundation Representative**, **School Principal**, **Academic Coordinator**, **Cambridge Coordinator**.
 
-Key features: EASE assessment dashboards (4 cycles/year), Cambridge exam performance tracking, school appraisal + teacher appraisal entry + calibration, school KPI / accreditation / network audit dashboards, academic standards framework, leadership competency framework + 4-page CPD set, weekly checklists per sub-role, satisfaction surveys (student/staff/parent), induction (Year-1 mentees + team view).
+Key features: EASE Growth results, Cambridge exam results + pathway planning, school appraisal + teacher appraisal entry + calibration, school KPI / accreditation / network audit dashboards, academic standards framework, leadership competency framework + 4-page CPD set, weekly checklists per sub-role, surveys to complete, induction (Year-1 mentees + team view).
 
 **Vanilla HTML/CSS/JS** (no React, no bundler — React-via-CDN is allowed for individual dashboard pages). Pages load Firebase via CDN.
 
@@ -165,12 +165,11 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 - `index.html` (`/`) — home page (ecosystem map + module sections), auth-guarded
 - `login.html` / `waiting.html` — auth flow
 
-**Dashboards (legacy hardcoded — Assessments dropdown):**
-- EASE: `EASE-I/II/III-AssessmentResults` (`/ease-1/2/3`), `A-EASE-I-AssessmentResults` (`/a-ease-1`), `EASE-Analytics` (`/ease-analytics`), `EASE-Archive` (`/ease-archive`)
-- Cambridge: `CambridgeExamsDashboard` (`/cambridge-exams`), `CambridgePathwaySimulator` (`/cambridge-pathway`), `CambridgeSchoolQuality` (`/cambridge-school-quality`)
-- School Quality: `SchoolAppraisalsDashboard` (`/school-appraisals`), `SchoolSelfAppraisal` (`/school-self-appraisal`), `SchoolPerformanceKPI` (`/school-performance-kpi`), `AccreditationDashboard` (`/accreditation-dashboard`), `SchoolNetworkAudit` (`/network-audit`), `PartnerSchoolsPerformance` (`/partner-schools`), `IslamicSchoolsPerformance` (`/islamic-schools`)
-- Surveys: `surveys` (My Surveys landing), `StudentSatisfactionSurvey` / `StaffSatisfactionSurvey` / `ParentSatisfactionSurvey`
-- `RaporPendidikan2025` (`/rapor-pendidikan-2025`), `AIPrompts` (`/ai-prompts`)
+**Dashboards (navbar Dashboards dropdown — current only since 2026-09-30):**
+- EASE: `EASE-Growth-Results` (`/ease-growth-results`, Firestore-backed, behind login)
+- Cambridge: `cambridge-results/` (`/cambridge-results`, static pack), `CambridgeExamsDashboard` (`/cambridge-exams`, regenerated from the Cambridge workbooks), `CambridgePathwaySimulator` (`/cambridge-pathway`)
+- School tools: `SchoolNetworkAudit` (`/network-audit`, public), plus `SchoolSelfAppraisal`, `SchoolPerformanceKPI`, `AIPrompts` reached from the home page / other menus
+- **Archived 2026-09-30** (AY 2025-26 static data — not built, not deployed, sources in [`archive/dashboards/`](archive/dashboards/)): EASE I/II/III, A-EASE I, EASE Analytics, EASE Archive, Cambridge School Quality, School Appraisals Dashboard, Accreditation, Partner Schools, Islamic Schools, Student/Staff/Parent Satisfaction Survey, Rapor Pendidikan 2025. Their page_access_config docs were deleted (backup in `scripts/dashboard/backups/`) except `school-appraisals`, which CH shares. A new year's dashboard is a new page — don't resurrect these.
 
 **School (Curriculum + Appraisal):**
 - Curriculum: `AcademicStandards` (`/academic-standards`), `CurriculumMap` (`/curriculum-map`), `SyllabusCoverage` (`/syllabus-coverage`). All 3 received the canonical `.page-hero` + 3-part contract refactor 2026-05-23/24 with associated tweaks: AcademicStandards 62 px dead-slot above the header closed 2026-05-26; CurriculumMap dropped the hero icon + clamped to 1200 px + adopted canonical footer + mor body tint + collapsed 3 toolbar rows into 1 compact row + icon-only toolbar; SyllabusCoverage shipped parity refactor with CurriculumMap (canonical hero + KPI tiles in hero + 1200 px clamp + explicit toolbar justify-content).
@@ -223,7 +222,7 @@ Profile dropdown shows display name + email + role badge + **read-only chips** f
 
 3 dropdowns, all in `partials/navbar.html`:
 
-- **Dashboards** (4 columns, `nav-dropdown-panel--wide`): EASE · Cambridge · School Quality · Surveys (sub-headers via `nav-dd-col-header`)
+- **Dashboards** (single column): EASE · Cambridge · School tools · Students Hub (sub-headers via `nav-dd-col-header`) — current dashboards only since 2026-09-30
 - **School** (2 columns, `--wide`): Curriculum (3) · Appraisal (5)
 - **My Hub** (3 columns, `--xwide` 720px min-width): Communications (4) · CPD (4) · Induction & Reference (8)
 
