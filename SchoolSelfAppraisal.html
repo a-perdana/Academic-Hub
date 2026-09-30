@@ -167,6 +167,10 @@ body:has(> .page-footer) > .page-body {
 .oh-sub { font-size:13px; color:rgba(255,255,255,.7); line-height:1.6; max-width:760px; }
 .oh-score-row { display:flex; gap:12px; margin-top:20px; flex-wrap:wrap; }
 .oh-score-chip { background:rgba(255,255,255,.15); border-radius:10px; padding:12px 18px; text-align:center; min-width:90px; }
+.oh-note { margin-top:12px; font-size:12.5px; opacity:.85; }
+.aspect-core { display:inline-block; margin-left:6px; padding:1px 6px; border-radius:6px; font-size:10px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; background:#fee2e2; color:#991b1b; vertical-align:middle; }
+.core-note { margin:0 0 12px; padding:8px 12px; border-radius:8px; background:#fef2f2; color:#7f1d1d; font-size:12.5px; line-height:1.5; }
+.ev-note { font-size:12px; color:#6b7280; margin:0 0 8px; line-height:1.5; }
 .oh-score-val { font-size:1.8rem; font-weight:800; line-height:1; }
 .oh-score-label { font-size:11px; color:rgba(255,255,255,.65); margin-top:3px; }
 
@@ -1101,7 +1105,7 @@ a.ref-pill:hover {
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Quality</p>
       <h1 class="page-hero__title">School Self-Appraisal</h1>
-      <p class="page-hero__desc">An honest, whole-school review of your provision against the Eduversal Academic Standards. Complete this before an Eduversal quality visit — rate each aspect, attach evidence, and name your strengths and improvement areas.</p>
+      <p class="page-hero__desc">An honest, whole-school review against the 33 aspects of School Appraisal. Draft your Self-Evaluation Summary here before each on-site visit — rate each aspect, link your evidence, and name your strengths and improvement areas. The School Appraisal: Evidence Guide 26-27 workbook remains the scoring document of record.</p>
     </div>
   </div>
 </header>
@@ -1120,14 +1124,14 @@ a.ref-pill:hover {
         <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="info-strip__explainer" id="infoStripExplainer">
-        <p class="info-strip__lede">Self-appraise your school against Eduversal's quality standards. Rate where your school stands and record short evidence notes — this is the starting picture before a school-quality visit.</p>
-        <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Record evidence</strong> — be honest, not over-confident</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
-        <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Anchored to the Eduversal Academic Standards (ES).</span></div>
+        <p class="info-strip__lede">Self-appraise your school against the School Appraisal Rating Rubric. Complete or update it before each on-site visit (Phase 1 and Phase 3), at least 5 working days before the visit date — the visit cannot proceed without it.</p>
+        <ol class="info-strip__flow"><li><strong>Review each quality area</strong> with your leadership team</li><li><strong>Link your evidence</strong> — keep it in your school's own online storage, and transfer the same ratings and links to the Evidence Guide workbook</li><li><strong>Eduversal uses it</strong> to make the school-quality visit a conversation, not a surprise</li></ol>
+        <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">⚠️</span><span><strong>A fair self-picture helps more than an inflated one.</strong> Each domain keeps its own rating — there is no overall school score.</span></div>
       </div>
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal + Academic Coordinator</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school</span>
-        <span class="info-strip__pill"><b>Anchor:</b> Eduversal Academic Standards</span>
+        <span class="info-strip__pill"><b>Record:</b> School Appraisal: Evidence Guide 26-27</span>
         <span class="info-strip__pill info-strip__pill--progress" id="sidebarOverall">
           <b>Progress:</b>
           <span class="isp-bar"><span class="isp-fill" id="sopFill" style="width:0%"></span></span>
@@ -1192,7 +1196,6 @@ a.ref-pill:hover {
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">School Quality</span>
         <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
-        <a href="/school-performance-kpi" class="page-footer__nav-link">School KPI</a>
       </div>
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">References</span>
@@ -1203,7 +1206,7 @@ a.ref-pill:hover {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Self-appraisal feeds the Eduversal quality visit · submitted ratings lock for review</span>
+    <span class="page-footer__meta-right">Update before each on-site visit · the Evidence Guide workbook is the record</span>
   </div>
 </footer>
 
@@ -1216,6 +1219,7 @@ a.ref-pill:hover {
     <span class="action-bar-scope" id="actionScope"></span>
   </div>
   <div class="action-bar-btns">
+    <button class="btn-save-draft" id="btnReopen" style="display:none;">Reopen to update before your next visit</button>
     <button class="btn-save-draft" id="btnSaveDraft">Save Draft</button>
     <!-- Domain count is re-set from FRAMEWORK once it loads; the literal is the
          pre-load fallback so the button is never ambiguous even for that beat. -->
@@ -1308,7 +1312,10 @@ async function saveSampleDocOverrides(aspectId, docs) {
   });
 }
 
-function scoreLabel(n) { return { 1:'Beginning', 2:'Developing', 3:'Established', 4:'Exemplary' }[n] || '—'; }
+// Labels come from the framework (Needs Intervention / Developing / Strong /
+// Outstanding). The hard-coded Beginning/Established/Exemplary set was retired
+// on 2026-08-20 and survived here until 2026-10-01.
+function scoreLabel(n) { return FRAMEWORK?.meta?.rating_scale?.[Math.round(n)]?.label || '—'; }
 function scoreCls(n) { if (!n) return 's0'; return ['','s1','s2','s3','s4'][Math.round(n)] || 's0'; }
 function domainAvg(domainId) {
   if (!appraisalDoc?.ratings || !FRAMEWORK) return null;
@@ -1326,12 +1333,14 @@ function domainCompletion(domainId) {
   const done = domain.aspects.filter(a => (appraisalDoc?.ratings?.[a.id] || 0) > 0).length;
   return { done, total };
 }
-function overallAvg() {
-  if (!FRAMEWORK) return null;
-  let all = [];
-  FRAMEWORK.domains.forEach(d => d.aspects.forEach(a => { const v = appraisalDoc?.ratings?.[a.id] || 0; if (v > 0) all.push(v); }));
-  if (!all.length) return null;
-  return (all.reduce((a,b) => a+b, 0) / all.length).toFixed(1);
+// No whole-school average. "Each domain carries its own rating; Eduversal does
+// not publish a single composite school score" (School Appraisal: Handbook
+// 26-27; ES 17.8; Common Mistake #60). An overallAvg() lived here until
+// 2026-10-01 and fed an "Overall Score" + "Rating Level" chip.
+function domainsStarted() {
+  if (!FRAMEWORK) return { started: 0, total: 0 };
+  const started = FRAMEWORK.domains.filter(d => domainCompletion(d.id).done > 0).length;
+  return { started, total: FRAMEWORK.domains.length };
 }
 function totalCompletion() {
   if (!FRAMEWORK) return { done:0, total:0 };
@@ -1374,9 +1383,11 @@ function openSubmitModal() {
   }
 
   document.getElementById('smBody').innerHTML = rows + warn +
-    `<div class="sm-lock">After you submit, this form locks and you cannot edit your
-     ratings or evidence. Only Eduversal can reopen it — contact your supervisor
-     if you submit by mistake.</div>`;
+    `<div class="sm-lock">After you submit, Eduversal uses this version to prepare your next
+     on-site visit. You can reopen it yourself to update it before the Phase 3 visit —
+     the Self-Evaluation Summary is completed or updated before each on-site visit, at least
+     5 working days before the visit date. Remember to enter the same ratings and links in the
+     School Appraisal: Evidence Guide 26-27 workbook.</div>`;
 
   document.getElementById('smConfirm').textContent = partial
     ? 'Submit incomplete' : 'Submit for review';
@@ -1435,7 +1446,7 @@ async function saveAppraisal(newStatus) {
     at: new Date().toISOString(),
     by: window.currentUser?.email || '',
     byName: window.userProfile?.displayName || '',
-    action: 'advance',
+    action: (prevStatus === 'submitted' && status === 'draft') ? 'reopen' : 'advance',
     via: 'academichub'
   } : null;
   await setDoc(doc(window.db, 'school_appraisals_v2', appraisalDocId), {
@@ -1455,7 +1466,9 @@ async function saveAppraisal(newStatus) {
   if (newStatus === 'submitted') {
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('btnSaveDraft').style.display = 'none';
+    const rb = document.getElementById('btnReopen'); if (rb) rb.style.display = '';
     showNotice('submitted');
+    switchView(currentView || 'overview');
   }
 }
 function scheduleSave() {
@@ -1511,7 +1524,7 @@ function updateSidebarScores() {
 
 function showNotice(type) {
   const map = {
-    submitted: { cls:'notice-success', msg:'Your self-appraisal has been submitted for review. An Eduversal coordinator will review and provide feedback.' },
+    submitted: { cls:'notice-success', msg:'Your self-appraisal has been submitted. Your Eduversal supervisors use it to prepare the next on-site visit. Reopen it to update it before the Phase 3 visit, and keep the Evidence Guide workbook in step.' },
     reviewed:  { cls:'notice-info',    msg:'This appraisal has been reviewed. The fields are now read-only. Contact Eduversal if you need to make amendments.' }
   };
   const n = map[type]; if (!n) return;
@@ -1671,7 +1684,7 @@ window.__saveSampleDocs = async function(aspectId) {
 
 // ===== RENDER OVERVIEW =====
 function renderOverview() {
-  const avg = overallAvg();
+  const { started, total: domTotal } = domainsStarted();
   const { done, total } = totalCompletion();
   const pct = total ? Math.round((done/total)*100) : 0;
   const canEdit = !isReviewed && appraisalDoc?.status !== 'submitted';
@@ -1702,14 +1715,15 @@ function renderOverview() {
 
   return `
     <div class="overview-hero">
-      <div class="oh-eyebrow">Eduversal School Appraisal · ${appraisalDoc?.academicYear||'2025–2026'}</div>
+      <div class="oh-eyebrow">Eduversal School Appraisal · ${appraisalDoc?.academicYear||'2026–2027'}</div>
       <h1 class="oh-title">${appraisalDoc?.schoolName||'Your School'}</h1>
       <p class="oh-sub">${FRAMEWORK.meta.description}</p>
       <div class="oh-score-row">
-        <div class="oh-score-chip"><div class="oh-score-val">${avg||'—'}</div><div class="oh-score-label">Overall Score</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${pct}%</div><div class="oh-score-label">Completed</div></div>
         <div class="oh-score-chip"><div class="oh-score-val">${done}/${total}</div><div class="oh-score-label">Aspects Rated</div></div>
-        <div class="oh-score-chip"><div class="oh-score-val">${avg ? (FRAMEWORK.meta.rating_scale[Math.round(parseFloat(avg))]?.label||'—') : '—'}</div><div class="oh-score-label">Rating Level</div></div>
+        <div class="oh-score-chip"><div class="oh-score-val">${started}/${domTotal}</div><div class="oh-score-label">Domains Started</div></div>
+      </div>
+      <div class="oh-note">Each domain keeps its own rating (see the domain list). There is no overall school score.
       </div>
     </div>
 
@@ -1784,7 +1798,7 @@ function renderPublishedReport() {
         (FRAMEWORK?.domains || []).map(d => block(`${d.code} · ${d.title}`, rep.domains?.[d.id])).join(''),
         block('Commendations', rep.commendations),
         block('Recommendations', rep.recommendations),
-        block('Priority Action Areas', rep.priorities)
+        block('Priority Recommendations', rep.priorities)
       ].join('');
 
   return `
@@ -1798,10 +1812,12 @@ function renderPublishedReport() {
 }
 
 // ===== THE CYCLE, FROM THE SCHOOL'S SIDE =====
-// A school leader opening this page for the first time sees 32 aspects and no
-// idea what happens after they fill them in. This strip answers the two
-// questions they actually have: what is the sequence, and what is my part
-// right now.
+// The live cycle is Phase 0 + Phases 1-4 (School Appraisal: Handbook 26-27;
+// Common Mistake #61). Phase names and timing come from the framework's
+// external_evaluation.annual_phases, so this strip and Central Hub read the
+// same source. Until 2026-10-01 it was five hard-coded steps with no Phase 0,
+// 2 or 4, a "10 business days" report, a single "School Development Rating"
+// and a four-week action plan — the retired model.
 //
 // Each step reports its own state, so the strip doubles as a progress
 // indicator rather than static text that everyone learns to skip.
@@ -1811,38 +1827,52 @@ function cycleSteps() {
   const published = rep?.status === 'published';
   const ap = actionPlanState();
   const { cases } = appealsState();
-
   const { done, total } = totalCompletion();
+  const ph = code => (FRAMEWORK?.meta?.external_evaluation?.annual_phases || []).find(p => p.code === code) || {};
+  const when = code => ph(code).timing ? ` · ${ph(code).timing}` : '';
+  const sdpFilled = ap.items.filter(it => String(it.title || it.priority || '').trim()).length;
 
   return [
     {
-      title: 'You self-appraise',
-      body: 'Rate all 32 aspects and attach your evidence. Submit at least 5 working days before your first visit — the visit cannot go ahead without it.',
-      state: submitted ? 'done' : (done > 0 ? 'now' : 'now'),
+      title: `Phase 0 — ${ph('phase_0').name || 'Kickoff'}`,
+      body: `Complete your self-evaluation on all ${total} aspects and link your evidence, at least 5 working days before your Phase 1 visit. Update it again before Phase 3 — the visit cannot go ahead without it.`,
+      state: submitted ? 'done' : 'now',
       note: submitted ? 'Submitted' : `${done} of ${total} aspects rated`,
     },
     {
-      title: 'Eduversal visits twice',
-      body: 'A five-person team visits for Teaching Quality, then again to validate. They rate the same aspects independently and explain anywhere they differ from you.',
+      title: `Phase 1 — ${ph('phase_1').name || 'Teaching Quality Visit'}`,
+      body: `On-site${when('phase_1')}. A five-person team, led by your Visit I Supervisor, reviews teaching quality and the evidence behind your self-evaluation.`,
       state: published ? 'done' : (submitted ? 'waiting' : 'later'),
-      note: published ? 'Both visits complete' : 'Scheduled with your supervisor',
+      note: 'Scheduled with your supervisors',
     },
     {
-      title: 'You receive the report',
-      body: 'Within 10 business days of the second visit: findings per domain, commendations, recommendations, and your School Development Rating.',
+      title: `Phase 2 — ${ph('phase_2').name || 'Progress Check-in'}`,
+      body: `Online, between Phase 1 and Phase 3, led by your Visit I Supervisor. No report — findings are shared in person and recorded in the Evidence Guide.`,
       state: published ? 'done' : 'later',
-      note: published ? 'Published — read it below' : 'After the second visit',
+      note: 'Online, 1–2 hours',
     },
     {
-      title: 'You write an action plan',
-      body: 'Within four weeks of the report: one action per recommendation, each with someone who owns it and a date. Eduversal reviews your progress at the mid-year check-in.',
+      title: `Phase 3 — ${ph('phase_3').name || 'Validation Visit'}`,
+      body: `On-site${when('phase_3')}, led by your Visit II Supervisor. Within three weeks you receive the Annual School Quality Report: a Development Rating for each of the five domains, commendations, recommendations and the two agreed School Development Priorities.`,
+      state: published ? 'done' : 'later',
+      note: published ? 'Report published — read it below' : 'Report within 3 weeks of the visit',
+    },
+    {
+      title: 'School Development Plan',
+      body: 'Within two weeks of receiving the report, transfer the two agreed School Development Priorities into your School Development Plan (Appraisal Suite: School Development Plan 26-27).',
       state: ap.status === 'submitted' ? 'done' : (published ? 'now' : 'later'),
       note: ap.status === 'submitted' ? 'Submitted'
-          : (published ? `${ap.items.length} action${ap.items.length === 1 ? '' : 's'} drafted` : 'After the report'),
+          : (published ? `${sdpFilled} of 2 priorities drafted` : 'After the report'),
+    },
+    {
+      title: `Phase 4 — ${ph('phase_4').name || 'Impact Review'}`,
+      body: `Online${when('phase_4')}. Reviews what changed for each School Development Priority — Achieved, Partly Achieved, Not Yet Achieved or Carry Forward. It creates no new Domain Rating.`,
+      state: 'later',
+      note: 'Near the end of the year',
     },
     {
       title: 'You may appeal',
-      body: 'If you believe a domain rating does not reflect the evidence, you have 10 working days from the report to say so. Eduversal responds within 15, and that decision is final.',
+      body: 'If you believe a domain rating does not reflect the evidence, submit a written appeal to the Eduversal CAO within 10 working days of the report. The CAO responds within 15, and that decision is final.',
       state: Object.keys(cases).length ? 'now' : 'later',
       note: Object.keys(cases).length
         ? `${Object.keys(cases).length} appeal${Object.keys(cases).length === 1 ? '' : 's'} lodged`
@@ -1870,8 +1900,8 @@ function renderCycleStrip() {
   const supLine = sup && (sup.primarySupervisor || sup.secondarySupervisor) ? `
     <div class="cyc-sup">
       <strong>Your Eduversal supervisors this year:</strong>
-      ${sup.primarySupervisor ? `${escHtml(sup.primarySupervisor)}${sup.visit1?.dates ? ` (first visit ${escHtml(sup.visit1.dates)})` : ''}` : ''}
-      ${sup.secondarySupervisor ? ` · ${escHtml(sup.secondarySupervisor)}${sup.visit2?.dates ? ` (second visit ${escHtml(sup.visit2.dates)})` : ''}` : ''}
+      ${sup.primarySupervisor ? `Visit I Supervisor ${escHtml(sup.primarySupervisor)}${sup.visit1?.dates ? ` (Phase 1, ${escHtml(sup.visit1.dates)})` : ''}` : ''}
+      ${sup.secondarySupervisor ? ` · Visit II Supervisor ${escHtml(sup.secondarySupervisor)}${sup.visit2?.dates ? ` (Phase 3, ${escHtml(sup.visit2.dates)})` : ''}` : ''}
     </div>` : '';
 
   return `
@@ -1961,7 +1991,7 @@ function renderAppeals() {
         <div class="apz-intro">
           The 10-working-day appeal window closed on
           ${escHtml(win.closes.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }))}.
-          If you have a concern about a rating, raise it with your Primary Supervisor.
+          If you have a concern about a rating, raise it with your Visit I Supervisor.
         </div>
       </div>`;
   }
@@ -1988,7 +2018,7 @@ function renderAppeals() {
             <div class="apz-decision-note">${escHtml(dec.note || '')}</div>
             <div class="apz-final">This decision is final.</div>
           </div>`
-          : '<div class="apz-pending">Under review. Eduversal responds within 15 working days.</div>'}
+          : '<div class="apz-pending">Under review. The CAO responds within 15 working days.</div>'}
       </div>`;
   }).join('');
 
@@ -2015,9 +2045,10 @@ function renderAppeals() {
         ${win ? `<div class="apz-window${win.open ? '' : ' is-closed'}">${win.open ? 'Window closes' : 'Window closed'} ${escHtml(win.closes.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }))}</div>` : ''}
       </div>
       <div class="apz-intro">
-        If you believe a domain rating does not reflect the evidence, you may appeal it within
-        10 working days of receiving the report. Eduversal reviews the appeal with the relevant
-        domain lead and responds within 15 working days. The decision is final.
+        If your leadership team believes a domain rating does not accurately reflect the evidence,
+        you may submit a formal written appeal to the Eduversal CAO within 10 working days of receiving
+        the Annual School Quality Report. The CAO reviews the appeal with the relevant Domain Lead and
+        responds within 15 working days. The decision of the CAO is final.
       </div>
       ${existing}
       ${form}
@@ -2085,29 +2116,41 @@ function reportPublished() {
   return appraisalDoc?.externalReview?.report?.status === 'published';
 }
 
-// Four weeks from publication, per ES 17.8.
+// The live cycle: "Within two weeks of receiving the report, the school
+// transfers those two agreed priorities into the School Development Plan"
+// (School Appraisal: Handbook 26-27). The four-week, one-action-per-
+// recommendation plan that lived here until 2026-10-01 is the retired model;
+// four weeks now applies only to a Needs Intervention domain's action plan,
+// which Eduversal leads through the normal improvement process.
 function actionPlanDeadline() {
   const pub = appraisalDoc?.externalReview?.report?.publishedAt;
   if (!pub) return null;
   const d = new Date(pub);
   if (isNaN(d)) return null;
-  d.setDate(d.getDate() + 28);
+  d.setDate(d.getDate() + 14);
   return d;
 }
 
-// Seed one row per priority in the published report, so the school answers
-// the recommendations rather than starting from a blank page. Priorities are
-// written as a numbered list, so split on the numbering.
+// The nine fields of Appraisal Suite: School Development Plan 26-27, Step 3
+// ("How to Build Each Priority"), in its order and with its labels.
+const SDP_FIELDS = [
+  ['title',    'Priority title',    'One clear improvement goal.', 'input'],
+  ['why',      'Why this matters',  'The evidence that makes this priority important.', 'textarea'],
+  ['baseline', 'Baseline',          'What the current evidence shows now.', 'textarea'],
+  ['outcome',  'Desired outcome',   'What should be different by the end of the cycle.', 'textarea'],
+  ['actions',  'Key actions',       'Two or three practical actions. Avoid long activity lists.', 'textarea'],
+  ['owner',    'Owner',             'One lead person who keeps the priority moving.', 'input'],
+  ['evidence', 'Success evidence',  'Two or three evidence sources that will show whether practice has changed.', 'textarea'],
+  ['support',  'Eduversal support', 'What support is needed from Eduversal, if any.', 'textarea'],
+  ['reviews',  'Review points',     'When progress will be checked, including the Phase 4 Impact Review.', 'input'],
+];
+const blankPriority = () => Object.fromEntries(SDP_FIELDS.map(([k]) => [k, '']));
+
+// Always exactly two School Development Priorities. A plan written under the
+// retired model (action / owner / due per recommendation) is shown read-only
+// underneath so nothing the school wrote disappears.
 function seedItemsFromReport() {
-  const text = appraisalDoc?.externalReview?.report?.priorities || '';
-  const rows = String(text)
-    .split(/\n(?=\d+\.\s)/)
-    .map(s => s.trim())
-    .filter(s => /^\d+\.\s/.test(s));
-  return rows.map(r => ({
-    priority: r.split('\n')[0].replace(/^\d+\.\s*/, '').trim(),
-    action: '', owner: '', due: '', status: 'not_started',
-  }));
+  return [blankPriority(), blankPriority()];
 }
 
 function renderActionPlan() {
@@ -2116,39 +2159,29 @@ function renderActionPlan() {
   const locked = ap.status === 'submitted';
   const due = actionPlanDeadline();
   const overdue = due && Date.now() > due.getTime() && !locked;
+  const legacy = ap.items.filter(it => it && it.action !== undefined && it.title === undefined);
+  const items = ap.items.filter(it => it && it.title !== undefined);
 
-  const rows = ap.items.map((it, i) => `
+  const rows = items.map((it, i) => `
     <div class="apx-item">
       <div class="apx-item-head">
         <span class="apx-num">${i + 1}</span>
-        ${it.priority ? `<span class="apx-priority">${escHtml(it.priority)}</span>` : ''}
+        <span class="apx-priority">School Development Priority ${i + 1}</span>
       </div>
-      <label class="apx-label" for="apxAction${i}">What we will do</label>
-      <textarea id="apxAction${i}" class="apx-action" data-ap-idx="${i}" data-ap-field="action"
-        ${locked ? 'disabled' : ''} placeholder="The specific action, not the intention…">${escHtml(it.action || '')}</textarea>
-      <div class="apx-fields">
-        <div>
-          <label class="apx-label" for="apxOwner${i}">Who owns it</label>
-          <input id="apxOwner${i}" data-ap-idx="${i}" data-ap-field="owner" ${locked ? 'disabled' : ''}
-            value="${escAttr(it.owner || '')}" placeholder="Name or role">
-        </div>
-        <div>
-          <label class="apx-label" for="apxDue${i}">By when</label>
-          <input id="apxDue${i}" data-ap-idx="${i}" data-ap-field="due" ${locked ? 'disabled' : ''}
-            value="${escAttr(it.due || '')}" placeholder="e.g. end of Term 2">
-        </div>
-        <div>
-          <label class="apx-label" for="apxStatus${i}">Status</label>
-          <select id="apxStatus${i}" data-ap-idx="${i}" data-ap-field="status" ${locked ? 'disabled' : ''}>
-            ${['not_started','in_progress','done'].map(s =>
-              `<option value="${s}" ${it.status === s ? 'selected' : ''}>${s.replace(/_/g,' ')}</option>`).join('')}
-          </select>
-        </div>
-      </div>
+      ${SDP_FIELDS.map(([k, label, hint, kind]) => `
+        <label class="apx-label" for="apx_${k}_${i}">${escHtml(label)}</label>
+        ${kind === 'input'
+          ? `<input id="apx_${k}_${i}" data-ap-idx="${i}" data-ap-field="${k}" ${locked ? 'disabled' : ''} value="${escAttr(it[k] || '')}" placeholder="${escAttr(hint)}">`
+          : `<textarea id="apx_${k}_${i}" class="apx-action" data-ap-idx="${i}" data-ap-field="${k}" ${locked ? 'disabled' : ''} placeholder="${escAttr(hint)}">${escHtml(it[k] || '')}</textarea>`}
+      `).join('')}
     </div>`).join('');
 
+  const legacyHtml = legacy.length ? `
+    <div class="apx-reviews-label">Earlier action plan (retired format, read-only)</div>
+    ${legacy.map(it => `<div class="apx-review"><div class="apx-review-note">${escHtml(it.priority ? it.priority + ' — ' : '')}${escHtml(it.action || '')}${it.owner ? ' · ' + escHtml(it.owner) : ''}${it.due ? ' · ' + escHtml(it.due) : ''}</div></div>`).join('')}` : '';
+
   const reviews = ap.reviews.length ? `
-    <div class="apx-reviews-label">Eduversal progress reviews</div>
+    <div class="apx-reviews-label">Eduversal progress and Phase 4 Impact Review notes</div>
     ${ap.reviews.map(r => `
       <div class="apx-review">
         <div class="apx-review-head">${escHtml(r.reviewedOn || '')} · ${escHtml(r.reviewedBy || '')}</div>
@@ -2158,26 +2191,29 @@ function renderActionPlan() {
   return `
     <div class="apx">
       <div class="apx-head">
-        <div class="apx-title">Our Action Plan</div>
+        <div class="apx-title">Our School Development Plan</div>
         ${due ? `<div class="apx-due${overdue ? ' is-overdue' : ''}">Due ${due.toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' })}${overdue ? ' · overdue' : ''}</div>` : ''}
       </div>
       <div class="apx-intro">
-        Eduversal's report is above. Within four weeks your leadership team writes how the school will
-        respond — one action per recommendation, each with someone who owns it and a date. Eduversal
-        reviews progress at the mid-year check-in and after.
+        Within two weeks of receiving the report, transfer the two agreed School Development Priorities
+        from the report into your plan — the working template is Appraisal Suite: School Development Plan 26-27.
+        Keep each priority short: two or three actions, one owner, two or three sources of success evidence.
+        The Phase 4 Impact Review checks what changed; it creates no new Domain Rating.
+        A Critical Attention issue is not handled here — it follows the urgent two-week process with your Visit I Supervisor.
         ${locked ? '<br><strong>This plan has been submitted and is now read-only.</strong>' : ''}
       </div>
-      ${ap.items.length ? rows : `
+      ${items.length ? rows : `
         <div class="apx-empty">
-          No actions yet.
-          <button type="button" id="apxSeed" class="apx-btn">Start from the report's priorities</button>
+          No priorities yet.
+          <button type="button" id="apxSeed" class="apx-btn">Start the two School Development Priorities</button>
         </div>`}
-      ${!locked && ap.items.length ? `
+      ${!locked && items.length ? `
         <div class="apx-actions">
           <button type="button" id="apxSave" class="apx-btn">Save draft</button>
           <button type="button" id="apxSubmit" class="apx-btn apx-btn--primary">Submit to Eduversal</button>
           <span id="apxStatusMsg" class="apx-msg"></span>
         </div>` : ''}
+      ${legacyHtml}
       ${reviews}
     </div>`;
 }
@@ -2362,14 +2398,14 @@ function renderDomain(domainId) {
     const fileListHtml = files.map((f, i) => {
       const ext = f.name.split('.').pop().toUpperCase();
       const sizeStr = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+'MB' : Math.round(f.size/1024)+'KB';
-      return `<div class="file-item"><span class="file-item-icon">${ext==='PDF'?'📄':['JPG','JPEG','PNG'].includes(ext)?'🖼️':'📎'}</span><span class="file-item-name" title="${f.name}">${f.name}</span><span class="file-item-size">${sizeStr}</span><a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a>${canEdit?`<button class="file-item-remove" onclick="window.__removeFile('${aspect.id}',${i})" title="Remove">✕</button>`:''}</div>`;
+      return `<div class="file-item"><span class="file-item-icon">${ext==='PDF'?'📄':['JPG','JPEG','PNG'].includes(ext)?'🖼️':'📎'}</span><span class="file-item-name" title="${f.name}">${f.name}</span><span class="file-item-size">${sizeStr}</span><a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a></div>`;
     }).join('');
 
     return `
       <div class="aspect-card${idx === 0 ? ' open' : ''}" id="aspect-${aspect.id}" style="border-left-color:${col};">
         <div class="aspect-head" role="button" tabindex="0" aria-expanded="${idx === 0}" aria-controls="aspect-body-${aspect.id}" onclick="window.__toggleAspect('${aspect.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.__toggleAspect('${aspect.id}');}">
           <div class="aspect-head-left">
-            <div class="aspect-num">${domain.code}.${idx+1}</div>
+            <div class="aspect-num">${aspect.code || `${domain.code}-${'ABCDEFGHI'[idx]}`}${aspect.core ? '<span class="aspect-core" title="Core aspect — a rating of 1 triggers a Critical Attention outcome for the whole visit">Core</span>' : ''}</div>
             <div class="aspect-title">${aspect.title}</div>
             <div class="aspect-desc">${aspect.description}</div>
           </div>
@@ -2379,6 +2415,7 @@ function renderDomain(domainId) {
           </div>
         </div>
         <div class="aspect-body" id="aspect-body-${aspect.id}">
+          ${aspect.core ? `<div class="core-note"><strong>Core aspect.</strong> A rating of 1 in any Core aspect triggers a Critical Attention outcome for the entire visit, regardless of the other ratings (School Appraisal: Rating Rubric 26-27).</div>` : ''}
 
           <!-- Expectations (collapsible) -->
           <div class="ab-section">
@@ -2393,7 +2430,7 @@ function renderDomain(domainId) {
 
           <!-- Rating scale guide — always visible -->
           <div class="ab-section">
-            <div class="ab-section-label">Rating Scale Guide</div>
+            <div class="ab-section-label">Rating Rubric — choose the highest rating where every part of the description is true</div>
             <div class="rsi-grid">${scaleCards}</div>
           </div>
 
@@ -2413,7 +2450,7 @@ function renderDomain(domainId) {
           <div class="ab-section">
             <button class="collapsible-btn" onclick="window.__toggleBlock('hints-${aspect.id}',this)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-              Evidence examples for this aspect
+              Evidence for this aspect (School Appraisal: Handbook 26-27)
             </button>
             <div class="collapsible-block" id="hints-${aspect.id}">
               <ul class="hints-inner">${hintItems}</ul>
@@ -2458,25 +2495,14 @@ function renderDomain(domainId) {
 
           <!-- Evidence files + links -->
           <div class="ab-section">
-            <div class="ab-section-label">Supporting Evidence</div>
-            ${canEdit ? `
-            <div class="file-upload-section">
-              <div class="drop-zone" id="dropzone-${aspect.id}" data-aspect="${aspect.id}">
-                <span class="drop-zone-icon">📎</span>
-                <div>
-                  <div class="drop-zone-text"><strong>Upload a file</strong> or drag and drop here</div>
-                  <div class="drop-zone-sub">PDF, Word, Excel, PowerPoint, images — max 20MB</div>
-                </div>
-              </div>
-              <div class="upload-progress" id="upload-progress-${aspect.id}">
-                <div class="upload-progress-bar" style="width:0%"></div>
-              </div>
-            </div>` : files.length ? '' : ''}
+            <div class="ab-section-label">Evidence links</div>
+            <div class="ev-note">Keep your evidence in your school's own online storage and link it here. Enter the same links in the School Appraisal: Evidence Guide 26-27 workbook — that workbook is what Eduversal scores.</div>
+            ${files.length ? `<div class="ev-note">Files uploaded before 2026-10-01 (read-only):</div>` : ''}
             <div class="file-list" id="file-list-${aspect.id}">${fileListHtml}</div>
             <div class="evidence-link-section" style="margin-top:${files.length||canEdit?'10px':'0'};">
               ${canEdit ? `
               <div class="evidence-link-row">
-                <input aria-label="Or paste an evidence link (Google Drive, Dropbox, etc.)" class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="Or paste an evidence link (Google Drive, Dropbox, etc.)" />
+                <input aria-label="Paste a link to the evidence in your school's storage" class="evidence-link-input" id="link-input-${aspect.id}" type="url" placeholder="Paste a link to the evidence in your school's storage (Google Drive, etc.)" />
                 <button class="evidence-link-add-btn" onclick="window.__addLink('${aspect.id}')">+ Add</button>
               </div>` : ''}
               <div class="link-list" id="link-list-${aspect.id}">${(appraisalDoc?.links?.[aspect.id]||[]).map((l,i) => `
@@ -2514,14 +2540,14 @@ function renderDomain(domainId) {
         </div>
         <div class="dh-stat" style="color:rgba(255,255,255,.85);">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-          ${davg ? `Avg ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
+          ${davg ? `Self-rating ${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : 'Not yet rated'}
         </div>
       </div>
       ${renderDomainAnchors(domain)}
     </div>
     ${aspectsHtml}
     <div class="domain-score-bar-wrap" style="border-color:${border};border-left:4px solid ${col};">
-      <div class="dsb-label">Domain Average Score</div>
+      <div class="dsb-label">Domain self-rating (mean of this domain's aspect ratings)</div>
       <div class="dsb-val ${scoreCls(parseFloat(davg||0))}" id="domain-avg-${domainId}">
         ${davg ? `${davg} — ${scoreLabel(Math.round(parseFloat(davg)))}` : '—'}
       </div>
@@ -2555,7 +2581,7 @@ function switchView(viewId) {
       ta.addEventListener('input', () => { appraisalDoc[ta.dataset.field] = ta.value; scheduleSave(); });
     });
 
-    // ── Action plan (ES 17.8) ──
+    // ── School Development Plan (two priorities) ──
     // Its own writer and its own rule branch, so it is NOT part of
     // scheduleSave()'s autosave — the school saves or submits it explicitly.
     content.querySelectorAll('[data-ap-field]').forEach(el => {
@@ -2564,23 +2590,20 @@ function switchView(viewId) {
         const i = parseInt(el.dataset.apIdx, 10);
         if (!appraisalDoc.actionPlan) appraisalDoc.actionPlan = {};
         if (!Array.isArray(appraisalDoc.actionPlan.items)) appraisalDoc.actionPlan.items = [];
-        const items = appraisalDoc.actionPlan.items;
-        if (!items[i]) items[i] = { action: '', owner: '', due: '', status: 'not_started' };
-        items[i][el.dataset.apField] = el.value;
+        // Index i counts School Development Priorities only; retired-format
+        // rows (action/owner/due) stay in the array untouched.
+        const sdp = appraisalDoc.actionPlan.items.filter(it => it && it.title !== undefined);
+        if (!sdp[i]) { const fresh = blankPriority(); appraisalDoc.actionPlan.items.push(fresh); sdp[i] = fresh; }
+        sdp[i][el.dataset.apField] = el.value;
         const msg = document.getElementById('apxStatusMsg');
         if (msg) { msg.textContent = 'Unsaved changes'; msg.classList.remove('is-error'); }
       });
     });
 
     content.querySelector('#apxSeed')?.addEventListener('click', () => {
-      const seeded = seedItemsFromReport();
-      if (!seeded.length) {
-        const msg = document.getElementById('apxStatusMsg');
-        if (msg) msg.textContent = 'The report has no numbered priorities to start from — add actions manually.';
-        return;
-      }
       if (!appraisalDoc.actionPlan) appraisalDoc.actionPlan = {};
-      appraisalDoc.actionPlan.items = seeded;
+      const kept = (appraisalDoc.actionPlan.items || []).filter(it => it && it.title === undefined);
+      appraisalDoc.actionPlan.items = [...kept, ...seedItemsFromReport()];
       switchView('overview');
     });
 
@@ -2616,12 +2639,12 @@ function switchView(viewId) {
     // once rather than on a single click.
     const submitBtn = content.querySelector('#apxSubmit');
     submitBtn?.addEventListener('click', () => {
-      const items = actionPlanState().items;
-      const blank = items.filter(it => !String(it.action || '').trim());
+      const items = actionPlanState().items.filter(it => it && it.title !== undefined);
+      const blank = items.filter(it => !String(it.title || '').trim() || !String(it.actions || '').trim() || !String(it.owner || '').trim());
       const msg = document.getElementById('apxStatusMsg');
       if (blank.length) {
         if (msg) {
-          msg.textContent = `Not submitted — ${blank.length} recommendation${blank.length === 1 ? ' has' : 's have'} no action written yet.`;
+          msg.textContent = `Not submitted — ${blank.length} priorit${blank.length === 1 ? 'y needs' : 'ies need'} at least a title, key actions and an owner.`;
           msg.classList.add('is-error');
         }
         return;
@@ -2783,8 +2806,32 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   if (appraisal.status === 'submitted') {
     actionBar.style.display = 'flex';
     document.getElementById('btnSubmit').style.display = 'none';
-    document.getElementById('actionStatus').textContent = 'Submitted — awaiting review';
+    document.getElementById('btnSaveDraft').style.display = 'none';
+    document.getElementById('btnReopen').style.display = '';
+    document.getElementById('actionStatus').textContent = 'Submitted — update it before each on-site visit';
   }
+
+  // "Before every scheduled on-site visit, schools must complete or update the
+  // Self-Evaluation Summary" (School Appraisal: Handbook 26-27). A submitted
+  // self-appraisal therefore reopens from the school's side; only 'reviewed'
+  // (Eduversal's end-of-cycle sign-off) stays locked.
+  const reopenBtn = document.getElementById('btnReopen');
+  reopenBtn.addEventListener('click', async () => {
+    if (reopenBtn.dataset.confirming !== '1') {
+      reopenBtn.dataset.confirming = '1';
+      const original = reopenBtn.textContent;
+      reopenBtn.textContent = 'Reopen for editing? Click again';
+      setTimeout(() => { reopenBtn.dataset.confirming = '0'; reopenBtn.textContent = original; }, 3000);
+      return;
+    }
+    reopenBtn.dataset.confirming = '0';
+    await saveAppraisal('draft');
+    reopenBtn.style.display = 'none';
+    document.getElementById('btnSubmit').style.display = '';
+    document.getElementById('btnSaveDraft').style.display = '';
+    document.getElementById('pageNotice')?.remove();
+    switchView(currentView || 'overview');
+  });
 
   document.getElementById('btnSaveDraft').addEventListener('click', () => saveAppraisal('draft'));
   document.getElementById('btnSubmit').addEventListener('click', openSubmitModal);
