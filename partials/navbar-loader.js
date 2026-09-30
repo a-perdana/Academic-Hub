@@ -704,28 +704,20 @@ const NAV_ITEMS = [
   { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
     // Handbooks & References (audience: everyone — AI Prompts moved to Communications > Prompt Library 2026-05-27)
     { key: 'references',              href: '/references',              label: 'References' },
-    { key: 'handbook',                href: '/handbook',                label: 'Handbooks' },
+    // Handbooks moved to Google Drive 2026-09-30 — Academic Services entry documents.
+    { key: 'drive-academic-services-start-here', href: 'https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit', label: 'Academic Services: Start Here ↗', external: true },
+    { key: 'drive-curriculum-module', href: 'https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit', label: 'Curriculum Module ↗', external: true },
+    { key: 'drive-induction-module', href: 'https://docs.google.com/document/d/11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw/edit', label: 'Induction Module ↗', external: true },
+    { key: 'drive-ease-module', href: 'https://docs.google.com/document/d/1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4/edit', label: 'EASE Module ↗', external: true },
+    { key: 'drive-appraisal-module', href: 'https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit', label: 'Appraisal Module ↗', external: true },
+    { key: 'drive-career-growth-module', href: 'https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit', label: 'Career Growth Module ↗', external: true },
+    { key: 'drive-student-learning', href: 'https://docs.google.com/document/d/1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8/edit', label: 'Student Learning ↗', external: true },
+    { key: 'drive-teaching-learning', href: 'https://docs.google.com/document/d/14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s/edit', label: 'Teaching & Learning ↗', external: true },
+    { key: 'drive-digital-citizenship-ai', href: 'https://docs.google.com/document/d/1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8/edit', label: 'Digital Citizenship & AI ↗', external: true },
+    { key: 'drive-quality-ecosystem', href: 'https://docs.google.com/document/d/1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4/edit', label: 'Quality Ecosystem ↗', external: true },
     // Featured for Leadership (2026-05-19; Cambridge Coord / Principal / DSL 90-day guides added 2026-05-27)
-    { key: 'handbook-principal-induction', href: '/handbook?id=eduversal_principal_v1',                          label: 'Principal Induction' },
-    { key: 'handbook-fr-90d',              href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',       label: 'Foundation Rep 90 Days' },
-    { key: 'handbook-ac-90d',              href: '/handbook?id=eduversal_academic_coordinator_first_90_days_v1', label: 'Academic Coord 90 Days' },
-    { key: 'handbook-cc-90d',              href: '/handbook?id=eduversal_cambridge_coordinator_first_90_days_v1', label: 'Cambridge Coord 90 Days' },
-    { key: 'handbook-principal-90d',       href: '/handbook?id=eduversal_principal_first_90_days_v1',            label: 'Principal 90 Days' },
-    { key: 'handbook-dsl-90d',             href: '/handbook?id=eduversal_dsl_first_90_days_v1',                  label: 'DSL 90 Days' },
-    { key: 'handbook-aicf-leader',         href: '/handbook?id=aicf_leader_playbook_v1',                         label: 'AI Playbook - Subject Leaders' },
     // Policy & AI (2026-05-19; Digital Citizenship / Anti-Bullying / Attendance added 2026-05-27)
-    { key: 'handbook-safeguarding',        href: '/handbook?id=eduversal_safeguarding_and_child_protection_v1',  label: 'Safeguarding & CP' },
-    { key: 'handbook-ai-use',              href: '/handbook?id=eduversal_ai_use_policy_v1',                      label: 'AI Use Policy' },
-    { key: 'handbook-digital-citizenship', href: '/handbook?id=eduversal_digital_citizenship_policy_v1',         label: 'Digital Citizenship' },
-    { key: 'handbook-behaviour',           href: '/handbook?id=eduversal_behaviour_and_restorative_practice_v1', label: 'Behaviour & Restorative' },
-    { key: 'handbook-anti-bullying',       href: '/handbook?id=eduversal_anti_bullying_policy_v1',               label: 'Anti-Bullying' },
-    { key: 'handbook-assessment-guide',    href: '/handbook?id=eduversal_assessment_guide_v1',                   label: 'Assessment Guide' },
-    { key: 'handbook-attendance',          href: '/handbook?id=eduversal_attendance_policy_v1',                  label: 'Attendance Policy' },
     // School-facing handbooks (seeded 2026-05-17)
-    { key: 'school-handbook-teacher',   href: '/handbook?id=eduversal_teacher_handbook_v1',        label: 'Teacher Handbook' },
-    { key: 'school-handbook-staff-coc', href: '/handbook?id=eduversal_staff_code_of_conduct_v1',   label: 'Staff Code of Conduct' },
-    { key: 'school-handbook-student',   href: '/handbook?id=eduversal_student_handbook_v1',        label: 'Student Handbook' },
-    { key: 'school-handbook-parent',    href: '/handbook?id=eduversal_parent_handbook_v1',         label: 'Parent Handbook' },
     // Standards (moved from Curriculum group 2026-06-27; Academic Calendar +
     // School Events moved here from Communications 2026-06-27)
     { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
@@ -821,6 +813,7 @@ function buildMobileMenu(activeKey, isAcademicAdmin) {
         a.href = sub.href;
         a.className = 'ah-mobile-menu-item' + (sub.key === activeKey ? ' active' : '');
         a.setAttribute('data-mobile-nav-key', sub.key);
+        if (sub.external) { a.target = '_blank'; a.rel = 'noopener'; }
         a.innerHTML = `<span>${sub.label}</span>`;
         a.addEventListener('click', () => closeMobileMenu());
         menu.appendChild(a);

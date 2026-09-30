@@ -103,7 +103,6 @@
       </div>
       <div class="ref-facets" id="refFacets" role="tablist" aria-label="Filter by category">
         <button class="ref-facet active" data-cat="all" role="tab" aria-selected="true"><span>All</span><span class="count" id="cntAll">0</span></button>
-        <button class="ref-facet" data-cat="handbooks" role="tab" aria-selected="false"><span>Handbooks</span><span class="count" id="cntHandbooks">0</span></button>
         <button class="ref-facet" data-cat="frameworks" role="tab" aria-selected="false"><span>Frameworks</span><span class="count" id="cntFrameworks">0</span></button>
         <button class="ref-facet" data-cat="cambridge" role="tab" aria-selected="false"><span>Cambridge Standards</span><span class="count" id="cntCambridge">0</span></button>
         <button class="ref-facet" data-cat="permen" role="tab" aria-selected="false"><span>Permendiknas / Permendikbud</span><span class="count" id="cntPermen">0</span></button>
@@ -124,15 +123,7 @@
   </div>
 
   <main class="ref-results" id="refResults">
-    <details class="ref-section" data-cat="handbooks">
-      <summary class="ref-section-head">
-        <span class="ref-section-caret" aria-hidden="true">▸</span>
-        <h2 class="ref-section-title">Handbooks</h2>
-        <span class="ref-section-count" data-count-for="handbooks">0</span>
-        <p class="ref-section-blurb">Year-1 induction tracks (📕 Charter NN1-NN5 bound) + role-operational 90-day onboarding (🛡 paired with weekly-checklist). Filtered to leadership-relevant handbooks. Reader lives at <a href="/handbook" style="color:var(--accent-dk);font-weight:600;">/handbook</a>.</p>
-      </summary>
-      <div class="ref-grid" id="gridHandbooks"></div>
-    </details>
+    <!-- Handbooks facet removed 2026-09-30: handbooks live in Google Drive (Academic Services 26-27). -->
 
     <details class="ref-section" data-cat="frameworks">
       <summary class="ref-section-head">
@@ -376,7 +367,7 @@
         roleField:              'role_academichub',
         adminValue:             'academic_admin',
         subRoleField:           'ah_sub_roles',
-        loadHandbooks:          true,
+        loadHandbooks:          false,   // handbooks live in Google Drive since 2026-09-30
         handbookAudienceFilter: ['academic'],
         // No role rail for AH yet — sub-role-to-content matrix not curated.
         roleRailMatcher:        null,

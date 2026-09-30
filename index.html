@@ -363,7 +363,7 @@
         <nav class="page-footer__nav" aria-label="Home footer navigation">
           <div class="page-footer__nav-group">
             <span class="page-footer__nav-heading">Knowledge</span>
-            <a href="/handbook" class="page-footer__nav-link">Handbooks</a>
+            <a href="https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit" target="_blank" rel="noopener" class="page-footer__nav-link">Academic Services ↗</a>
             <a href="/references" class="page-footer__nav-link">References</a>
             <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
             <a href="/library" class="page-footer__nav-link">Academic Library</a>
@@ -499,7 +499,6 @@
       // cardIds keep resolving. Pages in page_access_config with no entry
       // here still appear as auto tiles (id `auto_<slug>`).
       // ================================================================
-      const HB = id => `/handbook?id=${id}`;
       const TOOLS = [
         // Everyday
         { id: 'weekly-checklist', href: '/weekly-checklist', icon: 'list', title: 'Weekly Checklist', desc: 'What your role needs to do this week.' },
@@ -528,19 +527,19 @@
         // Induction
         { id: 'my-induction', href: '/my-induction', icon: 'seed', title: 'My Induction', desc: 'Your own first-year programme: windows, tasks, journal and pulse.', tags: ['For you'] },
         { id: 'team-induction', href: '/team-induction', icon: 'users', title: 'Team Induction', desc: 'Every new colleague at your school, their mentor and any pulse alerts.' },
-        { id: 'hb-induction-principal', href: HB('eduversal_principal_v1'), icon: 'doc', title: 'New Principal Induction', desc: 'The Principal induction track: Listen, Diagnose, Act, Anchor.', tags: ['Handbook'] },
-        { id: 'hb-induction-school', href: HB('eduversal_school_induction_v1'), icon: 'doc', title: 'School Induction Programme', desc: 'Induction for a school joining the network.', tags: ['Handbook'] },
-        { id: 'hb-induction-ac', href: HB('eduversal_academic_coordinator_induction_v1'), icon: 'doc', title: 'Academic Coordinator Induction', desc: 'The first-period track for a new Academic Coordinator.', tags: ['Handbook'] },
-        { id: 'hb-induction-eo', href: HB('eduversal_exams_officer_induction_v1'), icon: 'doc', title: 'Exams Officer Induction', desc: 'The first-period track for a new Exams Officer.', tags: ['Handbook'] },
+        { id: 'hb-induction-principal', href: 'https://docs.google.com/document/d/1jqiCU6vemA67-hAqgZ3iAsHWnBI1145qpn3HCNsk6rU/edit', ext: true, icon: 'doc', title: 'Induction Module: Principal', desc: 'The Principal induction track: Listen, Diagnose, Act, Anchor.', tags: ['Google Drive'] },
+        { id: 'hb-induction-school', href: 'https://docs.google.com/document/d/1Kwj7fi8X5CnCWiqwhM3c7q_dESkJqUmjGElygPFvaRI/edit', ext: true, icon: 'doc', title: 'Induction Module: School', desc: 'Induction for a school joining the network, in four phases.', tags: ['Google Drive'] },
+        { id: 'hb-induction-ac', href: 'https://docs.google.com/document/d/1-aRpO2ypOfMcnaGJ_uA3O6e5Q5AkWw1q3i_mHAhAkHQ/edit', ext: true, icon: 'doc', title: 'Induction Module: Academic Coordinators', desc: 'The first-year track for a new Academic Coordinator.', tags: ['Google Drive'] },
+        { id: 'hb-induction-eo', href: 'https://docs.google.com/document/d/16u1qENKqwEFbKS-gsORu4fSAKnq2zI5QDAlodqTGo-U/edit', ext: true, icon: 'doc', title: 'Induction Module: Exams Officers', desc: 'The first examination cycle for a new Exams Officer.', tags: ['Google Drive'] },
 
         // EASE
         { id: 'ease-growth-results', href: '/ease-growth-results', icon: 'chart', title: 'EASE Growth Results', desc: 'Baseline results in Mathematical Reasoning, Science Literacy and English Reading, your school against the network.', tags: ['New', 'Baseline'] },
         { id: 'school-assessment', href: '/school-assessment', icon: 'table', title: 'Common Assessment Results', desc: 'Class averages, mastery bands and students who need support.' },
         { id: 'student-roster', href: '/student-roster', icon: 'users', title: 'Student Roster', desc: 'Students Hub accounts at your school: approve, graduate or reactivate.' },
-        { id: 'hb-ease', href: HB('eduversal_ease_framework_guide_v1'), icon: 'doc', title: 'EASE Framework Guide', desc: 'EASE Growth, EASE Assessment and EASE Academic, and how they fit together.', tags: ['Guide'] },
+        { id: 'hb-ease', href: 'https://docs.google.com/document/d/1EclyyPLXbMSBz6x9eVQlUKlLsXI9rwkBorCMDwFPaVY/edit', ext: true, icon: 'doc', title: 'EASE Framework: Overview', desc: 'EASE Growth, EASE Assessment and EASE Academic, and how they fit together.', tags: ['Google Drive'] },
 
         // Student Learning
-        { id: 'hb-student-portfolio', href: HB('eduversal_student_portfolio_slc_v1'), icon: 'folder', title: 'Portfolio & Student-Led Conference', desc: 'Portfolio guide, rubric, goal-setting and the Student-Led Conference for Grades 7-12.', tags: ['Formative', 'Guide'] },
+        { id: 'hb-student-portfolio', href: 'https://docs.google.com/document/d/1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8/edit', ext: true, icon: 'folder', title: 'Student Learning: Overview', desc: 'Portfolio, goal-setting and the Student-Led Conference for Grades 7-12.', tags: ['Formative', 'Google Drive'] },
 
         // Appraisal
         { id: 'school-self-appraisal', href: '/school-self-appraisal', icon: 'check', title: 'School Self-Appraisal', desc: 'Rate your school on the five domains before the Validation Visit.' },
@@ -556,25 +555,25 @@
         { id: 'principal-appraisal-entry', href: '/principal-appraisal-entry', icon: 'person', title: 'Principal Annual Appraisal', desc: 'The weighted annual appraisal of the principal.' },
         { id: 'principal-360-results', href: '/principal-360-results', icon: 'users', title: 'Principal 360° Results', desc: 'Grouped 360° feedback, shown only above the respondent threshold.' },
         { id: 'principal-coaching-view', href: '/principal-coaching-view', icon: 'msg', title: 'My Coaching', desc: 'Coaching sessions logged by your Eduversal Director.', tags: ['For you'] },
-        { id: 'hb-school-appraisal', href: HB('eduversal_school_appraisal_handbook_v1'), icon: 'doc', title: 'School Appraisal Handbook', desc: 'Phase 0 to Phase 4, the five domains and the evidence each one needs.', tags: ['Handbook'] },
+        { id: 'hb-school-appraisal', href: 'https://docs.google.com/document/d/1uoDrYqB6EgA53ANWFV1ojPag5sGiNMlbUHbbV4bzyeQ/edit', ext: true, icon: 'doc', title: 'School Appraisal: Handbook', desc: 'Phase 0 to Phase 4, the five domains and the evidence each one needs.', tags: ['Google Drive'] },
 
         // Career Growth
         { id: 'competency-framework', href: '/competency-framework', icon: 'layers', title: 'Leadership Competency Framework', desc: 'Six domains of school leadership, each described at four levels.' },
         { id: 'learning-path', href: '/learning-path', icon: 'route', title: 'My Learning Path', desc: 'Your next competency steps and the evidence each one needs.', tags: ['For you'] },
         { id: 'my-portfolio', href: '/my-portfolio', icon: 'folder', title: 'My Evidence Portfolio', desc: 'The evidence you have submitted for your competencies.', tags: ['For you'] },
         { id: 'my-certificates', href: '/my-certificates', icon: 'badge', title: 'My Certificates', desc: 'The certificates you have earned.', tags: ['For you'] },
-        { id: 'hb-career-growth', href: HB('eduversal_career_growth_v1'), icon: 'doc', title: 'Career Growth Guide', desc: 'How people grow into approved roles across the network.', tags: ['Guide'] },
+        { id: 'hb-career-growth', href: 'https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit', ext: true, icon: 'doc', title: 'Career Growth Module: Start Here', desc: 'How people grow into approved roles across the network.', tags: ['Google Drive'] },
 
         // Teaching & Learning
         { id: 'library', href: '/library', icon: 'book', title: 'Academic Library', desc: 'Books, articles and resources for teachers and leaders.' },
-        { id: 'hb-teacher-handbook', href: HB('eduversal_teacher_handbook_v1'), icon: 'doc', title: 'Teacher Handbook', desc: 'The school-facing handbook for teachers.', tags: ['Handbook'] },
+        { id: 'hb-teacher-handbook', href: 'https://docs.google.com/document/d/1lERKMM02E5VdK9NHxT-5-riYF8AzctvEGG78_PBOx0s/edit', ext: true, icon: 'doc', title: 'Lesson Planning Guide & Template', desc: 'The network lesson-planning standard, with the template.', tags: ['Google Drive'] },
 
         // Digital Citizenship & AI
         { id: 'ai-prompts', href: '/ai-prompts', icon: 'bulb', title: 'AI Prompt Library', desc: 'Tested prompts for planning, feedback and school admin.' },
         { id: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', icon: 'chip', title: 'AI Maturity Self-Assessment', desc: 'Where your school stands on the AI Competency Framework.', tags: ['Developmental'] },
         { id: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', icon: 'check', title: 'Validate Teacher AI Self-Assessments', desc: 'Review your teachers’ AI Competency self-assessments.' },
         { id: 'network-audit', href: '/network-audit', icon: 'shield', title: 'Network Security Audit', desc: 'Device, account and network security checks for your school.' },
-        { id: 'hb-digital-citizenship', href: HB('eduversal_digital_citizenship_policy_v1'), icon: 'doc', title: 'Digital Citizenship Policy', desc: 'Academic integrity, AI use, acceptable use and social media.', tags: ['Policy'] },
+        { id: 'hb-digital-citizenship', href: 'https://docs.google.com/document/d/16igD73jJbgW4gSqjBDw7uffw4JWyOqbrC1dol4BSW8k/edit', ext: true, icon: 'doc', title: 'Digital Citizenship & AI: Framework', desc: 'Academic integrity, AI use, acceptable use and social media.', tags: ['Google Drive'] },
 
         // Academic Insights (the AY 2025-26 dashboards — EASE I-III, A-EASE,
         // surveys, accreditation, partner/Islamic schools, school appraisals,
@@ -586,18 +585,13 @@
 
         // Quality Ecosystem & Standards
         { id: 'academic-standards', href: '/academic-standards', icon: 'book', title: 'Eduversal Academic Standards', desc: 'The 24-section policy manual for the partner-school network.', tags: ['ES'] },
-        { id: 'handbook', href: '/handbook', icon: 'doc', title: 'Handbooks', desc: 'Induction, role, policy and school-facing handbooks in one reader.' },
+        { id: 'handbook', href: 'https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit', ext: true, icon: 'doc', title: 'Academic Services in Google Drive', desc: 'Start Here for every module document — the live documents are the reference.', tags: ['Google Drive'] },
         { id: 'references', href: '/references', icon: 'layers', title: 'References', desc: 'The frameworks, standards and regulations behind the network’s work.' },
-        { id: 'hb-qe-governance', href: HB('eduversal_quality_ecosystem_governance_v1'), icon: 'doc', title: 'Quality Ecosystem Governance Guide', desc: 'Which document governs each area, and in what order of authority.', tags: ['Guide'] },
+        { id: 'hb-qe-governance', href: 'https://docs.google.com/document/d/1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4/edit', ext: true, icon: 'doc', title: 'Policy Source-of-Truth Register', desc: 'Which document governs each area, and in what order of authority.', tags: ['Google Drive'] },
 
-        // Other school-facing handbooks (page_access slugs without a route
-        // of their own — listed so they never become broken auto tiles).
-        { id: 'school-handbook-student', href: HB('eduversal_student_handbook_v1'), icon: 'doc', title: 'Student Handbook', desc: 'The school-facing handbook for students.', tags: ['Handbook'] },
-        { id: 'school-handbook-parent', href: HB('eduversal_parent_handbook_v1'), icon: 'doc', title: 'Parent Handbook', desc: 'The school-facing handbook for parents.', tags: ['Handbook'] },
-        { id: 'school-handbook-staff-coc', href: HB('eduversal_staff_code_of_conduct_v1'), icon: 'doc', title: 'Staff Code of Conduct', desc: 'The school-facing code of conduct for staff.', tags: ['Handbook'] },
       ];
       // page_access_config keys that must never become auto tiles.
-      const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'school-handbook-teacher',
+      const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'school-handbook-teacher', 'school-handbook-student', 'school-handbook-parent', 'school-handbook-staff-coc',
         // Shared with CH's own /school-appraisals; the AH page was archived 2026-09-30.
         'school-appraisals']);
       // Tools that belong to a pilot system (mirrors auth-guard PILOT_SLUG_MAP
