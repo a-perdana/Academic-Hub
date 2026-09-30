@@ -485,12 +485,12 @@ body:has(> .page-footer) > .page-wrap {
       <span class="page-footer__cta-eyebrow">AICF · Institutional Track</span>
       <h2 class="page-footer__cta-title">Once a year. Honestly. Across all six areas.</h2>
       <p class="page-footer__cta-desc">
-        A developmental self-assessment, not an appraisal. Save drafts as the leadership team
-        agrees and mark the profile final when the Principal signs off. Eduversal uses it to plan
+        A developmental self-assessment, not an appraisal. Save drafts while the leadership team
+        discusses the evidence, and mark the profile final once the team agrees the ratings. Eduversal uses it to plan
         support and professional learning; it never becomes a School Appraisal score or a ranking.
       </p>
-      <a href="/references?doc=aicf-v1-part3-institutional" class="page-footer__cta-btn">
-        Read the framework verbatim <span aria-hidden="true">→</span>
+      <a href="https://docs.google.com/document/d/12sYAJUSea8KUFl5cD6iYKi6U5D1OOleEu3ka6EKDd4s/edit" target="_blank" rel="noopener" class="page-footer__cta-btn">
+        Open the AI Competency Framework 26-27 <span aria-hidden="true">→</span>
       </a>
     </div>
     <nav class="page-footer__nav" aria-label="AI Maturity footer navigation">
@@ -524,23 +524,25 @@ import {
 
 // Set in authReady from calendar_settings/current (single source of truth).
 const ACADEMIC_YEAR_DEFAULT = '';
-const REF_BASE = '/research/eduversal/ai-competency-framework';
 
 const DOMAINS = [
-  { id: 'strategy_leadership',     title: 'Strategy and Leadership',     scope: 'Strategic planning, leadership commitment, governance.' },
-  { id: 'policy_compliance',       title: 'Policy and Compliance',       scope: 'AI policies, UU PDP data privacy, academic integrity, responsible use.' },
-  { id: 'staff_capability',        title: 'Staff Capability',            scope: 'Staff AI competency levels and quality of professional development.' },
-  { id: 'teaching_learning',       title: 'Teaching and Learning',       scope: 'Quality and consistency of AI integration in classroom practice.' },
-  { id: 'student_outcomes',        title: 'Student Outcomes',            scope: 'Student AI literacy and the impact of AI on learning outcomes.' },
-  { id: 'infrastructure_resources',title: 'Infrastructure and Resources',scope: 'Technical infrastructure, approved tools, budget, technical support.' }
+  // Titles and scopes follow the live AI Competency Framework 26-27,
+  // Part Three, "Assessment Domains". The ids are stored keys — never rename.
+  { id: 'strategy_leadership',     title: 'Strategy and Leadership',     scope: 'Strategic planning, leadership commitment, and governance related to AI integration.' },
+  { id: 'policy_compliance',       title: 'Policy and Compliance',       scope: 'How complete AI policies are and how well they are implemented, including data privacy, academic integrity, and responsible use.' },
+  { id: 'staff_capability',        title: 'Staff Capability',            scope: 'The extent and depth of staff AI competency and the quality of professional development.' },
+  { id: 'teaching_learning',       title: 'Teaching and Learning',       scope: 'The quality and consistency of AI integration in classroom practice and curriculum.' },
+  { id: 'student_outcomes',        title: 'Student Outcomes',            scope: 'Student AI literacy development and the impact of AI integration on learning outcomes.' },
+  { id: 'infrastructure_resources',title: 'Infrastructure and Resources',scope: 'Whether technical infrastructure, tools, and resources are adequate to support AI integration.' }
 ];
 
 const LEVELS = [
-  { num: 1, name: 'Emerging',    short: 'Beginning. Awareness limited.' },
-  { num: 2, name: 'Developing',  short: 'Basic policies. Inconsistent.' },
-  { num: 3, name: 'Established', short: 'Coherent. Majority engagement.' },
-  { num: 4, name: 'Advanced',    short: 'Sophisticated. Strong impact.' },
-  { num: 5, name: 'Leading',     short: 'Network model. Outstanding.' }
+  // Short cues taken from the live "Maturity Levels" definitions.
+  { num: 1, name: 'Emerging',    short: 'Beginning to engage. Awareness limited.' },
+  { num: 2, name: 'Developing',  short: 'Basic policies. Inconsistent implementation.' },
+  { num: 3, name: 'Established', short: 'Coherent integration. Majority staff engagement.' },
+  { num: 4, name: 'Advanced',    short: 'Sophisticated integration. Strong impact.' },
+  { num: 5, name: 'Leading',     short: 'Outstanding integration. A model for the network.' }
 ];
 
 const MAX_EVIDENCE = 8;
@@ -560,7 +562,6 @@ const state = {
   status: null,        // 'draft' | 'submitted' | 'appraised' | null
   dirty: false,
   loadedRef: null,
-  reference: null,     // PDF verbatim — for popovers
   canEdit: false,
   canRead: false
 };
@@ -587,18 +588,8 @@ function computePermissions(profile) {
   return { canRead, canEdit };
 }
 
-// ----- Reference loader (verbatim PDF text for popovers — lazy) -----
-async function loadReference() {
-  if (state.reference) return state.reference;
-  try {
-    const res = await fetch(`${REF_BASE}/reference/eduversal-v1-part3-institutional.json`, { cache: 'force-cache' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    state.reference = await res.json();
-  } catch (err) {
-    console.warn('[ai-maturity] reference load failed', err);
-  }
-  return state.reference;
-}
+// (The v1.0 reference JSON was fetched here but never used; removed
+// 2026-10-01 — the live framework is AI Competency Framework 26-27, v2.0.)
 
 // ----- Firestore load -----
 async function loadAssessment() {
@@ -754,10 +745,10 @@ function renderDomains() {
         </div>
       </div>
 
-      <div class="level-row-label">Current step (where the school is now)</div>
+      <div class="level-row-label">Current level (where the school is now)</div>
       <div class="level-row" data-target="currentLevel"></div>
 
-      <div class="target-row-label">Target step for next year</div>
+      <div class="target-row-label">Target level for next year</div>
       <div class="target-row" data-target="targetLevel"></div>
 
       <div class="sub-label">Evidence <span class="sub-hint">(2-4 short sentences — what the school can point to)</span></div>
@@ -854,7 +845,7 @@ function renderAppraisalBlock(av, domainId) {
       <h4>Eduversal notes</h4>
       <p style="font-size:12px;">Developmental support notes. They do not validate or change your ratings and are not a School Appraisal rating.</p>
       <div class="av-row">
-        <div><span class="av-label">Step noted:</span> ${av.currentLevel ?? '—'}</div>
+        <div><span class="av-label">Level noted:</span> ${av.currentLevel ?? '—'}</div>
         <div><span class="av-label">Target noted:</span> ${av.targetLevel ?? '—'}</div>
       </div>
       ${evi.length ? `<p style="margin-top:8px;"><strong>Evidence noted:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${evi.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
@@ -1134,7 +1125,6 @@ document.addEventListener('authReady', async ({ detail }) => {
     yearSelEl.value = state.academicYear;
   }
 
-  await loadReference();
   await loadAssessment();
   document.getElementById('loadingState').style.display = 'none';
   document.getElementById('assessmentForm').style.display = 'block';

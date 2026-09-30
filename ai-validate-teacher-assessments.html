@@ -131,7 +131,7 @@ body:has(> .page-footer) > .page-wrap {
 .detail-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-dk); margin-bottom: 8px; }
 
 .rating-matrix-readonly {
-  display: grid; grid-template-columns: 160px repeat(3, 1fr);
+  display: grid; grid-template-columns: 220px repeat(3, 1fr);
   gap: 1px; background: #e2e8f0; border: 1px solid #e2e8f0; border-radius: 8px;
   overflow: hidden;
 }
@@ -253,7 +253,7 @@ body:has(> .page-footer) > .page-wrap {
       <div class="info-strip__pills">
         <span class="info-strip__pill"><b>For:</b> School Principal</span>
         <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
-        <span class="info-strip__pill"><b>Stage:</b> AICF Part 1</span>
+        <span class="info-strip__pill"><b>Framework:</b> AI Competency Framework 26-27 · Part One</span>
       </div>
     </div>
   </aside>
@@ -330,8 +330,10 @@ body:has(> .page-footer) > .page-wrap {
 <script type="module">
 import { collection, query, where, getDocs, doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Matrix row labels — the live Part One domain names.
 const DOMAIN_LABELS = {
-  domainA: 'Knowledge', domainB: 'Application', domainC: 'Pedagogical', domainD: 'Critical Eval', domainE: 'Professional'
+  domainA: 'A · AI Knowledge and Understanding', domainB: 'B · Practical Application',
+  domainC: 'C · Pedagogical Integration', domainD: 'D · Critical Evaluation', domainE: 'E · Professional Contribution'
 };
 // Full domain names (AI Competency Framework 26-27, Part One) for the agreed focus.
 const DOMAIN_NAMES = {

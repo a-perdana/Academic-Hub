@@ -233,7 +233,7 @@ import { collection, doc, getDoc, getDocs, query, where }
 
 // Principal Appraisal: Handbook 26-27 §7-§8, §10. Readers: the principal
 // (own cycles) and the Eduversal primary appraiser (AH academic_admin /
-// central_admin). The Foundation Representative / General Manager receives
+// CH director / central_admin). The Foundation Representative / General Manager receives
 // only the appraisal summary triplet + goals — never a 360 or F3 score.
 // URL: ?cycle=<cycleId>  or  ?principalUid=<uid> (lists that principal's cycles)
 const params = new URLSearchParams(window.location.search);
@@ -251,7 +251,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.body.style.display = '';
 
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isCHDirector = ['central_user', 'central_admin'].includes(profile?.role_centralhub)
+    && (profile?.role_centralhub === 'central_admin' || (profile?.ch_sub_roles || []).includes('director'));
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || isCHDirector;
   const isPrincipal = ahSubs.includes('school_principal');
   if (!isAppraiser && !isPrincipal) {
     showAccessDenied('360 results are read by the principal and the Eduversal primary appraiser. The Foundation Representative / General Manager receives only the appraisal summary (composite, band, recommendation and agreed goals).');
@@ -351,7 +353,7 @@ function renderCohort(cohortId, label, agg) {
       <div class="cohort-card hidden">
         <div class="name">${escapeHtml(label)}</div>
         <div class="count">—</div>
-        <div class="below-threshold">Below the minimum threshold of 5 respondents. Results hidden to protect anonymity. ${stats ? `(Currently ${stats.respondentCount} response${stats.respondentCount === 1 ? '' : 's'}.)` : ''}</div>
+        <div class="below-threshold">Insufficient response — fewer than 5 respondents, so this group is not scored and its results stay hidden to protect anonymity. ${stats ? `(Currently ${stats.respondentCount} response${stats.respondentCount === 1 ? '' : 's'}.)` : ''}</div>
       </div>
     `;
   }

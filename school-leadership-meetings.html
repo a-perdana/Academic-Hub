@@ -131,7 +131,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">School Leadership Meetings</h1>
-      <p class="page-hero__desc">Weekly + ad-hoc leadership team minutes. Each meeting carries agenda items tagged decision / action / discussion / announcement / red-text. Red-text items belong in the Decisions register; action items spawn cards in Activities.</p>
+      <p class="page-hero__desc">Minutes for your school's leadership meetings. The minimum rhythm: Principal – Academic Coordinator every week, Principal – Heads of Department every two weeks, department meetings every two weeks and inter-level department meetings every quarter (Career Growth: Framework 26-27 §13). Tag each agenda item decision / action / discussion / announcement / red-text. Record decisions in the Decisions register and actions in Activities — one action tracker, not two (Minimum Operating Standard 26-27 §9).</p>
     </div>
   </div>
 </header>
@@ -169,7 +169,10 @@ body { padding-top: 62px; }
         <div class="form-group">
           <label class="form-label">Kind</label>
           <select class="form-select" id="mKind">
-            <option value="weekly">Weekly rhythm</option>
+            <option value="weekly">Weekly leadership team meeting</option>
+            <option value="principal_ac">Principal – Academic Coordinator (weekly)</option>
+            <option value="principal_hod">Principal – Heads of Department (every two weeks)</option>
+            <option value="inter_level">Inter-level department meeting (quarterly)</option>
             <option value="ad_hoc">Ad-hoc</option>
             <option value="appraisal_calibration">Appraisal calibration</option>
             <option value="emergency">Emergency / urgent</option>
@@ -177,6 +180,7 @@ body { padding-top: 62px; }
           </select>
         </div>
       </div>
+      <div class="form-hint">Use a meeting that already exists before you create a new one, and do not hold a meeting only to produce minutes (Minimum Operating Standard 26-27 §9; Department Handbook Template 26-27).</div>
       <div class="form-group">
         <label class="form-label">Attendees (free text, one per line)</label>
         <textarea aria-label="Principal Siti&#10;Academic Coord Budi&#10;Foundation Rep Andi" class="form-textarea" id="mAttendees" rows="3" placeholder="Principal Siti&#10;Academic Coord Budi&#10;Foundation Rep Andi"></textarea>
@@ -209,12 +213,12 @@ body { padding-top: 62px; }
         <label class="form-label">Tag</label>
         <select class="form-select" id="iTag">
           <option value="discussion">Discussion</option>
-          <option value="decision">Decision (binding rule)</option>
+          <option value="decision">Decision (school rule)</option>
           <option value="action">Action (spawns a task)</option>
           <option value="announcement">Announcement</option>
           <option value="red_text">Red-text (urgent / sensitive)</option>
         </select>
-        <div class="form-hint">Decisions surface in the Decisions register; actions belong in Activities.</div>
+        <div class="form-hint">Record decisions in the Decisions register. Every action needs an owner and a due date — add it once, as a task in Activities (Minimum Operating Standard 26-27 §9).</div>
       </div>
       <div class="form-group">
         <label class="form-label">Body</label>
@@ -254,7 +258,7 @@ import {
 
 const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
 const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
-const KIND_LABELS = { weekly:'Weekly', ad_hoc:'Ad-hoc', appraisal_calibration:'Appraisal calibration', emergency:'Emergency', other:'Other' };
+const KIND_LABELS = { weekly:'Weekly leadership team', principal_ac:'Principal – Academic Coordinator', principal_hod:'Principal – Heads of Department', inter_level:'Inter-level department', ad_hoc:'Ad-hoc', appraisal_calibration:'Appraisal calibration', emergency:'Emergency', other:'Other' };
 const TAG_LABELS = { discussion:'Discussion', decision:'Decision', action:'Action', announcement:'Announcement', red_text:'Red-text' };
 
 let db, currentUser, userProfile;
@@ -629,7 +633,7 @@ function confirmDanger() {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">School Leaders Workspace · Meetings</span>
       <h2 class="page-footer__cta-title">The agenda item is the unit of leadership.</h2>
-      <p class="page-footer__cta-desc">Each row tagged decision belongs in the Decisions register; each action belongs in Activities. Tag them right at capture time and the rest of the workspace stays auditable.</p>
+      <p class="page-footer__cta-desc">End every meeting with named actions — owner, due date, and what still needs escalation. Record each decision in the Decisions register and each action once, in Activities, so the school keeps one action tracker.</p>
       <a href="/school-leadership-decisions" class="page-footer__cta-btn">Open Decisions to surface a binding rule <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Meetings footer navigation">

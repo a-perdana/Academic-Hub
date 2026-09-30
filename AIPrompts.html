@@ -375,7 +375,13 @@ body { padding-top: 62px; }
 }
 
 /* ─── RESPONSIVE ─────────────────────────────────── */
+/* Appendix B guard strip — same 1200px rail + 40px gutter as .page-layout */
+.ap-strip-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 0; box-sizing: border-box; }
+.ap-strip-wrap .page-info-strip { margin-bottom: 0; }
+.ap-strip-wrap ul { margin: 6px 0 0 18px; padding: 0; }
+.ap-strip-wrap li { margin: 2px 0; }
 @media (max-width: 900px) {
+  .ap-strip-wrap { padding: 16px 16px 0; }
   .page-layout { grid-template-columns: 1fr; padding: 16px; }
   .sidebar { position: static; }
 }
@@ -397,7 +403,7 @@ body { padding-top: 62px; }
         <div class="page-hero__eyebrow">Academic Hub · Reusable prompts for school leaders</div>
         <h1 class="page-hero__title">AI Prompt Library</h1>
         <p class="page-hero__desc">
-          Curated prompts for the LLMs school leaders use day-to-day — appraisal feedback, parent letters, lesson observation notes, board reports. Copy, fill the placeholders, and run in any chat model.
+          Reusable prompts for everyday school work — lesson planning, assessment design, parent communication, meeting notes and policy summaries. Copy a prompt, fill the placeholders, and run it only in an AI tool on your school's Approved AI Tools List. You stay responsible for checking every output.
         </p>
         <div class="page-hero__actions" style="margin-top:18px;">
           <button class="nav-add-btn" id="addPromptBtn" style="display:none;">
@@ -422,6 +428,25 @@ body { padding-top: 62px; }
       </div>
     </div>
   </header>
+
+  <!-- Appendix B guard — Digital Citizenship & AI Appendix B: AI Responsible Use Policy 26-27, B.3.1 / B.7.5 / B.8.1 -->
+  <div class="ap-strip-wrap">
+    <aside class="page-info-strip" data-accent="cyan" role="note">
+      <div class="page-info-strip__icon" aria-hidden="true">🛡️</div>
+      <div class="page-info-strip__text">
+        <span class="page-info-strip__title">Before you use a prompt</span>
+        <div class="page-info-strip__body">
+          These rules come from <strong>Digital Citizenship &amp; AI Appendix B: AI Responsible Use Policy 26-27</strong>.
+          <ul>
+            <li>Use only AI tools on your school's <strong>Approved AI Tools List</strong>. Teachers do not self-approve new tools — requests go to the school's AI Integration Coordinator.</li>
+            <li>Do not enter identifiable student data, confidential school information, secure assessment material, unreleased examination content or passwords into general-purpose AI tools — for example, write "the student" instead of a name.</li>
+            <li>Check every output for accuracy, syllabus alignment, level, language, bias and age appropriateness before you use it with students. An AI-drafted lesson plan must still meet the Lesson Planning Guide &amp; Template.</li>
+            <li>AI may help draft practice questions and generic feedback language. A teacher reviews every question, expected answer and mark allocation, and checks feedback against the student's actual work. For Cambridge candidate work, AI must not be the sole or primary means of marking — a human assessor reviews the work in full and decides the mark.</li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+  </div>
 
   <!-- Page Layout -->
   <div class="page-layout">
@@ -488,7 +513,7 @@ body { padding-top: 62px; }
       <div id="placeholderSection" style="display:none">
         <div class="placeholder-hint">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          This prompt contains placeholders in <code style="font-family:'DM Mono',monospace">[brackets]</code>. Replace them before testing.
+          This prompt contains placeholders in <code style="font-family:'DM Mono',monospace">[brackets]</code>. Replace them before testing — never with names or other identifiable student data.
         </div>
         <div class="placeholder-tags" id="placeholderTags" style="margin-top:8px"></div>
       </div>
@@ -502,7 +527,7 @@ body { padding-top: 62px; }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
         Test in Claude
       </button>
-      <div class="drawer-tip">Opens claude.ai · Free account works · Paste the copied prompt</div>
+      <div class="drawer-tip">Opens claude.ai · Use it only if Claude is on your school's Approved AI Tools List (staff only, 18+) · Never paste identifiable student data or secure assessment material</div>
     </div>
   </div>
 </div>
@@ -540,7 +565,7 @@ body { padding-top: 62px; }
     </div>
     <div class="modal-field">
       <label class="modal-label" for="mPrompt">Full Prompt Text</label>
-      <textarea class="modal-textarea" id="mPrompt" placeholder="Write your prompt here. Use [brackets] for placeholders like [Student Name], [Subject], [Grade Level]…" style="min-height:180px"></textarea>
+      <textarea class="modal-textarea" id="mPrompt" placeholder="Write your prompt here. Use [brackets] for placeholders like [Subject], [Grade Level], [Topic]. Do not ask for names or other identifiable student data." style="min-height:180px"></textarea>
     </div>
     <div class="modal-err" id="modalErr"></div>
     <div class="modal-footer">
@@ -976,7 +1001,7 @@ document.getElementById('promptGrid').addEventListener('click', e => {
 });
 
 // ── FAB ───────────────────────────────────────────
-document.getElementById('fabMain').addEventListener('click', e => {
+document.getElementById('fabMain')?.addEventListener('click', e => {   // the FAB element is not in the markup; guard so the rest of the module runs
   e.stopPropagation();
   document.getElementById('fabContainer').classList.toggle('open');
 });
@@ -988,20 +1013,20 @@ async function seedDefaultPrompts() {
   // Only seeds if Firestore has zero prompts
   const defaults = [
     // Lesson Planning
-    { category:'lesson-planning', icon:'📋', title:'Differentiated Lesson Plan Generator', description:'Create a complete lesson plan with three differentiation levels for diverse learners in your classroom.', prompt:`Create a differentiated lesson plan for [Subject] at [Grade Level] on the topic of [Topic/Unit].
+    { category:'lesson-planning', icon:'📋', title:'Differentiated Lesson Plan Generator', description:'Draft a lesson plan with the minimum components of the Lesson Planning Guide & Template, with Scaffold, Standard and Extend support for the same learning goal.', prompt:`Create a lesson plan for [Subject] at [Grade Level] on the topic of [Topic/Unit]. The lesson is [Duration] minutes and the class has about [Class Size] students.
 
-Include:
-1. Learning Objectives (3–4 measurable objectives using Bloom's Taxonomy)
-2. Three differentiation tiers:
-   - Tier 1 (Support): Scaffolded activities for students who need additional support
-   - Tier 2 (Core): Activities for students working at grade level
-   - Tier 3 (Extension): Enrichment activities for advanced learners
-3. Materials and resources needed
-4. Suggested timing (lesson is [Duration] minutes)
-5. Assessment strategy to check for understanding
-6. Possible misconceptions and how to address them
-
-School context: [School Name/Type], class size approximately [Class Size] students.` },
+Use these components (Eduversal Lesson Planning Guide & Template):
+1. Curriculum reference — Cambridge learning objective or scheme-of-work objective: [Objective]
+2. Learning objective(s) and success criteria
+3. Prior learning and likely misconceptions
+4. Lesson opening
+5. Teaching and learning sequence, with timing for each phase
+6. Student grouping / participation mode
+7. Differentiation and learner support — Scaffold, Standard and Extend routes to the SAME learning objective (vary the support, not the goal)
+8. Resources and materials
+9. Checks for understanding during the lesson, and what to do if students misunderstand
+10. Lesson closure / consolidation
+11. Space for teacher reflection and next steps` },
 
     { category:'lesson-planning', icon:'🔍', title:'Inquiry-Based Learning Sequence', description:'Design a 5-stage inquiry learning sequence that builds critical thinking and student agency.', prompt:`Design an inquiry-based learning sequence for [Subject], [Grade Level], on the topic: [Topic].
 
@@ -1016,7 +1041,9 @@ Also include:
 - Key inquiry questions to guide student thinking
 - Suggested grouping strategies
 - How to differentiate for mixed ability levels
-- Resources or websites to support research` },
+- Resources or websites to support research
+
+The 5E sequence is optional. Keep the minimum lesson-plan components: objective, success criteria, timing, differentiation, checks for understanding, closure.` },
 
     // Assessment
     { category:'assessment', icon:'📊', title:'Assessment Rubric Builder', description:'Generate a detailed, criterion-referenced rubric for any task or assignment.', prompt:`Create a detailed assessment rubric for the following task:
@@ -1049,7 +1076,7 @@ Class setting: [Class size, any specific considerations like EAL learners or mix
     { category:'parent-communication', icon:'📨', title:'Progress Report Narrative Writer', description:'Write a professional, strengths-based student progress narrative for parent reports.', prompt:`Write a professional student progress narrative for a parent/guardian report card.
 
 Student information:
-- Name: [Student Name]
+- Student: write "the student" — do not enter the name (add it yourself after you have checked the text)
 - Subject: [Subject]
 - Grade Level: [Grade Level]
 - Current performance level: [Exceeding / Meeting / Approaching / Below grade level expectations]
@@ -1064,7 +1091,7 @@ Avoid vague statements. Use specific, observable behaviours and examples.` },
     { category:'parent-communication', icon:'📞', title:'Parent Meeting Agenda Creator', description:'Create a structured and productive parent-teacher meeting agenda.', prompt:`Create a structured agenda for a 20-minute parent-teacher meeting.
 
 Meeting purpose: [e.g., Regular progress review / Concern about behaviour / Academic support discussion]
-Student: [Student Name], [Grade Level]
+Student: "the student", [Grade Level] — do not enter the name
 Key points to cover: [List your main discussion points]
 
 Include:
@@ -1079,9 +1106,9 @@ Make the agenda feel collaborative, not one-sided.` },
 
     { category:'parent-communication', icon:'✉️', title:'Concern Letter Drafter', description:'Draft a sensitive, professional letter to parents about a student concern.', prompt:`Draft a professional letter to parents/guardians regarding a concern about their child.
 
-Student: [Student Name], [Grade Level]
+Student: "the student", [Grade Level] — do not enter the name
 Concern: [Describe the specific concern — academic, behavioural, attendance, wellbeing]
-Context: [Relevant background information]
+Context: [Relevant background — no names or other identifying details]
 Actions already taken: [List steps taken so far]
 
 The letter should:
@@ -1096,9 +1123,9 @@ The letter should:
     // Student Support
     { category:'student-support', icon:'🤝', title:'Student Support Plan Builder', description:'Create an individualized learning support plan for a student with specific needs.', prompt:`Create an individualized student support plan for:
 
-Student: [Student Name], [Grade Level]
+Student: "the student", [Grade Level] — do not enter the name
 Subject(s) affected: [Subject(s)]
-Identified challenge: [e.g., Reading comprehension, Math fluency, Executive functioning, Social-emotional, EAL/ESL]
+Identified challenge: [e.g., Reading comprehension, Math fluency, Executive functioning, Social-emotional, EAL/ESL — describe it in general terms; do not enter diagnoses, reports or anything that could identify the student]
 Current performance: [Brief description]
 Student strengths: [List known strengths]
 
@@ -1117,7 +1144,7 @@ Student profile:
 - Subject: [Subject]
 - Observed behaviour: [e.g., Not completing work, distracted, withdrawn, disruptive]
 - Duration of issue: [How long this has been observed]
-- Known context: [Any relevant background — home situation, friendships, interests, learning differences]
+- Known context: [General context only — interests, learning needs in general terms; no names, family details or other identifying information]
 
 Please provide:
 1. 3 immediate classroom strategies (implementable today)
@@ -1134,14 +1161,14 @@ Grade Level: [Grade Level]
 Subject: [Subject]
 Student writing:
 ---
-[PASTE STUDENT WRITING HERE]
+[PASTE ANONYMISED STUDENT WRITING HERE — remove the name and any identifying details first, and use only a school-approved AI service for student work]
 ---
 
 Your feedback should include:
 1. What the student did well (2–3 specific strengths with examples from the text)
 2. Main areas for improvement (2–3 specific, actionable suggestions)
 3. One focused revision task the student should do
-4. A grade or level indication: [Exceeding / Meeting / Approaching / Beginning] with brief justification
+4. Draft feedback language only — do not give a mark, grade or level. The teacher checks the feedback against the student's actual work and decides any mark.
 
 Tone: Constructive, encouraging, and specific. Avoid vague praise. Refer directly to the student's text.` },
 
@@ -1166,13 +1193,13 @@ Please:
 Meeting details:
 - Meeting title: [Meeting Title]
 - Date and time: [Date / Time]
-- Attendees: [List names and roles]
+- Attendees: [List roles only]
 - Facilitator/Chair: [Name]
 - Minute taker: [Name]
 
 Raw notes:
 ---
-[PASTE YOUR RAW NOTES HERE]
+[PASTE YOUR RAW NOTES HERE — remove student names and any confidential school information first]
 ---
 
 Format into:
@@ -1192,7 +1219,7 @@ Purpose: [Why they need to understand this policy]
 
 Policy text:
 ---
-[PASTE POLICY TEXT HERE]
+[PASTE SCHOOL-FACING POLICY TEXT HERE — no confidential school information]
 ---
 
 Create a staff summary that includes:
@@ -1203,7 +1230,8 @@ Create a staff summary that includes:
 5. What staff must do / must not do (clear dos and don'ts)
 6. Where to get help or report concerns
 
-Keep language clear, practical and jargon-free. Maximum 1 page.` },
+Keep language clear, practical and jargon-free. Maximum 1 page.
+Keep every requirement exactly as the policy states it — do not add, remove or soften a rule. The full policy remains the reference.` },
 
     // Curriculum
     { category:'curriculum', icon:'📚', title:'Unit Overview Designer', description:'Create a comprehensive unit overview aligned to learning standards and outcomes.', prompt:`Design a unit overview for the following:
@@ -1211,7 +1239,7 @@ Keep language clear, practical and jargon-free. Maximum 1 page.` },
 Subject: [Subject]
 Grade Level: [Grade Level]
 Unit Title: [Unit Title]
-Curriculum Framework/Standards: [e.g., Cambridge, IB, National Curriculum, K13]
+Curriculum Framework/Standards: [e.g., Cambridge Lower Secondary, Cambridge IGCSE, Cambridge AS & A Level, Kurikulum Merdeka]
 Duration: [Number of weeks / lessons]
 Key prerequisites: [What students should already know]
 
@@ -1268,7 +1296,7 @@ The PDP should include:
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">AI Prompt Library</span>
       <h2 class="page-footer__cta-title">Reuse what works. Share what you learn.</h2>
-      <p class="page-footer__cta-desc">Every prompt here was written by a school leader for school-leader work — appraisal feedback, parent letters, board reports. Copy, fill the <code style="background:rgba(255,255,255,.12);padding:1px 6px;border-radius:3px;color:#a5f3fc;font-family:'DM Mono',monospace;font-size:11.5px;">[placeholders]</code>, run in any LLM. Admins add new prompts from the hero button.</p>
+      <p class="page-footer__cta-desc">Prompts here support everyday school-leader work — lesson planning, parent letters, meeting notes and policy summaries. Copy, fill the <code style="background:rgba(255,255,255,.12);padding:1px 6px;border-radius:3px;color:#a5f3fc;font-family:'DM Mono',monospace;font-size:11.5px;">[placeholders]</code> without identifiable student data, and run the prompt only in a tool on your school's Approved AI Tools List. Admins add new prompts from the hero button.</p>
       <a href="/references" class="page-footer__cta-btn">Browse References <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="AI Prompts footer navigation">
@@ -1290,7 +1318,7 @@ The PDP should include:
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Prompts are reusable across any LLM (Claude, ChatGPT, Gemini)</span>
+    <span class="page-footer__meta-right">Approved AI tools only · Digital Citizenship &amp; AI Appendix B applies</span>
   </div>
 </footer>
 

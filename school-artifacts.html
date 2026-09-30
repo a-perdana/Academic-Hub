@@ -106,7 +106,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Leaders · School Resources</p>
       <h1 class="page-hero__title">School Artifacts</h1>
-      <p class="page-hero__desc">Per-subject living documents this school maintains — Annual Plan, Scheme of Work, lesson plans, internal assessments, intervention plans. Each subject card collects what's current; superseded versions stay archived for audit.</p>
+      <p class="page-hero__desc">Links to the living documents each subject department keeps — the Department Handbook, the Annual Plan (kept in Edunav), the Scheme of Work, lesson plans, internal assessments and intervention plans. Link to the record where it already lives instead of making a second copy (Curriculum Module: Department Handbook Template 26-27; Minimum Operating Standard 26-27 §1). Superseded versions stay archived.</p>
     </div>
   </div>
 </header>
@@ -123,6 +123,7 @@ body { padding-top: 62px; }
     </select>
     <select class="da-filter" id="filterType">
       <option value="">All types</option>
+      <option value="department_handbook">Department Handbook</option>
       <option value="annual_plan">Annual Plan</option>
       <option value="sow">Scheme of Work</option>
       <option value="lesson_plans">Lesson Plans</option>
@@ -156,6 +157,7 @@ body { padding-top: 62px; }
       <div class="form-group">
         <label class="form-label">Type</label>
         <select class="form-select" id="aType">
+          <option value="department_handbook">Department Handbook</option>
           <option value="annual_plan">Annual Plan</option>
           <option value="sow">Scheme of Work</option>
           <option value="lesson_plans">Lesson Plans</option>
@@ -171,7 +173,7 @@ body { padding-top: 62px; }
       <div class="form-group">
         <label class="form-label">Link (Google Drive / SharePoint / external)</label>
         <input aria-label="https://docs.google.com/…" type="url" class="form-input" id="aUrl" placeholder="https://docs.google.com/…">
-        <div class="form-hint">Files live in your school's drive — paste a link here. Eduversal does not host the file.</div>
+        <div class="form-hint">Files live where the work happens — Edunav or your school's drive. Paste a link here; Eduversal does not host the file.</div>
       </div>
       <div class="form-group">
         <label class="form-label">Academic year</label>
@@ -212,7 +214,7 @@ import {
 const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
 const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };
 const SUBJECT_ICONS = { math:'M', biology:'Bi', chemistry:'Ch', physics:'Ph', science:'Sc', english:'En', bahasa:'Bh', religion:'Re', arts:'Ar', sport:'Sp', ict:'IT', humanities:'Hu' };
-const TYPE_LABELS = { annual_plan:'Annual Plan', sow:'Scheme of Work', lesson_plans:'Lesson Plans', assessments:'Assessments', intervention_plan:'Intervention Plan', other:'Other' };
+const TYPE_LABELS = { department_handbook:'Department Handbook', annual_plan:'Annual Plan', sow:'Scheme of Work', lesson_plans:'Lesson Plans', assessments:'Assessments', intervention_plan:'Intervention Plan', other:'Other' };
 
 let db, currentUser, userProfile;
 let isAdmin = false;
@@ -463,7 +465,7 @@ async function confirmDelete(id, btn) {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">School Resources · Artifacts</span>
       <h2 class="page-footer__cta-title">The annual plan only counts if the team can find it.</h2>
-      <p class="page-footer__cta-desc">Per-subject annual plans, schemes of work, and intervention plans are the living spine of the academic year. Link them here once and the whole leadership team — and HQ on review visits — knows where to look.</p>
+      <p class="page-footer__cta-desc">Department handbooks, annual plans, schemes of work and intervention plans are the living spine of the academic year. Link them here once and the whole leadership team — and Eduversal on appraisal visits — knows where to look. The Subject Leader / Head of Department keeps the Department Handbook current, with Academic Coordinator oversight: at the start of the year, at Semester I close, and when a syllabus or network rule changes.</p>
       <a href="/curriculum-map" class="page-footer__cta-btn">Cross-check with the Curriculum Map <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Artifacts footer navigation">

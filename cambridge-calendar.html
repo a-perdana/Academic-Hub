@@ -243,7 +243,7 @@ body { padding-top: 62px; }
       <div class="hero-text">
         <p class="eyebrow">Academic Hub · Cambridge</p>
         <h1>Cambridge Exam Calendar</h1>
-        <p class="sub">Upcoming deadlines, key dates, and action items for all Cambridge programmes.</p>
+        <p class="sub">Upcoming deadlines, key dates, and action items for each Cambridge series. Always check a date against the current official Cambridge timetable and Handbook before you share it — a date in an old planning document never overrides the official source.</p>
       </div>
       <div class="hero-controls" id="heroControls" style="display:none">
         <span class="ctrl-label">Cycle</span>
@@ -258,10 +258,10 @@ body { padding-top: 62px; }
     <nav class="series-tabs" id="seriesTabs">
       <button class="series-tab active" data-series="igcse_june">IGCSE — May/June</button>
       <button class="series-tab" data-series="alevel_june">AS &amp; A Level — May/June</button>
-      <button class="series-tab" data-series="checkpoint_may">Checkpoint — May</button>
+      <button class="series-tab" data-series="checkpoint_may">Checkpoint — May (network default)</button>
       <button class="series-tab" data-series="igcse_november">IGCSE — Oct/Nov</button>
       <button class="series-tab" data-series="alevel_november">AS &amp; A Level — Oct/Nov</button>
-      <button class="series-tab" data-series="checkpoint_oct">Checkpoint — Oct</button>
+      <button class="series-tab" data-series="checkpoint_oct">Checkpoint — Oct (approved exception)</button>
     </nav>
   </div>
 </section>
@@ -278,7 +278,7 @@ body { padding-top: 62px; }
     <!-- Info if no dates have been entered yet -->
     <div class="info-banner" id="infoBanner">
       <span>ℹ</span>
-      <span>Exact dates for this series have not been entered yet. The Cambridge Coordinator will update them shortly. Action items and notes are available below.</span>
+      <span>Exact dates for this series have not been entered yet. Eduversal adds them from the official Cambridge timetable; until then, use the current Cambridge timetable and your Exams Officer's internal calendar. Action items and notes are available below.</span>
     </div>
 
     <!-- Urgent deadlines -->
@@ -291,6 +291,7 @@ body { padding-top: 62px; }
     </div>
 
     <div class="section-label" id="seriesLabel">IGCSE — May/June Series 2026</div>
+    <p class="series-note" id="seriesNote" style="margin:-4px 0 16px;font-size:0.85rem;line-height:1.55;color:var(--ink-2, #4b5563);max-width:880px"></p>
     <div class="months-grid" id="monthsGrid"></div>
 
   </div>
@@ -319,11 +320,23 @@ import {
 const SERIES_LABELS = {
   igcse_june:       'IGCSE — May/June Series',
   alevel_june:      'AS & A Level — May/June Series',
-  checkpoint_may:   'Cambridge Checkpoint — May Series',
-  igcse_november:   'IGCSE & O Level — Oct/Nov Series',
+  checkpoint_may:   'Lower Secondary Checkpoint — May Series (network default)',
+  igcse_november:   'IGCSE — Oct/Nov Series',
   alevel_november:  'AS & A Level — Oct/Nov Series',
-  checkpoint_oct:   'Cambridge Checkpoint — October Series',
+  checkpoint_oct:   'Lower Secondary Checkpoint — October Series (approved exception only)',
 };
+
+// What each series is for in the network. Source: Curriculum Module: Exams
+// Officer Handbook 26-27 §4 "Your Year at a Glance" and Grades 11-12 Structure.
+const SERIES_NOTES = {
+  igcse_june:      'The IGCSE series for Grade 10 candidates. Exams run from late April to early June; results come in early-to-mid August.',
+  alevel_june:     'The series for approved full A Level continuation candidates in Grade 12. They study A2 content after the AS examination period and sit A Level in addition to the four AS examinations.',
+  checkpoint_may:  'The network series for the Lower Secondary Checkpoint (English, Mathematics, Science), sat at the end of Grade 8, immediately after teaching ends. A school does not choose a different series on its own.',
+  igcse_november:  'Only for approved early IGCSE entries or other registered entries. The main IGCSE series for Grade 10 is May/June.',
+  alevel_november: 'The main AS Level series: every Grade 12 student on the four-AS programme sits here. Exams run from late September to mid-November (by subject and component); results come in mid-January. By September, standard entries should already be closed.',
+  checkpoint_oct:  'Not the network series. March or October needs prior Academic Board approval before entries are made, and the current Cambridge deadline must be checked.',
+};
+const SERIES_NOTE_TAIL = ' Set your internal deadline at least one week before each Cambridge deadline.';
 
 const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
@@ -408,6 +421,7 @@ function urgencyClass(dateStr) {
 function renderPage() {
   const label = SERIES_LABELS[currentSeries] || currentSeries;
   document.getElementById('seriesLabel').textContent = `${label} ${currentYear}`;
+  document.getElementById('seriesNote').textContent = (SERIES_NOTES[currentSeries] || '') + SERIES_NOTE_TAIL;
 
   buildUrgentBanner();
   buildMonthGrid();

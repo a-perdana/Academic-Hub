@@ -649,7 +649,7 @@
           </div>
           <div class="stat-card">
             <div class="stat-number" id="percent">0%</div>
-            <div class="stat-label">Compliant</div>
+            <div class="stat-label">Checks passed</div>
           </div>
         </div>
 
@@ -668,6 +668,13 @@
           part of that duty. It is <strong>not</strong> a full compliance audit —
           age verification, parental consent, and data protection are separate
           obligations. For a complete review, ask your Eduversal representative.
+          <br><br>
+          <strong>Settings and vendors are examples.</strong> The fixes suggested below
+          (DNS services, filters, MDM steps) are examples. Digital Citizenship &amp; AI
+          Appendix D (Device Management Reference Guide) and Appendix F (Device Settings
+          Packages) are adopt-and-adapt implementation references: vendors and settings are
+          examples unless your school approves them, and they never override the Framework
+          and Appendices A, B, C and E.
         </div>
 
         <div class="recommendations" id="recommendations"></div>
@@ -1672,7 +1679,7 @@
 
         if (critical.length === 0) {
           html +=
-            '<div class="action-steps"><p style="color:#065f46;font-weight:600;">✅ All critical security controls are in place. Your network meets PP 17/2025 compliance standards.</p>';
+            '<div class="action-steps"><p style="color:#065f46;font-weight:600;">✅ All critical content-filter checks passed. This covers the WiFi content-filter part only — it is not a full PP 17/2025 compliance audit.</p>';
           if (testingMode === "principal") {
             html +=
               '<p style="color:#1e40af;margin-top:10px;font-size:12px;">💡 Consider running a Full Test from a student device to verify device management policies.</p>';
@@ -1971,7 +1978,7 @@
           msg += `\n🚨 Immediate action required!\n\n`;
         } else {
           msg += `✅ All critical controls active\n`;
-          msg += `PP 17/2025 compliant\n\n`;
+          msg += `Content-filter part only — not a full PP 17/2025 compliance audit\n\n`;
         }
 
         const lowConf = testResults.filter(r => r.confidence === "low");

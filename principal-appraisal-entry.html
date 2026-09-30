@@ -333,7 +333,7 @@ import { collection, doc, getDoc, getDocs, query, where, limit, writeBatch, upda
 //
 // Three modes (Handbook §7, §10, §13; Appraiser Guide §8 confidentiality matrix):
 //   appraiser — Chief Academic Officer / designated Academic Director
-//               (AH academic_admin, or central_admin): writes the full record,
+//               (AH academic_admin, or a CH director; central_admin): writes the full record,
 //               signs it off. PNF6 is stored in a separate Eduversal-only doc.
 //   principal — reads their own record after sign-off (never PNF6) and may
 //               add their reflection (PNF5) once.
@@ -364,6 +364,7 @@ const LEVELS = [
   { id: 'lead',       label: 'Lead (roughly Year 7+)' },
 ];
 const E_D_VALUE = { E: 4, D: 2 };                      // Handbook §5: Not Observed is excluded
+const E_D_LABELS = { E: 'Established', D: 'Developing', N: 'Not Observed' };
 const F2_WINDOWS = ['visit_1_sep_oct', 'visit_2_feb_apr'];
 const RECOMMENDATION_LABELS = {
   continue: 'Continue',
@@ -396,6 +397,7 @@ let formData = {
   f3CycleId: '',
   f2FallbackDates: '',
   f2FallbackNote: '',
+  f2FallbackCodes: {},   // controlled fallback: { 'F2-1': { v1: 'E', v2: 'D' }, … }
 };
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
@@ -406,7 +408,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.body.style.display = '';
 
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isCHDirector = ['central_user', 'central_admin'].includes(profile?.role_centralhub)
+    && (profile?.role_centralhub === 'central_admin' || (profile?.ch_sub_roles || []).includes('director'));
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || isCHDirector;
   const isFR = ahSubs.includes('foundation_representative');
   const isPrincipal = ahSubs.includes('school_principal');
 
@@ -470,6 +474,7 @@ async function bootAppraiser() {
       scores: { ...(d.scores || {}) },
       narratives: { ...(d.narratives || {}) },
       f5Completion: { ...formData.f5Completion, ...(d.f5Completion || {}) },
+      f2FallbackCodes: { ...(d.f2FallbackCodes || {}) },
     };
     // Records saved before 2026-10-01 kept PNF6 on the main document.
     if (d.narratives?.PNF6) { confidentialNote = d.narratives.PNF6; hadConfidentialNote = true; }
@@ -774,7 +779,7 @@ function evidenceCard() {
       <div class="narr-field">
         <label>F2 — valid leadership-observation records (${observations.length})</label>
         <div class="help">A record counts when it is a submitted scheduled appraisal visit in the Sept–Oct (Visit 1) or Feb–Apr (Visit 2) window and the principal was told in advance that it contributes to Principal Appraisal. At least two are required (Handbook §14).</div>
-        ${observations.length ? `<ul class="evidence-list">${observations.map(obsRow).join('')}</ul>` : `<div class="help"><strong>No valid record in Academic Hub.</strong> If the visits were recorded through the controlled manual fallback (Handbook §14 — digital-readiness fallback), enter their dates and the record location below; rate F2 from those records.</div>
+        ${observations.length ? `<ul class="evidence-list">${observations.map(obsRow).join('')}</ul>` : `<div class="help"><strong>No valid record in Academic Hub.</strong> If the visits were recorded through the controlled manual fallback (Handbook §14 — digital-readiness fallback), enter their dates and the record location below, then record the E / D / Not Observed rating each visit gave in the F2 section (no 1–4 visit score is invented).</div>
           <input id="f2Fallback" class="notes-select" type="text" placeholder="Visit dates, e.g. 2026-10-06, 2027-03-02" value="${escapeAttr(formData.f2FallbackDates || '')}">
           <textarea id="f2FallbackNote" class="notes-area" placeholder="Where the controlled fallback records are kept (file / record location, reviewer, sign-off status)">${escapeHtml(formData.f2FallbackNote || '')}</textarea>`}
         ${otherObservations.length ? `<div class="help" style="margin-top:6px;">Formative context only — not F2 evidence: ${otherObservations.map(o => escapeHtml(o.visitDate)).join(', ')}.</div>` : ''}
@@ -815,6 +820,8 @@ function renderFramework(fw) {
         <div class="item-source">From ${observations.length} valid visit record${observations.length === 1 ? '' : 's'} (E = 4, D = 2, Not Observed excluded).</div></div>
         <div class="score-row"><span class="score-pill active s${v ? Math.max(1, Math.min(4, Math.round(v.mean))) : 1}" style="cursor:default;">${v ? v.mean.toFixed(2) : 'Not observed'}</span></div></div>`;
     }).join('');
+  } else if (fw.id === 'F2') {
+    itemsHtml = (fw.items || []).map(it => renderF2FallbackItem(it)).join('');
   } else if (fw.id === 'F3' && aggregateF3() !== null) {
     const labels = { staff: 'Staff (60%)', parent: 'Parent representatives (25%)', student: 'Student-council representatives (15%)' };
     itemsHtml = ['staff', 'parent', 'student'].map(c => {
@@ -868,7 +875,32 @@ function renderItem(it) {
   `;
 }
 
+// Controlled fallback for F2 (Handbook §14): the observer's E / D / N rating per
+// visit is copied from the fallback records and mapped like a live record
+// (E = 4, D = 2, Not Observed excluded) — Appraiser Guide §5: no invented visit score.
+function renderF2FallbackItem(it) {
+  const cur = formData.f2FallbackCodes?.[it.id] || {};
+  const sel = (k, lbl) => `<label class="item-source">${lbl}
+    <select class="notes-select" data-f2fb="${escapeAttr(it.id)}" data-visit="${k}">
+      <option value="">—</option>${['E', 'D', 'N'].map(c => `<option value="${c}"${cur[k] === c ? ' selected' : ''}>${E_D_LABELS[c]}</option>`).join('')}
+    </select></label>`;
+  return `<div class="item-row"><div class="item-info"><div class="item-title">${escapeHtml(it.title || it.id)}</div>
+      <div class="item-source">From the controlled fallback visit records (E = 4, D = 2, Not Observed excluded).</div></div>
+    <div class="score-row" style="flex-wrap:wrap;gap:10px;">${sel('v1', 'Visit 1 (Sept–Oct)')}${sel('v2', 'Visit 2 (Feb–Apr)')}</div></div>`;
+}
+
 function wireFramework(fw) {
+  if (fw.id === 'F2' && f2UsesFallback()) {
+    document.querySelectorAll('[data-f2fb]').forEach(el => el.addEventListener('change', e => {
+      const id = el.dataset.f2fb;
+      formData.f2FallbackCodes = formData.f2FallbackCodes || {};
+      formData.f2FallbackCodes[id] = { ...(formData.f2FallbackCodes[id] || {}), [el.dataset.visit]: e.target.value };
+      const vals = Object.values(formData.f2FallbackCodes[id]).map(c => E_D_VALUE[c]).filter(v => typeof v === 'number');
+      if (vals.length) formData.scores[id] = avg(vals); else delete formData.scores[id];
+      updateProgress();
+    }));
+    return;
+  }
   (fw.items || []).forEach(it => {
     document.querySelectorAll(`[data-item="${cssEsc(it.id)}"]`).forEach(btn => {
       btn.addEventListener('click', () => {
@@ -983,6 +1015,7 @@ async function save(targetStatus) {
     f2VisitDates: f2UsesFallback() ? parseDates(formData.f2FallbackDates) : observations.map(o => o.visitDate),
     f2FallbackVisitDates: f2UsesFallback() ? parseDates(formData.f2FallbackDates) : [],
     f2FallbackNote: formData.f2FallbackNote || null,
+    f2FallbackCodes: f2UsesFallback() ? { ...(formData.f2FallbackCodes || {}) } : null,
     f3CycleId: formData.f3CycleId || null,
     frameworkScores: areaScores,
     compositeScore: issued ? r.score : null,

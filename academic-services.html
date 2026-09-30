@@ -299,6 +299,7 @@
     .service-card:nth-child(5) { animation-delay: 0.25s; }
     .service-card:nth-child(6) { animation-delay: 0.30s; }
     .service-card:nth-child(7) { animation-delay: 0.35s; }
+    .service-card:nth-child(8) { animation-delay: 0.40s; }
 
     .service-icon {
       width: 52px;
@@ -1066,7 +1067,7 @@
       </div>
       <h1>Academic Services for <span>Eduversal Partner Schools</span></h1>
       <p class="hero-lead">
-        Eduversal supports its network of partner schools with structured academic services — from the three EASE assessment programmes and specialist appraisal visits to safeguarding compliance, school quality assurance, and professional development for school leaders and teachers.
+        Eduversal supports its partner schools through one Academic Quality Ecosystem — five Academic Services modules (Curriculum, Induction, EASE, Appraisal and Career Growth), the Student Learning layer, and two cross-cutting areas: Teaching &amp; Learning, and Digital Citizenship &amp; AI.
       </p>
       <div class="hero-stats">
         <div class="stat-item">
@@ -1097,22 +1098,62 @@
   <section class="services-section">
     <div class="page-wrap">
       <div class="section-header">
-        <div class="section-tag" style="background:rgba(102,126,234,0.15);color:#a5b4fc;">Core Services</div>
-        <h2>What Eduversal Provides</h2>
-        <p>Each service is designed to raise academic standards, ensure Cambridge compliance, and support the sustainable growth of partner schools across Indonesia.</p>
+        <div class="section-tag" style="background:rgba(102,126,234,0.15);color:#a5b4fc;">Academic Quality Ecosystem</div>
+        <h2>Five Modules, One Learning Journey</h2>
+        <p>Curriculum, Induction, EASE, Appraisal and Career Growth are the five Academic Services modules. Student Learning is the student-facing reflection and ownership layer, and Teaching &amp; Learning and Digital Citizenship &amp; AI are cross-cutting practice and policy areas. Together they form one quality cycle: define → prepare → measure → reflect &amp; own → improve → grow.</p>
       </div>
 
       <div class="services-grid">
 
-        <!-- 1. EASE -->
+        <!-- 1. Curriculum Module -->
+        <div class="service-card sc-curriculum">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            </svg>
+          </div>
+          <div class="service-badge">Module · What is taught?</div>
+          <h3 class="service-title">Curriculum Module</h3>
+          <p class="service-desc">
+            The Grade 7–12 / Secondary Cambridge pathway — programme structure, exam management, the Secondary assessment policy, department implementation, exam-preparation guides, and Science &amp; Laboratory guidance. For Early Years / Primary, schools use the Primary Director’s separately issued Primary documents.
+          </p>
+          <ul class="service-details">
+            <li>One continuous Cambridge pathway: Lower Secondary (Grades 7–8, Checkpoint) → IGCSE (Grades 9–10) → AS/A Level (Grades 11–12)</li>
+            <li>Cambridge centre and examination management — entries, exam days and results — with the school’s Exams Officer</li>
+            <li>Science &amp; Laboratory stays inside the Curriculum Module; it is not a separate module or appraisal system</li>
+            <li>Department Handbook Template 26-27 supports consistent subject-team organisation without creating local policy</li>
+          </ul>
+        </div>
+
+        <!-- 2. Induction Module -->
+        <div class="service-card sc-teacher">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M15.5 3.5 17 5l3-3"/>
+            </svg>
+          </div>
+          <div class="service-badge">Module · Who delivers it?</div>
+          <h3 class="service-title">Induction Module</h3>
+          <p class="service-desc">
+            Protected onboarding for people, roles and schools taking on a new responsibility in the network. Induction protects a newcomer’s first period from formal judgment, so they can build real skill and real systems honestly before anyone scores them.
+          </p>
+          <ul class="service-details">
+            <li>Six tracks: Teacher (3 semesters, about 18 months), Principal (12 months), Subject Specialist (12 months), School (1 academic year), Academic Coordinator (1 academic year) and Exams Officer (one examination cycle)</li>
+            <li>Induction data never feeds a formal score, and every track ends with a categorical outcome, never a score or grade</li>
+            <li>Teacher Induction is supported by the Mentor Guide, the Oversight Guide and Mentor Certification; schools keep their Teacher Induction records in the central Induction Control Centre</li>
+            <li>Induction is not probation: support runs for the full programme regardless of contract type</li>
+          </ul>
+        </div>
+
+        <!-- 3. EASE Module -->
         <div class="service-card sc-ease">
           <div class="service-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/>
             </svg>
           </div>
-          <div class="service-badge">Assessment</div>
-          <h3 class="service-title">EASE — Centralised Assessment</h3>
+          <div class="service-badge">Module · What is understood?</div>
+          <h3 class="service-title">EASE Module</h3>
           <p class="service-desc">
             EASE stands for Eduversal Analytical &amp; Skills Evaluation. It is an umbrella name for three evaluations, each with its own purpose: EASE Growth measures student reasoning and literacy, EASE Assessment measures student subject knowledge, and EASE Academic measures teacher subject and teaching knowledge. Together they show where support is needed — and help the school fix the right thing.
           </p>
@@ -1121,106 +1162,98 @@
             <li><strong>EASE Assessment</strong> (also called Common Assessment) — written by Eduversal Subject Specialists and approved by the Academic Board: Teacher-Paced Tests every 1–3 chapters, plus a Synchronized Test at the end of each semester, taken by all schools on the same day.</li>
             <li><strong>EASE Academic</strong> (formerly A-EASE) — a 50-question, 120-minute exam for teachers, once per semester. It is formative professional development only: individual results stay confidential and never affect a teacher's appraisal.</li>
             <li>Four EASE Weeks a year, two per semester: Weeks 1 and 3 (mid-semester) carry EASE Growth and lessons continue; Weeks 2 and 4 (semester-end) are for the Synchronized Test and normal lessons stop.</li>
-            <li>Delivered through Latihan.id (Primary Teacher-Paced Tests on paper), with school-level results in Academic Hub</li>
+            <li>Delivered through Latihan.id (Primary Teacher-Paced Tests on paper). EASE data is never used for performance management, contract decisions or public ranking.</li>
           </ul>
         </div>
 
-        <!-- 2. Appraisal Visits -->
+        <!-- 4. Appraisal Module -->
         <div class="service-card sc-appraisal">
           <div class="service-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
             </svg>
           </div>
-          <div class="service-badge">School Visit</div>
-          <h3 class="service-title">Appraisal Visits</h3>
+          <div class="service-badge">Module · What is working, and what should improve?</div>
+          <h3 class="service-title">Appraisal Module</h3>
           <p class="service-desc">
-            Eduversal Subject Specialists conduct on-site and online structured appraisal visits to partner schools per academic year. These visits combine classroom observation, teacher walkthrough sessions, and structured interviews with school leadership to produce a detailed report aligned to the Eduversal Appraisal Framework.
+            Performance appraisal for schools, teachers and principals — evidence-based, developmental review, never a single-visit judgment.
           </p>
           <ul class="service-details">
-            <li>Specialist-led visits by trained Subject Specialists in Math, English, Sciences, and Bahasa</li>
-            <li>Structured classroom walkthrough observations with standardised rubrics</li>
-            <li>Appraiser calibration sessions to ensure consistency across schools</li>
-            <li>Post-visit reports with actionable recommendations and follow-up targets</li>
-            <li>Full digital record of all observations accessible in Academic Hub</li>
+            <li>School Appraisal: five domains, each with its own Development Rating — no single composite school score</li>
+            <li>Annual cycle: Phase 0 Kickoff, Phase 1 Teaching Quality Visit, Phase 2 Progress Check-in and Phase 3 Validation Visit in Semester I, then the Phase 4 Impact Review near the end of the year (no new Domain Rating)</li>
+            <li>Teacher Appraisal: the F2 Classroom Observation score comes from the school’s own appraisers — at least three formal observations per teacher per semester, recorded in Edunav</li>
+            <li>Eduversal Subject Specialist visits (1–2 a year) are formative for teachers and never produce or change an F2 score</li>
+            <li>Principal Appraisal: the Chief Academic Officer / designated Academic Director is the appraiser; the Foundation Representative / General Manager co-reviews and co-signs the summary</li>
+            <li>Quantitative operational indicators are embedded within the Appraisal Suite rather than operated as a separate standalone KPI system</li>
           </ul>
         </div>
 
-        <!-- 3. Cambridge Centre Support -->
-        <div class="service-card sc-cambridge">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
-            </svg>
-          </div>
-          <div class="service-badge">Cambridge</div>
-          <h3 class="service-title">Cambridge Centre Compliance</h3>
-          <p class="service-desc">
-            Eduversal supports partner schools in meeting and maintaining their obligations as Cambridge International Centres. This includes examination entry management, results review, pathway planning, and preparation for Cambridge school quality reviews.
-          </p>
-          <ul class="service-details">
-            <li>Guidance on Cambridge Centre requirements and annual compliance obligations</li>
-            <li>Cambridge Pathway Simulator to model subject combinations and predicted grades</li>
-            <li>Cambridge Exam dashboard tracking entries, results, and grade distributions</li>
-            <li>Cambridge Calendar integration for key examination and registration deadlines</li>
-            <li>Support with Cambridge School Quality and accreditation processes (CIS/WASC)</li>
-          </ul>
-        </div>
-
-        <!-- 4. School Quality & KPI -->
+        <!-- 5. Career Growth Module -->
         <div class="service-card sc-quality">
           <div class="service-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
             </svg>
           </div>
-          <div class="service-badge">Quality Assurance</div>
-          <h3 class="service-title">School Quality & KPI Monitoring</h3>
+          <div class="service-badge">Module · How do people grow into approved roles?</div>
+          <h3 class="service-title">Career Growth Module</h3>
           <p class="service-desc">
-            Eduversal provides a comprehensive school quality assurance framework, combining externally-set KPIs with school self-appraisal tools. This allows partner schools to benchmark their performance across academic, operational, and community dimensions, while supporting accreditation readiness for CIS and WASC.
+            Professional growth, approved roles, pathways, progression gates, role governance and network appointments. Career Growth connects professional development, formal evidence, role readiness, organizational need, and appointment.
           </p>
           <ul class="service-details">
-            <li>School Performance KPI dashboard with tracking across multiple quality domains</li>
-            <li>Annual School Self-Appraisal tool for structured internal review</li>
-            <li>School Appraisals Dashboard aggregating all visit outcomes by school</li>
-            <li>Network-wide audit view identifying patterns across the partner school network</li>
-            <li>Accreditation Toolkit aligned to CIS and WASC self-study requirements</li>
-            <li>Partner Schools Performance and Islamic Schools Performance dashboards</li>
+            <li>Five career pathways and a seven-gate progression model</li>
+            <li>Approved roles only, with formal appointment; network roles are separate formal appointments, not automatic promotions</li>
+            <li>Relevant formal appraisal evidence may support a readiness decision, but strong performance alone does not create an entitlement to promotion</li>
           </ul>
         </div>
 
-        <!-- 5. Teacher Development -->
-        <div class="service-card sc-teacher">
+        <!-- 6. Student Learning Layer -->
+        <div class="service-card sc-cambridge">
           <div class="service-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
-              <path d="M15.5 3.5 17 5l3-3"/>
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
             </svg>
           </div>
-          <div class="service-badge">Professional Development</div>
-          <h3 class="service-title">Teacher Proficiency & Professional Development</h3>
+          <div class="service-badge">Layer · How does the student see their learning?</div>
+          <h3 class="service-title">Student Learning Layer</h3>
           <p class="service-desc">
-            Beyond school-level appraisal, Eduversal provides a structured system for teacher proficiency and professional growth. School leaders can record classroom observations, submit appraisal entries, and track individual teacher development over time — all within Academic Hub.
+            The student-facing reflection and ownership layer — not an additional module. Students select evidence of their learning, reflect on it, set goals and lead Student-Led Conferences.
           </p>
           <ul class="service-details">
-            <li>Teacher Competency Framework forms for structured post-observation documentation</li>
-            <li>Learning Path Entry tool with subject-specific observation criteria</li>
-            <li>Evidence Portfolio log for teachers to track their own development history</li>
-            <li>Teacher Competency Collection aligned to national and Cambridge teaching standards</li>
-            <li>Subject Specialist Calibration sessions to standardise observation quality across schools</li>
-            <li>Coordinator Competency Framework and Learning Path for academic coordinators</li>
+            <li>Student portfolio, reflection, goal-setting and Student-Led Conferences (SLCs)</li>
+            <li>Select evidence; do not collect everything — about 1–2 purposeful pieces per subject per semester</li>
+            <li>Portfolio quality is formative and non-graded; existing marks remain in the approved system of record, and a portfolio never creates a second score</li>
+            <li>School Appraisal may sample portfolio evidence, but it creates no separate appraisal score</li>
           </ul>
         </div>
 
-        <!-- 6. Safeguarding & Child Protection -->
+        <!-- 7. Teaching & Learning · Digital Citizenship & AI -->
+        <div class="service-card sc-safe">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <div class="service-badge">Cross-cutting practice &amp; policy</div>
+          <h3 class="service-title">Teaching &amp; Learning · Digital Citizenship &amp; AI</h3>
+          <p class="service-desc">
+            Two cross-cutting practice and policy areas that support the whole ecosystem rather than additional service modules.
+          </p>
+          <ul class="service-details">
+            <li>Teaching &amp; Learning: lesson planning, learning environment, inclusive design / differentiation, digital learning and resources, STEAM integration, whole-school reading, and teacher development</li>
+            <li>Digital Citizenship &amp; AI: digital citizenship, academic integrity, responsible AI use, acceptable use, social media, device settings / management, and AI competency</li>
+            <li>The Digital Citizenship &amp; AI Framework plus Appendices A, B, C and E are the governing policy sources; Appendices D and F are adopt-and-adapt implementation companions</li>
+          </ul>
+        </div>
+
+        <!-- 8. Safeguarding & Child Protection -->
         <div class="service-card sc-safe">
           <div class="service-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
           </div>
-          <div class="service-badge">Safeguarding</div>
+          <div class="service-badge">Required · Academic Standards Section 09</div>
           <h3 class="service-title">Safeguarding & Child Protection</h3>
           <p class="service-desc">
             Eduversal requires all partner schools to maintain a robust safeguarding and child protection policy in line with both Indonesian law and Cambridge International requirements. This is not optional — it is a core compliance obligation for all schools in the network, and a dedicated section of the Academic Standards framework.
@@ -1241,29 +1274,6 @@
             </svg>
           </a>
         </div>
-
-        <!-- 7. Curriculum & Learning -->
-        <div class="service-card sc-curriculum">
-          <div class="service-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
-            </svg>
-          </div>
-          <div class="service-badge">Curriculum</div>
-          <h3 class="service-title">Curriculum Guidance & Learning Pathway</h3>
-          <p class="service-desc">
-            Eduversal supports partner schools in mapping their curriculum to Cambridge requirements and national standards. Schools have access to curriculum planning tools, subject pacing guides, and an academic calendar — enabling consistent, standards-aligned delivery across the network.
-          </p>
-          <ul class="service-details">
-            <li>Curriculum Map aligned to Cambridge IGCSE, AS/A-Level, and Checkpoint frameworks</li>
-            <li>Academic Calendar with key Eduversal and Cambridge milestones for the school year</li>
-            <li>Subject pacing guides (via Teachers Hub) for Math, Sciences, and English at all levels</li>
-            <li>Inclusion, EAL, and Learning Support framework (Section 08 of Academic Standards)</li>
-            <li>Student Conduct and Discipline standards with restorative practice guidance (Section 22)</li>
-            <li>External Partnerships and Student Pathways support for university and career guidance (Section 23)</li>
-          </ul>
-        </div>
-
       </div>
     </div>
   </section>
@@ -1441,7 +1451,7 @@
           <div class="step-num">3</div>
           <div class="step-title">Data-Driven Progress</div>
           <p class="step-body">
-            With EASE results, appraisal visit data, KPI tracking, and the Academic Standards framework all in one place, your school can make evidence-based decisions, track improvement over time, and ensure full compliance with Cambridge and Eduversal requirements year-round.
+            EASE results, appraisal evidence and the Academic Standards framework help your school make evidence-based decisions and track improvement over time. Evidence is created once, where the work happens: Latihan.id, Edunav or another approved system stays the system of record where it is designated.
           </p>
         </div>
       </div>
@@ -1495,7 +1505,7 @@
           </div>
           <div>
             <div class="commitment-title">Cooperation with Appraisal Visits</div>
-            <p class="commitment-text">Partner schools must cooperate fully with Eduversal appraisal visits — providing classroom access, making teachers available for observation, and engaging honestly with post-visit feedback and action plans.</p>
+            <p class="commitment-text">Partner schools take part fully in the School Appraisal cycle — Phase 0 to Phase 4 — providing classroom access, making teachers available for formative Specialist observations and walkthroughs, and carrying the two agreed School Development Priorities into the School Development Plan.</p>
           </div>
         </div>
 
@@ -1531,7 +1541,7 @@
           </div>
           <div>
             <div class="commitment-title">Data & Reporting</div>
-            <p class="commitment-text">Schools must maintain accurate student data, submit self-appraisal reports as required, and use Academic Hub tools as the primary record system for academic performance, teacher appraisal, and school quality monitoring.</p>
+            <p class="commitment-text">Schools keep accurate records and create evidence once, where the work happens. Latihan.id, Edunav or another approved system is treated as the source where it is designated as the system of record, and existing marks remain in the approved system of record; other modules reference or aggregate that record rather than asking for a second copy.</p>
           </div>
         </div>
       </div>
@@ -1617,19 +1627,53 @@
       <!-- Body -->
       <div class="ps-body">
 
-        <p class="ps-intro">Eduversal supports its network of partner schools with structured academic services — from the three EASE assessment programmes and specialist appraisal visits to safeguarding compliance, school quality assurance, and professional development for school leaders and teachers.</p>
+        <p class="ps-intro">Eduversal supports its partner schools through one Academic Quality Ecosystem — five Academic Services modules (Curriculum, Induction, EASE, Appraisal and Career Growth), the Student Learning layer, and two cross-cutting areas: Teaching &amp; Learning, and Digital Citizenship &amp; AI.</p>
 
-        <!-- Core Services -->
-        <div class="ps-section-label">Core Services</div>
+        <!-- Academic Quality Ecosystem -->
+        <div class="ps-section-label">Academic Quality Ecosystem — five modules, one layer, two cross-cutting areas</div>
         <div class="ps-services">
+
+          <div class="ps-service-row">
+            <div class="ps-svc-icon" style="background:#f0fdfa;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            </div>
+            <div>
+              <div class="ps-svc-name">Curriculum Module</div>
+              <div class="ps-svc-badge" style="color:#0d9488;">Module · What is taught?</div>
+            </div>
+            <div>
+              <div class="ps-svc-desc">The Grade 7–12 / Secondary Cambridge pathway — programme structure, exam management, the Secondary assessment policy, department implementation, exam-preparation guides, and Science &amp; Laboratory guidance. For Early Years / Primary, schools use the Primary Director’s separately issued Primary documents.</div>
+              <ul class="ps-svc-bullets">
+                <li><span style="background:#0d9488;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Lower Secondary (Grades 7–8) → IGCSE (Grades 9–10) → AS/A Level (Grades 11–12)</li>
+                <li><span style="background:#0d9488;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Cambridge exam management; Science &amp; Laboratory stays inside this module</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ps-service-row">
+            <div class="ps-svc-icon" style="background:#fdf4ff;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M15.5 3.5 17 5l3-3"/></svg>
+            </div>
+            <div>
+              <div class="ps-svc-name">Induction Module</div>
+              <div class="ps-svc-badge" style="color:#9333ea;">Module · Who delivers it?</div>
+            </div>
+            <div>
+              <div class="ps-svc-desc">Protected onboarding for people, roles and schools taking on a new responsibility in the network. Induction protects a newcomer’s first period from formal judgment, so they can build real skill and real systems honestly before anyone scores them.</div>
+              <ul class="ps-svc-bullets">
+                <li><span style="background:#9333ea;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Six tracks: Teacher, Principal, Subject Specialist, School, Academic Coordinator, Exams Officer</li>
+                <li><span style="background:#9333ea;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Induction data never feeds a formal score; outcomes are categorical</li>
+              </ul>
+            </div>
+          </div>
 
           <div class="ps-service-row">
             <div class="ps-svc-icon" style="background:#ede9fe;">
               <svg viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
             </div>
             <div>
-              <div class="ps-svc-name">EASE — Centralised Assessment</div>
-              <div class="ps-svc-badge" style="color:#7c3aed;">Assessment · 4 EASE Weeks per year</div>
+              <div class="ps-svc-name">EASE Module</div>
+              <div class="ps-svc-badge" style="color:#7c3aed;">Module · What is understood? · 4 EASE Weeks a year</div>
             </div>
             <div>
               <div class="ps-svc-desc">EASE (Eduversal Analytical &amp; Skills Evaluation) is an umbrella name for three evaluations: EASE Growth (student reasoning and literacy), EASE Assessment (student subject knowledge) and EASE Academic (teacher subject and teaching knowledge).</div>
@@ -1646,32 +1690,14 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             </div>
             <div>
-              <div class="ps-svc-name">Appraisal Visits</div>
-              <div class="ps-svc-badge" style="color:#ea580c;">School Visit · 1–2× per year</div>
+              <div class="ps-svc-name">Appraisal Module</div>
+              <div class="ps-svc-badge" style="color:#ea580c;">Module · What is working, and what should improve?</div>
             </div>
             <div>
-              <div class="ps-svc-desc">Subject Specialists conduct on-site and online structured visits combining classroom observation, teacher walkthroughs, and leadership interviews to produce detailed appraisal reports.</div>
+              <div class="ps-svc-desc">Performance appraisal for schools, teachers and principals — evidence-based, developmental review, never a single-visit judgment.</div>
               <ul class="ps-svc-bullets">
-                <li><span style="background:#ea580c;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Structured walkthrough observations with standardised rubrics</li>
-                <li><span style="background:#ea580c;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Post-visit reports with actionable recommendations and follow-up targets</li>
-                <li><span style="background:#ea580c;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Appraiser calibration sessions to ensure consistency across schools</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="ps-service-row">
-            <div class="ps-svc-icon" style="background:#f0fdf4;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-            </div>
-            <div>
-              <div class="ps-svc-name">Cambridge Centre Compliance</div>
-              <div class="ps-svc-badge" style="color:#16a34a;">Cambridge</div>
-            </div>
-            <div>
-              <div class="ps-svc-desc">Guidance on Cambridge Centre obligations, exam entry management, pathway planning, and preparation for Cambridge School Quality and accreditation reviews (CIS/WASC).</div>
-              <ul class="ps-svc-bullets">
-                <li><span style="background:#16a34a;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Cambridge Pathway Simulator for subject combination modelling</li>
-                <li><span style="background:#16a34a;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Cambridge Calendar integration for exam and registration deadlines</li>
+                <li><span style="background:#ea580c;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>School, Teacher and Principal Appraisal; five School Appraisal domains, each rated separately</li>
+                <li><span style="background:#ea580c;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Phase 0 + Phases 1–4; Specialist visits are formative for teachers</li>
               </ul>
             </div>
           </div>
@@ -1681,31 +1707,48 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
             </div>
             <div>
-              <div class="ps-svc-name">School Quality &amp; KPI</div>
-              <div class="ps-svc-badge" style="color:#2563eb;">Quality Assurance</div>
+              <div class="ps-svc-name">Career Growth Module</div>
+              <div class="ps-svc-badge" style="color:#2563eb;">Module · How do people grow into approved roles?</div>
             </div>
             <div>
-              <div class="ps-svc-desc">School Performance KPI dashboard, annual Self-Appraisal tools, and a network-wide audit view enabling accreditation readiness for CIS and WASC.</div>
+              <div class="ps-svc-desc">Professional growth, approved roles, pathways, progression gates, role governance and network appointments. Career Growth connects professional development, formal evidence, role readiness, organizational need, and appointment.</div>
               <ul class="ps-svc-bullets">
-                <li><span style="background:#2563eb;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>KPI tracking across academic, operational, and community dimensions</li>
-                <li><span style="background:#2563eb;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Accreditation Toolkit aligned to CIS and WASC self-study requirements</li>
+                <li><span style="background:#2563eb;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Five pathways, seven progression gates, approved roles only</li>
+                <li><span style="background:#2563eb;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Growth is not promotion: network roles are formal appointments</li>
               </ul>
             </div>
           </div>
 
           <div class="ps-service-row">
-            <div class="ps-svc-icon" style="background:#fdf4ff;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M15.5 3.5 17 5l3-3"/></svg>
+            <div class="ps-svc-icon" style="background:#f0fdf4;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             </div>
             <div>
-              <div class="ps-svc-name">Teacher Proficiency &amp; Professional Development</div>
-              <div class="ps-svc-badge" style="color:#9333ea;">Professional Development</div>
+              <div class="ps-svc-name">Student Learning Layer</div>
+              <div class="ps-svc-badge" style="color:#16a34a;">Layer · How does the student see their learning?</div>
             </div>
             <div>
-              <div class="ps-svc-desc">Structured system for teacher proficiency and professional growth — classroom observations, Evidence Portfolio, KPI evaluation, and a Coordinator Competency Framework with Learning Path for academic leaders.</div>
+              <div class="ps-svc-desc">The student-facing reflection and ownership layer — not an additional module. Students select evidence of their learning, reflect on it, set goals and lead Student-Led Conferences.</div>
               <ul class="ps-svc-bullets">
-                <li><span style="background:#9333ea;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Teacher Competency Framework forms and Learning Path Entry tool with subject-specific rubrics</li>
-                <li><span style="background:#9333ea;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Evidence Portfolio log, Teacher Competency Collection, and Subject Specialist Calibration sessions</li>
+                <li><span style="background:#16a34a;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Portfolio, reflection, goal-setting and Student-Led Conferences</li>
+                <li><span style="background:#16a34a;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Formative and non-graded; no second score</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ps-service-row">
+            <div class="ps-svc-icon" style="background:#ede9fe;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+            </div>
+            <div>
+              <div class="ps-svc-name">Teaching &amp; Learning · Digital Citizenship &amp; AI</div>
+              <div class="ps-svc-badge" style="color:#6d28d9;">Cross-cutting practice &amp; policy</div>
+            </div>
+            <div>
+              <div class="ps-svc-desc">Two cross-cutting practice and policy areas that support the whole ecosystem rather than additional service modules.</div>
+              <ul class="ps-svc-bullets">
+                <li><span style="background:#6d28d9;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Teaching &amp; Learning: classroom-practice standards and resources</li>
+                <li><span style="background:#6d28d9;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Digital Citizenship &amp; AI: digital-use, integrity, device and AI policy and competency guidance</li>
               </ul>
             </div>
           </div>
@@ -1724,23 +1767,6 @@
                 <li><span style="background:#6d28d9;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Designated Safeguarding Lead (DSL) role requirement for all schools</li>
                 <li><span style="background:#6d28d9;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Child protection policy, wellbeing framework, and incident reporting procedures</li>
                 <li><span style="background:#6d28d9;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Safeguarding checks integrated into Staff Recruitment (Section 12) and Data Protection (Section 14)</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="ps-service-row">
-            <div class="ps-svc-icon" style="background:#f0fdfa;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            </div>
-            <div>
-              <div class="ps-svc-name">Curriculum Guidance</div>
-              <div class="ps-svc-badge" style="color:#0d9488;">Curriculum</div>
-            </div>
-            <div>
-              <div class="ps-svc-desc">Curriculum mapping, academic calendar, subject pacing guides, and inclusion frameworks to ensure consistent Cambridge-aligned delivery across the network.</div>
-              <ul class="ps-svc-bullets">
-                <li><span style="background:#0d9488;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Curriculum Map aligned to IGCSE, AS/A-Level, and Checkpoint</li>
-                <li><span style="background:#0d9488;width:4px;height:4px;border-radius:50%;margin-top:6px;flex-shrink:0;display:inline-block;"></span>Inclusion, EAL, and Learning Support framework (Section 08)</li>
               </ul>
             </div>
           </div>
@@ -1794,7 +1820,7 @@
           <div class="ps-step">
             <div class="ps-step-num">3</div>
             <div class="ps-step-title">Data-Driven Progress</div>
-            <p class="ps-step-body">EASE results, appraisal data, KPI tracking, and the Academic Standards framework in one place — enabling evidence-based decisions year-round.</p>
+            <p class="ps-step-body">EASE results, appraisal evidence and the Academic Standards framework support evidence-based decisions; evidence is created once, in the approved system of record.</p>
           </div>
         </div>
 

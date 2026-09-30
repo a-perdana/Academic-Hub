@@ -100,7 +100,7 @@ table.roster tr:last-child td { border-bottom: none; }
       <div class="page-hero__text">
         <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
         <h1 class="page-hero__title">Student Roster</h1>
-        <p class="page-hero__desc">Active Students-Hub roster for your school. Approve pending sign-ins, graduate Year 12 cohorts, or remove duplicates. Read-only for everyone except school principals + academic admins.</p>
+        <p class="page-hero__desc">Active Students-Hub roster for your school. Approve pending sign-ins, graduate Grade 12 cohorts, or remove duplicates. Read-only for everyone except school principals + academic admins.</p>
       </div>
       <div class="page-hero__kpis" id="heroKpis">
         <div class="page-hero__kpi page-hero__kpi--primary">
@@ -136,12 +136,12 @@ table.roster tr:last-child td { border-bottom: none; }
       </select>
       <select id="fGrade">
         <option value="">All grades</option>
-        <option value="7">Year 7</option>
-        <option value="8">Year 8</option>
-        <option value="9">Year 9</option>
-        <option value="10">Year 10</option>
-        <option value="11">Year 11</option>
-        <option value="12">Year 12</option>
+        <option value="7">Grade 7</option>
+        <option value="8">Grade 8</option>
+        <option value="9">Grade 9</option>
+        <option value="10">Grade 10</option>
+        <option value="11">Grade 11</option>
+        <option value="12">Grade 12</option>
       </select>
       <input aria-label="Search by name or email…" id="fSearch" placeholder="Search by name or email…">
       <span style="margin-left:auto; font-size:12px; color:var(--ink-3)" id="resultCount">—</span>
@@ -158,7 +158,7 @@ table.roster tr:last-child td { border-bottom: none; }
       <div class="page-footer__cta">
         <span class="page-footer__cta-eyebrow">School Leadership · Students Hub</span>
         <h2 class="page-footer__cta-title">A clean roster keeps the data trustworthy.</h2>
-        <p class="page-footer__cta-desc">Approve pending sign-ins within seven days, graduate Year 12 at year-end, and remove duplicates as you spot them. Healthy rosters feed reliable chapter-mastery and EASE-growth roll-ups.</p>
+        <p class="page-footer__cta-desc">Approve pending sign-ins promptly, graduate Grade 12 at year-end, and remove duplicates as you spot them. A clean roster keeps the class counts and Common Assessment results on School Assessment reliable.</p>
         <a href="/school-assessment" class="page-footer__cta-btn">Open School Assessment <span aria-hidden="true">→</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="Student Roster footer navigation">
@@ -261,7 +261,7 @@ table.roster tr:last-child td { border-bottom: none; }
                 <td><strong>${escHtml(s.displayName || '—')}</strong></td>
                 <td style="color:var(--ink-3)">${escHtml(s.email || '')}</td>
                 <td>${escHtml(s.className || '')}</td>
-                <td>${s.gradeLevel ? 'Year ' + s.gradeLevel : ''}</td>
+                <td>${s.gradeLevel ? 'Grade ' + s.gradeLevel : ''}</td>
                 <td><span class="pill pill-${escAttr(s.status)}">${escHtml(s.status)}</span></td>
                 ${canEdit ? `<td style="text-align:right">
                   ${s.status === 'pending_approval' ? `<button class="btn btn-primary" data-act="approve" data-uid="${escAttr(s.id)}">Approve</button>` : ''}

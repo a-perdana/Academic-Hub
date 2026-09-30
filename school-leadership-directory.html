@@ -56,6 +56,8 @@ body { padding-top: 62px; }
 .kind-section[data-kind="school_principal"]          { --kind-grad: linear-gradient(135deg,#7c3aed,#5b21b6); }
 .kind-section[data-kind="academic_coordinator"]      { --kind-grad: linear-gradient(135deg,#0e7490,#0891b2); }
 .kind-section[data-kind="cambridge_coordinator"]     { --kind-grad: linear-gradient(135deg,#0d9488,#0f766e); }
+.kind-section[data-kind="subject_leader"]            { --kind-grad: linear-gradient(135deg,#b45309,#d97706); }
+.kind-section[data-kind="guidance_coordinator"]      { --kind-grad: linear-gradient(135deg,#be123c,#e11d48); }
 .kind-section[data-kind="other"]                     { --kind-grad: linear-gradient(135deg,#64748b,#475569); }
 
 /* Entry card */
@@ -74,6 +76,8 @@ body { padding-top: 62px; }
 .entry-card[data-kind="school_principal"]          { --kind-grad: linear-gradient(135deg,#7c3aed,#5b21b6); }
 .entry-card[data-kind="academic_coordinator"]      { --kind-grad: linear-gradient(135deg,#0e7490,#0891b2); }
 .entry-card[data-kind="cambridge_coordinator"]     { --kind-grad: linear-gradient(135deg,#0d9488,#0f766e); }
+.entry-card[data-kind="subject_leader"]            { --kind-grad: linear-gradient(135deg,#b45309,#d97706); }
+.entry-card[data-kind="guidance_coordinator"]      { --kind-grad: linear-gradient(135deg,#be123c,#e11d48); }
 .entry-card[data-kind="other"]                     { --kind-grad: linear-gradient(135deg,#64748b,#475569); }
 .ec-header { height: 56px; background: var(--kind-grad); position: relative; overflow: hidden; }
 .ec-header::before { content:''; position:absolute; inset:0; background: radial-gradient(ellipse 70% 100% at 100% 0%, rgba(255,255,255,0.18) 0%, transparent 55%); pointer-events:none; }
@@ -130,7 +134,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">School Leadership Directory</h1>
-      <p class="page-hero__desc">The leadership team at this school — Foundation Reps, School Principal, Academic + Cambridge Coordinators. Curated entries, not auto-synced from the user database, so departures + transitions can be reflected immediately.</p>
+      <p class="page-hero__desc">The leadership team at this school, in the order of the school academic line: FR/GM → Principal → Academic Coordinator / Vice Principal → Head of Department / Subject Leader (Career Growth: Framework 26-27 §2.4). The Cambridge Coordinator / Exams Officer works to the Principal as Head of Centre; the Guidance Coordinator reports to the FR/GM and coordinates with the Principal. Curated entries, not auto-synced from the user database, so departures and transitions show immediately.</p>
     </div>
   </div>
 </header>
@@ -148,10 +152,12 @@ body { padding-top: 62px; }
     </div>
     <select class="cd-filter" id="filterKind">
       <option value="">All roles</option>
-      <option value="foundation_representative">Foundation Representative</option>
+      <option value="foundation_representative">Foundation Representative / General Manager (FR/GM)</option>
       <option value="school_principal">School Principal</option>
-      <option value="academic_coordinator">Academic Coordinator</option>
-      <option value="cambridge_coordinator">Cambridge Coordinator</option>
+      <option value="academic_coordinator">Academic Coordinator / Vice Principal</option>
+      <option value="cambridge_coordinator">Cambridge Coordinator / Exams Officer</option>
+      <option value="subject_leader">Head of Department / Subject Leader</option>
+      <option value="guidance_coordinator">Guidance Coordinator</option>
       <option value="other">Other</option>
     </select>
     <select class="cd-filter" id="filterSubject">
@@ -174,10 +180,12 @@ body { padding-top: 62px; }
       <div class="form-group">
         <label class="form-label">Role</label>
         <select class="form-select" id="eKind">
-          <option value="foundation_representative">Foundation Representative</option>
+          <option value="foundation_representative">Foundation Representative / General Manager (FR/GM)</option>
           <option value="school_principal">School Principal</option>
-          <option value="academic_coordinator">Academic Coordinator</option>
-          <option value="cambridge_coordinator">Cambridge Coordinator</option>
+          <option value="academic_coordinator">Academic Coordinator / Vice Principal</option>
+          <option value="cambridge_coordinator">Cambridge Coordinator / Exams Officer</option>
+          <option value="subject_leader">Head of Department / Subject Leader</option>
+          <option value="guidance_coordinator">Guidance Coordinator</option>
           <option value="other">Other</option>
         </select>
       </div>
@@ -219,10 +227,12 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const KIND_LABELS = {
-  foundation_representative: 'Foundation Representative',
+  foundation_representative: 'Foundation Representative / General Manager (FR/GM)',
   school_principal: 'School Principal',
-  academic_coordinator: 'Academic Coordinator',
-  cambridge_coordinator: 'Cambridge Coordinator',
+  academic_coordinator: 'Academic Coordinator / Vice Principal',
+  cambridge_coordinator: 'Cambridge Coordinator / Exams Officer',
+  subject_leader: 'Head of Department / Subject Leader',
+  guidance_coordinator: 'Guidance Coordinator',
   other: 'Other',
 };
 const KIND_RANK = {
@@ -230,7 +240,9 @@ const KIND_RANK = {
   school_principal: 2,
   academic_coordinator: 3,
   cambridge_coordinator: 4,
-  other: 5,
+  subject_leader: 5,
+  guidance_coordinator: 6,
+  other: 7,
 };
 const SUBJECTS = ['math','biology','chemistry','physics','science','english','bahasa','religion','arts','sport','ict','humanities'];
 const SUBJECT_LABELS = { math:'Math', biology:'Biology', chemistry:'Chemistry', physics:'Physics', science:'Science', english:'English', bahasa:'Bahasa', religion:'Religion', arts:'Arts', sport:'Sport', ict:'ICT', humanities:'Humanities' };

@@ -186,7 +186,7 @@ body { padding-top: 62px; }
     <div class="page-hero__text">
       <p class="page-hero__eyebrow">Academic Hub · School Leaders Workspace</p>
       <h1 class="page-hero__title">Proposals</h1>
-      <p class="page-hero__desc">A discussion board for ideas still being shaped at your school — before they become binding decisions. Open a proposal, gather your leadership team's comments, then promote the agreed ones to the Decisions register. Replaces the running shared doc.</p>
+      <p class="page-hero__desc">A discussion board for ideas still being shaped at your school — before they become school decisions. Open a proposal, gather your leadership team's comments, then promote the agreed ones to the Decisions register. A proposal can shape how your school puts network policy into practice; it cannot change a network rule (Policy Source-of-Truth Register 26-27).</p>
     </div>
     <aside class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -250,11 +250,11 @@ body { padding-top: 62px; }
             <tr><td>Write / edit the proposal body</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
             <tr><td>Add comments to the discussion</td><td class="yes">Yes</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
             <tr><td>Set the phase (Draft / Open / Parked)</td><td class="no">View only</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
-            <tr><td>Promote to a binding decision</td><td class="no">—</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+            <tr><td>Promote to a school decision</td><td class="no">—</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
             <tr><td>Delete a proposal</td><td class="no">—</td><td class="no">—</td><td class="yes">Yes</td></tr>
           </tbody>
         </table>
-        <p class="pg-roles__note">Phase &amp; promote control sit with the School Principal by design — the leadership team shapes the idea through discussion, the Principal makes the call. Everything here is scoped to your own school; other schools never see your proposals.</p>
+        <p class="pg-roles__note">Phase &amp; promote control sit with the School Principal by design — the leadership team shapes the idea through discussion, the Principal makes the call. A decision that needs governance authority — for example a formal appointment of an Academic Coordinator / Vice Principal — goes to the Foundation Representative / General Manager (FR/GM) for confirmation (Career Growth: Framework 26-27 §5.1). A change to a network rule — Gradebook weights, EASE rules, appraisal criteria — is not a school decision; raise it with Eduversal. Everything here is scoped to your own school; other schools never see your proposals.</p>
       </div>
     </div>
   </details>
@@ -266,7 +266,7 @@ body { padding-top: 62px; }
     </div>
     <select class="prop-cat-select" id="propCatFilter">
       <option value="all">All categories</option>
-      <option value="kpi">KPI</option>
+      <option value="kpi">Indicators</option>
       <option value="assessment">Assessment</option>
       <option value="curriculum">Curriculum</option>
       <option value="appraisal">Appraisal</option>
@@ -314,7 +314,7 @@ body { padding-top: 62px; }
       <div class="form-group">
         <label class="form-label">Category</label>
         <select class="form-select" id="newCategory">
-          <option value="kpi">KPI</option>
+          <option value="kpi">Indicators</option>
           <option value="assessment">Assessment</option>
           <option value="curriculum">Curriculum</option>
           <option value="appraisal">Appraisal</option>
@@ -334,7 +334,7 @@ body { padding-top: 62px; }
 <!-- Promote-to-decision modal (Principal only) -->
 <div class="modal-overlay" id="modalDecision">
   <div class="modal">
-    <div class="modal-head"><h3>Promote to a binding decision</h3></div>
+    <div class="modal-head"><h3>Promote to a school decision</h3></div>
     <div class="modal-body">
       <div class="form-group">
         <label class="form-label">Decision title</label>
@@ -375,11 +375,11 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 const CATEGORIES = ['kpi','assessment','curriculum','appraisal','operations','other'];
-const CAT_LABELS = { kpi:'KPI', assessment:'Assessment', curriculum:'Curriculum', appraisal:'Appraisal', operations:'Operations', other:'Other' };
+const CAT_LABELS = { kpi:'Indicators', assessment:'Assessment', curriculum:'Curriculum', appraisal:'Appraisal', operations:'Operations', other:'Other' };
 const PHASES = ['draft','open_for_comment','decided','parked'];
 const PHASE_LABELS = { draft:'Draft', open_for_comment:'Open for comment', decided:'Decided', parked:'Parked' };
 // Proposal category → Decisions-register category, when promoting.
-const CAT_TO_DECISION = { kpi:'appraisal', assessment:'pedagogy', curriculum:'pedagogy', appraisal:'appraisal', operations:'admin', other:'other' };
+const CAT_TO_DECISION = { kpi:'other', assessment:'pedagogy', curriculum:'pedagogy', appraisal:'appraisal', operations:'admin', other:'other' };
 
 let db, currentUser, userProfile;
 let isAdmin = false, isPrincipal = false, schoolId = null;
@@ -580,7 +580,7 @@ function renderDetail(p) {
     <div class="pd-section-label">References (cite source files / standards)</div>
     <div class="pd-refs" id="pdRefs"></div>
     <div class="ref-add-row">
-      <input aria-label="e.g. appraisal-framework-v2.json → F3.weights, CSLS 4.1" type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. appraisal-framework-v2.json → F3.weights, CSLS 4.1">
+      <input aria-label="e.g. Assessment Policy 26-27 §6, CSLS 4.1" type="text" class="ref-add-input" id="pdRefInput" placeholder="e.g. Assessment Policy 26-27 §6, CSLS 4.1">
       <button class="ref-add-btn" id="pdRefAdd">+ Add reference</button>
     </div>
     <div class="pd-section-label">Discussion <span id="pdCommentCount" style="color:var(--ink-3);font-weight:400;"></span></div>
@@ -632,7 +632,7 @@ function renderDetail(p) {
 function renderRefs(p) {
   const wrap = $('pdRefs');
   const refs = Array.isArray(p.referenceRefs) ? p.referenceRefs : [];
-  if (!refs.length) { wrap.innerHTML = '<span style="color:var(--ink-3);font-size:0.78rem;">None yet — anchor this proposal to a framework, KPI weight, or standard.</span>'; return; }
+  if (!refs.length) { wrap.innerHTML = '<span style="color:var(--ink-3);font-size:0.78rem;">None yet — anchor this proposal to the live policy, framework or standard it touches.</span>'; return; }
   wrap.innerHTML = refs.map((r, i) => `<span class="ref-chip">${escHtml(r)}<span class="ref-x" data-ref-idx="${i}" title="Remove">×</span></span>`).join('');
   wrap.querySelectorAll('.ref-x').forEach(x => x.addEventListener('click', () => {
     const idx = Number(x.dataset.refIdx);
@@ -735,7 +735,7 @@ async function persist(id, patch) {
 function openNewModal() {
   if (!schoolId && !isAdmin) { showToast('No school on your profile — cannot create.'); return; }
   $('newTitle').value = '';
-  $('newCategory').value = 'kpi';
+  $('newCategory').value = 'curriculum';
   $('modalNew').classList.add('open');
   requestAnimationFrame(() => $('newTitle').focus());
 }

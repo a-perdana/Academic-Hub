@@ -302,7 +302,7 @@ import { collection, doc, getDoc, getDocs, query, where, writeBatch, deleteField
 // Policy: "Principal Appraisal: Handbook 26-27" §2, §5, §7, §10, §14 and
 // "Principal Appraisal: Appraiser Guide 26-27" §5.
 //   • Written by the Chief Academic Officer / designated Academic Director or
-//     an assigned observer (AH academic_admin, or central_admin).
+//     an assigned observer (AH academic_admin, or a CH director; central_admin).
 //   • The visit record is formative and carries no numeric visit score; the
 //     E / D ratings of VALID scheduled visits feed F2 of the annual appraisal.
 //   • Valid F2 visit = scheduled appraisal visit, in the Sept–Oct (Visit 1) or
@@ -346,13 +346,15 @@ let formData = {
 
 document.addEventListener('authReady', async ({ detail: { user, profile } }) => {
   if (typeof window.__loadAcademicNavbar === 'function') {
-    window.__loadAcademicNavbar('observation-entry', { user, profile });
+    window.__loadAcademicNavbar('principal-observation-entry', { user, profile });
   }
   observerProfile = profile;
   document.body.style.display = '';
 
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isCHDirector = ['central_user', 'central_admin'].includes(profile?.role_centralhub)
+    && (profile?.role_centralhub === 'central_admin' || (profile?.ch_sub_roles || []).includes('director'));
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || isCHDirector;
   const isPrincipal = ahSubs.includes('school_principal');
 
   try {

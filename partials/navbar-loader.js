@@ -443,6 +443,12 @@ function ensureNavbarSharedStyles() {
       flex-shrink: 0;
     }
 
+    /* Stage 0 — 1360px: dropdown triggers lose their icon, keep the label.
+       Eight ecosystem dropdowns (2026-10-01) do not fit at 1280px with icons. */
+    @media (max-width: 1360px) {
+      #topNav .nav-dropdown-trigger > svg:not(.dd-caret) { display: none; }
+    }
+
     /* Stage 1 — 1100px: hide brand name */
     @media (max-width: 1100px) {
       #topNav { padding: 0 18px; }
@@ -670,102 +676,92 @@ function ensureNavbarSharedStyles() {
   document.head.appendChild(style);
 }
 
-// Nav items config — used to build the mobile menu
+// Nav items config — used to build the mobile menu and to mark the active
+// desktop trigger (group key = the dropdown's data-dd). Same groups and order
+// as partials/navbar.html, which follows the Academic Quality Ecosystem
+// (2026-10-01): Curriculum → Induction → EASE → Appraisal, the cross-cutting
+// areas, Insights & Standards, then Your School and My Hub.
 // Groups have a `group` key with `label` and `items[]`
 const NAV_ITEMS = [
-  { group: 'assessments', label: 'Assessments', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
-    // AY 2025-26 EASE dashboards archived 2026-09-30 (archive/dashboards/).
-    { key: 'ease-growth-results',  href: '/ease-growth-results',   label: 'EASE Growth Results' },
-    { key: 'cambridge-results',    href: '/cambridge-results',     label: 'Cambridge Results' },
-    { key: 'cambridge-exams',      href: '/cambridge-exams',       label: 'Cambridge Exams' },
-    { key: 'cambridge-pathway',    href: '/cambridge-pathway',     label: 'Cambridge Pathway Simulator' },
-    { key: 'network-audit',        href: '/network-audit',         label: 'Network Audit' },
-  ]},
-  { group: 'comms', label: 'Communications', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>', items: [
-    // NB: academic-calendar + school-events moved to the PD group's Standards
-    // column 2026-06-27.
-    // Messaging
-    { key: 'announcements',        href: '/announcements',        label: 'Announcements', badgeId: 'annBadge' },
-    { key: 'message-board',        href: '/message-board',        label: 'Message Board', badgeId: 'msgBadge' },
-    // Documents
-    { key: 'documents',            href: '/documents',            label: 'Documents', badgeId: 'docBadge', badgeCount: true },
-    { key: 'library',              href: '/library',              label: 'Resource Library' },
-    { key: 'ai-prompts',           href: '/ai-prompts',           label: 'Prompt Library' },
-    // Surveys (moved from the Performance group 2026-06-27)
-    { key: 'surveys',              href: '/surveys',              label: 'Shared Surveys' },
-  ]},
   { group: 'curriculum', label: 'Curriculum', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
-    // Mapping & Coverage
-    { key: 'curriculum-map',          href: '/curriculum-map',          label: 'Curriculum Map' },
-    { key: 'syllabus-coverage',       href: '/syllabus-coverage',       label: 'Syllabus Coverage' },
-    // NB: Standards (academic-standards / cambridge-standards / cambridge-calendar)
-    // moved to the PD group 2026-06-27.
+    // Curriculum Module — What is taught?
+    { key: 'curriculum-map',                      href: '/curriculum-map',                      label: 'Curriculum Map' },
+    { key: 'syllabus-coverage',                   href: '/syllabus-coverage',                   label: 'Syllabus Coverage' },
+    { key: 'curriculum-alignment',                href: '/curriculum-alignment',                label: 'Curriculum Alignment' },
+    { key: 'cambridge-pathway',                   href: '/cambridge-pathway',                   label: 'Cambridge Pathway Simulator' },
+    { key: 'cambridge-calendar',                  href: '/cambridge-calendar',                  label: 'Cambridge Exam Calendar' },
+    { key: 'academic-calendar',                   href: '/academic-calendar',                   label: 'Academic Calendar' },
   ]},
-  { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
-    // Handbooks & References (audience: everyone — AI Prompts moved to Communications > Prompt Library 2026-05-27)
-    { key: 'references',              href: '/references',              label: 'References' },
-    // Featured for Leadership (2026-05-19; Cambridge Coord / Principal / DSL 90-day guides added 2026-05-27)
-    // Policy & AI (2026-05-19; Digital Citizenship / Anti-Bullying / Attendance added 2026-05-27)
-    // School-facing handbooks (seeded 2026-05-17)
-    // Standards (moved from Curriculum group 2026-06-27; Academic Calendar +
-    // School Events moved here from Communications 2026-06-27)
-    { key: 'academic-standards',      href: '/academic-standards',      label: 'Academic Standards' },
-    { key: 'cambridge-standards',     href: '/cambridge-standards',     label: 'Cambridge Standards' },
-    { key: 'cambridge-calendar',      href: '/cambridge-calendar',      label: 'Cambridge Calendar' },
-    { key: 'academic-calendar',       href: '/academic-calendar',       label: 'Academic Calendar' },
-    { key: 'school-events',           href: '/school-events',           label: 'School Events' },
+  { group: 'induction', label: 'Induction', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg>', items: [
+    // Induction Module — Who delivers it?
+    { key: 'my-induction',                        href: '/my-induction',                        label: 'My Induction' },
+    { key: 'team-induction',                      href: '/team-induction',                      label: 'Team Induction' },
   ]},
-  { group: 'admin', label: 'Performance', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
-    // Ordered to mirror the desktop Admin dropdown's semantic role-grouping
-    // (2026-05-27): FR-primary → SP-primary → AC-primary → Cross-hub & Settings.
-    //
-    // For Foundation Representative (Principal Evaluation suite — FR-only entry):
-    { key: 'admin-read-me-foundation-rep', href: '/admin-read-me-foundation-rep', label: 'Read Me First' },
-    { key: 'principal-evaluation',        href: '/principal-evaluation',        label: 'Principal Evaluation' },
-    { key: 'principal-observation-entry', href: '/principal-observation-entry', label: 'Principal Observation' },
-    { key: 'principal-appraisal-entry',   href: '/principal-appraisal-entry',   label: 'Principal Appraisal' },
-    { key: 'principal-360-results',       href: '/principal-360-results',       label: 'Principal 360 Results' },
-    // For School Principal (school-level appraisal + AI line-management + own coaching + AI Maturity + Students Hub roster + shared dashboards):
-    { key: 'admin-read-me-school-principal',  href: '/admin-read-me-school-principal',  label: 'Read Me First' },
-    { key: 'school-self-appraisal',           href: '/school-self-appraisal',           label: 'School Appraisal' },
-    { key: 'principal-coaching-view',         href: '/principal-coaching-view',         label: 'Principal Coaching' },
-    { key: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', label: 'Teacher AI Self-Assessments' },
-    { key: 'ai-maturity-self-assessment',     href: '/ai-maturity-self-assessment',     label: 'AI Maturity Assessment' },
-    { key: 'student-roster',                  href: '/student-roster',                  label: 'Student Roster' },
-    { key: 'school-assessment',               href: '/school-assessment',               label: 'School Assessment' },
-    // For Academic / Cambridge Coordinator (teacher-evaluation entry + Competency Framework):
-    { key: 'admin-read-me-academic-coord', href: '/admin-read-me-academic-coord', label: 'Read Me First' },
-    { key: 'teacher-appraisal-entry',     href: '/teacher-appraisal-entry',     label: 'Teacher Appraisal Entry' },
-    { key: 'teacher-levels',              href: '/teacher-levels',              label: 'Teacher Levels' },
-    { key: 'teacher-walkthrough-entry',   href: '/teacher-walkthrough-entry',   label: 'Teacher Walkthrough' },
-    { key: 'appraiser-calibration',       href: '/appraiser-calibration',       label: 'Appraisal Calibration' },
-    { key: 'competency-framework',        href: '/competency-framework',        label: 'Competency Framework' },
-    // NB: 'surveys' (Shared Surveys) moved to the comms group 2026-06-27.
-    // 'settings' removed from the navbar dropdowns 2026-06-27 — still reachable
-    // from the profile dropdown's Settings link.
+  { group: 'ease', label: 'EASE', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>', items: [
+    // EASE Module — What is understood? (EASE Growth · EASE Assessment)
+    { key: 'ease-growth-results',                 href: '/ease-growth-results',                 label: 'EASE Growth Results' },
+    { key: 'school-assessment',                   href: '/school-assessment',                   label: 'Common Assessment Results' },
+    { key: 'student-roster',                      href: '/student-roster',                      label: 'Student Roster' },
   ]},
-  { group: 'principal', label: 'School Leaders', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
-    // School leadership team workspace (mirrors CH Coordinators) — school-scoped via schoolId
-    { key: 'school-leadership-read-me',          href: '/school-leadership-read-me',          label: 'Read Me First' },
-    { key: 'school-leadership-operational-guide',href: '/school-leadership-operational-guide',label: 'Operational Guide' },
-    { key: 'school-leadership-meetings',         href: '/school-leadership-meetings',         label: 'Meetings' },
-    { key: 'school-leadership-proposals',        href: '/school-leadership-proposals',        label: 'Proposals' },
-    { key: 'school-leadership-decisions',        href: '/school-leadership-decisions',        label: 'Decisions' },
-    { key: 'school-leadership-directory',        href: '/school-leadership-directory',        label: 'Directory' },
-    { key: 'school-artifacts',                   href: '/school-artifacts',                   label: 'Artifacts' },
-    { key: 'school-activities',                  href: '/school-activities',                  label: 'Activities' },
-    { key: 'my-observations',                    href: '/my-observations',                    label: 'My Observations' },
-    { key: 'weekly-checklist',                   href: '/weekly-checklist',                   label: 'Weekly Checklist' },
-    { key: 'team-induction',                     href: '/team-induction',                     label: 'Team Induction' },
+  { group: 'appraisal', label: 'Appraisal', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
+    // Appraisal Module — Teacher · School · Principal (three separate systems)
+    { key: 'teacher-appraisal-entry',             href: '/teacher-appraisal-entry',             label: 'Teacher Appraisal Entry' },
+    { key: 'teacher-levels',                      href: '/teacher-levels',                      label: 'Teacher Levels' },
+    { key: 'teacher-walkthrough-entry',           href: '/teacher-walkthrough-entry',           label: 'Teaching Practice Walkthrough' },
+    { key: 'appraiser-calibration',               href: '/appraiser-calibration',               label: 'Appraisal Calibration' },
+    { key: 'my-observations',                     href: '/my-observations',                     label: 'My Observations' },
+    { key: 'school-self-appraisal',               href: '/school-self-appraisal',               label: 'School Self-Appraisal' },
+    { key: 'principal-evaluation',                href: '/principal-evaluation',                label: 'Principal Evaluation' },
+    { key: 'principal-observation-entry',         href: '/principal-observation-entry',         label: 'Principal Observation' },
+    { key: 'principal-appraisal-entry',           href: '/principal-appraisal-entry',           label: 'Principal Annual Appraisal' },
+    { key: 'principal-360-results',               href: '/principal-360-results',               label: 'Principal 360° Results' },
+    { key: 'principal-coaching-view',             href: '/principal-coaching-view',             label: 'My Coaching' },
+  ]},
+  { group: 'cross', label: 'Cross-cutting', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>', items: [
+    // Teaching & Learning · Digital Citizenship & AI (cross-cutting areas, not modules)
+    { key: 'library',                             href: '/library',                             label: 'Resource Library' },
+    { key: 'ai-prompts',                          href: '/ai-prompts',                          label: 'AI Prompt Library' },
+    { key: 'ai-validate-teacher-assessments',     href: '/ai-validate-teacher-assessments',     label: 'Teacher AI Self-Assessments' },
+    { key: 'ai-maturity-self-assessment',         href: '/ai-maturity-self-assessment',         label: 'AI Maturity Assessment' },
+    { key: 'network-audit',                       href: '/network-audit',                       label: 'Network Security Assessment' },
+  ]},
+  { group: 'insights', label: 'Insights & Standards', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>', items: [
+    // Academic Insights · Quality Ecosystem & Standards
+    { key: 'cambridge-results',                   href: '/cambridge-results',                   label: 'Cambridge Results' },
+    { key: 'cambridge-exams',                     href: '/cambridge-exams',                     label: 'Cambridge Exams Dashboard' },
+    { key: 'academic-standards',                  href: '/academic-standards',                  label: 'Academic Standards' },
+    { key: 'cambridge-standards',                 href: '/cambridge-standards',                 label: 'Cambridge Standards' },
+    { key: 'references',                          href: '/references',                          label: 'References' },
+  ]},
+  { group: 'school', label: 'Your School', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3 8-8"/><path d="M20 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>', items: [
+    // Communications
+    { key: 'announcements',                       href: '/announcements',                       label: 'Announcements', badgeId: 'annBadge' },
+    { key: 'message-board',                       href: '/message-board',                       label: 'Message Board', badgeId: 'msgBadge' },
+    { key: 'documents',                           href: '/documents',                           label: 'Documents', badgeId: 'docBadge', badgeCount: true },
+    { key: 'surveys',                             href: '/surveys',                             label: 'Shared Surveys' },
+    { key: 'school-events',                       href: '/school-events',                       label: 'School Events' },
+    // School Leaders workspace — school-scoped via schoolId
+    { key: 'school-leadership-read-me',           href: '/school-leadership-read-me',           label: 'Read Me First' },
+    { key: 'school-leadership-operational-guide', href: '/school-leadership-operational-guide', label: 'Operational Guide' },
+    { key: 'weekly-checklist',                    href: '/weekly-checklist',                    label: 'Weekly Checklist' },
+    { key: 'school-leadership-meetings',          href: '/school-leadership-meetings',          label: 'Meetings' },
+    { key: 'school-leadership-proposals',         href: '/school-leadership-proposals',         label: 'Proposals' },
+    { key: 'school-leadership-decisions',         href: '/school-leadership-decisions',         label: 'Decisions' },
+    { key: 'school-activities',                   href: '/school-activities',                   label: 'Activities' },
+    { key: 'school-artifacts',                    href: '/school-artifacts',                    label: 'Artifacts' },
+    { key: 'school-leadership-directory',         href: '/school-leadership-directory',         label: 'Directory' },
   ]},
   { group: 'myhub', label: 'My Hub', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>', items: [
-    // Start here — orientation page
-    { key: 'my-hub-read-me',       href: '/my-hub-read-me',       label: 'Read Me First' },
-    // My CPD + Induction (weekly-checklist + team-induction moved to School Leaders 2026-05-21)
-    { key: 'learning-path',        href: '/learning-path',        label: 'Learning Path' },
-    { key: 'my-portfolio',         href: '/my-portfolio',         label: 'My Portfolio' },
-    { key: 'my-certificates',      href: '/my-certificates',      label: 'My Progress Record' },
-    { key: 'my-induction',         href: '/my-induction',         label: 'My Induction' },
+    // Role orientation
+    { key: 'my-hub-read-me',                      href: '/my-hub-read-me',                      label: 'Read Me First: My Hub' },
+    { key: 'admin-read-me-foundation-rep',        href: '/admin-read-me-foundation-rep',        label: 'Read Me First: FR/GM' },
+    { key: 'admin-read-me-school-principal',      href: '/admin-read-me-school-principal',      label: 'Read Me First: School Principal' },
+    { key: 'admin-read-me-academic-coord',        href: '/admin-read-me-academic-coord',        label: 'Read Me First: Academic Coordinator' },
+    // Leadership competency — developmental self-reflection only
+    { key: 'competency-framework',                href: '/competency-framework',                label: 'Competency Framework' },
+    { key: 'learning-path',                       href: '/learning-path',                       label: 'Learning Path' },
+    { key: 'my-portfolio',                        href: '/my-portfolio',                        label: 'My Portfolio' },
+    { key: 'my-certificates',                     href: '/my-certificates',                     label: 'My Progress Record' },
   ]},
 ];
 

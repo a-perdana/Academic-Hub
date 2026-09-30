@@ -218,11 +218,13 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   document.body.style.display = '';
 
   // Principal Appraisal: Handbook 26-27 §7 / §13 — the Chief Academic Officer /
-  // designated Academic Director (AH academic_admin, or central_admin) is the
+  // designated Academic Director (AH academic_admin, or a CH director) is the
   // primary appraiser; the Foundation Representative / General Manager is the
   // governance-side co-reviewer and summary co-signer for their own school.
   const ahSubs = profile?.ah_sub_roles || [];
-  const isAppraiser = profile?.role_academichub === 'academic_admin' || profile?.role_centralhub === 'central_admin';
+  const isCHDirector = ['central_user', 'central_admin'].includes(profile?.role_centralhub)
+    && (profile?.role_centralhub === 'central_admin' || (profile?.ch_sub_roles || []).includes('director'));
+  const isAppraiser = profile?.role_academichub === 'academic_admin' || isCHDirector;
   const isFR = ahSubs.includes('foundation_representative');
   if (!isAppraiser && !isFR) {
     showAccessDenied('Restricted to the Eduversal primary appraiser and Foundation Representatives / General Managers.');

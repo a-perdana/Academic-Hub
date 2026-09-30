@@ -1230,7 +1230,7 @@ body:has(> .page-footer) > .page-wrap {
       <div class="info-strip__callout"><span class="info-strip__callout-icon" aria-hidden="true">&#x26A0;&#xFE0F;</span><span><strong>Score against the anchor, not a gut feeling.</strong> Every item links to a Cambridge Teacher Standard (the CTS chips) &mdash; click one if you are unsure what it means.</span></div>
     </div>
     <div class="info-strip__pills">
-      <span class="info-strip__pill"><b>For:</b> Academic Coordinator (+ SP, CC)</span>
+      <span class="info-strip__pill"><b>For:</b> Principal, Academic Coordinator, Cambridge Coordinator</span>
       <span class="info-strip__pill"><b>Scope:</b> Your school's teachers</span>
       <span class="info-strip__pill"><b>Anchor:</b> Cambridge Teacher Standards</span>
     </div>
@@ -2035,7 +2035,7 @@ body:has(> .page-footer) > .page-wrap {
                 </div>
               </div>
               <textarea class="field feedback-textarea" id="narr_actions"
-                placeholder="e.g. "By [date]: prepare tiered exit tasks for Year 10 lessons. Progress check: bring two examples to next pre-conference.""
+                placeholder="e.g. By [date]: prepare tiered exit tasks for Year 10 lessons, and bring two examples to the next review meeting."
                 oninput="checkGoCompleteness()"></textarea>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;">
                 <div>
@@ -2045,7 +2045,7 @@ body:has(> .page-footer) > .page-wrap {
                 <div>
                   <label class="feedback-tag-label">How progress will be checked <span style="color:#dc2626;">*</span></label>
                   <input type="text" class="field feedback-tag-input" id="narr_go_check"
-                    placeholder="e.g. Bring lesson plan to pre-conference"
+                    placeholder="e.g. Bring two examples to the next review meeting"
                     oninput="checkGoCompleteness()">
                 </div>
               </div>
@@ -2196,10 +2196,10 @@ body:has(> .page-footer) > .page-wrap {
       <div class="progress-card" style="margin-top:20px;">
         <div class="progress-title">Rubric Legend</div>
         <div style="display:flex;flex-direction:column;gap:6px;font-size:.75rem;">
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong> — Exceptional practice</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong> — Expected standard</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong> — Developing</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong> — Does not meet</span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block;"></span><span><strong>4 Distinguished</strong></span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#ca8a04;display:inline-block;"></span><span><strong>3 Proficient</strong></span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#f97316;display:inline-block;"></span><span><strong>2 Basic</strong></span></div>
+          <div style="display:flex;align-items:center;gap:8px;"><span style="width:10px;height:10px;border-radius:50%;background:#dc2626;display:inline-block;"></span><span><strong>1 Unsatisfactory</strong></span></div>
           <div style="font-size:.7rem;color:#64748b;margin-top:4px;line-height:1.5;">Every applicable item is scored. A framework score is the mean of all applicable item ratings, converted with (mean &divide; 4) &times; 100.</div>
         </div>
       </div>
@@ -2277,7 +2277,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Appraisal · Teacher Framework</span>
       <h2 class="page-footer__cta-title">Score against the framework — anchored to Cambridge.</h2>
-      <p class="page-footer__cta-desc">Every appraisal item maps to a Cambridge Teacher Standard. Score what you observed, evidence each judgement, and calibrate with other appraisers first so the network's appraisal data stays fair and comparable.</p>
+      <p class="page-footer__cta-desc">Every appraisal item maps to a Cambridge Teacher Standard. Score what you observed, evidence each judgement, and calibrate with other appraisers so the network's appraisal data stays fair and comparable.</p>
       <a href="/appraiser-calibration" class="page-footer__cta-btn">Open Appraisal Calibration <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Teacher Appraisal Entry footer navigation">
@@ -2285,7 +2285,7 @@ body:has(> .page-footer) > .page-wrap {
         <span class="page-footer__nav-heading">Appraisal</span>
         <a href="/appraiser-calibration" class="page-footer__nav-link">Appraisal Calibration</a>
         <a href="/teacher-walkthrough-entry" class="page-footer__nav-link">Teacher Walkthrough</a>
-        <a href="/teacher-kpi-evaluation" class="page-footer__nav-link">Teacher KPI Evaluation</a>
+        <a href="/teacher-levels" class="page-footer__nav-link">Teacher Levels</a>
       </div>
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">References</span>
@@ -2529,7 +2529,8 @@ function buildItemRow(item) {
 
   const theory = item.theory_basis ? `<div class="item-theory">${esc(item.theory_basis)}</div>` : '';
   const examples = item.evidence_examples ? `<div class="item-theory">Evidence: ${esc(item.evidence_examples)}</div>` : '';
-  const lvFrom = item.visible_from || '';
+  // The Early Years instruments are not level-gated, so their items carry no level pill.
+  const lvFrom = String(item.id).startsWith('EY') ? '' : (item.visible_from || '');
   const lvClass = lvFrom ? `level-${lvFrom}` : '';
   const lvPill = lvFrom
     ? `<span class="level-intro-pill ${lvFrom}" title="Introduced at ${levelLabel(lvFrom)} level">${levelLabel(lvFrom)}</span>`
@@ -2560,7 +2561,7 @@ function buildItemRow(item) {
     <div class="score-row">${scoreHtml}</div>
     <div class="item-note-row">
       <button class="item-note-toggle" id="noteToggle-${item.id}" onclick="toggleNote('${item.id}')">+ Add note</button>
-      <span class="note-required-hint" id="noteHint-${item.id}">⚠ note required for score ≤ 2</span>
+      <span class="note-required-hint" id="noteHint-${item.id}">⚠ add a note with the evidence for this score</span>
     </div>
     <textarea class="item-note-input" id="note-${item.id}"
       placeholder="Evidence / comment for this item…"
@@ -4079,13 +4080,16 @@ async function loadWalkthroughHistory() {
   const year = document.getElementById('academicYear')?.value;
   if (!uid || !year) return [];
   try {
-    const snap = await getDocs(
-      query(
-        collection(window.db, 'teacher_walkthroughs'),
-        where('teacherUid',  '==', uid),
-        where('academicYear','==', year)
-      )
-    );
+    const coll = collection(window.db, 'teacher_walkthroughs');
+    let snap;
+    try {
+      snap = await getDocs(query(coll, where('teacherUid', '==', uid), where('academicYear', '==', year)));
+    } catch (e0) {
+      // School leaders read their own school's walkthroughs (rule branch added
+      // 2026-10-01); the query has to carry the same schoolId filter.
+      snap = await getDocs(query(coll, where('teacherUid', '==', uid), where('academicYear', '==', year),
+        where('schoolId', '==', window.userProfile?.schoolId || '')));
+    }
     return snap.docs
       .map(d => ({ id: d.id, ...d.data() }))
       .sort((a, b) => (b.visitDate?.seconds || 0) - (a.visitDate?.seconds || 0));
@@ -4130,7 +4134,7 @@ function renderWalkthroughHistory(records) {
       return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:6px;${style}">${code} ${label}</span>`;
     }).join(' ');
     const keyObs = rec.keyObservation
-      ? `<div style="font-size:.78rem;color:#374151;margin-top:6px;font-style:italic;line-height:1.5;">"${rec.keyObservation}"</div>`
+      ? `<div style="font-size:.78rem;color:#374151;margin-top:6px;font-style:italic;line-height:1.5;">&ldquo;${esc(rec.keyObservation)}&rdquo;</div>`
       : '';
     return `
       <div style="padding:12px 0;border-bottom:1px solid #f1f5f9;">
@@ -4149,7 +4153,7 @@ function renderWalkthroughHistory(records) {
         Walkthrough History — ${records.length} visit${records.length > 1 ? 's' : ''} this year
       </div>
       <div style="font-size:.71rem;color:#94a3b8;margin-bottom:14px;font-style:italic;">
-        Developmental evidence only — walkthroughs never enter the F2 calculation or the composite.
+        Formative only &mdash; no score, not used in annual appraisal calculations (Teacher Appraisal: Walkthrough Form 26-27).
       </div>
       ${rows}
     </div>`;
@@ -4660,7 +4664,7 @@ const FW_TIP_CONTENT = {
   'f3-who': () => ({
     title: '👤 Who fills F3?',
     body: `<p>The <strong>appraiser</strong> scores F3, after the teacher has had the chance to present evidence. F3 should be scored by someone who regularly works with the teacher, with input from the school administrators.</p>
-      <p style="margin-top:8px;">F3 is not a self-assessment — the teacher presents evidence but does not score themselves.</p>`
+      <p style="margin-top:8px;">F3 scores are entered only after the teacher has had the chance to present their full portfolio of evidence at the End-of-Year Conference.</p>`
   }),
   'f3-when': () => ({
     title: '🗓 When is F3 scored?',
@@ -5166,12 +5170,12 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
               style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;border-bottom:1px solid #f1f5f9;"
               onmouseover="this.style.background='#f5f3ff'" onmouseout="this.style.background=''">
               <div style="width:36px;height:36px;border-radius:50%;background:#ede9fe;display:flex;align-items:center;justify-content:center;font-weight:700;color:#7c3aed;font-size:.9rem;flex-shrink:0;">
-                ${(u.displayName||'?')[0].toUpperCase()}
+                ${esc((u.displayName||'?')[0].toUpperCase())}
               </div>
               <div>
-                <div style="font-size:.88rem;font-weight:700;color:#1e293b;">${u.displayName||'—'}</div>
+                <div style="font-size:.88rem;font-weight:700;color:#1e293b;">${esc(u.displayName||'—')}</div>
                 <div style="font-size:.72rem;color:#64748b;margin-top:1px;">
-                  ${schoolName ? schoolName : ''}${u.subject ? ' · ' + u.subject : ''}
+                  ${schoolName ? esc(schoolName) : ''}${u.subject ? ' · ' + esc(u.subject) : ''}
                 </div>
               </div>
             </div>`;
@@ -5338,7 +5342,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       </div>
       ${f2Sections}
       <div class="sa-fw-section">
-        <div class="sa-fw-title">F3 — Professional Conduct &amp; Development</div>
+        <div class="sa-fw-title">F3 — Teacher&rsquo;s Work Inspection</div>
         <div class="sa-item-grid">${itemRows(f3.items)}</div>
       </div>`;
   }

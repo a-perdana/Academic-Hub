@@ -1245,7 +1245,6 @@ a.ref-pill:hover {
   </div>
 </div>
 
-<input type="file" id="globalFileInput" style="display:none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.jpg,.jpeg,.png,.zip">
 <div class="toast" id="toast"><span class="toast-icon">✓</span><span id="toastMsg"></span></div>
 
 <script src="partials/navbar-loader.js"></script>
@@ -1253,9 +1252,6 @@ a.ref-pill:hover {
 import {
   collection, doc, getDoc, getDocs, setDoc, query, where, serverTimestamp, arrayUnion
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import {
-  getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 let FRAMEWORK = null;
 let appraisalDoc = null;
@@ -1265,7 +1261,6 @@ let isReviewed = false;
 let isAdmin = false;
 let saveTimer = null;
 let toastTimer = null;
-let pendingUploadAspect = null;
 
 function showToast(msg, icon = '✓') {
   const toast = document.getElementById('toast');
@@ -1350,9 +1345,9 @@ function totalCompletion() {
 }
 
 // ===== PRE-SUBMIT REVIEW =====
-// Submitting is one-way from the school's side: the rule lets them write, but
-// every input on this page disables the moment status leaves 'draft', and only
-// Eduversal can reopen it. The failure this guards against is a leader who
+// Submitting disables every input on this page until the school reopens it
+// (allowed until the Phase 3 Validation Visit rates it — see
+// canReopenSelfAppraisal()). The failure this guards against is a leader who
 // completes one domain and submits believing they submitted only that domain.
 // A per-domain breakdown makes the four empty ones visible at the decision
 // point, which a single aggregate count never did.
@@ -1466,8 +1461,8 @@ async function saveAppraisal(newStatus) {
   if (newStatus === 'submitted') {
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('btnSaveDraft').style.display = 'none';
-    const rb = document.getElementById('btnReopen'); if (rb) rb.style.display = '';
-    showNotice('submitted');
+    const rb = document.getElementById('btnReopen'); if (rb) rb.style.display = canReopenSelfAppraisal() ? '' : 'none';
+    showNotice(canReopenSelfAppraisal() ? 'submitted' : 'validated');
     switchView(currentView || 'overview');
   }
 }
@@ -1525,6 +1520,7 @@ function updateSidebarScores() {
 function showNotice(type) {
   const map = {
     submitted: { cls:'notice-success', msg:'Your self-appraisal has been submitted. Your Eduversal supervisors use it to prepare the next on-site visit. Reopen it to update it before the Phase 3 visit, and keep the Evidence Guide workbook in step.' },
+    validated: { cls:'notice-info',    msg:'Your self-appraisal has been submitted and the Phase 3 Validation Visit has rated it, so it can no longer be reopened this cycle. Contact your Visit I Supervisor if something needs correcting.' },
     reviewed:  { cls:'notice-info',    msg:'This appraisal has been reviewed. The fields are now read-only. Contact Eduversal if you need to make amendments.' }
   };
   const n = map[type]; if (!n) return;
@@ -1533,77 +1529,11 @@ function showNotice(type) {
   document.getElementById('pageContent').prepend(el);
 }
 
-// ===== FILE UPLOAD =====
-async function uploadFile(aspectId, file) {
-  const storage = getStorage(window.firebaseApp);
-  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-  const path = `school_appraisals/${appraisalDocId}/${aspectId}/${Date.now()}_${safeName}`;
-  const fileRef = storageRef(storage, path);
-  const progressBar = document.querySelector(`#upload-progress-${aspectId} .upload-progress-bar`);
-  const progressWrap = document.getElementById(`upload-progress-${aspectId}`);
-  if (progressWrap) progressWrap.style.display = 'block';
-  return new Promise((resolve, reject) => {
-    const task = uploadBytesResumable(fileRef, file);
-    task.on('state_changed',
-      snap => { const pct = (snap.bytesTransferred / snap.totalBytes) * 100; if (progressBar) progressBar.style.width = pct + '%'; },
-      err => { if (progressWrap) progressWrap.style.display = 'none'; reject(err); },
-      async () => {
-        const url = await getDownloadURL(task.snapshot.ref);
-        if (progressWrap) progressWrap.style.display = 'none';
-        resolve({ url, path, name: file.name, size: file.size });
-      }
-    );
-  });
-}
-
-async function handleFileUpload(aspectId, file) {
-  if (!file) return;
-  const actionEl = document.getElementById('actionStatus');
-  actionEl.textContent = 'Uploading…';
-  try {
-    const fileData = await uploadFile(aspectId, file);
-    if (!appraisalDoc.files) appraisalDoc.files = {};
-    if (!appraisalDoc.files[aspectId]) appraisalDoc.files[aspectId] = [];
-    appraisalDoc.files[aspectId].push(fileData);
-    renderFileList(aspectId);
-    await saveAppraisal();
-  } catch(e) {
-    console.error('Upload failed', e);
-    actionEl.textContent = 'Upload failed';
-  }
-}
-
-async function removeFile(aspectId, idx) {
-  const fileData = appraisalDoc.files?.[aspectId]?.[idx];
-  if (!fileData) return;
-  try {
-    const storage = getStorage(window.firebaseApp);
-    await deleteObject(storageRef(storage, fileData.path));
-  } catch(_) {}
-  appraisalDoc.files[aspectId].splice(idx, 1);
-  renderFileList(aspectId);
-  await saveAppraisal();
-}
-window.__removeFile = removeFile;
-
-function renderFileList(aspectId) {
-  const listEl = document.getElementById(`file-list-${aspectId}`);
-  if (!listEl) return;
-  const files = appraisalDoc.files?.[aspectId] || [];
-  listEl.innerHTML = files.map((f, i) => {
-    const ext = f.name.split('.').pop().toUpperCase();
-    const sizeStr = f.size > 1024*1024 ? (f.size/1024/1024).toFixed(1)+'MB' : Math.round(f.size/1024)+'KB';
-    return `
-      <div class="file-item">
-        <span class="file-item-icon">${ext === 'PDF' ? '📄' : ['JPG','JPEG','PNG'].includes(ext) ? '🖼️' : '📎'}</span>
-        <span class="file-item-name" title="${f.name}">${f.name}</span>
-        <span class="file-item-size">${sizeStr}</span>
-        <a class="file-item-link" href="${f.url}" target="_blank" rel="noopener">View</a>
-        <button class="file-item-remove" onclick="window.__removeFile('${aspectId}',${i})" title="Remove">✕</button>
-      </div>`;
-  }).join('');
-}
-window.__renderFileList = renderFileList;
+// ===== EVIDENCE FILES =====
+// Uploads to Eduversal's storage were retired on 2026-10-01: evidence stays in
+// the school's own online storage and is linked here and in the School
+// Appraisal: Evidence Guide 26-27 workbook (School Appraisal: Handbook 26-27,
+// 4.3). Files uploaded before then still render read-only in renderDomain().
 
 // ===== SAMPLE DOC EDITOR (admin) =====
 window.__toggleDocEditor = function(aspectId) {
@@ -1772,9 +1702,9 @@ function escHtml(s) { return String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '
 function escAttr(s) { return escHtml(s); }
 
 // ===== EDUVERSAL'S WRITTEN REPORT (ES 17.8) =====
-// Read-only here — the report is written by the Eduversal appraisal team in
-// Central Hub. It appears only once they publish it, which models ES 17.8's
-// "Written Report (within 10 business days)" hand-over. A draft in progress
+// Read-only here — the Annual School Quality Report is written by the Visit I
+// Supervisor in Central Hub, within three weeks of the Phase 3 Validation Visit
+// (School Appraisal: Handbook 26-27). It appears only once published. A draft in progress
 // stays invisible so the school reads a finished document, not a work in
 // progress. Same treatment the recommendations field already gets.
 function renderPublishedReport() {
@@ -1804,7 +1734,7 @@ function renderPublishedReport() {
   return `
     <div class="ext-report">
       <div class="ext-report-head">
-        <div class="ext-report-title">Eduversal Appraisal Report</div>
+        <div class="ext-report-title">Annual School Quality Report</div>
         ${when ? `<div class="ext-report-when">Issued ${escHtml(when)}</div>` : ''}
       </div>
       ${body}
@@ -1939,10 +1869,10 @@ function renderBenchmarks() {
     </details>`;
 }
 
-// ===== APPEALS (Updated Appraisal Model §8.1) =====
+// ===== APPEALS (School Appraisal: Handbook 26-27; Overview 26-27 §8.1) =====
 // If the school believes a domain rating does not reflect the evidence, it may
-// appeal within 10 working days of the report. Eduversal responds within 15,
-// and the decision is final.
+// appeal to the CAO within 10 working days of the report. The CAO responds
+// within 15 working days, and the decision is final.
 //
 // The school writes cases{} only; decisions{} come back from Eduversal and are
 // read-only here. The rule enforces both directions — a school cannot write
@@ -2094,10 +2024,9 @@ async function submitAppeal(domainId, grounds) {
   switchView('overview');
 }
 
-// ===== ACTION PLAN (ES 17.8 "School Response and Action Planning") =====
-// The school's answer to the published report. ES 17.8 gives it four weeks:
-// an action per recommendation, each with an owner and a date, submitted to
-// Eduversal for review.
+// ===== SCHOOL DEVELOPMENT PLAN (Appraisal Suite: School Development Plan 26-27) =====
+// The school's answer to the published report: the two agreed School Development
+// Priorities, transferred into the plan within two weeks of the report.
 //
 // This is the SCHOOL's plan — Eduversal can append progress reviews but
 // cannot edit an item, and the rule enforces that in both directions.
@@ -2114,6 +2043,17 @@ function actionPlanState() {
 
 function reportPublished() {
   return appraisalDoc?.externalReview?.report?.status === 'published';
+}
+
+// A submitted self-appraisal can be reopened for the next on-site visit, but not
+// once the Phase 3 Validation Visit has rated it: Phase 3 validates that version,
+// and "Phase 4 … does not reopen the Phase 3 rating" (School Appraisal: Handbook
+// 26-27). Closed as soon as Eduversal records any Phase 3 rating or publishes
+// the report.
+function canReopenSelfAppraisal() {
+  if (isReviewed || reportPublished()) return false;
+  const p3 = appraisalDoc?.externalReview?.phases?.phase_3?.ratings || {};
+  return !Object.values(p3).some(v => v > 0);
 }
 
 // The live cycle: "Within two weeks of receiving the report, the school
@@ -2134,15 +2074,15 @@ function actionPlanDeadline() {
 // The nine fields of Appraisal Suite: School Development Plan 26-27, Step 3
 // ("How to Build Each Priority"), in its order and with its labels.
 const SDP_FIELDS = [
-  ['title',    'Priority title',    'One clear improvement goal.', 'input'],
-  ['why',      'Why this matters',  'The evidence that makes this priority important.', 'textarea'],
-  ['baseline', 'Baseline',          'What the current evidence shows now.', 'textarea'],
-  ['outcome',  'Desired outcome',   'What should be different by the end of the cycle.', 'textarea'],
-  ['actions',  'Key actions',       'Two or three practical actions. Avoid long activity lists.', 'textarea'],
-  ['owner',    'Owner',             'One lead person who keeps the priority moving.', 'input'],
-  ['evidence', 'Success evidence',  'Two or three evidence sources that will show whether practice has changed.', 'textarea'],
-  ['support',  'Eduversal support', 'What support is needed from Eduversal, if any.', 'textarea'],
-  ['reviews',  'Review points',     'When progress will be checked, including the Phase 4 Impact Review.', 'input'],
+  ['title',    'Priority title',    'Write one clear improvement goal.', 'input'],
+  ['why',      'Why this matters',  'State the evidence that makes this priority important.', 'textarea'],
+  ['baseline', 'Baseline',          'Describe what the current evidence shows now.', 'textarea'],
+  ['outcome',  'Desired outcome',   'Describe what should be different by the end of the cycle.', 'textarea'],
+  ['actions',  'Key actions',       'Choose two or three practical actions. Avoid long activity lists.', 'textarea'],
+  ['owner',    'Owner',             'Name one lead person who is responsible for keeping the priority moving.', 'input'],
+  ['evidence', 'Success evidence',  'Choose two or three evidence sources that will show whether practice has changed.', 'textarea'],
+  ['support',  'Eduversal support', 'State what support is needed from Eduversal, if any.', 'textarea'],
+  ['reviews',  'Review points',     'Agree when progress will be checked, including the Phase 4 Impact Review.', 'input'],
 ];
 const blankPriority = () => Object.fromEntries(SDP_FIELDS.map(([k]) => [k, '']));
 
@@ -2156,9 +2096,13 @@ function seedItemsFromReport() {
 function renderActionPlan() {
   if (!reportPublished()) return '';
   const ap = actionPlanState();
-  const locked = ap.status === 'submitted';
+  // Submitting records that the two priorities were transferred on time; it does
+  // not freeze the plan. "The school monitors both priorities during Semester 2
+  // and adjusts the actions when the evidence shows that a different approach is
+  // needed" (School Appraisal: Handbook 26-27, 5.3) — so it stays editable.
+  const submitted = ap.status === 'submitted';
   const due = actionPlanDeadline();
-  const overdue = due && Date.now() > due.getTime() && !locked;
+  const overdue = due && Date.now() > due.getTime() && !submitted;
   const legacy = ap.items.filter(it => it && it.action !== undefined && it.title === undefined);
   const items = ap.items.filter(it => it && it.title !== undefined);
 
@@ -2171,8 +2115,8 @@ function renderActionPlan() {
       ${SDP_FIELDS.map(([k, label, hint, kind]) => `
         <label class="apx-label" for="apx_${k}_${i}">${escHtml(label)}</label>
         ${kind === 'input'
-          ? `<input id="apx_${k}_${i}" data-ap-idx="${i}" data-ap-field="${k}" ${locked ? 'disabled' : ''} value="${escAttr(it[k] || '')}" placeholder="${escAttr(hint)}">`
-          : `<textarea id="apx_${k}_${i}" class="apx-action" data-ap-idx="${i}" data-ap-field="${k}" ${locked ? 'disabled' : ''} placeholder="${escAttr(hint)}">${escHtml(it[k] || '')}</textarea>`}
+          ? `<input id="apx_${k}_${i}" data-ap-idx="${i}" data-ap-field="${k}" value="${escAttr(it[k] || '')}" placeholder="${escAttr(hint)}">`
+          : `<textarea id="apx_${k}_${i}" class="apx-action" data-ap-idx="${i}" data-ap-field="${k}" placeholder="${escAttr(hint)}">${escHtml(it[k] || '')}</textarea>`}
       `).join('')}
     </div>`).join('');
 
@@ -2198,19 +2142,20 @@ function renderActionPlan() {
         Within two weeks of receiving the report, transfer the two agreed School Development Priorities
         from the report into your plan — the working template is Appraisal Suite: School Development Plan 26-27.
         Keep each priority short: two or three actions, one owner, two or three sources of success evidence.
+        Monitor both priorities during Semester 2 and adjust the actions when the evidence shows that a different approach is needed.
         The Phase 4 Impact Review checks what changed; it creates no new Domain Rating.
-        A Critical Attention issue is not handled here — it follows the urgent two-week process with your Visit I Supervisor.
-        ${locked ? '<br><strong>This plan has been submitted and is now read-only.</strong>' : ''}
+        A Critical Attention issue is not delayed or hidden inside normal priority-setting: its action plan is required within two weeks of the visit report, and the Eduversal Academic Board is involved directly.
+        ${submitted ? '<br><strong>Submitted to Eduversal. Keep the plan up to date as the evidence changes.</strong>' : ''}
       </div>
       ${items.length ? rows : `
         <div class="apx-empty">
           No priorities yet.
           <button type="button" id="apxSeed" class="apx-btn">Start the two School Development Priorities</button>
         </div>`}
-      ${!locked && items.length ? `
+      ${items.length ? `
         <div class="apx-actions">
-          <button type="button" id="apxSave" class="apx-btn">Save draft</button>
-          <button type="button" id="apxSubmit" class="apx-btn apx-btn--primary">Submit to Eduversal</button>
+          <button type="button" id="apxSave" class="apx-btn">${submitted ? 'Save changes' : 'Save draft'}</button>
+          ${submitted ? '' : '<button type="button" id="apxSubmit" class="apx-btn apx-btn--primary">Submit to Eduversal</button>'}
           <span id="apxStatusMsg" class="apx-msg"></span>
         </div>` : ''}
       ${legacyHtml}
@@ -2257,7 +2202,7 @@ async function saveActionPlan(newStatus) {
   }
   appraisalDoc.actionPlan = { ...(appraisalDoc.actionPlan || {}), ...payload };
   if (msg) msg.textContent = newStatus === 'submitted' ? 'Submitted ✓' : 'Saved ✓';
-  // Submitting locks the form, so re-render to show it read-only.
+  // Re-render so the Submit button gives way to "Save changes".
   if (newStatus === 'submitted') switchView('overview');
 }
 
@@ -2405,7 +2350,7 @@ function renderDomain(domainId) {
       <div class="aspect-card${idx === 0 ? ' open' : ''}" id="aspect-${aspect.id}" style="border-left-color:${col};">
         <div class="aspect-head" role="button" tabindex="0" aria-expanded="${idx === 0}" aria-controls="aspect-body-${aspect.id}" onclick="window.__toggleAspect('${aspect.id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.__toggleAspect('${aspect.id}');}">
           <div class="aspect-head-left">
-            <div class="aspect-num">${aspect.code || `${domain.code}-${'ABCDEFGHI'[idx]}`}${aspect.core ? '<span class="aspect-core" title="Core aspect — a rating of 1 triggers a Critical Attention outcome for the whole visit">Core</span>' : ''}</div>
+            <div class="aspect-num">${aspect.code || `${domain.code}-${'ABCDEFGHI'[idx]}`}${aspect.core ? '<span class="aspect-core" title="Core aspect — a rating of 1 triggers a Critical Attention outcome for the entire visit">Core</span>' : ''}</div>
             <div class="aspect-title">${aspect.title}</div>
             <div class="aspect-desc">${aspect.description}</div>
           </div>
@@ -2415,7 +2360,7 @@ function renderDomain(domainId) {
           </div>
         </div>
         <div class="aspect-body" id="aspect-body-${aspect.id}">
-          ${aspect.core ? `<div class="core-note"><strong>Core aspect.</strong> A rating of 1 in any Core aspect triggers a Critical Attention outcome for the entire visit, regardless of the other ratings (School Appraisal: Rating Rubric 26-27).</div>` : ''}
+          ${aspect.core ? `<div class="core-note"><strong>Core aspect.</strong> A rating of 1 in any Core aspect triggers a Critical Attention outcome for the entire visit, regardless of the other ratings (School Appraisal: Rating Rubric 26-27).${aspect.code === 'D5-B' ? ' Any Safeguarding &amp; Child Protection evidence item verified as “No” also gives a Critical Attention outcome (School Appraisal: Handbook 26-27).' : ''}</div>` : ''}
 
           <!-- Expectations (collapsible) -->
           <div class="ab-section">
@@ -2609,7 +2554,7 @@ function switchView(viewId) {
 
     content.querySelector('#apxSave')?.addEventListener('click', () => saveActionPlan());
 
-    // ── Appeal (Updated Appraisal Model §8.1) ──
+    // ── Appeal (School Appraisal: Overview 26-27 §8.1) ──
     // Two-click confirm: an appeal is a formal act with a final decision at
     // the end of it, not something to fire off by mis-click.
     const apzBtn = content.querySelector('#apzSubmit');
@@ -2635,8 +2580,8 @@ function switchView(viewId) {
       submitAppeal(domainId, grounds);
     });
 
-    // Submitting hands the plan to Eduversal and closes editing, so it asks
-    // once rather than on a single click.
+    // Submitting hands the plan to Eduversal, so it asks once rather than on a
+    // single click. The plan stays editable afterwards (Handbook 5.3).
     const submitBtn = content.querySelector('#apxSubmit');
     submitBtn?.addEventListener('click', () => {
       const items = actionPlanState().items.filter(it => it && it.title !== undefined);
@@ -2652,7 +2597,7 @@ function switchView(viewId) {
       if (submitBtn.dataset.confirming !== '1') {
         submitBtn.dataset.confirming = '1';
         const original = submitBtn.textContent;
-        submitBtn.textContent = 'Submit and lock? Click again';
+        submitBtn.textContent = 'Submit to Eduversal? Click again';
         setTimeout(() => { submitBtn.dataset.confirming = '0'; submitBtn.textContent = original; }, 3000);
         return;
       }
@@ -2685,18 +2630,6 @@ function switchView(viewId) {
     content.querySelectorAll('.evidence-link-input').forEach(inp => {
       const aspectId = inp.id.replace('link-input-', '');
       inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); window.__addLink(aspectId); } });
-    });
-    // Wire drop zones
-    content.querySelectorAll('.drop-zone').forEach(zone => {
-      const aspectId = zone.dataset.aspect;
-      zone.addEventListener('click', () => { pendingUploadAspect = aspectId; document.getElementById('globalFileInput').click(); });
-      zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('dragover'); });
-      zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
-      zone.addEventListener('drop', e => {
-        e.preventDefault(); zone.classList.remove('dragover');
-        const file = e.dataTransfer.files[0];
-        if (file) handleFileUpload(aspectId, file);
-      });
     });
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -2807,8 +2740,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     actionBar.style.display = 'flex';
     document.getElementById('btnSubmit').style.display = 'none';
     document.getElementById('btnSaveDraft').style.display = 'none';
-    document.getElementById('btnReopen').style.display = '';
-    document.getElementById('actionStatus').textContent = 'Submitted — update it before each on-site visit';
+    const reopenable = canReopenSelfAppraisal();
+    document.getElementById('btnReopen').style.display = reopenable ? '' : 'none';
+    document.getElementById('actionStatus').textContent = reopenable
+      ? 'Submitted — update it before each on-site visit'
+      : 'Submitted — validated at Phase 3';
   }
 
   // "Before every scheduled on-site visit, schools must complete or update the
@@ -2817,6 +2753,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   // (Eduversal's end-of-cycle sign-off) stays locked.
   const reopenBtn = document.getElementById('btnReopen');
   reopenBtn.addEventListener('click', async () => {
+    if (!canReopenSelfAppraisal()) { reopenBtn.style.display = 'none'; return; }
     if (reopenBtn.dataset.confirming !== '1') {
       reopenBtn.dataset.confirming = '1';
       const original = reopenBtn.textContent;
@@ -2844,18 +2781,11 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     await saveAppraisal('submitted');
   });
 
-  // Global file input
-  document.getElementById('globalFileInput').addEventListener('change', e => {
-    const file = e.target.files?.[0];
-    if (file && pendingUploadAspect) { handleFileUpload(pendingUploadAspect, file); pendingUploadAspect = null; }
-    e.target.value = '';
-  });
-
   document.getElementById('pageContent').style.display = 'block';
   switchView('overview');
   updateSidebarScores();
   if (isReviewed) showNotice('reviewed');
-  else if (appraisal.status === 'submitted') showNotice('submitted');
+  else if (appraisal.status === 'submitted') showNotice(canReopenSelfAppraisal() ? 'submitted' : 'validated');
 });
 </script>
 </body>

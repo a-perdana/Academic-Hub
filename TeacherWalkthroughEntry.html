@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Classroom Walkthrough — Academic Hub</title>
+<title>Teaching Practice Walkthrough — Academic Hub</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%23072a33'/><polygon points='10,45 50,65 50,70 10,50' fill='%23066c84'/><polygon points='90,45 50,65 50,70 90,50' fill='%230a7e9b'/><polygon points='50,25 90,45 50,65 10,45' fill='%230891b2'/><circle cx='76' cy='76' r='20' fill='%230891b2' stroke='%23072a33' stroke-width='3'/><text x='76' y='84' font-family='Georgia,serif' font-size='26' font-weight='bold' text-anchor='middle' fill='white'>A</text></svg>">
 <script src="firebase-config.js"></script>
 <script>
@@ -278,21 +278,6 @@ body:has(> .page-footer) > .page-wrap {
 }
 .char-count.warn { color: #ca8a04; }
 
-/* ── CONFIDENCE ── */
-.confidence-row {
-  display: flex; align-items: center; gap: 10px; margin-top: 10px;
-}
-.confidence-label { font-size: .67rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #94a3b8; }
-.confidence-opts { display: flex; gap: 6px; }
-.conf-btn {
-  padding: 3px 10px; border: 1.5px solid #e2e8f0; border-radius: 20px;
-  font-family: inherit; font-size: .7rem; font-weight: 700; cursor: pointer;
-  background: #fff; color: #64748b; transition: all .15s;
-}
-.conf-btn:hover { border-color: #059669; color: #059669; }
-.conf-btn.sel { border-color: #059669; background: #f0fdf4; color: #15803d; }
-.conf-btn.sel-low { border-color: #ca8a04; background: #fefce8; color: #92400e; }
-
 /* ── NARRATIVE ── */
 .narrative-card {
   background: #fff; border: 1px solid #e2e8f0; border-radius: 16px;
@@ -305,7 +290,7 @@ body:has(> .page-footer) > .page-wrap {
 .narrative-head h2 { font-size: .95rem; font-weight: 700; color: #1e293b; }
 .narrative-body { padding: 20px 24px; }
 
-/* Glow/Grow/Go tabs */
+/* Narrative panes (Key Observation · Suggested Focus) */
 .narrative-tabs { display: flex; gap: 0; margin-bottom: 16px; border-radius: 10px; overflow: hidden; border: 1px solid #e2e8f0; }
 .narr-tab {
   flex: 1; padding: 9px 8px; font-family: inherit; font-size: .78rem; font-weight: 700;
@@ -587,7 +572,7 @@ body:has(> .page-footer) > .page-wrap {
         <svg class="info-strip__chevron" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="info-strip__explainer" id="infoStripExplainer">
-        <p class="info-strip__lede">A walkthrough is a short, unannounced visit of about 10&ndash;15 minutes, recorded with the Teaching Practice Walkthrough Form. The Principal walks through every classroom weekly; other school appraisers add their own walkthroughs through the year.</p>
+        <p class="info-strip__lede">A walkthrough is a short, unannounced visit of about 10&ndash;15 minutes, recorded with the Teaching Practice Walkthrough Form. The Principal walks through every classroom weekly. Other school leaders may also make short visits at any time; the written feedback on the Walkthrough Form must be shared with the teacher (Teacher Appraisal: Handbook 26-27).</p>
         <ol class="info-strip__flow">
           <li><strong>Visit a classroom</strong> for about 10&ndash;15 minutes, unannounced</li>
           <li><strong>Mark each focus E / D / N</strong> and note what you saw while it is fresh</li>
@@ -689,18 +674,21 @@ body:has(> .page-footer) > .page-wrap {
             <input type="time" id="visitTime">
           </div>
           <div class="field">
-            <label>Duration (minutes)</label>
+            <label>Approximate Duration (min)</label>
             <input type="number" id="duration" value="10" min="5" max="20">
           </div>
         </div>
         <div class="form-row">
           <div class="field">
             <label>Observer Role</label>
+            <!-- The live form also lists Subject Leader and Subject Specialist.
+                 Only these three roles can open this page (and the rule only
+                 lets them create a record); Subject Specialists record on
+                 Central Hub /classroom-walkthrough-entry. -->
             <select id="observerRole">
               <option value="School Principal">School Principal</option>
               <option value="Academic Coordinator">Academic Coordinator</option>
               <option value="Cambridge Coordinator">Cambridge Coordinator</option>
-              <option value="Subject Leader">Subject Leader</option>
             </select>
           </div>
           <div class="field">
@@ -720,31 +708,7 @@ body:has(> .page-footer) > .page-wrap {
       </div>
     </div>
 
-    <!-- OBSERVATION FOCI -->
-    <div class="card">
-      <div class="card-head">
-        <div>
-          <h2>Observation Foci</h2>
-          <div class="card-head-sub">For each focus, select E (Evident), D (Developing), or N (Not Observed). Click focus to activate, use keyboard shortcuts to rate.</div>
-        </div>
-      </div>
-      <div style="padding:0 24px 12px;">
-        <div class="kbd-hint">
-          <span style="font-weight:700;color:#374151;">Keyboard shortcuts:</span>
-          <span><span class="kbd">↑</span><span class="kbd">↓</span> navigate foci</span>
-          <span><span class="kbd">E</span> Evident</span>
-          <span><span class="kbd">D</span> Developing</span>
-          <span><span class="kbd">N</span> Not Observed</span>
-          <span><span class="kbd">Tab</span> jump to note</span>
-          <span><span class="kbd">?</span> open rubric</span>
-        </div>
-      </div>
-      <div class="foci-grid" id="fociGrid">
-        <!-- built by JS -->
-      </div>
-    </div>
-
-    <!-- NARRATIVE — the live form's two fields (Teacher Appraisal: Walkthrough Form 26-27) -->
+    <!-- NARRATIVE — the live form's two fields, placed before the foci as on the form (Teacher Appraisal: Walkthrough Form 26-27) -->
     <div class="narrative-card">
       <div class="narrative-head">
         <div>
@@ -777,6 +741,28 @@ body:has(> .page-footer) > .page-wrap {
         <div hidden><textarea id="narr_grow"></textarea><div id="grow-count"></div></div>
       </div>
     </div>
+
+    <!-- OBSERVATION FOCI -->
+    <div class="card">
+      <div class="card-head">
+        <div>
+          <h2>Observation Foci</h2>
+          <div class="card-head-sub">For each focus, select E (Evident), D (Developing), or N (Not Observed). Click focus to activate, use keyboard shortcuts to rate.</div>
+        </div>
+      </div>
+      <div style="padding:0 24px 12px;">
+        <div class="kbd-hint">
+          <span style="font-weight:700;color:#374151;">Keyboard shortcuts:</span>
+          <span><span class="kbd">↑</span><span class="kbd">↓</span> navigate foci</span>
+          <span><span class="kbd">E</span> Evident</span>
+          <span><span class="kbd">D</span> Developing</span>
+          <span><span class="kbd">N</span> Not Observed</span>
+          <span><span class="kbd">Tab</span> jump to note</span>
+          <span><span class="kbd">?</span> open rubric</span>
+        </div>
+      </div>
+      <div class="foci-grid" id="fociGrid">
+        <!-- built by JS -->
       </div>
     </div>
   </div>
@@ -785,7 +771,7 @@ body:has(> .page-footer) > .page-wrap {
   <div class="success-state" id="successState">
     <div class="success-icon">&#x2705;</div>
     <div class="success-title">Walkthrough Saved</div>
-    <div class="success-sub" id="successSub">The observation record has been saved and is now visible to the teacher in their appraisal view.</div>
+    <div class="success-sub" id="successSub">The walkthrough has been saved and shared with the teacher as developmental feedback.</div>
     <button class="btn-new" onclick="resetForm()">Record Another Walkthrough</button>
   </div>
 </div>
@@ -845,7 +831,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Appraisal · Walkthroughs</span>
       <h2 class="page-footer__cta-title">Frequent walkthroughs build an honest evidence base.</h2>
-      <p class="page-footer__cta-desc">Short, regular visits surface patterns a single formal observation can miss. Keep them developmental — never scored — and share the Glow · Grow · Go feedback with the teacher soon after each visit.</p>
+      <p class="page-footer__cta-desc">Short, regular visits surface patterns a single formal observation can miss. Keep them developmental — never scored — and share the Key Observation and any Suggested Focus with the teacher in writing soon after each visit.</p>
       <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Teacher Walkthrough footer navigation">
@@ -915,8 +901,9 @@ window.teacherSearch = async function(val) {
         dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found matching "${q}"</div>`;
       } else {
         dropdown.innerHTML = results.slice(0, 8).map(u => {
-          const schoolId   = u.schoolId || u.school || '';
-          const schoolName = schoolMap[schoolId] || schoolId;
+          // schoolId is the partner_schools id only; `school` is the display name.
+          const schoolId   = u.schoolId || '';
+          const schoolName = schoolMap[schoolId] || u.school || schoolId;
           const subj = u.subject || '';
           const meta = [schoolName, subj].filter(Boolean).join(' · ');
           return `<div role="button" tabindex="0" class="teacher-dropdown-item"
@@ -984,7 +971,7 @@ document.addEventListener('click', e => {
 let RUBRIC = null;
 fetch('resources/walkthrough-rubric.json').then(r=>r.json()).then(d => { RUBRIC = d; buildFoci(); });
 
-const fociResponses = {}; // focusId → { code, note, confidence }
+const fociResponses = {}; // focusId → { code, note }
 let activeFocusIndex = -1; // keyboard nav
 const FOCUS_ORDER = ['W1','W2','W3','W4','W5'];
 const DRAFT_KEY = 'wt_draft_v1';
@@ -1163,11 +1150,6 @@ window.restoreDraft = function() {
         if (resp.note) {
           const ta = document.getElementById(`note-${id}`);
           if (ta) { ta.value = resp.note; updateCharCount(id, resp.note); }
-        }
-        if (resp.confidence) {
-          document.querySelectorAll(`.conf-btn[data-focus="${id}"]`).forEach(b => {
-            b.className = 'conf-btn' + (b.dataset.conf === resp.confidence ? (resp.confidence==='low'?' sel-low':' sel') : '');
-          });
         }
         updateFocusBadge(id, resp.code);
       });
@@ -1363,22 +1345,6 @@ window.setNote = function(focusId, note) {
   fociResponses[focusId].note = note;
 };
 
-window.setConfidence = function(focusId, conf, btn) {
-  if (!fociResponses[focusId]) fociResponses[focusId] = {};
-  const prev = fociResponses[focusId].confidence;
-  if (prev === conf) {
-    fociResponses[focusId].confidence = null;
-    btn.className = 'conf-btn';
-    return;
-  }
-  fociResponses[focusId].confidence = conf;
-  document.querySelectorAll(`.conf-btn[data-focus="${focusId}"]`).forEach(b => {
-    const isSelected = b.dataset.conf === conf;
-    b.className = 'conf-btn' + (isSelected ? (conf==='low'?' sel-low':' sel') : '');
-  });
-  autosaveDraft();
-};
-
 window.scrollToFocus = function(focusId) {
   const card = document.getElementById(`card-${focusId}`);
   if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
@@ -1424,7 +1390,7 @@ function highlightInvalid() {
   }
   const fields = [
     { id: 'subject', label: 'Subject' },
-    { id: 'yearGroup', label: 'Year Group' },
+    { id: 'yearGroup', label: 'Class Observed' },
   ];
   fields.forEach(f => {
     const el = document.getElementById(f.id);
@@ -1448,11 +1414,12 @@ function highlightInvalid() {
     firstEl = document.getElementById(`card-${unratedFoci[0]}`);
   }
 
-  // glow required
+  // Key Observation required (the field keeps its legacy id narr_glow).
+  // Both narrative panes stay visible — no tab switching.
   const glowEl = document.getElementById('narr_glow');
   const glowEmpty = !glowEl?.value.trim();
   if (glowEl) glowEl.parentElement.parentElement.classList.toggle('invalid', glowEmpty);
-  if (glowEmpty && !firstEl) { firstEl = glowEl; switchNarrTab('glow'); }
+  if (glowEmpty && !firstEl) firstEl = glowEl;
 
   if (firstEl) firstEl.scrollIntoView({ behavior:'smooth', block:'center' });
   return unratedFoci.length === 0 && fields.every(f => !!document.getElementById(f.id)?.value.trim()) && !glowEmpty;
@@ -1493,11 +1460,17 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   const now = new Date();
   document.getElementById('visitTime').value = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
 
-  // Walkthrough count badge
+  // Observer Role defaults to the signed-in leader's own role.
+  const ownRole = subRoles.includes('school_principal') ? 'School Principal'
+                : subRoles.includes('academic_coordinator') ? 'Academic Coordinator'
+                : subRoles.includes('cambridge_coordinator') ? 'Cambridge Coordinator' : '';
+  if (ownRole) document.getElementById('observerRole').value = ownRole;
+
+  // Walkthrough count badge — this academic year only (the label says so).
   try {
     const q = query(collection(db,'teacher_walkthroughs'), where('observerUid','==',user.uid));
     const snap = await getDocs(q);
-    const count = snap.size;
+    const count = snap.docs.filter(d => d.data().academicYear === yearSel.value).length;
     const badge = document.getElementById('walkthroughCountBadge');
     const text  = document.getElementById('walkthroughCountText');
     if (badge && text) {
@@ -1557,7 +1530,10 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     const payload = {
       teacherUid: document.getElementById('teacherUid').value.trim() || null,
       observerUid: user.uid,
-      schoolId: profile?.schoolId || null,       // partner_schools id (was the school NAME until 2026-10-01)
+      // The teacher's partner_schools id (was the school NAME until 2026-10-01).
+      // Leaders only see their own school's teachers, so this equals their own
+      // schoolId; for an academic_admin it is the observed teacher's school.
+      schoolId: document.getElementById('schoolId').value.trim() || profile?.schoolId || null,
       academicYear: document.getElementById('academicYear').value,
       visitDate: visitDateObj,
       duration: parseInt(document.getElementById('duration').value) || 10,
@@ -1586,7 +1562,8 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
       const subject = document.getElementById('subject').value.trim();
       document.getElementById('successSub').innerHTML =
         `Walkthrough for <strong>${teacherName}</strong> (${subject}) has been saved. ` +
-        `${goVal ? 'Key Observation and Suggested Focus recorded.' : 'Key Observation recorded.'}`;
+        `${goVal ? 'Key Observation and Suggested Focus recorded.' : 'Key Observation recorded.'} ` +
+        'The teacher can read it in Teachers Hub as developmental feedback.';
       document.getElementById('formView').style.display = 'none';
       document.getElementById('progressTracker').style.display = 'none';
       document.getElementById('successState').style.display = 'block';

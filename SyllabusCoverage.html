@@ -195,9 +195,9 @@
 <header class="page-hero" data-accent="mor" aria-label="Syllabus Coverage header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Academic Hub · Teaching Quality</div>
+      <div class="page-hero__eyebrow">Academic Hub · Curriculum</div>
       <h1 class="page-hero__title">Syllabus Coverage</h1>
-      <p class="page-hero__desc">Track how far each teacher has progressed through the Cambridge curriculum this term relative to the scheduled pacing guide.</p>
+      <p class="page-hero__desc">How far each teacher has progressed through the Cambridge pacing plan so far this academic year, against the scheduled pacing. The badges are an automatic pacing signal only: the status in your Curriculum Coverage Tracker (On Track, Watch, At Risk, Escalated) is set by the Academic Coordinator, and At Risk always needs a documented recovery action — never silently dropping required Cambridge content.</p>
     </div>
     <div class="page-hero__kpis">
       <div class="page-hero__kpi page-hero__kpi--primary">
@@ -228,22 +228,22 @@
   <span class="toolbar-label">Subject:</span>
   <select class="filter-select" id="subjectFilter">
     <option value="">All subjects</option>
-    <optgroup label="IGCSE (Year 9–10)">
+    <optgroup label="IGCSE (Grades 9–10)">
       <option value="math_pacing|year9-10|IGCSE Mathematics|#c0392b">IGCSE Mathematics</option>
       <option value="biology_pacing|year9-10|IGCSE Biology|#27ae60">IGCSE Biology</option>
       <option value="chemistry_pacing|year9-10|IGCSE Chemistry|#e67e22">IGCSE Chemistry</option>
       <option value="physics_pacing|year9-10|IGCSE Physics|#2980b9">IGCSE Physics</option>
     </optgroup>
-    <optgroup label="AS & A Level (Year 11–12)">
-      <option value="asalevel_math_pacing|year11-12|A-Level Mathematics|#c0392b">A-Level Mathematics</option>
-      <option value="asalevel_biology_pacing|year11-12|A-Level Biology|#27ae60">A-Level Biology</option>
-      <option value="asalevel_chemistry_pacing|year11-12|A-Level Chemistry|#e67e22">A-Level Chemistry</option>
-      <option value="asalevel_physics_pacing|year11-12|A-Level Physics|#2980b9">A-Level Physics</option>
+    <optgroup label="AS &amp; A Level (Grades 11–12)">
+      <option value="asalevel_math_pacing|year11-12|AS &amp; A Level Mathematics|#c0392b">AS &amp; A Level Mathematics</option>
+      <option value="asalevel_biology_pacing|year11-12|AS &amp; A Level Biology|#27ae60">AS &amp; A Level Biology</option>
+      <option value="asalevel_chemistry_pacing|year11-12|AS &amp; A Level Chemistry|#e67e22">AS &amp; A Level Chemistry</option>
+      <option value="asalevel_physics_pacing|year11-12|AS &amp; A Level Physics|#2980b9">AS &amp; A Level Physics</option>
     </optgroup>
-    <optgroup label="Cambridge Checkpoint (Year 7–8)">
-      <option value="checkpoint_math_pacing|year7-8|Checkpoint Mathematics|#c0392b">Checkpoint Mathematics</option>
-      <option value="checkpoint_english_pacing|year7-8|Checkpoint English|#2980b9">Checkpoint English</option>
-      <option value="checkpoint_science_pacing|year7-8|Checkpoint Science|#27ae60">Checkpoint Science</option>
+    <optgroup label="Lower Secondary (Grades 7–8)">
+      <option value="checkpoint_math_pacing|year7-8|Lower Secondary Mathematics|#c0392b">Lower Secondary Mathematics</option>
+      <option value="checkpoint_english_pacing|year7-8|Lower Secondary English|#2980b9">Lower Secondary English</option>
+      <option value="checkpoint_science_pacing|year7-8|Lower Secondary Science|#27ae60">Lower Secondary Science</option>
     </optgroup>
   </select>
 
@@ -284,13 +284,13 @@ const ALL_SUBJECTS = [
   { col: 'biology_pacing',            doc: 'year9-10',  label: 'IGCSE Biology',          color: '#27ae60', subjKey: 'biology' },
   { col: 'chemistry_pacing',          doc: 'year9-10',  label: 'IGCSE Chemistry',        color: '#e67e22', subjKey: 'chemistry' },
   { col: 'physics_pacing',            doc: 'year9-10',  label: 'IGCSE Physics',          color: '#2980b9', subjKey: 'physics' },
-  { col: 'asalevel_math_pacing',      doc: 'year11-12', label: 'A-Level Mathematics',    color: '#c0392b', subjKey: 'asalevel_math' },
-  { col: 'asalevel_biology_pacing',   doc: 'year11-12', label: 'A-Level Biology',        color: '#27ae60', subjKey: 'asalevel_biology' },
-  { col: 'asalevel_chemistry_pacing', doc: 'year11-12', label: 'A-Level Chemistry',      color: '#e67e22', subjKey: 'asalevel_chemistry' },
-  { col: 'asalevel_physics_pacing',   doc: 'year11-12', label: 'A-Level Physics',        color: '#2980b9', subjKey: 'asalevel_physics' },
-  { col: 'checkpoint_math_pacing',    doc: 'year7-8',   label: 'Checkpoint Mathematics', color: '#c0392b', subjKey: 'checkpoint_math' },
-  { col: 'checkpoint_english_pacing', doc: 'year7-8',   label: 'Checkpoint English',     color: '#2980b9', subjKey: 'checkpoint_english' },
-  { col: 'checkpoint_science_pacing', doc: 'year7-8',   label: 'Checkpoint Science',     color: '#27ae60', subjKey: 'checkpoint_science' },
+  { col: 'asalevel_math_pacing',      doc: 'year11-12', label: 'AS & A Level Mathematics',color: '#c0392b', subjKey: 'asalevel_math' },
+  { col: 'asalevel_biology_pacing',   doc: 'year11-12', label: 'AS & A Level Biology',   color: '#27ae60', subjKey: 'asalevel_biology' },
+  { col: 'asalevel_chemistry_pacing', doc: 'year11-12', label: 'AS & A Level Chemistry', color: '#e67e22', subjKey: 'asalevel_chemistry' },
+  { col: 'asalevel_physics_pacing',   doc: 'year11-12', label: 'AS & A Level Physics',   color: '#2980b9', subjKey: 'asalevel_physics' },
+  { col: 'checkpoint_math_pacing',    doc: 'year7-8',   label: 'Lower Secondary Mathematics', color: '#c0392b', subjKey: 'checkpoint_math' },
+  { col: 'checkpoint_english_pacing', doc: 'year7-8',   label: 'Lower Secondary English',     color: '#2980b9', subjKey: 'checkpoint_english' },
+  { col: 'checkpoint_science_pacing', doc: 'year7-8',   label: 'Lower Secondary Science',     color: '#27ae60', subjKey: 'checkpoint_science' },
 ];
 
 // Maps Teachers Hub subjKey → Academic Hub subjKey (for userProgress field lookup)

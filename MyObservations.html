@@ -668,7 +668,7 @@ function renderWalkthroughs() {
     const fociDots = [1,2,3,4,5].map(n => {
       const resp = foci[`W${n}`];
       const active = resp?.code && resp.code !== 'N';
-      return `<span class="foci-dot ${active?'yes':'no'}" title="W${n}: ${FOCI_LABELS[n-1]} (${resp?.code||'N'})"></span>`;
+      return `<span class="foci-dot ${active?'yes':'no'}" title="W${n}: ${FOCI_LABELS[n-1]} (${resp?.code||'—'})"></span>`;
     }).join('');
 
     return `<tr>
@@ -873,7 +873,7 @@ function esc(str) {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Leadership observations · Year-round</span>
       <h2 class="page-footer__cta-title">Make the next observation count.</h2>
-      <p class="page-footer__cta-desc">A short, focused walkthrough every week beats one long appraisal once a term. Pick one teacher, watch one focus, and write back the same day — the people you observe remember what you wrote, not how long you stayed.</p>
+      <p class="page-footer__cta-desc">The school's appraisers formally observe each teacher at least three times per semester, and the Principal walks through every classroom weekly. Walkthroughs are formative only &mdash; no score, not used in annual appraisal calculations &mdash; so share the feedback with the teacher.</p>
       <a href="TeacherWalkthroughEntry.html" class="page-footer__cta-btn">Start a new walkthrough <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="My Observations footer navigation">
@@ -882,7 +882,7 @@ function esc(str) {
         <a href="/teacher-appraisal-entry" class="page-footer__nav-link">New Appraisal</a>
         <a href="/teacher-walkthrough-entry" class="page-footer__nav-link">New Walkthrough</a>
         <a href="/appraiser-calibration" class="page-footer__nav-link">Calibration</a>
-        <a href="/teacher-kpi-evaluation" class="page-footer__nav-link">KPI Evaluation</a>
+        <a href="/teacher-levels" class="page-footer__nav-link">Teacher Levels</a>
       </div>
       <div class="page-footer__nav-group">
         <span class="page-footer__nav-heading">References</span>
@@ -895,7 +895,7 @@ function esc(str) {
   </div>
   <div class="page-footer__meta">
     <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
-    <span class="page-footer__meta-right">Submitted observations are immutable · disputes open a review lane</span>
+    <span class="page-footer__meta-right">Finalised records can be flagged for review</span>
   </div>
 </footer>
 </body>

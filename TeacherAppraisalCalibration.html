@@ -286,31 +286,6 @@ body:has(> .page-footer) > .page-wrap {
 /* Save status */
 .save-status { font-size: .75rem; color: #94a3b8; text-align: center; padding: 8px; }
 
-/* Admin leaderboard */
-.lb-table { width: 100%; border-collapse: collapse; }
-.lb-table th {
-  font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em;
-  color: #94a3b8; padding: 8px 12px; text-align: left; border-bottom: 1px solid #e2e8f0;
-}
-.lb-table td { font-size: .82rem; color: #1e293b; padding: 10px 12px; border-bottom: 1px solid #f8fafc; }
-.lb-table tr:last-child td { border-bottom: none; }
-.lb-table tr:hover td { background: #f8fafc; }
-.lb-rank { font-weight: 800; color: #94a3b8; }
-.lb-name { font-weight: 600; }
-.lb-school { font-size: .73rem; color: #94a3b8; }
-.lb-pass { color: #16a34a; font-weight: 700; font-size: .78rem; }
-.lb-retry { color: #b45309; font-weight: 700; font-size: .78rem; }
-.lb-na { color: #cbd5e1; font-size: .78rem; }
-.lb-bar-wrap { width: 100px; }
-.lb-bar-track { background: #e2e8f0; border-radius: 3px; height: 6px; }
-.lb-bar-fill { height: 6px; border-radius: 3px; }
-.lb-bar-lbl { font-size: .68rem; color: #64748b; margin-top: 2px; }
-.lb-filter-row { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-.lb-filter-row select {
-  font-family: inherit; font-size: .8rem; padding: 6px 10px;
-  border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; color: #1e293b;
-}
-.lb-empty { text-align: center; padding: 40px 0; color: #94a3b8; font-size: .85rem; }
 
 /* Group calibration */
 .gc-session-box {
@@ -479,11 +454,6 @@ body:has(> .page-footer) > .page-wrap {
     <div id="groupSession" style="display:none;"></div>
   </div>
 
-  <!-- LEADERBOARD (admin only) -->
-  <div id="leaderboardMode" style="display:none;">
-    <div id="leaderboardContent"></div>
-  </div>
-
 </div>
 
 <!-- ─── PAGE FOOTER (canonical .page-footer · induction tint) ──────
@@ -494,7 +464,7 @@ body:has(> .page-footer) > .page-wrap {
     <div class="page-footer__cta">
       <span class="page-footer__cta-eyebrow">Appraisal · Calibration</span>
       <h2 class="page-footer__cta-title">Calibrated appraisers score the same lesson the same way.</h2>
-      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through the vignettes and look closely at any item where you differ by two or more points. Formal authorisation to appraise comes from your role and the Appraisal Certification, not from this exercise.</p>
+      <p class="page-footer__cta-desc">Inter-rater agreement is what makes appraisal scores fair across schools. Work through the vignettes and look closely at any item where you differ by two or more points. The school appoints its appraisers under the Teacher Appraisal Handbook; this exercise does not authorise or bar anyone from appraising.</p>
       <a href="/teacher-appraisal-entry" class="page-footer__cta-btn">Open Teacher Appraisal Entry <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Appraisal Calibration footer navigation">
@@ -545,6 +515,11 @@ async function loadAnchors() {
   } catch (e) { console.warn('Could not load the appraisal framework', e); }
 }
 
+// Only live-observation items are scored here. The vignettes are live-lesson
+// evidence, and "Lesson-plan-review and post-lesson items may not be scored on
+// the basis of live observation alone" (Teacher Appraisal: Handbook 26-27, D3
+// Evidence Sources). Until the 2026-10-01 re-audit the scenarios also scored
+// D1.4 and D1.8 (Pre-Visit Document Review) and D3.20 (Post-Lesson Sheet).
 const SCENARIOS = [
   {
     id: 'S1',
@@ -559,7 +534,7 @@ const SCENARIOS = [
     rationale: {
       'D3.3': 'Objective is physically present but never verbalised, reinforced, or returned to — students have partial awareness at best. Score 2.',
       'D3.4': 'Worked examples and worksheet are aligned to the stated vertex form objective. Minor misalignment: no higher-complexity application or real-world context. Score 3.',
-      'D2.4': 'Independent phase of 18 minutes is reasonable, but teacher circulation is absent throughout. Two students off-task for a sustained period without intervention. Score 2.'
+      'D2.4': 'Time is not used well in every phase: 18 minutes of independent work pass while the teacher marks homework, only Q1 and Q2 are reviewed, and the lesson ends with no closure. Score 2.'
     }
   },
   {
@@ -582,48 +557,45 @@ const SCENARIOS = [
     id: 'S3',
     title: 'Grade 9 Biology — Cell Division',
     level: 'proficient',
-    items: ['D3.5','D3.19','D1.8'],
+    items: ['D3.5','D3.19'],
     vignette: [
       'The observer enters at 13:05, lesson already underway. Students are in groups of four, each group assigned a phase of mitosis (prophase, metaphase, anaphase, telophase). Groups are building a physical model using pipe cleaners and card. The teacher moves between groups, asking: "What would happen if the spindle fibres failed here?" and "How would this phase differ in a plant cell?"',
       'At 13:22 the teacher calls the class together. Each group presents their model. During presentations the teacher poses follow-up questions to the audience, not just the presenters: "Do you agree with their interpretation of cytokinesis?" At 13:38 the teacher asks students to write a 3-sentence "exit explanation" answering: "Why does cell division require chromosome duplication first?" — collected before students leave. No review of prior learning at the lesson\'s start was observed. Teacher does not circulate during the initial 8-minute independent model-building phase.'
     ],
-    expertScores: { 'D3.5': 4, 'D3.19': 3, 'D1.8': 2 },
+    expertScores: { 'D3.5': 4, 'D3.19': 3 },
     rationale: {
       'D3.5': 'Spindle fibre failure question, plant vs animal cell comparison, cytokinesis interpretation — consistently demands analysis and application beyond recall throughout the lesson. Score 4.',
-      'D3.19': 'Exit explanation is a deliberate, well-placed formative check. Questioning during presentations serves as live monitoring. Limited monitoring in the opening independent phase reduces this from Distinguished. Score 3.',
-      'D1.8': 'Exit explanation is planned and well-placed. However, no formative check is planned for the opening phase (8 mins unmonitored), and only a single method is used, placed only at lesson end. Score 2.'
+      'D3.19': 'Exit explanation is a deliberate, well-placed formative check. Questioning during presentations serves as live monitoring. Limited monitoring in the opening independent phase reduces this from Distinguished. Score 3.'
     }
   },
   {
     id: 'S4',
     title: 'Grade 5 Mathematics — Fractions on a Number Line',
     level: 'developing',
-    items: ['D3.13','D3.12','D3.20'],
+    items: ['D3.13','D3.12'],
     vignette: [
       'The observer enters at 09:05. The teacher writes "3/4" on the board and asks, "Who can tell me what this means?" One student answers correctly. The teacher says "Good" and moves immediately to distributing worksheets. No physical model or visual representation is used. Students work individually for 22 minutes; the teacher circulates briefly in the first 5 minutes then returns to the front.',
       'At 09:34, the teacher reviews the answers: "Number 1 — who got ¼?" Hands go up. "Good, it\'s the point halfway between 0 and ½." No explanation of why is offered. A student says, "But I put it on the ½ mark." The teacher replies, "That\'s wrong — the answer is ¼, not ½." The student does not receive further guidance. Seven students in the third row did not complete more than 3 of 10 problems — the teacher does not return to them.'
     ],
-    expertScores: { 'D3.13': 1, 'D3.12': 2, 'D3.20': 1 },
+    expertScores: { 'D3.13': 1, 'D3.12': 2 },
     rationale: {
       'D3.13': 'No modelling, no guided practice, no check for readiness before independent work. Students given the task without scaffolding — a score of 1 is appropriate.',
-      'D3.12': 'Students are mostly compliant but only a few take part; independent work is procedural, with no discussion or collaborative sense-making and no deliberate step to widen participation. Score 2.',
-      'D3.20': 'Feedback is purely evaluative ("good", "that\'s wrong") with no strategy offered for improvement. The student who misplaced the fraction receives no actionable guidance. Score 1.'
+      'D3.12': 'Participation is uneven: the class works on the worksheet, but seven students complete little of it and the teacher does not return to them, and only one student answers the opening question. Score 2.'
     }
   },
   {
     id: 'S5',
     title: 'Grade 11 Chemistry — Equilibrium and Le Chatelier\'s Principle',
     level: 'lead',
-    items: ['D3.5','D3.3','D1.4'],
+    items: ['D3.5','D3.3'],
     vignette: [
       'The observer enters at 11:00. The projector shows a photograph of a bottle of sparkling water being opened. The teacher asks: "What\'s happening in this bottle before I open it? Think about the gases." Students pair-share. After 2 minutes the teacher takes three responses, probing: "Why does the pressure matter?" and "What would happen if I chilled the bottle first?" The teacher then states the objective: "Today we\'re going to use Le Chatelier\'s principle to predict how a system responds to stress — and by the end you\'ll be able to design an industrial process that maximises yield."',
       'During the main activity, the teacher gives three groups different scenarios (temperature stress, pressure stress, concentration stress) with a rubric. Extension cards are pre-prepared for a group of four who finished early — these cards ask them to critique a real industrial Haber process flow diagram. The teacher circulates continuously and is observed crouching beside one student: "I noticed you struggled with this in last week\'s task — watch how I approach the temperature change here." The lesson ends with a 5-minute whole-class debate: "Should engineers always push for maximum yield?" No exit ticket is collected.'
     ],
-    expertScores: { 'D3.5': 4, 'D3.3': 4, 'D1.4': 4 },
+    expertScores: { 'D3.5': 4, 'D3.3': 4 },
     rationale: {
       'D3.5': 'Every teacher question demands application, analysis, or evaluation. Students debate real industrial trade-offs. Consistently Distinguished-level questioning throughout. Score 4.',
-      'D3.3': 'Objective is delayed but then made explicit and ambitious; students clearly understand what success looks like by the end; referred back to at closure debate. Score 4.',
-      'D1.4': 'Extension cards for early finishers, individual reference to a prior learning gap, differentiated scenario cards — all evidence of deep knowledge of individual learners driving design decisions. Score 4.'
+      'D3.3': 'Objective is delayed but then made explicit and ambitious; students clearly understand what success looks like by the end; referred back to at closure debate. Score 4.'
     }
   },
   {
@@ -637,8 +609,8 @@ const SCENARIOS = [
     ],
     expertScores: { 'D2.3': 2, 'D3.12': 2, 'D3.19': 1 },
     rationale: {
-      'D2.3': 'The public correction ("were you paying attention?") is potentially damaging to psychological safety. Climate is functional but not warm; the student\'s retreat into silence signals risk aversion. Score 2.',
-      'D3.12': 'Participation is uneven: a few students answer recall questions while most stay passive, and the pair discussion is not monitored. Score 2.',
+      'D2.3': 'One student is corrected sharply in public ("Were you paying attention?") and does not speak again; other interactions are neutral. Respect is inconsistent rather than absent across the class. Score 2.',
+      'D3.12': 'Participation is uneven: a few students answer recall questions, three students read an unrelated book and are not re-engaged, and the pair discussion is not monitored. Score 2.',
       'D3.19': '"Does everyone understand?" is not a formative check — it yields no usable data. No other monitoring strategy was deployed. Score 1.'
     }
   },
@@ -646,31 +618,29 @@ const SCENARIOS = [
     id: 'S7',
     title: 'Grade 6 Science — Properties of Materials',
     level: 'proficient',
-    items: ['D3.13','D2.4','D1.8'],
+    items: ['D3.13','D2.4'],
     vignette: [
       'The observer enters at 08:58. The lesson is already 3 minutes in. The teacher is demonstrating a sorting activity at the visualiser: "I\'m going to sort these materials by conductivity. Watch what I do — I\'m asking myself: does this let electricity flow?" She sorts three materials aloud, narrating her thinking. She then passes a set of materials to pairs: "Your turn — sort your set and be ready to justify one decision." Pairs work for 6 minutes; the teacher circulates continuously, asking "What\'s your evidence for that?" rather than confirming answers.',
       'At 09:12 the teacher brings the class together using a clap-call signal. Transitions take under 30 seconds. Each pair reports one decision; the teacher records answers on a class T-chart. At 09:22 the teacher distributes an independent investigation sheet. Students work individually. At 09:38 the teacher collects the sheets as an exit check. Two students have only completed 2 of 5 questions — the teacher notes their names for follow-up but does not intervene during the lesson. The lesson ends precisely on time.'
     ],
-    expertScores: { 'D3.13': 4, 'D2.4': 3, 'D1.8': 3 },
+    expertScores: { 'D3.13': 4, 'D2.4': 3 },
     rationale: {
       'D3.13': 'Textbook I Do (visualiser modelling with think-aloud) → We Do (guided pair sort with teacher questioning) → You Do (independent investigation). Release is explicit and readiness-checked. Score 4.',
-      'D2.4': 'Transitions are highly efficient; time allocation is purposeful; teacher circulates actively during pair work. Minor note: two students behind at independent stage are not supported in-lesson. Score 3.',
-      'D1.8': 'Exit check is planned and embedded at end. A mid-lesson checkpoint (the T-chart reporting) also functions as informal data. Two formative points present but no mid-task individual check. Score 3.'
+      'D2.4': 'Transitions take under 30 seconds and the lesson ends on time; most phases are well paced. It stops short of 4 because two students fall behind in the independent phase and the time is not adjusted for them in the lesson. Score 3.'
     }
   },
   {
     id: 'S8',
     title: 'Grade 10 English Literature — The Great Gatsby',
     level: 'lead',
-    items: ['D3.20','D2.3','D3.5'],
+    items: ['D2.3','D3.5'],
     vignette: [
       'The observer enters at 10:05. A student is mid-sentence: "…so Gatsby is essentially performing wealth rather than possessing it." The teacher responds: "That\'s an interesting move — \'performing\'. Can you extend that? What does it mean for the theme of the American Dream if the Dream itself is a performance?" The student reflects: "Maybe it means the Dream was always fake?" The teacher says: "That\'s your strongest reading so far — write that sentence down verbatim. You\'ll want it in your essay. What do others think — fake, or aspirational but unattainable?"',
       'A quieter student offers a tentative reading. The teacher says: "I\'m glad you said that — it\'s actually the most defensible reading from the text. Here\'s why: look at page 89." The class examines the passage. At 10:28 the teacher distributes a counter-argument card to each student: "Your task is to write the strongest possible objection to your own reading from last lesson." Students work silently for 10 minutes; the teacher circulates and annotates one student\'s draft in the margin: "Your verb choice here undermines your claim — try \'perpetuates\' vs \'creates\'." Three minutes before the bell the teacher summarises: "Today we moved from interpretation to argumentation. Next lesson you defend your reading in writing under timed conditions."'
     ],
-    expertScores: { 'D3.20': 4, 'D2.3': 4, 'D3.5': 4 },
+    expertScores: { 'D2.3': 4, 'D3.5': 4 },
     rationale: {
-      'D3.20': 'Feedback is dialogic, specific, and acted on in real time ("write that sentence verbatim"; margin annotation with precise vocabulary suggestion). Students use feedback to self-correct immediately. Score 4.',
-      'D2.3': 'The tentative student\'s contribution is publicly celebrated; counter-argument task normalises intellectual risk. Climate is psychologically safe — students openly revise their own positions. Score 4.',
+      'D2.3': 'The confident student and the quieter student are treated with the same respect; the tentative reading is valued in public, and every student gets the same counter-argument task. No observable bias. Score 4.',
       'D3.5': 'Every teacher utterance extends student thinking — from "performing wealth" to the philosophical question of whether the American Dream is inherently performative. All students are challenged to evaluate and argue, not recall. Score 4.'
     }
   }
@@ -684,7 +654,6 @@ const LABELS = { 1: 'Unsatisf.', 2: 'Basic', 3: 'Proficient', 4: 'Distngshd' };
 let currentScenario = 0;
 let userScores = SCENARIOS.map(() => ({}));
 let activeMode = 'solo';
-let isAdmin = false;
 let groupSession = null; // { code, docRef, unsubscribe }
 let openAnchorPanels = {}; // itemId -> bool
 let activeTab = 'vignette'; // persists across score clicks
@@ -693,8 +662,7 @@ let activeTab = 'vignette'; // persists across score clicks
    AUTH READY
    ───────────────────────────────────────────── */
 document.addEventListener('authReady', ({ detail: { user, profile } }) => {
-  window.__loadAcademicNavbar('calibration', { user, profile });
-  isAdmin = profile?.role_academichub === 'academic_admin';
+  window.__loadAcademicNavbar('appraiser-calibration', { user, profile });
   loadAnchors().then(() => { renderStepDots(); renderScenario(0); });
 });
 
@@ -704,12 +672,10 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
 window.setMode = function(mode) {
   activeMode = mode;
   document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.mode-tab')[['solo','group','leaderboard'].indexOf(mode)].classList.add('active');
+  document.querySelectorAll('.mode-tab')[['solo','group'].indexOf(mode)].classList.add('active');
   document.getElementById('soloMode').style.display        = mode === 'solo'        ? '' : 'none';
   document.getElementById('groupMode').style.display       = mode === 'group'       ? '' : 'none';
-  document.getElementById('leaderboardMode').style.display = mode === 'leaderboard' ? '' : 'none';
   if (mode === 'group' && !groupSession) renderGroupLanding();
-  if (mode === 'leaderboard') renderLeaderboard();
 };
 
 /* ─────────────────────────────────────────────
@@ -799,7 +765,7 @@ function renderScenario(idx) {
       <div class="tab-pane ${activeTab==='score'?'active':''}" id="tab-score-${idx}">
         <div class="card-body">
           <div style="font-size:.75rem;color:#94a3b8;margin-bottom:14px;font-weight:600;">
-            Score each item independently based only on the evidence above. Use "Show rubric" for behavioural anchors.
+            Score each item independently based only on the evidence above. Use "Show rubric" for the rubric descriptors. Only live-observation items are used here: lesson-plan-review and post-lesson items may not be scored on the basis of live observation alone (Teacher Appraisal: Handbook 26-27).
           </div>
           ${itemsHtml}
         </div>
@@ -927,7 +893,6 @@ function showSummary() {
     const adj   = sc.items.filter(id => Math.abs(my[id]-sc.expertScores[id]) <= 1).length;
     exactTotal += exact; adjTotal += adj; itemTotal += sc.items.length;
     const pct = Math.round(adj / sc.items.length * 100);
-    const barCls = pct >= 85 ? 'bar-green' : pct >= 67 ? 'bar-amber' : 'bar-red';
     return `
       <div class="bar-row">
         <div class="bar-label-row">
@@ -935,14 +900,13 @@ function showSummary() {
           <span style="color:#64748b;">${pct}% adj.</span>
         </div>
         <div class="bar-track">
-          <div class="bar-fill ${barCls}" style="width:${pct}%"></div>
+          <div class="bar-fill" style="width:${pct}%;background:#94a3b8;"></div>
         </div>
       </div>`;
   }).join('');
 
   const overallAdj   = Math.round(adjTotal / itemTotal * 100);
   const overallExact = Math.round(exactTotal / itemTotal * 100);
-  const passed = null;   // no pass mark: the live pack sets none (2026-10-01)
 
   document.getElementById('resultsView').innerHTML = `
     <div class="card">
@@ -982,10 +946,10 @@ function showSummary() {
   document.getElementById('scenarioView').style.display = 'none';
   document.getElementById('resultsView').style.display = 'block';
 
-  saveResult(passed, overallAdj, overallExact);
+  saveResult(overallAdj, overallExact);
 }
 
-async function saveResult(passed, adjPct, exactPct) {
+async function saveResult(adjPct, exactPct) {
   const statusEl = document.getElementById('saveStatus2') || document.getElementById('saveStatus');
   if (!db) { if (statusEl) statusEl.textContent = 'Firebase not connected.'; return; }
   try {
@@ -997,7 +961,8 @@ async function saveResult(passed, adjPct, exactPct) {
       displayName: window.currentUser?.displayName || '',
       email: window.currentUser?.email || '',
       school: profile.school || '',
-      academicYear: new Date().getFullYear() + '/' + (new Date().getFullYear() + 1),
+      academicYear: (window.getCurrentAcademicYear && window.getCurrentAcademicYear().replace('-', '/'))
+                    || (new Date().getFullYear() + '/' + (new Date().getFullYear() + 1)),
       completedAt:  serverTimestamp(),
       scenarioIds:  SCENARIOS.map(s => s.id),
       adjPct, exactPct,
@@ -1018,109 +983,6 @@ async function saveResult(passed, adjPct, exactPct) {
   } catch(e) {
     console.error(e);
     if (statusEl) statusEl.textContent = 'Save failed — check connection.';
-  }
-}
-
-/* ─────────────────────────────────────────────
-   ADMIN — LEADERBOARD
-   ───────────────────────────────────────────── */
-async function renderLeaderboard() {
-  const el = document.getElementById('leaderboardContent');
-  if (!isAdmin) {
-    el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;font-size:.85rem;">Admin access required.</p></div></div>`;
-    return;
-  }
-  el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#94a3b8;">Loading…</p></div></div>`;
-  try {
-    // @lint-allow-unbounded — auto-annotated; revisit if collection grows large
-    const snap = await getDocs(collection(db, 'calibration_sessions'));
-    const rows = [];
-    snap.forEach(d => rows.push(d.data()));
-    rows.sort((a,b) => (b.adjPct||0) - (a.adjPct||0));
-
-    if (!rows.length) {
-      el.innerHTML = `<div class="card"><div class="card-body lb-empty">No calibration results yet.</div></div>`;
-      return;
-    }
-
-    const tableRows = rows.map((r, i) => {
-      const pct = r.adjPct ?? '—';
-      const barW = typeof r.adjPct === 'number' ? r.adjPct : 0;
-      const barCls = barW >= 85 ? 'bar-green' : barW >= 67 ? 'bar-amber' : 'bar-red';
-      const statusHtml = r.passed === true
-        ? `<span class="lb-pass">&#x2713; Calibrated</span>`
-        : r.passed === false
-          ? `<span class="lb-retry">&#x26A0; Needs retry</span>`
-          : `<span class="lb-na">—</span>`;
-      const dateStr = r.completedAt?.toDate
-        ? r.completedAt.toDate().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})
-        : '—';
-      return `<tr>
-        <td class="lb-rank">${i+1}</td>
-        <td>
-          <div class="lb-name">${r.displayName || r.email || 'Unknown'}</div>
-          <div class="lb-school">${r.school || r.email || ''}</div>
-        </td>
-        <td>
-          <div class="lb-bar-wrap">
-            <div class="lb-bar-track"><div class="lb-bar-fill ${barCls}" style="width:${Math.min(barW,100)}%"></div></div>
-            <div class="lb-bar-lbl">${pct}% adjacent</div>
-          </div>
-        </td>
-        <td>${typeof r.exactPct === 'number' ? r.exactPct+'%' : '—'}</td>
-        <td>${statusHtml}</td>
-        <td style="font-size:.75rem;color:#94a3b8;">${r.academicYear||'—'}</td>
-        <td style="font-size:.75rem;color:#94a3b8;">${dateStr}</td>
-      </tr>`;
-    }).join('');
-
-    const calibratedCount = rows.filter(r => r.passed).length;
-    const avgAdj = rows.length ? Math.round(rows.reduce((s,r) => s+(r.adjPct||0),0)/rows.length) : 0;
-
-    el.innerHTML = `
-      <div class="card" style="margin-bottom:16px;">
-        <div class="card-body">
-          <div class="irr-grid">
-            <div class="irr-card">
-              <div class="irr-label">Total completed</div>
-              <div class="irr-val">${rows.length}</div>
-              <div class="irr-sub">appraisers</div>
-            </div>
-            <div class="irr-card">
-              <div class="irr-label">Calibrated</div>
-              <div class="irr-val" style="color:#16a34a;">${calibratedCount}</div>
-              <div class="irr-sub">${Math.round(calibratedCount/rows.length*100)}% pass rate</div>
-            </div>
-            <div class="irr-card">
-              <div class="irr-label">Avg adjacent</div>
-              <div class="irr-val">${avgAdj}%</div>
-              <div class="irr-sub">across all sessions</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div>
-            <h2>Appraiser Calibration Results</h2>
-            <div class="card-head-sub">All sessions — sorted by adjacent agreement</div>
-          </div>
-        </div>
-        <div class="card-body" style="padding:0;">
-          <table class="lb-table">
-            <thead>
-              <tr>
-                <th>#</th><th>Appraiser</th><th>Adjacent score</th>
-                <th>Exact</th><th>Status</th><th>Year</th><th>Date</th>
-              </tr>
-            </thead>
-            <tbody>${tableRows}</tbody>
-          </table>
-        </div>
-      </div>`;
-  } catch(e) {
-    console.error(e);
-    el.innerHTML = `<div class="card"><div class="card-body"><p style="color:#ef4444;">Error loading data: ${e.message}</p></div></div>`;
   }
 }
 

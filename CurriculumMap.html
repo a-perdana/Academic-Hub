@@ -728,7 +728,7 @@
       <div>
         <p class="hero-eyebrow">Academics · Cambridge</p>
         <h1 class="hero-title">Curriculum Map</h1>
-        <p class="hero-desc">Week-by-week visual overview of all subjects and Cambridge syllabus coverage. Identify gaps, overlaps, and pacing across the academic year.</p>
+        <p class="hero-desc">Week-by-week view of the Cambridge pacing plan for Grades 7–12 and the syllabus objectives each topic covers. Grades 7–8 follow the accelerated Stage 7–9 sequence, with Stage 8 split across both years; IGCSE runs in Grades 9–10 and AS &amp; A Level in Grades 11–12.</p>
         <span class="ro-badge">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           Read-only view
@@ -751,9 +751,9 @@
            visible UI is the custom .icon-dropdown built below; its
            menu items dispatch a synthetic change event on submit. -->
       <select id="selLevel" hidden aria-hidden="true">
-        <option value="igcse">IGCSE (Year 9–10)</option>
-        <option value="checkpoint">Checkpoint (Year 7–8)</option>
-        <option value="asalevel">AS &amp; A Level (Year 11–12)</option>
+        <option value="igcse">IGCSE (Grades 9–10)</option>
+        <option value="checkpoint">Lower Secondary (Grades 7–8)</option>
+        <option value="asalevel">AS &amp; A Level (Grades 11–12)</option>
       </select>
       <select id="selSubject" hidden aria-hidden="true">
         <option value="all">All Subjects</option>
@@ -764,14 +764,14 @@
       </select>
 
       <div class="icon-dropdown" data-for="selLevel">
-        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="IGCSE (Year 9–10)" aria-label="IGCSE (Year 9–10)">
+        <button class="icon-dropdown-trigger" type="button" aria-haspopup="listbox" aria-expanded="false" title="IGCSE (Grades 9–10)" aria-label="IGCSE (Grades 9–10)">
           <span class="icon-dropdown-code">IG</span>
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div class="icon-dropdown-menu" role="listbox" hidden>
-          <button class="icon-dropdown-item active" type="button" role="option" data-value="igcse"><span class="icon-dropdown-code">IG</span><span class="icon-dropdown-label">IGCSE (Year 9–10)</span></button>
-          <button class="icon-dropdown-item" type="button" role="option" data-value="checkpoint"><span class="icon-dropdown-code">CP</span><span class="icon-dropdown-label">Checkpoint (Year 7–8)</span></button>
-          <button class="icon-dropdown-item" type="button" role="option" data-value="asalevel"><span class="icon-dropdown-code">AL</span><span class="icon-dropdown-label">AS &amp; A Level (Year 11–12)</span></button>
+          <button class="icon-dropdown-item active" type="button" role="option" data-value="igcse"><span class="icon-dropdown-code">IG</span><span class="icon-dropdown-label">IGCSE (Grades 9–10)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="checkpoint"><span class="icon-dropdown-code">LS</span><span class="icon-dropdown-label">Lower Secondary (Grades 7–8)</span></button>
+          <button class="icon-dropdown-item" type="button" role="option" data-value="asalevel"><span class="icon-dropdown-code">AL</span><span class="icon-dropdown-label">AS &amp; A Level (Grades 11–12)</span></button>
         </div>
       </div>
 
@@ -935,7 +935,29 @@
       await loadAndRender();
     });
 
+    // The subject list depends on the level: Lower Secondary pacing holds
+    // Mathematics, Science and English, not the three separate sciences, so
+    // the menu is rebuilt from SUBJECT_CONFIGS whenever the level changes.
+    function syncSubjectMenu() {
+      const configs = SUBJECT_CONFIGS[currentLevel] || [];
+      const select  = document.getElementById('selSubject');
+      const dd      = document.querySelector('.icon-dropdown[data-for="selSubject"]');
+      const items   = [{ key: 'all', label: 'All Subjects', code: 'All' }]
+        .concat(configs.map(c => ({ key: c.key, label: c.label, code: c.label.charAt(0) })));
+      select.innerHTML = items.map(i => `<option value="${i.key}">${esc(i.label)}</option>`).join('');
+      select.value   = 'all';
+      currentSubject = 'all';
+      dd.querySelector('.icon-dropdown-menu').innerHTML = items.map((i, n) =>
+        `<button class="icon-dropdown-item${n === 0 ? ' active' : ''}" type="button" role="option" data-value="${i.key}"><span class="icon-dropdown-code">${esc(i.code)}</span><span class="icon-dropdown-label">${esc(i.label)}</span></button>`
+      ).join('');
+      const trigger = dd.querySelector('.icon-dropdown-trigger');
+      trigger.querySelector('.icon-dropdown-code').textContent = 'All';
+      trigger.setAttribute('title', 'All Subjects');
+      trigger.setAttribute('aria-label', 'All Subjects');
+    }
+
     function bindControls() {
+      syncSubjectMenu();
       document.getElementById('selLevel').addEventListener('change', e => {
         currentLevel          = e.target.value;
         currentMonth          = null;
@@ -943,6 +965,7 @@
         currentChapterMonth   = {};
         pacingData            = {};
         syllabusCache         = {};
+        syncSubjectMenu();
         loadAndRender();
       });
       document.getElementById('selSubject').addEventListener('change', e => {
@@ -1099,18 +1122,21 @@
     }
 
     // ── Academic calendar month map (mirrors AcademicCalendar.html MONTHS) ──
+    // Academic Year 2026/2027 (Curriculum Module: Academic Structure 26-27 —
+    // "Curriculum begins Jul 2026"), July to June.
     const AC_MONTHS = [
-      { name:'July',      short:'Jul', year:2025 },
-      { name:'August',    short:'Aug', year:2025 },
-      { name:'September', short:'Sep', year:2025 },
-      { name:'October',   short:'Oct', year:2025 },
-      { name:'November',  short:'Nov', year:2025 },
-      { name:'December',  short:'Dec', year:2025 },
-      { name:'January',   short:'Jan', year:2026 },
-      { name:'February',  short:'Feb', year:2026 },
-      { name:'March',     short:'Mar', year:2026 },
-      { name:'April',     short:'Apr', year:2026 },
-      { name:'May',       short:'May', year:2026 },
+      { name:'July',      short:'Jul', year:2026 },
+      { name:'August',    short:'Aug', year:2026 },
+      { name:'September', short:'Sep', year:2026 },
+      { name:'October',   short:'Oct', year:2026 },
+      { name:'November',  short:'Nov', year:2026 },
+      { name:'December',  short:'Dec', year:2026 },
+      { name:'January',   short:'Jan', year:2027 },
+      { name:'February',  short:'Feb', year:2027 },
+      { name:'March',     short:'Mar', year:2027 },
+      { name:'April',     short:'Apr', year:2027 },
+      { name:'May',       short:'May', year:2027 },
+      { name:'June',      short:'Jun', year:2027 },
     ];
     // Academic week 1 = July W1 → 4 weeks per month
     function weekToMonth(w) { return Math.floor((w - 1) / 4); } // 0-indexed into AC_MONTHS
@@ -1466,7 +1492,7 @@
       <div class="page-footer__cta">
         <span class="page-footer__cta-eyebrow">School · Curriculum</span>
         <h2 class="page-footer__cta-title">One map, every subject, every week.</h2>
-        <p class="page-footer__cta-desc">Curriculum Map gives you the network-wide view of Cambridge syllabus coverage across all subjects + weeks. For per-class drill-down, head to Syllabus Coverage.</p>
+        <p class="page-footer__cta-desc">Curriculum Map gives you the network pacing plan and the Cambridge syllabus objectives behind each topic, week by week. To see how far each teacher has progressed against it, open Syllabus Coverage.</p>
         <a href="/syllabus-coverage" class="page-footer__cta-btn">Open Syllabus Coverage <span aria-hidden="true">→</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="Curriculum Map footer navigation">

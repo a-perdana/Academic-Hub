@@ -95,7 +95,7 @@ body:has(> .page-footer) > .page-wrap {
       <div class="page-hero__text">
         <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
         <h1 class="page-hero__title">School Assessment</h1>
-        <p class="page-hero__desc">EASE Assessment (Common Assessment) results for every Year 7–8 class in your school. See where students score below KKTP — the mastery standard your school sets — so teachers can re-teach, reassess and support them.</p>
+        <p class="page-hero__desc">Results of the EASE Assessment (Common Assessment) tests your Grade 7–8 students take in the Students Hub, class by class. See where students score below KKTP — the mastery standard your school sets — so teachers can re-teach, reassess and support them.</p>
       </div>
       <div class="page-hero__kpis" id="heroKpis">
         <div class="page-hero__kpi page-hero__kpi--primary">
@@ -132,10 +132,10 @@ body:has(> .page-footer) > .page-wrap {
       </select>
       <select id="fGrade">
         <option value="">All grades</option>
-        <option value="7">Year 7</option>
-        <option value="8">Year 8</option>
-        <option value="9">Year 9</option>
-        <option value="10">Year 10</option>
+        <option value="7">Grade 7</option>
+        <option value="8">Grade 8</option>
+        <option value="9">Grade 9</option>
+        <option value="10">Grade 10</option>
       </select>
       <label class="kktp-field" for="fKktp">Your school's KKTP
         <input id="fKktp" type="number" min="0" max="100" step="1" inputmode="numeric" aria-describedby="kktpNote"> %
@@ -155,7 +155,7 @@ body:has(> .page-footer) > .page-wrap {
         <span class="page-footer__cta-eyebrow">School Leadership · Students Hub</span>
         <h2 class="page-footer__cta-title">Roll-ups guide where attention goes next.</h2>
         <p class="page-footer__cta-desc">When students score below your school's KKTP on a Common Assessment, the Gradebook remedial policy applies: re-teach first, then one short reassessment within 10 working days. The KKTP stays the same — the goal is to help students reach it, not to lower the bar.</p>
-        <a href="/coordinators-meetings" class="page-footer__cta-btn">Open Coordinators Meetings <span aria-hidden="true">→</span></a>
+        <a href="https://docs.google.com/document/d/11wMMmrhqpjyj66nvlZk1Zb5swBl1jUzQjFo_q45Ffmk/edit" target="_blank" rel="noopener" class="page-footer__cta-btn">Read the remedial policy (EASE Assessment: Gradebook 26-27) <span aria-hidden="true">→</span></a>
       </div>
       <nav class="page-footer__nav" aria-label="School Assessment footer navigation">
         <div class="page-footer__nav-group">
@@ -293,7 +293,7 @@ body:has(> .page-footer) > .page-wrap {
         return `
           <div class="class-card">
             <div class="class-name">${escHtml(c.name)}</div>
-            <div class="class-meta">Year ${escHtml(c.grade)} · ${classStudents} student${classStudents === 1 ? '' : 's'} · ${classAttempts.length} submission${classAttempts.length === 1 ? '' : 's'}</div>
+            <div class="class-meta">Grade ${escHtml(c.grade)} · ${classStudents} student${classStudents === 1 ? '' : 's'} · ${classAttempts.length} submission${classAttempts.length === 1 ? '' : 's'}</div>
             <div class="bar"><div style="width:${avg || 0}%"></div></div>
             <div class="row-stats">
               <div><strong>${avg == null ? '—' : avg + '%'}</strong><span>Average</span></div>

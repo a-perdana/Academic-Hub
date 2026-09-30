@@ -144,8 +144,8 @@
           subtitle:
             "Educational Leadership, Cambridge Standards & Quality Management",
           organization: "Yayasan Edukasi Universal Indonesia",
-          version: "1.0",
-          lastUpdated: "2025-01-15",
+          version: "1.1",
+          lastUpdated: "2026-08-17",
         },
         sections: [
           {
@@ -262,7 +262,7 @@
           },
           {
             id: "09",
-            title: "Safeguarding, Child Protection, Wellbeing",
+            title: "Safeguarding, Child Protection, and Wellbeing",
             shortTitle: "Safeguarding",
             icon: "Shield",
             color: "#6d28d9",
@@ -288,7 +288,7 @@
           },
           {
             id: "11",
-            title: "Admissions, Enrollment, Marketing",
+            title: "Admissions, Enrollment, and Marketing Ethics",
             shortTitle: "Admissions",
             icon: "DoorOpen",
             color: "#dc2626",
@@ -301,7 +301,7 @@
           },
           {
             id: "12",
-            title: "Staff Lifecycle",
+            title: "Staff Lifecycle: Recruitment, Induction, Appraisal, Career Growth, PD, Wellbeing",
             shortTitle: "Staff",
             icon: "UserCog",
             color: "#ea580c",
@@ -314,7 +314,7 @@
           },
           {
             id: "13",
-            title: "Operations, Finance, Resources",
+            title: "Operations, Finance, and Resources",
             shortTitle: "Operations",
             icon: "Settings",
             color: "#f97316",
@@ -327,7 +327,7 @@
           },
           {
             id: "14",
-            title: "Data Protection and Records",
+            title: "Data Protection, Records, and Information Systems",
             shortTitle: "Data",
             icon: "Lock",
             color: "#fb923c",
@@ -339,7 +339,7 @@
           },
           {
             id: "15",
-            title: "Risk Management and Emergency",
+            title: "Risk Management, Emergency Preparedness, and Business Continuity",
             shortTitle: "Risk",
             icon: "AlertTriangle",
             color: "#c2410c",
@@ -352,7 +352,7 @@
           },
           {
             id: "16",
-            title: "Parent and Community Engagement",
+            title: "Parent, Student, and Community Engagement",
             shortTitle: "Community",
             icon: "Building",
             color: "#ef4444",
@@ -365,7 +365,7 @@
           },
           {
             id: "17",
-            title: "Quality Assurance and Review",
+            title: "Quality Assurance and Internal Review",
             shortTitle: "QA",
             icon: "CheckCircle",
             color: "#3b82f6",
@@ -413,7 +413,7 @@
           },
           {
             id: "21",
-            title: "Digital Learning and Technology",
+            title: "Digital Learning and Technology Infrastructure",
             shortTitle: "Technology",
             icon: "Laptop",
             color: "#a16207",
@@ -425,7 +425,7 @@
           },
           {
             id: "22",
-            title: "Student Conduct and Discipline",
+            title: "Student Conduct, Discipline, and Restorative Practices",
             shortTitle: "Conduct",
             icon: "Ruler",
             color: "#8b5cf6",
@@ -437,7 +437,7 @@
           },
           {
             id: "23",
-            title: "External Partnerships and Pathways",
+            title: "External Partnerships and Student Pathways",
             shortTitle: "Partnerships",
             icon: "Handshake",
             color: "#f87171",
@@ -446,6 +446,18 @@
             status: "complete",
             docUrl:
               "https://docs.google.com/document/d/1Kgilip1jXRphibINwSuQeSpc31pj_yqriCefnrVNk8Y/edit?usp=drive_link",
+          },
+          {
+            id: "24",
+            title: "School Appraisal Framework: International Alignment",
+            shortTitle: "Alignment",
+            icon: "Globe",
+            color: "#1d4ed8",
+            description: "How the School Appraisal domains relate to international quality frameworks",
+            tags: ["appraisal", "alignment", "CIS", "WASC", "international"],
+            status: "complete",
+            docUrl:
+              "https://docs.google.com/document/d/1nF4k4xYoKm0pNfk_IabzSc7d4SUNAh9q8EA0NhstliU/edit?usp=drive_link",
           },
         ],
       };
@@ -1547,7 +1559,7 @@
                           <Clock size={14} /> {indexData.meta.lastUpdated}
                         </span>
                         <span className="flex items-center gap-1">
-                          <Tag size={14} /> 23 Sections
+                          <Tag size={14} /> {indexData.sections.length} Sections
                         </span>
                       </div>
 
@@ -2101,7 +2113,7 @@
 
 LANGUAGE: Always respond in the same language the user writes in. If they write in Indonesian (Bahasa Indonesia), respond in Indonesian. If in English, respond in English. If in Turkish, respond in Turkish.
 
-Here is the full list of the 23 academic standard sections:\n\n`;
+Here is the full list of the ${indexData.sections.length} academic standard sections:\n\n`;
 
           indexData.sections.forEach((s) => {
             const detail = sectionsData[s.id];

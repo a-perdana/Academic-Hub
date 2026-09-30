@@ -292,7 +292,7 @@
   <div class="hero-inner">
     <p class="hero-eyebrow">Eduversal · Cambridge Reference</p>
     <h1 class="hero-title">Cambridge Standards Reference</h1>
-    <p class="hero-sub">The full set of Cambridge Teacher Standards (27, 2023) and Cambridge School Leader Standards (25, 2023) we anchor every KPI, Appraisal item and Competency to. Click any standard to see exactly which Eduversal artefacts share that anchor.</p>
+    <p class="hero-sub">The full set of Cambridge Teacher Standards (27, 2023) and Cambridge School Leader Standards (25, 2023) that Eduversal's appraisal, competency and induction materials are anchored to. Click any standard to see exactly which Eduversal materials share that anchor.</p>
     <div class="hero-actions">
       <a href="https://www.cambridgeinternational.org/Images/466465-cambridge-teacher-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 Cambridge Teacher Standards (PDF)</a>
       <a href="https://www.cambridgeinternational.org/Images/466466-cambridge-school-leader-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 School Leader Standards (PDF)</a>
@@ -344,9 +344,11 @@
 <script type="module">
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-const SYSTEM_LABELS = { kpi: 'KPI', appraisal: 'Appraisal', competency: 'Competency', induction: 'Induction' };
+// KPI tags come from the archived KPI pages: the live pack has no standalone KPI
+// system (Academic Services: Start Here 26-27), so they are labelled as archived.
+const SYSTEM_LABELS = { kpi: 'KPI (archived)', appraisal: 'Appraisal', competency: 'Competency', induction: 'Induction' };
 const TRACK_LABELS  = { teachers: 'Teachers', leaders: 'Leaders (AH)', specialists: 'Specialists (CH)',
-                        subject_teacher: 'Subject Teacher Y1', principal: 'Principal Y1', specialist: 'Specialist Y1' };
+                        subject_teacher: 'Teacher Induction', principal: 'Principal Induction', specialist: 'Specialist Induction' };
 
 // Crossref `link` fields are seeded for the TH route set. Each hub hosts a
 // different page set, so rewrite per-item links to the clean URL that exists
@@ -504,7 +506,7 @@ function renderList() {
   const renderXrefs = (id) => {
     const entry = state.crossref?.byStandard?.[id];
     if (!entry || !Array.isArray(entry.items) || !entry.items.length) {
-      return `<div class="std-detail-empty">No cross-references yet — this standard is not currently tagged on any KPI, Appraisal F-item or Competency.</div>`;
+      return `<div class="std-detail-empty">No cross-references yet — this standard is not currently tagged on any Appraisal item, Competency or Induction task.</div>`;
     }
     const grouped = { kpi: [], appraisal: [], competency: [], induction: [] };
     for (const it of entry.items) (grouped[it.system] ||= []).push(it);

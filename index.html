@@ -156,6 +156,7 @@
       .h-sec-h .kick { font-size: 10.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--mid); }
       .h-sec-h h2 { font-family: "Lora", Georgia, serif; font-weight: 600; font-size: 21px; color: var(--c); margin: 2px 0 0; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
       .h-sec-h .q { font-size: 13.5px; color: var(--h-ink-2); margin-top: 3px; }
+      .h-sec-h .note { font-size: 13px; color: var(--h-ink-2); line-height: 1.5; margin: 8px 0 0; max-width: 72ch; }
       .h-sec-h .doc {
         margin-left: auto; align-self: center; font-size: 12.5px; font-weight: 600; color: var(--c); background: #fff;
         border: 1px solid color-mix(in srgb, var(--c) 25%, #fff); padding: 7px 11px; border-radius: 9px;
@@ -294,7 +295,7 @@
       <div class="h-wrap">
         <div class="h-eyebrow" id="heroEyebrow">Academic Hub</div>
         <h1 id="heroTitle">Welcome to the Academic Hub</h1>
-        <p>One quality system, one cycle: define what is taught, prepare the people who teach it, measure what is understood, and improve and grow from what you find.</p>
+        <p>One quality system, one cycle: define what is taught, prepare the people who deliver it, measure what is understood, help students reflect on and own their learning, then improve and grow.</p>
         <div class="h-chips" id="heroChips"></div>
         <label class="h-search">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
@@ -357,7 +358,7 @@
         <div class="page-footer__cta">
           <span class="page-footer__cta-eyebrow">Academic Services 26-27</span>
           <h2 class="page-footer__cta-title">Every tool here belongs to one cycle.</h2>
-          <p class="page-footer__cta-desc">Not sure where something fits? The Start Here document explains the five modules, the Student Learning layer and how they work together.</p>
+          <p class="page-footer__cta-desc">Not sure where something fits? Academic Services: Start Here explains the five modules, the Student Learning layer, the two cross-cutting areas and how they work together.</p>
           <a href="https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit" target="_blank" rel="noopener" class="page-footer__cta-btn">Open Start Here <span aria-hidden="true">↗</span></a>
         </div>
         <nav class="page-footer__nav" aria-label="Home footer navigation">
@@ -366,7 +367,7 @@
             <a href="https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit" target="_blank" rel="noopener" class="page-footer__nav-link">Academic Services ↗</a>
             <a href="/references" class="page-footer__nav-link">References</a>
             <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
-            <a href="/library" class="page-footer__nav-link">Academic Library</a>
+            <a href="/library" class="page-footer__nav-link">Resource Library</a>
           </div>
           <div class="page-footer__nav-group">
             <span class="page-footer__nav-heading">Your school</span>
@@ -470,27 +471,38 @@
       // families (scripts/gdocs/module-theme.js → cover / mid / tint), so a
       // section here matches the covers of the documents it links to.
       // Entry documents are the live "Start Here" docs of each Drive folder
-      // in Academic Services 26-27 (listed 2026-09-30).
+      // in Academic Services 26-27; labels are the exact live titles
+      // (checked 2026-10-01). Student Learning has no Start Here: the root
+      // "Academic Services: Start Here" points to its Overview. Questions,
+      // verbs and step order are verbatim from the root Start Here ("Six
+      // Questions Across the Ecosystem": define → prepare → measure →
+      // reflect & own → improve → grow). `note` is one line under the
+      // question, used where a section has no tools; its words come from
+      // that part's live documents.
       // ================================================================
       const GDOC = id => `https://docs.google.com/document/d/${id}/edit`;
       const GFOLDER = id => `https://drive.google.com/drive/folders/${id}`;
       const HOME_FAMILIES = {
         school_workspace:    { group: 'workspace', name: 'Your school this week', kick: 'Everyday', c: '#3d3399', mid: '#5b52c4', tint: '#ecebf8', compact: true },
-        curriculum:          { group: 'cycle', step: 1, verb: 'Define',        name: 'Curriculum',       q: 'What is taught?', c: '#1B356A', mid: '#365697', tint: '#e7ebf3', doc: ['Curriculum Module: Start Here', GDOC('1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg')] },
-        induction:           { group: 'cycle', step: 2, verb: 'Prepare',       name: 'Induction',        q: 'Who delivers it?', c: '#6A1B6A', mid: '#973697', tint: '#f3e7f3', doc: ['Induction Module: Start Here', GDOC('11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw')] },
-        ease:                { group: 'cycle', step: 3, verb: 'Measure',       name: 'EASE',             q: 'What is understood?', c: '#351B6A', mid: '#563697', tint: '#ebe7f3', doc: ['EASE Module: Start Here', GDOC('1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4')] },
-        student_learning:    { group: 'cycle', step: 4, verb: 'Reflect & own', name: 'Student Learning', q: 'How does the student see, reflect on and communicate their learning?', qShort: 'How does the student see and share their learning?', layer: true, c: '#556A1B', mid: '#6f8630', tint: '#f0f3e7', doc: ['Student Learning: Overview', GDOC('1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8')] },
-        appraisal:           { group: 'cycle', step: 5, verb: 'Improve',       name: 'Appraisal',        q: 'What is working, and what should improve?', c: '#6A351B', mid: '#975636', tint: '#f3ebe7', doc: ['Appraisal Module: Start Here', GDOC('1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU')] },
-        career_growth:       { group: 'cycle', step: 6, verb: 'Grow',          name: 'Career Growth',    q: 'How do people grow into approved roles?', c: '#711A50', mid: '#9e3576', tint: '#f3e7ef', doc: ['Career Growth Module: Start Here', GDOC('1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk')] },
-        teaching_learning:   { group: 'cross', name: 'Teaching & Learning',      q: 'Network standards for lesson planning and classroom management.', c: '#2E6B1B', mid: '#488e32', tint: '#eaf3e7', doc: ['Start Here — Teaching & Learning', GDOC('14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s')] },
-        digital_citizenship: { group: 'cross', name: 'Digital Citizenship & AI', q: 'Academic integrity, responsible AI, acceptable use and devices.', c: '#1B4F6A', mid: '#367697', tint: '#e7eff3', doc: ['Start Here — Digital Citizenship & AI', GDOC('1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8')] },
-        academic_insights:   { group: 'evidence', name: 'Academic Insights',     q: 'Results and analysis from your school and across the network.', kick: 'Results & analysis', c: '#6A5A1B', mid: '#917e34', tint: '#f3f1e7', doc: ['Academic Insights folder', GFOLDER('1jKD8BODaQo0hleK2ITkA7PFtp8pGdjxS')] },
-        quality_ecosystem:   { group: 'evidence', name: 'Quality Ecosystem & Standards', q: 'The rules the modules follow, and where each one is written down.', kick: 'Governance', c: '#1B6A35', mid: '#338f51', tint: '#e7f3eb', doc: ['Policy Source-of-Truth Register', GDOC('1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4')] },
+        curriculum:          { group: 'cycle', step: 1, verb: 'Define',        name: 'Curriculum',       q: 'What is taught?', c: '#1B356A', mid: '#365697', tint: '#e7ebf3', doc: ['Curriculum Module: Start Here 26-27', GDOC('1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg')] },
+        induction:           { group: 'cycle', step: 2, verb: 'Prepare',       name: 'Induction',        q: 'Who delivers it?', c: '#6A1B6A', mid: '#973697', tint: '#f3e7f3', doc: ['Induction Module: Start Here 26-27', GDOC('11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw')] },
+        ease:                { group: 'cycle', step: 3, verb: 'Measure',       name: 'EASE',             q: 'What is understood?', c: '#351B6A', mid: '#563697', tint: '#ebe7f3', doc: ['EASE Module: Start Here 26-27', GDOC('1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4')] },
+        student_learning:    { group: 'cycle', step: 4, verb: 'Reflect & own', name: 'Student Learning', q: 'How does the student see, reflect on, and communicate their learning?', layer: true, c: '#556A1B', mid: '#6f8630', tint: '#f0f3e7', doc: ['Student Learning: Overview 26-27', GDOC('1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8')],
+          // Student Learning: Overview / Quick Reference / Portfolio Guide 26-27.
+          note: 'Student portfolios are kept in the school’s approved format or platform (for example Edunav, where its configured functions meet portfolio needs, or Google Workspace/Sites), not in Academic Hub. Each school names one Portfolio Coordinator and runs two portfolio-led review/SLC cycles a year, one in each semester, on dates each school sets.' },
+        appraisal:           { group: 'cycle', step: 5, verb: 'Improve',       name: 'Appraisal',        q: 'What is working, and what should improve?', c: '#6A351B', mid: '#975636', tint: '#f3ebe7', doc: ['Appraisal Module: Start Here 26-27', GDOC('1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU')] },
+        career_growth:       { group: 'cycle', step: 6, verb: 'Grow',          name: 'Career Growth',    q: 'How do people grow into approved roles?', c: '#711A50', mid: '#9e3576', tint: '#f3e7ef', doc: ['Career Growth Module: Start Here 26-27', GDOC('1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk')],
+          // Career Growth Module: Start Here 26-27 (Progression Principle, Controlled Documents, Protected Boundaries).
+          note: 'Career growth is broader than promotion. Approved roles, levels and progression are set by Career Growth: Framework 26-27 and Career Growth: Role Register 26-27; no role, level or allowance may be self-activated.' },
+        teaching_learning:   { group: 'cross', name: 'Teaching & Learning',      q: 'Classroom practice across the network: lesson planning, learning environment, digital resources, STEAM, whole-school reading and teacher development.', c: '#2E6B1B', mid: '#488e32', tint: '#eaf3e7', doc: ['Start Here — Teaching & Learning 26-27', GDOC('14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s')] },
+        digital_citizenship: { group: 'cross', name: 'Digital Citizenship & AI', q: 'Digital citizenship, academic integrity, responsible AI use, acceptable use, social media, devices and AI competency.', c: '#1B4F6A', mid: '#367697', tint: '#e7eff3', doc: ['Start Here — Digital Citizenship & AI 26-27', GDOC('1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8')] },
+        academic_insights:   { group: 'evidence', name: 'Academic Insights',     q: 'Evidence-informed analysis and reference material, including results from your school and across the network.', kick: 'Analysis', c: '#6A5A1B', mid: '#917e34', tint: '#f3f1e7', doc: ['Academic Insights folder', GFOLDER('1jKD8BODaQo0hleK2ITkA7PFtp8pGdjxS')] },
+        quality_ecosystem:   { group: 'evidence', name: 'Quality Ecosystem & Standards', q: 'Governance and source control: which document governs each area when two seem to conflict.', kick: 'Governance', c: '#1B6A35', mid: '#338f51', tint: '#e7f3eb', doc: ['Quality Ecosystem: Policy Source-of-Truth Register 26-27', GDOC('1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4')] },
       };
       const OTHER_FAMILY = { group: 'other', name: 'Other', c: '#475569', mid: '#64748b', tint: '#eceff3' };
       const START_HERE_URL = GDOC('1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU');
-      const GROUP_LABEL = { cross: 'Across the whole ecosystem', evidence: 'Evidence and rules', other: 'More' };
-      const GROUP_SIDE = { workspace: 'Everyday', cycle: 'The cycle', cross: 'Across all', evidence: 'Evidence & rules', other: 'More' };
+      const GROUP_LABEL = { cross: 'Cross-cutting practice and policy', evidence: 'Analysis and governance', other: 'More' };
+      const GROUP_SIDE = { workspace: 'Everyday', cycle: 'The cycle', cross: 'Cross-cutting', evidence: 'Analysis & governance', other: 'More' };
 
       // ================================================================
       // TOOL REGISTRY — every hand-described tile. `id` is the card id that
@@ -510,45 +522,45 @@
         { id: 'school-activities', href: '/school-activities', icon: 'kanban', title: 'Leadership Activities', desc: 'School improvement initiatives on one board.' },
         { id: 'school-leadership-proposals', href: '/school-leadership-proposals', icon: 'bulb', title: 'Leadership Proposals', desc: 'Ideas the leadership team is still shaping.' },
         { id: 'school-artifacts', href: '/school-artifacts', icon: 'folder', title: 'School Artifacts', desc: 'Annual plans, department handbooks and other living documents.' },
-        { id: 'school-leadership-directory', href: '/school-leadership-directory', icon: 'phone', title: 'Leadership Directory', desc: 'Your school leadership team’s contacts.' },
+        { id: 'school-leadership-directory', href: '/school-leadership-directory', icon: 'phone', title: 'Leadership Directory', desc: 'Your school leadership team’s contacts, including Heads of Department and the Guidance Coordinator.' },
         { id: 'documents', href: '/documents', icon: 'doc', title: 'Documents', desc: 'Shared documents.' },
         { id: 'school-leadership-read-me', href: '/school-leadership-read-me', icon: 'info', title: 'School Leaders: Read Me First', desc: 'How the School Leaders workspace fits together.' },
         { id: 'school-leadership-operational-guide', href: '/school-leadership-operational-guide', icon: 'info', title: 'School Leaders: Operational Guide', desc: 'Meetings → Decisions → Activities, step by step.' },
 
         // Curriculum
-        { id: 'curriculum-map', href: '/curriculum-map', icon: 'map', title: 'Curriculum Map', desc: 'Week-by-week pacing for every Cambridge subject, set against the syllabus.', tags: ['Grades 7-12'] },
-        { id: 'syllabus-coverage', href: '/syllabus-coverage', icon: 'check', title: 'Syllabus Coverage', desc: 'Which syllabus objectives each class has covered so far, from teacher pacing.' },
-        { id: 'curriculum-alignment', href: '/curriculum-alignment', icon: 'layers', title: 'Curriculum Alignment', desc: 'Cambridge and Kurikulum Merdeka side by side for mathematics and science.', tags: ['KM'] },
+        { id: 'curriculum-map', href: '/curriculum-map', icon: 'map', title: 'Curriculum Map', desc: 'Week-by-week Cambridge pacing for Mathematics, Science and English, with the syllabus objectives behind each topic.', tags: ['Grades 7–12'] },
+        { id: 'syllabus-coverage', href: '/syllabus-coverage', icon: 'check', title: 'Syllabus Coverage', desc: 'How far each teacher has progressed through the pacing plan this year, and who needs follow-up.' },
+        { id: 'curriculum-alignment', href: '/curriculum-alignment', icon: 'layers', title: 'Curriculum Alignment', desc: 'Cambridge and Kurikulum Merdeka side by side for mathematics and science. Draft, pending Subject Specialist review.', tags: ['KM'] },
         { id: 'cambridge-standards', href: '/cambridge-standards', icon: 'book', title: 'Cambridge Standards', desc: 'The Cambridge Teacher Standards and School Leader Standards in full.', tags: ['Reference'] },
-        { id: 'cambridge-pathway', href: '/cambridge-pathway', icon: 'route', title: 'Cambridge Pathway Simulator', desc: 'Plan subject combinations from Lower Secondary to A Level.', tags: ['Planning'] },
-        { id: 'cambridge-calendar', href: '/cambridge-calendar', icon: 'cal', title: 'Cambridge Exam Calendar', desc: 'Entry deadlines, exam days and results dates for each series.' },
+        { id: 'cambridge-pathway', href: '/cambridge-pathway', icon: 'route', title: 'Cambridge Pathway Simulator', desc: 'Plan subject choices the network way: Lower Secondary enrichment, six IGCSE subjects, four AS subjects.', tags: ['Planning'] },
+        { id: 'cambridge-calendar', href: '/cambridge-calendar', icon: 'cal', title: 'Cambridge Exam Calendar', desc: 'Entry deadlines, exam days and results dates for each series — always check against the current Cambridge timetable.' },
         { id: 'academic-calendar', href: '/academic-calendar', icon: 'cal', title: 'Academic Calendar', desc: 'Network dates for the year, including the four EASE Weeks.' },
 
         // Induction
-        { id: 'my-induction', href: '/my-induction', icon: 'seed', title: 'My Induction', desc: 'Your own first-year programme: windows, tasks, journal and pulse.', tags: ['For you'] },
-        { id: 'team-induction', href: '/team-induction', icon: 'users', title: 'Team Induction', desc: 'Every new colleague at your school, their mentor and any pulse alerts.' },
+        { id: 'my-induction', href: '/my-induction', icon: 'seed', title: 'My Induction', desc: 'Your own protected induction track: tasks, your mentor or guide, and a weekly pulse.', tags: ['For you'] },
+        { id: 'team-induction', href: '/team-induction', icon: 'users', title: 'Team Induction', desc: 'Teacher Induction at your school: each new teacher’s status, mentor and weekly pulse.' },
 
         // EASE
-        { id: 'ease-growth-results', href: '/ease-growth-results', icon: 'chart', title: 'EASE Growth Results', desc: 'Baseline results in Mathematical Reasoning, Science Literacy and English Reading, your school against the network.', tags: ['New', 'Baseline'] },
-        { id: 'school-assessment', href: '/school-assessment', icon: 'table', title: 'Common Assessment Results', desc: 'Class averages, mastery bands and students who need support.' },
+        { id: 'ease-growth-results', href: '/ease-growth-results', icon: 'chart', title: 'EASE Growth Results', desc: 'Your school’s Version 1 baseline in Mathematical Reasoning, Science Literacy and English Reading, shown alongside the Network Reference. A baseline, not a growth score.', tags: ['New', 'Baseline'] },
+        { id: 'school-assessment', href: '/school-assessment', icon: 'table', title: 'Common Assessment Results', desc: 'Class averages and the students scoring below your school’s KKTP on EASE Assessment (Common Assessment).' },
         { id: 'student-roster', href: '/student-roster', icon: 'users', title: 'Student Roster', desc: 'Students Hub accounts at your school: approve, graduate or reactivate.' },
 
         // Student Learning
 
         // Appraisal
-        { id: 'school-self-appraisal', href: '/school-self-appraisal', icon: 'check', title: 'School Self-Appraisal', desc: 'Rate your school on the five domains before the Validation Visit.' },
-        { id: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', icon: 'person', title: 'Teacher Formal Appraisal', desc: 'Record F1-F4 evidence and scores for each teacher.', tags: ['F1-F4'] },
-        { id: 'teacher-walkthrough-entry', href: '/teacher-walkthrough-entry', icon: 'eye', title: 'Classroom Walkthrough', desc: 'Short classroom visits recorded against the walkthrough rubric.' },
-        { id: 'my-observations', href: '/my-observations', icon: 'list', title: 'My Observations', desc: 'Every appraisal and walkthrough you have recorded.' },
-        { id: 'appraiser-calibration', href: '/appraiser-calibration', icon: 'scale', title: 'Appraiser Calibration', desc: 'Compare appraisers’ scores on the same lesson.' },
-        { id: 'teacher-levels', href: '/teacher-levels', icon: 'ladder', title: 'Teacher Levels', desc: 'Your teachers and the appraisal level each one holds.' },
+        { id: 'school-self-appraisal', href: '/school-self-appraisal', icon: 'check', title: 'School Self-Appraisal', desc: 'Draft your Self-Evaluation Summary against the 33 aspects before each on-site visit.' },
+        { id: 'teacher-appraisal-entry', href: '/teacher-appraisal-entry', icon: 'person', title: 'Teacher Appraisal Entry', desc: 'The formal, scored appraisal of each teacher, at the teacher’s appraisal level.', tags: ['F1-F4'] },
+        { id: 'teacher-walkthrough-entry', href: '/teacher-walkthrough-entry', icon: 'eye', title: 'Teaching Practice Walkthrough', desc: 'Short classroom visits of about 10–15 minutes. Formative only: no score.' },
+        { id: 'my-observations', href: '/my-observations', icon: 'list', title: 'My Observations', desc: 'The formal appraisals and walkthroughs you have submitted.' },
+        { id: 'appraiser-calibration', href: '/appraiser-calibration', icon: 'scale', title: 'Appraisal Calibration', desc: 'Score lesson vignettes on your own, then compare with the reference scores.' },
+        { id: 'teacher-levels', href: '/teacher-levels', icon: 'ladder', title: 'Teacher Levels', desc: 'Your teachers and the appraisal level each one is assessed against.' },
         // School Performance KPI + Teacher KPI Evaluation retired 2026-10-01
         // (archive/kpi/): the live pack has no standalone KPI system.
-        { id: 'principal-evaluation', href: '/principal-evaluation', icon: 'award', title: 'Principal Evaluation', desc: 'Observation, annual appraisal, 360° and coaching for the principal.', tags: ['Foundation Rep'] },
-        { id: 'principal-observation-entry', href: '/principal-observation-entry', icon: 'eye', title: 'Principal Observation', desc: 'Formative observation of the principal across eight leadership foci.' },
-        { id: 'principal-appraisal-entry', href: '/principal-appraisal-entry', icon: 'person', title: 'Principal Annual Appraisal', desc: 'The weighted annual appraisal of the principal.' },
-        { id: 'principal-360-results', href: '/principal-360-results', icon: 'users', title: 'Principal 360° Results', desc: 'Grouped 360° feedback, shown only above the respondent threshold.' },
-        { id: 'principal-coaching-view', href: '/principal-coaching-view', icon: 'msg', title: 'My Coaching', desc: 'Coaching sessions logged by your Eduversal Director.', tags: ['For you'] },
+        { id: 'principal-evaluation', href: '/principal-evaluation', icon: 'award', title: 'Principal Evaluation', desc: 'The Principal Appraisal cycle in one place: observation visits, the annual appraisal and 360° results.', tags: ['Foundation Rep'] },
+        { id: 'principal-observation-entry', href: '/principal-observation-entry', icon: 'eye', title: 'Principal Observation', desc: 'The record of a scheduled leadership-observation visit across the eight foci (P1–P8).' },
+        { id: 'principal-appraisal-entry', href: '/principal-appraisal-entry', icon: 'person', title: 'Principal Annual Appraisal', desc: 'The formal yearly review of the principal’s leadership, led by Eduversal.' },
+        { id: 'principal-360-results', href: '/principal-360-results', icon: 'users', title: 'Principal 360° Results', desc: 'Anonymous feedback as group averages. A group shows only with 5 or more responses.' },
+        { id: 'principal-coaching-view', href: '/principal-coaching-view', icon: 'msg', title: 'My Coaching', desc: 'Coaching sessions logged by your coach or mentor. Confidential to you and your mentor.', tags: ['For you'] },
 
         // Leadership self-reflection tools. Not part of the live Career Growth
         // module (no Role Register level, promotion step or certification);
@@ -559,13 +571,13 @@
         { id: 'my-certificates', href: '/my-certificates', icon: 'badge', title: 'My Progress Record', desc: 'Your self-reflection progress by domain. Not a certificate.', tags: ['For you'] },
 
         // Teaching & Learning
-        { id: 'library', href: '/library', icon: 'book', title: 'Academic Library', desc: 'Books, articles and resources for teachers and leaders.' },
+        { id: 'library', href: '/library', icon: 'book', title: 'Resource Library', desc: 'Curated teaching resources, exemplars and references shared across the network.' },
 
         // Digital Citizenship & AI
-        { id: 'ai-prompts', href: '/ai-prompts', icon: 'bulb', title: 'AI Prompt Library', desc: 'Tested prompts for planning, feedback and school admin.' },
+        { id: 'ai-prompts', href: '/ai-prompts', icon: 'bulb', title: 'AI Prompt Library', desc: 'Tested prompts for planning, feedback and school admin — approved AI tools only, and never identifiable student data.' },
         { id: 'ai-maturity-self-assessment', href: '/ai-maturity-self-assessment', icon: 'chip', title: 'AI Maturity Self-Assessment', desc: 'Your school’s yearly six-area AI self-assessment. Not an appraisal score.', tags: ['Developmental'] },
         { id: 'ai-validate-teacher-assessments', href: '/ai-validate-teacher-assessments', icon: 'check', title: 'Teacher AI Self-Assessments', desc: 'Record the professional development conversation on each teacher’s AI self-assessment.', tags: ['Developmental'] },
-        { id: 'network-audit', href: '/network-audit', icon: 'shield', title: 'Network Security Audit', desc: 'Device, account and network security checks for your school.' },
+        { id: 'network-audit', href: '/network-audit', icon: 'shield', title: 'Network Security Assessment', desc: 'Device, account and network security checks for your school.' },
 
         // Academic Insights (the AY 2025-26 dashboards — EASE I-III, A-EASE,
         // surveys, accreditation, partner/Islamic schools, school appraisals,
@@ -573,10 +585,10 @@
         // 2026-09-30 and are not listed.)
         { id: 'cambridge-results', href: '/cambridge-results', icon: 'cap', title: 'Cambridge Results', desc: 'Cambridge results by school and subject, with the network for comparison.', tags: ['New'] },
         { id: 'cambridge-exams', href: '/cambridge-exams', icon: 'bars', title: 'Cambridge Exams Dashboard', desc: 'Series results, grade distributions and trends.' },
-        { id: 'surveys', href: '/surveys', icon: 'list', title: 'Surveys to Complete', desc: 'Surveys that are waiting for your answers.' },
+        { id: 'surveys', href: '/surveys', icon: 'list', title: 'Shared Surveys', desc: 'Surveys from Eduversal that are waiting for your answers.' },
 
         // Quality Ecosystem & Standards
-        { id: 'academic-standards', href: '/academic-standards', icon: 'book', title: 'Eduversal Academic Standards', desc: 'The 24-section policy manual for the partner-school network.', tags: ['ES'] },
+        { id: 'academic-standards', href: '/academic-standards', icon: 'book', title: 'Academic Standards', desc: 'The 24-section policy manual for the partner-school network.', tags: ['ES'] },
         { id: 'references', href: '/references', icon: 'layers', title: 'References', desc: 'The frameworks, standards and regulations behind the network’s work.' },
 
       ];
@@ -700,7 +712,7 @@
           : fam.group === 'cross' ? 'Cross-cutting area' : (fam.kick || '');
         const docLink = fam.doc
           ? `<a class="doc" href="${esc(fam.doc[1])}" target="_blank" rel="noopener">${svg('doc')} ${esc(fam.doc[0])} ↗</a>` : '';
-        const q = fam.q ? `<div class="q">${esc(fam.q)}</div>` : '';
+        const q = (fam.q ? `<div class="q">${esc(fam.q)}</div>` : '') + (fam.note ? `<p class="note">${esc(fam.note)}</p>` : '');
         const hiddenNote = hiddenForUsers ? '<span class="h-hidden-note">Hidden from non-admins</span>' : '';
         return `<section class="h-sec${fam.compact ? ' is-compact' : ''}${hiddenForUsers ? ' is-hidden-for-users' : ''}" id="sec-${esc(id)}" data-sec-id="${esc(id)}" style="${famVars(fam)}">
           <div class="h-sec-h">
