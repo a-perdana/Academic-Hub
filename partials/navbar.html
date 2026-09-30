@@ -139,91 +139,38 @@
         <span>PD</span>
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
-      <div class="nav-dropdown-panel nav-dropdown-panel--wide" id="ddPanel-pd">
-        <div class="nav-dd-col-group">
+      <!-- Single column since 2026-10-01: the "Academic Services · Google Drive"
+           column was removed. The live Drive documents are reached from the
+           home page's module headers ("<Module>: Start Here ↗"), not the navbar. -->
+      <div class="nav-dropdown-panel" id="ddPanel-pd">
+        <div class="nav-dd-col-header">References</div>
+        <a href="/references" class="nav-dropdown-item" data-nav-key="references">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+          References
+        </a>
 
-          <!-- Column 1 — References & Standards -->
-          <div class="nav-dd-col">
-            <div class="nav-dd-col-header">References</div>
-            <a href="/references" class="nav-dropdown-item" data-nav-key="references">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-              References
-            </a>
-
-            <div class="nav-dd-divider"></div>
-            <div class="nav-dd-col-header" style="padding:4px 12px;">Standards</div>
-            <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              Academic Standards
-            </a>
-            <a href="/cambridge-standards" class="nav-dropdown-item" data-nav-key="cambridge-standards">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-              Cambridge Standards
-            </a>
-            <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              Cambridge Calendar
-            </a>
-            <a href="/academic-calendar" class="nav-dropdown-item" data-nav-key="academic-calendar">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h2M8 18h2M14 14h2M14 18h2"/></svg>
-              Academic Calendar
-            </a>
-            <a href="/school-events" class="nav-dropdown-item" data-nav-key="school-events">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-              School Events
-            </a>
-          </div>
-
-          <div class="nav-dd-col-divider"></div>
-
-          <!-- Column 2 — Academic Services in Google Drive (2026-09-30). Academic Hub
-               hosts no handbooks any more: the live Drive documents are the single
-               source. /handbook?id= links still work — they redirect to the live doc. -->
-          <div class="nav-dd-col">
-            <div class="nav-dd-col-header">Academic Services · Google Drive</div>
-            <a href="https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Academic Services: Start Here ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Curriculum Module ↗
-            </a>
-            <a href="https://docs.google.com/document/d/11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Induction Module ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              EASE Module ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Appraisal Module ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Career Growth Module ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Student Learning ↗
-            </a>
-            <a href="https://docs.google.com/document/d/14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Teaching &amp; Learning ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Digital Citizenship &amp; AI ↗
-            </a>
-            <a href="https://docs.google.com/document/d/1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4/edit" target="_blank" rel="noopener" class="nav-dropdown-item">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Quality Ecosystem ↗
-            </a>
-          </div>
-
-        </div>
+        <div class="nav-dd-divider"></div>
+        <div class="nav-dd-col-header" style="padding:4px 12px;">Standards</div>
+        <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          Academic Standards
+        </a>
+        <a href="/cambridge-standards" class="nav-dropdown-item" data-nav-key="cambridge-standards">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          Cambridge Standards
+        </a>
+        <a href="/cambridge-calendar" class="nav-dropdown-item" data-nav-key="cambridge-calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Cambridge Calendar
+        </a>
+        <a href="/academic-calendar" class="nav-dropdown-item" data-nav-key="academic-calendar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h2M8 18h2M14 14h2M14 18h2"/></svg>
+          Academic Calendar
+        </a>
+        <a href="/school-events" class="nav-dropdown-item" data-nav-key="school-events">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          School Events
+        </a>
       </div>
     </div>
 

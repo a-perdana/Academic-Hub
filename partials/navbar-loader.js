@@ -704,17 +704,6 @@ const NAV_ITEMS = [
   { group: 'pd', label: 'PD', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>', items: [
     // Handbooks & References (audience: everyone — AI Prompts moved to Communications > Prompt Library 2026-05-27)
     { key: 'references',              href: '/references',              label: 'References' },
-    // Handbooks moved to Google Drive 2026-09-30 — Academic Services entry documents.
-    { key: 'drive-academic-services-start-here', href: 'https://docs.google.com/document/d/1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU/edit', label: 'Academic Services: Start Here ↗', external: true },
-    { key: 'drive-curriculum-module', href: 'https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit', label: 'Curriculum Module ↗', external: true },
-    { key: 'drive-induction-module', href: 'https://docs.google.com/document/d/11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw/edit', label: 'Induction Module ↗', external: true },
-    { key: 'drive-ease-module', href: 'https://docs.google.com/document/d/1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4/edit', label: 'EASE Module ↗', external: true },
-    { key: 'drive-appraisal-module', href: 'https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit', label: 'Appraisal Module ↗', external: true },
-    { key: 'drive-career-growth-module', href: 'https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit', label: 'Career Growth Module ↗', external: true },
-    { key: 'drive-student-learning', href: 'https://docs.google.com/document/d/1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8/edit', label: 'Student Learning ↗', external: true },
-    { key: 'drive-teaching-learning', href: 'https://docs.google.com/document/d/14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s/edit', label: 'Teaching & Learning ↗', external: true },
-    { key: 'drive-digital-citizenship-ai', href: 'https://docs.google.com/document/d/1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8/edit', label: 'Digital Citizenship & AI ↗', external: true },
-    { key: 'drive-quality-ecosystem', href: 'https://docs.google.com/document/d/1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4/edit', label: 'Quality Ecosystem ↗', external: true },
     // Featured for Leadership (2026-05-19; Cambridge Coord / Principal / DSL 90-day guides added 2026-05-27)
     // Policy & AI (2026-05-19; Digital Citizenship / Anti-Bullying / Attendance added 2026-05-27)
     // School-facing handbooks (seeded 2026-05-17)
