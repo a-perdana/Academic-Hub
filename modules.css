@@ -149,6 +149,21 @@ body[data-module] .page-hero {
   border-top: 3px solid var(--m-soft);
   box-shadow: inset 0 7px 26px -12px var(--m-vivid);
 }
+/* Hero texture. The base .page-hero::before lays a 22px dot grid over the
+   gradient, which reads as a tiled square pattern on a large hero (Alif,
+   2026-10-01: "remove the little squares, something more elegant"). Module
+   pages replace it with light, not pattern: a warm bloom top-right, depth
+   bottom-left, one soft diagonal sheen, and a single oversized hairline ring
+   motif fading off the right edge. (0,2,2) beats the page-local
+   .page-hero::before rules some CPD pages still carry. */
+body[data-module] .page-hero::before {
+  background:
+    radial-gradient(ellipse 55% 95% at 92% -10%, rgba(255, 240, 222, 0.20) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 70% at 70% 115%, rgba(var(--m-vivid-rgb), 0.16) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 85% at -5% 110%, rgba(0, 0, 0, 0.24) 0%, transparent 60%),
+    linear-gradient(112deg, transparent 50%, rgba(255, 255, 255, 0.045) 58%, transparent 67%),
+    url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%20600%20600%27%20fill%3D%27none%27%20stroke%3D%27white%27%20stroke-width%3D%271%27%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27300%27%20r%3D%2770%27%20stroke-opacity%3D%270.110%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27300%27%20r%3D%27125%27%20stroke-opacity%3D%270.093%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27300%27%20r%3D%27180%27%20stroke-opacity%3D%270.076%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27300%27%20r%3D%27235%27%20stroke-opacity%3D%270.059%27%2F%3E%3Ccircle%20cx%3D%27300%27%20cy%3D%27300%27%20r%3D%27290%27%20stroke-opacity%3D%270.042%27%2F%3E%3C%2Fsvg%3E") no-repeat right -180px center / 680px 680px;
+}
 body[data-module="hub"] .page-hero { --hero-mesh: radial-gradient(circle at 85% 10%, rgba(255,255,255,0.16) 0%, transparent 45%); background: linear-gradient(135deg, #221c52 0%, #3d3399 48%, #0e6078 100%); }
 body[data-module] .page-hero::after {
   background: linear-gradient(to bottom, rgba(var(--m-mid-rgb), 0.10), transparent);
