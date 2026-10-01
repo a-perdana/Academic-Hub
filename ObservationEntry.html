@@ -9,26 +9,16 @@
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <style>
 :root {
-  --accent: #6c5ce7;
-  --accent-2: #ede9fe;
-  --accent-dark: #4e3db8;
+  --accent: var(--m-mid, #6c5ce7);
+  --accent-2: var(--m-tint, #ede9fe);
 }
-body { padding-top: 62px; }
-.page-wrap { max-width: 920px; margin: 0 auto; padding: 28px 20px 80px; }
-
-.page-header {
-  background: linear-gradient(135deg, #1a1530 0%, #2d2354 55%, #0a0815 100%);
-  color: #fff; padding: 32px 28px; border-radius: 16px;
-  margin-bottom: 24px; position: relative; overflow: hidden;
-}
-.page-header::before {
-  content: ''; position: absolute; inset: 0;
-  background: radial-gradient(circle at 80% 20%, rgba(108,92,231,0.22) 0%, transparent 55%);
-}
-.page-header > * { position: relative; z-index: 1; }
-.page-header .eyebrow { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
-.page-header h1 { font-family: 'Lora', serif; font-size: 1.75rem; font-weight: 600; margin-bottom: 6px; }
-.page-header p { font-size: 14px; color: rgba(255,255,255,0.65); max-width: 700px; }
+/* --accent-dark sits on body, not :root: the --m-* module tokens live on
+   body[data-module], so a :root reference would always hit the fallback. */
+body { padding-top: 62px; --accent-dark: var(--m-dark, #4e3db8); }
+/* Hero = canonical .page-hero from /base.css; the module sets its colours.
+   width:100% — body is a flex column once the canonical .page-footer is a
+   direct child (base.css body:has(> .page-footer)). */
+.page-wrap { width: 100%; max-width: 920px; margin: 0 auto; padding: 28px 20px 80px; }
 
 .context-card {
   background: var(--white); border: 1px solid var(--border); border-radius: 14px;
@@ -69,7 +59,7 @@ body { padding-top: 62px; }
 .rubric-cell:hover { border-color: var(--accent); background: #fff; }
 .rubric-cell.selected {
   border-color: var(--accent); background: var(--accent-2);
-  box-shadow: 0 0 0 2px rgba(108,92,231,0.15);
+  box-shadow: 0 0 0 2px rgba(var(--m-mid-rgb, 124, 58, 237), 0.15);
 }
 .rubric-cell-label {
   font-weight: 600; font-size: 11px; color: var(--ink);
@@ -103,11 +93,11 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); }
   background: #fafafa;
 }
 .ggg-card.glow { background: linear-gradient(180deg, #fef3c7 0%, #fafafa 100%); border-color: #fde68a; }
-.ggg-card.grow { background: linear-gradient(180deg, #ddd6fe 0%, #fafafa 100%); border-color: #c4b5fd; }
+.ggg-card.grow { background: linear-gradient(180deg, var(--m-border, #ddd6fe) 0%, #fafafa 100%); border-color: var(--m-border, #c4b5fd); }
 .ggg-card.go   { background: linear-gradient(180deg, #d1fae5 0%, #fafafa 100%); border-color: #6ee7b7; }
 .ggg-card label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
 .ggg-card.glow label { color: #92400e; }
-.ggg-card.grow label { color: #5b21b6; }
+.ggg-card.grow label { color: var(--m-dark, #5b21b6); }
 .ggg-card.go label   { color: #065f46; }
 .ggg-card textarea { background: #fff; }
 
@@ -152,16 +142,20 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-module="induction">
 <div id="navbarMount"></div>
 
-<div class="page-wrap">
-  <div class="page-header">
-    <p class="eyebrow">Induction Module · Mentor / School Leader</p>
-    <h1>Observation Entry</h1>
-    <p>Write up a Teacher Induction observation on the four-domain induction rubric (Planning, Management, Instruction, Assessment). Each domain gets a developmental placement — Emerging, Developing, Embedding or Extending — never a score. Charter Non-Negotiable 1: induction observations stay inside the induction system and never feed Teacher Appraisal.</p>
+<header class="page-hero" aria-label="Observation Entry header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw/edit" target="_blank" rel="noopener" title="Open Induction: Start Here (Google Doc)">Induction</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Prepare</span></p>
+      <h1 class="page-hero__title">Observation Entry</h1>
+      <p class="page-hero__desc">Write up a Teacher Induction observation on the four-domain induction rubric (Planning, Management, Instruction, Assessment). Each domain gets a developmental placement — Emerging, Developing, Embedding or Extending — never a score. Charter Non-Negotiable 1: induction observations stay inside the induction system and never feed Teacher Appraisal.</p>
+    </div>
   </div>
+</header>
 
+<div class="page-wrap">
   <div class="alert info">This form keeps the observation write-up only. It is not the school's induction tracker: the Teacher Induction Coordinator keeps the school's records (stage, RAG status, checkpoint dates) in the central Induction Control Centre, and schools do not create a separate Teacher Induction tracker.</div>
 
   <div id="loadingState" style="padding:40px;text-align:center;color:var(--ink-3);">Loading mentee context…</div>
@@ -237,6 +231,34 @@ textarea:focus, input:focus { outline: none; border-color: var(--accent); }
     </div>
   </div>
 </div>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Academic Hub · Induction</span>
+      <h2 class="page-footer__cta-title">Back to your induction team.</h2>
+      <p class="page-footer__cta-desc">Team Induction lists the teachers in induction at your school and their observations.</p>
+      <a href="/team-induction" class="page-footer__cta-btn">Open Team Induction <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Observation Entry footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Induction</span>
+        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
+        <a href="/team-induction" class="page-footer__nav-link">Team Induction</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Induction observations stay inside the induction system.</span>
+  </div>
+</footer>
 
 <script src="partials/navbar-loader.js"></script>
 <script type="module">

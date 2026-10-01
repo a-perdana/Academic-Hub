@@ -233,10 +233,10 @@ body {
 .mat-pitfall-icon { font-size: 14px; color: #e11d48; flex-shrink: 0; padding-top: 1px; }
 
 /* ─── v3 reflection prompts (violet, contemplative) ─── */
-.mat-reflection-box { background: #f5f3ff; border: 1px solid #ddd6fe; border-left: 4px solid #7c3aed; border-radius: 12px; padding: 12px 14px; margin-top: 0; }
-.mat-reflection-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; font-size: 13px; line-height: 1.6; color: #4c1d95; font-style: italic; }
-.mat-reflection-item + .mat-reflection-item { border-top: 1px dashed #ddd6fe; }
-.mat-reflection-num { width: 22px; height: 22px; border-radius: 50%; background: #7c3aed; color: #fff; font-size: 11px; font-weight: 700; font-style: normal; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+.mat-reflection-box { background: var(--m-tint-2, #f5f3ff); border: 1px solid var(--m-border, #ddd6fe); border-left: 4px solid var(--m-mid, #7c3aed); border-radius: 12px; padding: 12px 14px; margin-top: 0; }
+.mat-reflection-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 0; font-size: 13px; line-height: 1.6; color: var(--m-dark, #4c1d95); font-style: italic; }
+.mat-reflection-item + .mat-reflection-item { border-top: 1px dashed var(--m-border, #ddd6fe); }
+.mat-reflection-num { width: 22px; height: 22px; border-radius: 50%; background: var(--m-mid, #7c3aed); color: #fff; font-size: 11px; font-weight: 700; font-style: normal; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
 
 /* ─── v3 glossary (definition list) ─── */
 .mat-glossary-list { margin: 0; padding: 0; background: var(--paper); border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px; }
@@ -292,16 +292,16 @@ body {
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
 /* ── New-user intro banner (dismissable) ─────────────────────── */
-.page-intro { display:none; background:linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%); border:1px solid #c4b5fd; border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
+.page-intro { display:none; background:linear-gradient(135deg,var(--m-tint, #ede9fe) 0%,#e0f2fe 100%); border:1px solid var(--m-border, #c4b5fd); border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
 .page-intro.show { display:flex; gap:14px; align-items:flex-start; }
 .page-intro-icon { font-size:22px; flex-shrink:0; padding-top:1px; }
 .page-intro-body { flex:1; min-width:0; padding-right:26px; }
-.page-intro-title { font-size:13.5px; font-weight:700; color:#5b21b6; margin-bottom:4px; }
+.page-intro-title { font-size:13.5px; font-weight:700; color:var(--m-dark, #5b21b6); margin-bottom:4px; }
 .page-intro-text { font-size:12.5px; color:#44445a; line-height:1.55; }
-.page-intro-text strong { color:#5b21b6; }
-.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:#6d28d9; text-decoration:none; }
+.page-intro-text strong { color:var(--m-dark, #5b21b6); }
+.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:var(--m-mid, #6d28d9); text-decoration:none; }
 .page-intro-link:hover { text-decoration:underline; }
-.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid #c4b5fd; border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6d28d9; font-size:14px; line-height:1; transition:all .15s; }
+.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid var(--m-border, #c4b5fd); border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--m-mid, #6d28d9); font-size:14px; line-height:1; transition:all .15s; }
 .page-intro-dismiss:hover { background:#fff; }
 
 /* ─── THE FOUNDATIONS SHOWCASE (rounded card aligned to content width) ─── */
@@ -311,7 +311,7 @@ body {
   padding: 56px 40px 48px;
   background:
     radial-gradient(ellipse at 20% 0%, rgba(13,148,136,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 80% 100%, rgba(124,58,237,0.16) 0%, transparent 55%),
+    radial-gradient(ellipse at 80% 100%, rgba(var(--m-mid-rgb, 124, 58, 237), 0.16) 0%, transparent 55%),
     linear-gradient(180deg, #0a0e1a 0%, #0f1e2e 100%);
   color: #fff;
   overflow: hidden;
@@ -550,7 +550,7 @@ body {
 }
 .research-chip[data-tier="meta"]      { --chip-dot: #14b8a6; }
 .research-chip[data-tier="research"]  { --chip-dot: #06b6d4; }
-.research-chip[data-tier="framework"] { --chip-dot: #7c3aed; }
+.research-chip[data-tier="framework"] { --chip-dot: var(--m-mid, #7c3aed); }
 .research-chip[data-tier="indo"]      { --chip-dot: #f43f5e; }
 .research-chip[data-tier="ai"]        { --chip-dot: #f59e0b; }
 .research-chip[data-tier="cambridge"] { --chip-dot: #2dd4bf; }
@@ -566,7 +566,7 @@ body {
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body data-page-accent="learning">
+<body data-module="career_growth">
 
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
@@ -590,10 +590,10 @@ body {
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="learning">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit" target="_blank" rel="noopener" title="Open Career Growth: Start Here (Google Doc)">Career Growth</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Grow</span></p>
       <h1 class="page-hero__title">Learning Path</h1>
       <p class="page-hero__desc">Twenty-nine leadership competencies across six domains, each with up to four stages — Awareness → Practitioner → Advanced → Lead. Read the short lesson, do the practice task, advance one stage at a time. This is developmental self-reflection: no stage here is a Career Growth Role Register level, a promotion step or a certification.</p>
     </div>

@@ -8,7 +8,7 @@
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <style>
-:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
+:root { --accent: var(--m-mid, #6c5ce7); --accent-2: var(--m-tint, #ede9fe); --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
 
 /* ─── HERO (canonical .page-hero, induction-mor accent — tokens from base.css/tokens.css) ─── */
@@ -56,7 +56,7 @@ body { padding-top: 62px; }
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 .page-hero__kpi-num {
   font-family: 'Lora', serif; font-size: 2.2rem; line-height: 1;
   font-weight: 600; color: #fff;
@@ -125,7 +125,7 @@ body { padding-top: 62px; }
 
 .deliverable-card {
   border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
-  background: linear-gradient(180deg, #faf5ff 0%, #fff 100%);
+  background: linear-gradient(180deg, var(--m-tint-2, #faf5ff) 0%, #fff 100%);
 }
 .deliverable-card.due { background: linear-gradient(180deg, #fef3c7 0%, #fff 100%); border-color: #fde68a; }
 .deliverable-card-title { font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
@@ -161,38 +161,39 @@ body { padding-top: 62px; }
 /* ── New-user intro banner (dismissable) ─────────────────────── */
 .page-intro {
   display: none;
-  background: linear-gradient(135deg, #ede9fe 0%, #e0f2fe 100%);
-  border: 1px solid #c4b5fd; border-radius: 14px;
+  background: linear-gradient(135deg, var(--m-tint, #ede9fe) 0%, #e0f2fe 100%);
+  border: 1px solid var(--m-border, #c4b5fd); border-radius: 14px;
   padding: 16px 20px 16px 18px; margin-bottom: 18px;
   position: relative;
 }
 .page-intro.show { display: flex; gap: 14px; align-items: flex-start; }
 .page-intro-icon { font-size: 22px; flex-shrink: 0; padding-top: 1px; }
 .page-intro-body { flex: 1; min-width: 0; padding-right: 26px; }
-.page-intro-title { font-size: 13.5px; font-weight: 700; color: #5b21b6; margin-bottom: 4px; }
+.page-intro-title { font-size: 13.5px; font-weight: 700; color: var(--m-dark, #5b21b6); margin-bottom: 4px; }
 .page-intro-text { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
-.page-intro-text strong { color: #5b21b6; }
-.page-intro-link { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600; color: #6d28d9; text-decoration: none; }
+.page-intro-text strong { color: var(--m-dark, #5b21b6); }
+.page-intro-link { display: inline-block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--m-mid, #6d28d9); text-decoration: none; }
 .page-intro-link:hover { text-decoration: underline; }
 .page-intro-dismiss {
   position: absolute; top: 10px; right: 10px;
-  background: rgba(255,255,255,0.7); border: 1px solid #c4b5fd;
+  background: rgba(255,255,255,0.7); border: 1px solid var(--m-border, #c4b5fd);
   border-radius: 6px; width: 24px; height: 24px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer; color: #6d28d9; font-size: 14px; line-height: 1;
+  cursor: pointer; color: var(--m-mid, #6d28d9); font-size: 14px; line-height: 1;
   transition: all 0.15s;
 }
 .page-intro-dismiss:hover { background: #fff; }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body data-page-accent="induction">
+<body data-module="induction">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="induction">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · Induction Module</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw/edit" target="_blank" rel="noopener" title="Open Induction: Start Here (Google Doc)">Induction</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Prepare</span></p>
+      <div class="page-hero__eyebrow" id="heroEyebrow">Induction Module</div>
       <h1 class="page-hero__title" id="heroTitle">My Induction</h1>
       <p class="page-hero__desc" id="heroDesc">Your protected induction track — tasks, your named mentor or guide, and a weekly pulse. On Academic Hub this is usually Principal Induction (12 months, four windows: Listen → Diagnose → Act → Anchor, with Window 1 — Listen running days 1–90), Academic Coordinator Induction (one academic year) or Exams Officer Induction (one examination cycle). Induction data never feeds a formal score.</p>
     </div>
@@ -423,7 +424,7 @@ function render() {
   if (heroTasksSub) heroTasksSub.textContent = 'completed';
   if (heroWindow) heroWindow.textContent = stageLabel;
   const heroEyebrow = document.getElementById('heroEyebrow');
-  if (heroEyebrow) heroEyebrow.textContent = `Academic Hub · ${track.name}`;
+  if (heroEyebrow) heroEyebrow.textContent = track.name;
   const heroWindowSub = document.getElementById('heroKpiWindowSub');
   if (heroWindowSub) heroWindowSub.textContent = track.name;
   const footerLink = document.getElementById('footerHandbookLink');

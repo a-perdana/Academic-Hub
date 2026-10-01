@@ -18,63 +18,18 @@
    sticky TOC + role-aware blocks + glossary). Preserves the AH-specific
    landing function: pin the user's sub-role(s) handbook(s) first in the
    role-card grid, sibling handbooks remain available for cross-reference. */
-:root { --og-accent: #6c5ce7; --og-accent-dk: #5b21b6; --og-accent-2: #ede9fe; }
+/* Declared on body, not :root: the --m-* module tokens live on
+   body[data-module], so a :root reference would always hit the fallback. */
+body { --og-accent: var(--m-mid, #6c5ce7); --og-accent-dk: var(--m-dark, #5b21b6); --og-accent-2: var(--m-tint, #ede9fe); padding-top: 62px; }
 
-body { padding-top: 62px; }
-
-/* ── Hero (dark navy, mor accent — parity with CH but AH brand palette) */
-.og-hero {
-  background: linear-gradient(135deg, #0a0a1a 0%, #18172e 55%, #060614 100%);
-  padding: 56px 0 52px; position: relative; overflow: hidden; min-height: 380px;
-}
-.og-hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 8% 75%, rgba(167,139,250,0.32) 0%, transparent 42%),
-    radial-gradient(circle at 88% 20%, rgba(8,145,178,0.20) 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(108,92,231,0.24) 0%, transparent 55%);
-  pointer-events: none;
-}
-.og-hero::after {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse at 60% 50%, rgba(0,0,0,0.6) 0%, transparent 70%);
-  pointer-events: none;
-}
-.og-hero-inner {
-  position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 40px;
-  display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center;
-}
-@media (max-width: 860px) { .og-hero-inner { grid-template-columns: 1fr; gap: 28px; } }
-
-.og-hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.65);
-  letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;
-  padding: 5px 11px; background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
-}
-.og-hero-eyebrow::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: #a78bfa; box-shadow: 0 0 12px rgba(167,139,250,0.8);
-  animation: pulseDot 2.4s ease-in-out infinite;
-}
-@keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
-
-.og-hero-title {
-  font-family: 'Lora', serif; font-size: 2.6rem; font-weight: 600;
-  color: #fff; margin-bottom: 14px; line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-.og-hero-title .og-hero-name {
-  background: linear-gradient(120deg, #a78bfa 0%, #67e8f9 100%);
+/* Hero = canonical .page-hero from /base.css; the module (data-module on
+   the body element) sets its colours. Only page-local extras inside the
+   hero text are styled here: name highlight, role chip, resume link. */
+.og-hero-name {
+  background: linear-gradient(120deg, var(--m-soft, #a78bfa) 0%, #67e8f9 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.og-hero-sub { font-size: 1rem; color: rgba(255,255,255,0.72); max-width: 560px; line-height: 1.6; }
 
 .og-hero-role-chip {
   display: inline-flex; align-items: center; gap: 8px;
@@ -88,101 +43,22 @@ body { padding-top: 62px; }
   box-shadow: 0 0 10px rgba(52,211,153,0.7);
 }
 
-.og-hero-metrics {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 10px; margin-top: 24px; max-width: 540px;
-}
-.og-hero-metric {
-  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 12px; padding: 12px 14px;
-  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-}
-.og-hero-metric-val {
-  font-family: 'Lora', serif; font-size: 1.5rem; font-weight: 600;
-  color: #fff; line-height: 1; margin-bottom: 4px;
-}
-.og-hero-metric-lbl {
-  font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.55);
-  letter-spacing: 0.06em; text-transform: uppercase;
-}
-
 .og-hero-resume {
   display: inline-flex; align-items: center; gap: 10px;
   margin-top: 18px; padding: 9px 16px 9px 12px;
-  background: linear-gradient(120deg, rgba(108,92,231,0.32), rgba(8,145,178,0.18));
+  background: linear-gradient(120deg, rgba(var(--m-mid-rgb, 124, 58, 237), 0.32), rgba(8,145,178,0.18));
   border: 1px solid rgba(167,139,250,0.4); border-radius: 10px;
   color: #fff; text-decoration: none; font-size: 12.5px; font-weight: 600;
   transition: all 0.2s; cursor: pointer;
 }
-.og-hero-resume:hover { background: linear-gradient(120deg, rgba(108,92,231,0.46), rgba(8,145,178,0.3)); border-color: rgba(167,139,250,0.65); transform: translateY(-1px); }
+.og-hero-resume:hover { background: linear-gradient(120deg, rgba(var(--m-mid-rgb, 124, 58, 237), 0.46), rgba(8,145,178,0.3)); border-color: rgba(167,139,250,0.65); transform: translateY(-1px); }
 .og-hero-resume-icon { font-size: 14px; }
 .og-hero-resume-text { color: rgba(255,255,255,0.92); font-weight: 500; }
 .og-hero-resume-text strong { color: #fff; font-weight: 700; }
 
-/* Hero visual — central cube + orbit glyphs */
-.og-hero-visual {
-  position: relative; width: 100%; aspect-ratio: 1; max-width: 320px;
-  margin: 0 auto; display: flex; align-items: center; justify-content: center;
-}
-.og-hero-visual::before {
-  content: ''; position: absolute; inset: 8%; border-radius: 50%;
-  border: 1px dashed rgba(167,139,250,0.3);
-  animation: orbitRot 32s linear infinite;
-}
-.og-hero-visual::after {
-  content: ''; position: absolute; inset: 22%; border-radius: 50%;
-  border: 1px dashed rgba(103,232,249,0.18);
-  animation: orbitRot 22s linear infinite reverse;
-}
-@keyframes orbitRot { to { transform: rotate(360deg); } }
-
-.og-hero-cube {
-  position: relative; width: 96px; height: 96px;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #6c5ce7 0%, #5b21b6 100%);
-  border-radius: 20px;
-  box-shadow:
-    0 20px 60px rgba(108,92,231,0.45),
-    0 0 0 1px rgba(255,255,255,0.1) inset,
-    0 2px 0 rgba(255,255,255,0.15) inset;
-  z-index: 2;
-}
-.og-hero-cube svg { width: 56px; height: 56px; }
-.og-hero-cube::before {
-  content: ''; position: absolute; inset: -14px; border-radius: 28px;
-  background: radial-gradient(circle, rgba(108,92,231,0.45), transparent 70%);
-  z-index: -1; filter: blur(8px);
-}
-
-.og-hero-orbit-glyph {
-  position: absolute; width: 52px; height: 52px; border-radius: 14px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(10,12,30,0.78); border: 1px solid rgba(255,255,255,0.14);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  font-size: 22px; line-height: 1;
-  animation: floatY 4s ease-in-out infinite;
-}
-.og-hero-orbit-glyph .glyph-step {
-  font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
-  color: rgba(167,139,250,0.95); margin-top: 2px;
-}
-.og-hero-orbit-glyph.g1 { top: 4%; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
-.og-hero-orbit-glyph.g2 { top: 50%; right: 2%; transform: translateY(-50%); animation-delay: 1s; }
-.og-hero-orbit-glyph.g3 { bottom: 4%; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
-.og-hero-orbit-glyph.g4 { top: 50%; left: 2%; transform: translateY(-50%); animation-delay: 3s; }
-@keyframes floatY {
-  0%,100% { margin-top: 0; }
-  50% { margin-top: -6px; }
-}
-@media (max-width: 860px) { .og-hero-visual { max-width: 240px; } }
-@media (max-width: 720px) {
-  .og-hero-title { font-size: 1.9rem; }
-  .og-hero-metrics { grid-template-columns: 1fr 1fr; }
-  .og-hero-metric:nth-child(3) { grid-column: 1 / -1; }
-}
-
-.og-page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
+/* width:100% — body is a flex column because the canonical .page-footer is
+   a direct child (base.css body:has(> .page-footer)). */
+.og-page-wrap { width: 100%; max-width: var(--container-max, 1200px); margin: 0 auto; padding: 28px 40px 80px; }
 
 /* TOC sticky sidebar — matches CH pattern */
 .og-layout { display: grid; grid-template-columns: 1fr 240px; gap: 36px; align-items: start; }
@@ -212,7 +88,7 @@ body { padding-top: 62px; }
   transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 .og-sec.open {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 16px 36px rgba(108,92,231,0.10);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 16px 36px rgba(var(--m-mid-rgb, 124, 58, 237), 0.10);
 }
 
 .og-sec-head {
@@ -282,20 +158,20 @@ body { padding-top: 62px; }
 .og-sec-lead { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; margin-bottom: 18px; max-width: 720px; }
 
 /* Per-section accent tokens — mor family for AH (parity-shifted from CH cyan) */
-#og-sec-welcome  { --sec-accent: #6c5ce7; --sec-accent-dk: #5b21b6; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(108,92,231,0.22); }
-#og-sec-flow     { --sec-accent: #8b5cf6; --sec-accent-dk: #6d28d9; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(139,92,246,0.22); }
-#og-sec-roles    { --sec-accent: #a78bfa; --sec-accent-dk: #6d28d9; --sec-accent-soft: #f3efff; --sec-accent-border: rgba(167,139,250,0.22); }
+#og-sec-welcome  { --sec-accent: var(--m-mid, #6c5ce7); --sec-accent-dk: var(--m-dark, #5b21b6); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(var(--m-mid-rgb, 124, 58, 237), 0.22); }
+#og-sec-flow     { --sec-accent: var(--m-mid, #8b5cf6); --sec-accent-dk: var(--m-mid, #6d28d9); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(139,92,246,0.22); }
+#og-sec-roles    { --sec-accent: var(--m-soft, #a78bfa); --sec-accent-dk: var(--m-mid, #6d28d9); --sec-accent-soft: #f3efff; --sec-accent-border: rgba(167,139,250,0.22); }
 #og-sec-week1    { --sec-accent: #10b981; --sec-accent-dk: #047857; --sec-accent-soft: #d1fae5; --sec-accent-border: rgba(16,185,129,0.22); }
 #og-sec-role     { --sec-accent: #ec4899; --sec-accent-dk: #be185d; --sec-accent-soft: #fce7f3; --sec-accent-border: rgba(236,72,153,0.22); }
 #og-sec-beyond   { --sec-accent: #f59e0b; --sec-accent-dk: #b45309; --sec-accent-soft: #fef3c7; --sec-accent-border: rgba(245,158,11,0.22); }
 #og-sec-glossary { --sec-accent: #3b82f6; --sec-accent-dk: #1d4ed8; --sec-accent-soft: #dbeafe; --sec-accent-border: rgba(59,130,246,0.22); }
-#og-sec-help     { --sec-accent: #6c5ce7; --sec-accent-dk: #5b21b6; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(108,92,231,0.22); }
+#og-sec-help     { --sec-accent: var(--m-mid, #6c5ce7); --sec-accent-dk: var(--m-dark, #5b21b6); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(var(--m-mid-rgb, 124, 58, 237), 0.22); }
 
 #og-sec-help .og-sec-body-inner { padding-top: 0; border-top: none; }
 
 .og-welcome-banner {
-  background: linear-gradient(135deg, #ede9fe 0%, #cffafe 100%);
-  border: 1px solid #c4b5fd; border-radius: 16px;
+  background: linear-gradient(135deg, var(--m-tint, #ede9fe) 0%, #cffafe 100%);
+  border: 1px solid var(--m-border, #c4b5fd); border-radius: 16px;
   padding: 22px 26px; margin-bottom: 28px;
 }
 .og-welcome-banner-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--og-accent-dk); margin-bottom: 6px; }
@@ -318,12 +194,12 @@ body { padding-top: 62px; }
   background: linear-gradient(180deg, #fff 0%, #faf7ff 100%);
   border: 1px solid var(--border); border-radius: 18px;
   padding: 36px 28px 28px; margin-bottom: 22px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(108,92,231,0.06);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(var(--m-mid-rgb, 124, 58, 237), 0.06);
   overflow: hidden;
 }
 .og-flow::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #c4b5fd 0%, #8b5cf6 50%, #6d28d9 100%);
+  background: linear-gradient(90deg, var(--m-border, #c4b5fd) 0%, var(--m-mid, #8b5cf6) 50%, var(--m-mid, #6d28d9) 100%);
 }
 .og-flow-track {
   position: relative;
@@ -332,7 +208,7 @@ body { padding-top: 62px; }
 .og-flow-track::before {
   content: ''; position: absolute;
   top: 22px; left: 12.5%; right: 12.5%; height: 2px;
-  background: linear-gradient(90deg, #c4b5fd 0%, #8b5cf6 60%, #6d28d9 100%);
+  background: linear-gradient(90deg, var(--m-border, #c4b5fd) 0%, var(--m-mid, #8b5cf6) 60%, var(--m-mid, #6d28d9) 100%);
   z-index: 0;
 }
 @media (max-width: 800px) {
@@ -354,11 +230,11 @@ body { padding-top: 62px; }
   display: flex; align-items: center; justify-content: center;
   font-family: 'Lora', serif; font-size: 18px; font-weight: 700;
   color: var(--og-accent-dk);
-  box-shadow: 0 4px 12px rgba(108,92,231,0.18), 0 0 0 4px #fff;
+  box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18), 0 0 0 4px #fff;
   margin-bottom: 12px; transition: all 0.2s;
 }
 .og-flow-step:nth-child(1) .og-flow-step-bubble { border-color: #1e3a8a; color: #1e3a8a; box-shadow: 0 4px 12px rgba(30,58,138,0.22), 0 0 0 4px #fff; }
-.og-flow-step:nth-child(2) .og-flow-step-bubble { border-color: #7c3aed; color: #5b21b6; box-shadow: 0 4px 12px rgba(124,58,237,0.24), 0 0 0 4px #fff; }
+.og-flow-step:nth-child(2) .og-flow-step-bubble { border-color: var(--m-mid, #7c3aed); color: var(--m-dark, #5b21b6); box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.24), 0 0 0 4px #fff; }
 .og-flow-step:nth-child(3) .og-flow-step-bubble { border-color: #0e7490; color: #0e7490; box-shadow: 0 4px 12px rgba(14,116,144,0.22), 0 0 0 4px #fff; }
 .og-flow-step:nth-child(4) .og-flow-step-bubble { border-color: #0d9488; color: #0f766e; box-shadow: 0 4px 12px rgba(13,148,136,0.22), 0 0 0 4px #fff; }
 
@@ -375,7 +251,7 @@ body { padding-top: 62px; }
 }
 .og-flow-step-link:hover {
   background: var(--og-accent); color: #fff; transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(108,92,231,0.3);
+  box-shadow: 0 4px 10px rgba(var(--m-mid-rgb, 124, 58, 237), 0.3);
 }
 .og-flow-step:hover .og-flow-step-bubble {
   transform: translateY(-3px) scale(1.05);
@@ -396,11 +272,11 @@ body { padding-top: 62px; }
 .og-role-card:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(15,23,42,0.08); }
 .og-role-card[data-active="true"] {
   border-color: var(--og-accent);
-  box-shadow: 0 0 0 3px rgba(108,92,231,0.18), 0 8px 20px rgba(108,92,231,0.08);
+  box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18), 0 8px 20px rgba(var(--m-mid-rgb, 124, 58, 237), 0.08);
 }
 .og-role-card .strip { height: 6px; background: var(--role-grad); }
 .og-role-card[data-role="foundation_representative"] { --role-grad: linear-gradient(90deg,#1e3a8a,#0c4a6e); }
-.og-role-card[data-role="school_principal"]          { --role-grad: linear-gradient(90deg,#7c3aed,#5b21b6); }
+.og-role-card[data-role="school_principal"]          { --role-grad: linear-gradient(90deg,var(--m-mid, #7c3aed),var(--m-dark, #5b21b6)); }
 .og-role-card[data-role="academic_coordinator"]      { --role-grad: linear-gradient(90deg,#0e7490,#0891b2); }
 .og-role-card[data-role="cambridge_coordinator"]     { --role-grad: linear-gradient(90deg,#0d9488,#0f766e); }
 .og-role-card .body { padding: 18px 22px 18px; flex: 1; display: flex; flex-direction: column; }
@@ -423,7 +299,7 @@ body { padding-top: 62px; }
   font-size: 0.84rem; font-weight: 600;
   transition: transform .12s, box-shadow .12s;
 }
-.og-role-card .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(108,92,231,0.3); }
+.og-role-card .cta:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.3); }
 .og-role-card .your-badge {
   display: inline-block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em;
   text-transform: uppercase; color: #fff; background: var(--og-accent);
@@ -484,12 +360,12 @@ body { padding-top: 62px; }
   position: relative;
   background: #fff; border: 2px solid var(--og-accent-2); border-radius: 16px;
   padding: 28px 24px 22px; margin-bottom: 18px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(108,92,231,0.08);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(var(--m-mid-rgb, 124, 58, 237), 0.08);
   overflow: hidden;
 }
 .og-role-block.is-admin     { border-color: #fde68a; background: linear-gradient(180deg, #fffbeb 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(245,158,11,0.10); }
 .og-role-block.is-fr        { border-color: #93c5fd; background: linear-gradient(180deg, #eff6ff 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(30,58,138,0.10); }
-.og-role-block.is-principal { border-color: #c4b5fd; background: linear-gradient(180deg, #faf5ff 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(139,92,246,0.12); }
+.og-role-block.is-principal { border-color: var(--m-border, #c4b5fd); background: linear-gradient(180deg, var(--m-tint-2, #faf5ff) 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(139,92,246,0.12); }
 .og-role-block.is-academic  { border-color: #a5f3fc; background: linear-gradient(180deg, #ecfeff 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(8,145,178,0.10); }
 .og-role-block.is-cambridge { border-color: #99f6e4; background: linear-gradient(180deg, #f0fdfa 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(13,148,136,0.10); }
 .og-role-block.is-plain     { border-color: #e5e7eb; background: linear-gradient(180deg, #f9fafb 0%, #fff 80%); }
@@ -502,11 +378,11 @@ body { padding-top: 62px; }
   color: #fff; font-size: 10.5px; font-weight: 700;
   letter-spacing: 0.06em; text-transform: uppercase;
   border-radius: 0 14px 0 14px;
-  box-shadow: 0 4px 12px rgba(108,92,231,0.3);
+  box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.3);
 }
 .og-role-block.is-admin     .og-role-ribbon { background: linear-gradient(120deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 4px 12px rgba(245,158,11,0.35); }
 .og-role-block.is-fr        .og-role-ribbon { background: linear-gradient(120deg, #1e3a8a 0%, #1e40af 100%); box-shadow: 0 4px 12px rgba(30,58,138,0.32); }
-.og-role-block.is-principal .og-role-ribbon { background: linear-gradient(120deg, #7c3aed 0%, #5b21b6 100%); box-shadow: 0 4px 12px rgba(124,58,237,0.32); }
+.og-role-block.is-principal .og-role-ribbon { background: linear-gradient(120deg, var(--m-mid, #7c3aed) 0%, var(--m-dark, #5b21b6) 100%); box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.32); }
 .og-role-block.is-academic  .og-role-ribbon { background: linear-gradient(120deg, #06b6d4 0%, #0e7490 100%); box-shadow: 0 4px 12px rgba(6,182,212,0.30); }
 .og-role-block.is-cambridge .og-role-ribbon { background: linear-gradient(120deg, #0d9488 0%, #0f766e 100%); box-shadow: 0 4px 12px rgba(13,148,136,0.30); }
 .og-role-block.is-plain     .og-role-ribbon { background: linear-gradient(120deg, #6b7280 0%, #374151 100%); box-shadow: 0 4px 12px rgba(107,114,128,0.25); }
@@ -518,7 +394,7 @@ body { padding-top: 62px; }
 }
 .og-role-block.is-admin     .og-role-block-eyebrow { color: #92400e; }
 .og-role-block.is-fr        .og-role-block-eyebrow { color: #1e3a8a; }
-.og-role-block.is-principal .og-role-block-eyebrow { color: #6d28d9; }
+.og-role-block.is-principal .og-role-block-eyebrow { color: var(--m-mid, #6d28d9); }
 .og-role-block.is-academic  .og-role-block-eyebrow { color: #0e7490; }
 .og-role-block.is-cambridge .og-role-block-eyebrow { color: #0f766e; }
 .og-role-block.is-plain     .og-role-block-eyebrow { color: #4b5563; }
@@ -544,7 +420,7 @@ body { padding-top: 62px; }
   background: var(--og-accent-2); border-left: 4px solid var(--og-accent); border-radius: 8px;
   padding: 12px 16px; margin: 14px 0; font-size: 12.5px; color: var(--og-accent-dk); line-height: 1.55;
 }
-.og-note strong { color: #4c1d95; }
+.og-note strong { color: var(--m-dark, #4c1d95); }
 
 /* Glossary */
 .og-glossary {
@@ -579,17 +455,7 @@ body { padding-top: 62px; }
 }
 .og-help-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
 
-/* Canonical AH footer override (induction tint, matching the
-   School Leaders dropdown's mor brand) */
-.page-footer { background: var(--footer-grad-induction); }
-.page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
-.page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
-
 @media (max-width: 720px) {
-  .og-hero { padding: 32px 0 28px; }
-  .og-hero-inner { padding: 0 22px; }
-  .og-hero-title { font-size: 1.4rem; }
   .og-page-wrap { padding: 22px 18px 60px; }
   .og-sec-title { font-size: 1.15rem; }
   .og-gloss-row { grid-template-columns: 1fr; gap: 4px; }
@@ -597,55 +463,37 @@ body { padding-top: 62px; }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-module="school_workspace">
 <div id="navbarMount"></div>
 
-<div class="og-hero">
-  <div class="og-hero-inner">
-    <div class="og-hero-text">
-      <p class="og-hero-eyebrow">Eduversal · Academic Hub · School Leaders · Operational Guide</p>
-      <h1 class="og-hero-title">Welcome, <span class="og-hero-name" id="ogHeroName">there</span></h1>
-      <p class="og-hero-sub">Your start page for the four <strong style="color:#fff;">School Leaders</strong> role guides — Foundation Representative, Principal, Academic Coordinator, Cambridge Coordinator. Each guide opens the live Academic Services document for that role. Open the one matching your role first, then pull a sibling whenever a meeting touches that lane.</p>
+<header class="page-hero" aria-label="Operational Guide header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
+      <h1 class="page-hero__title">Welcome, <span class="og-hero-name" id="ogHeroName">there</span></h1>
+      <p class="page-hero__desc">Your start page for the four <strong style="color:#fff;">School Leaders</strong> role guides — Foundation Representative, Principal, Academic Coordinator, Cambridge Coordinator. Each guide opens the live Academic Services document for that role. Open the one matching your role first, then pull a sibling whenever a meeting touches that lane.</p>
       <div class="og-hero-role-chip" id="ogRoleChip"><span class="role-dot"></span><span id="ogRoleChipText">Loading your role…</span></div>
-
-      <div class="og-hero-metrics">
-        <div class="og-hero-metric">
-          <div class="og-hero-metric-val">4</div>
-          <div class="og-hero-metric-lbl">Role guides</div>
-        </div>
-        <div class="og-hero-metric">
-          <div class="og-hero-metric-val">26-27</div>
-          <div class="og-hero-metric-lbl">Live documents</div>
-        </div>
-        <div class="og-hero-metric">
-          <div class="og-hero-metric-val" id="ogMetricStages">1</div>
-          <div class="og-hero-metric-lbl">Principals Checklist</div>
-        </div>
-      </div>
-
       <a class="og-hero-resume" id="ogHeroResume" href="#og-sec-welcome" style="display:none;">
         <span class="og-hero-resume-icon">↩</span>
         <span class="og-hero-resume-text">Resume from <strong id="ogHeroResumeSection">Welcome</strong></span>
       </a>
     </div>
-
-    <div class="og-hero-visual" aria-hidden="true">
-      <div class="og-hero-cube">
-        <svg viewBox="0 0 100 100" fill="none">
-          <polygon points="10,45 50,65 50,70 10,50" fill="#5b21b6" opacity="0.85"/>
-          <polygon points="90,45 50,65 50,70 90,50" fill="#6c5ce7" opacity="0.9"/>
-          <polygon points="50,25 90,45 50,65 10,45" fill="#fff" opacity="0.95"/>
-          <line x1="85" y1="46" x2="85" y2="68" stroke="#ffd93d" stroke-width="4" stroke-linecap="round"/>
-          <circle cx="85" cy="72" r="3.5" fill="#ffd93d"/>
-        </svg>
+    <div class="page-hero__kpis">
+      <div class="page-hero__kpi page-hero__kpi--primary">
+        <div class="page-hero__kpi-num">4</div>
+        <div class="page-hero__kpi-lbl">Role guides</div>
       </div>
-      <div class="og-hero-orbit-glyph g1">📘<span class="glyph-step">READ</span></div>
-      <div class="og-hero-orbit-glyph g2">🗺️<span class="glyph-step">RAMP</span></div>
-      <div class="og-hero-orbit-glyph g3">✅<span class="glyph-step">CHECK</span></div>
-      <div class="og-hero-orbit-glyph g4">🤝<span class="glyph-step">LEAD</span></div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num">26-27</div>
+        <div class="page-hero__kpi-lbl">Live documents</div>
+      </div>
+      <div class="page-hero__kpi">
+        <div class="page-hero__kpi-num" id="ogMetricStages">1</div>
+        <div class="page-hero__kpi-lbl">Principals Checklist</div>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 <div class="og-page-wrap">
   <div class="og-layout">
@@ -1402,28 +1250,22 @@ onScroll();
       <span class="page-footer__cta-eyebrow">You've got the lay of the land — now open your role guide</span>
       <h2 class="page-footer__cta-title">Guide tells the WHY. Checklist tells the WHEN.</h2>
       <p class="page-footer__cta-desc">Role guides open the live Academic Services document for your role. Weekly checklists tell you what to do this week. Pair them.</p>
-      <a href="/school-leadership-weekly-checklist" class="page-footer__cta-btn">Open this week's checklist <span aria-hidden="true">→</span></a>
+      <a href="/weekly-checklist" class="page-footer__cta-btn">Open this week's checklist <span aria-hidden="true">→</span></a>
     </div>
     <nav class="page-footer__nav" aria-label="Operational Guide footer navigation">
       <div class="page-footer__nav-group">
-        <span class="page-footer__nav-heading">School Leaders</span>
-        <a href="/school-leadership-read-me" class="page-footer__nav-link">Read Me First</a>
+        <span class="page-footer__nav-heading">Your school</span>
+        <a href="/weekly-checklist" class="page-footer__nav-link">Weekly Checklist</a>
         <a href="/school-leadership-meetings" class="page-footer__nav-link">Meetings</a>
         <a href="/school-leadership-decisions" class="page-footer__nav-link">Decisions</a>
+        <a href="/school-leadership-proposals" class="page-footer__nav-link">Proposals</a>
         <a href="/school-leadership-directory" class="page-footer__nav-link">Directory</a>
       </div>
       <div class="page-footer__nav-group">
-        <span class="page-footer__nav-heading">CPD</span>
-        <a href="/my-induction" class="page-footer__nav-link">My Induction</a>
-        <a href="/competency-framework" class="page-footer__nav-link">Competency Framework</a>
-        <a href="/learning-path" class="page-footer__nav-link">Learning Path</a>
-        <a href="/handbook" class="page-footer__nav-link">Handbook Browser</a>
-      </div>
-      <div class="page-footer__nav-group">
-        <span class="page-footer__nav-heading">References</span>
-        <a href="/references" class="page-footer__nav-link">References &amp; Standards</a>
-        <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
-        <a href="/roles-positions-doesnt-exist" class="page-footer__nav-link" style="display:none;">Roles (CH-only)</a>
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
       </div>
     </nav>
   </div>

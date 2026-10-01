@@ -56,7 +56,7 @@ body:has(> .page-footer) > .page-wrap {
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 @media (max-width: 760px) {
   .page-hero__inner,
@@ -127,7 +127,7 @@ body:has(> .page-footer) > .page-wrap {
 /* Item badge */
 .item-badge {
   font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 6px;
-  background: #ede9fe; color: #3c3489; border: 1px solid #c4b5fd;
+  background: var(--m-tint, #ede9fe); color: #3c3489; border: 1px solid var(--m-border, #c4b5fd);
   white-space: nowrap;
 }
 
@@ -240,7 +240,7 @@ body:has(> .page-footer) > .page-wrap {
 .score-box.yours.s2 { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
 .score-box.yours.s3 { background: #f0fdfa; color: #0f766e; border: 1px solid #99f6e4; }
 .score-box.yours.s4 { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-.score-box.expert { background: #ede9fe; color: #3c3489; border: 1px solid #c4b5fd; }
+.score-box.expert { background: var(--m-tint, #ede9fe); color: #3c3489; border: 1px solid var(--m-border, #c4b5fd); }
 .arrow { font-size: .72rem; color: #cbd5e1; }
 .delta-pill {
   font-size: .68rem; font-weight: 700; padding: 2px 8px; border-radius: 20px;
@@ -350,9 +350,9 @@ body:has(> .page-footer) > .page-wrap {
 }
 /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
-  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
-  border: 1px solid #ddd6fe;
-  border-left: 4px solid #6c5ce7;
+  background: linear-gradient(135deg, var(--m-tint-2, #f5f3ff) 0%, #eef2ff 100%);
+  border: 1px solid var(--m-border, #ddd6fe);
+  border-left: 4px solid var(--m-mid, #6c5ce7);
   border-radius: 12px;
   padding: 16px 18px;
   margin: 0 0 24px;
@@ -360,9 +360,9 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
 .info-strip__body { flex: 1; min-width: 0; }
-.info-strip__title { font-size: 15px; font-weight: 700; color: #5a4bd1; margin: 0 0 4px; letter-spacing: -0.01em; }
+.info-strip__title { font-size: 15px; font-weight: 700; color: var(--m-mid, #5a4bd1); margin: 0 0 4px; letter-spacing: -0.01em; }
 .info-strip__lede { font-size: 13px; color: #3730a3; line-height: 1.55; margin: 0 0 12px; }
-.info-strip__lede strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__lede strong { color: var(--m-mid, #5a4bd1); font-weight: 700; }
 .info-strip__flow { display: grid; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; counter-reset: flow-step; }
 .info-strip__flow > li {
   position: relative; padding: 8px 12px 8px 38px;
@@ -371,11 +371,11 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__flow > li::before {
   content: counter(flow-step); position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  width: 20px; height: 20px; border-radius: 50%; background: #6c5ce7; color: #fff;
+  width: 20px; height: 20px; border-radius: 50%; background: var(--m-mid, #6c5ce7); color: #fff;
   font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
-.info-strip__flow strong { color: #5a4bd1; font-weight: 700; }
-.info-strip__flow a { color: #6c5ce7; font-weight: 600; text-decoration: none; }
+.info-strip__flow strong { color: var(--m-mid, #5a4bd1); font-weight: 700; }
+.info-strip__flow a { color: var(--m-mid, #6c5ce7); font-weight: 600; text-decoration: none; }
 .info-strip__flow a:hover { text-decoration: underline; }
 .info-strip__callout {
   display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px;
@@ -384,26 +384,26 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__callout strong { color: #92400e; font-weight: 700; }
 .info-strip__callout-icon { font-size: 16px; flex-shrink: 0; line-height: 1.3; }
-.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(108,92,231,0.25); }
+.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(var(--m-mid-rgb, 124, 58, 237), 0.25); }
 .info-strip__pill {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 600; color: #5a4bd1;
-  background: rgba(255,255,255,0.75); border: 1px solid #ddd6fe;
+  font-size: 11.5px; font-weight: 600; color: var(--m-mid, #5a4bd1);
+  background: rgba(255,255,255,0.75); border: 1px solid var(--m-border, #ddd6fe);
   padding: 4px 10px; border-radius: 999px;
 }
 .info-strip__pill b { color: #3730a3; font-weight: 700; }
 @media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="appraisal">
 
 <div id="navbarMount"></div>
 
 <!-- HERO (canonical .page-hero · My Work / dark family) -->
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · Appraisal</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit" target="_blank" rel="noopener" title="Open Appraisal: Start Here (Google Doc)">Appraisal</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Improve</span></p>
       <h1 class="page-hero__title">Appraisal Calibration</h1>
       <p class="page-hero__desc">Compare your scoring with other appraisers and expert consensus to keep appraisals fair across the network. Score each lesson vignette independently against the Teacher Appraisal rubric, then see where you differ from the reference scores.</p>
       <span class="hero-notice">&#x2139;&#xFE0F; Developmental practice — not the Appraisal Certification and not a gate for appraising.</span>
@@ -1124,7 +1124,7 @@ function startGroupSession(code, scIdx, ref) {
             <span class="gc-consensus-lbl">Spread</span>
             <span class="gc-spread-pill ${spreadCls}">Δ ${spread}</span>
             <span class="gc-consensus-lbl" style="margin-left:8px;">Expert</span>
-            <span class="gc-score-badge gc-s${expert}" style="background:#ede9fe;color:#3c3489;border-color:#c4b5fd;">${expert}</span>
+            <span class="gc-score-badge gc-s${expert}" style="background:var(--m-tint, #ede9fe);color:#3c3489;border-color:var(--m-border, #c4b5fd);">${expert}</span>
           </div>
         </div>`;
       }).join('');

@@ -21,7 +21,9 @@
       picks its family (colour, question, Drive entry document) from HOME_FAMILIES
       below. Colours are the Drive document families in
       scripts/gdocs/module-theme.js (cover / mid / tint), so the hub and the
-      documents it links to look like one system.
+      documents it links to look like one system. `mid` is the web value from
+      modules.css (Drive mid darkened to WCAG AA where needed), and every page
+      a tile opens wears the same family via the data-module attribute on the page body.
       v1 (dark cards dashboard) is archived at archive/home-v1.html — not built.
     -->
     <style>
@@ -288,7 +290,7 @@
        while each section here carries its own module colour. (Never write the
        literal tag in this comment — build.js injects the skip link after the
        first match of it.) -->
-  <body>
+  <body data-module="hub">
     <div id="navbarMount"></div>
 
     <header class="h-hero">
@@ -483,21 +485,21 @@
       const GDOC = id => `https://docs.google.com/document/d/${id}/edit`;
       const GFOLDER = id => `https://drive.google.com/drive/folders/${id}`;
       const HOME_FAMILIES = {
-        school_workspace:    { group: 'workspace', name: 'Your school this week', kick: 'Everyday', c: '#3d3399', mid: '#5b52c4', tint: '#ecebf8', compact: true },
+        school_workspace:    { group: 'workspace', name: 'Your school this week', kick: 'Everyday', c: '#1B6B6B', mid: '#2c7c7c', tint: '#e7f3f3', compact: true },
         curriculum:          { group: 'cycle', step: 1, verb: 'Define',        name: 'Curriculum',       q: 'What is taught?', c: '#1B356A', mid: '#365697', tint: '#e7ebf3', doc: ['Curriculum Module: Start Here 26-27', GDOC('1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg')] },
         induction:           { group: 'cycle', step: 2, verb: 'Prepare',       name: 'Induction',        q: 'Who delivers it?', c: '#6A1B6A', mid: '#973697', tint: '#f3e7f3', doc: ['Induction Module: Start Here 26-27', GDOC('11-J70MK80CPzVaKbL7pfvIepCzB5a_CzV14xEfa1MUw')] },
         ease:                { group: 'cycle', step: 3, verb: 'Measure',       name: 'EASE',             q: 'What is understood?', c: '#351B6A', mid: '#563697', tint: '#ebe7f3', doc: ['EASE Module: Start Here 26-27', GDOC('1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4')] },
-        student_learning:    { group: 'cycle', step: 4, verb: 'Reflect & own', name: 'Student Learning', q: 'How does the student see, reflect on, and communicate their learning?', layer: true, c: '#556A1B', mid: '#6f8630', tint: '#f0f3e7', doc: ['Student Learning: Overview 26-27', GDOC('1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8')],
+        student_learning:    { group: 'cycle', step: 4, verb: 'Reflect & own', name: 'Student Learning', q: 'How does the student see, reflect on, and communicate their learning?', layer: true, c: '#556A1B', mid: '#64792b', tint: '#f0f3e7', doc: ['Student Learning: Overview 26-27', GDOC('1FGAyq9Pi18xdJLHZzecQdwcqhy5vA4lv8PR2cbqUmI8')],
           // Student Learning: Overview / Quick Reference / Portfolio Guide 26-27.
           note: 'Student portfolios are kept in the school’s approved format or platform (for example Edunav, where its configured functions meet portfolio needs, or Google Workspace/Sites), not in Academic Hub. Each school names one Portfolio Coordinator and runs two portfolio-led review/SLC cycles a year, one in each semester, on dates each school sets.' },
         appraisal:           { group: 'cycle', step: 5, verb: 'Improve',       name: 'Appraisal',        q: 'What is working, and what should improve?', c: '#6A351B', mid: '#975636', tint: '#f3ebe7', doc: ['Appraisal Module: Start Here 26-27', GDOC('1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU')] },
         career_growth:       { group: 'cycle', step: 6, verb: 'Grow',          name: 'Career Growth',    q: 'How do people grow into approved roles?', c: '#711A50', mid: '#9e3576', tint: '#f3e7ef', doc: ['Career Growth Module: Start Here 26-27', GDOC('1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk')],
           // Career Growth Module: Start Here 26-27 (Progression Principle, Controlled Documents, Protected Boundaries).
           note: 'Career growth is broader than promotion. Approved roles, levels and progression are set by Career Growth: Framework 26-27 and Career Growth: Role Register 26-27; no role, level or allowance may be self-activated.' },
-        teaching_learning:   { group: 'cross', name: 'Teaching & Learning',      q: 'Classroom practice across the network: lesson planning, learning environment, digital resources, STEAM, whole-school reading and teacher development.', c: '#2E6B1B', mid: '#488e32', tint: '#eaf3e7', doc: ['Start Here — Teaching & Learning 26-27', GDOC('14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s')] },
+        teaching_learning:   { group: 'cross', name: 'Teaching & Learning',      q: 'Classroom practice across the network: lesson planning, learning environment, digital resources, STEAM, whole-school reading and teacher development.', c: '#2E6B1B', mid: '#407f2d', tint: '#eaf3e7', doc: ['Start Here — Teaching & Learning 26-27', GDOC('14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s')] },
         digital_citizenship: { group: 'cross', name: 'Digital Citizenship & AI', q: 'Digital citizenship, academic integrity, responsible AI use, acceptable use, social media, devices and AI competency.', c: '#1B4F6A', mid: '#367697', tint: '#e7eff3', doc: ['Start Here — Digital Citizenship & AI 26-27', GDOC('1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8')] },
-        academic_insights:   { group: 'evidence', name: 'Academic Insights',     q: 'Evidence-informed analysis and reference material, including results from your school and across the network.', kick: 'Analysis', c: '#6A5A1B', mid: '#917e34', tint: '#f3f1e7', doc: ['Academic Insights folder', GFOLDER('1jKD8BODaQo0hleK2ITkA7PFtp8pGdjxS')] },
-        quality_ecosystem:   { group: 'evidence', name: 'Quality Ecosystem & Standards', q: 'Governance and source control: which document governs each area when two seem to conflict.', kick: 'Governance', c: '#1B6A35', mid: '#338f51', tint: '#e7f3eb', doc: ['Quality Ecosystem: Policy Source-of-Truth Register 26-27', GDOC('1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4')] },
+        academic_insights:   { group: 'evidence', name: 'Academic Insights',     q: 'Evidence-informed analysis and reference material, including results from your school and across the network.', kick: 'Analysis', c: '#6A5A1B', mid: '#82712f', tint: '#f3f1e7', doc: ['Academic Insights folder', GFOLDER('1jKD8BODaQo0hleK2ITkA7PFtp8pGdjxS')] },
+        quality_ecosystem:   { group: 'evidence', name: 'Quality Ecosystem & Standards', q: 'Governance and source control: which document governs each area when two seem to conflict.', kick: 'Governance', c: '#1B6A35', mid: '#2e8048', tint: '#e7f3eb', doc: ['Quality Ecosystem: Policy Source-of-Truth Register 26-27', GDOC('1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4')] },
       };
       const OTHER_FAMILY = { group: 'other', name: 'Other', c: '#475569', mid: '#64748b', tint: '#eceff3' };
       const START_HERE_URL = GDOC('1wLRINpRQUpHtnDqxxw3635tpmHtjypENM7r-rxozsMU');

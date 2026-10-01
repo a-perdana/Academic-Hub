@@ -52,7 +52,7 @@ body:has(> .page-footer) > .settings-wrap {
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 /* Settings shell — clamped to the 1200 rail, sits under the hero. The
    sidebar is sticky so the tab list stays in view as the panel scrolls
@@ -110,30 +110,30 @@ body:has(> .page-footer) > .settings-wrap {
   background: #f5f4f0;
   color: #1a1a2e;
 }
-.settings-nav-item:hover svg { color: #6c5ce7; }
+.settings-nav-item:hover svg { color: var(--m-mid, #6c5ce7); }
 .settings-nav-item.active {
-  background: rgba(108, 92, 231, 0.1);
-  color: #6c5ce7;
+  background: rgba(var(--m-mid-rgb, 124, 58, 237), 0.1);
+  color: var(--m-mid, #6c5ce7);
   font-weight: 600;
 }
-.settings-nav-item.active svg { color: #6c5ce7; }
+.settings-nav-item.active svg { color: var(--m-mid, #6c5ce7); }
 
 /* Profile completeness card in sidebar */
 .settings-progress-card {
   margin: 0 10px 20px;
   padding: 12px 14px;
-  background: linear-gradient(135deg, rgba(108,92,231,0.08), rgba(108,92,231,0.04));
-  border: 1px solid rgba(108,92,231,0.18);
+  background: linear-gradient(135deg, rgba(var(--m-mid-rgb, 124, 58, 237), 0.08), rgba(var(--m-mid-rgb, 124, 58, 237), 0.04));
+  border: 1px solid rgba(var(--m-mid-rgb, 124, 58, 237), 0.18);
   border-radius: 12px;
 }
 .settings-progress-label {
   font-size: 11px;
   font-weight: 600;
-  color: #6c5ce7;
+  color: var(--m-mid, #6c5ce7);
   margin-bottom: 8px;
 }
 .settings-progress-bar-wrap {
-  background: rgba(108,92,231,0.15);
+  background: rgba(var(--m-mid-rgb, 124, 58, 237), 0.15);
   border-radius: 99px;
   height: 6px;
   margin-bottom: 5px;
@@ -141,7 +141,7 @@ body:has(> .page-footer) > .settings-wrap {
 }
 .settings-progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #6c5ce7, #a78bfa);
+  background: linear-gradient(90deg, var(--m-mid, #6c5ce7), var(--m-soft, #a78bfa));
   border-radius: 99px;
   transition: width .5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
@@ -205,7 +205,7 @@ body:has(> .page-footer) > .settings-wrap {
   width: 88px;
   height: 88px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6c5ce7, #0891b2);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #0891b2);
   color: #fff;
   display: flex;
   align-items: center;
@@ -216,7 +216,7 @@ body:has(> .page-footer) > .settings-wrap {
   background-size: cover;
   background-position: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.18);
+  box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18);
 }
 .photo-actions {
   display: flex;
@@ -243,7 +243,7 @@ body:has(> .page-footer) > .settings-wrap {
   cursor: pointer;
   transition: all .15s;
 }
-.photo-btn:hover { background: #f3f0e8; border-color: #6c5ce7; color: #6c5ce7; }
+.photo-btn:hover { background: #f3f0e8; border-color: var(--m-mid, #6c5ce7); color: var(--m-mid, #6c5ce7); }
 .photo-btn.danger { color: #dc2626; }
 .photo-btn.danger:hover { background: rgba(220,38,38,0.06); border-color: rgba(220,38,38,0.4); color: #dc2626; }
 
@@ -264,8 +264,8 @@ body:has(> .page-footer) > .settings-wrap {
   display: flex; align-items: center; justify-content: center;
   transition: transform .15s, border-color .15s, box-shadow .15s;
 }
-.monogram-swatch:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(108, 92, 231, 0.18); }
-.monogram-swatch.is-selected { border-color: #6c5ce7; box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.18); }
+.monogram-swatch:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18); }
+.monogram-swatch.is-selected { border-color: var(--m-mid, #6c5ce7); box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18); }
 .monogram-swatch svg { width: 100%; height: 100%; display: block; }
 @media (max-width: 560px) { .monogram-row { flex-direction: column; align-items: flex-start; } }
 .photo-hint {
@@ -292,8 +292,8 @@ body:has(> .page-footer) > .settings-wrap {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: rgba(108,92,231,0.1);
-  color: #6c5ce7;
+  background: rgba(var(--m-mid-rgb, 124, 58, 237), 0.1);
+  color: var(--m-mid, #6c5ce7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -316,7 +316,7 @@ body:has(> .page-footer) > .settings-wrap {
   color: #8b8b9e;
 }
 .cv-current a {
-  color: #6c5ce7;
+  color: var(--m-mid, #6c5ce7);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
@@ -344,8 +344,8 @@ body:has(> .page-footer) > .settings-wrap {
   box-sizing: border-box;
 }
 .settings-input:focus {
-  border-color: #6c5ce7;
-  box-shadow: 0 0 0 3px rgba(108,92,231,0.12);
+  border-color: var(--m-mid, #6c5ce7);
+  box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), 0.12);
   background: #fff;
 }
 .settings-input::placeholder { color: #b8b4ac; }
@@ -380,8 +380,8 @@ body:has(> .page-footer) > .settings-wrap {
   box-sizing: border-box;
 }
 .settings-textarea:focus {
-  border-color: #6c5ce7;
-  box-shadow: 0 0 0 3px rgba(108,92,231,0.12);
+  border-color: var(--m-mid, #6c5ce7);
+  box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), 0.12);
   background: #fff;
 }
 .settings-textarea::placeholder { color: #b8b4ac; }
@@ -408,7 +408,7 @@ body:has(> .page-footer) > .settings-wrap {
   align-items: center;
   gap: 7px;
   padding: 10px 22px;
-  background: #6c5ce7;
+  background: var(--m-mid, #6c5ce7);
   border: none;
   border-radius: 10px;
   color: #fff;
@@ -422,7 +422,7 @@ body:has(> .page-footer) > .settings-wrap {
 .settings-save-btn:hover:not(:disabled) {
   filter: brightness(1.08);
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(108,92,231,0.35);
+  box-shadow: 0 4px 14px rgba(var(--m-mid-rgb, 124, 58, 237), 0.35);
 }
 .settings-save-btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
 .settings-save-btn svg { width: 15px; height: 15px; }
@@ -478,7 +478,7 @@ body:has(> .page-footer) > .settings-wrap {
 .readonly-chip-row:last-child { margin-bottom: 0; }
 .readonly-chip-icon {
   width: 18px; height: 18px; flex-shrink: 0;
-  color: #6c5ce7;
+  color: var(--m-mid, #6c5ce7);
 }
 .readonly-chip-label {
   font-size: 11px;
@@ -524,7 +524,7 @@ body:has(> .page-footer) > .settings-wrap {
   user-select: none;
   margin-bottom: 12px;
 }
-.pw-toggle:hover { color: #6c5ce7; }
+.pw-toggle:hover { color: var(--m-mid, #6c5ce7); }
 .pw-fields { display: none; }
 .pw-fields.open { display: block; }
 
@@ -579,7 +579,7 @@ body:has(> .page-footer) > .settings-wrap {
   transition: transform .2s;
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
 }
-.toggle-switch input:checked + .toggle-track { background: #6c5ce7; }
+.toggle-switch input:checked + .toggle-track { background: var(--m-mid, #6c5ce7); }
 .toggle-switch input:checked + .toggle-track::after { transform: translateX(18px); }
 
 /* ── Incomplete banner ──────────────────────────────────────────── */
@@ -630,7 +630,7 @@ body:has(> .page-footer) > .settings-wrap {
   transition: color .15s, border-color .15s;
 }
 .settings-mobile-tab svg { width: 14px; height: 14px; }
-.settings-mobile-tab.active { color: #6c5ce7; border-bottom-color: #6c5ce7; font-weight: 600; }
+.settings-mobile-tab.active { color: var(--m-mid, #6c5ce7); border-bottom-color: var(--m-mid, #6c5ce7); font-weight: 600; }
 
 @media (max-width: 768px) {
   .settings-sidebar { display: none; }
@@ -639,13 +639,13 @@ body:has(> .page-footer) > .settings-wrap {
 }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="hub">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · Your account</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Academic Hub</p>
       <h1 class="page-hero__title">Settings</h1>
       <p class="page-hero__desc">Manage your personal info, profile photo and CV, account security, and notification preferences. Your school and leadership sub-roles are managed by Eduversal.</p>
     </div>
@@ -882,7 +882,7 @@ body:has(> .page-footer) > .settings-wrap {
           <label class="settings-input-label">Email address</label>
           <input type="email" class="settings-input" id="sEmail" disabled>
         </div>
-        <div class="photo-hint" style="margin-top:4px;">Phone number, LinkedIn and CV moved to <a href="#" data-go-personal style="color:#6c5ce7;font-weight:600;text-decoration:none;">Personal Info</a>.</div>
+        <div class="photo-hint" style="margin-top:4px;">Phone number, LinkedIn and CV moved to <a href="#" data-go-personal style="color:var(--m-mid, #6c5ce7);font-weight:600;text-decoration:none;">Personal Info</a>.</div>
       </div>
 
       <div class="settings-card" id="sPwCard" style="display:none;">

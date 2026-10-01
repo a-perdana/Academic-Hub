@@ -180,7 +180,7 @@ body {
 
 /* Category border colours */
 .topic-row[data-cat="general"]   { border-left-color: #0891b2; }
-.topic-row[data-cat="academic"]  { border-left-color: #7c3aed; }
+.topic-row[data-cat="academic"]  { border-left-color: var(--m-mid, #7c3aed); }
 .topic-row[data-cat="resources"] { border-left-color: #16a34a; }
 .topic-row[data-cat="events"]    { border-left-color: #ea580c; }
 .topic-row[data-cat="technical"] { border-left-color: #475569; }
@@ -233,13 +233,13 @@ body {
   text-transform: uppercase; letter-spacing: 0.04em;
 }
 .cat-general   { background: #e0f2fe; color: #0891b2; border: 1px solid #bae6fd; }
-.cat-academic  { background: #f5f3ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+.cat-academic  { background: var(--m-tint-2, #f5f3ff); color: var(--m-mid, #7c3aed); border: 1px solid var(--m-border, #ddd6fe); }
 .cat-resources { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
 .cat-events    { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
 .cat-technical { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 .platform-badge { display:inline-flex; align-items:center; font-size:10px; font-weight:700; padding:2px 7px; border-radius:8px; white-space:nowrap; flex-shrink:0; letter-spacing:.04em; }
 .platform-badge.th { background:#fef3c7; color:#92400e; border:1px solid #fde68a; }
-.platform-badge.ah { background:#ede9fe; color:#5b21b6; border:1px solid #ddd6fe; }
+.platform-badge.ah { background:var(--m-tint, #ede9fe); color:var(--m-dark, #5b21b6); border:1px solid var(--m-border, #ddd6fe); }
 .platform-badge.ch { background:#fce7f3; color:#9d174d; border:1px solid #fbcfe8; }
 
 /* ─── TOPIC DETAIL ────────────────────────────── */
@@ -510,7 +510,7 @@ body {
 }
 .fab-action-btn:hover { transform: scale(1.1); }
 .fab-home:hover { background: var(--accent); border-color: var(--accent); box-shadow: 0 6px 22px rgba(8,145,178,.5); color: #fff; }
-.fab-feedback-btn:hover { background: #6c5ce7; border-color: #6c5ce7; box-shadow: 0 6px 22px rgba(108,92,231,.5); color: #fff; }
+.fab-feedback-btn:hover { background: var(--m-mid, #6c5ce7); border-color: var(--m-mid, #6c5ce7); box-shadow: 0 6px 22px rgba(var(--m-mid-rgb, 124, 58, 237), .5); color: #fff; }
 .fab-main {
   width: 54px; height: 54px; border-radius: 50%;
   background: rgba(28,28,46,.92); border: 1px solid rgba(255,255,255,.14);
@@ -602,14 +602,14 @@ body {
   };
 </script>
 </head>
-<body data-page-accent="cyan">
+<body data-module="school_workspace">
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="cyan" aria-label="Message Board header">
+<header class="page-hero" aria-label="Message Board header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
       <h1 class="page-hero__title">Message Board</h1>
       <p class="page-hero__desc">Cross-network discussion threads — pedagogy, operations, partner-school exchange. Pin replies, mention colleagues, and keep the long-form conversations searchable.</p>
     </div>
@@ -663,7 +663,7 @@ body {
           </li>
           <li class="cat-nav-item">
             <button data-cat="academic" onclick="window.__mb_setCategory('academic')">
-              <span class="cat-nav-dot" style="background:#7c3aed"></span>
+              <span class="cat-nav-dot" style="background:var(--m-mid, #7c3aed)"></span>
               <span class="cat-nav-name">Academic</span>
               <span class="cat-nav-count" id="catCount-academic">0</span>
             </button>

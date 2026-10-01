@@ -11,8 +11,8 @@
    (injected by build.js). Page-local styles below MUST NOT override
    .page-hero* selectors — see root CLAUDE.md Common Mistake #50. */
 :root {
-  --accent:   #6c5ce7;   /* brand mor — My Work family accent */
-  --accent-2: #ede9fe;
+  --accent:   var(--m-mid, #6c5ce7);   /* brand mor — My Work family accent */
+  --accent-2: var(--m-tint, #ede9fe);
 }
 
 /* ─── NAVBAR OFFSET ──────────────────────────── */
@@ -44,7 +44,7 @@ body { padding-top: 62px; }
 }
 .ring-svg { transform: rotate(-90deg); }
 .ring-bg   { fill: none; stroke: rgba(255,255,255,0.12); stroke-width: 6; }
-.ring-fill { fill: none; stroke: #a78bfa; stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
+.ring-fill { fill: none; stroke: var(--m-soft, #a78bfa); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset 0.5s ease; }
 .ring-text { font-size: 18px; font-weight: 800; fill: #fff; dominant-baseline: middle; text-anchor: middle; }
 .ring-sub  { font-size: 9px; font-weight: 600; fill: rgba(255,255,255,0.55); dominant-baseline: middle; text-anchor: middle; }
 
@@ -211,10 +211,10 @@ body { padding-top: 62px; }
   background: var(--ink-3);
   transition: background 0.18s;
 }
-.task-card[data-priority="core"]::before      { background: linear-gradient(180deg, #6c5ce7, #4e3db8); }
+.task-card[data-priority="core"]::before      { background: linear-gradient(180deg, var(--m-mid, #6c5ce7), #4e3db8); }
 .task-card[data-priority="important"]::before { background: linear-gradient(180deg, #0891b2, #0e7490); }
 .task-card[data-priority="support"]::before   { background: linear-gradient(180deg, #94a3b8, #64748b); }
-.task-card:hover { border-color: var(--accent); box-shadow: 0 6px 18px -10px rgba(108,92,231,0.25); transform: translateY(-1px); }
+.task-card:hover { border-color: var(--accent); box-shadow: 0 6px 18px -10px rgba(var(--m-mid-rgb, 124, 58, 237), 0.25); transform: translateY(-1px); }
 .task-card.checked { background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%); border-color: #86efac; }
 .task-card.checked::before { background: linear-gradient(180deg, #10b981, #059669) !important; }
 .task-card.checked .task-title { text-decoration: line-through; text-decoration-thickness: 1.5px; color: var(--ink-3); }
@@ -256,7 +256,7 @@ body { padding-top: 62px; }
 .task-cat {
   font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
   letter-spacing: 0.04em;
-  background: #ede9fe; color: #4c1d95;
+  background: var(--m-tint, #ede9fe); color: var(--m-dark, #4c1d95);
 }
 .task-chip {
   display: inline-flex; align-items: center; gap: 4px;
@@ -266,7 +266,7 @@ body { padding-top: 62px; }
 }
 .task-chip.timing  { background: #fef3c7; color: #92400e; }
 .task-chip.duration{ background: #e0e7ff; color: #3730a3; font-family: 'DM Mono', monospace; }
-.task-chip.priority-core      { background: #ede9fe; color: #4c1d95; font-weight: 600; }
+.task-chip.priority-core      { background: var(--m-tint, #ede9fe); color: var(--m-dark, #4c1d95); font-weight: 600; }
 .task-chip.priority-important { background: #cffafe; color: #155e75; font-weight: 600; }
 .task-chip.priority-support   { background: #f1f5f9; color: #475569; }
 .task-chip.framework { background: #f0fdf4; color: #14532d; font-family: 'DM Mono', monospace; font-size: 10px; }
@@ -275,10 +275,10 @@ body { padding-top: 62px; }
    PIGP via .hb-tag.pigp). On click → popover with verbatim text + sibling
    KPI / Appraisal / Competency / Induction items. */
 .task-chip.cts {
-  background: #ede9fe; color: #4c1d95; font-family: 'DM Mono', monospace;
+  background: var(--m-tint, #ede9fe); color: var(--m-dark, #4c1d95); font-family: 'DM Mono', monospace;
   font-size: 10.5px; font-weight: 600;
 }
-.task-chip.cts:hover { background: #ddd6fe; cursor: pointer; }
+.task-chip.cts:hover { background: var(--m-border, #ddd6fe); cursor: pointer; }
 .task-chip.permen {
   background: #fee2e2; color: #991b1b; font-family: 'DM Mono', monospace;
   font-size: 10.5px;
@@ -299,7 +299,7 @@ body { padding-top: 62px; }
 .task-note-indicator {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 11px; color: var(--accent-dk);
-  background: #ede9fe; padding: 3px 9px; border-radius: 999px;
+  background: var(--m-tint, #ede9fe); padding: 3px 9px; border-radius: 999px;
 }
 
 /* Expandable detail block */
@@ -322,7 +322,7 @@ body { padding-top: 62px; }
 .task-detail .detail-value ul { margin: 0; padding-left: 18px; }
 .task-detail .detail-value li { margin-bottom: 2px; }
 .task-detail .first-time-guide {
-  background: #faf5ff; border-left: 3px solid var(--accent);
+  background: var(--m-tint-2, #faf5ff); border-left: 3px solid var(--accent);
   padding: 10px 14px; border-radius: 0 8px 8px 0;
   font-style: italic; font-size: 12.5px; color: var(--ink-2);
 }
@@ -364,11 +364,11 @@ body { padding-top: 62px; }
 .task-note-textarea:focus { border-color: var(--accent); }
 .note-save-btn {
   margin-top: 6px; padding: 5px 14px;
-  background: var(--accent-2); color: #4c1d95; border: 1px solid #c4b5fd;
+  background: var(--accent-2); color: var(--m-dark, #4c1d95); border: 1px solid var(--m-border, #c4b5fd);
   border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;
   font-family: 'DM Sans', sans-serif; transition: all 0.15s;
 }
-.note-save-btn:hover { background: #ddd6fe; }
+.note-save-btn:hover { background: var(--m-border, #ddd6fe); }
 
 /* ─── EMPTY STATE ────────────────────────────── */
 .empty-state {
@@ -613,13 +613,13 @@ body { padding-top: 62px; }
 
 /* Next Week — mor family (preview, matches hero My Work accent). */
 .events-col--next-week {
-  background: linear-gradient(180deg, #f5f3ff 0%, #ffffff 38%);
-  border-color: #ddd6fe;
-  border-left: 3px solid #6c5ce7;
-  box-shadow: 0 4px 14px -8px rgba(108,92,231,0.35), var(--shadow-sm);
+  background: linear-gradient(180deg, var(--m-tint-2, #f5f3ff) 0%, #ffffff 38%);
+  border-color: var(--m-border, #ddd6fe);
+  border-left: 3px solid var(--m-mid, #6c5ce7);
+  box-shadow: 0 4px 14px -8px rgba(var(--m-mid-rgb, 124, 58, 237), 0.35), var(--shadow-sm);
 }
 .events-col--next-week .events-col-head {
-  background: linear-gradient(135deg, #6c5ce7 0%, #5b4dd1 60%, #4e3db8 100%);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7) 0%, #5b4dd1 60%, #4e3db8 100%);
 }
 .events-col-body { padding: 8px 0; }
 .ev-group { padding: 0 14px 6px; }
@@ -689,7 +689,7 @@ body { padding-top: 62px; }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(13,148,136,0.50); }
 </style>
 </head>
-<body>
+<body data-module="school_workspace">
 <div class="journal-toast" id="journalToast">
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   Journal saved
@@ -699,10 +699,11 @@ body { padding-top: 62px; }
 <div id="navbarMount"></div>
 
 <!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner wc-hero-inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow" id="heroEyebrow">Academic Hub · 2026–2027</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
+      <p class="page-hero__eyebrow" id="heroEyebrow">2026–2027</p>
       <h1 class="page-hero__title" id="heroTitle">Week — Checklist</h1>
       <p class="page-hero__desc" id="heroSub">Track weekly leadership tasks, meetings, and observations.</p>
     </div>
@@ -1071,8 +1072,8 @@ function updateHeroLabels() {
   const label = PLATFORM_LABELS[currentPlatform] || currentPlatform;
   const yearLabel = (ACADEMIC_YEAR || '').replace('-', '–');
   document.getElementById('heroEyebrow').textContent = yearLabel
-    ? `Academic Hub · ${label} · ${yearLabel}`
-    : `Academic Hub · ${label}`;
+    ? `${label} · ${yearLabel}`
+    : `${label}`;
   const skip = isOnSkippedWeek() && currentWeek === getCurrentWeekNumber() ? getCurrentSkippedWeek() : null;
   const weekText = skip ? skip.reason : getWeekLabel(currentWeek);
   document.getElementById('heroTitle').textContent = `${weekText} — ${label} Checklist`;
@@ -1341,7 +1342,7 @@ function renderEventsBand() {
     const rows = pageItems.map(e => `
       <div class="ev-item">
         <span class="ev-date">${escHtml(_fmtEventDate(e.date_start, e.date_end))}</span>
-        <span class="ev-text">${escHtml(e.title)}<span class="ev-tag" style="background:#f5f3ff;color:#7c3aed">${escHtml(e.kind)}</span></span>
+        <span class="ev-text">${escHtml(e.title)}<span class="ev-tag" style="background:var(--m-tint-2, #f5f3ff);color:var(--m-mid, #7c3aed)">${escHtml(e.kind)}</span></span>
       </div>`).join('');
     const pager = totalPages > 1 ? `
       <div class="ev-pager">
@@ -1351,7 +1352,7 @@ function renderEventsBand() {
       </div>` : '';
     return `
       <div class="ev-group">
-        <div class="ev-group-title"><span class="ev-dot" style="background:#7c3aed"></span>Cambridge${pager}</div>
+        <div class="ev-group-title"><span class="ev-dot" style="background:var(--m-mid, #7c3aed)"></span>Cambridge${pager}</div>
         ${rows}
       </div>`;
   };

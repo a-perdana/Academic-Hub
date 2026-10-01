@@ -15,38 +15,15 @@
 }
 body { padding-top: 62px; }
 
-/* ── HERO ── */
-.hero {
-  background: linear-gradient(130deg, #0a1628 0%, #0c2d4a 40%, #0a4a6e 72%, #0891b2 100%);
-  padding: 36px 40px 0; position: relative; overflow: hidden;
+/* ── HERO ── canonical .page-hero from base.css; colour comes from
+   body[data-module] (modules.css). Page-local extras only: the series
+   tabs sit flush on the hero's bottom edge, so this hero drops its
+   bottom padding and the tabs rail carries the 1200 clamp itself. */
+.page-hero.cal-hero { padding-bottom: 0; }
+.cal-tabs-rail {
+  position: relative; z-index: 1;
+  max-width: var(--container-max); margin: 24px auto 0; padding: 0 40px;
 }
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 8% 80%, rgba(8,145,178,0.18) 0%, transparent 55%),
-    radial-gradient(ellipse at 90% 10%, rgba(255,255,255,0.04) 0%, transparent 45%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 30%, rgba(8,145,178,0.4) 55%, rgba(255,255,255,0.12) 80%, transparent 100%);
-}
-.hero-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding-bottom: 0; }
-.hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; padding-bottom: 24px; }
-.hero-text .eyebrow {
-  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(255,255,255,0.42); margin-bottom: 10px;
-  display: flex; align-items: center; gap: 8px;
-}
-.hero-text .eyebrow::before {
-  content: ''; display: inline-block; width: 18px; height: 1.5px;
-  background: rgba(8,145,178,0.7); border-radius: 2px; flex-shrink: 0;
-}
-.hero-text h1 {
-  font-family: 'Lora', serif; font-size: 1.9rem; font-weight: 600;
-  color: #fff; line-height: 1.2; margin-bottom: 8px;
-}
-.hero-text .sub { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.5; }
 
 /* Year + series controls in hero */
 .hero-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; flex-shrink: 0; }
@@ -57,7 +34,7 @@ body { padding-top: 62px; }
   font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
   cursor: pointer; outline: none;
 }
-.ctrl-select option { background: #0c2d4a; color: #fff; }
+.ctrl-select option { background: var(--m-deep, #0c2d4a); color: #fff; }
 
 /* ── Series tabs ── */
 .series-tabs {
@@ -78,10 +55,12 @@ body { padding-top: 62px; }
 }
 .series-tab:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
 .series-tab.active { color: #fff; background: rgba(255,255,255,0.1); font-weight: 700; }
-.series-tab.active::after { background: #38bdf8; }
+.series-tab.active::after { background: var(--m-vivid, #38bdf8); }
 
 /* ── PAGE WRAP ── */
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 72px; }
+/* width:100% — the canonical footer makes body a flex column, and a
+   margin:auto child would otherwise shrink to its content (CM #54). */
+.page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px 72px; }
 
 /* ── URGENT BANNER ── */
 .urgent-banner {
@@ -227,34 +206,33 @@ body { padding-top: 62px; }
 }
 @media (max-width: 768px) {
   .page-wrap { padding: 20px 16px 56px; }
-  .hero { padding: 28px 20px 0; }
-  .hero-top { flex-direction: column; }
+  .cal-tabs-rail { padding: 0 20px; }
 }
 </style>
 </head>
-<body>
+<body data-module="curriculum">
 
 <div id="navbarMount"></div>
 
 <!-- ── HERO ── -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-top">
-      <div class="hero-text">
-        <p class="eyebrow">Academic Hub · Cambridge</p>
-        <h1>Cambridge Exam Calendar</h1>
-        <p class="sub">Upcoming deadlines, key dates, and action items for each Cambridge series. Always check a date against the current official Cambridge timetable and Handbook before you share it — a date in an old planning document never overrides the official source.</p>
-      </div>
-      <div class="hero-controls" id="heroControls" style="display:none">
-        <span class="ctrl-label">Cycle</span>
-        <select class="ctrl-select" id="yearSelect">
-          <option value="2025">2025</option>
-          <option value="2026" selected>2026</option>
-          <option value="2027">2027</option>
-        </select>
-      </div>
+<header class="page-hero cal-hero" aria-label="Cambridge Calendar header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit" target="_blank" rel="noopener" title="Open Curriculum: Start Here (Google Doc)">Curriculum</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Define</span></p>
+      <h1 class="page-hero__title">Cambridge Exam Calendar</h1>
+      <p class="page-hero__desc">Upcoming deadlines, key dates, and action items for each Cambridge series. Always check a date against the current official Cambridge timetable and Handbook before you share it — a date in an old planning document never overrides the official source.</p>
     </div>
+    <div class="hero-controls" id="heroControls" style="display:none">
+      <span class="ctrl-label">Cycle</span>
+      <select class="ctrl-select" id="yearSelect">
+        <option value="2025">2025</option>
+        <option value="2026" selected>2026</option>
+        <option value="2027">2027</option>
+      </select>
+    </div>
+  </div>
 
+  <div class="cal-tabs-rail">
     <nav class="series-tabs" id="seriesTabs">
       <button class="series-tab active" data-series="igcse_june">IGCSE — May/June</button>
       <button class="series-tab" data-series="alevel_june">AS &amp; A Level — May/June</button>
@@ -264,7 +242,7 @@ body { padding-top: 62px; }
       <button class="series-tab" data-series="checkpoint_oct">Checkpoint — Oct (approved exception)</button>
     </nav>
   </div>
-</section>
+</header>
 
 <div class="page-wrap">
 
@@ -297,6 +275,36 @@ body { padding-top: 62px; }
   </div>
 
 </div>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">School · Curriculum</span>
+      <h2 class="page-footer__cta-title">Exam dates sit inside your school year.</h2>
+      <p class="page-footer__cta-desc">The Academic Calendar shows the network's semesters and the four EASE Weeks alongside the Cambridge exam dates.</p>
+      <a href="/academic-calendar" class="page-footer__cta-btn">Open Academic Calendar <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Cambridge Calendar footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Curriculum</span>
+        <a href="/curriculum-map" class="page-footer__nav-link">Curriculum Map</a>
+        <a href="/syllabus-coverage" class="page-footer__nav-link">Syllabus Coverage</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+        <a href="/cambridge-pathway" class="page-footer__nav-link">Cambridge Pathway</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Always confirm dates against the official Cambridge timetable.</span>
+  </div>
+</footer>
 
 <script src="firebase-config.js"></script>
 <script>

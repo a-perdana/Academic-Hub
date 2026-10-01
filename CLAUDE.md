@@ -288,6 +288,17 @@ The `leaders` track of the 3-track Cambridge competency system (root CLAUDE.md "
 
 ---
 
+## Module colour families (2026-10-01)
+
+Every AH page wears the colour family of the ecosystem module it belongs to — the same family its live Google Docs use. A page declares it once: `<body data-module="appraisal">` (keys: `curriculum induction ease student_learning appraisal career_growth teaching_learning digital_citizenship academic_insights quality_ecosystem school_workspace hub`). `modules.css` (generated from `scripts/gdocs/module-theme.js` by `scripts/design/build-ah-module-css.js` — never hand-edit) then themes hero, paper, footer, navbar rule, buttons, info strip and focus ring. The hero's first line is the module row (dot · module name linked to its *Start Here* doc · cycle verb).
+
+- **New page:** give it a canonical `.page-hero` with an eyebrow `Academic Hub · <Area>`, then run `node scripts/design/apply-ah-module.js --page=<File>.html --module=<key> --apply` from the monorepo root. Pre-commit Gate 7 rejects a page without a known module.
+- **No `data-accent` / `data-page-accent` on AH pages any more**, and no page-local hero/footer colours. In page CSS use `var(--m-mid)` / `var(--m-tint)` / `var(--m-border)` etc. for identity colour; keep category and status colours as they are.
+- **Which module?** The same one the home page section shows the page under (`ah_categories.module`). Home itself, Read Me pages, welcome and settings are `hub`.
+- **Out of the system on purpose** (`EXEMPT` in the generator): `login`, `waiting`, the public `academic-services` landing, the `handbook` redirect and `handbook-reader-shell`. `cambridge-results/` and `curriculum-alignment/` are public packs with their own design and are not scanned.
+- **Generated dashboards:** `dashboards/EASE-Growth-Results.html` is rebuilt by the out-of-repo EASE Growth pipeline — its template must carry `data-module="ease"` or the next rebuild drops it (Gate 7 will then fail the commit).
+- Full spec: root `docs/architecture/DESIGN_SYSTEM.md` → "Academic Hub — module families".
+
 ## Important Conventions
 
 - **AH source filenames are PascalCase, NOT kebab-case** (legacy AH convention — CH + TH ship kebab-case). Every dashboard / CPD / appraisal page is `PascalCaseName.html` (e.g. `CompetencyFramework.html`, `LearningPath.html`, `MyPortfolio.html`, `CambridgeExamsDashboard.html`, `TeacherAppraisalEntry.html`, `SchoolAppraisalsDashboard.html`, `EASE-I-AssessmentResults.html`, `SyllabusCoverage.html`, `RaporPendidikan2025.html`). `build.js`'s `cleanUrls` map translates the PascalCase basename to a kebab-case URL slug (`CompetencyFramework.html → /competency-framework`) so public URLs + `page_access_config` doc IDs + cross-hub links stay kebab-case + identical across hubs. **Implications:**

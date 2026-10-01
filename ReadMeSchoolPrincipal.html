@@ -28,68 +28,25 @@
   --ink-3: #64748b;
   --paper: #f8fafc;
   --border: #e2e8f0;
-  /* School Principal accent — cyan (matches Admin dropdown "For School Principal" + role-block.is-sp) */
-  --accent: #0891b2;
-  --accent-dk: #0e7490;
-  --accent-2: #cffafe;
+  /* Identity accent follows the page module (body[data-module], modules.css).
+     The original School Principal cyan stays as the fallback. */
+  --accent: var(--m-mid, #0891b2);
+  --accent-dk: var(--m-dark, #0e7490);
+  --accent-2: var(--m-tint, #cffafe);
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
-body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
+body { color: var(--ink); font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
 
-/* ─── HERO ─── */
-.hero {
-  background: linear-gradient(135deg, #0a0a1a 0%, #0c2233 55%, #061826 100%);
-  padding: 56px 0 52px; position: relative; overflow: hidden; min-height: 360px;
-}
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 8% 75%, rgba(8,145,178,0.34) 0%, transparent 42%),
-    radial-gradient(circle at 88% 20%, rgba(6,182,212,0.22) 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(13,148,136,0.18) 0%, transparent 55%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse at 60% 50%, rgba(0,0,0,0.6) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero-inner {
-  position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 40px;
-  display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center;
-}
-@media (max-width: 860px) { .hero-inner { grid-template-columns: 1fr; gap: 28px; } }
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.65);
-  letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;
-  padding: 5px 11px; background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
-}
-.hero-eyebrow::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: #06b6d4; box-shadow: 0 0 12px rgba(6,182,212,0.8);
-  animation: pulseDot 2.4s ease-in-out infinite;
-}
-@keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
-
-.hero-title {
-  font-family: 'Lora', serif; font-size: 2.5rem; font-weight: 600;
-  color: #fff; margin-bottom: 14px; line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-.hero-title .hero-name {
-  background: linear-gradient(120deg, #67e8f9 0%, #a78bfa 100%);
+/* ─── HERO (page-local extras) ───
+   The hero itself is the canonical .page-hero (base.css), coloured by
+   the page's data-module attribute (modules.css) — no hero background or layout here.
+   These rules style only the page-local pieces inside .page-hero__text. */
+.hero-name {
+  background: linear-gradient(120deg, var(--m-vivid, #9d93f0) 0%, #67e8f9 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.hero-sub { font-size: 1rem; color: rgba(255,255,255,0.72); max-width: 560px; line-height: 1.6; }
 
 .hero-role-chip {
   display: inline-flex; align-items: center; gap: 8px;
@@ -103,6 +60,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   box-shadow: 0 0 10px rgba(52,211,153,0.7);
 }
 
+/* Hero metric strip — 3 stats */
 .hero-metrics {
   display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 10px; margin-top: 24px; max-width: 540px;
@@ -113,7 +71,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
 }
 .hero-metric-val {
-  font-family: 'Lora', serif; font-size: 1.45rem; font-weight: 600;
+  font-family: 'Lora', serif; font-size: 1.5rem; font-weight: 600;
   color: #fff; line-height: 1; margin-bottom: 4px;
 }
 .hero-metric-val .metric-sep { color: rgba(255,255,255,0.4); font-weight: 400; }
@@ -122,82 +80,45 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   letter-spacing: 0.06em; text-transform: uppercase;
 }
 
+/* Hero resume bar */
 .hero-resume {
   display: inline-flex; align-items: center; gap: 10px;
   margin-top: 18px; padding: 9px 16px 9px 12px;
-  background: linear-gradient(120deg, rgba(8,145,178,0.25), rgba(13,148,136,0.2));
-  border: 1px solid rgba(103,232,249,0.35); border-radius: 10px;
+  background: linear-gradient(120deg, rgba(var(--m-vivid-rgb, 157, 147, 240), 0.25), rgba(255,255,255,0.06));
+  border: 1px solid rgba(var(--m-vivid-rgb, 157, 147, 240), 0.38); border-radius: 10px;
   color: #fff; text-decoration: none; font-size: 12.5px; font-weight: 600;
   transition: all 0.2s; cursor: pointer;
 }
-.hero-resume:hover { background: linear-gradient(120deg, rgba(8,145,178,0.4), rgba(13,148,136,0.32)); border-color: rgba(103,232,249,0.6); transform: translateY(-1px); }
+.hero-resume:hover { background: linear-gradient(120deg, rgba(var(--m-vivid-rgb, 157, 147, 240), 0.4), rgba(255,255,255,0.1)); border-color: rgba(var(--m-vivid-rgb, 157, 147, 240), 0.6); transform: translateY(-1px); }
 .hero-resume-icon { font-size: 14px; }
 .hero-resume-text { color: rgba(255,255,255,0.92); font-weight: 500; }
 .hero-resume-text strong { color: #fff; font-weight: 700; }
 
-.hero-visual {
-  position: relative; width: 100%; aspect-ratio: 1; max-width: 300px;
-  margin: 0 auto; display: flex; align-items: center; justify-content: center;
-}
-.hero-visual::before {
-  content: ''; position: absolute; inset: 8%; border-radius: 50%;
-  border: 1px dashed rgba(103,232,249,0.25);
-  animation: orbitRot 32s linear infinite;
-}
-.hero-visual::after {
-  content: ''; position: absolute; inset: 22%; border-radius: 50%;
-  border: 1px dashed rgba(167,139,250,0.18);
-  animation: orbitRot 22s linear infinite reverse;
-}
-@keyframes orbitRot { to { transform: rotate(360deg); } }
-
-.hero-cube {
-  position: relative; width: 92px; height: 92px;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);
-  border-radius: 20px;
-  box-shadow:
-    0 20px 60px rgba(8,145,178,0.45),
-    0 0 0 1px rgba(255,255,255,0.1) inset,
-    0 2px 0 rgba(255,255,255,0.15) inset;
-  z-index: 2;
-  font-family: 'Lora', serif; font-size: 1.5rem; font-weight: 700; color: #fff;
-}
-.hero-cube::before {
-  content: ''; position: absolute; inset: -14px; border-radius: 28px;
-  background: radial-gradient(circle, rgba(8,145,178,0.45), transparent 70%);
-  z-index: -1; filter: blur(8px);
-}
-
-.hero-orbit-glyph {
-  position: absolute; width: 52px; height: 52px; border-radius: 14px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(8,20,30,0.78); border: 1px solid rgba(255,255,255,0.14);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  font-size: 22px; line-height: 1;
-  animation: floatY 4s ease-in-out infinite;
-}
-.hero-orbit-glyph .glyph-step {
-  font-size: 7.5px; font-weight: 700; letter-spacing: 0.06em;
-  color: rgba(103,232,249,0.95); margin-top: 2px;
-}
-.hero-orbit-glyph.g1 { top: 4%; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
-.hero-orbit-glyph.g2 { top: 50%; right: 2%; transform: translateY(-50%); animation-delay: 1s; }
-.hero-orbit-glyph.g3 { bottom: 4%; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
-.hero-orbit-glyph.g4 { top: 50%; left: 2%; transform: translateY(-50%); animation-delay: 3s; }
-@keyframes floatY {
-  0%,100% { margin-top: 0; }
-  50% { margin-top: -6px; }
-}
-@media (max-width: 860px) { .hero-visual { max-width: 240px; } }
 @media (max-width: 720px) {
-  .hero-title { font-size: 1.8rem; }
   .hero-metrics { grid-template-columns: 1fr 1fr; }
   .hero-metric:nth-child(3) { grid-column: 1 / -1; }
 }
 
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
+/* modules.css colours every link inside .page-wrap with the module
+   (body[data-module] .page-wrap a:not(.btn):not([class*="__"]), 0-4-2).
+   This page's button-style links and TOC carry their own colours, so they
+   are restored here at the same specificity — this <style> loads after
+   base.css, so it wins the tie. */
+body[data-module] .page-wrap a.page-detail-open:not(.btn),
+body[data-module] .page-wrap a.flow-people-link:not(.btn),
+body[data-module] .page-wrap a.help-btn:not(.btn),
+body[data-module] .page-wrap a.flow-step-link:not(.btn):hover { color: #fff; }
+body[data-module] .page-wrap a.flow-step-link:not(.btn) { color: var(--accent-dk); }
+body[data-module] .page-wrap .toc-list a:not(.btn) { color: var(--ink-2); }
+body[data-module] .page-wrap .toc-list a:not(.btn):hover,
+body[data-module] .page-wrap .toc-list a.active:not(.btn),
+body[data-module] .page-wrap .role-block-text a:not(.btn),
+body[data-module] .page-wrap .intro-card-title a:not(.btn):hover { color: var(--accent-dk); }
+body[data-module] .page-wrap .intro-card-title a:not(.btn) { color: inherit; }
+
+/* width:100% — body is a flex column once it carries a .page-footer (base.css), so a
+   block child would otherwise shrink to its content (root CLAUDE.md Common Mistake #54). */
+.page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
 
 .layout { display: grid; grid-template-columns: 1fr 240px; gap: 36px; align-items: start; }
 @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
@@ -295,7 +216,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .sec-lead { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; margin-bottom: 18px; max-width: 720px; }
 
 #sec-welcome   { --sec-accent: #0891b2; --sec-accent-dk: #0e7490; --sec-accent-soft: #cffafe; --sec-accent-border: rgba(8,145,178,0.2); }
-#sec-groups    { --sec-accent: #6c5ce7; --sec-accent-dk: #5a4bd1; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(108,92,231,0.2); }
+#sec-groups    { --sec-accent: var(--m-mid, #6c5ce7); --sec-accent-dk: var(--m-mid, #5a4bd1); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(var(--m-mid-rgb, 108, 92, 231), 0.2); }
 #sec-pages     { --sec-accent: #06b6d4; --sec-accent-dk: #0e7490; --sec-accent-soft: #cffafe; --sec-accent-border: rgba(6,182,212,0.22); }
 #sec-scope     { --sec-accent: #10b981; --sec-accent-dk: #047857; --sec-accent-soft: #d1fae5; --sec-accent-border: rgba(16,185,129,0.22); }
 #sec-rules     { --sec-accent: #f59e0b; --sec-accent-dk: #b45309; --sec-accent-soft: #fef3c7; --sec-accent-border: rgba(245,158,11,0.22); }
@@ -306,7 +227,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 #sec-help .sec-body-inner { padding-top: 0; border-top: none; }
 
 .welcome-banner {
-  background: linear-gradient(135deg, #cffafe 0%, #ede9fe 100%);
+  background: linear-gradient(135deg, #cffafe 0%, var(--m-tint, #ede9fe) 100%);
   border: 1px solid #67e8f9; border-radius: 16px;
   padding: 22px 26px; margin-bottom: 28px;
 }
@@ -339,7 +260,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   background: linear-gradient(90deg, var(--gc, #06b6d4), transparent);
 }
 .group-card.g-leadership { --gc: #06b6d4; }
-.group-card.g-ai { --gc: #8b5cf6; }
+.group-card.g-ai { --gc: var(--m-mid, #8b5cf6); }
 .group-card.g-students { --gc: #10b981; }
 .group-card-icon { font-size: 24px; margin-bottom: 8px; }
 .group-card-title { font-size: 14.5px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
@@ -357,7 +278,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 }
 .page-detail-icon {
   width: 44px; height: 44px; border-radius: 11px;
-  background: linear-gradient(135deg, var(--accent-2) 0%, #ede9fe 100%);
+  background: linear-gradient(135deg, var(--accent-2) 0%, var(--m-tint, #ede9fe) 100%);
   display: flex; align-items: center; justify-content: center;
   font-size: 22px; flex-shrink: 0;
 }
@@ -442,9 +363,6 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .help-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
 
 @media (max-width: 720px) {
-  .hero { padding: 32px 0 28px; }
-  .hero-inner { padding: 0 22px; }
-  .hero-title { font-size: 1.4rem; }
   .page-wrap { padding: 22px 18px 60px; }
   .sec-title { font-size: 1.2rem; }
   .page-detail { padding: 18px; }
@@ -454,16 +372,16 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 }
 </style>
 </head>
-<body>
+<body data-module="hub">
 
 <div id="navbarMount"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <p class="hero-eyebrow">Eduversal · Academic Hub · Read Me First — School Principal</p>
-      <h1 class="hero-title">Welcome, <span class="hero-name" id="heroName">Principal</span></h1>
-      <p class="hero-sub">You lead your whole school. This page explains the <strong style="color:#fff;">School Principal pages</strong> in the Performance menu — school self-appraisal, your coaching record, AI readiness, and the Students Hub roster — and the order to use them in. Read it once; come back any time.</p>
+<header class="page-hero" aria-label="Read Me First: School Principal header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Academic Hub<span class="page-hero__module-sep" aria-hidden="true">·</span><span>Read Me First</span></p>
+      <h1 class="page-hero__title">Welcome, <span class="hero-name" id="heroName">Principal</span></h1>
+      <p class="page-hero__desc">You lead your whole school. This page explains the <strong style="color:#fff;">School Principal pages</strong> in the Performance menu — school self-appraisal, your coaching record, AI readiness, and the Students Hub roster — and the order to use them in. Read it once; come back any time.</p>
       <div class="hero-role-chip" id="roleChip"><span class="role-dot"></span><span id="roleChipText">Loading your role…</span></div>
 
       <div class="hero-metrics">
@@ -486,16 +404,8 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
         <span class="hero-resume-text">Resume from <strong id="heroResumeSection">Welcome</strong></span>
       </a>
     </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="hero-cube">SP</div>
-      <div class="hero-orbit-glyph g1">📝<span class="glyph-step">APPRAISE</span></div>
-      <div class="hero-orbit-glyph g2">💬<span class="glyph-step">COACH</span></div>
-      <div class="hero-orbit-glyph g3">🤖<span class="glyph-step">AI</span></div>
-      <div class="hero-orbit-glyph g4">🎓<span class="glyph-step">STUDENTS</span></div>
-    </div>
   </div>
-</div>
+</header>
 
 <div class="page-wrap">
   <div class="layout">
@@ -972,6 +882,36 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
     </aside>
   </div>
 </div>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Read Me First · School Principal</span>
+      <h2 class="page-footer__cta-title">Next: School Self-Appraisal</h2>
+      <p class="page-footer__cta-desc">Draft your Self-Evaluation Summary here before each on-site visit.</p>
+      <a href="/school-self-appraisal" class="page-footer__cta-btn">Open School Self-Appraisal <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Read Me First: School Principal footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Read Me First</span>
+        <a href="/my-hub-read-me" class="page-footer__nav-link">My Hub</a>
+        <a href="/admin-read-me-academic-coord" class="page-footer__nav-link">Academic Coordinator</a>
+        <a href="/admin-read-me-foundation-rep" class="page-footer__nav-link">Foundation Rep</a>
+        <a href="/school-leadership-read-me" class="page-footer__nav-link">School Leaders</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Read Me First · School Principal</span>
+  </div>
+</footer>
 
 <script src="partials/navbar-loader.js"></script>
 <script>

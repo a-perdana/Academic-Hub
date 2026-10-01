@@ -139,21 +139,21 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-siz
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 
 /* ── New-user intro banner (dismissable) ─────────────────────── */
-.page-intro { display:none; background:linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%); border:1px solid #c4b5fd; border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
+.page-intro { display:none; background:linear-gradient(135deg,var(--m-tint, #ede9fe) 0%,#e0f2fe 100%); border:1px solid var(--m-border, #c4b5fd); border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
 .page-intro.show { display:flex; gap:14px; align-items:flex-start; }
 .page-intro-icon { font-size:22px; flex-shrink:0; padding-top:1px; }
 .page-intro-body { flex:1; min-width:0; padding-right:26px; }
-.page-intro-title { font-size:13.5px; font-weight:700; color:#5b21b6; margin-bottom:4px; }
+.page-intro-title { font-size:13.5px; font-weight:700; color:var(--m-dark, #5b21b6); margin-bottom:4px; }
 .page-intro-text { font-size:12.5px; color:var(--ink-2); line-height:1.55; }
-.page-intro-text strong { color:#5b21b6; }
-.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:#6d28d9; text-decoration:none; }
+.page-intro-text strong { color:var(--m-dark, #5b21b6); }
+.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:var(--m-mid, #6d28d9); text-decoration:none; }
 .page-intro-link:hover { text-decoration:underline; }
-.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid #c4b5fd; border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6d28d9; font-size:14px; line-height:1; transition:all .15s; }
+.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid var(--m-border, #c4b5fd); border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--m-mid, #6d28d9); font-size:14px; line-height:1; transition:all .15s; }
 .page-intro-dismiss:hover { background:#fff; }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body data-page-accent="certificates">
+<body data-module="career_growth">
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
 (function() {
@@ -175,10 +175,10 @@ body{font-family:'DM Sans',sans-serif;color:var(--ink);min-height:100vh;font-siz
 </script>
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="certificates">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My CPD</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit" target="_blank" rel="noopener" title="Open Career Growth: Start Here (Google Doc)">Career Growth</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Grow</span></p>
       <h1 class="page-hero__title">My Progress Record</h1>
       <p class="page-hero__desc">Your self-reflection progress on the <a href="/competency-framework" style="color:rgba(255,255,255,.95);text-decoration:underline;">Leadership Competency Framework</a>, by domain. This is a developmental record, not a certificate or a credential. No level here is a Career Growth Role Register level, a promotion step or a certification.</p>
     </div>

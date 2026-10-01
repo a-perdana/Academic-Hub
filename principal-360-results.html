@@ -16,7 +16,7 @@
    AND canonical .page-hero* / .page-footer* chrome come from /base.css.
    Page-local styles below MUST NOT override .page-hero* selectors —
    root CLAUDE.md Common Mistake #50. */
-:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dk: #4e3db8; }
+:root { --accent: var(--m-mid, #6c5ce7); --accent-2: var(--m-tint, #ede9fe); --accent-dk: #4e3db8; }
 body { padding-top: 62px; }
 
 /* Body content rail = 1200px (canonical). Flex-trap fix: width:100% on every
@@ -84,7 +84,7 @@ body:has(> .page-footer) > .page-wrap {
 .charter-banner {
   background: linear-gradient(180deg, var(--accent-2) 0%, #fff 100%);
   border: 1px solid var(--accent); border-radius: 12px;
-  padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #4c1d95; line-height: 1.55;
+  padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: var(--m-dark, #4c1d95); line-height: 1.55;
 }
 .charter-banner strong { display: block; font-weight: 700; margin-bottom: 3px; color: #3b0764; }
 
@@ -96,7 +96,7 @@ body:has(> .page-footer) > .page-wrap {
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 @media (max-width: 720px) {
   .composite-banner { grid-template-columns: 1fr; gap: 8px; padding: 18px 20px; }
@@ -112,9 +112,9 @@ body:has(> .page-footer) > .page-wrap {
 
 /* ─── INFO STRIP (hero-altı bilgilendirme — mor / My Work family) ─── */
 .info-strip {
-  background: linear-gradient(135deg, #f5f3ff 0%, #eef2ff 100%);
-  border: 1px solid #ddd6fe;
-  border-left: 4px solid #6c5ce7;
+  background: linear-gradient(135deg, var(--m-tint-2, #f5f3ff) 0%, #eef2ff 100%);
+  border: 1px solid var(--m-border, #ddd6fe);
+  border-left: 4px solid var(--m-mid, #6c5ce7);
   border-radius: 12px;
   padding: 16px 18px;
   margin: 0 0 24px;
@@ -122,9 +122,9 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__icon { font-size: 22px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
 .info-strip__body { flex: 1; min-width: 0; }
-.info-strip__title { font-size: 15px; font-weight: 700; color: #5a4bd1; margin: 0 0 4px; letter-spacing: -0.01em; }
+.info-strip__title { font-size: 15px; font-weight: 700; color: var(--m-mid, #5a4bd1); margin: 0 0 4px; letter-spacing: -0.01em; }
 .info-strip__lede { font-size: 13px; color: #3730a3; line-height: 1.55; margin: 0 0 12px; }
-.info-strip__lede strong { color: #5a4bd1; font-weight: 700; }
+.info-strip__lede strong { color: var(--m-mid, #5a4bd1); font-weight: 700; }
 .info-strip__flow { display: grid; gap: 8px; margin: 0 0 12px; padding: 0; list-style: none; counter-reset: flow-step; }
 .info-strip__flow > li {
   position: relative; padding: 8px 12px 8px 38px;
@@ -133,11 +133,11 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__flow > li::before {
   content: counter(flow-step); position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
-  width: 20px; height: 20px; border-radius: 50%; background: #6c5ce7; color: #fff;
+  width: 20px; height: 20px; border-radius: 50%; background: var(--m-mid, #6c5ce7); color: #fff;
   font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center;
 }
-.info-strip__flow strong { color: #5a4bd1; font-weight: 700; }
-.info-strip__flow a { color: #6c5ce7; font-weight: 600; text-decoration: none; }
+.info-strip__flow strong { color: var(--m-mid, #5a4bd1); font-weight: 700; }
+.info-strip__flow a { color: var(--m-mid, #6c5ce7); font-weight: 600; text-decoration: none; }
 .info-strip__flow a:hover { text-decoration: underline; }
 .info-strip__callout {
   display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; margin: 0 0 12px;
@@ -146,24 +146,24 @@ body:has(> .page-footer) > .page-wrap {
 }
 .info-strip__callout strong { color: #92400e; font-weight: 700; }
 .info-strip__callout-icon { font-size: 16px; flex-shrink: 0; line-height: 1.3; }
-.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(108,92,231,0.25); }
+.info-strip__pills { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 10px; border-top: 1px dashed rgba(var(--m-mid-rgb, 124, 58, 237), 0.25); }
 .info-strip__pill {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 600; color: #5a4bd1;
-  background: rgba(255,255,255,0.75); border: 1px solid #ddd6fe;
+  font-size: 11.5px; font-weight: 600; color: var(--m-mid, #5a4bd1);
+  background: rgba(255,255,255,0.75); border: 1px solid var(--m-border, #ddd6fe);
   padding: 4px 10px; border-radius: 999px;
 }
 .info-strip__pill b { color: #3730a3; font-weight: 700; }
 @media (max-width: 600px) { .info-strip { flex-direction: column; gap: 8px; } }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="appraisal">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · Principal Evaluation</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit" target="_blank" rel="noopener" title="Open Appraisal: Start Here (Google Doc)">Appraisal</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Improve</span></p>
       <h1 class="page-hero__title">Principal 360° Results</h1>
       <p class="page-hero__desc">Anonymous feedback from staff, parent representatives and student-council representatives, shown as group averages per focus. A cohort only appears once it has 5 or more responses — below that it is reported as insufficient response. Only the year-end cycle feeds F3; the mid-year cycle is formative.</p>
     </div>

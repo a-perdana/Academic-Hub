@@ -477,6 +477,10 @@ if (fs.existsSync("tokens.css")) {
   fs.copyFileSync("tokens.css", "dist/tokens.css");
   console.log("Copied: tokens.css");
 }
+if (fs.existsSync("modules.css")) {
+  fs.copyFileSync("modules.css", "dist/modules.css");
+  console.log("Copied: modules.css");
+}
 if (fs.existsSync("base.css")) {
   fs.copyFileSync("base.css", "dist/base.css");
   console.log("Copied: base.css");

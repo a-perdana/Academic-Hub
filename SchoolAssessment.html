@@ -12,7 +12,7 @@
    typography, AND canonical .page-hero* / .page-footer* chrome come
    from /base.css. Page-local styles below MUST NOT override
    .page-hero* selectors — root CLAUDE.md Common Mistake #50. */
-:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
+:root { --accent: var(--m-mid, #6c5ce7); --accent-2: var(--m-tint, #ede9fe); --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
 
 /* Body content rail = 1200px (canonical). Flex-trap fix: width:100% on
@@ -46,11 +46,11 @@ body:has(> .page-footer) > .page-wrap {
 
 .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
 .class-card { background: var(--white); border: 1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s; }
-.class-card:hover { box-shadow: 0 8px 28px rgba(108,92,231,.14); transform: translateY(-2px); }
+.class-card:hover { box-shadow: 0 8px 28px rgba(var(--m-mid-rgb, 124, 58, 237), .14); transform: translateY(-2px); }
 .class-name { font-weight: 600; font-size: 1rem; }
 .class-meta { font-size: 11.5px; color: var(--ink-3); margin: 4px 0 12px; }
 .bar { height: 8px; background: #f3f4f6; border-radius: 99px; overflow: hidden; margin: 10px 0; }
-.bar > div { height: 100%; background: linear-gradient(90deg, #6c5ce7, #0891b2); }
+.bar > div { height: 100%; background: linear-gradient(90deg, var(--m-mid, #6c5ce7), #0891b2); }
 .row-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; font-size: 12px; }
 .row-stats > div { background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: center; }
 .row-stats > div strong { display: block; font-family: 'Lora', serif; font-size: 1.05rem; }
@@ -64,7 +64,7 @@ body:has(> .page-footer) > .page-wrap {
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 @media (max-width: 760px) {
   .page-hero__inner,
@@ -74,7 +74,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="ease">
   <script src="firebase-config.js"></script>
   <script>
     if (!window.ENV) window.ENV = {
@@ -90,10 +90,10 @@ body:has(> .page-footer) > .page-wrap {
   <div id="navbarMount"></div>
   <script src="partials/navbar-loader.js"></script>
 
-  <header class="page-hero" data-accent="dark">
+  <header class="page-hero">
     <div class="page-hero__inner">
       <div class="page-hero__text">
-        <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
+        <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4/edit" target="_blank" rel="noopener" title="Open EASE: Start Here (Google Doc)">EASE</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Measure</span></p>
         <h1 class="page-hero__title">School Assessment</h1>
         <p class="page-hero__desc">Results of the EASE Assessment (Common Assessment) tests your Grade 7–8 students take in the Students Hub, class by class. See where students score below KKTP — the mastery standard your school sets — so teachers can re-teach, reassess and support them.</p>
       </div>

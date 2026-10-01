@@ -69,7 +69,7 @@
     .input:focus,
     .select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,92,231,.12);
+      box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), .12);
       background: var(--white);
     }
 
@@ -91,7 +91,7 @@
       transition: box-shadow 0.2s ease, transform 0.2s ease;
     }
     .survey-card:hover {
-      box-shadow: 0 8px 28px rgba(108,92,231,.14);
+      box-shadow: 0 8px 28px rgba(var(--m-mid-rgb, 124, 58, 237), .14);
       transform: translateY(-2px);
     }
     .survey-head {
@@ -100,7 +100,7 @@
       align-items: flex-start;
       gap: 12px;
       padding: 18px 20px 12px;
-      background: linear-gradient(to right, rgba(108,92,231,.06), transparent);
+      background: linear-gradient(to right, rgba(var(--m-mid-rgb, 124, 58, 237), .06), transparent);
     }
     .survey-title {
       font-size: 1.1rem;
@@ -134,7 +134,7 @@
       vertical-align: middle;
     }
     .badge-closed { background: #fee2e2; color: #991b1b; }
-    .badge-status { background: #ede9fe; color: #5b21b6; }
+    .badge-status { background: var(--m-tint, #ede9fe); color: var(--m-dark, #5b21b6); }
 
     /* ─── CARD BODY ──────────────────────────────────── */
     .survey-body {
@@ -188,7 +188,7 @@
       border: 1px solid transparent;
     }
     .chip-on-academic { background: #e0e7ff; color: #3730a3; border-color: #c7d2fe; }
-    .chip-on-central  { background: #ede9fe; color: #5b21b6; border-color: #c4b5fd; }
+    .chip-on-central  { background: var(--m-tint, #ede9fe); color: var(--m-dark, #5b21b6); border-color: var(--m-border, #c4b5fd); }
     .chip-on-teachers { background: #dcfce7; color: #166534; border-color: #86efac; }
     .chip-off         { background: #f3f4f6; color: #9ca3af; border-color: #e5e7eb; }
 
@@ -261,7 +261,7 @@
     }
     .response-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(108,92,231,.12);
+      box-shadow: 0 0 0 3px rgba(var(--m-mid-rgb, 124, 58, 237), .12);
     }
     .response-input:disabled {
       background: #f0eeff;
@@ -280,18 +280,18 @@
       padding: 0 24px;
       width: 100%;
       height: 48px;
-      background: linear-gradient(135deg, #6c5ce7, #4f46e5);
+      background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #4f46e5);
       color: #fff;
       font-size: 0.95rem;
       font-weight: 700;
       cursor: pointer;
       font-family: 'DM Sans', sans-serif;
-      box-shadow: 0 4px 14px rgba(108,92,231,.35);
+      box-shadow: 0 4px 14px rgba(var(--m-mid-rgb, 124, 58, 237), .35);
       transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
     }
     .response-btn:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(108,92,231,.45);
+      box-shadow: 0 6px 20px rgba(var(--m-mid-rgb, 124, 58, 237), .45);
     }
     .response-btn:active:not(:disabled) { transform: translateY(0); }
     .response-btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
@@ -382,7 +382,7 @@
 
     /* ─── QUESTION TYPE CHIPS ────────────────────────── */
     .q-type-chip { display: inline-flex; align-items: center; font-size: 0.63rem; font-weight: 700; padding: 2px 7px; border-radius: 10px; margin-left: 6px; vertical-align: middle; }
-    .q-type-chip-mc     { background: #ede9fe; color: #5b21b6; }
+    .q-type-chip-mc     { background: var(--m-tint, #ede9fe); color: var(--m-dark, #5b21b6); }
     .q-type-chip-rating { background: #fef3c7; color: #92400e; }
     .q-type-chip-likert { background: #dcfce7; color: #166534; }
 
@@ -428,13 +428,13 @@
 
   </style>
 </head>
-<body data-page-accent="cyan">
+<body data-module="school_workspace">
   <div id="navbarMount"></div>
 
-  <header class="page-hero" data-accent="cyan" aria-label="Surveys header">
+  <header class="page-hero" aria-label="Surveys header">
     <div class="page-hero__inner">
       <div class="page-hero__text">
-        <p class="page-hero__eyebrow">Eduversal · Academic Hub</p>
+        <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
         <h1 class="page-hero__title">Shared Surveys</h1>
         <p class="page-hero__desc">Surveys published by Eduversal appear here when they are shared with Academic Hub. Only surveys shared to Academic Hub are listed.</p>
       </div>

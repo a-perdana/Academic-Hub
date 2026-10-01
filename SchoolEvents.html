@@ -11,9 +11,9 @@
   <link rel="stylesheet" href="base.css">
   <style>
     :root {
-      --accent:    #6c5ce7;
-      --accent-dk: #5a4bd1;
-      --accent-2:  #ede9fe;
+      --accent:    var(--m-mid, #6c5ce7);
+      --accent-dk: var(--m-mid, #5a4bd1);
+      --accent-2:  var(--m-tint, #ede9fe);
     }
     body {
       padding-top: 62px;
@@ -140,7 +140,7 @@
       border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden;
     }
     .month-card.past { opacity: 0.62; }
-    .month-card.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.15), var(--shadow-sm); }
+    .month-card.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(var(--m-mid-rgb, 124, 58, 237), 0.15), var(--shadow-sm); }
 
     .month-head {
       padding: 14px 20px; display: flex; align-items: center; justify-content: space-between;
@@ -151,11 +151,11 @@
     .month-name { font-size: 1rem; font-weight: 700; color: var(--ink); }
     .month-current-pill {
       font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
-      background: rgba(108,92,231,0.12); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
+      background: rgba(var(--m-mid-rgb, 124, 58, 237), 0.12); color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em;
     }
     .month-event-count {
       font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
-      background: var(--accent-2); color: #5b21b6;
+      background: var(--accent-2); color: var(--m-dark, #5b21b6);
     }
     .month-chevron { font-size: 1rem; color: var(--ink-3); transition: transform 0.2s; }
     .month-card.collapsed .month-chevron { transform: rotate(-90deg); }
@@ -314,7 +314,7 @@
       background: var(--white); border: 1px solid var(--border);
       border-radius: var(--radius); box-shadow: var(--shadow-sm); overflow: hidden;
     }
-    .cal-month.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(108,92,231,0.15), var(--shadow-sm); }
+    .cal-month.current { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(var(--m-mid-rgb, 124, 58, 237), 0.15), var(--shadow-sm); }
 
     .cal-month-head {
       background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
@@ -356,7 +356,7 @@
     .cal-cell.ev-open_day  { background: #16a34a; color: #fff; }
     .cal-cell.ev-fair      { background: #d97706; color: #fff; }
     .cal-cell.ev-sports    { background: #e11d48; color: #fff; }
-    .cal-cell.ev-cultural  { background: #7c3aed; color: #fff; }
+    .cal-cell.ev-cultural  { background: var(--m-mid, #7c3aed); color: #fff; }
     .cal-cell.ev-academic  { background: #0284c7; color: #fff; }
     .cal-cell.ev-ceremony  { background: #db2777; color: #fff; }
     .cal-cell.ev-other     { background: #64748b; color: #fff; }
@@ -379,7 +379,7 @@
     .cal-cell.ev-continuation.ev-open_day::before  { color: #16a34a; }
     .cal-cell.ev-continuation.ev-fair::before      { color: #d97706; }
     .cal-cell.ev-continuation.ev-sports::before    { color: #e11d48; }
-    .cal-cell.ev-continuation.ev-cultural::before  { color: #7c3aed; }
+    .cal-cell.ev-continuation.ev-cultural::before  { color: var(--m-mid, #7c3aed); }
     .cal-cell.ev-continuation.ev-academic::before  { color: #0284c7; }
     .cal-cell.ev-continuation.ev-ceremony::before  { color: #db2777; }
     .cal-cell.ev-continuation.ev-other::before     { color: #64748b; }
@@ -398,7 +398,7 @@
     .cal-foot-item .day.open_day  { color: #16a34a; }
     .cal-foot-item .day.fair      { color: #d97706; }
     .cal-foot-item .day.sports    { color: #e11d48; }
-    .cal-foot-item .day.cultural  { color: #7c3aed; }
+    .cal-foot-item .day.cultural  { color: var(--m-mid, #7c3aed); }
     .cal-foot-item .day.academic  { color: #0284c7; }
     .cal-foot-item .day.ceremony  { color: #db2777; }
     .cal-foot-item .day.other     { color: #64748b; }
@@ -463,14 +463,14 @@
     }
   </style>
 </head>
-<body>
+<body data-module="school_workspace">
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="cyan" aria-label="School Events header">
+<header class="page-hero" aria-label="School Events header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub · My School</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
       <h1 class="page-hero__title">School Events</h1>
       <p class="page-hero__desc">Activities and events at your school. Add what you have planned and HQ + your leadership team can monitor at a glance.</p>
       <div class="school-pill" id="schoolPill" style="display:none"></div>

@@ -25,9 +25,9 @@
     /* Page-specific accent override (mor). Tokens, reset, and base
        typography come from /base.css. */
     :root {
-      --accent:    #7c3aed;
-      --accent-dk: #6d28d9;
-      --accent-2:  #ede9fe;
+      --accent:    var(--m-mid, #7c3aed);
+      --accent-dk: var(--m-mid, #6d28d9);
+      --accent-2:  var(--m-tint, #ede9fe);
     }
     body { padding-top: 62px; }
 
@@ -189,13 +189,13 @@
     }
   </style>
 </head>
-<body data-page-accent="mor">
+<body data-module="curriculum">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="mor" aria-label="Syllabus Coverage header">
+<header class="page-hero" aria-label="Syllabus Coverage header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Academic Hub · Curriculum</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit" target="_blank" rel="noopener" title="Open Curriculum: Start Here (Google Doc)">Curriculum</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Define</span></p>
       <h1 class="page-hero__title">Syllabus Coverage</h1>
       <p class="page-hero__desc">How far each teacher has progressed through the Cambridge pacing plan so far this academic year, against the scheduled pacing. The badges are an automatic pacing signal only: the status in your Curriculum Coverage Tracker (On Track, Watch, At Risk, Escalated) is set by the Academic Coordinator, and At Risk always needs a documented recovery action — never silently dropping required Cambridge content.</p>
     </div>

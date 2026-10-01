@@ -253,8 +253,8 @@ body {
 }
 .fab-feedback-btn { background: rgba(18,18,40,0.92); }
 .fab-feedback-btn:hover {
-  background: #6c5ce7; border-color: #6c5ce7;
-  box-shadow: 0 6px 22px rgba(108,92,231,0.55); color: #fff;
+  background: var(--m-mid, #6c5ce7); border-color: var(--m-mid, #6c5ce7);
+  box-shadow: 0 6px 22px rgba(var(--m-mid-rgb, 124, 58, 237), 0.55); color: #fff;
 }
 .fab-main {
   width: 54px; height: 54px; border-radius: 50%;
@@ -267,11 +267,11 @@ body {
 }
 .fab-main:hover {
   transform: scale(1.07);
-  box-shadow: 0 8px 32px rgba(108,92,231,0.45); border-color: rgba(108,92,231,0.5);
+  box-shadow: 0 8px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.45); border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.5);
 }
 .fab-container.open .fab-main {
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
-  border-color: transparent; box-shadow: 0 6px 32px rgba(108,92,231,0.6);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
+  border-color: transparent; box-shadow: 0 6px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.6);
 }
 .fab-ic {
   position: absolute;
@@ -289,7 +289,7 @@ body {
 }
 .feedback-overlay.open { display: flex; }
 .feedback-modal {
-  background: rgba(10,10,26,0.97); border: 1px solid rgba(108,92,231,0.35);
+  background: rgba(10,10,26,0.97); border: 1px solid rgba(var(--m-mid-rgb, 124, 58, 237), 0.35);
   border-radius: 20px; width: 100%; max-width: 480px;
   padding: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.7);
   display: flex; flex-direction: column; gap: 16px;
@@ -316,12 +316,12 @@ body {
 }
 .feedback-select { cursor: pointer; }
 .feedback-select option { background: #0a0a1a; }
-.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(108,92,231,0.7); }
+.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.7); }
 .feedback-textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
 .feedback-textarea::placeholder { color: rgba(255,255,255,0.25); }
 .feedback-submit-btn {
   width: 100%; padding: 11px; border-radius: 10px; border: none;
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
   color: #fff; font-size: 14px; font-weight: 600;
   font-family: 'DM Sans','Sora',sans-serif; cursor: pointer; transition: opacity 0.18s;
 }
@@ -353,15 +353,15 @@ body {
 .nav-add-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 </style>
 </head>
-<body data-page-accent="mor">
+<body data-module="teaching_learning">
 
 <!-- Loading screen -->
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="mor" aria-label="Resource Library header">
+<header class="page-hero" aria-label="Resource Library header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s/edit" target="_blank" rel="noopener" title="Open Teaching & Learning: Start Here (Google Doc)">Teaching & Learning</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Cross-cutting</span></p>
       <h1 class="page-hero__title">Resource Library</h1>
       <p class="page-hero__desc">Curated teaching resources, exemplars, scheme-of-work supplements, and references shared across the partner-school network. Filter by category or subject to find what you need fast. Tool and website names are recommendations, not mandated platforms — see Teaching &amp; Learning: Digital Learning &amp; Resource Library 26-27. Students use an AI tool only if it is on the school's Approved AI Tools List.</p>
     </div>

@@ -109,16 +109,16 @@ body:has(> .page-footer) > .page-wrap {
 }
 .domain-card::before {
   content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
-  background: linear-gradient(180deg, #6c5ce7, #0891b2);
+  background: linear-gradient(180deg, var(--m-mid, #6c5ce7), #0891b2);
 }
-.domain-card:hover { box-shadow: 0 2px 4px rgba(15,23,42,0.05), 0 18px 38px rgba(108,92,231,0.10); transform: translateY(-2px); }
+.domain-card:hover { box-shadow: 0 2px 4px rgba(15,23,42,0.05), 0 18px 38px rgba(var(--m-mid-rgb, 124, 58, 237), 0.10); transform: translateY(-2px); }
 .domain-head { display: flex; gap: 14px; align-items: center; margin-bottom: 18px; }
 .domain-num {
   width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0;
-  background: linear-gradient(135deg, #6c5ce7 0%, #4e3db8 100%); color: #fff;
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7) 0%, #4e3db8 100%); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Lora', serif; font-size: 19px; font-weight: 700;
-  box-shadow: 0 6px 16px rgba(108,92,231,0.32);
+  box-shadow: 0 6px 16px rgba(var(--m-mid-rgb, 124, 58, 237), 0.32);
 }
 .domain-info { flex: 1; }
 .domain-title { font-family: 'Lora', serif; font-size: 18px; font-weight: 600; color: #1e293b; }
@@ -356,7 +356,7 @@ body:has(> .page-footer) > .page-wrap {
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 @media (max-width: 768px) {
   .level-row { grid-template-columns: repeat(2, 1fr); }
@@ -368,13 +368,13 @@ body:has(> .page-footer) > .page-wrap {
 }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="digital_citizenship">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · AI Competency Framework 26-27 · Part Three</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1m2H41XMR2wXKwawWPmyqdQCe3qh5D2hTx5r96DW1di8/edit" target="_blank" rel="noopener" title="Open Digital Citizenship & AI: Start Here (Google Doc)">Digital Citizenship & AI</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Cross-cutting</span></p>
       <h1 class="page-hero__title">AI Maturity Assessment</h1>
       <p class="page-hero__desc">The yearly school self-assessment of AI integration, across six areas of school life. It is developmental: it helps your school plan improvement and professional learning. It is not validated or turned into a School Appraisal rating, and it keeps six separate area levels — no single overall score. Ratings lock once you mark the profile as final.</p>
       <div id="heroStatusChip" class="hero-status" style="display:none;">—</div>

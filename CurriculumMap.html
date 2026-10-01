@@ -9,62 +9,15 @@
     /* Page-specific accent override (mor). Tokens, reset, and base
        typography come from /base.css. */
     :root {
-      --accent:    #7c3aed;
-      --accent-dk: #6d28d9;
-      --accent-2:  #ede9fe;
+      --accent:    var(--m-mid, #7c3aed);
+      --accent-dk: var(--m-mid, #6d28d9);
+      --accent-2:  var(--m-tint, #ede9fe);
     }
     body { padding-top: 62px; }
 
-    /* ── HERO ── legacy 3-wrapper pattern. Per Common Mistake #52,
-       horizontal padding lives on .hero-inner (NOT on .hero) so the
-       hero text shares a left edge with the .page-wrap content
-       column at viewports > 1280px. Both clamps are canonical
-       1200px. */
-    .hero {
-      width: 100%;
-      background: linear-gradient(140deg, #2e1065 0%, #4c1d95 45%, #7c3aed 100%);
-      padding: 48px 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 10% 70%, rgba(255,255,255,0.07) 0%, transparent 50%),
-        radial-gradient(circle at 88% 18%, rgba(0,0,0,0.14) 0%, transparent 50%);
-    }
-    .hero-inner {
-      position: relative;
-      z-index: 1;
-      width: 100%;
-      max-width: var(--container-max);
-      margin: 0 auto;
-      padding: 0;
-    }
-    .hero-eyebrow {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: rgba(255,255,255,0.5);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .hero-title {
-      font-family: 'Lora', serif;
-      font-size: 2rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 8px;
-      line-height: 1.2;
-    }
-    .hero-desc {
-      font-size: 0.9rem;
-      color: rgba(255,255,255,0.65);
-      max-width: 540px;
-      line-height: 1.6;
-    }
+    /* ── HERO ── canonical .page-hero from base.css; colour comes from
+       body[data-module] (modules.css). .ro-badge is a page-local pill
+       inside .page-hero__text. */
     .ro-badge {
       display: inline-flex;
       align-items: center;
@@ -249,7 +202,7 @@
     .sum-card.sc-green  { border-left: 3px solid #10b981; }
     .sum-card.sc-amber  { border-left: 3px solid #f59e0b; }
     .sum-card.sc-red    { border-left: 3px solid #ef4444; }
-    .sum-card.sc-violet { border-left: 3px solid #7c3aed; }
+    .sum-card.sc-violet { border-left: 3px solid var(--m-mid, #7c3aed); }
 
     /* ── WEEK GRID VIEW ── */
     .grid-wrap {
@@ -343,7 +296,7 @@
       flex-wrap: wrap;
     }
     .tc-hours { color: var(--ink-3); }
-    .tc-codes { color: #7c3aed; font-family: 'DM Mono', monospace; }
+    .tc-codes { color: var(--m-mid, #7c3aed); font-family: 'DM Mono', monospace; }
     .tc-status-dot {
       width: 7px;
       height: 7px;
@@ -440,8 +393,8 @@
       letter-spacing: 0.09em;
       color: var(--accent);
       background: var(--accent-2);
-      border-top: 2px solid #ddd6fe;
-      border-bottom: 1px solid #ddd6fe;
+      border-top: 2px solid var(--m-border, #ddd6fe);
+      border-bottom: 1px solid var(--m-border, #ddd6fe);
     }
     .month-separator-row:first-child .month-separator-cell { border-top: none; }
 
@@ -573,7 +526,7 @@
       cursor: pointer;
       transition: background 0.15s;
     }
-    .obj-badge:hover { background: #ddd6fe; }
+    .obj-badge:hover { background: var(--m-border, #ddd6fe); }
     .obj-badge.uncovered { background: #fee2e2; color: #dc2626; }
 
     /* ── STATUS PILL ── */
@@ -707,35 +660,38 @@
 
     @media (max-width: 900px) {
       .page-wrap { padding: 24px 20px 60px; }
-      .hero { padding: 36px 20px; }
       .summary-row { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* Footer content 1200 rail'ine hizala: outer clamp
+    /* Hero + footer content 1200 rail'ine hizala: outer clamp
        var(--container-max) (= 1200) + horizontal padding sıfır.
        See [[references-three-rails-1200]]. */
+    .page-hero__inner,
     .page-footer__inner,
     .page-footer__meta { max-width: var(--container-max); padding-left: 0; padding-right: 0; }
+    @media (max-width: 900px) {
+      .page-hero__inner { padding-left: 20px; padding-right: 20px; }
+    }
   </style>
 </head>
-<body data-page-accent="mor">
+<body data-module="curriculum">
 
   <div id="navbarMount"></div>
 
   <!-- ── HERO ── -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div>
-        <p class="hero-eyebrow">Academics · Cambridge</p>
-        <h1 class="hero-title">Curriculum Map</h1>
-        <p class="hero-desc">Week-by-week view of the Cambridge pacing plan for Grades 7–12 and the syllabus objectives each topic covers. Grades 7–8 follow the accelerated Stage 7–9 sequence, with Stage 8 split across both years; IGCSE runs in Grades 9–10 and AS &amp; A Level in Grades 11–12.</p>
+  <header class="page-hero" aria-label="Curriculum Map header">
+    <div class="page-hero__inner">
+      <div class="page-hero__text">
+        <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1k00Y-hcD38E7SmOQ6L9iPodXeKLDNRaYuNR1UZQIvHg/edit" target="_blank" rel="noopener" title="Open Curriculum: Start Here (Google Doc)">Curriculum</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Define</span></p>
+        <h1 class="page-hero__title">Curriculum Map</h1>
+        <p class="page-hero__desc">Week-by-week view of the Cambridge pacing plan for Grades 7–12 and the syllabus objectives each topic covers. Grades 7–8 follow the accelerated Stage 7–9 sequence, with Stage 8 split across both years; IGCSE runs in Grades 9–10 and AS &amp; A Level in Grades 11–12.</p>
         <span class="ro-badge">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           Read-only view
         </span>
       </div>
     </div>
-  </section>
+  </header>
 
   <!-- ── PAGE WRAP ── -->
   <div class="page-wrap">
@@ -1466,7 +1422,7 @@
         if (!s) return `<div class="dm-code-card"><div class="dm-code-id">${esc(c)}</div><div class="dm-code-desc" style="font-style:italic">Not found in syllabus database.</div></div>`;
         return `
           <div class="dm-code-card">
-            <div class="dm-code-id">${esc(s.code)}${s.tier ? ` <span style="font-family:'DM Sans';font-size:0.7rem;font-weight:600;padding:1px 6px;border-radius:3px;background:${s.tier==='Core'?'#e0f2fe':'#ede9fe'};color:${s.tier==='Core'?'#0891b2':'#7c3aed'}">${s.tier}</span>` : ''}</div>
+            <div class="dm-code-id">${esc(s.code)}${s.tier ? ` <span style="font-family:'DM Sans';font-size:0.7rem;font-weight:600;padding:1px 6px;border-radius:3px;background:${s.tier==='Core'?'#e0f2fe':'var(--m-tint, #ede9fe)'};color:${s.tier==='Core'?'#0891b2':'var(--m-mid, #7c3aed)'}">${s.tier}</span>` : ''}</div>
             <div class="dm-code-title">${esc(s.title || '')}</div>
             ${s.description ? `<div class="dm-code-desc">${esc(s.description)}</div>` : ''}
           </div>`;

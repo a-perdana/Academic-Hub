@@ -669,8 +669,8 @@ body {
 }
 .fab-feedback-btn { background: rgba(18,18,40,0.92); }
 .fab-feedback-btn:hover {
-  background: #6c5ce7; border-color: #6c5ce7;
-  box-shadow: 0 6px 22px rgba(108,92,231,0.55); color: #fff;
+  background: var(--m-mid, #6c5ce7); border-color: var(--m-mid, #6c5ce7);
+  box-shadow: 0 6px 22px rgba(var(--m-mid-rgb, 124, 58, 237), 0.55); color: #fff;
 }
 .fab-main {
   width: 54px; height: 54px; border-radius: 50%;
@@ -683,11 +683,11 @@ body {
 }
 .fab-main:hover {
   transform: scale(1.07);
-  box-shadow: 0 8px 32px rgba(108,92,231,0.45); border-color: rgba(108,92,231,0.5);
+  box-shadow: 0 8px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.45); border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.5);
 }
 .fab-container.open .fab-main {
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
-  border-color: transparent; box-shadow: 0 6px 32px rgba(108,92,231,0.6);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
+  border-color: transparent; box-shadow: 0 6px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.6);
 }
 .fab-ic {
   position: absolute;
@@ -705,7 +705,7 @@ body {
 }
 .feedback-overlay.open { display: flex; }
 .feedback-modal {
-  background: rgba(10,10,26,0.97); border: 1px solid rgba(108,92,231,0.35);
+  background: rgba(10,10,26,0.97); border: 1px solid rgba(var(--m-mid-rgb, 124, 58, 237), 0.35);
   border-radius: 20px; width: 100%; max-width: 480px;
   padding: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.7);
   display: flex; flex-direction: column; gap: 16px;
@@ -732,12 +732,12 @@ body {
 }
 .feedback-select { cursor: pointer; }
 .feedback-select option { background: #0a0a1a; }
-.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(108,92,231,0.7); }
+.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.7); }
 .feedback-textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
 .feedback-textarea::placeholder { color: rgba(255,255,255,0.25); }
 .feedback-submit-btn {
   width: 100%; padding: 11px; border-radius: 10px; border: none;
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
   color: #fff; font-size: 14px; font-weight: 600;
   font-family: 'DM Sans','Sora',sans-serif; cursor: pointer; transition: opacity 0.18s;
 }
@@ -766,14 +766,14 @@ body {
 .confirm-delete { padding: 8px 20px; border-radius: 8px; border: none; background: #dc2626; color: white; font-size: 13px; font-family: 'DM Sans', sans-serif; cursor: pointer; font-weight: 600; }
 </style>
 </head>
-<body data-page-accent="cyan">
+<body data-module="school_workspace">
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="cyan" aria-label="Announcements header">
+<header class="page-hero" aria-label="Announcements header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
       <h1 class="page-hero__title">Announcements</h1>
       <p class="page-hero__desc">Network-wide messages from HQ and school leadership. Filter by audience or topic; pinned announcements stay at the top.</p>
     </div>

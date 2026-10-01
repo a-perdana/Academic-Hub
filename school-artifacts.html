@@ -29,12 +29,12 @@ body { padding-top: 62px; }
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 .da-filter-bar { display: flex; gap: 10px; flex-wrap: wrap; padding: 14px 18px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 18px; align-items: center; }
 .da-filter { padding: 7px 12px; border: 1px solid var(--border); border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.84rem; color: var(--ink); background: var(--paper); cursor: pointer; }
 .da-filter:focus { outline: none; border-color: var(--accent); background: var(--white); }
-.da-btn-add { padding: 8px 16px; background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .12s; }
+.da-btn-add { padding: 8px 16px; background: linear-gradient(135deg,var(--m-mid, #7c3aed),#0891b2); color: #fff; border: none; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; transition: opacity .15s, transform .12s; }
 .da-btn-add:hover { opacity: 0.9; transform: translateY(-1px); }
 
 .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
@@ -45,7 +45,7 @@ body { padding-top: 62px; }
 .subject-icon.math { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
 .subject-icon.biology { background: linear-gradient(135deg,#10b981,#047857); }
 .subject-icon.chemistry { background: linear-gradient(135deg,#f59e0b,#b45309); }
-.subject-icon.physics { background: linear-gradient(135deg,#8b5cf6,#5b21b6); }
+.subject-icon.physics { background: linear-gradient(135deg,var(--m-mid, #8b5cf6),var(--m-dark, #5b21b6)); }
 .subject-icon.science { background: linear-gradient(135deg,#06b6d4,#0e7490); }
 .subject-icon.english { background: linear-gradient(135deg,#ec4899,#9d174d); }
 .subject-icon.bahasa { background: linear-gradient(135deg,#f43f5e,#9f1239); }
@@ -59,7 +59,7 @@ body { padding-top: 62px; }
 .artifact-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; padding: 9px 12px; background: var(--paper); border: 1px solid var(--border); border-radius: 7px; font-size: 0.82rem; transition: background .12s; }
 .artifact-row:hover { background: #fff; border-color: var(--accent); }
 .ar-text { flex: 1; min-width: 0; }
-.ar-type { font-size: 0.66rem; font-weight: 700; color: #5b21b6; background: #ede9fe; padding: 2px 7px; border-radius: 4px; display: inline-block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.ar-type { font-size: 0.66rem; font-weight: 700; color: var(--m-dark, #5b21b6); background: var(--m-tint, #ede9fe); padding: 2px 7px; border-radius: 4px; display: inline-block; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
 .ar-title { color: var(--ink); font-weight: 500; }
 .ar-title a { color: var(--accent); text-decoration: none; }
 .ar-title a:hover { text-decoration: underline; }
@@ -88,7 +88,7 @@ body { padding-top: 62px; }
 .btn-cancel, .btn-save { padding: 8px 16px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 0.86rem; font-weight: 600; cursor: pointer; border: none; }
 .btn-cancel { background: var(--paper-2); color: var(--ink-2); }
 .btn-cancel:hover { background: #e2e8f0; }
-.btn-save { background: linear-gradient(135deg,#7c3aed,#0891b2); color: #fff; }
+.btn-save { background: linear-gradient(135deg,var(--m-mid, #7c3aed),#0891b2); color: #fff; }
 .btn-save:hover { opacity: 0.92; }
 
 .empty-state { text-align: center; padding: 48px 24px; color: var(--ink-3); background: var(--white); border: 1px dashed var(--border); border-radius: 10px; }
@@ -98,13 +98,13 @@ body { padding-top: 62px; }
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-module="school_workspace">
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Leaders · School Resources</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
       <h1 class="page-hero__title">School Artifacts</h1>
       <p class="page-hero__desc">Links to the living documents each subject department keeps — the Department Handbook, the Annual Plan (kept in Edunav), the Scheme of Work, lesson plans, internal assessments and intervention plans. Link to the record where it already lives instead of making a second copy (Curriculum Module: Department Handbook Template 26-27; Minimum Operating Standard 26-27 §1). Superseded versions stay archived.</p>
     </div>

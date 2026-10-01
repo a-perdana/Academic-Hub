@@ -30,8 +30,8 @@ body::before {
   content: '';
   position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(ellipse 70% 55% at 8% 12%, rgba(108,92,231,0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 92% 88%, rgba(124,58,237,0.09) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 55% at 8% 12%, rgba(var(--m-mid-rgb, 124, 58, 237), 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 92% 88%, rgba(var(--m-mid-rgb, 124, 58, 237), 0.09) 0%, transparent 62%),
     radial-gradient(ellipse 80% 70% at 50% 50%, rgba(236,229,246,0.45) 0%, transparent 70%);
 }
 
@@ -148,10 +148,10 @@ body:has(> .page-footer) > .page-wrap {
 
 /* ─── PAGE FOOTER (canonical — mor CTA accent matches Knowledge hero) ─── */
 .page-footer__cta-btn {
-  background: linear-gradient(135deg, #7c3aed 0%, #5a4bd1 100%);
-  box-shadow: 0 4px 14px rgba(108,92,231,0.35);
+  background: linear-gradient(135deg, var(--m-mid, #7c3aed) 0%, var(--m-mid, #5a4bd1) 100%);
+  box-shadow: 0 4px 14px rgba(var(--m-mid-rgb, 124, 58, 237), 0.35);
 }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.48); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.48); }
 
 @media (max-width: 760px) {
   .page-hero__inner,
@@ -171,7 +171,7 @@ body:has(> .page-footer) > .page-wrap {
   content: ''; position: absolute; inset: 0; pointer-events: none;
   background:
     radial-gradient(circle at 12% 80%, rgba(13,148,136,0.22) 0%, transparent 48%),
-    radial-gradient(circle at 88% 20%, rgba(124,58,237,0.16) 0%, transparent 48%);
+    radial-gradient(circle at 88% 20%, rgba(var(--m-mid-rgb, 124, 58, 237), 0.16) 0%, transparent 48%);
 }
 .grounded-inner { position: relative; z-index: 1; }
 .grounded-head {
@@ -327,7 +327,7 @@ body:has(> .page-footer) > .page-wrap {
 }
 .sf-chip:hover { background: var(--accent-2); color: var(--accent-dk); border-color: var(--accent-2); }
 .sf-chip.is-active { background: var(--accent); color: #fff; border-color: var(--accent); }
-.sf-chip[data-color="dom-purple"].is-active { background: #7c3aed; border-color: #7c3aed; }
+.sf-chip[data-color="dom-purple"].is-active { background: var(--m-mid, #7c3aed); border-color: var(--m-mid, #7c3aed); }
 .sf-chip[data-color="dom-blue"].is-active   { background: #2563eb; border-color: #2563eb; }
 .sf-chip[data-color="dom-green"].is-active  { background: #16a34a; border-color: #16a34a; }
 .sf-chip[data-color="dom-amber"].is-active  { background: #d97706; border-color: #d97706; }
@@ -406,7 +406,7 @@ body:has(> .page-footer) > .page-wrap {
 .domain-name { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 4px; line-height: 1.3; }
 .domain-desc { font-size: 12.5px; color: var(--ink-3); line-height: 1.5; padding: 0 20px 14px; border-bottom: 1px solid var(--border); }
 
-.domain-card[data-color="dom-purple"] { --dc: #7c3aed; --dc-soft: #ede9fe; --dc-text: #5b21b6; }
+.domain-card[data-color="dom-purple"] { --dc: var(--m-mid, #7c3aed); --dc-soft: var(--m-tint, #ede9fe); --dc-text: var(--m-dark, #5b21b6); }
 .domain-card[data-color="dom-blue"]   { --dc: #2563eb; --dc-soft: #dbeafe; --dc-text: #1d4ed8; }
 .domain-card[data-color="dom-green"]  { --dc: #16a34a; --dc-soft: #dcfce7; --dc-text: #15803d; }
 .domain-card[data-color="dom-amber"]  { --dc: #d97706; --dc-soft: #fef3c7; --dc-text: #92400e; }
@@ -444,10 +444,10 @@ body:has(> .page-footer) > .page-wrap {
   padding: 2px 8px; border-radius: 50px; font-size: 10px; font-weight: 700;
   letter-spacing: 0.02em; white-space: nowrap;
 }
-.comp-recommend-pill.start { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
+.comp-recommend-pill.start { background: var(--m-tint, #ede9fe); color: var(--m-dark, #5b21b6); border: 1px solid var(--m-border, #ddd6fe); }
 .comp-recommend-pill.next  { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
-.comp-item.is-recommended { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.18); border-color: #c4b5fd; }
-.comp-item.is-recommended:hover { box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.32); }
+.comp-item.is-recommended { box-shadow: 0 0 0 2px rgba(var(--m-mid-rgb, 124, 58, 237), 0.18); border-color: var(--m-border, #c4b5fd); }
+.comp-item.is-recommended:hover { box-shadow: 0 0 0 2px rgba(var(--m-mid-rgb, 124, 58, 237), 0.32); }
 
 .lvl-awareness { background: #e0f2fe; color: #0369a1; }
 .lvl-practitioner { background: #fef3c7; color: #92400e; }
@@ -503,7 +503,7 @@ body:has(> .page-footer) > .page-wrap {
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body data-page-accent="mor">
+<body data-module="career_growth">
 
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
@@ -527,10 +527,10 @@ body:has(> .page-footer) > .page-wrap {
 
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="mor">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1JZOxRnlBnS1VEubZ2fjzcjEqSemwE5whJo80dQmKnQk/edit" target="_blank" rel="noopener" title="Open Career Growth: Start Here (Google Doc)">Career Growth</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Grow</span></p>
       <h1 class="page-hero__title">Competency Framework</h1>
       <p class="page-hero__desc">A developmental self-reflection framework for school principals, foundation representatives, academic coordinators, and Cambridge coordinators. Six domains × 29 competencies anchored in Cambridge School Leader Standards 2023, Eduversal Academic Standards (including the §18 CIS:WASC accreditation toolkit), Permendiknas + the 2026 Indonesian regulatory wave, and the AI Competency Framework 26-27. No stage on this page is a Career Growth Role Register level, a promotion step or a certification.</p>
       <div class="page-hero__actions">

@@ -12,7 +12,7 @@
    typography, AND canonical .page-hero* / .page-footer* chrome come
    from /base.css. Page-local styles below MUST NOT override
    .page-hero* selectors — root CLAUDE.md Common Mistake #50. */
-:root { --accent: #6c5ce7; --accent-2: #ede9fe; --accent-dark: #4e3db8; }
+:root { --accent: var(--m-mid, #6c5ce7); --accent-2: var(--m-tint, #ede9fe); --accent-dark: #4e3db8; }
 body { padding-top: 62px; }
 
 /* Body content rail = 1200px (canonical). Flex-trap fix: width:100% on
@@ -68,7 +68,7 @@ table.roster tr:last-child td { border-bottom: none; }
 .page-footer { background: var(--footer-grad-induction); }
 .page-footer::before { background: var(--footer-radial-induction-a), var(--footer-radial-induction-b); }
 .page-footer__cta-btn { background: var(--footer-cta-grad-induction); box-shadow: var(--footer-cta-shadow-induction); }
-.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(108,92,231,0.52); }
+.page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(var(--m-mid-rgb, 124, 58, 237), 0.52); }
 
 @media (max-width: 760px) {
   .page-hero__inner,
@@ -79,7 +79,7 @@ table.roster tr:last-child td { border-bottom: none; }
 }
 </style>
 </head>
-<body data-page-accent="dark">
+<body data-module="ease">
   <script src="firebase-config.js"></script>
   <script>
     if (!window.ENV) window.ENV = {
@@ -95,10 +95,10 @@ table.roster tr:last-child td { border-bottom: none; }
   <div id="navbarMount"></div>
   <script src="partials/navbar-loader.js"></script>
 
-  <header class="page-hero" data-accent="dark">
+  <header class="page-hero">
     <div class="page-hero__inner">
       <div class="page-hero__text">
-        <p class="page-hero__eyebrow">Academic Hub · School Leadership</p>
+        <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1Hp_zfFPTwRA4RPyTak6UpBvbnSHXaf79cY7j1Q9LxG4/edit" target="_blank" rel="noopener" title="Open EASE: Start Here (Google Doc)">EASE</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Measure</span></p>
         <h1 class="page-hero__title">Student Roster</h1>
         <p class="page-hero__desc">Active Students-Hub roster for your school. Approve pending sign-ins, graduate Grade 12 cohorts, or remove duplicates. Read-only for everyone except school principals + academic admins.</p>
       </div>

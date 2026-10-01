@@ -10,7 +10,7 @@
 <script src="firebase-config.js"></script>
 <script>if (!window.ENV) window.ENV = { FIREBASE_API_KEY: "__FIREBASE_API_KEY__", FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__", FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__", FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__", FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__", FIREBASE_APP_ID: "__FIREBASE_APP_ID__" };</script>
 <style>
-:root { --accent: #6c5ce7; --accent-dk: #5a4bd1; --accent-2: #ede9fe; }
+:root { --accent: var(--m-mid, #6c5ce7); --accent-dk: var(--m-mid, #5a4bd1); --accent-2: var(--m-tint, #ede9fe); }
 
 /* ─── DOMAIN PALETTE ───────────────────────── */
 .dom-1 { --d-bg:#fef3c7; --d-bg2:#fde68a; --d-fg:#92400e; --d-fg2:#78350f; --d-bd:#fcd34d; }
@@ -20,21 +20,10 @@
 .dom-5 { --d-bg:#ede9fe; --d-bg2:#ddd6fe; --d-fg:#5b21b6; --d-fg2:#4c1d95; --d-bd:#c4b5fd; }
 
 /* ─── HERO ─────────────────────────────────── */
-.hero {
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1438 55%, #0c1028 100%);
-  padding: 40px 40px 56px; position: relative; overflow: hidden;
-}
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 12% 80%, rgba(108,92,231,0.22) 0%, transparent 48%),
-    radial-gradient(circle at 86% 20%, rgba(8,145,178,0.16) 0%, transparent 48%);
-}
-.hero-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; }
-.hero-eyebrow { font-size: 0.72rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
-.hero-title { font-family: 'Lora', serif; font-size: 2rem; font-weight: 600; color: #fff; margin-bottom: 8px; line-height: 1.2; }
-.hero-sub { font-size: 0.9rem; color: rgba(255,255,255,0.5); max-width: 760px; line-height: 1.6; margin-bottom: 22px; }
-.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+/* Canonical .page-hero from base.css; colour comes from body[data-module]
+   (modules.css). Page-local extras only: the two PDF buttons. */
+body { padding-top: 62px; }
+.hero-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
 .btn-hero {
   padding: 10px 22px; border-radius: 10px; font-size: 13px; font-weight: 600;
   text-decoration: none; display: inline-flex; align-items: center; gap: 7px;
@@ -44,7 +33,9 @@
 .btn-hero-secondary:hover { background: rgba(255,255,255,.16); }
 
 /* ─── PAGE WRAP ─────────────────────────────── */
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
+/* width:100% — the canonical footer makes body a flex column, and a
+   margin:auto child would otherwise shrink to its content (CM #54). */
+.page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
 
 /* ─── TABS ──────────────────────────────────── */
 .tab-bar {
@@ -64,7 +55,7 @@
 .tab-btn.active {
   color: var(--accent-dk);
   border-bottom-color: var(--accent);
-  background: linear-gradient(180deg, transparent 0%, rgba(108,92,231,.06) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(var(--m-mid-rgb, 124, 58, 237), .06) 100%);
 }
 .tab-btn .tab-count {
   display: inline-block; padding: 2px 9px;
@@ -148,7 +139,7 @@
 .domain-block::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0;
   width: 5px;
-  background: linear-gradient(180deg, var(--d-bg2, #ddd6fe) 0%, var(--d-fg, #5b21b6) 100%);
+  background: linear-gradient(180deg, var(--d-bg2, var(--m-border, #ddd6fe)) 0%, var(--d-fg, var(--m-dark, #5b21b6)) 100%);
 }
 .domain-block:hover { box-shadow: var(--shadow); transform: translateY(-1px); }
 .domain-block-header {
@@ -159,10 +150,10 @@
 .domain-num {
   width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, var(--d-bg2, #ddd6fe) 0%, var(--d-bg, #ede9fe) 100%);
-  color: var(--d-fg, #5b21b6);
+  background: linear-gradient(135deg, var(--d-bg2, var(--m-border, #ddd6fe)) 0%, var(--d-bg, var(--m-tint, #ede9fe)) 100%);
+  color: var(--d-fg, var(--m-dark, #5b21b6));
   font-family: 'Lora', serif; font-size: 18px; font-weight: 700;
-  border: 1px solid var(--d-bd, #c4b5fd);
+  border: 1px solid var(--d-bd, var(--m-border, #c4b5fd));
   box-shadow: inset 0 -2px 0 rgba(0,0,0,.04);
 }
 .domain-info { flex: 1; min-width: 0; }
@@ -248,8 +239,8 @@
 }
 .xref-group-label.kpi        { background: #fef3c7; color: #92400e; }
 .xref-group-label.appraisal  { background: #dbeafe; color: #1e40af; }
-.xref-group-label.competency { background: #ede9fe; color: #5b21b6; }
-.xref-group-label.induction  { background: #ddd6fe; color: #4c1d95; }
+.xref-group-label.competency { background: var(--m-tint, #ede9fe); color: var(--m-dark, #5b21b6); }
+.xref-group-label.induction  { background: var(--m-border, #ddd6fe); color: var(--m-dark, #4c1d95); }
 
 .xref-item {
   display: block; padding: 8px 12px; margin-bottom: 5px;
@@ -273,8 +264,7 @@
 @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
 @media (max-width: 720px) {
-  .hero { padding: 28px 22px 40px; }
-  .hero-title { font-size: 1.5rem; }
+  .page-hero__inner { padding: 0 18px; }
   .page-wrap { padding: 20px 18px 60px; }
   .domain-block-header { padding: 14px 16px; gap: 10px; }
   .std-row { padding: 12px 16px; gap: 10px; }
@@ -284,21 +274,23 @@
 </style>
 <script type="module" src="auth-guard.js"></script>
 </head>
-<body>
+<body data-module="quality_ecosystem">
 
 <div id="navbarMount"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <p class="hero-eyebrow">Eduversal · Cambridge Reference</p>
-    <h1 class="hero-title">Cambridge Standards Reference</h1>
-    <p class="hero-sub">The full set of Cambridge Teacher Standards (27, 2023) and Cambridge School Leader Standards (25, 2023) that Eduversal's appraisal, competency and induction materials are anchored to. Click any standard to see exactly which Eduversal materials share that anchor.</p>
-    <div class="hero-actions">
-      <a href="https://www.cambridgeinternational.org/Images/466465-cambridge-teacher-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 Cambridge Teacher Standards (PDF)</a>
-      <a href="https://www.cambridgeinternational.org/Images/466466-cambridge-school-leader-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 School Leader Standards (PDF)</a>
+<header class="page-hero" aria-label="Cambridge Standards header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1OVtsDPwcHxY_IwTEEA7F2ycVrSCj6Cybu4yEUYTTs_4/edit" target="_blank" rel="noopener" title="Open Quality Ecosystem: Start Here (Google Doc)">Quality Ecosystem</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Governance</span></p>
+      <h1 class="page-hero__title">Cambridge Standards Reference</h1>
+      <p class="page-hero__desc">The full set of Cambridge Teacher Standards (27, 2023) and Cambridge School Leader Standards (25, 2023) that Eduversal's appraisal, competency and induction materials are anchored to. Click any standard to see exactly which Eduversal materials share that anchor.</p>
+      <div class="hero-actions">
+        <a href="https://www.cambridgeinternational.org/Images/466465-cambridge-teacher-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 Cambridge Teacher Standards (PDF)</a>
+        <a href="https://www.cambridgeinternational.org/Images/466466-cambridge-school-leader-standards.pdf" class="btn-hero btn-hero-secondary" target="_blank" rel="noopener">📄 School Leader Standards (PDF)</a>
+      </div>
     </div>
   </div>
-</div>
+</header>
 
 <div class="page-wrap">
 
@@ -340,6 +332,34 @@
   </div>
 
 </div>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Quality Ecosystem · Standards</span>
+      <h2 class="page-footer__cta-title">Cambridge standards sit beside Eduversal's own.</h2>
+      <p class="page-footer__cta-desc">The Eduversal Academic Standards set the network policy that these Cambridge anchors support.</p>
+      <a href="/academic-standards" class="page-footer__cta-btn">Open Academic Standards <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Cambridge Standards footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Quality Ecosystem</span>
+        <a href="/academic-standards" class="page-footer__nav-link">Academic Standards</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Standard text from Cambridge International — read-only here.</span>
+  </div>
+</footer>
 
 <script type="module">
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';

@@ -28,67 +28,23 @@
   --ink-3: #64748b;
   --paper: #f8fafc;
   --border: #e2e8f0;
-  --accent: #6c5ce7;
-  --accent-dk: #5a4bd1;
-  --accent-2: #ede9fe;
+  --accent: var(--m-mid, #6c5ce7);
+  --accent-dk: var(--m-mid, #5a4bd1);
+  --accent-2: var(--m-tint, #ede9fe);
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
-body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
+body { color: var(--ink); font-family: 'DM Sans', sans-serif; margin: 0; min-height: 100vh; padding-top: 62px; }
 
-/* ─── HERO ─── */
-.hero {
-  background: linear-gradient(135deg, #0a0a1a 0%, #1a1438 55%, #0c1028 100%);
-  padding: 56px 0 52px; position: relative; overflow: hidden; min-height: 380px;
-}
-.hero::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(circle at 8% 75%, rgba(108,92,231,0.32) 0%, transparent 42%),
-    radial-gradient(circle at 88% 20%, rgba(8,145,178,0.22) 0%, transparent 45%),
-    radial-gradient(circle at 50% 100%, rgba(124,58,237,0.18) 0%, transparent 55%);
-  pointer-events: none;
-}
-.hero::after {
-  content: ''; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-  mask-image: radial-gradient(ellipse at 60% 50%, rgba(0,0,0,0.6) 0%, transparent 70%);
-  pointer-events: none;
-}
-.hero-inner {
-  position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 40px;
-  display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center;
-}
-@media (max-width: 860px) { .hero-inner { grid-template-columns: 1fr; gap: 28px; } }
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.7rem; font-weight: 600; color: rgba(255,255,255,0.65);
-  letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;
-  padding: 5px 11px; background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.12); border-radius: 999px;
-}
-.hero-eyebrow::before {
-  content: ''; width: 6px; height: 6px; border-radius: 50%;
-  background: #67e8f9; box-shadow: 0 0 12px rgba(103,232,249,0.8);
-  animation: pulseDot 2.4s ease-in-out infinite;
-}
-@keyframes pulseDot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
-
-.hero-title {
-  font-family: 'Lora', serif; font-size: 2.6rem; font-weight: 600;
-  color: #fff; margin-bottom: 14px; line-height: 1.15;
-  letter-spacing: -0.01em;
-}
-.hero-title .hero-name {
-  background: linear-gradient(120deg, #a78bfa 0%, #67e8f9 100%);
+/* ─── HERO (page-local extras) ───
+   The hero itself is the canonical .page-hero (base.css), coloured by
+   the page's data-module attribute (modules.css) — no hero background or layout here.
+   These rules style only the page-local pieces inside .page-hero__text. */
+.hero-name {
+  background: linear-gradient(120deg, var(--m-vivid, #9d93f0) 0%, #67e8f9 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.hero-sub { font-size: 1rem; color: rgba(255,255,255,0.72); max-width: 560px; line-height: 1.6; }
 
 .hero-role-chip {
   display: inline-flex; align-items: center; gap: 8px;
@@ -126,80 +82,41 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .hero-resume {
   display: inline-flex; align-items: center; gap: 10px;
   margin-top: 18px; padding: 9px 16px 9px 12px;
-  background: linear-gradient(120deg, rgba(108,92,231,0.25), rgba(8,145,178,0.2));
-  border: 1px solid rgba(167,139,250,0.35); border-radius: 10px;
+  background: linear-gradient(120deg, rgba(var(--m-vivid-rgb, 157, 147, 240), 0.25), rgba(255,255,255,0.06));
+  border: 1px solid rgba(var(--m-vivid-rgb, 157, 147, 240), 0.38); border-radius: 10px;
   color: #fff; text-decoration: none; font-size: 12.5px; font-weight: 600;
   transition: all 0.2s; cursor: pointer;
 }
-.hero-resume:hover { background: linear-gradient(120deg, rgba(108,92,231,0.4), rgba(8,145,178,0.32)); border-color: rgba(167,139,250,0.6); transform: translateY(-1px); }
+.hero-resume:hover { background: linear-gradient(120deg, rgba(var(--m-vivid-rgb, 157, 147, 240), 0.4), rgba(255,255,255,0.1)); border-color: rgba(var(--m-vivid-rgb, 157, 147, 240), 0.6); transform: translateY(-1px); }
 .hero-resume-icon { font-size: 14px; }
 .hero-resume-text { color: rgba(255,255,255,0.92); font-weight: 500; }
 .hero-resume-text strong { color: #fff; font-weight: 700; }
 
-/* Hero visual — orbiting glyphs around central emblem */
-.hero-visual {
-  position: relative; width: 100%; aspect-ratio: 1; max-width: 320px;
-  margin: 0 auto; display: flex; align-items: center; justify-content: center;
-}
-.hero-visual::before {
-  content: ''; position: absolute; inset: 8%; border-radius: 50%;
-  border: 1px dashed rgba(167,139,250,0.25);
-  animation: orbitRot 32s linear infinite;
-}
-.hero-visual::after {
-  content: ''; position: absolute; inset: 22%; border-radius: 50%;
-  border: 1px dashed rgba(103,232,249,0.18);
-  animation: orbitRot 22s linear infinite reverse;
-}
-@keyframes orbitRot { to { transform: rotate(360deg); } }
-
-.hero-cube {
-  position: relative; width: 96px; height: 96px;
-  display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(135deg, #6c5ce7 0%, #4e3db8 100%);
-  border-radius: 20px;
-  box-shadow:
-    0 20px 60px rgba(108,92,231,0.45),
-    0 0 0 1px rgba(255,255,255,0.1) inset,
-    0 2px 0 rgba(255,255,255,0.15) inset;
-  z-index: 2;
-  font-family: 'Lora', serif; font-size: 2.2rem; font-weight: 600; color: #fff;
-}
-.hero-cube::before {
-  content: ''; position: absolute; inset: -14px; border-radius: 28px;
-  background: radial-gradient(circle, rgba(108,92,231,0.45), transparent 70%);
-  z-index: -1; filter: blur(8px);
-}
-
-.hero-orbit-glyph {
-  position: absolute; width: 52px; height: 52px; border-radius: 14px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  background: rgba(15,15,40,0.78); border: 1px solid rgba(255,255,255,0.14);
-  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-  font-size: 22px; line-height: 1;
-  animation: floatY 4s ease-in-out infinite;
-}
-.hero-orbit-glyph .glyph-step {
-  font-size: 8px; font-weight: 700; letter-spacing: 0.08em;
-  color: rgba(167,139,250,0.95); margin-top: 2px;
-}
-.hero-orbit-glyph.g1 { top: 4%; left: 50%; transform: translateX(-50%); animation-delay: 0s; }
-.hero-orbit-glyph.g2 { top: 50%; right: 2%; transform: translateY(-50%); animation-delay: 1s; }
-.hero-orbit-glyph.g3 { bottom: 4%; left: 50%; transform: translateX(-50%); animation-delay: 2s; }
-.hero-orbit-glyph.g4 { top: 50%; left: 2%; transform: translateY(-50%); animation-delay: 3s; }
-@keyframes floatY {
-  0%,100% { margin-top: 0; }
-  50% { margin-top: -6px; }
-}
-@media (max-width: 860px) { .hero-visual { max-width: 240px; } }
 @media (max-width: 720px) {
-  .hero-title { font-size: 1.9rem; }
   .hero-metrics { grid-template-columns: 1fr 1fr; }
   .hero-metric:nth-child(3) { grid-column: 1 / -1; }
 }
 
-.page-wrap { max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
+/* modules.css colours every link inside .page-wrap with the module
+   (body[data-module] .page-wrap a:not(.btn):not([class*="__"]), 0-4-2).
+   This page's button-style links and TOC carry their own colours, so they
+   are restored here at the same specificity — this <style> loads after
+   base.css, so it wins the tie. */
+body[data-module] .page-wrap a.page-detail-open:not(.btn),
+body[data-module] .page-wrap a.flow-people-link:not(.btn),
+body[data-module] .page-wrap a.help-btn:not(.btn),
+body[data-module] .page-wrap a.flow-step-link:not(.btn):hover { color: #fff; }
+body[data-module] .page-wrap a.flow-step-link:not(.btn) { color: var(--accent-dk); }
+body[data-module] .page-wrap .toc-list a:not(.btn) { color: var(--ink-2); }
+body[data-module] .page-wrap .toc-list a:not(.btn):hover,
+body[data-module] .page-wrap .toc-list a.active:not(.btn),
+body[data-module] .page-wrap .role-block-text a:not(.btn),
+body[data-module] .page-wrap .intro-card-title a:not(.btn):hover { color: var(--accent-dk); }
+body[data-module] .page-wrap .intro-card-title a:not(.btn) { color: inherit; }
+
+/* width:100% — body is a flex column once it carries a .page-footer (base.css), so a
+   block child would otherwise shrink to its content (root CLAUDE.md Common Mistake #54). */
+.page-wrap { width: 100%; max-width: 1200px; margin: 0 auto; padding: 28px 40px 80px; }
 
 /* TOC sticky sidebar */
 .layout { display: grid; grid-template-columns: 1fr 240px; gap: 36px; align-items: start; }
@@ -229,7 +146,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   transition: box-shadow 0.25s ease, transform 0.25s ease;
 }
 .sec.open {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 16px 36px rgba(108,92,231,0.1);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 16px 36px rgba(var(--m-mid-rgb, 108, 92, 231), 0.1);
 }
 
 /* Accordion header — clickable, coloured strip + chevron */
@@ -249,7 +166,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   transition: width 0.2s ease;
 }
 .sec.open .sec-head::before { width: 6px; }
-.sec-head:hover { background: linear-gradient(180deg, #fafaff 0%, #f5f3ff 100%); }
+.sec-head:hover { background: linear-gradient(180deg, #fafaff 0%, var(--m-tint-2, #f5f3ff) 100%); }
 .sec-head:focus-visible { outline: 2px solid var(--sec-accent, var(--accent)); outline-offset: -2px; }
 
 .sec-head-num {
@@ -301,21 +218,21 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .sec-lead { font-size: 0.95rem; color: var(--ink-2); line-height: 1.65; margin-bottom: 18px; max-width: 720px; }
 
 /* Per-section accent tokens */
-#sec-welcome   { --sec-accent: #6c5ce7; --sec-accent-dk: #5a4bd1; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(108,92,231,0.18); }
+#sec-welcome   { --sec-accent: var(--m-mid, #6c5ce7); --sec-accent-dk: var(--m-mid, #5a4bd1); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(var(--m-mid-rgb, 108, 92, 231), 0.18); }
 #sec-flow      { --sec-accent: #06b6d4; --sec-accent-dk: #0e7490; --sec-accent-soft: #cffafe; --sec-accent-border: rgba(6,182,212,0.22); }
-#sec-pages     { --sec-accent: #8b5cf6; --sec-accent-dk: #6d28d9; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(139,92,246,0.2); }
+#sec-pages     { --sec-accent: var(--m-mid, #8b5cf6); --sec-accent-dk: var(--m-mid, #6d28d9); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(139,92,246,0.2); }
 #sec-week1     { --sec-accent: #10b981; --sec-accent-dk: #047857; --sec-accent-soft: #d1fae5; --sec-accent-border: rgba(16,185,129,0.22); }
 #sec-role      { --sec-accent: #f59e0b; --sec-accent-dk: #b45309; --sec-accent-soft: #fef3c7; --sec-accent-border: rgba(245,158,11,0.22); }
 #sec-beyond    { --sec-accent: #ec4899; --sec-accent-dk: #be185d; --sec-accent-soft: #fce7f3; --sec-accent-border: rgba(236,72,153,0.22); }
 #sec-glossary  { --sec-accent: #3b82f6; --sec-accent-dk: #1d4ed8; --sec-accent-soft: #dbeafe; --sec-accent-border: rgba(59,130,246,0.22); }
-#sec-help      { --sec-accent: #6c5ce7; --sec-accent-dk: #5a4bd1; --sec-accent-soft: #ede9fe; --sec-accent-border: rgba(108,92,231,0.18); }
+#sec-help      { --sec-accent: var(--m-mid, #6c5ce7); --sec-accent-dk: var(--m-mid, #5a4bd1); --sec-accent-soft: var(--m-tint, #ede9fe); --sec-accent-border: rgba(var(--m-mid-rgb, 108, 92, 231), 0.18); }
 
 #sec-help .sec-body-inner { padding-top: 0; border-top: none; }
 
 /* Welcome banner */
 .welcome-banner {
-  background: linear-gradient(135deg, #ede9fe 0%, #e0f2fe 100%);
-  border: 1px solid #c4b5fd; border-radius: 16px;
+  background: linear-gradient(135deg, var(--m-tint, #ede9fe) 0%, #e0f2fe 100%);
+  border: 1px solid var(--m-border, #c4b5fd); border-radius: 16px;
   padding: 22px 26px; margin-bottom: 28px;
 }
 .welcome-banner-title { font-family: 'Lora', serif; font-size: 1.15rem; font-weight: 600; color: var(--accent-dk); margin-bottom: 6px; }
@@ -342,12 +259,12 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   background: linear-gradient(180deg, #fff 0%, #faf9ff 100%);
   border: 1px solid var(--border); border-radius: 18px;
   padding: 36px 28px 28px; margin-bottom: 22px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(108,92,231,0.06);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(var(--m-mid-rgb, 108, 92, 231), 0.06);
   overflow: hidden;
 }
 .flow::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, #67e8f9 0%, #a78bfa 50%, #6c5ce7 100%);
+  background: linear-gradient(90deg, #67e8f9 0%, var(--m-soft, #a78bfa) 50%, var(--m-mid, #6c5ce7) 100%);
 }
 .flow-track {
   position: relative;
@@ -356,7 +273,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .flow-track::before {
   content: ''; position: absolute;
   top: 22px; left: 12.5%; right: 12.5%; height: 2px;
-  background: linear-gradient(90deg, #67e8f9 0%, #a78bfa 60%, #6c5ce7 100%);
+  background: linear-gradient(90deg, #67e8f9 0%, var(--m-soft, #a78bfa) 60%, var(--m-mid, #6c5ce7) 100%);
   z-index: 0;
 }
 @media (max-width: 800px) {
@@ -378,13 +295,13 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   display: flex; align-items: center; justify-content: center;
   font-family: 'Lora', serif; font-size: 18px; font-weight: 700;
   color: var(--accent-dk);
-  box-shadow: 0 4px 12px rgba(108,92,231,0.18), 0 0 0 4px #fff;
+  box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 108, 92, 231), 0.18), 0 0 0 4px #fff;
   margin-bottom: 12px; transition: all 0.2s;
 }
 .flow-step:nth-child(1) .flow-step-bubble { border-color: #06b6d4; color: #0e7490; box-shadow: 0 4px 12px rgba(6,182,212,0.22), 0 0 0 4px #fff; }
-.flow-step:nth-child(2) .flow-step-bubble { border-color: #8b5cf6; color: #6d28d9; box-shadow: 0 4px 12px rgba(139,92,246,0.22), 0 0 0 4px #fff; }
-.flow-step:nth-child(3) .flow-step-bubble { border-color: #a78bfa; color: #6d28d9; box-shadow: 0 4px 12px rgba(167,139,250,0.24), 0 0 0 4px #fff; }
-.flow-step:nth-child(4) .flow-step-bubble { border-color: #6c5ce7; color: #5a4bd1; box-shadow: 0 4px 12px rgba(108,92,231,0.28), 0 0 0 4px #fff; }
+.flow-step:nth-child(2) .flow-step-bubble { border-color: var(--m-mid, #8b5cf6); color: var(--m-mid, #6d28d9); box-shadow: 0 4px 12px rgba(139,92,246,0.22), 0 0 0 4px #fff; }
+.flow-step:nth-child(3) .flow-step-bubble { border-color: var(--m-soft, #a78bfa); color: var(--m-mid, #6d28d9); box-shadow: 0 4px 12px rgba(167,139,250,0.24), 0 0 0 4px #fff; }
+.flow-step:nth-child(4) .flow-step-bubble { border-color: var(--m-mid, #6c5ce7); color: var(--m-mid, #5a4bd1); box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 108, 92, 231), 0.28), 0 0 0 4px #fff; }
 
 .flow-step-icon { font-size: 22px; margin-bottom: 8px; line-height: 1; }
 .flow-step-num { font-size: 9.5px; font-weight: 700; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 4px; }
@@ -399,7 +316,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 }
 .flow-step-link:hover {
   background: var(--accent); color: #fff; transform: translateY(-1px);
-  box-shadow: 0 4px 10px rgba(108,92,231,0.3);
+  box-shadow: 0 4px 10px rgba(var(--m-mid-rgb, 108, 92, 231), 0.3);
 }
 .flow-step:hover .flow-step-bubble {
   transform: translateY(-3px) scale(1.05);
@@ -415,7 +332,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 }
 .flow-people-icon {
   width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
-  background: linear-gradient(135deg, #ede9fe 0%, #e0f2fe 100%);
+  background: linear-gradient(135deg, var(--m-tint, #ede9fe) 0%, #e0f2fe 100%);
   display: flex; align-items: center; justify-content: center; font-size: 22px;
 }
 .flow-people-text { flex: 1; min-width: 0; }
@@ -503,11 +420,11 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   position: relative;
   background: #fff; border: 2px solid var(--accent-2); border-radius: 16px;
   padding: 28px 24px 22px; margin-bottom: 18px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(108,92,231,0.08);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(var(--m-mid-rgb, 108, 92, 231), 0.08);
   overflow: hidden;
 }
 .role-block.is-admin { border-color: #fde68a; background: linear-gradient(180deg, #fffbeb 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(245,158,11,0.1); }
-.role-block.is-fr { border-color: #c4b5fd; background: linear-gradient(180deg, #faf5ff 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(139,92,246,0.12); }
+.role-block.is-fr { border-color: var(--m-border, #c4b5fd); background: linear-gradient(180deg, var(--m-tint-2, #faf5ff) 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(139,92,246,0.12); }
 .role-block.is-sp { border-color: #a5f3fc; background: linear-gradient(180deg, #ecfeff 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(8,145,178,0.1); }
 .role-block.is-ac { border-color: #bbf7d0; background: linear-gradient(180deg, #f0fdf4 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(16,185,129,0.1); }
 .role-block.is-cc { border-color: #fbcfe8; background: linear-gradient(180deg, #fdf2f8 0%, #fff 80%); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 20px rgba(236,72,153,0.1); }
@@ -521,10 +438,10 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   color: #fff; font-size: 10.5px; font-weight: 700;
   letter-spacing: 0.06em; text-transform: uppercase;
   border-radius: 0 14px 0 14px;
-  box-shadow: 0 4px 12px rgba(108,92,231,0.3);
+  box-shadow: 0 4px 12px rgba(var(--m-mid-rgb, 108, 92, 231), 0.3);
 }
 .role-block.is-admin .role-ribbon { background: linear-gradient(120deg, #f59e0b 0%, #d97706 100%); box-shadow: 0 4px 12px rgba(245,158,11,0.35); }
-.role-block.is-fr .role-ribbon { background: linear-gradient(120deg, #8b5cf6 0%, #6d28d9 100%); box-shadow: 0 4px 12px rgba(139,92,246,0.35); }
+.role-block.is-fr .role-ribbon { background: linear-gradient(120deg, var(--m-mid, #8b5cf6) 0%, var(--m-mid, #6d28d9) 100%); box-shadow: 0 4px 12px rgba(139,92,246,0.35); }
 .role-block.is-sp .role-ribbon { background: linear-gradient(120deg, #06b6d4 0%, #0e7490 100%); box-shadow: 0 4px 12px rgba(6,182,212,0.3); }
 .role-block.is-ac .role-ribbon { background: linear-gradient(120deg, #10b981 0%, #047857 100%); box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
 .role-block.is-cc .role-ribbon { background: linear-gradient(120deg, #ec4899 0%, #be185d 100%); box-shadow: 0 4px 12px rgba(236,72,153,0.3); }
@@ -536,7 +453,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   color: var(--accent-dk); margin-bottom: 6px;
 }
 .role-block.is-admin .role-block-eyebrow { color: #92400e; }
-.role-block.is-fr .role-block-eyebrow { color: #6d28d9; }
+.role-block.is-fr .role-block-eyebrow { color: var(--m-mid, #6d28d9); }
 .role-block.is-sp .role-block-eyebrow { color: #0e7490; }
 .role-block.is-ac .role-block-eyebrow { color: #047857; }
 .role-block.is-cc .role-block-eyebrow { color: #be185d; }
@@ -574,7 +491,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
   background: var(--accent-2); border-left: 4px solid var(--accent); border-radius: 8px;
   padding: 12px 16px; margin: 14px 0; font-size: 12.5px; color: var(--accent-dk); line-height: 1.55;
 }
-.note strong { color: #4c1d95; }
+.note strong { color: var(--m-dark, #4c1d95); }
 
 .warn {
   background: #fef9ee; border-left: 4px solid #f59e0b; border-radius: 8px;
@@ -601,9 +518,6 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 .help-btn:hover { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.35); }
 
 @media (max-width: 720px) {
-  .hero { padding: 32px 0 28px; }
-  .hero-inner { padding: 0 22px; }
-  .hero-title { font-size: 1.4rem; }
   .page-wrap { padding: 22px 18px 60px; }
   .sec-title { font-size: 1.2rem; }
   .page-detail { padding: 18px; }
@@ -613,16 +527,16 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 }
 </style>
 </head>
-<body>
+<body data-module="school_workspace">
 
 <div id="navbarMount"></div>
 
-<div class="hero">
-  <div class="hero-inner">
-    <div class="hero-text">
-      <p class="hero-eyebrow">Eduversal · Academic Hub · Read Me First — School Leaders</p>
-      <h1 class="hero-title">Welcome, <span class="hero-name" id="heroName">there</span></h1>
-      <p class="hero-sub">Your <strong style="color:#fff;">School Leaders Workspace</strong> — the school-scoped command centre where the FR/GM, the Principal and the Coordinators run the operational week together. This page explains what each page does, the order the work flows in, and the words you will meet along the way.</p>
+<header class="page-hero" aria-label="Read Me First: School Leaders header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>Read Me First</span></p>
+      <h1 class="page-hero__title">Welcome, <span class="hero-name" id="heroName">there</span></h1>
+      <p class="page-hero__desc">Your <strong style="color:#fff;">School Leaders Workspace</strong> — the school-scoped command centre where the FR/GM, the Principal and the Coordinators run the operational week together. This page explains what each page does, the order the work flows in, and the words you will meet along the way.</p>
       <div class="hero-role-chip" id="roleChip"><span class="role-dot"></span><span id="roleChipText">Loading your role…</span></div>
 
       <div class="hero-metrics">
@@ -645,16 +559,8 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
         <span class="hero-resume-text">Resume from <strong id="heroResumeSection">Welcome</strong></span>
       </a>
     </div>
-
-    <div class="hero-visual" aria-hidden="true">
-      <div class="hero-cube">AH</div>
-      <div class="hero-orbit-glyph g1">📋<span class="glyph-step">MEET</span></div>
-      <div class="hero-orbit-glyph g2">⚖️<span class="glyph-step">DECIDE</span></div>
-      <div class="hero-orbit-glyph g3">📦<span class="glyph-step">DO</span></div>
-      <div class="hero-orbit-glyph g4">📄<span class="glyph-step">ANCHOR</span></div>
-    </div>
   </div>
-</div>
+</header>
 
 <div class="page-wrap">
   <div class="layout">
@@ -1369,7 +1275,7 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
 
         <div class="help-footer">
           <div class="help-footer-title">Three ways to unstick yourself</div>
-          <div class="help-footer-text">1. Check the <strong>Operational Guide</strong> — your live role document often answers the "who owns this" question.  2. Send <strong>feedback</strong> from any page — choose Bug or Idea and explain what you expected vs what happened.  3. For blocking issues (can't sign in, page won't load, data missing) email <a href="mailto:tech@eduversal.org" style="color:#a78bfa;font-weight:700;text-decoration:none;">tech@eduversal.org</a> — the Eduversal tech team responds within 1 business day.</div>
+          <div class="help-footer-text">1. Check the <strong>Operational Guide</strong> — your live role document often answers the "who owns this" question.  2. Send <strong>feedback</strong> from any page — choose Bug or Idea and explain what you expected vs what happened.  3. For blocking issues (can't sign in, page won't load, data missing) email <a href="mailto:tech@eduversal.org" style="color:var(--m-soft, #a78bfa);font-weight:700;text-decoration:none;">tech@eduversal.org</a> — the Eduversal tech team responds within 1 business day.</div>
           <div class="help-footer-actions">
             <a class="help-btn" href="/school-leadership-operational-guide">📘 Operational Guide</a>
             <a class="help-btn" href="/school-leadership-meetings">📋 Open Meetings</a>
@@ -1398,6 +1304,36 @@ body { background: #f8fafc; color: var(--ink); font-family: 'DM Sans', sans-seri
     </aside>
   </div>
 </div>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Read Me First · School Leaders</span>
+      <h2 class="page-footer__cta-title">Next: Meetings</h2>
+      <p class="page-footer__cta-desc">Step 1 of the workspace flow: meetings raise the topics that proposals, decisions, activities and artifacts follow.</p>
+      <a href="/school-leadership-meetings" class="page-footer__cta-btn">Open Meetings <span aria-hidden="true">→</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Read Me First: School Leaders footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Read Me First</span>
+        <a href="/my-hub-read-me" class="page-footer__nav-link">My Hub</a>
+        <a href="/admin-read-me-academic-coord" class="page-footer__nav-link">Academic Coordinator</a>
+        <a href="/admin-read-me-foundation-rep" class="page-footer__nav-link">Foundation Rep</a>
+        <a href="/admin-read-me-school-principal" class="page-footer__nav-link">School Principal</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">Read Me First · School Leaders</span>
+  </div>
+</footer>
 
 <script src="partials/navbar-loader.js"></script>
 <script>

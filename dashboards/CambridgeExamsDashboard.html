@@ -406,7 +406,7 @@
     </style>
   </head>
 
-  <body data-page-accent="teal">
+  <body data-module="academic_insights">
     <!--
       The skip link and the #main-content landmark are written here by hand
       rather than being left to build.js's injectA11y(): shipping our own skip
@@ -422,7 +422,7 @@
       still gets a branded page and the message inside #root, not a blank
       screen. Only the analysis itself is React.
     -->
-    <header class="page-hero" data-accent="teal">
+    <header class="page-hero">
       <div class="page-hero__inner">
         <!--
           An inline SVG, not an emoji: base.css sizes this slot's contents with
@@ -434,7 +434,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6"/><path d="M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 2.6 9 2.6 12 0v-5"/></svg>
         </div>
         <div class="page-hero__text">
-          <p class="page-hero__eyebrow">Academic Hub · Curriculum · Cambridge</p>
+          <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://drive.google.com/drive/folders/1jKD8BODaQo0hleK2ITkA7PFtp8pGdjxS" target="_blank" rel="noopener" title="Open Academic Insights: Start Here (Google Doc)">Academic Insights</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Analysis</span></p>
           <h1 class="page-hero__title">Cambridge Results</h1>
           <p class="page-hero__desc">
             Every Cambridge result the network holds, read straight from the workbooks
@@ -465,7 +465,7 @@
 
     <main id="main-content" role="main" tabindex="-1">
       <div class="cx-wrap cx-strip-slot">
-        <aside class="page-info-strip" data-accent="teal" role="note">
+        <aside class="page-info-strip" role="note">
           <div class="page-info-strip__icon" aria-hidden="true">ℹ️</div>
           <div class="page-info-strip__text">
             <span class="page-info-strip__title">How to read this page</span>
@@ -490,7 +490,7 @@
       <div id="root"></div>
     </main>
 
-    <footer class="page-footer" data-accent="teal" role="contentinfo">
+    <footer class="page-footer" role="contentinfo">
       <div class="page-footer__inner">
         <div class="page-footer__cta cx-no-print">
           <span class="page-footer__cta-eyebrow">Curriculum · Cambridge</span>

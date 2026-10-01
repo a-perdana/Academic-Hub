@@ -39,7 +39,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   font-size: .85rem; font-weight: 600; cursor: pointer; text-decoration: none;
   border: none; transition: background .15s, opacity .15s;
 }
-.btn-hero-primary { background: #fff; color: #4c1d95; }
+.btn-hero-primary { background: #fff; color: var(--m-dark, #4c1d95); }
 .btn-hero-primary:hover { opacity: .9; }
 .btn-hero-secondary { background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.3); }
 .btn-hero-secondary:hover { background: rgba(255,255,255,.25); }
@@ -80,13 +80,13 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   margin-bottom: -2px; cursor: pointer; transition: color .15s, border-color .15s;
   display: flex; align-items: center; gap: 8px;
 }
-.tab-btn:hover { color: #7c3aed; }
-.tab-btn.active { color: #7c3aed; border-bottom-color: #7c3aed; }
+.tab-btn:hover { color: var(--m-mid, #7c3aed); }
+.tab-btn.active { color: var(--m-mid, #7c3aed); border-bottom-color: var(--m-mid, #7c3aed); }
 .tab-count {
   font-size: .68rem; font-weight: 700; padding: 1px 6px; border-radius: 10px;
   background: #f1f5f9; color: #64748b;
 }
-.tab-btn.active .tab-count { background: #ede9fe; color: #7c3aed; }
+.tab-btn.active .tab-count { background: var(--m-tint, #ede9fe); color: var(--m-mid, #7c3aed); }
 
 /* ── FILTER BAR ── */
 .filter-bar {
@@ -98,7 +98,7 @@ body { font-family: 'DM Sans', sans-serif; background: #f1f5f9; color: #1e293b; 
   font-family: inherit; font-size: .83rem; color: #1e293b; background: #fff;
   transition: border-color .15s;
 }
-.filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: #7c3aed; }
+.filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: var(--m-mid, #7c3aed); }
 .filter-bar input { flex: 1; min-width: 180px; }
 
 /* ── TABLE ── */
@@ -133,7 +133,7 @@ tr:hover td { background: #fafbff; }
 .level-badge {
   display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: .68rem; font-weight: 700;
 }
-.level-I { background: #ede9fe; color: #6d28d9; }
+.level-I { background: var(--m-tint, #ede9fe); color: var(--m-mid, #6d28d9); }
 .level-D { background: #dbeafe; color: #1d4ed8; }
 .level-P { background: #dcfce7; color: #15803d; }
 .level-L { background: #fef3c7; color: #b45309; }
@@ -141,7 +141,7 @@ tr:hover td { background: #fafbff; }
 /* ── SCORE BAR ── */
 .score-bar-wrap { display: flex; align-items: center; gap: 4px; }
 .score-bar-bg { width: 36px; flex-shrink: 0; height: 5px; background: #f1f5f9; border-radius: 3px; overflow: hidden; }
-.score-bar-fill { height: 100%; border-radius: 3px; background: #7c3aed; transition: width .3s; }
+.score-bar-fill { height: 100%; border-radius: 3px; background: var(--m-mid, #7c3aed); transition: width .3s; }
 .score-pct { font-size: .72rem; font-weight: 700; color: #475569; white-space: nowrap; }
 
 /* ── FOCI DOTS ── */
@@ -149,7 +149,7 @@ tr:hover td { background: #fafbff; }
   display: inline-block; width: 10px; height: 10px; border-radius: 50%;
   margin-right: 3px;
 }
-.foci-dot.yes { background: #7c3aed; }
+.foci-dot.yes { background: var(--m-mid, #7c3aed); }
 .foci-dot.no  { background: #e2e8f0; }
 
 /* ── ACTION CELL ── */
@@ -158,10 +158,10 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 /* ── VIEW / CONTINUE BTN ── */
 .btn-view {
   padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
-  font-weight: 600; cursor: pointer; background: #ede9fe; color: #6d28d9;
+  font-weight: 600; cursor: pointer; background: var(--m-tint, #ede9fe); color: var(--m-mid, #6d28d9);
   border: none; transition: background .15s; white-space: nowrap;
 }
-.btn-view:hover { background: #ddd6fe; }
+.btn-view:hover { background: var(--m-border, #ddd6fe); }
 .btn-continue {
   padding: 5px 14px; border-radius: 8px; font-family: inherit; font-size: .78rem;
   font-weight: 600; cursor: pointer; background: #fef3c7; color: #92400e;
@@ -240,16 +240,16 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .btn-dispute-submit:disabled { opacity: .5; cursor: default; }
 
 /* ── New-user intro banner (dismissable) ─────────────────────── */
-.page-intro { display:none; background:linear-gradient(135deg,#ede9fe 0%,#e0f2fe 100%); border:1px solid #c4b5fd; border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
+.page-intro { display:none; background:linear-gradient(135deg,var(--m-tint, #ede9fe) 0%,#e0f2fe 100%); border:1px solid var(--m-border, #c4b5fd); border-radius:14px; padding:16px 20px 16px 18px; margin-bottom:18px; position:relative; }
 .page-intro.show { display:flex; gap:14px; align-items:flex-start; }
 .page-intro-icon { font-size:22px; flex-shrink:0; padding-top:1px; }
 .page-intro-body { flex:1; min-width:0; padding-right:26px; }
-.page-intro-title { font-size:13.5px; font-weight:700; color:#5b21b6; margin-bottom:4px; }
+.page-intro-title { font-size:13.5px; font-weight:700; color:var(--m-dark, #5b21b6); margin-bottom:4px; }
 .page-intro-text { font-size:12.5px; color:#44445a; line-height:1.55; }
-.page-intro-text strong { color:#5b21b6; }
-.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:#6d28d9; text-decoration:none; }
+.page-intro-text strong { color:var(--m-dark, #5b21b6); }
+.page-intro-link { display:inline-block; margin-top:8px; font-size:12px; font-weight:600; color:var(--m-mid, #6d28d9); text-decoration:none; }
 .page-intro-link:hover { text-decoration:underline; }
-.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid #c4b5fd; border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#6d28d9; font-size:14px; line-height:1; transition:all .15s; }
+.page-intro-dismiss { position:absolute; top:10px; right:10px; background:rgba(255,255,255,.7); border:1px solid var(--m-border, #c4b5fd); border-radius:6px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--m-mid, #6d28d9); font-size:14px; line-height:1; transition:all .15s; }
 .page-intro-dismiss:hover { background:#fff; }
 
 /* ─── PAGE FOOTER TOKEN OVERRIDES (portfolio tint, amber) ───────
@@ -262,7 +262,7 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 .page-footer__cta-btn:hover { box-shadow: 0 6px 18px rgba(217,119,6,0.50); }
 </style>
 </head>
-<body>
+<body data-module="appraisal">
 <!-- Intro banner show/dismiss (runs early, no Firebase dep) -->
 <script>
 (function() {
@@ -285,10 +285,10 @@ td.action-cell { overflow: visible; white-space: nowrap; }
 <div id="navbarMount"></div>
 
 <!-- ─── HERO (My Work family · canonical .page-hero) ─────────────── -->
-<header class="page-hero" data-accent="dark">
+<header class="page-hero">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <p class="page-hero__eyebrow">Academic Hub · School Leaders · Workspace</p>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/1FEsjMgYKRtyPJndPv5cgjuPEpt7WPtJ4slUoe-vTCCU/edit" target="_blank" rel="noopener" title="Open Appraisal: Start Here (Google Doc)">Appraisal</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Improve</span></p>
       <h1 class="page-hero__title">My Observation Records</h1>
       <p class="page-hero__desc">Formal appraisals and classroom walkthroughs you have submitted.</p>
       <div class="page-hero__actions">
@@ -700,7 +700,7 @@ function openAppraisalModal(id) {
     <div class="score-row-detail">
       <span class="score-label-detail">${label}</span>
       ${has
-        ? `<div class="score-bar-bg" style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div class="score-bar-fill" style="width:${width}%;background:#7c3aed;height:100%;border-radius:3px;"></div></div><span class="score-pct" style="font-size:.75rem;font-weight:700;color:#475569;white-space:nowrap;">${isPercent ? val.toFixed(1) + '%' : val.toFixed(2) + ' / 4'}</span>`
+        ? `<div class="score-bar-bg" style="flex:1;height:6px;background:#f1f5f9;border-radius:3px;overflow:hidden;"><div class="score-bar-fill" style="width:${width}%;background:var(--m-mid, #7c3aed);height:100%;border-radius:3px;"></div></div><span class="score-pct" style="font-size:.75rem;font-weight:700;color:#475569;white-space:nowrap;">${isPercent ? val.toFixed(1) + '%' : val.toFixed(2) + ' / 4'}</span>`
         : '<span style="color:#cbd5e1;font-size:.78rem;flex:1;">Not scored</span>'
       }
     </div>`;
@@ -735,14 +735,14 @@ function openAppraisalModal(id) {
       ${scoreRow('F3 Work', a.f3Score)}
       ${ey ? '<div class="score-row-detail"><span class="score-label-detail">F4 Survey</span><span style="color:#94a3b8;font-size:.78rem;flex:1;">Not administered at Early Years</span></div>' : scoreRow('F4 Survey', a.surveyMean)}
       ${scoreRow('Composite', a.compositePercent, true)}
-      ${a.predicate ? `<div style="margin-top:6px;font-size:.83rem;font-weight:600;">Predicate: <span style="color:#7c3aed;">${esc(a.predicate)}</span></div>` : ''}
+      ${a.predicate ? `<div style="margin-top:6px;font-size:.83rem;font-weight:600;">Predicate: <span style="color:var(--m-mid, #7c3aed);">${esc(a.predicate)}</span></div>` : ''}
     </div>
     <div class="detail-section">
       <div class="detail-section-title">Status</div>
       <div><span class="status-pill pill-${a.status||'draft'}">${(a.status||'draft').charAt(0).toUpperCase()+(a.status||'draft').slice(1)}</span></div>
       ${a.appraiserNarrative?.strengths   ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">✨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.strengths)}</div></div>` : ''}
       ${a.appraiserNarrative?.development ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">🌱 Grow${(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) ? ' — ' + esc(a.appraiserNarrative.growItemLabel||a.appraiserNarrative.growItem) : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.development)}</div></div>` : ''}
-      ${a.appraiserNarrative?.actions     ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go${a.appraiserNarrative.goDate ? ' — by ' + a.appraiserNarrative.goDate : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.actions)}</div>${a.appraiserNarrative.goCheck ? `<div style="font-size:.75rem;color:#64748b;margin-top:3px;">Check: ${esc(a.appraiserNarrative.goCheck)}</div>` : ''}</div>` : ''}
+      ${a.appraiserNarrative?.actions     ? `<div style="margin-top:10px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--m-mid, #7c3aed);margin-bottom:3px;">🎯 Go${a.appraiserNarrative.goDate ? ' — by ' + a.appraiserNarrative.goDate : ''}</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(a.appraiserNarrative.actions)}</div>${a.appraiserNarrative.goCheck ? `<div style="font-size:.75rem;color:#64748b;margin-top:3px;">Check: ${esc(a.appraiserNarrative.goCheck)}</div>` : ''}</div>` : ''}
       ${a.teacherResponse ? `<div style="margin-top:8px;background:#f8fafc;border-radius:10px;padding:10px 14px;font-size:.83rem;color:#475569;line-height:1.6;"><strong>Teacher response:</strong> ${esc(a.teacherResponse)}</div>` : ''}
     </div>
     ${a.followUp?.achieved ? (() => {
@@ -807,7 +807,7 @@ function openWalkthroughModal(id) {
       <div class="detail-section-title">Observation Narrative</div>
       ${w.narrative?.glow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#16a34a;margin-bottom:3px;">✨ Glow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.glow)}</div></div>` : ''}
       ${w.narrative?.grow ? `<div style="margin-bottom:8px;"><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#ea580c;margin-bottom:3px;">🌱 Grow</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.grow)}</div></div>` : ''}
-      ${w.narrative?.go   ? `<div><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#7c3aed;margin-bottom:3px;">🎯 Go</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.go)}</div></div>` : ''}
+      ${w.narrative?.go   ? `<div><div style="font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--m-mid, #7c3aed);margin-bottom:3px;">🎯 Go</div><div style="font-size:.82rem;color:#475569;line-height:1.6;">${esc(w.narrative.go)}</div></div>` : ''}
     </div>` : (w.keyObservation ? `<div class="detail-section">
       <div class="detail-section-title">Key Observation</div>
       <div style="font-size:.83rem;color:#475569;line-height:1.6;">${esc(w.keyObservation)}</div>

@@ -132,7 +132,7 @@ body {
 .doc-row[data-cat="Guideline"] { border-left-color: #2563eb; background: #f5f8ff; }
 .doc-row[data-cat="Handbook"]  { border-left-color: #16a34a; background: #f5fff8; }
 .doc-row[data-cat="Circular"]  { border-left-color: #ea580c; background: #fff9f5; }
-.doc-row[data-cat="Report"]    { border-left-color: #7c3aed; background: #faf5ff; }
+.doc-row[data-cat="Report"]    { border-left-color: var(--m-mid, #7c3aed); background: var(--m-tint-2, #faf5ff); }
 .doc-row[data-cat="Form"]      { border-left-color: #ca8a04; background: #fffef0; }
 .doc-row[data-cat="Other"]     { border-left-color: #64748b; background: #f8fafc; }
 
@@ -145,7 +145,7 @@ body {
 .doc-row[data-cat="Guideline"] .doc-icon { background: rgba(37,99,235,.10); }
 .doc-row[data-cat="Handbook"]  .doc-icon { background: rgba(22,163,74,.10); }
 .doc-row[data-cat="Circular"]  .doc-icon { background: rgba(234,88,12,.10); }
-.doc-row[data-cat="Report"]    .doc-icon { background: rgba(124,58,237,.10); }
+.doc-row[data-cat="Report"]    .doc-icon { background: rgba(var(--m-mid-rgb, 124, 58, 237), .10); }
 .doc-row[data-cat="Form"]      .doc-icon { background: rgba(202,138,4,.10); }
 .doc-row[data-cat="Other"]     .doc-icon { background: rgba(100,116,139,.10); }
 
@@ -169,7 +169,7 @@ body {
 .cat-guideline { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
 .cat-handbook  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
 .cat-circular  { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
-.cat-report    { background: #faf5ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+.cat-report    { background: var(--m-tint-2, #faf5ff); color: var(--m-mid, #7c3aed); border: 1px solid var(--m-border, #ddd6fe); }
 .cat-form      { background: #fefce8; color: #ca8a04; border: 1px solid #fde68a; }
 .cat-other     { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
 
@@ -357,8 +357,8 @@ body {
 }
 .fab-feedback-btn { background: rgba(18,18,40,0.92); }
 .fab-feedback-btn:hover {
-  background: #6c5ce7; border-color: #6c5ce7;
-  box-shadow: 0 6px 22px rgba(108,92,231,0.55); color: #fff;
+  background: var(--m-mid, #6c5ce7); border-color: var(--m-mid, #6c5ce7);
+  box-shadow: 0 6px 22px rgba(var(--m-mid-rgb, 124, 58, 237), 0.55); color: #fff;
 }
 .fab-main {
   width: 54px; height: 54px; border-radius: 50%;
@@ -371,11 +371,11 @@ body {
 }
 .fab-main:hover {
   transform: scale(1.07);
-  box-shadow: 0 8px 32px rgba(108,92,231,0.45); border-color: rgba(108,92,231,0.5);
+  box-shadow: 0 8px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.45); border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.5);
 }
 .fab-container.open .fab-main {
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
-  border-color: transparent; box-shadow: 0 6px 32px rgba(108,92,231,0.6);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
+  border-color: transparent; box-shadow: 0 6px 32px rgba(var(--m-mid-rgb, 124, 58, 237), 0.6);
 }
 .fab-ic {
   position: absolute;
@@ -393,7 +393,7 @@ body {
 }
 .feedback-overlay.open { display: flex; }
 .feedback-modal {
-  background: rgba(10,10,26,0.97); border: 1px solid rgba(108,92,231,0.35);
+  background: rgba(10,10,26,0.97); border: 1px solid rgba(var(--m-mid-rgb, 124, 58, 237), 0.35);
   border-radius: 20px; width: 100%; max-width: 480px;
   padding: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.7);
   display: flex; flex-direction: column; gap: 16px;
@@ -420,12 +420,12 @@ body {
 }
 .feedback-select { cursor: pointer; }
 .feedback-select option { background: #0a0a1a; }
-.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(108,92,231,0.7); }
+.feedback-select:focus, .feedback-textarea:focus { border-color: rgba(var(--m-mid-rgb, 124, 58, 237), 0.7); }
 .feedback-textarea { min-height: 100px; resize: vertical; line-height: 1.6; }
 .feedback-textarea::placeholder { color: rgba(255,255,255,0.25); }
 .feedback-submit-btn {
   width: 100%; padding: 11px; border-radius: 10px; border: none;
-  background: linear-gradient(135deg, #6c5ce7, #00d9ff);
+  background: linear-gradient(135deg, var(--m-mid, #6c5ce7), #00d9ff);
   color: #fff; font-size: 14px; font-weight: 600;
   font-family: 'DM Sans','Sora',sans-serif; cursor: pointer; transition: opacity 0.18s;
 }
@@ -463,15 +463,15 @@ body {
 .nav-add-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 </style>
 </head>
-<body>
+<body data-module="school_workspace">
 
 <!-- Loading screen -->
 <div id="navbarMount"></div>
 
-<header class="page-hero" data-accent="mor" aria-label="Policy & Documents header">
+<header class="page-hero" aria-label="Policy & Documents header">
   <div class="page-hero__inner">
     <div class="page-hero__text">
-      <div class="page-hero__eyebrow">Eduversal · Academic Hub</div>
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span>Your school<span class="page-hero__module-sep" aria-hidden="true">·</span><span>This week</span></p>
       <h1 class="page-hero__title">Policy &amp; Documents</h1>
       <p class="page-hero__desc">Network-wide policies, guidelines, handbooks, circulars, reports, and forms — searchable, filterable, and version-tracked. Star a document to pin it to your Focused list. If a copy here differs from the live Google Doc in Academic Services 26-27, the live document is right. When two documents appear to conflict, use Quality Ecosystem: Policy Source-of-Truth Register 26-27.</p>
     </div>
