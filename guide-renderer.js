@@ -133,7 +133,7 @@ const R = {
   callout: (b) => `<aside class="g-callout${b.tone === 'soft' ? ' g-callout--soft' : ''}"><div class="g-callout__icon">${icon(b.icon || 'alert')}</div>
     <div style="flex:1;min-width:0"><h3 class="g-callout__title">${md(b.title)}</h3><div class="g-callout__text g-md">${md(b.text)}</div>${sources(b.source)}</div></aside>`,
 
-  dodont: (b) => card(b, `<div class="g-dodont"><div class="g-dodont__col g-dodont__col--do"><h4>${esc(b.doLabel || 'Do')}</h4><ul>${b.do.map((x) => `<li class="g-md">${md(x)}</li>`).join('')}</ul></div>
+  dodont: (b) => card(b, `<div class="g-dodont${b.tone === 'warn' ? ' g-dodont--warn' : ''}"><div class="g-dodont__col g-dodont__col--do"><h4>${esc(b.doLabel || 'Do')}</h4><ul>${b.do.map((x) => `<li class="g-md">${md(x)}</li>`).join('')}</ul></div>
     <div class="g-dodont__col g-dodont__col--dont"><h4>${esc(b.dontLabel || "Don't")}</h4><ul>${b.dont.map((x) => `<li class="g-md">${md(x)}</li>`).join('')}</ul></div></div>`),
 
   faq: (b) => card(b, `<div class="g-faq">${b.items.map((q) => `<details><summary>${esc(q.q)}</summary><div class="g-faq__a g-md">${md(q.a)}</div></details>`).join('')}</div>`),
