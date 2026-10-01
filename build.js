@@ -131,6 +131,7 @@ const cleanUrls = {
   "TeacherAppraisalCalibration.html": "appraiser-calibration",
   "academic-services.html":          "academic-services",
   "SyllabusCoverage.html":           "syllabus-coverage",
+  "AppraisalGuide.html":             "appraisal-guide",
   "StudentRoster.html":              "student-roster",
   "SchoolAssessment.html":           "school-assessment",
   "settings.html":                   "settings",
@@ -237,6 +238,7 @@ const htmlFiles = [
   "TeacherAppraisalCalibration.html",
   "academic-services.html",
   "SyllabusCoverage.html",
+  "AppraisalGuide.html",
   "StudentRoster.html",
   "SchoolAssessment.html",
   "settings.html",
@@ -477,6 +479,11 @@ if (fs.existsSync("tokens.css")) {
   fs.copyFileSync("tokens.css", "dist/tokens.css");
   console.log("Copied: tokens.css");
 }
+// Module guides (2026-10-01): one renderer + one stylesheet for every
+// resources/guides/<module>.json visual summary of the live documents.
+["guide.css", "guide-renderer.js"].forEach(name => {
+  if (fs.existsSync(name)) { fs.copyFileSync(name, path.join("dist", name)); console.log(`Copied: ${name}`); }
+});
 if (fs.existsSync("modules.css")) {
   fs.copyFileSync("modules.css", "dist/modules.css");
   console.log("Copied: modules.css");
