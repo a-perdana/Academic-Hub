@@ -122,7 +122,15 @@ const R = {
     ];
     const n = b.items.length;
     return card(b, `<div class="g-bands" style="--n:${n}">${b.items.map((it, i) => {
-      const t = tones[Math.round((i / Math.max(1, n - 1)) * (tones.length - 1))];
+      // A band may carry a status tone (RAG). Status colours carry meaning,
+      // so they never take the module family.
+      const STATUS = {
+        green: { bg: '#dcfce7', fg: '#166534', fg2: '#14532d' },
+        amber: { bg: '#fef3c7', fg: '#92400e', fg2: '#78350f' },
+        red:   { bg: '#fee2e2', fg: '#991b1b', fg2: '#7f1d1d' },
+        darkred: { bg: '#991b1b', fg: '#fff', fg2: 'rgba(255,255,255,.88)' },
+      };
+      const t = STATUS[it.tone] || tones[Math.round((i / Math.max(1, n - 1)) * (tones.length - 1))];
       return `<div class="g-band" style="--bg:${t.bg};--fg:${t.fg};--fg2:${t.fg2}"><div class="g-band__range">${esc(it.range)}</div><div class="g-band__name">${esc(it.name)}</div>${it.desc ? `<div class="g-band__desc g-md">${md(it.desc)}</div>` : ''}</div>`;
     }).join('')}</div>`);
   },
