@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teaching & Learning Guide — Academic Hub</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY: "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN: "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID: "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET: "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID: "__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID: "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <script src="partials/navbar-loader.js"></script>
+  <link rel="stylesheet" href="/guide.css">
+  <style>
+    /* Module guide page. Hero, paper and footer come from base.css +
+       modules.css (data-module); every guide component from guide.css.
+       Content lives in resources/guides/teaching_learning.json. */
+    body { padding-top: 62px; }
+    main { width: 100%; }
+  </style>
+</head>
+<body data-module="teaching_learning">
+<div id="navbarMount"></div>
+
+<header class="page-hero" aria-label="Teaching & Learning Guide header">
+  <div class="page-hero__inner">
+    <div class="page-hero__text">
+      <p class="page-hero__module"><span class="page-hero__module-dot" aria-hidden="true"></span><a href="https://docs.google.com/document/d/14mU0ro1k2mx6Vl3htVrEeGepYwnBEQtiHvQGICjjJ7s/edit" target="_blank" rel="noopener" title="Open Teaching & Learning: Start Here (Google Doc)">Teaching & Learning</a><span class="page-hero__module-sep" aria-hidden="true">·</span><span>Cross-cutting</span></p>
+      <h1 class="page-hero__title">Teaching & Learning Guide</h1>
+      <p class="page-hero__desc">Everyday classroom quality on one page: the lesson-planning and learning-environment standards, the resource and STEAM guides, and how teachers develop practice one small change at a time. Each part links to the live document it summarises.</p>
+    </div>
+  </div>
+</header>
+
+<nav class="g-nav" id="guideNav" aria-label="Guide chapters"></nav>
+
+<main id="main-content">
+  <div class="g-wrap" id="guideRoot"><div class="g-loading">Loading the guide…</div></div>
+</main>
+
+<footer class="page-footer" role="contentinfo">
+  <div class="page-footer__inner">
+    <div class="page-footer__cta">
+      <span class="page-footer__cta-eyebrow">Teaching &amp; Learning · Next step</span>
+      <h2 class="page-footer__cta-title">Start with the lesson plan</h2>
+      <p class="page-footer__cta-desc">The Lesson Planning Guide &amp; Template sets the network minimum and includes a completed example.</p>
+      <a href="https://docs.google.com/document/d/1lERKMM02E5VdK9NHxT-5-riYF8AzctvEGG78_PBOx0s/edit" class="page-footer__cta-btn" target="_blank" rel="noopener">Open the Lesson Planning Guide <span aria-hidden="true">↗</span></a>
+    </div>
+    <nav class="page-footer__nav" aria-label="Teaching & Learning Guide footer navigation">
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Teaching &amp; Learning</span>
+        <a href="/library" class="page-footer__nav-link">Resource Library</a>
+        <a href="/teacher-walkthrough-entry" class="page-footer__nav-link">Teaching Practice Walkthrough</a>
+        <a href="/curriculum-guide" class="page-footer__nav-link">Curriculum Guide</a>
+      </div>
+      <div class="page-footer__nav-group">
+        <span class="page-footer__nav-heading">Academic Hub</span>
+        <a href="/" class="page-footer__nav-link">Home</a>
+        <a href="/references" class="page-footer__nav-link">References</a>
+        <a href="/academic-calendar" class="page-footer__nav-link">Academic Calendar</a>
+      </div>
+    </nav>
+  </div>
+  <div class="page-footer__meta">
+    <span class="page-footer__meta-left">© Eduversal · Academic Hub</span>
+    <span class="page-footer__meta-right">A summary of the live Teaching &amp; Learning documents — the documents are the rule.</span>
+  </div>
+</footer>
+
+<script type="module">
+import { renderGuide } from '/guide-renderer.js';
+
+document.addEventListener('authReady', ({ detail: { user, profile } }) => {
+  window.__loadAcademicNavbar('teaching-learning-guide', { user, profile });
+});
+
+(async () => {
+  const root = document.getElementById('guideRoot');
+  try {
+    const res = await fetch('/resources/guides/teaching_learning.json', { cache: 'no-cache' });
+    if (!res.ok) throw new Error(res.status);
+    renderGuide(root, document.getElementById('guideNav'), await res.json());
+  } catch (e) {
+    console.error('[guide] could not load', e);
+    root.innerHTML = '<div class="g-loading">The guide could not be loaded. Please refresh the page.</div>';
+  }
+})();
+</script>
+</body>
+</html>
