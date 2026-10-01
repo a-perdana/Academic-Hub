@@ -21,6 +21,6 @@ node scripts/guides/check-guide-sources.js --guide=<module> --accept   # after r
 
 ## Block types
 
-`oneminute` (lead + ticked points) · `stats` (number tiles) · `compare` (side-by-side cards) · `cycle` (phase timeline; `mode: online|onsite`, `key: true` for the main stops) · `weights` (donut, one or more `sets` shown as tabs) · `flow` (numbered steps with a `who` chip) · `bands` (a rating scale, lightest → darkest; an item may set `tone: green|amber|red|darkred` when it is a status such as RAG — status colours never take the module family) · `roles` (table) · `callout` (`tone: "soft"` for the light version) · `dodont` (`tone: "warn"` when both columns are warnings) · `faq` · `links` (`href` for AH pages, `doc` for live documents) · `row` (2–3 blocks side by side).
+`oneminute` (lead + ticked points) · `stats` (number tiles) · `compare` (side-by-side cards) · `cycle` (phase timeline; `mode: online|onsite`, `key: true` for the main stops) · `weights` (donut, one or more `sets` shown as tabs) · `flow` (numbered steps with a `who` chip) · `bands` (a rating scale, lightest → darkest; an item may set `tone: green|amber|red|darkred|neutral` when it is a status such as RAG — status colours never take the module family) · `roles` (table) · `callout` (`tone: "soft"` for the light version) · `dodont` (`tone: "warn"` when both columns are warnings) · `faq` · `links` (`href` for AH pages, `doc` for live documents) · `row` (2–3 blocks side by side).
 
 Inline markup in any text: `**bold**`, `[text](url)`.
