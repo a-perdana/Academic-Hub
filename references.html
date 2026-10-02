@@ -248,17 +248,15 @@
         // Principal-side (Phase-2 forward-looking)
         { id: 'principal-appraisal',   title: 'Principal Appraisal v1',           desc: 'Summative principal appraisal — F1–F5 + F_LEAD. Source for the upcoming /principal-appraisal-entry.', kind: 'json', path: 'frameworks/principal-appraisal-framework-v1.json', meta: ['JSON', 'forward'] },
         { id: 'principal-observation', title: 'Principal Observation Rubric',     desc: '8 foci × 55 indicators with E/D/N coding. Source for /observation-entry?type=principal_leadership (UI pending).', kind: 'json', path: 'frameworks/principal-observation-rubric.json', meta: ['JSON', 'forward'] },
-        { id: 'principal-cadence',     title: 'Principal Operating Cadence',      desc: '83 tasks across 6 cadences. Anchors the principal weekly-checklist track and the year-1 induction overlay.', kind: 'json', path: 'frameworks/principal-operating-cadence.json', meta: ['JSON', '83 tasks'] },
         { id: 'coaching-questions',    title: 'Coaching Questions Bank',          desc: 'Cambridge-tagged coaching questions (GROW + Eduversal extensions). Used by mentor + 360° + principal coaching cycles.', kind: 'json', path: 'frameworks/coaching-questions.json', meta: ['JSON'] },
         // Leadership competency
         { id: 'competency-leaders',    title: 'Leadership Competency Framework',  desc: '6 domains × 24 competencies × 4 levels. Cambridge School Leader Standards 2023 anchored.', kind: 'json', path: 'frameworks/leadership-competency-framework.json', meta: ['JSON', '24 comps'] },
         // Weekly checklists × AH sub-roles
-        { id: 'weekly',                title: 'Weekly Checklists (AH sub-roles)', desc: 'Shared 38-week academic year arc + School Principal, Academic Coordinator, Cambridge Coordinator and Foundation Rep tracks.', kind: 'index', subItems: [
-          { id: 'wc-arc',     title: 'Academic Year Arc',          path: 'frameworks/weekly-checklists/_academic-year-arc.json' },
-          { id: 'wc-sp',      title: 'School Principal',           path: 'frameworks/weekly-checklists/school-principal.json' },
-          { id: 'wc-ac',      title: 'Academic Coordinator',       path: 'frameworks/weekly-checklists/academic-coordinator.json' },
-          { id: 'wc-cc',      title: 'Cambridge Coordinator',      path: 'frameworks/weekly-checklists/cambridge-coordinator.json' },
-          { id: 'wc-fr',      title: 'Foundation Representative',  path: 'frameworks/weekly-checklists/foundation-representative.json' },
+        { id: 'weekly',                title: 'Weekly Checklists (AH sub-roles)', desc: 'School Principal, Academic Coordinator, Cambridge Coordinator / Exams Officer and FR/GM. Built from the live Academic Services 26-27 documents: every task quotes its source, and tasks are placed by date on the teaching calendar.', kind: 'index', subItems: [
+          { id: 'wc-sp',      title: 'School Principal',           path: 'frameworks/weekly-checklists/v2/school_principal.json' },
+          { id: 'wc-ac',      title: 'Academic Coordinator',       path: 'frameworks/weekly-checklists/v2/academic_coordinator.json' },
+          { id: 'wc-cc',      title: 'Cambridge Coordinator / Exams Officer', path: 'frameworks/weekly-checklists/v2/cambridge_coordinator.json' },
+          { id: 'wc-fr',      title: 'Foundation Representative / General Manager', path: 'frameworks/weekly-checklists/v2/foundation_representative.json' },
         ], meta: ['JSON', 'AH only'] },
       ],
       cambridge: [

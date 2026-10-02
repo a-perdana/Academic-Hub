@@ -269,6 +269,12 @@ body { padding-top: 62px; }
 .task-chip.priority-core      { background: var(--m-tint, #ede9fe); color: var(--m-dark, #4c1d95); font-weight: 600; }
 .task-chip.priority-important { background: #cffafe; color: #155e75; font-weight: 600; }
 .task-chip.priority-support   { background: #f1f5f9; color: #475569; }
+.task-chip.priority-recommended { background: #f1f5f9; color: #475569; }
+.task-chip.source { background: #f8fafc; color: #334155; border: 1px solid #e2e8f0; }
+.detail-value .src-quote { display: block; margin-top: 4px; font-style: italic; color: #475569; }
+/* v2 checklists (2026-10-02): built from the live Academic Services documents */
+.wc-v2-note { margin: 0 0 14px; padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5;
+  background: var(--m-tint-2, #f6f5fc); border: 1px solid var(--m-border, #e2e8f0); color: #334155; }
 .task-chip.framework { background: #f0fdf4; color: #14532d; font-family: 'DM Mono', monospace; font-size: 10px; }
 /* Cambridge cross-reference chips — wired by cambridge-crossref.js at runtime
    (CTS via [title*="Cambridge Teacher Standards"], SKL via .hb-tag.skl,
@@ -822,6 +828,9 @@ body { padding-top: 62px; }
       Add First Task
     </button>
   </div>
+
+  <!-- Where the tasks come from (v2 templates only) -->
+  <p class="wc-v2-note" id="v2Note" hidden></p>
 
   <!-- Task list -->
   <div id="taskArea" style="display:none"></div>
@@ -1468,6 +1477,7 @@ function loadWeek(week) {
       if (d.taskCategories && typeof d.taskCategories === 'object') window._taskCategories = d.taskCategories;
       if (d.priorityLevels && typeof d.priorityLevels === 'object') window._priorityLevels = d.priorityLevels;
     }
+    updateV2Note(snap.exists() ? snap.data().source : null);
     render();
   }, err => {
     console.error('Template snapshot error:', err);
@@ -1502,9 +1512,21 @@ async function saveProgress() {
   }, { merge: true });
 }
 
+// v2 note: what the list is, and — on the Principal tab — what it is not.
+function updateV2Note(source) {
+  const el = document.getElementById('v2Note');
+  if (!el) return;
+  if (source !== 'eduversal_v2') { el.hidden = true; return; }
+  let t = 'These tasks come from the live Academic Services 26-27 documents. Open a task to see its source.';
+  if (currentPlatform === 'school_principal') t += ' This is your working list: ticking a task here does not, on its own, make your Principal Appraisal (F1) record.';
+  el.textContent = t;
+  el.hidden = false;
+}
+
 async function toggleTask(taskId) {
   const prev    = myProgress[taskId] || {};
-  myProgress[taskId] = { ...prev, checked: !prev.checked };
+  // checkedAt records when a task was ticked (null when unticked).
+  myProgress[taskId] = { ...prev, checked: !prev.checked, checkedAt: !prev.checked ? new Date().toISOString() : null };
   render();
   await saveProgress();
   showToast(myProgress[taskId].checked ? '✓ Task checked' : 'Task unchecked');
@@ -1587,8 +1609,10 @@ function buildTaskCard(task, _catColor) {
   const firstTime   = task.first_time_guide || '';
   const missedAction = task.missed_threshold_action || '';
   const appliesWhen = task.applies_when || '';
+  const sourceDoc   = task.source_doc && task.source_doc.title ? task.source_doc : null;
+  const sourceQuote = task.source_quote || '';
 
-  const hasDetail = description || timing || frameworkAnchors.length || evidence.length || firstTime || missedAction;
+  const hasDetail = description || timing || frameworkAnchors.length || evidence.length || firstTime || missedAction || sourceDoc;
 
   const card = document.createElement('div');
   card.className = 'task-card' + (checked ? ' checked' : '') + (expanded ? ' expanded' : '');
@@ -1633,6 +1657,7 @@ function buildTaskCard(task, _catColor) {
     const more = otherFramework.length > 1 ? ` +${otherFramework.length - 1}` : '';
     chips.push(`<span class="task-chip framework" title="${escAttr(otherFramework.join(' · '))}">📖 ${escHtml(fa)}${more}</span>`);
   }
+  if (sourceDoc) chips.push(`<span class="task-chip source" title="${escAttr(sourceDoc.title)}">📄 ${escHtml(sourceDoc.title.replace(/\s+26-27$/, ''))}</span>`);
   if (note) chips.push(`<span class="task-note-indicator">📝 Note</span>`);
 
   // Expanded detail block
@@ -1646,6 +1671,7 @@ function buildTaskCard(task, _catColor) {
     if (frameworkAnchors.length) rows.push(`<div class="detail-row"><div class="detail-label">Frameworks</div><div class="detail-value">${frameworkAnchors.map(escHtml).join(' · ')}</div></div>`);
     if (refsRegulatory.length) rows.push(`<div class="detail-row"><div class="detail-label">Regulatory</div><div class="detail-value">${refsRegulatory.map(escHtml).join(' · ')}</div></div>`);
     if (missedAction) rows.push(`<div class="detail-row"><div class="detail-label">If missed</div><div class="detail-value">${escHtml(missedAction)}</div></div>`);
+    if (sourceDoc) rows.push(`<div class="detail-row"><div class="detail-label">Source</div><div class="detail-value">${sourceDoc.url ? `<a href="${escAttr(sourceDoc.url)}" target="_blank" rel="noopener">${escHtml(sourceDoc.title)} ↗</a>` : escHtml(sourceDoc.title)}${sourceQuote ? `<span class="src-quote">“${escHtml(sourceQuote)}”</span>` : ''}</div></div>`);
     if (firstTime) rows.push(`<div class="detail-row"><div class="detail-label">First time?</div><div class="detail-value"><div class="first-time-guide">${escHtml(firstTime)}</div></div></div>`);
 
     detailHtml = `<div class="task-detail">${rows.join('')}</div>`;
@@ -1683,6 +1709,8 @@ function buildTaskCard(task, _catColor) {
 
   // Click on the card body checks the box. Clicks on chips/buttons handled separately.
   card.addEventListener('click', e => {
+    // A link or the detail block (e.g. the Source link) never ticks the task.
+    if (e.target.closest('a, .task-detail')) return;
     if (e.target.closest('.task-admin-actions')) return;
     if (e.target.closest('.task-note-area')) return;
     if (e.target.closest('[data-toggle-detail]')) return;
