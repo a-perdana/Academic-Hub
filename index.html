@@ -83,6 +83,56 @@
       .h-kbd { font-size: 11.5px; border: 1px solid var(--h-line); border-radius: 6px; padding: 2px 7px; color: var(--h-ink-3); white-space: nowrap; }
       @media (max-width: 600px) { .h-kbd { display: none; } }
 
+      /* ── Your school this week (partials/home-week.js) ─────
+         School leaders only. When shown it takes the hero overlap and
+         the ecosystem map moves below it. */
+      .h-week {
+        position: relative; z-index: 2; margin-top: -58px;
+        background: var(--h-card); border: 1px solid var(--h-line); border-radius: 18px;
+        box-shadow: var(--h-shadow); padding: 20px 22px 22px;
+      }
+      .h-week:not([hidden]) + .h-eco { margin-top: 24px; }
+      .hw-kick { font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--h-ink-3); font-weight: 700; }
+      .hw-title { font-family: "Lora", Georgia, serif; font-size: 22px; font-weight: 600; margin: 4px 0 2px; }
+      .hw-sub { font-size: 13.5px; color: var(--h-ink-2); }
+      .hw-grid { display: grid; grid-template-columns: 1fr 300px; gap: 16px; margin-top: 16px; align-items: start; }
+      @media (max-width: 1000px) { .hw-grid { grid-template-columns: 1fr; } }
+      .hw-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; }
+      .hw-cards.is-four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      @media (max-width: 560px) { .hw-cards.is-four { grid-template-columns: 1fr; } }
+      .hw-card {
+        display: flex; flex-direction: column; gap: 4px; min-width: 0;
+        background: linear-gradient(180deg, var(--hw-t) 0%, #fff 58%); border: 1px solid var(--h-line);
+        border-top: 3px solid var(--hw-c); border-radius: 14px; padding: 14px 16px 12px;
+        transition: box-shadow .15s, transform .15s;
+      }
+      .hw-card:hover { box-shadow: var(--h-shadow-h); transform: translateY(-1px); }
+      .hw-card-kick { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--hw-d); }
+      .hw-big { font-family: "Lora", Georgia, serif; font-size: 26px; font-weight: 600; color: var(--hw-d); line-height: 1.15; margin-top: 4px; }
+      .hw-big small { font-family: "DM Sans", sans-serif; font-size: 14px; font-weight: 600; color: var(--h-ink-3); }
+      .hw-label { font-size: 13px; color: var(--h-ink-2); }
+      .hw-bar { height: 6px; border-radius: 99px; background: var(--h-line-2); overflow: hidden; margin: 6px 0 2px; }
+      .hw-bar span { display: block; height: 100%; background: var(--hw-c); border-radius: 99px; }
+      .hw-split { display: flex; height: 8px; border-radius: 99px; overflow: hidden; background: var(--h-line-2); margin: 6px 0 4px; gap: 2px; }
+      .hw-split .s0 { background: #2f855a; } .hw-split .s1 { background: #d69e2e; } .hw-split .s2 { background: #cbd2dc; }
+      .hw-legend { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 12px; color: var(--h-ink-2); }
+      .hw-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+      .hw-legend .s0 i { background: #2f855a; } .hw-legend .s1 i { background: #d69e2e; } .hw-legend .s2 i { background: #cbd2dc; }
+      .hw-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+      .hw-chips span { font-size: 11.5px; padding: 3px 8px; border-radius: 99px; background: #fff; border: 1px solid var(--h-line); color: var(--h-ink-2); }
+      .hw-chips span.is-done { color: #2f6b47; border-color: #cfe5d8; background: #f2f9f5; }
+      .hw-note { font-size: 12.5px; line-height: 1.45; color: var(--h-ink-2); margin: 6px 0 0; }
+      .hw-cta { margin-top: auto; padding-top: 8px; font-size: 13px; font-weight: 700; color: var(--hw-c); }
+      .hw-coming { background: #fafafd; border: 1px solid var(--h-line); border-radius: 14px; padding: 14px 16px; }
+      .hw-coming-h { font-size: 11.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--h-ink-3); margin-bottom: 8px; }
+      .hw-coming ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+      .hw-ev { display: grid; grid-template-columns: 70px 1fr; gap: 2px 10px; padding-left: 10px; border-left: 3px solid #cbd2dc; }
+      .hw-ev.is-ease { border-left-color: #563697; } .hw-ev.is-visit { border-left-color: #975636; } .hw-ev.is-holiday { border-left-color: #2f855a; }
+      .hw-ev-date { font-size: 12.5px; font-weight: 700; color: var(--h-ink); }
+      .hw-ev-t { font-size: 13px; color: var(--h-ink-2); grid-row: span 2; }
+      .hw-ev-in { font-size: 11.5px; color: var(--h-ink-3); }
+      .hw-coming-more { display: inline-block; margin-top: 10px; font-size: 12.5px; font-weight: 700; color: var(--h-mor-deep); }
+
       /* ── Ecosystem map (overlaps the hero) ──────────────── */
       .h-eco {
         position: relative; z-index: 2; margin-top: -58px;
@@ -318,6 +368,7 @@
     </header>
 
     <div class="h-wrap">
+      <section class="h-week" id="homeWeek" aria-label="Your school this week" hidden></section>
       <section class="h-eco" aria-labelledby="ecoTitle">
         <div class="h-eco-h">
           <h2 id="ecoTitle">Academic Quality Ecosystem</h2>
@@ -1269,6 +1320,12 @@
         if (state.isAdmin) chips.unshift('Admin');
         if (profile?.school) chips.push(profile.school);
         document.getElementById('heroChips').innerHTML = chips.map(c => `<span class="h-chip">${esc(c)}</span>`).join('');
+
+        // Your school this week — school leaders with a school. Non-blocking:
+        // the sections below render whatever this panel does.
+        import('/partials/home-week.js')
+          .then(m => m.renderHomeWeek({ db: state.db, user, profile, families: HOME_FAMILIES, mount: document.getElementById('homeWeek') }))
+          .catch(err => console.warn('home-week failed', err));
 
         // Pilot enrolment for section-level pilot_systems (tiles are also
         // gated by auth-guard). Missing field = all systems on.
