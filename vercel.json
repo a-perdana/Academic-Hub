@@ -8,11 +8,43 @@
   "headers": [
     {
       "source": "/cambridge-results(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
     },
     {
       "source": "/curriculum-alignment(.*)",
-      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, nofollow"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/welcome",
+      "destination": "/my-hub-read-me",
+      "permanent": false
+    },
+    {
+      "source": "/welcome.html",
+      "destination": "/my-hub-read-me",
+      "permanent": false
+    },
+    {
+      "source": "/school-leadership-operational-guide",
+      "destination": "/school-leadership-read-me",
+      "permanent": false
+    },
+    {
+      "source": "/school-leadership-operational-guide.html",
+      "destination": "/school-leadership-read-me",
+      "permanent": false
     }
   ]
 }

@@ -813,7 +813,6 @@ const NAV_ITEMS = [
     { key: 'school-events',                       href: '/school-events',                       label: 'School Events' },
     // School Leaders workspace — school-scoped via schoolId
     { key: 'school-leadership-read-me',           href: '/school-leadership-read-me',           label: 'Read Me First' },
-    { key: 'school-leadership-operational-guide', href: '/school-leadership-operational-guide', label: 'Operational Guide' },
     { key: 'weekly-checklist',                    href: '/weekly-checklist',                    label: 'Weekly Checklist' },
     { key: 'school-leadership-meetings',          href: '/school-leadership-meetings',          label: 'Meetings' },
     { key: 'school-leadership-proposals',         href: '/school-leadership-proposals',         label: 'Proposals' },

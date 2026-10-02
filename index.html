@@ -588,7 +588,6 @@
         { id: 'school-leadership-directory', href: '/school-leadership-directory', icon: 'phone', title: 'Leadership Directory', desc: 'Your school leadership team’s contacts, including Heads of Department and the Guidance Coordinator.' },
         { id: 'documents', href: '/documents', icon: 'doc', title: 'Documents', desc: 'Shared documents.' },
         { id: 'school-leadership-read-me', href: '/school-leadership-read-me', icon: 'info', title: 'School Leaders: Read Me First', desc: 'How the School Leaders workspace fits together.' },
-        { id: 'school-leadership-operational-guide', href: '/school-leadership-operational-guide', icon: 'info', title: 'School Leaders: Operational Guide', desc: 'Meetings → Decisions → Activities, step by step.' },
 
         // Curriculum
         { id: 'curriculum-map', href: '/curriculum-map', icon: 'map', title: 'Curriculum Map', desc: 'Week-by-week Cambridge pacing for Mathematics, Science and English, with the syllabus objectives behind each topic.', tags: ['Grades 7–12'] },
@@ -660,7 +659,7 @@
       // ecosystem map, so a Drive tile inside the section only repeated it.
       // cardIds that still name a removed tile (hb-*, handbook) are skipped.
       // page_access_config keys that must never become auto tiles.
-      const AUTO_SKIP = new Set(['', 'index', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'handbook', 'school-handbook-teacher', 'school-handbook-student', 'school-handbook-parent', 'school-handbook-staff-coc',
+      const AUTO_SKIP = new Set(['', 'index', 'welcome', 'school-leadership-operational-guide', 'login', 'waiting', 'observation-entry', 'academic-standards-public', 'principal-360-respond', 'handbook', 'school-handbook-teacher', 'school-handbook-student', 'school-handbook-parent', 'school-handbook-staff-coc',
         // Shared with CH's own /school-appraisals; the AH page was archived 2026-09-30.
         'school-appraisals',
         // Retired 2026-10-01 (archive/kpi/) — a leftover page_access_config row

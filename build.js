@@ -117,7 +117,6 @@ const cleanUrls = {
   "ReadMeFoundationRep.html":       "admin-read-me-foundation-rep",
   "ReadMeSchoolPrincipal.html":     "admin-read-me-school-principal",
   "ReadMeAcademicCoord.html":       "admin-read-me-academic-coord",
-  "welcome.html":                   "welcome",
   "ObservationEntry.html":          "observation-entry",
   "principal-observation-entry.html": "principal-observation-entry",
   "principal-appraisal-entry.html":   "principal-appraisal-entry",
@@ -145,7 +144,6 @@ const cleanUrls = {
   "settings.html":                   "settings",
   // School Leadership Workspace (2026-05-21) — 7 new pages
   "school-leadership-read-me.html":           "school-leadership-read-me",
-  "school-leadership-operational-guide.html": "school-leadership-operational-guide",
   "school-leadership-meetings.html":          "school-leadership-meetings",
   "school-leadership-proposals.html":         "school-leadership-proposals",
   "school-leadership-decisions.html":         "school-leadership-decisions",
@@ -232,7 +230,6 @@ const htmlFiles = [
   "ReadMeFoundationRep.html",
   "ReadMeSchoolPrincipal.html",
   "ReadMeAcademicCoord.html",
-  "welcome.html",
   "ObservationEntry.html",
   "principal-observation-entry.html",
   "principal-appraisal-entry.html",
@@ -260,7 +257,6 @@ const htmlFiles = [
   "settings.html",
   // School Leadership Workspace (2026-05-21)
   "school-leadership-read-me.html",
-  "school-leadership-operational-guide.html",
   "school-leadership-meetings.html",
   "school-leadership-proposals.html",
   "school-leadership-decisions.html",
