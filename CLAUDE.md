@@ -227,11 +227,11 @@ Profile dropdown shows display name + email + role badge + **read-only chips** f
 
 ## Navbar
 
-3 dropdowns, all in `partials/navbar.html`:
+8 dropdowns in `partials/navbar.html`, following the Academic Quality Ecosystem (2026-10-01; same grouping as the home page): **Curriculum · Induction · EASE · Appraisal · Cross-cutting** (Teaching & Learning | Digital Citizenship & AI) **· Insights** (Academic Insights | Quality Ecosystem & Standards), then on the right **Your School** and **My Hub**.
 
-- **Dashboards** (single column): EASE · Cambridge · School tools · Students Hub (sub-headers via `nav-dd-col-header`) — current dashboards only since 2026-09-30
-- **School** (2 columns, `--wide`): Curriculum (3) · Appraisal (5)
-- **My Hub** (3 columns, `--xwide` 720px min-width): Communications (4) · CPD (4) · Induction & Reference (8)
+**Module guides in the navbar (2026-10-02).** Every module dropdown opens with that module's guide (`.nav-guide`, `data-guide="<module>"`). It takes its colour from `modules.css` §3b (`[data-guide]` → `--g-vivid`, generated with the other family tokens), so a guide link wears its own module on every page. Single-module panels hold it in a `.nav-dd-col.nav-dd-guide-slot` wrapper — keeps it on top if an admin ever saves a `nav_config` order (the editor re-appends items per `.nav-dd-col`); Cross-cutting columns hold their guide under the column header. Student Learning and Career Growth have no AH tools, so their guides sit under Insights → Quality Ecosystem & Standards, below the ecosystem guide. A new guide = card in `navbar.html` + `guide:` entry in `NAV_ITEMS` (the mobile drawer styles it from that key).
+
+**Breakpoints (measured 2026-10-02 with an admin profile, i.e. with "Edit nav"):** ≤1520 px profile first name hidden · ≤1460 px trigger icons hidden · **≤1300 px the dropdowns give way to the hamburger drawer** (the bar overflowed below ~1290 px). The drawer is `position: fixed` and scrolls on its own (`max-height: calc(100dvh - 62px)`). Re-measure if a dropdown is added. Headless Edge will not go narrower than ~492 px, so a 390 px screenshot is a crop, not an overflow.
 
 Mobile drawer is built dynamically by `partials/navbar-loader.js` from `NAV_ITEMS` (the same source as the loader injects). Each item carries `data-mobile-nav-key="<slug>"`. Mobile section headers (`ah-mobile-section-header`) are sibling elements (not parent containers); auth-guard walks forward from each header until the next header/divider to detect "all hidden" state.
 
@@ -278,7 +278,7 @@ The `leaders` track of the 3-track Cambridge competency system (root CLAUDE.md "
 |---|---|
 | `auth-guard.js` | Auth + role gate, profile prompt, page-access UI gating, mobile drawer gating, Uncategorized meta doc subscription |
 | `build.js` | Vercel build — `cleanUrls` map, link rewriting, asset copy |
-| `partials/navbar.html` | Shared navbar HTML (3 dropdowns, columned) |
+| `partials/navbar.html` | Shared navbar HTML (8 ecosystem dropdowns, each module opening with its guide) |
 | `partials/navbar-loader.js` | Exposes `window.__loadAcademicNavbar()`. Builds mobile drawer from `NAV_ITEMS`. CSS for column panels (`.nav-dropdown-panel--wide` 480px, `--xwide` 720px). |
 | `partials/navbar.js` | `initNavbar()`, `setupNavBadges()`, feedback button |
 | `firebase-config.js` / `.example.js` | Local dev config (gitignored) / template |

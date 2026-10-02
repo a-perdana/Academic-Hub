@@ -255,6 +255,11 @@ function ensureNavbarSharedStyles() {
       gap: 2px;
       z-index: 998;
       padding: 10px 14px 18px;
+      /* Fixed drawer with 60+ entries: it must scroll on its own. */
+      max-height: calc(100vh - 62px);
+      max-height: calc(100dvh - 62px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
       transform: translateY(-110%);
       opacity: 0;
       transition: transform .28s cubic-bezier(.16,1,.3,1), opacity .2s ease;
@@ -316,6 +321,17 @@ function ensureNavbarSharedStyles() {
     }
     .ah-mobile-badge.visible { display: flex; }
     .ah-mobile-badge--count { background: #6c5ce7; }
+
+    /* Module guide entry in the mobile drawer — same colour rule as desktop. */
+    .ah-mobile-menu-item--guide {
+      color: #fff; font-weight: 600;
+      background: rgba(var(--g-vivid-rgb, 157, 147, 240), 0.12);
+      border: 1px solid rgba(var(--g-vivid-rgb, 157, 147, 240), 0.26);
+    }
+    .ah-mobile-menu-item--guide svg,
+    .ah-mobile-menu-item--guide:hover svg,
+    .ah-mobile-menu-item--guide.active svg { color: var(--g-vivid, #9d93f0); }
+    .ah-mobile-menu-item--guide.active { border-color: var(--g-vivid, #9d93f0); }
 
     /* ── Mobile section header ──────────────────────────────────── */
     .ah-mobile-section-header {
@@ -442,11 +458,46 @@ function ensureNavbarSharedStyles() {
       margin: 6px 4px;
       flex-shrink: 0;
     }
+    /* Module guide link (2026-10-02) — the first entry of every module
+       dropdown. It wears its own module colour on any page: --g-vivid comes
+       from data-guide (modules.css 3b), brand mor if that file is absent. */
+    #topNav .nav-dd-guide-slot {
+      flex: none; min-width: 0;
+      padding-bottom: 4px; margin-bottom: 4px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    #topNav .nav-guide {
+      align-items: flex-start; gap: 11px;
+      padding: 10px 12px; margin: 2px 0 4px;
+      white-space: normal;
+      background: linear-gradient(135deg, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.17) 0%, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.04) 100%);
+      border: 1px solid rgba(var(--g-vivid-rgb, 157, 147, 240), 0.28);
+      border-radius: 11px;
+    }
+    #topNav .nav-guide svg { width: 17px; height: 17px; margin-top: 1px; color: var(--g-vivid, #9d93f0); }
+    #topNav .nav-guide__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+    #topNav .nav-guide .nav-item-label { color: #fff; font-weight: 600; line-height: 1.25; white-space: nowrap; }
+    #topNav .nav-guide__sub { font-size: 11.5px; font-weight: 400; line-height: 1.3; color: rgba(255,255,255,0.55); }
+    #topNav .nav-guide:hover {
+      background: linear-gradient(135deg, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.27) 0%, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.08) 100%);
+      border-color: rgba(var(--g-vivid-rgb, 157, 147, 240), 0.5);
+    }
+    #topNav .nav-guide:hover svg,
+    #topNav .nav-guide.active svg { color: var(--g-vivid, #9d93f0); }
+    #topNav .nav-guide.active {
+      background: linear-gradient(135deg, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.27) 0%, rgba(var(--g-vivid-rgb, 157, 147, 240), 0.08) 100%);
+      border-color: var(--g-vivid, #9d93f0);
+    }
 
-    /* Stage 0 — 1360px: dropdown triggers lose their icon, keep the label.
-       Eight ecosystem dropdowns (2026-10-01) do not fit at 1280px with icons. */
-    @media (max-width: 1360px) {
+    /* Stage 0 — 1460px: dropdown triggers lose their icon, keep the label.
+       Eight ecosystem dropdowns (2026-10-01) overflow below ~1450px with
+       icons (measured 2026-10-02). */
+    @media (max-width: 1460px) {
       #topNav .nav-dropdown-trigger > svg:not(.dd-caret) { display: none; }
+    }
+    /* The profile first name pushes the bar off-screen below ~1520px. */
+    @media (max-width: 1520px) {
+      #topNav .profile-first-name { display: none; }
     }
 
     /* Stage 1 — 1100px: hide brand name */
@@ -463,7 +514,16 @@ function ensureNavbarSharedStyles() {
       #topNav .profile-btn { padding: 5px 8px 5px 5px; }
     }
 
-    /* Stage 3 — 640px: hamburger only, hide all nav-actions items */
+    /* Stage 3 — 1300px: the eight ecosystem dropdowns no longer fit (the bar
+       ran off-screen below ~1290px; measured 2026-10-02). The hamburger drawer,
+       which lists every page and guide, takes over; profile stays. */
+    @media (max-width: 1300px) {
+      #topNav .hamburger-btn { display: flex; }
+      #topNav .nav-actions .nav-dropdown-wrap,
+      #topNav .nav-actions .nav-edit-trigger { display: none !important; }
+    }
+
+    /* Stage 4 — 640px: hamburger only, hide all nav-actions items */
     @media (max-width: 640px) {
       #topNav { padding: 0 14px; gap: 8px; }
       #topNav .hamburger-btn { display: flex; }
@@ -685,6 +745,7 @@ function ensureNavbarSharedStyles() {
 const NAV_ITEMS = [
   { group: 'curriculum', label: 'Curriculum', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', items: [
     // Curriculum Module — What is taught?
+    { key: 'curriculum-guide',                    href: '/curriculum-guide',                    label: 'Curriculum Guide', guide: 'curriculum' },
     { key: 'curriculum-map',                      href: '/curriculum-map',                      label: 'Curriculum Map' },
     { key: 'syllabus-coverage',                   href: '/syllabus-coverage',                   label: 'Syllabus Coverage' },
     { key: 'curriculum-alignment',                href: '/curriculum-alignment',                label: 'Curriculum Alignment' },
@@ -694,17 +755,20 @@ const NAV_ITEMS = [
   ]},
   { group: 'induction', label: 'Induction', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12"/><path d="M12 12C12 7 8 4 3 4c0 5 4 8 9 8z"/><path d="M12 12c0-4 3-7 8-7 0 4-3 7-8 7z"/></svg>', items: [
     // Induction Module — Who delivers it?
+    { key: 'induction-guide',                     href: '/induction-guide',                     label: 'Induction Guide', guide: 'induction' },
     { key: 'my-induction',                        href: '/my-induction',                        label: 'My Induction' },
     { key: 'team-induction',                      href: '/team-induction',                      label: 'Team Induction' },
   ]},
   { group: 'ease', label: 'EASE', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>', items: [
     // EASE Module — What is understood? (EASE Growth · EASE Assessment)
+    { key: 'ease-guide',                          href: '/ease-guide',                          label: 'EASE Guide', guide: 'ease' },
     { key: 'ease-growth-results',                 href: '/ease-growth-results',                 label: 'EASE Growth Results' },
     { key: 'school-assessment',                   href: '/school-assessment',                   label: 'Common Assessment Results' },
     { key: 'student-roster',                      href: '/student-roster',                      label: 'Student Roster' },
   ]},
   { group: 'appraisal', label: 'Appraisal', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>', items: [
     // Appraisal Module — Teacher · School · Principal (three separate systems)
+    { key: 'appraisal-guide',                     href: '/appraisal-guide',                     label: 'Appraisal Guide', guide: 'appraisal' },
     { key: 'teacher-appraisal-entry',             href: '/teacher-appraisal-entry',             label: 'Teacher Appraisal Entry' },
     { key: 'teacher-levels',                      href: '/teacher-levels',                      label: 'Teacher Levels' },
     { key: 'teacher-walkthrough-entry',           href: '/teacher-walkthrough-entry',           label: 'Teaching Practice Walkthrough' },
@@ -719,14 +783,21 @@ const NAV_ITEMS = [
   ]},
   { group: 'cross', label: 'Cross-cutting', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 10 5-10 5L2 7z"/><path d="m2 17 10 5 10-5M2 12l10 5 10-5"/></svg>', items: [
     // Teaching & Learning · Digital Citizenship & AI (cross-cutting areas, not modules)
+    { key: 'teaching-learning-guide',             href: '/teaching-learning-guide',             label: 'Teaching & Learning Guide', guide: 'teaching_learning' },
     { key: 'library',                             href: '/library',                             label: 'Resource Library' },
+    { key: 'digital-citizenship-guide',           href: '/digital-citizenship-guide',           label: 'Digital Citizenship & AI Guide', guide: 'digital_citizenship' },
     { key: 'ai-prompts',                          href: '/ai-prompts',                          label: 'AI Prompt Library' },
     { key: 'ai-validate-teacher-assessments',     href: '/ai-validate-teacher-assessments',     label: 'Teacher AI Self-Assessments' },
     { key: 'ai-maturity-self-assessment',         href: '/ai-maturity-self-assessment',         label: 'AI Maturity Assessment' },
     { key: 'network-audit',                       href: '/network-audit',                       label: 'Network Security Assessment' },
   ]},
   { group: 'insights', label: 'Insights & Standards', icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>', items: [
-    // Academic Insights · Quality Ecosystem & Standards
+    // Academic Insights · Quality Ecosystem & Standards. The ecosystem guide
+    // links every module; Student Learning + Career Growth have no AH tools,
+    // so their guides live here too.
+    { key: 'quality-ecosystem-guide',             href: '/quality-ecosystem-guide',             label: 'Quality Ecosystem Guide', guide: 'quality_ecosystem' },
+    { key: 'student-learning-guide',              href: '/student-learning-guide',              label: 'Student Learning Guide', guide: 'student_learning' },
+    { key: 'career-growth-guide',                 href: '/career-growth-guide',                 label: 'Career Growth Guide', guide: 'career_growth' },
     { key: 'cambridge-results',                   href: '/cambridge-results',                   label: 'Cambridge Results' },
     { key: 'cambridge-exams',                     href: '/cambridge-exams',                     label: 'Cambridge Exams Dashboard' },
     { key: 'academic-standards',                  href: '/academic-standards',                  label: 'Academic Standards' },
@@ -765,6 +836,9 @@ const NAV_ITEMS = [
   ]},
 ];
 
+// Book icon for the module guide entries (same as partials/navbar.html .nav-guide).
+const GUIDE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>';
+
 function buildMobileMenu(activeKey, isAcademicAdmin) {
   if (document.getElementById('ahMobileMenu')) return;
 
@@ -794,10 +868,11 @@ function buildMobileMenu(activeKey, isAcademicAdmin) {
       item.items.forEach(sub => {
         const a = document.createElement('a');
         a.href = sub.href;
-        a.className = 'ah-mobile-menu-item' + (sub.key === activeKey ? ' active' : '');
+        a.className = 'ah-mobile-menu-item' + (sub.guide ? ' ah-mobile-menu-item--guide' : '') + (sub.key === activeKey ? ' active' : '');
         a.setAttribute('data-mobile-nav-key', sub.key);
+        if (sub.guide) a.setAttribute('data-guide', sub.guide);
         if (sub.external) { a.target = '_blank'; a.rel = 'noopener'; }
-        a.innerHTML = `<span>${sub.label}</span>`;
+        a.innerHTML = (sub.guide ? GUIDE_ICON : '') + `<span>${sub.label}</span>`;
         a.addEventListener('click', () => closeMobileMenu());
         menu.appendChild(a);
       });

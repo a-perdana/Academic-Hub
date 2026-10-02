@@ -19,8 +19,10 @@
          cross-cutting areas, then Academic Insights + Quality Ecosystem &
          Standards; the school workspace and My Hub sit on the right. Same
          grouping as the home page sections (index.html → HOME_FAMILIES).
-         Student Learning and Career Growth have no AH pages, so no dropdown;
-         their live documents are linked from the home page.
+         Every module dropdown opens with that module's guide (.nav-guide, colour
+         from data-guide via modules.css 3b). Student Learning and Career Growth
+         have no AH tools, so no dropdown: their guides sit under Quality
+         Ecosystem & Standards, next to the ecosystem guide that links them all.
          Links without data-nav-key (cambridge-results, curriculum-alignment,
          Students Hub) have no page_access_config doc. -->
 
@@ -32,6 +34,12 @@
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="nav-dropdown-panel" id="ddPanel-curriculum">
+        <div class="nav-dd-col nav-dd-guide-slot">
+          <a href="/curriculum-guide" class="nav-dropdown-item nav-guide" data-nav-key="curriculum-guide" data-guide="curriculum">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <span class="nav-guide__text"><span class="nav-item-label">Curriculum Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+          </a>
+        </div>
         <div class="nav-dd-col-header">Mapping &amp; Coverage</div>
         <a href="/curriculum-map" class="nav-dropdown-item" data-nav-key="curriculum-map">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/><line x1="9" y1="3" x2="9" y2="18"/><line x1="15" y1="6" x2="15" y2="21"/></svg>
@@ -70,6 +78,12 @@
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="nav-dropdown-panel" id="ddPanel-induction">
+        <div class="nav-dd-col nav-dd-guide-slot">
+          <a href="/induction-guide" class="nav-dropdown-item nav-guide" data-nav-key="induction-guide" data-guide="induction">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <span class="nav-guide__text"><span class="nav-item-label">Induction Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+          </a>
+        </div>
         <div class="nav-dd-col-header">Induction</div>
         <a href="/my-induction" class="nav-dropdown-item" data-nav-key="my-induction">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
@@ -90,6 +104,12 @@
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="nav-dropdown-panel" id="ddPanel-ease">
+        <div class="nav-dd-col nav-dd-guide-slot">
+          <a href="/ease-guide" class="nav-dropdown-item nav-guide" data-nav-key="ease-guide" data-guide="ease">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <span class="nav-guide__text"><span class="nav-item-label">EASE Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+          </a>
+        </div>
         <div class="nav-dd-col-header">EASE Growth</div>
         <a href="/ease-growth-results" class="nav-dropdown-item" data-nav-key="ease-growth-results">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-6"/></svg>
@@ -120,6 +140,12 @@
         <svg class="dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="nav-dropdown-panel nav-dropdown-panel--wide nav-dropdown-panel--xwide" id="ddPanel-appraisal">
+        <div class="nav-dd-col nav-dd-guide-slot">
+          <a href="/appraisal-guide" class="nav-dropdown-item nav-guide" data-nav-key="appraisal-guide" data-guide="appraisal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+            <span class="nav-guide__text"><span class="nav-item-label">Appraisal Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+          </a>
+        </div>
         <div class="nav-dd-col-group">
           <div class="nav-dd-col">
             <div class="nav-dd-col-header">Teacher Appraisal</div>
@@ -195,6 +221,10 @@
         <div class="nav-dd-col-group">
           <div class="nav-dd-col">
             <div class="nav-dd-col-header">Teaching &amp; Learning</div>
+            <a href="/teaching-learning-guide" class="nav-dropdown-item nav-guide" data-nav-key="teaching-learning-guide" data-guide="teaching_learning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span class="nav-guide__text"><span class="nav-item-label">Teaching &amp; Learning Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+            </a>
             <a href="/library" class="nav-dropdown-item" data-nav-key="library">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
               Resource Library
@@ -205,6 +235,10 @@
 
           <div class="nav-dd-col">
             <div class="nav-dd-col-header">Digital Citizenship &amp; AI</div>
+            <a href="/digital-citizenship-guide" class="nav-dropdown-item nav-guide" data-nav-key="digital-citizenship-guide" data-guide="digital_citizenship">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span class="nav-guide__text"><span class="nav-item-label">Digital Citizenship &amp; AI Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+            </a>
             <a href="/ai-prompts" class="nav-dropdown-item" data-nav-key="ai-prompts">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
               AI Prompt Library
@@ -251,6 +285,10 @@
 
           <div class="nav-dd-col">
             <div class="nav-dd-col-header">Quality Ecosystem &amp; Standards</div>
+            <a href="/quality-ecosystem-guide" class="nav-dropdown-item nav-guide" data-nav-key="quality-ecosystem-guide" data-guide="quality_ecosystem">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span class="nav-guide__text"><span class="nav-item-label">Quality Ecosystem Guide</span><span class="nav-guide__sub">How the five modules fit together</span></span>
+            </a>
             <a href="/academic-standards" class="nav-dropdown-item" data-nav-key="academic-standards">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
               Academic Standards
@@ -262,6 +300,16 @@
             <a href="/references" class="nav-dropdown-item" data-nav-key="references">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
               References
+            </a>
+            <div class="nav-dd-divider"></div>
+            <div class="nav-dd-col-header" style="padding:4px 12px;">More module guides</div>
+            <a href="/student-learning-guide" class="nav-dropdown-item nav-guide" data-nav-key="student-learning-guide" data-guide="student_learning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span class="nav-guide__text"><span class="nav-item-label">Student Learning Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
+            </a>
+            <a href="/career-growth-guide" class="nav-dropdown-item nav-guide" data-nav-key="career-growth-guide" data-guide="career_growth">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+              <span class="nav-guide__text"><span class="nav-item-label">Career Growth Guide</span><span class="nav-guide__sub">The live documents, summarised</span></span>
             </a>
           </div>
         </div>

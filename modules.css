@@ -133,6 +133,24 @@ body[data-module] {
 /* ── 3. Navbar: one family rule under the (shared, dark) bar ────── */
 body[data-module] .top-nav { box-shadow: inset 0 -3px 0 var(--m-soft), 0 2px 12px rgba(0, 0, 0, 0.18); }
 
+/* ── 3b. Navbar guide links: each wears its OWN module ───────────
+   Every module dropdown opens with a link to that module's guide
+   (partials/navbar.html, .nav-guide). The bar is shared, so the link
+   takes its colour from data-guide, not from the page's body. Vivid
+   is the light family stop, legible on the dark dropdown panel. */
+[data-guide="curriculum"] { --g-vivid: #7b9ce0; --g-vivid-rgb: 123, 156, 224; }
+[data-guide="induction"] { --g-vivid: #e07be0; --g-vivid-rgb: 224, 123, 224; }
+[data-guide="ease"] { --g-vivid: #9c7be0; --g-vivid-rgb: 156, 123, 224; }
+[data-guide="student_learning"] { --g-vivid: #c5e07b; --g-vivid-rgb: 197, 224, 123; }
+[data-guide="appraisal"] { --g-vivid: #e09c7b; --g-vivid-rgb: 224, 156, 123; }
+[data-guide="career_growth"] { --g-vivid: #e07bba; --g-vivid-rgb: 224, 123, 186; }
+[data-guide="teaching_learning"] { --g-vivid: #93e07b; --g-vivid-rgb: 147, 224, 123; }
+[data-guide="digital_citizenship"] { --g-vivid: #7bbde0; --g-vivid-rgb: 123, 189, 224; }
+[data-guide="academic_insights"] { --g-vivid: #e0cb7b; --g-vivid-rgb: 224, 203, 123; }
+[data-guide="quality_ecosystem"] { --g-vivid: #7be09c; --g-vivid-rgb: 123, 224, 156; }
+[data-guide="school_workspace"] { --g-vivid: #7be0e0; --g-vivid-rgb: 123, 224, 224; }
+[data-guide="hub"] { --g-vivid: #9d93f0; --g-vivid-rgb: 157, 147, 240; }
+
 /* ── 4. Hero ─────────────────────────────────────────────────────
    body[data-module] .page-hero (0,2,1) outranks .page-hero[data-accent]
    (0,2,0) and any page-local .page-hero rule, so a page that still
