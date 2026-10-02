@@ -397,14 +397,21 @@ const ORDER = LEVELS.map(l => l.id);
 const labelOf = (id) => (LEVELS.find(l => l.id === id) || {}).label || 'not set';
 
 // The appraiser's recommendation lives on the teacher's finalised annual record
-// (teacher_appraisals, sessionType 'endofyear', levelProgression). The rule lets
-// a plain academic user read only records they appraised, so fall back to those.
+// (teacher_appraisals, sessionType 'endofyear', levelProgression). Since
+// 2026-10-01 the rule lets the school's Principal / Academic / Cambridge
+// Coordinator read every record of their own school, so a recommendation made
+// by a colleague is found too — but only through a schoolId-scoped query (a
+// list query must be provably inside the rule). Admins can read unscoped;
+// anyone else falls back to the records they appraised themselves.
 async function findRecommendation(uid, from, to) {
   const coll = collection(window.db, 'teacher_appraisals');
+  const schoolId = window.userProfile?.schoolId;
   let docs = [];
   let scope = 'all';
   try {
-    docs = (await getDocs(query(coll, where('teacherUid', '==', uid)))).docs;
+    docs = (await getDocs(schoolId
+      ? query(coll, where('teacherUid', '==', uid), where('schoolId', '==', schoolId))
+      : query(coll, where('teacherUid', '==', uid)))).docs;
   } catch (e) {
     scope = 'own';
     try {

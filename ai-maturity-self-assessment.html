@@ -730,8 +730,12 @@ function renderDomains() {
 
   DOMAINS.forEach((d, idx) => {
     const r = state.doc.domainRatings[d.id] || { currentLevel: null, targetLevel: null, evidence: [], strengths: [], improvementAreas: [] };
-    const appraised = state.status === 'appraised' && state.doc.appraisal && state.doc.appraisal.validatedDomainRatings;
-    const appraiserView = appraised ? state.doc.appraisal.validatedDomainRatings[d.id] : null;
+    // Eduversal notes: new records carry appraisal.areaNotes (notes only, no
+    // levels, 2026-10-02); older records carry validatedDomainRatings, shown
+    // as an earlier record.
+    const ap = state.status === 'appraised' ? state.doc.appraisal : null;
+    const isEarlier = !!(ap && !ap.areaNotes && ap.validatedDomainRatings);
+    const appraiserView = ap ? (ap.areaNotes ? ap.areaNotes[d.id] : (ap.validatedDomainRatings ? ap.validatedDomainRatings[d.id] : null)) : null;
 
     const card = document.createElement('div');
     card.className = 'domain-card';
@@ -766,7 +770,7 @@ function renderDomains() {
       <button class="list-add-btn" data-add="improvementAreas" ${locked || r.improvementAreas.length >= MAX_BULLETS ? 'disabled' : ''}>+ Add improvement area</button>
       <span class="list-counter ${r.improvementAreas.length > MAX_BULLETS ? 'over' : ''}">${r.improvementAreas.length} / ${MAX_BULLETS}</span>
 
-      ${appraiserView ? renderAppraisalBlock(appraiserView, d.id) : ''}
+      ${appraiserView ? renderAppraisalBlock(appraiserView, d.id, isEarlier) : ''}
     `;
 
     // Inject level pills
@@ -832,7 +836,7 @@ function renderListInto(target, domainId, field, items, locked, maxLen) {
   });
 }
 
-function renderAppraisalBlock(av, domainId) {
+function renderAppraisalBlock(av, domainId, isEarlier) {
   // av: { currentLevel, evidence[], strengths[], improvementAreas[], targetLevel }
   const evi = Array.isArray(av.evidence) ? av.evidence : [];
   const str = Array.isArray(av.strengths) ? av.strengths : [];
@@ -844,10 +848,11 @@ function renderAppraisalBlock(av, domainId) {
     <div class="appraisal-block">
       <h4>Eduversal notes</h4>
       <p style="font-size:12px;">Developmental support notes. They do not validate or change your ratings and are not a School Appraisal rating.</p>
-      <div class="av-row">
-        <div><span class="av-label">Level noted:</span> ${av.currentLevel ?? '—'}</div>
-        <div><span class="av-label">Target noted:</span> ${av.targetLevel ?? '—'}</div>
+      ${isEarlier ? `<div class="av-row">
+        <div><span class="av-label">Earlier record — level noted then:</span> ${escapeHtml(av.currentLevel ?? '—')}</div>
+        <div><span class="av-label">Target noted then:</span> ${escapeHtml(av.targetLevel ?? '—')}</div>
       </div>
+      <p style="font-size:11.5px;">Saved before the AI Competency Framework 26-27. Eduversal no longer notes levels; your school's own levels are the profile.</p>` : ''}
       ${evi.length ? `<p style="margin-top:8px;"><strong>Evidence noted:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${evi.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
       ${str.length ? `<p style="margin-top:8px;"><strong>Strengths noted:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${str.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}
       ${imp.length ? `<p style="margin-top:8px;"><strong>Improvement areas:</strong></p><ul style="margin-left:18px;font-size:12.5px;">${imp.map(e=>'<li>'+escapeHtml(e)+'</li>').join('')}</ul>` : ''}

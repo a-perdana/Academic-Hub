@@ -619,7 +619,7 @@ body {
     countEl.textContent = `${filtered.length} resource${filtered.length !== 1 ? 's' : ''}`;
 
     if (filtered.length === 0) {
-      grid.innerHTML = `<div class="res-empty"><div class="res-empty-icon">📭</div><p>No resources found. Be the first to add one!</p></div>`;
+      grid.innerHTML = `<div class="res-empty"><div class="res-empty-icon">📭</div><p>${isAdmin ? 'No resources found. Be the first to add one!' : 'No resources match these filters yet. Eduversal adds new resources through the year.'}</p></div>`;
       return;
     }
 

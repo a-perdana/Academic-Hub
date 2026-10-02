@@ -239,7 +239,7 @@ function renderSession(s) {
           <div class="session-date">${escapeHtml(s.sessionDate || '—')}</div>
           <div class="session-mentor">Mentor · ${escapeHtml(s.mentorName || s.mentorUid || '—')}</div>
         </div>
-        <span class="session-mode">${escapeHtml(s.mode || 'year_2_plus')}</span>
+        <span class="session-mode">${escapeHtml(({ year_1_induction: 'Year 1 · induction mentoring', year_2_plus: 'Year 2+ · ongoing coaching' })[s.mode || 'year_2_plus'] || s.mode)}</span>
       </div>
 
       <div class="session-detail">

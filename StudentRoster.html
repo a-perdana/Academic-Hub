@@ -129,7 +129,7 @@ table.roster tr:last-child td { border-bottom: none; }
       <select id="fStatus">
         <option value="active">Active</option>
         <option value="pending_approval">Pending approval</option>
-        <option value="rejected">Rejected</option>
+        <option value="rejected">Removed</option>
         <option value="graduated">Graduated</option>
         <option value="needs_class">Needs class</option>
         <option value="">All statuses</option>
@@ -190,6 +190,7 @@ table.roster tr:last-child td { border-bottom: none; }
     let students = [];
     let unsub = null;
     let canEdit = false;
+    const STATUS_LABEL = { needs_class: 'Needs class', pending_approval: 'Pending approval', active: 'Active', rejected: 'Removed', graduated: 'Graduated' };
 
     document.addEventListener('authReady', ({ detail: { user, profile } } = { detail: window.__authReadyDetail || {} }) => {
       if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('student-roster', { user, profile });
@@ -262,7 +263,7 @@ table.roster tr:last-child td { border-bottom: none; }
                 <td style="color:var(--ink-3)">${escHtml(s.email || '')}</td>
                 <td>${escHtml(s.className || '')}</td>
                 <td>${s.gradeLevel ? 'Grade ' + s.gradeLevel : ''}</td>
-                <td><span class="pill pill-${escAttr(s.status)}">${escHtml(s.status)}</span></td>
+                <td><span class="pill pill-${escAttr(s.status)}">${escHtml(STATUS_LABEL[s.status] || s.status)}</span></td>
                 ${canEdit ? `<td style="text-align:right">
                   ${s.status === 'pending_approval' ? `<button class="btn btn-primary" data-act="approve" data-uid="${escAttr(s.id)}">Approve</button>` : ''}
                   ${s.status === 'active' && Number(s.gradeLevel) === 12 ? `<button class="btn" data-act="graduate" data-uid="${escAttr(s.id)}">Graduate</button>` : ''}

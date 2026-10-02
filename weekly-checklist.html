@@ -724,13 +724,11 @@ body { padding-top: 62px; }
       <button class="checklist-tab" data-tab="academic_coordinator" id="tabCoordinator" style="display:none">Academic Coordinator</button>
       <button class="checklist-tab" data-tab="cambridge_coordinator" id="tabCambridge" style="display:none">Cambridge Coordinator / Exams Officer</button>
     </nav>
-    <!-- Cross-link to the matching live role guide for the active tab.
+    <!-- Cross-link to the matching live role document for the active tab.
          Updated by JS whenever currentPlatform changes; CSS keeps it
-         hidden until updatePairedHandbookLink() flips display. Handbook
-         lives on CH (centralhub.eduversal.org/handbook) so this is a
-         cross-hub link. -->
+         hidden until updatePairedHandbookLink() flips display. -->
     <a id="pairedHandbookLink" class="wc-paired-handbook"
-       href="https://centralhub.eduversal.org/handbook" target="_blank" rel="noopener">
+       href="/handbook" target="_blank" rel="noopener">
       <span aria-hidden="true">📕</span>
       <span id="pairedHandbookLabel">Open the paired role guide</span>
       <span aria-hidden="true" style="opacity:.7;">↗</span>
@@ -989,15 +987,18 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
   // Set initial platform to first visible tab
   currentPlatform = activePlatforms[0];
 
-  // Paired-handbook mapping. Each weekly-checklist sub-role (data-tab
-  // value) maps to its paired handbook on CH. Cross-hub link — opens in
-  // new tab (target=_blank). Handbook host hardcoded to
-  // centralhub.eduversal.org since handbooks live in CH dist.
+  // Paired live document per weekly-checklist sub-role (data-tab value).
+  // Handbooks live in Google Drive since 2026-09-30; AH /handbook?id=…
+  // redirects to the live doc (resources/handbook-redirects.json). Never
+  // link CH /handbook here: CH only admits @eduversal.org accounts, so a
+  // school leader was turned away. The Principal's weekly cadence is the F1
+  // "Principal Operating Cadence" of the Principal Guide — not the Year-1
+  // induction track the link used to open.
   const PAIRED_HANDBOOK_AH = {
-    foundation_representative: { id: 'eduversal_foundation_rep_first_90_days_v1',         label: 'Foundation Rep · role guide (live document)' },
-    school_principal:          { id: 'eduversal_principal_v1',                            label: 'School Principal · Induction Module: Principal' },
-    academic_coordinator:      { id: 'eduversal_academic_coordinator_first_90_days_v1',   label: 'Academic Coordinator · Induction Module: Academic Coordinators' },
-    cambridge_coordinator:     { id: 'eduversal_cambridge_coordinator_first_90_days_v1',  label: 'Cambridge Coordinator · Exams Officer Handbook' },
+    foundation_representative: { href: '/handbook?id=eduversal_foundation_rep_first_90_days_v1',        label: 'FR/GM · Principal Appraisal: Appraiser Guide' },
+    school_principal:          { href: 'https://docs.google.com/document/d/1GxSKogtLcZcZmqpcpq59h2OXIS4vJSvnHDB1s1D2tUE/edit', label: 'Principal · Principal Guide (Operating Cadence)' },
+    academic_coordinator:      { href: '/handbook?id=eduversal_academic_coordinator_first_90_days_v1',  label: 'Academic Coordinator · Induction Module: Academic Coordinators' },
+    cambridge_coordinator:     { href: '/handbook?id=eduversal_cambridge_coordinator_first_90_days_v1', label: 'Cambridge Coordinator · Exams Officer Handbook' },
   };
   function updatePairedHandbookLink(platform) {
     const link = document.getElementById('pairedHandbookLink');
@@ -1005,7 +1006,7 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     const m = PAIRED_HANDBOOK_AH[platform];
     if (!link) return;
     if (!m) { link.style.display = 'none'; return; }
-    link.href = `https://centralhub.eduversal.org/handbook?id=${encodeURIComponent(m.id)}`;
+    link.href = m.href;
     labelEl.textContent = m.label;
     link.style.display = 'inline-flex';
   }
@@ -1056,8 +1057,8 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     if (!_teachingWeeks.length) {
       document.getElementById('loadingState').style.display = 'none';
       document.getElementById('emptyState').style.display = '';
-      document.getElementById('emptyTitle').textContent = 'Academic calendar not configured';
-      document.getElementById('emptyMsg').textContent = 'Ask central_admin to open CH /academic-calendar → ⚙ Year Settings → Sync Teaching Weeks.';
+      document.getElementById('emptyTitle').textContent = 'This year’s teaching weeks are not set up yet';
+      document.getElementById('emptyMsg').textContent = 'Eduversal sets up the teaching weeks for each academic year. Your weekly checklist will appear here as soon as they are ready.';
       return;
     }
     currentWeek = getCurrentWeekNumber();

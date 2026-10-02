@@ -358,8 +358,6 @@ td.action-cell { overflow: visible; white-space: nowrap; }
       <input aria-label="Search teacher name…" type="text" id="searchA" placeholder="Search teacher name…">
       <select id="filterYear">
         <option value="">All years</option>
-        <option value="2025/2026">2025/2026</option>
-        <option value="2026/2027">2026/2027</option>
       </select>
       <select id="filterLevel">
         <option value="">All levels</option>
@@ -419,8 +417,6 @@ td.action-cell { overflow: visible; white-space: nowrap; }
       <input aria-label="Search teacher name…" type="text" id="searchW" placeholder="Search teacher name…">
       <select id="filterYearW">
         <option value="">All years</option>
-        <option value="2025/2026">2025/2026</option>
-        <option value="2026/2027">2026/2027</option>
       </select>
     </div>
     <div class="table-wrap">
@@ -524,6 +520,13 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   allAppraisals = aSnap.docs.map(d => ({ id: d.id, ...d.data() }));
   allWalkthroughs = wSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+  // Year filters follow the data (no hard-coded years that go stale).
+  [['filterYear', allAppraisals], ['filterYearW', allWalkthroughs]].forEach(([id, list]) => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    [...new Set(list.map(r => r.academicYear).filter(Boolean))].sort().reverse()
+      .forEach(y => sel.insertAdjacentHTML('beforeend', `<option value="${esc(y)}">${esc(y)}</option>`));
+  });
 
   updateStats();
   renderAppraisals();
@@ -610,7 +613,10 @@ function renderAppraisals() {
       ? `<span style="font-weight:700;font-size:.88rem;color:#1e293b;">${Math.round(a.compositePercent)}%</span>`
       : '<span style="color:#cbd5e1;font-size:.78rem;">—</span>';
 
-    const canFlag = a.status === 'finalised' && !a.disputed;
+    // This list shows the records YOU appraised. A dispute is the teacher's
+    // to raise (in Teachers Hub), so the appraiser view offers no Flag button;
+    // an open dispute still shows as the "⚠ Disputed" status above.
+    const canFlag = false;
 
     return `<tr>
       <td style="font-weight:600;">${esc(a.teacherName||'—')}<div style="font-size:.7rem;color:#94a3b8;font-weight:500;">${esc(recordKind(a))}</div></td>

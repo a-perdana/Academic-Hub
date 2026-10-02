@@ -4886,19 +4886,24 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   // The query MUST mirror what firestore.rules grants, because a list query is
   // rejected outright unless the rule can be satisfied for every doc it could
-  // return. In `match /teacher_appraisals`, a plain academic_user may only read
-  // rows where appraiserUid == their uid; school-wide read is granted to
-  // academic_admin / central_user / teachers_admin. So: admins and HQ list by
-  // schoolId, everyone else lists their OWN appraisals. Filtering a broad query
-  // client-side instead would just produce a permission-denied.
+  // return. In `match /teacher_appraisals`, school-wide read is granted to
+  // academic_admin / central_user / teachers_admin and (since 2026-10-01) to
+  // the school's Principal / Academic / Cambridge Coordinator for their own
+  // schoolId — the annual F2 is the mean of ALL the school appraisers'
+  // observations. Everyone else lists their OWN appraisals. Filtering a broad
+  // query client-side instead would just produce a permission-denied.
   async function loadAppraisedTeachers() {
     const bodyEl = document.getElementById('apprListBody');
     if (!bodyEl) return;
     const profile = window.userProfile || {};
+    const subRoles = Array.isArray(profile.ah_sub_roles) ? profile.ah_sub_roles : [];
+    const isSchoolAppraiser = !!profile.schoolId
+                           && ['school_principal', 'academic_coordinator', 'cambridge_coordinator'].some(r => subRoles.includes(r));
     const canReadSchoolWide = profile.role_academichub === 'academic_admin'
                            || profile.role_centralhub  === 'central_admin'
                            || !!profile.role_centralhub
-                           || profile.role_teachershub === 'teachers_admin';
+                           || profile.role_teachershub === 'teachers_admin'
+                           || isSchoolAppraiser;
     const subEl = document.getElementById('apprListSub');
     try {
       const constraints = [];
@@ -5923,9 +5928,13 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   window.saveAppraisal = saveAppraisal;
 
   document.getElementById('saveDraftBtn').addEventListener('click',    () => saveAppraisal('draft',     false));
-  document.getElementById('shareBtn').addEventListener('click',        () => saveAppraisal('shared',    false));
+  document.getElementById('shareBtn').addEventListener('click', () => {
+    if (!confirm('Share this record with the teacher? They will be able to read it and add a response.')) return;
+    saveAppraisal('shared', false);
+  });
   document.getElementById('saveEoyDraftBtn').addEventListener('click', () => saveAppraisal('draft',     true));
   document.getElementById('finaliseBtn').addEventListener('click', () => {
+    if (!confirm("Finalise this annual record? It becomes the teacher's final result for the year, so check that every part is complete first.")) return;
     saveAppraisal('finalised', true);
   });
 

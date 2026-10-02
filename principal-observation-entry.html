@@ -360,7 +360,14 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   try {
     rubric = await loadRubric();
     if (!isAppraiser) {
-      if (isPrincipal && (!PRINCIPAL_UID || PRINCIPAL_UID === user.uid)) { await renderOwnVisits(user.uid); return; }
+      if (isPrincipal && (!PRINCIPAL_UID || PRINCIPAL_UID === user.uid)) {
+        // The principal reads their own submitted visits; the hero text is
+        // written for the observer, so say what this view is instead.
+        const descEl = document.querySelector('.page-hero__desc');
+        if (descEl) descEl.textContent = 'Your leadership-observation visits, once the observer submits them: what was seen in each of the 8 foci (P1–P8) and the evidence behind it. The visit itself is not scored; the ratings of valid scheduled visits feed F2 of your annual Principal Appraisal.';
+        await renderOwnVisits(user.uid);
+        return;
+      }
       showAccessDenied('Leadership-observation visits are recorded by the Chief Academic Officer / designated Academic Director or an assigned Eduversal observer. A principal can read their own submitted visit records here. The Foundation Representative / General Manager does not see P1–P8 observation notes.');
       return;
     }

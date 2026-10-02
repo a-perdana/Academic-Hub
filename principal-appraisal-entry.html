@@ -1134,7 +1134,7 @@ async function bootPrincipal() {
   let snap = null;
   try { snap = await getDoc(doc(window.db, 'principal_annual_appraisals', DOC_ID)); } catch (_) { snap = null; }
   if (!snap || !snap.exists() || snap.data().status !== 'submitted') {
-    showAccessDenied(`Your ${ACADEMIC_YEAR} appraisal has not been signed off yet. You can read it here once the primary appraiser signs it off.`);
+    showNotice('Not signed off yet', `Your ${ACADEMIC_YEAR} appraisal has not been signed off yet. You can read it here once the primary appraiser signs it off, and then add your reflection.`);
     return;
   }
   const d = snap.data();
@@ -1221,6 +1221,12 @@ async function coSign() {
   }
 }
 
+// Neutral (not error-red) message for an expected state, e.g. the principal's
+// own appraisal before sign-off.
+function showNotice(title, msg) {
+  document.body.style.display = '';
+  document.getElementById('content').innerHTML = `<div class="loading-state"><h2 style="font-family:'Lora',serif;color:var(--ink-1,#1f2937);margin-bottom:8px;">${escapeHtml(title)}</h2><p>${escapeHtml(msg)}</p></div>`;
+}
 function showAccessDenied(msg) {
   document.body.style.display = '';
   document.getElementById('content').innerHTML = `<div class="access-denied"><h2>Cannot open</h2><p>${escapeHtml(msg)}</p></div>`;

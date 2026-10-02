@@ -84,6 +84,7 @@ body:has(> .page-footer) > .settings-wrap {
   padding: 0 10px;
   margin-bottom: 10px;
 }
+.settings-nav-item[hidden], .settings-mobile-tab[hidden] { display: none !important; }
 .settings-nav-item {
   display: flex;
   align-items: center;
@@ -676,7 +677,10 @@ body:has(> .page-footer) > .settings-wrap {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       Account &amp; Security
     </button>
-    <button class="settings-nav-item" data-panel="notifications">
+    <!-- Notifications hidden 2026-10-02: users.notification_prefs is written here
+         but read by nothing in any hub or Cloud Function, so the switches did
+         nothing. Show the panel again once something honours the preferences. -->
+    <button class="settings-nav-item" data-panel="notifications" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       Notifications
     </button>
@@ -696,7 +700,7 @@ body:has(> .page-footer) > .settings-wrap {
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
       Account
     </button>
-    <button class="settings-mobile-tab" data-panel="notifications">
+    <button class="settings-mobile-tab" data-panel="notifications" hidden>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
       Notifs
     </button>
@@ -842,7 +846,7 @@ body:has(> .page-footer) > .settings-wrap {
     <!-- ── School & Roles (read-only) ────────────────────────────── -->
     <div class="settings-panel" id="sPanel-school">
       <div class="settings-section-title">School &amp; Roles</div>
-      <div class="settings-section-sub">Your school and leadership sub-roles. These are managed by Eduversal HQ.</div>
+      <div class="settings-section-sub">Your school and leadership sub-roles. These are managed by Eduversal.</div>
 
       <div class="settings-card">
         <div class="settings-card-label">Your assignment</div>
@@ -866,7 +870,7 @@ body:has(> .page-footer) > .settings-wrap {
         </div>
 
         <div style="font-size:12.5px;color:#a8a49c;margin-top:14px;line-height:1.5;">
-          To request changes to your school assignment or sub-roles, contact your Eduversal HQ administrator.
+          To request changes to your school assignment or sub-roles, contact your Eduversal administrator.
         </div>
       </div>
     </div>

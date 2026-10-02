@@ -374,6 +374,17 @@ document.addEventListener('authReady', ({ detail: { user, profile } }) => {
     loadAndRender();
   });
 
+  // Open on the series that matters now: the calendar year's own series,
+  // and from July (after the June results) the Oct/Nov AS series — the main
+  // AS series the network sits in Semester I — instead of a June series
+  // that has already finished. Clicking a tab or a year still overrides.
+  const now = new Date();
+  currentYear = now.getFullYear();
+  if (now.getMonth() >= 6) currentSeries = 'alevel_november';
+  const ySel = document.getElementById('yearSelect');
+  if (ySel && [...ySel.options].some(o => Number(o.value) === currentYear)) ySel.value = String(currentYear);
+  document.querySelectorAll('.series-tab').forEach(t => t.classList.toggle('active', t.dataset.series === currentSeries));
+
   loadAndRender();
 });
 
