@@ -287,7 +287,11 @@ const DASHBOARD_SLUGS = new Set([
   // 2026-09-30 — no longer built, so they are gone from this list too.
   // School Performance KPI was retired 2026-10-01 (archive/kpi/): the live
   // pack embeds operational indicators in the Appraisal Suite instead.
-  'cambridge-exams', 'cambridge-pathway',
+  // Cambridge Results (2026-10-04): login + own school. TH-only teachers
+  // reach the teachers view from their own navbar; the Firestore rule, not
+  // this list, keeps each school to its own document.
+  'cambridge-results', 'cambridge-results-leaders', 'cambridge-results-teachers', 'cambridge-results-network',
+  'cambridge-pathway',
   'network-audit', 'ai-prompts',
   'academic-standards', 'academic-standards-public',
 ]);

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cambridge Results</title>
+<style>
+  :root { color-scheme: light; --page: #f6f5fb; --surface: #fcfcfb; --surface-2: #f3f2ee; --ink: #0b0b0b; --ink-2: #52514e; --ink-3: #75736d; --ring: rgba(11,11,11,0.10); --brand: #6c5ce7; --shadow: 0 1px 2px rgba(20,18,40,0.06), 0 4px 16px rgba(20,18,40,0.06); }
+  @media (prefers-color-scheme: dark) { :root { color-scheme: dark; --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321; --ink: #fff; --ink-2: #c3c2b7; --ink-3: #9b998f; --ring: rgba(255,255,255,0.10); --shadow: none; } }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15.5px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .rail { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+  .hero { background: linear-gradient(120deg, #3b2fa0 0%, #6c5ce7 45%, #0891b2 100%); color: #fff; padding: 34px 0 30px; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; margin: 0 0 6px; font-weight: 600; }
+  h1 { margin: 0; font-size: clamp(28px, 4vw, 38px); line-height: 1.15; }
+  .hero p { margin: 10px 0 0; max-width: 720px; opacity: .93; font-size: 16.5px; }
+  .pill { display: inline-block; margin-top: 14px; font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25); }
+  main { padding: 24px 0 50px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  a.card { display: flex; flex-direction: column; gap: 6px; background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 18px; box-shadow: var(--shadow); text-decoration: none; color: inherit; position: relative; overflow: hidden; }
+  a.card::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: linear-gradient(90deg, #6c5ce7, #0891b2); }
+  a.card:hover { border-color: var(--brand); }
+  .num { font-size: 13px; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .05em; margin-top: 4px; }
+  .card h2 { margin: 0; font-size: 20px; line-height: 1.25; }
+  .who { font-size: 14px; color: var(--ink-2); }
+  .q { font-size: 15px; font-style: italic; margin: 4px 0; }
+  .card ul { margin: 4px 0 0; padding-left: 18px; font-size: 14px; color: var(--ink-2); }
+  .open { margin-top: auto; padding-top: 10px; font-weight: 700; color: var(--brand); }
+  section.info { background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 16px 20px; margin-top: 16px; box-shadow: var(--shadow); font-size: 14.5px; color: var(--ink-2); }
+  section.info h3 { margin: 0 0 6px; color: var(--ink); font-size: 17px; }
+  section.info li { margin: 5px 0; }
+  table.links { border-collapse: collapse; width: 100%; font-size: 14px; }
+  table.links th, table.links td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--ring); }
+  table.links a { color: var(--brand); font-weight: 600; text-decoration: none; }
+  table.links a:hover { text-decoration: underline; }
+  footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 30px; }
+</style>
+
+<style>
+  body { padding-top: 62px; }
+  [hidden] { display: none !important; }  /* a.card { display: flex } would beat the attribute */
+  .cr-admin { position: sticky; top: 62px; z-index: 50; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 16px; background: #fff7e6; border-bottom: 1px solid #f0d9a8; color: #6b4a00; font: 600 13.5px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .cr-admin select { font: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid #e3c98f; background: #fff; color: #3d2a00; }
+  @media print { body { padding-top: 0; } .cr-admin { display: none; } }
+</style>
+</head>
+<body data-module="academic_insights">
+
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY:            "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN:        "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID:         "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET:     "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID:"__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <div id="navbarMount"></div>
+  <script src="partials/navbar-loader.js"></script>
+
+<header class="hero"><div class="rail">
+  <p class="eyebrow">Eduversal · Academic Insights</p>
+  <h1>Cambridge Results</h1>
+  <p>Your school's Cambridge exam results, compared with the average of the partner schools. You see your own school only: the partner-school average is shown without naming any school.</p>
+  <span class="pill">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04</span>
+</div></header>
+<main><div class="rail">
+  <div class="cards">
+    <a class="card" href="/cambridge-results-leaders"><span class="num">For school leaders</span><h2>Results by school</h2><span class="who">Principals, coordinators, Foundation Representatives</span><p class="q">How did our school do, and where should we focus?</p><span class="open">Open →</span></a>
+    <a class="card" href="/cambridge-results-teachers"><span class="num">For teachers</span><h2>Topics and questions</h2><span class="who">Subject teachers and subject leaders</span><p class="q">Which topics and questions did our students find hardest?</p><span class="open">Open →</span></a>
+    <a class="card" href="/cambridge-results-network" id="crNetworkCard" hidden><span class="num">For Eduversal</span><h2>Results at a glance</h2><span class="who">Eduversal staff only — compares every school</span><p class="q">How does each partner school compare?</p><span class="open">Open →</span></a>
+  </div>
+  <section class="info"><h3>Who sees what</h3><ul>
+    <li>School leaders and teachers see their own school only, after signing in with their school account.</li>
+    <li>The partner-school average is a single figure for all partner schools together; no other school is named.</li>
+    <li>Figures for fewer than 3 students are not shown.</li>
+  </ul></section>
+</div></main>
+<footer><div class="rail">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04. Built from the provisional result files Cambridge International sent to each partner school. Please keep it within your school.</div></footer>
+<script type="module">
+document.addEventListener('authReady', ({ detail: { user, profile } = {} } = {}) => {
+  if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('cambridge-results', { user, profile });
+  const p = profile || {};
+  const hq = p.role_academichub === 'academic_admin' || p.role_centralhub === 'central_admin'
+    || (p.role_centralhub === 'central_user' && p.approval_status_centralhub === 'approved') || p.role_teachershub === 'teachers_admin';
+  document.getElementById('crNetworkCard').hidden = !hq;
+});
+</script>
+</body>
+</html>

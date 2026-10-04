@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cambridge Results for School Leaders</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f5fb; --surface: #fcfcfb; --surface-2: #f3f2ee;
+    --ink: #0b0b0b; --ink-2: #52514e; --ink-3: #75736d;
+    --grid: #e1e0d9; --axis: #c3c2b7; --ring: rgba(11, 11, 11, 0.10);
+    --brand: #6c5ce7; --focus: #6c5ce7;
+    --up: #006300; --down: #b42e2e;
+    --focus-bg: #fdf0ea; --focus-edge: #eb6834; --strong-bg: #eaf2fc; --strong-edge: #2a78d6;
+    --shadow: 0 1px 2px rgba(20, 18, 40, 0.06), 0 4px 16px rgba(20, 18, 40, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10); --focus: #9085e9;
+      --up: #0ca30c; --down: #e66767;
+      --focus-bg: #2e1f18; --focus-edge: #d95926; --strong-bg: #15243a; --strong-edge: #3987e5;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10); --focus: #9085e9;
+    --up: #0ca30c; --down: #e66767;
+    --focus-bg: #2e1f18; --focus-edge: #d95926; --strong-bg: #15243a; --strong-edge: #3987e5;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  button, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .rail { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+  .hero { background: linear-gradient(120deg, #3b2fa0 0%, #6c5ce7 45%, #0891b2 100%); color: #fff; padding: 28px 0 26px; position: relative; overflow: hidden; }
+  .hero::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(600px 240px at 85% 0%, rgba(255,255,255,0.18), transparent 70%); }
+  .hero .rail { position: relative; z-index: 1; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; margin: 0 0 6px; font-weight: 600; }
+  .hero h1 { margin: 0; font-size: clamp(26px, 3.5vw, 34px); line-height: 1.15; }
+  .hero p { margin: 8px 0 0; max-width: 700px; opacity: .93; }
+  .pill { display: inline-block; margin-top: 12px; font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25); }
+  .tools { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .tools label { font-size: 13px; opacity: .9; }
+  .hero select { background: rgba(255,255,255,0.95); color: #1b1b1b; border: 0; border-radius: 10px; padding: 7px 10px; font-weight: 600; }
+  .theme-btn { background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px; }
+
+  main { padding: 22px 0 60px; }
+  h2.school { margin: 0 0 4px; font-size: 26px; }
+  .sub { color: var(--ink-2); margin: 0 0 16px; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px; }
+  @media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+  .box { border-radius: 14px; padding: 14px 16px; border: 1px solid var(--ring); }
+  .box h3 { margin: 0 0 6px; font-size: 17px; }
+  .box ul { margin: 0; padding-left: 20px; font-size: 14.5px; }
+  .box li { margin: 6px 0; }
+  .box.focus { background: var(--focus-bg); border-left: 5px solid var(--focus-edge); }
+  .box.strong { background: var(--strong-bg); border-left: 5px solid var(--strong-edge); }
+  .box .none { color: var(--ink-2); font-size: 14px; margin: 0; }
+
+  section.card { background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; box-shadow: var(--shadow); padding: 18px 18px 14px; margin-bottom: 16px; }
+  .card h3 { margin: 0; font-size: 19px; }
+  .card .what { margin: 3px 0 12px; color: var(--ink-2); font-size: 14px; }
+  .tscroll { overflow-x: auto; }
+  table.t { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .t th { text-align: left; font-size: 12.5px; color: var(--ink-2); font-weight: 600; border-bottom: 1px solid var(--axis); padding: 6px 8px; white-space: nowrap; }
+  .t td { border-bottom: 1px solid var(--grid); padding: 8px; vertical-align: top; }
+  .t .n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .t td.lead { font-weight: 600; }
+  .up { color: var(--up); font-weight: 700; } .down { color: var(--down); font-weight: 700; }
+  .muted { color: var(--ink-3); }
+  .band { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--ring); margin-left: 6px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 2px; }
+  .chip { font-size: 12.5px; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--ring); white-space: nowrap; }
+  .detail { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; margin-top: 10px; }
+  .detail h4 { margin: 0 0 4px; font-size: 14.5px; }
+  .detail p { margin: 4px 0; font-size: 13.5px; color: var(--ink-2); }
+  .howto { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); font-size: 13.5px; color: var(--ink-2); }
+  .howto b { color: var(--ink); }
+  .notes { background: var(--surface); border: 1px solid var(--ring); border-radius: 14px; padding: 14px 18px; font-size: 14px; color: var(--ink-2); }
+  .notes h3 { margin: 0 0 6px; color: var(--ink); font-size: 17px; }
+  .notes li { margin: 6px 0; }
+  .gate { max-width: 640px; margin: 40px auto; background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 26px 28px; text-align: center; box-shadow: var(--shadow); }
+  .gate h2 { margin: 0 0 8px; font-size: 22px; }
+  .gate p { color: var(--ink-2); margin: 0 0 16px; }
+  .gate a { display: inline-block; background: var(--brand); color: #fff; font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+  select:disabled { opacity: 1; cursor: default; }
+  footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 32px; }
+  @media print {
+    @page { size: A4; margin: 12mm; }
+    .tools { display: none !important; }
+    body { background: #fff; font-size: 12.5px; }
+    .hero { padding: 12px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    section.card, .box { box-shadow: none; break-inside: avoid; }
+  }
+</style>
+
+<style>
+  body { padding-top: 62px; }
+  [hidden] { display: none !important; }  /* a.card { display: flex } would beat the attribute */
+  .cr-admin { position: sticky; top: 62px; z-index: 50; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 16px; background: #fff7e6; border-bottom: 1px solid #f0d9a8; color: #6b4a00; font: 600 13.5px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .cr-admin select { font: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid #e3c98f; background: #fff; color: #3d2a00; }
+  @media print { body { padding-top: 0; } .cr-admin { display: none; } }
+</style>
+</head>
+<body data-module="academic_insights">
+
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY:            "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN:        "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID:         "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET:     "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID:"__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <div id="navbarMount"></div>
+  <script src="partials/navbar-loader.js"></script>
+
+<header class="hero">
+  <div class="rail">
+    <div>
+      <p class="eyebrow">Eduversal · for principals and coordinators</p>
+      <h1>Cambridge Results for School Leaders</h1>
+      <p>One school at a time: where to focus, every subject on one page, and how results have moved. For deciding which departments need support.</p>
+      <span class="pill">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04</span>
+    </div>
+    <div class="tools">
+      <label for="school">School</label>
+      <select id="school"></select>
+      <button type="button" class="theme-btn" id="themeBtn">Theme: Auto</button>
+    </div>
+  </div>
+</header>
+<main><div class="rail" id="main"></div></main>
+<footer><div class="rail">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04. Built from the provisional result files Cambridge International sent to each partner school, and Cambridge's published worldwide statistics. Shared by Eduversal with its partner schools; please keep it within your school.</div></footer>
+
+<script type="text/plain" id="cr-app-src">
+const D = window.__CR_D;
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* ignore */ } } };
+const year = (label) => (label || '').replace(/^.*?(\d{4})$/, '$1');
+/** A gap from the partner schools in the SAME year: words, never arrows —
+ *  an arrow reads as "went up", and a first-year school has not moved. */
+function gap(v, d) {
+  if (v == null) return '<span class="muted">—</span>';
+  const r = Math.abs(v);
+  if (r < 0.5) return '<span class="muted">about the same</span>';
+  return `<span class="${v > 0 ? 'up' : 'down'}">${r.toFixed(d)} ${v > 0 ? 'above' : 'below'}</span>`;
+}
+/** A change over TIME: arrows are only used here. */
+function diff(v, unit, d) {
+  if (v == null) return '<span class="muted">—</span>';
+  const r = Math.abs(v);
+  if (r < (unit === '%' ? 1 : 0.5)) return '<span class="muted">≈ same</span>';
+  return `<span class="${v > 0 ? 'up' : 'down'}">${v > 0 ? '▲' : '▼'} ${r.toFixed(d)}${unit === '%' ? ' pts' : ''}</span>`;
+}
+
+function checkpointCard(level, L) {
+  const rows = L.subjects.map((x) => `<tr>
+    <td class="lead">${esc(x.subject)}</td>
+    <td class="n"><b>${x.v.toFixed(1)}</b> / 50<span class="band">${esc(x.band)}</span></td>
+    <td class="n">${x.net ? x.net.v.toFixed(1) : '<span class="muted">only school</span>'}</td>
+    <td class="n">${x.net ? gap(x.v - x.net.v, 1) : '—'}</td>
+    <td class="n">${x.change != null ? diff(x.change, 'pt', 1) + ` <span class="muted">vs ${esc(year(x.prev.series))}</span>` : (x.prev ? '<span class="muted">too few students</span>' : '<span class="muted">first year</span>')}</td>
+    <td class="n">${x.n}</td></tr>`).join('');
+  const details = L.subjects.map((x) => `<div class="detail"><h4>${esc(x.subject)}</h4>
+    <p>Strand scores (out of 50), and how far each is above or below the partner-school average this year:</p>
+    <div class="chips">${x.strands.map((s) => `<span class="chip">${esc(s.name)} <b>${s.v.toFixed(1)}</b>${s.net != null ? ` <span style="font-size:12px">${gap(s.v - s.net, 1)}</span>` : ''}</span>`).join('')}</div>
+    <p style="margin-top:8px">Weakest topics (share of the available marks earned):</p>
+    <div class="chips">${x.weakest.map((s) => `<span class="chip">${esc(s.name)} <b>${s.v.toFixed(0)}%</b>${s.net != null ? ` <span class="muted">partner schools ${s.net.toFixed(0)}%</span>` : ''}</span>`).join('')}</div>
+  </div>`).join('');
+  return `<section class="card"><h3>Cambridge ${esc(level)} · ${esc(L.latest)}</h3>
+    <p class="what">Average Checkpoint score out of 50. Cambridge describes 21–30 as Good and 31–40 as High.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Subject</th><th class="n">Your school</th><th class="n">Partner schools</th><th class="n">Compared with partner schools</th><th class="n">Change since last year</th><th class="n">Students</th></tr></thead><tbody>${rows}</tbody></table></div>
+    ${details}
+    <div class="howto"><b>How to use this:</b> the strand and topic lines show <i>where</i> inside a subject the marks were lost. Share them with the subject leader; the teacher dashboard in this pack goes down to each question and teaching group.</div>
+  </section>`;
+}
+
+function igcseCard(L) {
+  const rows = L.subjects.flatMap((sj) => sj.tiers.map((t, i) => `<tr>
+    <td class="lead">${i === 0 ? esc(sj.subject) : ''}</td>
+    <td>${t.tier === 'Untiered' ? (sj.subject === 'English' ? esc(t.syl) : '—') : esc(t.tier)}</td>
+    <td class="n">${t.n}</td>
+    <td class="n">${t.aa.toFixed(0)}%</td>
+    <td class="n"><b>${t.ac.toFixed(0)}%</b></td>
+    <td class="n">${t.net ? t.net.v.toFixed(0) + '%' : '<span class="muted">only school</span>'}</td>
+    <td class="n">${i === 0 && sj.world != null ? sj.world.toFixed(0) + '%' : ''}</td>
+    <td class="n">${t.change != null ? diff(t.change, '%', 0) + ` <span class="muted">vs ${esc(year(t.prev.series))}</span>` : (t.prev ? '<span class="muted">too few</span>' : '<span class="muted">—</span>')}</td>
+    <td class="n">${i === 0 ? (sj.missed ? `<span class="down">${sj.missed}</span>` : '0') : ''}</td>
+    <td class="n">${i === 0 ? (sj.coreShare ? sj.coreShare.toFixed(0) + '%' : '0%') : ''}</td></tr>`)).join('');
+  return `<section class="card"><h3>Cambridge IGCSE · ${esc(L.latest)}</h3>
+    <p class="what">Share of candidates at each grade band. Core and Extended are always separate rows, because Core grades stop at C.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Subject</th><th>Tier</th><th class="n">Candidates</th><th class="n">A*–A</th><th class="n">A*–C</th><th class="n">Partner schools A*–C</th><th class="n">World A*–C</th><th class="n">Change since last year</th><th class="n">Missed a paper</th><th class="n">Entered for Core</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="howto"><b>How to use this:</b> <b>Entered for Core</b> is a leadership decision: a Core candidate cannot get above C, so a high Core share caps results before the exam is sat. <b>Missed a paper</b> means a student has no grade at all; check entries and attendance. The <b>World</b> figure is every Cambridge candidate (Cambridge counts Core and Extended together there).</div>
+  </section>`;
+}
+
+function alevelCard(L) {
+  const pc = (a, b) => (b >= 3 ? ` <span class="muted">(${Math.round((100 * a) / b)}%)</span>` : '');
+  const rows = L.subjects.map((x) => `<tr>
+    <td class="lead">${esc(x.subject)}</td>
+    <td class="n"><b>${x.as}</b>${pc(x.asAC, x.as)}</td>
+    <td class="n">${x.worldAS != null ? x.worldAS.toFixed(0) + '%' : '—'}</td>
+    <td class="n"><b>${x.a2}</b>${pc(x.a2AC, x.a2)}</td>
+    <td class="n">${x.worldA2 != null ? x.worldA2.toFixed(0) + '%' : '—'}</td>
+    <td class="n">${x.u}</td>
+    <td class="n muted">${x.prev ? `${x.prev.as} AS · ${x.prev.a2} A Level · ${x.prev.u} U` : '—'}</td></tr>`).join('');
+  return `<section class="card"><h3>Cambridge International AS & A Level · ${esc(L.latest)}</h3>
+    <p class="what">Results are counted, because the numbers are small. In brackets: the share at a–c (AS) or A*–C (full A Level).</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Subject</th><th class="n">AS results (a–c)</th><th class="n">World AS a–c</th><th class="n">A Level results (A*–C)</th><th class="n">World A Level A*–C</th><th class="n">Ungraded (U)</th><th class="n">Year before</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="howto"><b>How to read this:</b> AS and full A Level are separate awards. U is written the same way for both, so it cannot be split between them. If there are no full A Level results, check first whether final-year students were entered this year.</div>
+  </section>`;
+}
+
+function historyCard(level, L, unit) {
+  if (!L.history || L.history.length < 2) return '';
+  const subjects = [...new Set(L.history.flatMap((h) => Object.keys(h.values)))].sort();
+  return `<section class="card"><h3>${esc(level)} over time</h3>
+    <p class="what">${unit === '%' ? 'Share at A*–C' : 'Average score out of 50'} in every series your school sat. October and November are smaller second sittings, so compare like with like.</p>
+    <div class="tscroll"><table class="t"><thead><tr><th>Series</th>${subjects.map((s) => `<th class="n">${esc(s)}</th>`).join('')}</tr></thead><tbody>
+    ${L.history.map((h) => `<tr><td class="lead">${esc(h.label)}</td>${subjects.map((s) => {
+      const v = h.values[s];
+      return `<td class="n">${v ? `${unit === '%' ? v.v.toFixed(0) + '%' : v.v.toFixed(1)} <span class="muted">(${v.n})</span>` : '<span class="muted">—</span>'}</td>`;
+    }).join('')}</tr>`).join('')}</tbody></table></div></section>`;
+}
+
+function render() {
+  const S = D.schools[document.getElementById('school').value];
+  const order = ['Primary Checkpoint', 'Lower Secondary Checkpoint', 'IGCSE', 'AS & A Level'];
+  const levels = order.filter((l) => S.levels[l]);
+  let h = `<h2 class="school">${esc(S.name)}</h2><p class="sub">Latest results: ${levels.map((l) => `${esc(l)} (${esc(S.levels[l].latest)})`).join(' · ')}</p>`;
+  h += `<div class="two">
+    <div class="box focus"><h3>Where to focus</h3>${S.focus.length ? `<ul>${S.focus.map((t) => `<li>${t}</li>`).join('')}</ul>` : '<p class="none">Nothing stands out: no subject is clearly below the partner schools or down on last year.</p>'}</div>
+    <div class="box strong"><h3>Strengths to build on</h3>${S.strengths.length ? `<ul>${S.strengths.map((t) => `<li>${t}</li>`).join('')}</ul>` : '<p class="none">No subject is clearly above the partner schools or up on last year yet.</p>'}</div>
+  </div>`;
+  for (const l of levels) {
+    const L = S.levels[l];
+    h += L.kind === 'checkpoint' ? checkpointCard(l, L) : L.kind === 'igcse' ? igcseCard(L) : alevelCard(L);
+  }
+  for (const l of levels) {
+    const L = S.levels[l];
+    if (L.kind !== 'alevel') h += historyCard(l, L, L.kind === 'igcse' ? '%' : '');
+  }
+  h += `<div class="notes"><h3>Good to know</h3><ul>
+    <li><b>No class or teacher breakdown here, on purpose.</b> A results table is one piece of evidence, not a judgement of a teacher. Teachers see their own teaching groups in the teacher dashboard in this pack.</li>
+    <li><b>“Where to focus”</b> lists only differences backed by at least ${D.meta.moveMin} students: a subject 3+ points (Checkpoint) or 10+ points (IGCSE A*–C) below the partner schools or below last year, missed papers, and subjects where most candidates were entered for Core.</li>
+    <li><b>Partner schools</b> means every student at every partner school that sat the same exam, counted together. <b>World</b> figures are Cambridge's published statistics for the June series. Cambridge does not publish worldwide Checkpoint figures; your own Checkpoint report from Cambridge includes an international average.</li>
+    <li>Groups of fewer than 3 students are not shown. These are Cambridge's provisional results.</li>
+  </ul></div>`;
+  document.getElementById('main').innerHTML = h;
+}
+
+const sel = document.getElementById('school');
+Object.values(D.schools).sort((a, b) => a.name.localeCompare(b.name)).forEach((s) => { const o = document.createElement('option'); o.value = s.centre; o.textContent = s.name; sel.appendChild(o); });
+// This view opens for ONE school, from that school's link on the pack's start page
+// (#school=IDxxx); the picker is then shown but locked. Without a school link the
+// page shows no school. A courtesy lock, not access control: all data is in this file.
+const HOME = location.protocol === 'file:' ? '0%20Start%20here.html' : '/cambridge-results';
+const want = new URLSearchParams(location.hash.slice(1)).get('school');
+const LOCKED = !!(want && D.schools[want]);
+if (LOCKED) { sel.value = want; sel.disabled = true; sel.title = 'This page was opened for your school'; }
+const themeBtn = document.getElementById('themeBtn');
+let theme = store.get('crl-theme') || 'auto';
+function applyTheme() { if (theme === 'auto') document.documentElement.removeAttribute('data-theme'); else document.documentElement.setAttribute('data-theme', theme); themeBtn.textContent = 'Theme: ' + theme[0].toUpperCase() + theme.slice(1); }
+themeBtn.onclick = () => { theme = { auto: 'light', light: 'dark', dark: 'auto' }[theme]; store.set('crl-theme', theme); applyTheme(); };
+applyTheme();
+if (LOCKED) render();
+else {
+  document.querySelector('.tools label').style.display = 'none'; sel.style.display = 'none';
+  document.getElementById('main').innerHTML = `<div class="gate"><h2>Open this page from your school's link</h2><p>This view shows one school at a time. Please use the link for your school on the Cambridge Results Pack page.</p><a href="${HOME}#links">Go to the Cambridge Results Pack</a></div>`;
+}
+window.addEventListener('hashchange', () => location.reload());
+</script>
+
+<script type="module">
+import { doc, getDoc, getDocs, collection, query, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+const VIEW = 'leaders';
+const REPORT = ['cambridge_results_reports', 'current'];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function say(title, text) {
+  const m = document.getElementById('main');
+  if (m) m.innerHTML = '<div class="gate"><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
+}
+function boot(D) {
+  window.__CR_D = D;
+  const s = document.createElement('script');
+  s.textContent = document.getElementById('cr-app-src').textContent;
+  document.body.appendChild(s);
+}
+const hashSchool = () => new URLSearchParams(location.hash.slice(1)).get('school');
+function setSchool(centre) {
+  const h = new URLSearchParams(location.hash.slice(1));
+  h.set('school', centre);
+  history.replaceState(null, '', '#' + h.toString());
+}
+// Eduversal staff read every school; everyone else reads their own school only.
+// The Firestore rule enforces the same split (cambridge_results_reports).
+const isHQ = (p) => p.role_academichub === 'academic_admin' || p.role_centralhub === 'central_admin'
+  || (p.role_centralhub === 'central_user' && p.approval_status_centralhub === 'approved')
+  || p.role_teachershub === 'teachers_admin';
+const J = (s) => JSON.parse(s || 'null');
+function assemble(R, schools) {
+  if (VIEW === 'leaders') {
+    return { meta: J(R.leadersMetaJson), schools: Object.fromEntries(schools.map((s) => [s.centre, J(s.leadersJson)])) };
+  }
+  const C = J(R.teachersJson);
+  const own = schools.map((s) => J(s.teachersJson));
+  return {
+    ...C,
+    meta: { ...C.meta, exSuppressed: own.flatMap((t) => t.exSuppressed), incomplete: own.flatMap((t) => t.incomplete), schoolNote: own.length === 1 ? own[0].note || '' : '' },
+    schools: Object.fromEntries(schools.map((s) => [s.centre, { name: s.name, short: s.short }])),
+    cp: own.flatMap((t) => t.cp),
+    ex: own.flatMap((t) => t.ex),
+  };
+}
+function adminBar(schools) {
+  const bar = document.createElement('div');
+  bar.className = 'cr-admin';
+  bar.innerHTML = '<span>Eduversal view — every school is visible to you. School users see only their own school.</span>'
+    + '<label>School <select id="crAdminSchool">' + schools.slice().sort((a, b) => a.name.localeCompare(b.name))
+      .map((s) => '<option value="' + esc(s.centre) + '">' + esc(s.name) + '</option>').join('') + '</select></label>';
+  document.body.insertBefore(bar, document.getElementById('navbarMount').nextSibling);
+  const sel = bar.querySelector('select');
+  sel.value = hashSchool();
+  sel.onchange = () => { setSchool(sel.value); location.reload(); };
+}
+document.addEventListener('authReady', async ({ detail: { user, profile } = {} } = {}) => {
+  if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('cambridge-results', { user, profile });
+  if (!profile) return;
+  const hq = isHQ(profile);
+  if (VIEW === 'network' && !hq) { say('For Eduversal only', 'This view compares every partner school, so only Eduversal staff can open it. Your school\'s own results are in the School Leaders and Teachers views.'); return; }
+  if (!hq && !profile.schoolId) { say('Your school is not set', 'Your account is not linked to a school yet, so your school\'s results cannot be shown. Please ask Eduversal to set your school.'); return; }
+  try {
+    const rootSnap = await getDoc(doc(window.db, ...REPORT));
+    if (!rootSnap.exists()) { say('No results published yet', 'The Cambridge results have not been published here yet.'); return; }
+    if (VIEW === 'network') {
+      const f = await getDoc(doc(window.db, ...REPORT, 'internal', 'foundation'));
+      if (!f.exists()) { say('No results published yet', 'The network view has not been published yet.'); return; }
+      boot(J(f.data().json));
+      return;
+    }
+    let schools;
+    if (hq) {
+      schools = (await getDocs(query(collection(window.db, ...REPORT, 'schools'), limit(60)))).docs.map((d) => d.data());
+      if (!schools.length) { say('No results published yet', 'No school results have been published.'); return; }
+      if (!schools.some((s) => s.centre === hashSchool())) setSchool(schools.slice().sort((a, b) => a.name.localeCompare(b.name))[0].centre);
+      adminBar(schools);
+    } else {
+      const s = await getDoc(doc(window.db, ...REPORT, 'schools', profile.schoolId));
+      if (!s.exists()) { say('No Cambridge results for your school', 'Eduversal has no Cambridge result files for your school in this pack.'); return; }
+      schools = [s.data()];
+      setSchool(schools[0].centre);
+    }
+    boot(assemble(rootSnap.data(), schools));
+  } catch (err) {
+    console.error('[cambridge-results]', err);
+    say('Results could not be loaded', err && err.code === 'permission-denied'
+      ? 'Your account does not have access to these results. Ask Eduversal to check your school and approval.'
+      : 'Please reload the page. If it keeps failing, contact Academic Services.');
+  }
+});
+</script>
+</body>
+</html>

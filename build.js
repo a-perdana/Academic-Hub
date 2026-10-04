@@ -91,7 +91,12 @@ const cleanUrls = {
   "SchoolEvents.html":               "school-events",
   "AcademicStandards.html":          "academic-standards",
   "AcademicStandardsDynamic.html":   "academic-standards-public",
-  "CambridgeExamsDashboard.html":    "cambridge-exams",
+  // Cambridge Results (2026-10-04): login + own school. Written by
+  // scripts/cambridge-results/build-pack.js; the pages carry no results.
+  "CambridgeResults.html":           "cambridge-results",
+  "CambridgeResultsLeaders.html":    "cambridge-results-leaders",
+  "CambridgeResultsTeachers.html":   "cambridge-results-teachers",
+  "CambridgeResultsNetwork.html":    "cambridge-results-network",
   "CambridgePathwaySimulator.html":  "cambridge-pathway",
   "SchoolSelfAppraisal.html":        "school-self-appraisal",
   "AIPrompts.html":                  "ai-prompts",
@@ -200,8 +205,12 @@ const htmlFiles = [
   "messageboard.html",
   "dashboards/AcademicStandards.html",
   "dashboards/AcademicStandardsDynamic.html",
-  // dashboards/CambridgeExamsDashboard.html — taken offline 2026-10-04: it was
-  // public and named every school's results. Returns as a login + own-school page.
+  // dashboards/CambridgeExamsDashboard.html — retired 2026-10-04: it was public
+  // and named every school's results. Replaced by the Cambridge Results pages.
+  "dashboards/CambridgeResults.html",
+  "dashboards/CambridgeResultsLeaders.html",
+  "dashboards/CambridgeResultsTeachers.html",
+  "dashboards/CambridgeResultsNetwork.html",
   "dashboards/CambridgePathwaySimulator.html",
   "SchoolSelfAppraisal.html",
   "academic-calendar.html",
@@ -585,12 +594,10 @@ if (fs.existsSync("Sections")) {
   copyDirRecursive("Sections", "dist/Sections");
   console.log("Copied: Sections/");
 }
-// Cambridge Results Pack (/cambridge-results) — NOT copied since 2026-10-04.
-// It was published without login (2026-09-24) and every view carried every
-// school's results by name; Alif then ruled that the Academic Hub shows a
-// school only its own school. The folder stays as the build-pack.js output
-// until the login + own-school edition replaces it; vercel.json redirects
-// the old URLs to the home page. Do not re-add a verbatim copy.
+// Cambridge Results Pack — the 2026-09-24 public folder (cambridge-results/,
+// no login, every school by name) was removed 2026-10-04. Its replacement is
+// the four login pages listed above; they carry no results and read each
+// school's own Firestore document. Never publish a file with every school's data.
 // Cambridge × Kurikulum Merdeka curriculum alignment dashboard — published
 // WITHOUT login (Alif, 2026-09-24) at /curriculum-alignment for school leaders.
 // Same rule as above: one self-contained page, copied verbatim, no navbar /

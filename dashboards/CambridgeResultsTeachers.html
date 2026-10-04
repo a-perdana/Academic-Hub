@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Cambridge Results for Teachers</title>
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f6f5fb;
+    --surface: #fcfcfb;
+    --surface-2: #f3f2ee;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --ink-3: #75736d;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --ring: rgba(11, 11, 11, 0.10);
+    --brand: #6c5ce7;
+    --brand-2: #0891b2;
+    --brand-ink: #4b3fc4;
+    --school: #2a78d6;
+    --weak: #eb6834;
+    --net: #2b2a28;
+    --neutral-mark: #c3c2b7;
+    --good-text: #006300;
+    --bad-text: #b42e2e;
+    --focus: #6c5ce7;
+    --b1: #86b6ef; --b2: #5598e7; --b3: #2a78d6; --b4: #1c5cab; --b5: #104281;
+    --p1: #86b6ef; --p2: #3987e5; --p3: #1c5cab; --p4: #0d366b;
+    --a1: #86b6ef; --a2: #2a78d6; --a3: #104281;
+    --tip-bg: #1f1e2b; --tip-ink: #ffffff;
+    --shadow: 0 1px 2px rgba(20, 18, 40, 0.06), 0 4px 16px rgba(20, 18, 40, 0.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+      --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10);
+      --brand-ink: #b3a9ff;
+      --school: #3987e5; --weak: #d95926; --net: #f2f1ec; --neutral-mark: #5d5c57;
+      --good-text: #0ca30c; --bad-text: #e66767; --focus: #9085e9;
+      --b1: #184f95; --b2: #2a78d6; --b3: #5598e7; --b4: #86b6ef; --b5: #b7d3f6;
+      --p1: #184f95; --p2: #3987e5; --p3: #86b6ef; --p4: #cde2fb;
+      --a1: #184f95; --a2: #5598e7; --a3: #b7d3f6;
+      --tip-bg: #f3f2ee; --tip-ink: #0b0b0b;
+      --shadow: none;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0f0f14; --surface: #1a1a19; --surface-2: #232321;
+    --ink: #ffffff; --ink-2: #c3c2b7; --ink-3: #9b998f;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, 0.10);
+    --brand-ink: #b3a9ff;
+    --school: #3987e5; --weak: #d95926; --net: #f2f1ec; --neutral-mark: #5d5c57;
+    --good-text: #0ca30c; --bad-text: #e66767; --focus: #9085e9;
+    --b1: #184f95; --b2: #2a78d6; --b3: #5598e7; --b4: #86b6ef; --b5: #b7d3f6;
+    --p1: #184f95; --p2: #3987e5; --p3: #86b6ef; --p4: #cde2fb;
+    --a1: #184f95; --a2: #5598e7; --a3: #b7d3f6;
+    --tip-bg: #f3f2ee; --tip-ink: #0b0b0b;
+    --shadow: none;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink);
+    font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  button { font: inherit; color: inherit; }
+  .rail { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---- header ---- */
+  .hero {
+    background: linear-gradient(120deg, #3b2fa0 0%, #6c5ce7 45%, #0891b2 100%);
+    color: #fff; padding: 28px 0 26px; position: relative; overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(600px 240px at 85% 0%, rgba(255,255,255,0.18), transparent 70%);
+  }
+  .hero .rail { position: relative; z-index: 1; display: flex; gap: 16px; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; }
+  .eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; opacity: .85; margin: 0 0 6px; font-weight: 600; }
+  .hero h1 { margin: 0; font-size: clamp(24px, 3.4vw, 34px); line-height: 1.15; font-weight: 700; }
+  .hero p { margin: 8px 0 0; max-width: 700px; opacity: .92; }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .hero-pill { font-size: 12.5px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.25); }
+  .theme-btn {
+    background: rgba(255,255,255,0.16); border: 1px solid rgba(255,255,255,0.3); color: #fff;
+    border-radius: 999px; padding: 6px 12px; cursor: pointer; font-size: 13px; white-space: nowrap;
+  }
+  .theme-btn:hover { background: rgba(255,255,255,0.26); }
+
+  /* ---- filter bar ---- */
+  .filters {
+    position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--surface) 94%, transparent);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--ring);
+  }
+  @media (max-width: 760px) { .filters { position: static; } }
+  .filters .rail { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: flex-end; padding-top: 12px; padding-bottom: 12px; }
+  .f-group { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .f-label { font-size: 11.5px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: .05em; }
+  select {
+    font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--axis);
+    border-radius: 10px; padding: 7px 30px 7px 10px; max-width: 100%;
+    appearance: none; -webkit-appearance: none;
+    background-image: linear-gradient(45deg, transparent 50%, var(--ink-2) 50%), linear-gradient(135deg, var(--ink-2) 50%, transparent 50%);
+    background-position: calc(100% - 15px) 55%, calc(100% - 10px) 55%; background-size: 5px 5px; background-repeat: no-repeat;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip {
+    border: 1px solid var(--axis); background: var(--surface); border-radius: 999px;
+    padding: 6px 12px; cursor: pointer; font-size: 13.5px; line-height: 1.2; white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--brand); }
+  .chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+  :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  /* ---- layout ---- */
+  main { padding: 22px 0 64px; }
+  .context { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline; margin: 0 0 14px; }
+  .context h2 { margin: 0; font-size: 22px; line-height: 1.25; }
+  .context .ctx-sub { color: var(--ink-2); font-size: 14px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .tile { background: var(--surface); border-radius: 14px; padding: 14px 16px; box-shadow: var(--shadow); border: 1px solid var(--ring); position: relative; overflow: hidden; }
+  .tile::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--brand), var(--brand-2)); }
+  .tile-label { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+  .tile-value { font-size: 30px; font-weight: 700; line-height: 1.15; margin-top: 4px; }
+  .tile-unit { font-size: 15px; font-weight: 500; color: var(--ink-3); margin-left: 2px; }
+  .tile-sub { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+  .up { color: var(--good-text); font-weight: 600; }
+  .down { color: var(--bad-text); font-weight: 600; }
+
+  .card { background: var(--surface); border-radius: 16px; border: 1px solid var(--ring); box-shadow: var(--shadow); padding: 18px 18px 16px; margin-bottom: 16px; }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .card h3 { margin: 0; font-size: 18px; line-height: 1.3; }
+  .card .lede { margin: 4px 0 0; color: var(--ink-2); font-size: 14px; max-width: 760px; }
+  .tbl-btn { border: 1px solid var(--axis); background: transparent; border-radius: 8px; padding: 5px 10px; font-size: 13px; cursor: pointer; color: var(--ink-2); white-space: nowrap; }
+  .tbl-btn:hover { border-color: var(--brand); color: var(--ink); }
+  .howto { margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: var(--surface-2); font-size: 13.5px; color: var(--ink-2); }
+  .howto b { color: var(--ink); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .two { grid-template-columns: 1fr; } }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; color: var(--ink-2); margin: 2px 0 10px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .sw { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .sw-tick { width: 3px; height: 14px; border-radius: 2px; background: var(--net); display: inline-block; }
+
+  /* stacked 100% bars */
+  .stack-row { display: grid; grid-template-columns: minmax(120px, 190px) 1fr; gap: 10px; align-items: center; margin: 7px 0; }
+  .stack-label { font-size: 13.5px; line-height: 1.25; }
+  .stack-label small { display: block; color: var(--ink-3); font-size: 12px; }
+  .stack-label.net { color: var(--ink-2); }
+  .stack { display: flex; gap: 2px; height: 30px; border-radius: 4px; overflow: hidden; }
+  .stack.thin { height: 18px; }
+  .seg { min-width: 0; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; cursor: default; }
+  .seg:first-child { border-radius: 4px 0 0 4px; }
+  .seg:last-child { border-radius: 0 4px 4px 0; }
+  .seg:hover, .seg:focus-visible { filter: brightness(1.08); }
+
+  /* horizontal bars with a network tick */
+  .hrow { display: grid; grid-template-columns: minmax(140px, 320px) 1fr 118px; gap: 10px; align-items: center; padding: 5px 6px; border-radius: 8px; }
+  .hrow.clickable { cursor: pointer; }
+  .hrow.clickable:hover { background: var(--surface-2); }
+  .hrow.active { background: color-mix(in srgb, var(--brand) 12%, transparent); outline: 1px solid color-mix(in srgb, var(--brand) 40%, transparent); }
+  .hname { font-size: 13.5px; line-height: 1.25; }
+  .htrack { position: relative; height: 16px; background: var(--surface-2); border-radius: 4px; }
+  .hfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 0 4px 4px 0; background: var(--school); }
+  .htick { position: absolute; top: -4px; bottom: -4px; width: 3px; margin-left: -1.5px; border-radius: 2px; background: var(--net); box-shadow: 0 0 0 2px var(--surface); }
+  .hval { font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; line-height: 1.2; }
+  .hval small { display: block; color: var(--ink-3); font-size: 11.5px; }
+  @media (max-width: 640px) {
+    .hrow { grid-template-columns: 1fr 84px; }
+    .hname { grid-column: 1 / -1; }
+    .stack-row { grid-template-columns: 1fr; gap: 4px; }
+  }
+
+  /* question columns */
+  .qwrap { overflow-x: auto; padding-bottom: 4px; }
+  .qchart { position: relative; height: 260px; margin: 8px 0 0 34px; }
+  .qgrid { position: absolute; left: 0; right: 0; border-top: 1px solid var(--grid); }
+  .qgrid span { position: absolute; left: -34px; top: -9px; width: 28px; text-align: right; font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .qgrid.half { border-top-color: var(--axis); }
+  .qcols { position: absolute; inset: 0; display: flex; gap: 2px; align-items: stretch; border-bottom: 1px solid var(--axis); }
+  .qcol { flex: 1 1 0; min-width: 16px; position: relative; cursor: default; background: none; border: 0; padding: 0; border-radius: 4px 4px 0 0; }
+  .qcol:hover { background: var(--surface-2); }
+  .qbar { position: absolute; left: 2px; right: 2px; bottom: 0; border-radius: 4px 4px 0 0; }
+  .qtick { position: absolute; left: 0; right: 0; height: 3px; margin-bottom: -1.5px; background: var(--net); border-radius: 2px; box-shadow: 0 0 0 1.5px var(--surface); }
+  .qcol.dim .qbar { opacity: .2; }
+  .qcol.dim .qtick { opacity: .3; }
+  .qlabels { display: flex; gap: 2px; margin-left: 34px; }
+  .qlabels span { flex: 1 1 0; min-width: 16px; text-align: center; font-size: 10.5px; color: var(--ink-3); padding-top: 4px; white-space: nowrap; overflow: hidden; }
+  .qaxis-title { font-size: 12px; color: var(--ink-3); margin-left: 34px; margin-top: 2px; }
+  .paper-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 6px; }
+  .focus-note { font-size: 13px; color: var(--ink-2); margin: 4px 0 0; }
+  .focus-note button { border: 0; background: none; color: var(--brand-ink); cursor: pointer; text-decoration: underline; padding: 0; font-size: 13px; }
+
+  /* columns for grades */
+  .gchart { display: flex; gap: 6px; align-items: flex-end; height: 200px; margin-top: 26px !important; border-bottom: 1px solid var(--axis); position: relative; margin-top: 12px; }
+  .gcol { flex: 1 1 0; position: relative; height: 100%; border-radius: 4px 4px 0 0; }
+  .gcol:hover { background: var(--surface-2); }
+  .gbar { position: absolute; left: 14%; right: 14%; bottom: 0; background: var(--school); border-radius: 4px 4px 0 0; }
+  .gtick { position: absolute; left: 6%; right: 6%; height: 3px; margin-bottom: -1.5px; background: var(--net); border-radius: 2px; box-shadow: 0 0 0 1.5px var(--surface); }
+  .gval { position: absolute; left: 0; right: 0; text-align: center; font-size: 12px; font-weight: 600; transform: translateY(-100%); padding-bottom: 2px; font-variant-numeric: tabular-nums; }
+  .glabels { display: flex; gap: 6px; }
+  .glabels span { flex: 1 1 0; text-align: center; font-size: 13px; font-weight: 600; padding-top: 4px; }
+
+  /* line chart */
+  .line-svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .line-svg text { fill: var(--ink-3); font-size: 12px; font-family: inherit; }
+  .line-svg .lbl { fill: var(--ink); font-weight: 600; }
+
+  /* tables */
+  table.data { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.data th { text-align: left; font-weight: 600; color: var(--ink-2); font-size: 12.5px; border-bottom: 1px solid var(--axis); padding: 6px 8px; white-space: nowrap; }
+  table.data td { border-bottom: 1px solid var(--grid); padding: 7px 8px; vertical-align: top; }
+  table.data td.n, table.data th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  table.data tr.clickable { cursor: pointer; }
+  table.data tr.clickable:hover td { background: var(--surface-2); }
+  table.data tr.sel td { background: color-mix(in srgb, var(--brand) 10%, transparent); }
+  .tscroll { overflow-x: auto; }
+  .heat td.cell { text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; min-width: 64px; border: 2px solid var(--surface); }
+  .table-view { margin-top: 12px; }
+
+  .next-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 12px; }
+  .next { border: 1px solid var(--ring); border-radius: 12px; padding: 12px 14px; background: var(--surface-2); }
+  .next h4 { margin: 0 0 2px; font-size: 15px; }
+  .next .meta { font-size: 12.5px; color: var(--ink-2); margin-bottom: 8px; }
+  .next ul { margin: 0; padding-left: 18px; font-size: 13.5px; }
+  .next li { margin: 5px 0; }
+  .next code { font-size: 12px; background: var(--surface); border: 1px solid var(--ring); border-radius: 5px; padding: 0 4px; }
+  .next .builds { font-size: 12.5px; color: var(--ink-2); margin-top: 8px; }
+  .link-btn { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; font-size: 13.5px; font-weight: 600; color: #fff; background: var(--brand); border-radius: 8px; padding: 6px 12px; text-decoration: none; }
+  .link-btn:hover { filter: brightness(1.08); }
+  .gate { max-width: 640px; margin: 40px auto; background: var(--surface); border: 1px solid var(--ring); border-radius: 16px; padding: 26px 28px; text-align: center; box-shadow: var(--shadow); }
+  .gate h2 { margin: 0 0 8px; font-size: 22px; }
+  .gate p { color: var(--ink-2); margin: 0 0 16px; }
+  .gate a { display: inline-block; background: var(--brand); color: #fff; font-weight: 700; text-decoration: none; padding: 9px 16px; border-radius: 10px; }
+  select:disabled { opacity: 1; cursor: default; }
+  .empty { padding: 26px; text-align: center; color: var(--ink-2); background: var(--surface); border-radius: 16px; border: 1px dashed var(--axis); }
+  .notes { font-size: 14px; color: var(--ink-2); }
+  .notes summary { cursor: pointer; font-weight: 600; color: var(--ink); font-size: 16px; }
+  .notes li { margin: 6px 0; }
+  .band-guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 8px; margin: 10px 0 4px; }
+  .band-guide div { background: var(--surface-2); border-radius: 10px; padding: 8px 10px; font-size: 13px; }
+  .band-guide b { display: flex; align-items: center; gap: 6px; color: var(--ink); }
+  footer { color: var(--ink-3); font-size: 12.5px; padding: 0 0 32px; }
+
+  /* tooltip */
+  #tip {
+    position: fixed; z-index: 50; pointer-events: none; background: var(--tip-bg); color: var(--tip-ink);
+    border-radius: 10px; padding: 8px 11px; font-size: 13px; line-height: 1.4; max-width: 300px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25); opacity: 0; transition: opacity .08s;
+  }
+  #tip.on { opacity: 1; }
+  #tip b { font-weight: 700; }
+  #tip .tip-row { display: flex; justify-content: space-between; gap: 14px; }
+  #tip .tip-muted { opacity: .75; }
+
+  @media print {
+    .filters, .theme-btn, .tbl-btn, #tip { display: none !important; }
+    body { background: #fff; }
+    .card, .tile { box-shadow: none; break-inside: avoid; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<style>
+  body { padding-top: 62px; }
+  [hidden] { display: none !important; }  /* a.card { display: flex } would beat the attribute */
+  .cr-admin { position: sticky; top: 62px; z-index: 50; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 16px; background: #fff7e6; border-bottom: 1px solid #f0d9a8; color: #6b4a00; font: 600 13.5px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .cr-admin select { font: inherit; padding: 4px 8px; border-radius: 8px; border: 1px solid #e3c98f; background: #fff; color: #3d2a00; }
+  @media print { body { padding-top: 0; } .cr-admin { display: none; } }
+</style>
+</head>
+<body data-module="academic_insights">
+
+  <script src="firebase-config.js"></script>
+  <script>
+    if (!window.ENV) window.ENV = {
+      FIREBASE_API_KEY:            "__FIREBASE_API_KEY__",
+      FIREBASE_AUTH_DOMAIN:        "__FIREBASE_AUTH_DOMAIN__",
+      FIREBASE_PROJECT_ID:         "__FIREBASE_PROJECT_ID__",
+      FIREBASE_STORAGE_BUCKET:     "__FIREBASE_STORAGE_BUCKET__",
+      FIREBASE_MESSAGING_SENDER_ID:"__FIREBASE_MESSAGING_SENDER_ID__",
+      FIREBASE_APP_ID:             "__FIREBASE_APP_ID__",
+    };
+  </script>
+  <script type="module" src="auth-guard.js"></script>
+  <div id="navbarMount"></div>
+  <script src="partials/navbar-loader.js"></script>
+
+<header class="hero">
+  <div class="rail">
+    <div>
+      <p class="eyebrow">Eduversal · Cambridge results</p>
+      <h1>Cambridge Results for Teachers</h1>
+      <p>See how your learners did, which topics and questions cost the most marks, and how each teaching group compares. Pick your school and subject below.</p>
+      <div class="hero-pills">
+        <span class="hero-pill" id="pillData"></span>
+        <span class="hero-pill">No learner names: every figure is a group figure</span>
+        <span class="hero-pill">Your school only</span>
+        <span class="hero-pill">Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04</span>
+      </div>
+    </div>
+    <button class="theme-btn" id="themeBtn" type="button" aria-label="Change colour theme">Theme: Auto</button>
+  </div>
+</header>
+
+<nav class="filters" aria-label="Choose what to show">
+  <div class="rail" id="filters"></div>
+</nav>
+
+<main>
+  <div class="rail" id="main"></div>
+</main>
+
+<footer>
+  <div class="rail" id="foot"></div>
+</footer>
+
+<div id="tip" role="tooltip"></div>
+
+<script type="text/plain" id="cr-app-src">
+const D = window.__CR_D;
+
+// ---------------------------------------------------------------------------
+// Basics
+// ---------------------------------------------------------------------------
+const LEVELS = ['Primary Checkpoint', 'Lower Secondary Checkpoint', 'IGCSE', 'AS & A Level'];
+const isCP = (l) => l.indexOf('Checkpoint') > -1;
+const SR = (s) => D.meta.seriesOrder.indexOf(s);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const fmt = (n, d) => (n == null || isNaN(n) ? '—' : Number(n).toFixed(d == null ? 0 : d));
+const pct = (a, b) => (b ? (a / b) * 100 : null);
+const sum = (a) => a.reduce((s, x) => s + x, 0);
+const sittingOf = (s) => (/^(March|May|June)/.test(s) ? 'main' : 'second');
+const schoolName = (c) => (D.schools[c] ? D.schools[c].name : c);
+const subjName = (syl) => (D.syllabus[syl] ? D.syllabus[syl].short : syl);
+const subjFull = (syl) => (D.syllabus[syl] ? D.syllabus[syl].subject : syl);
+const cssVar = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* private mode */ } },
+};
+function signed(n, d) {
+  if (n == null || isNaN(n)) return '—';
+  const r = Number(Math.abs(n).toFixed(d == null ? 0 : d));
+  if (r === 0) return '0';
+  return (n > 0 ? '+' : '−') + r.toFixed(d == null ? 0 : d);
+}
+
+const BAND_VARS = ['--neutral-mark', '--b1', '--b2', '--b3', '--b4', '--b5']; // Unclassified sits outside the scale: grey
+const PAPER_VARS_IG = ['--p4', '--p3', '--p2', '--p1', '--neutral-mark'];     // A*–A darkest ... U grey
+const PAPER_VARS_AL = ['--a3', '--a2', '--a1', '--neutral-mark'];
+
+// Readable ink on a coloured segment: light ink on dark fills.
+function inkOn(hex) {
+  const h = hex.replace('#', '');
+  if (h.length !== 6) return 'var(--ink)';
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(h.slice(i, i + 2), 16) / 255)
+    .map((c) => (c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)));
+  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return L > 0.3 ? '#0b0b0b' : '#ffffff';
+}
+
+// ---------------------------------------------------------------------------
+// State
+// ---------------------------------------------------------------------------
+const S = { school: null, level: null, series: null, syl: null, group: 'all', tier: null, paper: null, topic: null, tables: {} };
+
+function readHash() {
+  const h = new URLSearchParams(location.hash.slice(1));
+  ['school', 'level', 'series', 'syl', 'group', 'tier', 'paper'].forEach((k) => { if (h.get(k)) S[k] = h.get(k); });
+}
+function writeHash() {
+  const h = new URLSearchParams();
+  ['school', 'level', 'series', 'syl', 'group', 'tier', 'paper'].forEach((k) => { if (S[k]) h.set(k, S[k]); });
+  history.replaceState(null, '', '#' + h.toString());
+}
+
+const allRows = () => D.cp.map((c) => ({ kind: 'cp', r: c })).concat(D.ex.map((e) => ({ kind: 'ex', r: e })));
+const schoolsAvailable = () => Object.keys(D.schools).filter((c) => allRows().some((x) => x.r.centre === c))
+  .sort((a, b) => schoolName(a).localeCompare(schoolName(b)));
+const rowsFor = (level) => (isCP(level) ? D.cp : D.ex);
+
+function normalise() {
+  const schools = schoolsAvailable();
+  if (schools.indexOf(S.school) < 0) S.school = schools[0];
+  const levels = LEVELS.filter((l) => rowsFor(l).some((r) => r.level === l && r.centre === S.school));
+  if (levels.indexOf(S.level) < 0) S.level = levels[0];
+  const rows = rowsFor(S.level).filter((r) => r.level === S.level && r.centre === S.school);
+  const series = [...new Set(rows.map((r) => r.series))].sort((a, b) => SR(b) - SR(a));
+  if (series.indexOf(S.series) < 0) S.series = series[0];
+  const inSeries = rows.filter((r) => r.series === S.series);
+  const syls = [...new Set(inSeries.map((r) => r.syl))].sort((a, b) => subjName(a).localeCompare(subjName(b)));
+  if (syls.indexOf(S.syl) < 0) S.syl = syls[0];
+  if (!isCP(S.level)) {
+    const tiers = inSeries.filter((r) => r.syl === S.syl).sort((a, b) => b.n - a.n).map((r) => r.tier);
+    if (tiers.indexOf(S.tier) < 0) S.tier = tiers[0];
+  } else {
+    const c = current();
+    const codes = c ? c.groups.map((g) => g.code) : [];
+    if (S.group !== 'all' && codes.indexOf(S.group) < 0) S.group = 'all';
+    const papers = c ? c.papers.map((p) => p.comp) : [];
+    if (papers.indexOf(S.paper) < 0) S.paper = papers[0];
+    if (c && S.topic && !c.subs.some((s) => s.name === S.topic)) S.topic = null;
+  }
+  return { schools, levels, series, syls };
+}
+function current() {
+  if (isCP(S.level)) return D.cp.find((c) => c.level === S.level && c.centre === S.school && c.series === S.series && c.syl === S.syl);
+  return D.ex.find((e) => e.level === S.level && e.centre === S.school && e.series === S.series && e.syl === S.syl && e.tier === S.tier);
+}
+
+// ---------------------------------------------------------------------------
+// Filters
+// ---------------------------------------------------------------------------
+function renderFilters(opt) {
+  const f = document.getElementById('filters');
+  const chips = (key, items, label) => `<div class="chips" role="group" aria-label="${esc(label)}">${items.map(([v, t]) =>
+    `<button type="button" class="chip" data-set="${key}" data-val="${esc(v)}" aria-pressed="${String(S[key]) === String(v)}">${esc(t)}</button>`).join('')}</div>`;
+  let html = '';
+  html += `<label class="f-group"><span class="f-label">School</span><select id="fSchool"${LOCKED ? ' disabled title="This page was opened for your school"' : ''}>${opt.schools.map((c) =>
+    `<option value="${c}"${c === S.school ? ' selected' : ''}>${esc(schoolName(c))}</option>`).join('')}</select></label>`;
+  html += `<div class="f-group"><span class="f-label">Qualification</span>${chips('level', opt.levels.map((l) => [l, l]), 'Qualification')}</div>`;
+  html += `<label class="f-group"><span class="f-label">Exam series</span><select id="fSeries">${opt.series.map((s) =>
+    `<option value="${esc(s)}"${s === S.series ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select></label>`;
+  html += `<div class="f-group"><span class="f-label">Subject</span>${chips('syl', opt.syls.map((s) => [s, subjName(s)]), 'Subject')}</div>`;
+  const c = current();
+  if (isCP(S.level) && c && c.groups.length) {
+    html += `<div class="f-group"><span class="f-label">Teaching group</span>${chips('group', [['all', 'Whole school']].concat(c.groups.map((g) => [g.code, g.code])), 'Teaching group')}</div>`;
+  }
+  if (!isCP(S.level)) {
+    const tiers = D.ex.filter((e) => e.level === S.level && e.centre === S.school && e.series === S.series && e.syl === S.syl).map((e) => e.tier);
+    if (tiers.length > 1 || (tiers[0] && tiers[0] !== 'Untiered')) {
+      html += `<div class="f-group"><span class="f-label">Tier</span>${chips('tier', tiers.map((t) => [t, t]), 'Tier')}</div>`;
+    }
+  }
+  f.innerHTML = html;
+  document.getElementById('fSchool').onchange = (e) => { S.school = e.target.value; S.group = 'all'; S.topic = null; render(); };
+  document.getElementById('fSeries').onchange = (e) => { S.series = e.target.value; S.group = 'all'; S.topic = null; render(); };
+  f.querySelectorAll('[data-set]').forEach((b) => {
+    b.onclick = () => {
+      const k = b.dataset.set;
+      S[k] = b.dataset.val;
+      if (k !== 'group') { S.topic = null; }
+      if (k === 'level' || k === 'syl') { S.group = 'all'; S.paper = null; S.tier = null; }
+      render();
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Pieces
+// ---------------------------------------------------------------------------
+const tile = (label, value, unit, sub) => `<div class="tile"><div class="tile-label">${label}</div><div class="tile-value">${value}${unit ? `<span class="tile-unit">${unit}</span>` : ''}</div>${sub ? `<div class="tile-sub">${sub}</div>` : ''}</div>`;
+const tipAttr = (html) => ` data-tip="${esc(html)}" tabindex="0"`;
+const card = (id, title, lede, body, howto, tableHtml) => {
+  const open = !!S.tables[id];
+  return `<section class="card" id="${id}">
+    <div class="card-head"><div><h3>${title}</h3>${lede ? `<p class="lede">${lede}</p>` : ''}</div>
+    ${tableHtml ? `<button type="button" class="tbl-btn" data-table="${id}" aria-expanded="${open}">${open ? 'Hide table' : 'Show as table'}</button>` : ''}</div>
+    ${body}
+    ${tableHtml && open ? `<div class="table-view tscroll">${tableHtml}</div>` : ''}
+    ${howto ? `<div class="howto">${howto}</div>` : ''}
+  </section>`;
+};
+function netLabel(net) {
+  if (!net || net.schools < 2) return null;
+  const ser = net.series && net.series.length > 1 ? ` (${net.series.join(' + ')})` : '';
+  return `Network${ser}`;
+}
+function stackRow(label, sub, counts, vars, names, thin, isNet) {
+  const n = sum(counts);
+  const segs = counts.map((c, i) => {
+    if (!c) return '';
+    const p = pct(c, n);
+    const col = cssVar(vars[i]);
+    const tip = `<b>${esc(label)}</b><br>${esc(names[i])}: <b>${c}</b> of ${n} (${fmt(p, 1)}%)`;
+    const txt = !thin && p >= 9 ? `${fmt(p)}%` : '';
+    return `<div class="seg" style="flex:${c} 1 0;background:${col};color:${inkOn(col)}"${tipAttr(tip)}>${txt}</div>`;
+  }).join('');
+  return `<div class="stack-row"><div class="stack-label${isNet ? ' net' : ''}">${esc(label)}${sub ? `<small>${esc(sub)}</small>` : ''}</div><div class="stack${thin ? ' thin' : ''}">${segs}</div></div>`;
+}
+const legend = (names, vars, extra) => `<div class="legend">${names.map((n, i) => `<span><i class="sw" style="background:var(${vars[i]})"></i>${esc(n)}</span>`).join('')}${extra || ''}</div>`;
+const netLegend = (label) => `<span><i class="sw-tick"></i>${esc(label)}</span>`;
+
+function hrow(o) {
+  // o: {name, value, max, net, valText, subText, tip, click, active}
+  const w = Math.max(0, Math.min(100, (o.value / o.max) * 100));
+  const tick = o.net != null ? `<div class="htick" style="left:${Math.max(0, Math.min(100, (o.net / o.max) * 100))}%"></div>` : '';
+  const fill = o.fill ? `background:${o.fill};` : '';
+  return `<div class="hrow${o.click ? ' clickable' : ''}${o.active ? ' active' : ''}"${o.click ? ` data-topic="${esc(o.name)}" role="button"` : ''}${tipAttr(o.tip)}>
+    <div class="hname">${esc(o.name)}</div>
+    <div class="htrack"><div class="hfill" style="width:${w}%;${fill}"></div>${tick}</div>
+    <div class="hval">${o.valText}${o.subText ? `<small>${o.subText}</small>` : ''}</div></div>`;
+}
+
+function lineChart(points, yMax, yLabel, unit) {
+  // points: [{x, school, net, n}] ordered by series
+  if (points.length < 2) return '';
+  const W = 720; const H = 230; const L = 40; const R = 110; const T = 16; const B = 34;
+  const iw = W - L - R; const ih = H - T - B;
+  const X = (i) => L + (points.length === 1 ? iw / 2 : (i / (points.length - 1)) * iw);
+  const Y = (v) => T + ih - (v / yMax) * ih;
+  const step = yMax === 50 ? 10 : 25;
+  const grid = Array.from({ length: yMax / step + 1 }, (_, i) => i * step).map((v) => {
+    return `<line x1="${L}" x2="${L + iw}" y1="${Y(v)}" y2="${Y(v)}" stroke="var(--grid)" stroke-width="1"/><text x="${L - 8}" y="${Y(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+  }).join('');
+  const xl = points.map((p, i) => `<text x="${X(i)}" y="${H - 10}" text-anchor="middle">${esc(p.x)}</text>`).join('');
+  const path = (key) => {
+    const pts = points.map((p, i) => (p[key] == null ? null : [X(i), Y(p[key])]));
+    let d = ''; let pen = false;
+    pts.forEach((pt) => { if (!pt) { pen = false; return; } d += (pen ? 'L' : 'M') + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1); pen = true; });
+    return d;
+  };
+  const dots = (key, color, r) => points.map((p, i) => (p[key] == null ? '' :
+    `<circle cx="${X(i)}" cy="${Y(p[key])}" r="${r}" fill="${color}" stroke="var(--surface)" stroke-width="2"/>`)).join('');
+  const hits = points.map((p, i) => {
+    const tip = `<b>${esc(p.x)}</b><div class="tip-row"><span>Your school</span><b>${fmt(p.school, 1)}${unit}</b></div>${p.net != null ? `<div class="tip-row"><span>Network</span><b>${fmt(p.net, 1)}${unit}</b></div>` : ''}<div class="tip-muted">${p.n} learners</div>`;
+    const x0 = i === 0 ? L : (X(i - 1) + X(i)) / 2; const x1 = i === points.length - 1 ? L + iw : (X(i) + X(i + 1)) / 2;
+    return `<rect x="${x0}" y="${T}" width="${x1 - x0}" height="${ih}" fill="transparent"${tipAttr(tip)}/>`;
+  }).join('');
+  const last = points.length - 1;
+  const endLbl = (key, text, color) => (points[last][key] == null ? '' :
+    `<text class="lbl" x="${X(last) + 10}" y="${Y(points[last][key]) + 4}" style="fill:${color}">${esc(text)} ${fmt(points[last][key], 1)}${unit}</text>`);
+  const hasNet = points.some((p) => p.net != null);
+  // keep the two end labels apart
+  let netLbl = endLbl('net', 'Network', 'var(--ink-2)');
+  if (hasNet && points[last].net != null && Math.abs(Y(points[last].net) - Y(points[last].school)) < 16) {
+    const up = points[last].net > points[last].school ? -12 : 12;
+    netLbl = `<text class="lbl" x="${X(last) + 10}" y="${Y(points[last].net) + 4 + up}" style="fill:var(--ink-2)">Network ${fmt(points[last].net, 1)}${unit}</text>`;
+  }
+  return `<svg class="line-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(yLabel)} by series">
+    ${grid}${xl}
+    ${hasNet ? `<path d="${path('net')}" fill="none" stroke="var(--ink-3)" stroke-width="2"/>${dots('net', 'var(--ink-3)', 4)}` : ''}
+    <path d="${path('school')}" fill="none" stroke="var(--school)" stroke-width="2.5"/>${dots('school', 'var(--school)', 5)}
+    ${endLbl('school', 'Your school', 'var(--school)')}${hasNet ? netLbl : ''}
+    ${hits}
+  </svg>`;
+}
+
+// ---------------------------------------------------------------------------
+// Next steps — where a weak topic lives in the Cambridge curriculum
+// ---------------------------------------------------------------------------
+function pacingLink(syl) {
+  const p = D.pacing[syl];
+  return p ? `<a class="link-btn" href="${esc(p[0])}" target="_blank" rel="noopener">Open ${esc(p[1])} in Teachers Hub ↗</a>` : '';
+}
+function nextStepsCard(c, subVal, scope) {
+  const cur = D.curriculum[c.syl];
+  const net = c.net.subs || {};
+  // Thinking and Working Mathematically runs across every topic and has no scheme-of-work unit,
+  // so it is left out of the automatic pick, but a teacher who clicks it still gets the card.
+  const pool = c.subs.filter((s) => subVal(s) != null);
+  const chosen = S.topic ? pool.filter((s) => s.name === S.topic)
+    : pool.filter((s) => s.name !== 'Thinking and Working Mathematically').sort((a, b) => subVal(a) - subVal(b)).slice(0, 3);
+  if (!chosen.length) return '';
+  const codes = (list) => list.map((x) => `<code>${esc(x)}</code>`).join(' ');
+  const boxes = chosen.map((s) => {
+    const n = net[s.name];
+    const meta = `${esc(scope)}: <b>${fmt(subVal(s))}%</b> of marks${n != null && c.net.paperSchools >= 2 ? ` · network ${fmt(n)}%` : ''}`;
+    const m = cur && cur.subs[s.name];
+    let body = '';
+    if (m && m.stage9) {
+      body = m.stage9.length
+        ? (() => {
+          const li = (e) => `<li><code>${esc(e.code)}</code> <b>${esc(e.title)}</b> <span style="color:var(--ink-3)">· ${esc(e.unit)}</span>${e.objectives.length ? `<br>${esc(e.objectives.join(' '))}` : ''}</li>`;
+          const first = m.stage9.slice(0, 4); const rest = m.stage9.slice(4);
+          return `<ul>${first.map(li).join('')}</ul>${rest.length ? `<details style="margin-top:4px;font-size:13.5px"><summary style="cursor:pointer;color:var(--brand-ink)">${rest.length} more Stage 9 objective${rest.length > 1 ? 's' : ''}</summary><ul>${rest.map(li).join('')}</ul></details>` : ''}`;
+        })()
+        : '<p style="margin:0;font-size:13.5px">No Stage 9 objective in this topic; it is taught in Stages 7 and 8.</p>';
+    } else if (m && m.stage9Codes) {
+      body = m.stage9Codes.length ? `<p style="margin:0;font-size:13.5px">Stage 9 learning objectives: ${codes(m.stage9Codes)}</p>` : '<p style="margin:0;font-size:13.5px">No Stage 9 objective in this topic; it is taught in Stages 7 and 8.</p>';
+    } else {
+      body = s.name === 'Thinking and Working Mathematically'
+        ? '<p style="margin:0;font-size:13.5px;color:var(--ink-2)">This strand runs through every topic rather than sitting in one unit. Build it into lessons across the scheme of work: ask learners to specialise, generalise, conjecture and convince.</p>'
+        : '<p style="margin:0;font-size:13.5px;color:var(--ink-2)">Find this topic in your scheme of work and plan when to revisit it.</p>';
+    }
+    const builds = m && ((m.stage7Codes && m.stage7Codes.length) || (m.stage8Codes && m.stage8Codes.length))
+      ? `<div class="builds">Builds on Stage 7: ${codes(m.stage7Codes || []) || '—'} · Stage 8: ${codes(m.stage8Codes || []) || '—'}</div>` : '';
+    return `<div class="next"><h4>${esc(s.name)}</h4><div class="meta">${meta}</div>${body}${builds}</div>`;
+  }).join('');
+  const lede = S.topic
+    ? `The topic you selected, and where it sits in the Cambridge curriculum.`
+    : `The three topics where ${g0(scope)} earned the smallest share of the marks, and where each sits in the Cambridge curriculum. Click any topic above to see it here instead.`;
+  const src = cur ? `<p style="margin:10px 0 0;font-size:12.5px;color:var(--ink-3)">Source: ${esc(cur.source)}.</p>` : '';
+  return card('cNext', 'What to teach next', lede, `<div class="next-grid">${boxes}</div>${src}${pacingLink(c.syl)}`,
+    `<b>How to use this:</b> the Checkpoint test is sat at the end of Stage 9, so a weak topic usually means going back over the Stage 9 objectives listed here, and checking the Stage 7 and 8 objectives it builds on. Plan the revisit in your pacing${D.pacing[c.syl] ? ' (the button opens it in Teachers Hub; you need to be signed in)' : ''}.`, null);
+}
+const g0 = (scope) => (scope === 'Your school' ? 'your learners' : scope.toLowerCase().replace('group', 'group'));
+
+// ---------------------------------------------------------------------------
+// Checkpoint view
+// ---------------------------------------------------------------------------
+function renderCP(c) {
+  const g = S.group === 'all' ? null : c.groups.find((x) => x.code === S.group);
+  const scope = g ? `Group ${g.code}` : 'Your school';
+  const ov = g ? g.overall : c.overall;
+  const net = c.net;
+  const nl = netLabel(net);
+  const goodUp = (o) => pct(o.bands[3] + o.bands[4] + o.bands[5], o.n);
+
+  // ---- tiles ----
+  let changeTile;
+  if (g) {
+    changeTile = tile('Compared with the whole school', signed(ov.mean - c.overall.mean, 1), ' pts', `Whole school average ${fmt(c.overall.mean, 1)} of 50`);
+  } else if (c.prev) {
+    const d = c.overall.mean - c.prev.mean;
+    changeTile = tile(`Change since ${esc(c.prev.series)}`, `<span class="${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '▲' : '▼'} ${fmt(Math.abs(d), 1)}</span>`, ' pts',
+      `Average score was ${fmt(c.prev.mean, 1)} (${c.prev.n} learners)`);
+  } else {
+    changeTile = tile('Change since last year', '—', '', 'No earlier series of the same sitting with 10+ learners');
+  }
+  const tiles = `<div class="tiles">
+    ${tile(`${scope}: learners`, ov.n, '', g ? `of ${c.n} in the school` : `${c.groups.length ? c.groups.length + ' teaching groups' : 'One teaching group'}`)}
+    ${tile('Average Checkpoint score', fmt(ov.mean, 1), ' / 50', nl ? `${esc(nl)}: ${fmt(net.overall.mean, 1)} (${net.overall.n} learners, ${net.schools} schools)` : 'Only your school sat this subject in this series')}
+    ${tile('Scored Good or better (21+)', fmt(goodUp(ov)), '%', nl ? `${esc(nl)}: ${fmt(goodUp(net.overall))}%` : '')}
+    ${changeTile}
+  </div>`;
+
+  // ---- score bands ----
+  const bandNames = D.meta.bands.map((b) => `${b.name} ${b.lo === b.hi ? b.lo : b.lo + '–' + b.hi}`);
+  let bandRows = '';
+  if (c.groups.length) c.groups.forEach((x) => { bandRows += stackRow(`Group ${x.code}`, `${x.overall.n} learners · average ${fmt(x.overall.mean, 1)}`, x.overall.bands, BAND_VARS, bandNames); });
+  bandRows += stackRow('Whole school', `${c.overall.n} learners · average ${fmt(c.overall.mean, 1)}`, c.overall.bands, BAND_VARS, bandNames);
+  if (nl) bandRows += stackRow(nl, `${net.overall.n} learners · average ${fmt(net.overall.mean, 1)}`, net.overall.bands, BAND_VARS, bandNames, false, true);
+  const bandTable = `<table class="data"><thead><tr><th>Group</th>${D.meta.bands.map((b) => `<th class="n">${esc(b.name)}</th>`).join('')}<th class="n">Learners</th><th class="n">Average</th></tr></thead><tbody>
+    ${(c.groups.map((x) => [`Group ${x.code}`, x.overall]).concat([['Whole school', c.overall]]).concat(nl ? [[nl, net.overall]] : []))
+      .map(([l, o]) => `<tr><td>${esc(l)}</td>${o.bands.map((b) => `<td class="n">${b}</td>`).join('')}<td class="n">${o.n}</td><td class="n">${fmt(o.mean, 1)}</td></tr>`).join('')}</tbody></table>`;
+  const bandsCard = card('cBands', 'How learners spread across the score bands',
+    'Cambridge reports every learner on a 0–50 Checkpoint scale. Each bar shows the share of learners in each band.',
+    legend(bandNames, BAND_VARS) + bandRows,
+    `<b>How to read this:</b> the bands run from low on the left to high on the right, in the order of the key above. <b>Good (21–30)</b> means a learner is secure in most of the content. Look at the left-hand part of each bar: learners in Basic and Aspiring need the most support.${c.hiddenLearners ? ` ${c.hiddenLearners} learners are in teaching groups with fewer than ${D.meta.minReport} learners, so those groups are not shown on their own; they are included in the whole school bar.` : ''}`,
+    bandTable);
+
+  // ---- strands ----
+  const st = g ? g.strands : c.strands;
+  const strandRows = c.strandOrder.filter((s) => st[s] != null).map((s) => hrow({
+    name: s, value: st[s], max: 50, net: nl ? net.strands[s] : null,
+    valText: `<b>${fmt(st[s], 1)}</b>`, subText: nl ? `network ${fmt(net.strands[s], 1)}` : '',
+    tip: `<b>${esc(s)}</b><div class="tip-row"><span>${esc(scope)}</span><b>${fmt(st[s], 1)} / 50</b></div>${nl ? `<div class="tip-row"><span>${esc(nl)}</span><b>${fmt(net.strands[s], 1)}</b></div><div class="tip-muted">${signed(st[s] - net.strands[s], 1)} points compared with the network</div>` : ''}`,
+  })).join('');
+  const strandTable = `<table class="data"><thead><tr><th>Strand</th>${c.groups.map((x) => `<th class="n">Group ${esc(x.code)}</th>`).join('')}<th class="n">Whole school</th>${nl ? `<th class="n">${esc(nl)}</th>` : ''}</tr></thead><tbody>
+    ${c.strandOrder.map((s) => `<tr><td>${esc(s)}</td>${c.groups.map((x) => `<td class="n">${fmt(x.strands[s], 1)}</td>`).join('')}<td class="n">${fmt(c.strands[s], 1)}</td>${nl ? `<td class="n">${fmt(net.strands[s], 1)}</td>` : ''}</tr>`).join('')}</tbody></table>`;
+  const strandsCard = card('cStrands', 'Strand scores',
+    `Average score on each strand of ${esc(subjFull(c.syl))}, on the same 0–50 scale.`,
+    legend([scope], ['--school'], nl ? netLegend(nl) : '') + strandRows,
+    `<b>How to read this:</b> a longer bar is a stronger strand. The upright tick mark is the network average. A bar that stops well before its tick is a strand to plan more teaching time for.`,
+    strandTable);
+
+  // ---- sub-strands (topics) ----
+  const subVal = (s) => (g ? s.g[g.code] : s.pct);
+  const subs = c.subs.filter((s) => subVal(s) != null).slice().sort((a, b) => subVal(a) - subVal(b));
+  const subRows = subs.map((s) => {
+    const v = subVal(s); const n = net.subs ? net.subs[s.name] : null;
+    const hasNet = n != null && net.paperSchools >= 2;
+    return hrow({
+      name: s.name, value: v, max: 100, net: hasNet ? n : null, fill: v < 50 ? 'var(--weak)' : null,
+      valText: `<b>${fmt(v)}%</b>`, subText: hasNet ? `${signed(v - n)} vs network` : '',
+      click: true, active: S.topic === s.name,
+      tip: `<b>${esc(s.name)}</b><div class="tip-row"><span>${esc(scope)}</span><b>${fmt(v, 1)}% of marks</b></div>${hasNet ? `<div class="tip-row"><span>Network</span><b>${fmt(n, 1)}%</b></div>` : ''}<div class="tip-muted">${s.avail / c.n > 0 ? `${fmt(s.avail / c.n)} marks per learner on this topic` : ''} · click to see its questions</div>`,
+    });
+  }).join('');
+  const subTable = `<table class="data"><thead><tr><th>Topic</th><th class="n">${esc(scope)}</th>${nl ? '<th class="n">Network</th><th class="n">Difference</th>' : ''}</tr></thead><tbody>
+    ${subs.map((s) => { const n = net.subs ? net.subs[s.name] : null; return `<tr><td>${esc(s.name)}</td><td class="n">${fmt(subVal(s), 1)}%</td>${nl ? `<td class="n">${fmt(n, 1)}%</td><td class="n">${signed(subVal(s) - n, 1)}</td>` : ''}</tr>`; }).join('')}</tbody></table>`;
+  const subsCard = card('cSubs', 'Topics: where marks were won and lost',
+    'Share of the available marks that learners earned on each topic (Cambridge calls these sub-strands), weakest first. Every paper the topic appears on is counted together.',
+    legend([`${scope}: half the marks or more`, `${scope}: fewer than half the marks`], ['--school', '--weak'], net.paperSchools >= 2 ? netLegend('Network (schools that sat the same papers)') : '') + subRows,
+    `<b>How to read this:</b> the topics at the top cost your learners the most marks. <b>Orange</b> means learners earned fewer than half of the marks. <b>Click a topic</b> to highlight its questions in the chart below.`,
+    subTable);
+
+  // ---- heatmap by group ----
+  let heatCard = '';
+  if (c.groups.length && !g) {
+    const steps = ['--b1', '--b2', '--b3', '--b4', '--b5'];
+    const colFor = (v) => cssVar(steps[Math.min(4, Math.floor(v / 20))]);
+    const sorted = c.subs.slice().sort((a, b) => a.pct - b.pct);
+    const rows = sorted.map((s) => `<tr><td>${esc(s.name)}</td>${c.groups.map((x) => {
+      const v = s.g[x.code];
+      if (v == null) return '<td class="cell">—</td>';
+      const col = colFor(v);
+      return `<td class="cell" style="background:${col};color:${inkOn(col)}"${tipAttr(`<b>${esc(s.name)}</b><br>Group ${esc(x.code)}: <b>${fmt(v, 1)}%</b> of marks<br><span class="tip-muted">Whole school ${fmt(s.pct, 1)}%</span>`)}>${fmt(v)}%</td>`;
+    }).join('')}<td class="cell n" style="background:var(--surface-2)">${fmt(s.pct)}%</td></tr>`).join('');
+    heatCard = card('cHeat', 'Topics by teaching group',
+      'The same topic figures, split by teaching group. Each colour is a range of marks earned, shown in the key above.',
+      `${legend(['0–19%', '20–39%', '40–59%', '60–79%', '80–100%'], steps)}<div class="tscroll"><table class="data heat"><thead><tr><th>Topic</th>${c.groups.map((x) => `<th class="n">Group ${esc(x.code)}<br><span style="font-weight:400">${x.n} learners</span></th>`).join('')}<th class="n">Whole school</th></tr></thead><tbody>${rows}</tbody></table></div>`,
+      `<b>How to read this:</b> read across a row to compare groups on one topic. A cell with a much lower number than the others in its row shows a topic that one group needs to revisit. Groups with fewer than ${D.meta.minReport} learners are not shown.`,
+      null);
+  }
+
+  // ---- questions ----
+  const paper = c.papers.find((p) => p.comp === S.paper) || c.papers[0];
+  let qCard = '';
+  if (paper) {
+    const netQ = net.papers ? net.papers[paper.comp] : null;
+    const qv = (q) => (g ? q.g[g.code] : q.pct);
+    const cols = paper.q.map((q, i) => {
+      const v = qv(q); const n = netQ ? netQ[i] : null;
+      const dim = S.topic && q.sub !== S.topic;
+      const colour = v != null && v < 50 ? 'var(--weak)' : 'var(--school)';
+      const tip = `<b>Question ${esc(q.q)}</b> · ${q.max} mark${q.max > 1 ? 's' : ''}<br><span class="tip-muted">${esc(q.sub || '')}</span><div class="tip-row"><span>${esc(scope)}</span><b>${fmt(v, 1)}%</b></div>${n != null ? `<div class="tip-row"><span>Network</span><b>${fmt(n, 1)}%</b></div><div class="tip-muted">${signed(v - n)} points compared with the network</div>` : ''}`;
+      return `<div class="qcol${dim ? ' dim' : ''}"${tipAttr(tip)} aria-label="Question ${esc(q.q)}">${v != null ? `<div class="qbar" style="height:${v}%;background:${colour}"></div>` : ''}${n != null ? `<div class="qtick" style="bottom:${n}%"></div>` : ''}</div>`;
+    }).join('');
+    const grid = [0, 25, 50, 75, 100].map((y) => `<div class="qgrid${y === 50 ? ' half' : ''}" style="bottom:${y}%"><span>${y}%</span></div>`).join('');
+    const minW = paper.q.length * 20 + 40;
+    const tabs = c.papers.length > 1 ? `<div class="paper-tabs" role="group" aria-label="Paper">${c.papers.map((p) =>
+      `<button type="button" class="chip" data-paper="${esc(p.comp)}" aria-pressed="${p.comp === paper.comp}">Paper ${esc(p.comp.replace(/^0/, ''))} · ${p.q.length} questions</button>`).join('')}</div>` : '';
+    const focus = S.topic ? `<p class="focus-note">Highlighting questions on <b>${esc(S.topic)}</b> (${paper.q.filter((q) => q.sub === S.topic).length} on this paper). <button type="button" data-clear-topic>Show all questions</button></p>` : '';
+
+    // questions to look at first — across ALL papers
+    const allQ = [];
+    c.papers.forEach((p) => {
+      const nq = net.papers ? net.papers[p.comp] : null;
+      p.q.forEach((q, i) => { const v = qv(q); if (v != null) allQ.push({ paper: p.comp, q, v, n: nq ? nq[i] : null }); });
+    });
+    const withNet = allQ.filter((x) => x.n != null);
+    const pick = allQ.slice().sort((a, b) => a.v - b.v || (a.n == null ? 0 : a.v - a.n) - (b.n == null ? 0 : b.v - b.n)).slice(0, 10);
+    const lookTable = `<div class="tscroll"><table class="data"><thead><tr><th>Paper</th><th>Question</th><th>Topic</th><th class="n">Marks</th><th class="n">${esc(scope)}</th>${withNet.length ? '<th class="n">Network</th><th class="n">Difference</th>' : ''}</tr></thead><tbody>
+      ${pick.map((x) => `<tr><td>${esc(x.paper.replace(/^0/, ''))}</td><td><b>${esc(x.q.q)}</b></td><td>${esc(x.q.sub || '')}</td><td class="n">${x.q.max}</td><td class="n">${fmt(x.v)}%</td>${withNet.length ? `<td class="n">${fmt(x.n)}%</td><td class="n"><b>${signed(x.v - x.n)}</b></td>` : ''}</tr>`).join('')}</tbody></table></div>`;
+
+    const qTable = `<table class="data"><thead><tr><th>Question</th><th>Topic</th><th class="n">Marks</th><th class="n">${esc(scope)}</th>${netQ ? '<th class="n">Network</th>' : ''}</tr></thead><tbody>
+      ${paper.q.map((q, i) => `<tr><td>${esc(q.q)}</td><td>${esc(q.sub || '')}</td><td class="n">${q.max}</td><td class="n">${fmt(qv(q), 1)}%</td>${netQ ? `<td class="n">${fmt(netQ[i], 1)}%</td>` : ''}</tr>`).join('')}</tbody></table>`;
+
+    qCard = card('cQuestions', 'Question by question',
+      `Share of the marks learners earned on each question of Paper ${esc(paper.comp.replace(/^0/, ''))}. Hover or tap a column for the topic and the network figure.`,
+      tabs + legend(['Half the marks or more', 'Fewer than half the marks'], ['--school', '--weak'], netQ ? netLegend('Network (schools that sat this paper)') : '') + focus +
+      `<div class="qwrap"><div style="min-width:${minW}px"><div class="qchart">${grid}<div class="qcols">${cols}</div></div>
+       <div class="qlabels">${paper.q.map((q) => `<span>${esc(q.q)}</span>`).join('')}</div><div class="qaxis-title">Question number</div></div></div>
+       <h4 style="margin:18px 0 6px;font-size:15px">Questions to look at first</h4>
+       <p class="lede" style="margin:0 0 8px">The ten questions where ${g ? 'this group' : 'your learners'} earned the smallest share of the marks, across every paper.${withNet.length ? ' The last column shows whether other schools found the question hard too: a large minus means other schools did much better.' : ''}</p>${lookTable}`,
+      `<b>How to read this:</b> each column is one question. A short <b>orange</b> column is a question most learners could not answer. When the tick mark sits well <b>above</b> the column, other schools did better on that question, so the gap is about teaching, not about a hard question. Your school's own copy of the question paper shows what each question asked.`,
+      qTable);
+  }
+
+  // ---- over time ----
+  const hist = D.cp.filter((x) => x.level === c.level && x.centre === c.centre && x.syl === c.syl).sort((a, b) => SR(a.series) - SR(b.series));
+  let timeCard = '';
+  if (hist.length >= 2) {
+    const pts = hist.map((x) => ({ x: x.series, school: x.overall.mean, net: x.net && x.net.schools >= 2 ? x.net.overall.mean : null, n: x.overall.n }));
+    const mixed = new Set(hist.map((x) => sittingOf(x.series))).size > 1;
+    timeCard = card('cTime', 'Average score over time',
+      `${esc(subjFull(c.syl))}, whole school, every series your school sat.`,
+      legend(['Your school'], ['--school'], `<span><i class="sw" style="background:var(--ink-3)"></i>Network</span>`) + lineChart(pts, 50, 'Average Checkpoint score', ''),
+      `<b>How to read this:</b> each point is one exam series. The 0–50 score is standardised by Cambridge, so points can be compared across series.${mixed ? ' October and November are a smaller second sitting, usually a different group of learners from the May sitting, so compare May with May.' : ''}`,
+      `<table class="data"><thead><tr><th>Series</th><th class="n">Learners</th><th class="n">Your school</th><th class="n">Network</th></tr></thead><tbody>${pts.map((p) => `<tr><td>${esc(p.x)}</td><td class="n">${p.n}</td><td class="n">${fmt(p.school, 1)}</td><td class="n">${fmt(p.net, 1)}</td></tr>`).join('')}</tbody></table>`);
+  }
+
+  return tiles + bandsCard + strandsCard + subsCard + nextStepsCard(c, subVal, scope) + heatCard + qCard + timeCard;
+}
+
+// ---------------------------------------------------------------------------
+// IGCSE / AS & A Level view
+// ---------------------------------------------------------------------------
+const IG_PASS = ['A*', 'A', 'B', 'C'];
+function igPct(grades, n, set) { return pct(sum(set.map((g) => grades[g] || 0)), n); }
+function alSplit(grades) {
+  const AS = {}; const A2 = {}; let U = 0;
+  Object.entries(grades).forEach(([g, c]) => {
+    if (/^[a-e]$/.test(g)) AS[g] = c; else if (g === 'U') U += c; else A2[g] = c;
+  });
+  return { AS, A2, U, nAS: sum(Object.values(AS)), nA2: sum(Object.values(A2)) };
+}
+
+function renderEX(e) {
+  const isAL = e.level === 'AS & A Level';
+  const net = e.net;
+  const hasNet = net && net.schools >= 2;
+  const nlab = hasNet ? `Network (${net.schools} schools)` : null;
+  const tierTxt = e.tier !== 'Untiered' ? ` · ${e.tier} tier` : '';
+
+  let tiles;
+  if (!isAL) {
+    const ac = igPct(e.grades, e.n, IG_PASS);
+    const aa = igPct(e.grades, e.n, ['A*', 'A']);
+    let change = tile('Change since last year', '—', '', 'No earlier series of the same sitting with 10+ candidates');
+    if (e.prev) {
+      const pn = sum(Object.values(e.prev.grades));
+      const d = ac - igPct(e.prev.grades, pn, IG_PASS);
+      change = tile(`A*–C change since ${esc(e.prev.series)}`, `<span class="${d >= 0 ? 'up' : 'down'}">${d >= 0 ? '▲' : '▼'} ${fmt(Math.abs(d))}</span>`, ' pts', `Was ${fmt(igPct(e.prev.grades, pn, IG_PASS))}% of ${pn} candidates`);
+    }
+    tiles = `<div class="tiles">
+      ${tile('Candidates with a grade', e.n, '', e.incomplete ? `${e.incomplete} more entered but missed a paper, so have no grade` : `${e.entries} entered`)}
+      ${tile('Grades A*–C', fmt(ac), '%', hasNet ? `Network: ${fmt(igPct(net.grades, net.n, IG_PASS))}% of ${net.n}` : 'Only your school sat this in this series')}
+      ${tile('Grades A*–A', fmt(aa), '%', hasNet ? `Network: ${fmt(igPct(net.grades, net.n, ['A*', 'A']))}%` : '')}
+      ${change}
+    </div>`;
+  } else {
+    const s = alSplit(e.grades);
+    const a2ac = s.nA2 >= D.meta.minReport ? `${fmt(pct(sum(['A*', 'A', 'B', 'C'].map((g) => s.A2[g] || 0)), s.nA2))}% at A*–C` : (s.nA2 ? 'too few to show a percentage' : '');
+    const asac = s.nAS >= D.meta.minReport ? `${fmt(pct(sum(['a', 'b', 'c'].map((g) => s.AS[g] || 0)), s.nAS))}% at a–c` : (s.nAS ? 'too few to show a percentage' : '');
+    tiles = `<div class="tiles">
+      ${tile('Candidates with a result', e.n, '', e.incomplete ? `${e.incomplete} more entered but missed a paper` : `${e.entries} entered`)}
+      ${tile('Full A Level awards', s.nA2, '', a2ac)}
+      ${tile('AS Level awards', s.nAS, '', asac)}
+      ${tile('Ungraded (U)', s.U, '', 'Cannot be split between AS and A Level')}
+    </div>`;
+  }
+
+  // ---- grade columns ----
+  const gradeCols = (list, grades, n, netGrades, netN, label) => {
+    const vals = list.map((g) => pct(grades[g] || 0, n));
+    const nv = netGrades ? list.map((g) => pct(netGrades[g] || 0, netN)) : null;
+    const top = Math.max(10, ...vals, ...(nv || [0]));
+    const yMax = Math.ceil(top / 10) * 10;
+    return `<div class="gchart" role="img" aria-label="${esc(label)}">${list.map((g, i) => {
+      const tip = `<b>Grade ${esc(g)}</b><div class="tip-row"><span>Your school</span><b>${grades[g] || 0} (${fmt(vals[i], 1)}%)</b></div>${nv ? `<div class="tip-row"><span>Network</span><b>${fmt(nv[i], 1)}%</b></div>` : ''}`;
+      return `<div class="gcol"${tipAttr(tip)}><div class="gbar" style="height:${(vals[i] / yMax) * 100}%"></div>${vals[i] > 0 ? `<div class="gval" style="bottom:${(Math.max(vals[i], nv ? nv[i] : 0) / yMax) * 100 + 1.5}%">${fmt(vals[i])}%</div>` : ''}${nv ? `<div class="gtick" style="bottom:${(nv[i] / yMax) * 100}%"></div>` : ''}</div>`;
+    }).join('')}</div><div class="glabels">${list.map((g) => `<span>${esc(g)}</span>`).join('')}</div>`;
+  };
+  let gradesBody; let gradesTable; let gradesHow;
+  if (!isAL) {
+    gradesBody = legend(['Your school'], ['--school'], hasNet ? netLegend(nlab) : '') + gradeCols(D.meta.igGrades, e.grades, e.n, hasNet ? net.grades : null, hasNet ? net.n : 0, 'Grade distribution');
+    gradesTable = `<table class="data"><thead><tr><th>Grade</th><th class="n">Candidates</th><th class="n">Your school</th>${hasNet ? '<th class="n">Network</th>' : ''}</tr></thead><tbody>${D.meta.igGrades.map((g) => `<tr><td>${esc(g)}</td><td class="n">${e.grades[g] || 0}</td><td class="n">${fmt(pct(e.grades[g] || 0, e.n), 1)}%</td>${hasNet ? `<td class="n">${fmt(pct(net.grades[g] || 0, net.n), 1)}%</td>` : ''}</tr>`).join('')}</tbody></table>`;
+    gradesHow = `<b>How to read this:</b> each column is the share of candidates who got that grade. The tick mark is the network share.${e.tier === 'Core' ? ' <b>Core tier is capped at grade C</b>, so compare Core candidates only with other Core candidates.' : ''}`;
+  } else {
+    const s = alSplit(e.grades); const ns = hasNet ? alSplit(net.grades) : null;
+    const block = (title, list, grades, n, ng, nn) => (n ? `<div><h4 style="margin:6px 0 0;font-size:14.5px">${title} · ${n} awards</h4>${gradeCols(list, grades, n, ng, nn, title)}</div>` : '');
+    const both = s.nA2 && s.nAS;
+    gradesBody = legend(['Your school'], ['--school'], hasNet ? netLegend(nlab) : '') + `<div class="${both ? 'two' : ''}">${block('Full A Level', ['A*', 'A', 'B', 'C', 'D', 'E'], s.A2, s.nA2, ns && ns.A2, ns && ns.nA2)}${block('AS Level', ['a', 'b', 'c', 'd', 'e'], s.AS, s.nAS, ns && ns.AS, ns && ns.nAS)}</div>`;
+    gradesTable = `<table class="data"><thead><tr><th>Grade</th><th class="n">Candidates</th></tr></thead><tbody>${Object.entries(e.grades).sort().map(([g, c2]) => `<tr><td>${esc(g)}</td><td class="n">${c2}</td></tr>`).join('')}</tbody></table>`;
+    gradesHow = `<b>How to read this:</b> Cambridge writes AS grades in small letters (a–e) and full A Level grades in capitals (A*–E), so the two are shown separately. Each chart shows the share of that award's candidates at each grade. <b>U</b> is written the same way for both, so ${s.U} ungraded result${s.U === 1 ? '' : 's'} cannot be placed in either chart.`;
+  }
+  const gradesCard = card('eGrades', 'Grades', `${esc(subjFull(e.syl))}${tierTxt}, ${esc(e.series)}.`, gradesBody, gradesHow, gradesTable);
+
+  // ---- papers ----
+  const pNames = isAL ? D.meta.paperBandsAL : D.meta.paperBandsIG;
+  const pVars = isAL ? PAPER_VARS_AL : PAPER_VARS_IG;
+  let paperRows = '';
+  e.papers.forEach((p) => {
+    const np = hasNet && net.papers ? net.papers[p.paper] : null;
+    if (p.ungradedPaper) {
+      paperRows += `<div class="stack-row"><div class="stack-label">Paper ${esc(p.paper)}<small>${p.n} candidates</small></div><div style="font-size:13.5px;color:var(--ink-2)">This paper is reported as an endorsement (1–5), not a letter grade. Average mark ${fmt(p.meanRaw, 1)}${np ? `; network ${fmt(np.meanRaw, 1)}` : ''}.</div></div>`;
+      return;
+    }
+    paperRows += stackRow(`Paper ${p.paper}`, `${p.n} candidates · average mark ${fmt(p.meanRaw, 1)}`, p.bands, pVars, pNames);
+    if (np && np.bands) paperRows += stackRow('Network', `${np.n} candidates · average mark ${fmt(np.meanRaw, 1)}`, np.bands, pVars, pNames, true, true);
+  });
+  const paperTable = `<table class="data"><thead><tr><th>Paper</th><th class="n">Candidates</th><th class="n">Average mark</th>${pNames.map((n) => `<th class="n">${esc(n)}</th>`).join('')}</tr></thead><tbody>
+    ${e.papers.map((p) => `<tr><td>Paper ${esc(p.paper)}</td><td class="n">${p.n}</td><td class="n">${fmt(p.meanRaw, 1)}</td>${(p.bands || pNames.map(() => '—')).map((b) => `<td class="n">${b}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  const papersCard = card('ePapers', 'Paper by paper',
+    'Cambridge also grades each paper on its own. This shows which paper held your candidates back.',
+    legend(pNames, pVars) + paperRows,
+    `<b>How to read this:</b> compare the papers with each other. The grades run from high on the left to low on the right. If one paper has a much larger right-hand part than the others, that paper, and the skills it tests, is where to focus. The average mark is out of each paper's own total, which the Cambridge report does not include, so compare average marks only for the same paper.${hasNet ? ' The thinner bar under each paper is the network.' : ''}`,
+    paperTable);
+
+  // ---- all subjects at this school ----
+  const all = D.ex.filter((x) => x.level === e.level && x.centre === e.centre && x.series === e.series)
+    .sort((a, b) => subjName(a.syl).localeCompare(subjName(b.syl)) || a.tier.localeCompare(b.tier));
+  const allTable = !isAL
+    ? `<table class="data"><thead><tr><th>Subject</th><th>Tier</th><th class="n">Candidates</th><th class="n">A*–A</th><th class="n">A*–C</th><th class="n">Network A*–C</th><th class="n">Difference</th></tr></thead><tbody>
+      ${all.map((x) => { const ac = igPct(x.grades, x.n, IG_PASS); const nac = x.net.schools >= 2 ? igPct(x.net.grades, x.net.n, IG_PASS) : null; return `<tr class="clickable${x === e ? ' sel' : ''}" data-pick="${esc(x.syl)}|${esc(x.tier)}" tabindex="0"><td>${esc(subjName(x.syl))}</td><td>${x.tier === 'Untiered' ? '—' : esc(x.tier)}</td><td class="n">${x.n}</td><td class="n">${fmt(igPct(x.grades, x.n, ['A*', 'A']))}%</td><td class="n"><b>${fmt(ac)}%</b></td><td class="n">${nac == null ? '—' : fmt(nac) + '%'}</td><td class="n">${nac == null ? '—' : signed(ac - nac)}</td></tr>`; }).join('')}</tbody></table>`
+    : `<table class="data"><thead><tr><th>Subject</th><th class="n">A Level awards</th><th class="n">AS awards</th><th class="n">U</th></tr></thead><tbody>
+      ${all.map((x) => { const s = alSplit(x.grades); return `<tr class="clickable${x === e ? ' sel' : ''}" data-pick="${esc(x.syl)}|${esc(x.tier)}" tabindex="0"><td>${esc(subjName(x.syl))}</td><td class="n">${s.nA2}</td><td class="n">${s.nAS}</td><td class="n">${s.U}</td></tr>`; }).join('')}</tbody></table>`;
+  const allCard = card('eAll', `Every subject at ${esc(schoolName(e.centre))}`, `${esc(e.level)}, ${esc(e.series)}. Click a row to open that subject.`,
+    `<div class="tscroll">${allTable}</div>`,
+    !isAL ? `<b>How to read this:</b> Core and Extended are always separate rows, because Core grades stop at C. A subject or tier with fewer than ${D.meta.minReport} graded candidates is not listed.` : null, null);
+
+  // ---- over time ----
+  let timeCard = '';
+  if (!isAL) {
+    const hist = D.ex.filter((x) => x.level === e.level && x.centre === e.centre && x.syl === e.syl && x.tier === e.tier).sort((a, b) => SR(a.series) - SR(b.series));
+    if (hist.length >= 2) {
+      const pts = hist.map((x) => ({ x: x.series, school: igPct(x.grades, x.n, IG_PASS), net: x.net.schools >= 2 ? igPct(x.net.grades, x.net.n, IG_PASS) : null, n: x.n }));
+      timeCard = card('eTime', 'Grades A*–C over time', `${esc(subjFull(e.syl))}${tierTxt}, every series your school sat.`,
+        legend(['Your school'], ['--school'], `<span><i class="sw" style="background:var(--ink-3)"></i>Network</span>`) + lineChart(pts, 100, 'Share at A*–C', '%'),
+        `<b>How to read this:</b> each point is one exam series. November is a smaller second sitting, usually different candidates from June, so compare June with June.`,
+        `<table class="data"><thead><tr><th>Series</th><th class="n">Candidates</th><th class="n">Your school</th><th class="n">Network</th></tr></thead><tbody>${pts.map((p) => `<tr><td>${esc(p.x)}</td><td class="n">${p.n}</td><td class="n">${fmt(p.school, 1)}%</td><td class="n">${fmt(p.net, 1)}%</td></tr>`).join('')}</tbody></table>`);
+    }
+  }
+
+  const nextEx = D.pacing[e.syl] ? card('eNext', 'Plan the next step', 'Use the paper-by-paper grades above to decide which part of the course to revisit, then plan it in your pacing.', pacingLink(e.syl), null, null) : '';
+  return tiles + `<div class="two">${gradesCard}${papersCard}</div>` + nextEx + allCard + timeCard;
+}
+
+// ---------------------------------------------------------------------------
+// Notes
+// ---------------------------------------------------------------------------
+function renderNotes() {
+  const bandText = {
+    Unclassified: 'A score of 0.',
+    Basic: 'Limited understanding; needs support across the curriculum.',
+    Aspiring: 'Between Basic and Good.',
+    Good: 'Secure understanding of most of the content.',
+    High: 'Between Good and Outstanding.',
+    Outstanding: 'Comprehensive understanding; well prepared for the next stage.',
+  };
+  return `<section class="card notes"><details><summary>About these figures</summary>
+    <p><b>The Checkpoint 0–50 scale</b>, as described in Cambridge's report guide:</p>
+    <div class="band-guide">${D.meta.bands.map((b, i) => `<div><b><i class="sw" style="background:var(${BAND_VARS[i]})"></i>${esc(b.name)} ${b.lo === b.hi ? b.lo : b.lo + '–' + b.hi}</b>${esc(bandText[b.name])}</div>`).join('')}</div>
+    <ul>
+      <li><b>No learner is named.</b> Every figure is for a school, a teaching group or the network. A school, group or tier with fewer than ${D.meta.minReport} learners is not shown on its own.</li>
+      <li><b>Network</b> means every Eduversal partner school that sat the same exam, counted learner by learner (a school with more learners counts more). Your school is included. For the 0–50 score in 2026, the March and May Primary series are counted together, because Cambridge standardises the score. Question and topic figures only compare schools that sat exactly the same paper.</li>
+      <li><b>Topic and question figures</b> are the share of the available marks that learners earned. They come from Cambridge's question-level marks, and a topic that appears on two papers counts both.</li>
+      <li><b>A change</b> between two years is shown only when both years have at least ${D.meta.moveMin} learners, and only between the same sitting (May with May, November with November).</li>
+      <li><b>IGCSE Core and Extended</b> are never combined, because Core grades stop at C. The tier comes from the papers each candidate sat.</li>
+      <li><b>A candidate who missed a paper</b> has no grade from Cambridge. They are counted as an entry, but not in any percentage.</li>
+      <li><b>AS and A Level</b> are different awards and are shown separately. Grade U cannot be split between them.</li>
+      ${D.meta.schoolNote ? `<li>${esc(D.meta.schoolNote)}</li>` : ''}
+      <li>These are Cambridge's <b>provisional</b> results, as sent to each school after the series.</li>
+    </ul></details></section>`;
+}
+
+// ---------------------------------------------------------------------------
+// Render
+// ---------------------------------------------------------------------------
+function render() {
+  const opt = normalise();
+  renderFilters(opt);
+  writeHash();
+  const m = document.getElementById('main');
+  const c = current();
+  if (!c) {
+    m.innerHTML = `<div class="empty">There are no results to show for this choice.</div>` + renderNotes();
+    return;
+  }
+  const head = `<div class="context"><h2>${esc(schoolName(S.school))} · ${esc(subjFull(S.syl))}</h2><span class="ctx-sub">${esc(S.level)} · ${esc(S.series)}${!isCP(S.level) && S.tier !== 'Untiered' ? ' · ' + esc(S.tier) + ' tier' : ''} · syllabus ${esc(S.syl)}</span></div>`;
+  m.innerHTML = head + (isCP(S.level) ? renderCP(c) : renderEX(c)) + renderNotes();
+
+  m.querySelectorAll('[data-table]').forEach((b) => { b.onclick = () => { S.tables[b.dataset.table] = !S.tables[b.dataset.table]; render(); }; });
+  m.querySelectorAll('[data-paper]').forEach((b) => { b.onclick = () => { S.paper = b.dataset.paper; render(); }; });
+  m.querySelectorAll('[data-topic]').forEach((b) => {
+    const go = () => {
+      S.topic = S.topic === b.dataset.topic ? null : b.dataset.topic;
+      // open the first paper that contains the topic
+      const cur = current();
+      if (S.topic && cur) {
+        const onThis = cur.papers.find((p) => p.comp === S.paper && p.q.some((q) => q.sub === S.topic));
+        if (!onThis) { const p = cur.papers.find((pp) => pp.q.some((q) => q.sub === S.topic)); if (p) S.paper = p.comp; }
+      }
+      render();
+      if (S.topic) { const q = document.getElementById('cQuestions'); if (q) q.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    };
+    b.onclick = go;
+    b.onkeydown = (ev) => { if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); go(); } };
+  });
+  m.querySelectorAll('[data-clear-topic]').forEach((b) => { b.onclick = () => { S.topic = null; render(); }; });
+  m.querySelectorAll('[data-pick]').forEach((r) => {
+    const go = () => { const [syl, tier] = r.dataset.pick.split('|'); S.syl = syl; S.tier = tier; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+    r.onclick = go;
+    r.onkeydown = (ev) => { if (ev.key === 'Enter') go(); };
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Tooltip (hover and keyboard focus)
+// ---------------------------------------------------------------------------
+const tip = document.getElementById('tip');
+function showTip(el, x, y) {
+  tip.innerHTML = el.getAttribute('data-tip');
+  tip.classList.add('on');
+  const r = tip.getBoundingClientRect();
+  let left = x + 14; let top = y + 14;
+  if (left + r.width > window.innerWidth - 8) left = x - r.width - 14;
+  if (top + r.height > window.innerHeight - 8) top = y - r.height - 14;
+  tip.style.left = Math.max(8, left) + 'px';
+  tip.style.top = Math.max(8, top) + 'px';
+}
+document.addEventListener('mousemove', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-tip]');
+  if (el) showTip(el, ev.clientX, ev.clientY); else tip.classList.remove('on');
+});
+document.addEventListener('focusin', (ev) => {
+  const el = ev.target.closest && ev.target.closest('[data-tip]');
+  if (!el) { tip.classList.remove('on'); return; }
+  const r = el.getBoundingClientRect();
+  showTip(el, r.left + r.width / 2, r.top);
+});
+document.addEventListener('focusout', () => tip.classList.remove('on'));
+document.addEventListener('scroll', () => tip.classList.remove('on'), { passive: true });
+
+// ---------------------------------------------------------------------------
+// Theme
+// ---------------------------------------------------------------------------
+const themeBtn = document.getElementById('themeBtn');
+const THEMES = ['auto', 'light', 'dark'];
+function applyTheme(t) {
+  if (t === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', t);
+  themeBtn.textContent = 'Theme: ' + t[0].toUpperCase() + t.slice(1);
+}
+let theme = store.get('ctd-theme') || 'auto';
+applyTheme(theme);
+themeBtn.onclick = () => { theme = THEMES[(THEMES.indexOf(theme) + 1) % 3]; store.set('ctd-theme', theme); applyTheme(theme); render(); };
+if (window.matchMedia) window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (theme === 'auto') render(); });
+
+// ---------------------------------------------------------------------------
+document.getElementById('pillData').textContent = `Series ${D.meta.seriesOrder[0]} to ${D.meta.seriesOrder[D.meta.seriesOrder.length - 1]} · updated ${D.meta.generatedAt}`;
+document.getElementById('foot').innerHTML = `Built from the provisional result workbooks Cambridge International sent to each partner school. Cambridge Results Pack v1.0 · Results to June 2026 · built 2026-10-04. Shared by Eduversal with its partner schools; please keep it within your school.`;
+// This view opens for ONE school, from that school's link on the pack's start page
+// (#school=IDxxx). The school picker is then shown but locked. Opened without a
+// school link, the page shows no school at all and points back to the start page.
+// This is a courtesy lock, not access control: every school's data is in this file.
+const HOME = location.protocol === 'file:' ? '0%20Start%20here.html' : '/cambridge-results';
+const linkedSchool = () => { const c = new URLSearchParams(location.hash.slice(1)).get('school'); return c && D.schools[c] ? c : null; };
+const LOCKED = !!linkedSchool();
+function gate() {
+  document.getElementById('filters').innerHTML = '';
+  document.getElementById('main').innerHTML = `<div class="gate"><h2>Open this page from your school's link</h2><p>This view shows one school at a time. Please use the link for your school on the Cambridge Results Pack page.</p><a href="${HOME}#links">Go to the Cambridge Results Pack</a></div>`;
+}
+if (!LOCKED) { gate(); } else {
+  readHash();
+  render();
+  window.addEventListener('hashchange', () => { if (!linkedSchool()) return gate(); S.school = linkedSchool(); readHash(); render(); });
+}
+</script>
+
+<script type="module">
+import { doc, getDoc, getDocs, collection, query, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+const VIEW = 'teachers';
+const REPORT = ['cambridge_results_reports', 'current'];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+function say(title, text) {
+  const m = document.getElementById('main');
+  if (m) m.innerHTML = '<div class="gate"><h2>' + esc(title) + '</h2><p>' + esc(text) + '</p></div>';
+}
+function boot(D) {
+  window.__CR_D = D;
+  const s = document.createElement('script');
+  s.textContent = document.getElementById('cr-app-src').textContent;
+  document.body.appendChild(s);
+}
+const hashSchool = () => new URLSearchParams(location.hash.slice(1)).get('school');
+function setSchool(centre) {
+  const h = new URLSearchParams(location.hash.slice(1));
+  h.set('school', centre);
+  history.replaceState(null, '', '#' + h.toString());
+}
+// Eduversal staff read every school; everyone else reads their own school only.
+// The Firestore rule enforces the same split (cambridge_results_reports).
+const isHQ = (p) => p.role_academichub === 'academic_admin' || p.role_centralhub === 'central_admin'
+  || (p.role_centralhub === 'central_user' && p.approval_status_centralhub === 'approved')
+  || p.role_teachershub === 'teachers_admin';
+const J = (s) => JSON.parse(s || 'null');
+function assemble(R, schools) {
+  if (VIEW === 'leaders') {
+    return { meta: J(R.leadersMetaJson), schools: Object.fromEntries(schools.map((s) => [s.centre, J(s.leadersJson)])) };
+  }
+  const C = J(R.teachersJson);
+  const own = schools.map((s) => J(s.teachersJson));
+  return {
+    ...C,
+    meta: { ...C.meta, exSuppressed: own.flatMap((t) => t.exSuppressed), incomplete: own.flatMap((t) => t.incomplete), schoolNote: own.length === 1 ? own[0].note || '' : '' },
+    schools: Object.fromEntries(schools.map((s) => [s.centre, { name: s.name, short: s.short }])),
+    cp: own.flatMap((t) => t.cp),
+    ex: own.flatMap((t) => t.ex),
+  };
+}
+function adminBar(schools) {
+  const bar = document.createElement('div');
+  bar.className = 'cr-admin';
+  bar.innerHTML = '<span>Eduversal view — every school is visible to you. School users see only their own school.</span>'
+    + '<label>School <select id="crAdminSchool">' + schools.slice().sort((a, b) => a.name.localeCompare(b.name))
+      .map((s) => '<option value="' + esc(s.centre) + '">' + esc(s.name) + '</option>').join('') + '</select></label>';
+  document.body.insertBefore(bar, document.getElementById('navbarMount').nextSibling);
+  const sel = bar.querySelector('select');
+  sel.value = hashSchool();
+  sel.onchange = () => { setSchool(sel.value); location.reload(); };
+}
+document.addEventListener('authReady', async ({ detail: { user, profile } = {} } = {}) => {
+  if (window.__loadAcademicNavbar) window.__loadAcademicNavbar('cambridge-results', { user, profile });
+  if (!profile) return;
+  const hq = isHQ(profile);
+  if (VIEW === 'network' && !hq) { say('For Eduversal only', 'This view compares every partner school, so only Eduversal staff can open it. Your school\'s own results are in the School Leaders and Teachers views.'); return; }
+  if (!hq && !profile.schoolId) { say('Your school is not set', 'Your account is not linked to a school yet, so your school\'s results cannot be shown. Please ask Eduversal to set your school.'); return; }
+  try {
+    const rootSnap = await getDoc(doc(window.db, ...REPORT));
+    if (!rootSnap.exists()) { say('No results published yet', 'The Cambridge results have not been published here yet.'); return; }
+    if (VIEW === 'network') {
+      const f = await getDoc(doc(window.db, ...REPORT, 'internal', 'foundation'));
+      if (!f.exists()) { say('No results published yet', 'The network view has not been published yet.'); return; }
+      boot(J(f.data().json));
+      return;
+    }
+    let schools;
+    if (hq) {
+      schools = (await getDocs(query(collection(window.db, ...REPORT, 'schools'), limit(60)))).docs.map((d) => d.data());
+      if (!schools.length) { say('No results published yet', 'No school results have been published.'); return; }
+      if (!schools.some((s) => s.centre === hashSchool())) setSchool(schools.slice().sort((a, b) => a.name.localeCompare(b.name))[0].centre);
+      adminBar(schools);
+    } else {
+      const s = await getDoc(doc(window.db, ...REPORT, 'schools', profile.schoolId));
+      if (!s.exists()) { say('No Cambridge results for your school', 'Eduversal has no Cambridge result files for your school in this pack.'); return; }
+      schools = [s.data()];
+      setSchool(schools[0].centre);
+    }
+    boot(assemble(rootSnap.data(), schools));
+  } catch (err) {
+    console.error('[cambridge-results]', err);
+    say('Results could not be loaded', err && err.code === 'permission-denied'
+      ? 'Your account does not have access to these results. Ask Eduversal to check your school and approval.'
+      : 'Please reload the page. If it keeps failing, contact Academic Services.');
+  }
+});
+</script>
+</body>
+</html>
