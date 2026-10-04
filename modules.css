@@ -266,3 +266,144 @@ body[data-module] .page-footer[data-accent] .page-footer__cta-btn:hover {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28);
 }
 body[data-module] .page-footer__meta { border-top-color: rgba(255, 255, 255, 0.14); }
+
+/* ── 7. Network-home chrome (2026-10-04) ─────────────────────────
+   The visual language of the AH home page (designed in Stitch, built
+   2026-10-03), carried to every module page in its own family colour:
+   a deep hero with one soft bloom, a big serif title, the module row as
+   a glass pill, a white icon badge, a glass panel on the right
+   (partials/module-aside.js: where the page sits in the cycle) and a
+   white stat strip overlapping the hero's lower edge. Body cards lift
+   on a soft family-tinted shadow. Alif: "a better level than the
+   classic gradient design". */
+body[data-module] .page-hero {
+  padding: 56px 0 64px;
+  border-top: 0;
+  box-shadow: none;
+  overflow: visible;            /* the stat strip overlaps the lower edge */
+  background:
+    radial-gradient(60% 90% at 88% 6%, rgba(var(--m-vivid-rgb), 0.26) 0%, transparent 60%),
+    linear-gradient(135deg, var(--m-deep) 0%, var(--m-cover) 52%, var(--m-end) 100%);
+}
+body[data-module="hub"] .page-hero {
+  background:
+    radial-gradient(60% 90% at 88% 6%, rgba(127, 224, 207, 0.22) 0%, transparent 60%),
+    linear-gradient(135deg, #1a1548 0%, #2b2470 50%, #0e6078 100%);
+}
+body[data-module] .page-hero__inner { align-items: center; gap: 28px 40px; }
+/* min-width (not flex-basis) makes the panel wrap: on phones base.css turns
+   the row into a column, where a flex-basis would become a height. */
+body[data-module] .page-hero__text { flex: 1 1 auto; min-width: min(420px, 100%); }
+@media (max-width: 768px) {
+  body[data-module] .page-hero { padding: 36px 0 44px; }
+  /* Some pages zero the inner padding to hold a 1200 px rail on desktop;
+     on a phone the text would touch the screen edge. */
+  body[data-module] .page-hero__inner { padding-left: 16px; padding-right: 16px; }
+}
+body[data-module] .page-hero__title {
+  font-size: clamp(32px, 4.2vw, 48px);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin: 6px 0 14px;
+  text-shadow: none;
+}
+body[data-module] .page-hero__desc { font-size: 16px; color: rgba(255, 255, 255, 0.86); max-width: 640px; }
+body[data-module] .page-hero__module {
+  padding: 6px 14px 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(6px);
+  font-size: 11.5px;
+  letter-spacing: 0.1em;
+}
+body[data-module] .page-hero__icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #fff; border: 0; color: var(--m-mid);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.26);
+}
+body[data-module] .page-hero__icon svg { width: 26px; height: 26px; }
+
+/* Glass panel (partials/module-aside.js adds it to heroes without KPIs). */
+.page-hero__aside {
+  flex: 0 0 360px; margin-left: auto; color: #fff;
+  border-radius: 22px; padding: 18px 18px 16px;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.26);
+}
+.pha-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); }
+.pha-top b { font-size: 11.5px; letter-spacing: 0.04em; text-transform: none; padding: 3px 10px; border-radius: 999px; background: rgba(var(--m-vivid-rgb, 255, 255, 255), 0.22); border: 1px solid rgba(var(--m-vivid-rgb, 255, 255, 255), 0.45); color: #fff; }
+.pha-cycle { position: relative; display: grid; grid-template-columns: repeat(6, 1fr); margin: 16px 2px 14px; }
+.pha-cycle::before { content: ""; position: absolute; left: 8%; right: 8%; top: 14px; border-top: 1.5px dashed rgba(255, 255, 255, 0.32); }
+.pha-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 10.5px; font-weight: 600; color: rgba(255, 255, 255, 0.55); text-align: center; line-height: 1.15; }
+.pha-step i { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 12px; font-weight: 700; background: rgba(255, 255, 255, 0.10); border: 1px solid rgba(255, 255, 255, 0.28); color: rgba(255, 255, 255, 0.8); backdrop-filter: blur(4px); }
+.pha-step.is-here { color: #fff; }
+.pha-step.is-here i { background: #fff; color: var(--m-dark, #1a1548); border-color: #fff; box-shadow: 0 0 0 4px rgba(var(--m-vivid-rgb, 255, 255, 255), 0.35); }
+.pha-name { font-family: var(--font-title, Lora, Georgia, serif); font-size: 21px; font-weight: 600; line-height: 1.2; margin: 2px 0 4px; }
+.pha-q { font-size: 13.5px; line-height: 1.45; color: rgba(255, 255, 255, 0.84); margin: 0; }
+.pha-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.16); width: 100%; font-size: 13px; font-weight: 700; color: #fff; text-decoration: none; }
+.pha-link:hover { color: rgba(var(--m-vivid-rgb, 255, 255, 255), 1); }
+.pha-top span { min-width: 0; }
+.pha-top b { white-space: nowrap; flex: none; }
+.page-hero__inner:has(.page-hero__kpis:not([style*="none"])) .page-hero__aside { display: none; }
+@media (max-width: 980px) { .page-hero__aside { display: none; } }
+
+/* Stat strip: the hero KPIs become one white strip across the lower edge.
+   Flex (not grid) so a page script that sets style.display = 'flex' keeps it. */
+body[data-module] .page-hero__kpis {
+  flex: 1 0 auto; width: 100%; order: 10;
+  margin: 30px 0 -112px;
+  display: flex; flex-wrap: wrap; gap: 0;
+  position: relative; z-index: 3;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px -12px rgba(var(--m-mid-rgb), 0.38), 0 2px 8px rgba(16, 24, 40, 0.06);
+  overflow: hidden;
+}
+body[data-module] .page-hero:has(.page-hero__kpis:not([style*="none"])) { margin-bottom: 72px; }
+body[data-module] .page-hero__kpi,
+body[data-module] .page-hero__kpi--primary {
+  flex: 1 1 170px; min-width: 0;
+  background: transparent; border: 0; border-radius: 0;
+  padding: 20px 24px;
+  box-shadow: inset 1px 0 0 var(--m-tint);
+}
+body[data-module] .page-hero__kpi::before { display: none; }
+body[data-module] .page-hero__kpi:hover { transform: none; box-shadow: inset 1px 0 0 var(--m-tint); background: var(--m-tint-2); }
+body[data-module] .page-hero__kpi-num,
+body[data-module] .page-hero__kpi--primary .page-hero__kpi-num {
+  font-size: 34px; color: var(--m-dark);
+  background: none; -webkit-text-fill-color: currentColor;   /* references-shell paints white gradient text */
+}
+body[data-module] .page-hero__kpi-lbl { color: var(--m-mid); letter-spacing: 0.08em; }
+body[data-module] .page-hero__kpi-sub { color: #6b6a72; }
+@media (max-width: 768px) {
+  body[data-module] .page-hero__kpi { flex-basis: 45%; padding: 16px 18px; }
+  body[data-module] .page-hero__kpi-num,
+  body[data-module] .page-hero__kpi--primary .page-hero__kpi-num { font-size: 28px; }
+}
+
+/* Body: elevated cards and panels on a family-tinted shadow. */
+body[data-module] .card {
+  border: 1px solid rgba(var(--m-mid-rgb), 0.14);
+  border-radius: 18px;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 12px 32px -20px rgba(var(--m-mid-rgb), 0.45);
+}
+body[data-module] .card:hover {
+  border-color: rgba(var(--m-mid-rgb), 0.32);
+  box-shadow: 0 2px 4px rgba(16, 24, 40, 0.05), 0 22px 44px -18px rgba(var(--m-mid-rgb), 0.5);
+  transform: translateY(-2px);
+}
+body[data-module] .page-info-strip,
+body[data-module] .info-strip {
+  border-radius: 18px;
+  box-shadow: 0 12px 32px -22px rgba(var(--m-mid-rgb), 0.45);
+}
+body[data-module] .page-toolbar {
+  background: rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(12px);
+}

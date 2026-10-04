@@ -346,6 +346,18 @@ htmlFiles.forEach((file) => {
     }
   }
 
+  // Hero glass panel (2026-10-04): where a module page sits in the cycle.
+  // The script adds the panel only to a .page-hero without a KPI strip on a
+  // body[data-module] page, so injecting it everywhere is safe.
+  if (html.includes('page-hero__inner') && !/<script\s[^>]*src=["']\/?partials\/module-aside\.js["']/.test(html)) {
+    const aClose = html.lastIndexOf('</body>');
+    if (aClose >= 0) {
+      html = html.slice(0, aClose)
+        + '<script src="/partials/module-aside.js" defer></script>\n'
+        + html.slice(aClose);
+    }
+  }
+
   // 3. Write to dist using the slug name so Vercel cleanUrls serves the
   //    correct path (e.g. cambridge-pathway.html -> /cambridge-pathway).
   //    Files whose slug matches their base name (e.g. announcements.html)
