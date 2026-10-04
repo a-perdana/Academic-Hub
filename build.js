@@ -353,10 +353,6 @@ if (fs.existsSync("auth-guard.js")) {
   fs.writeFileSync("dist/auth-guard.js", js);
   console.log("Processed: auth-guard.js");
 }
-if (fs.existsSync("schools_compact.js")) {
-  fs.copyFileSync("schools_compact.js", "dist/schools_compact.js");
-  console.log("Copied: schools_compact.js");
-}
 if (fs.existsSync("cambridge-crossref.js")) {
   fs.copyFileSync("cambridge-crossref.js", "dist/cambridge-crossref.js");
   console.log("Copied: cambridge-crossref.js");

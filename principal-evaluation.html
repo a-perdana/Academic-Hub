@@ -233,15 +233,20 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
   hubMode = isAppraiser ? 'appraiser' : 'fr';
 
   try {
-    // Find users with school_principal sub-role.
-    const q = query(
-      collection(window.db, 'users'),
-      where('ah_sub_roles', 'array-contains', 'school_principal')
-    );
-    const snap = await getDocs(q);
-    let principals = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
-    // FR/GM: principals at their own school only.
-    if (hubMode === 'fr') principals = principals.filter(p => p.schoolId && p.schoolId === profile?.schoolId);
+    // Find users with school_principal sub-role. FR/GM: the query itself is
+    // limited to their own school, so no other school's staff profiles ever
+    // reach the browser (filtering after the fetch still downloaded them).
+    let principals = [];
+    if (hubMode === 'fr') {
+      if (profile?.schoolId) {
+        const snap = await getDocs(query(collection(window.db, 'users'), where('schoolId', '==', profile.schoolId)));
+        principals = snap.docs.map(d => ({ uid: d.id, ...d.data() }))
+          .filter(p => (p.ah_sub_roles || []).includes('school_principal'));
+      }
+    } else {
+      const snap = await getDocs(query(collection(window.db, 'users'), where('ah_sub_roles', 'array-contains', 'school_principal')));
+      principals = snap.docs.map(d => ({ uid: d.id, ...d.data() }));
+    }
 
     // Fetch school names for display
     const schoolIds = [...new Set(principals.map(p => p.schoolId).filter(Boolean))];

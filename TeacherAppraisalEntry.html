@@ -18,7 +18,6 @@
 </script>
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
-<script src="schools_compact.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/base.css">
 <style>
@@ -4822,10 +4821,9 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
 
   // ── SCHOOL NAME RESOLUTION ───────────────────────────────
   // `users.schoolId` holds a `partner_schools` doc id (e.g. owwocOfmTd5Z7nVMmRJj),
-  // which is NOT the id space used by schools_compact.js (legacy slug / Drive ids).
-  // Looking the id up in window.SCHOOLS therefore always missed and the raw doc id
-  // leaked into the read-only School field. partner_schools/{id}.name is the source
-  // of truth; SCHOOLS stays as a fallback for the handful of legacy-id records.
+  // partner_schools/{id}.name is the source of truth. (The old schools_compact.js
+  // fallback was removed 2026-10-04: it was a public file carrying every school's
+  // accreditation record, and as a top-level const it never reached window anyway.)
   const schoolNameCache = {};
   async function resolveSchoolName(schoolId) {
     if (!schoolId) return '';
@@ -4834,11 +4832,7 @@ document.addEventListener('authReady', async ({ detail: { user, profile } }) => 
     try {
       const s = await getDoc(doc(window.db, 'partner_schools', schoolId));
       if (s.exists()) name = s.data().name || '';
-    } catch (_) { /* rules / offline — fall through to the legacy map */ }
-    if (!name && window.SCHOOLS) {
-      const hit = window.SCHOOLS.find(s => s.id === schoolId);
-      if (hit) name = hit.fullName || '';
-    }
+    } catch (_) { /* rules / offline — leave the name blank */ }
     schoolNameCache[schoolId] = name;
     return name;
   }

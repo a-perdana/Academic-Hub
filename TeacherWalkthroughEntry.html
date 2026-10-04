@@ -18,7 +18,6 @@
 </script>
 <script type="module" src="auth-guard.js"></script>
 <script src="partials/navbar-loader.js"></script>
-<script src="schools_compact.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/base.css">
 <style>
@@ -895,15 +894,13 @@ window.teacherSearch = async function(val) {
         (u.displayName || '').toLowerCase().includes(ql) ||
         (u.email || '').toLowerCase().includes(ql)
       );
-      const schoolMap = {};
-      if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
       if (!results.length) {
         dropdown.innerHTML = `<div style="padding:10px 14px;font-size:.8rem;color:#94a3b8;">No teachers found matching "${q}"</div>`;
       } else {
         dropdown.innerHTML = results.slice(0, 8).map(u => {
           // schoolId is the partner_schools id only; `school` is the display name.
           const schoolId   = u.schoolId || '';
-          const schoolName = schoolMap[schoolId] || u.school || schoolId;
+          const schoolName = u.school || schoolId;
           const subj = u.subject || '';
           const meta = [schoolName, subj].filter(Boolean).join(' · ');
           return `<div role="button" tabindex="0" class="teacher-dropdown-item"
@@ -928,9 +925,7 @@ window.selectTeacher = function(uid, name, schoolId, subject, schoolNameParam) {
   document.getElementById('teacherChip').style.display = 'flex';
   document.getElementById('teacherChipAvatar').textContent = (name||'?')[0].toUpperCase();
   document.getElementById('teacherChipName').textContent = name || '—';
-  const schoolMap = {};
-  if (window.SCHOOLS) window.SCHOOLS.forEach(s => { schoolMap[s.id] = s.fullName; });
-  const schoolDisplay = schoolNameParam || schoolMap[schoolId] || schoolId || '';
+  const schoolDisplay = schoolNameParam || schoolId || '';
   const metaParts = [schoolDisplay, subject].filter(Boolean);
   document.getElementById('teacherChipMeta').textContent = metaParts.join(' · ');
   // Write hidden fields

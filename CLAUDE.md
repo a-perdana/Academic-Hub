@@ -150,7 +150,7 @@ const isAdmin = profile?.role_academichub === 'academic_admin';
 3. Strips `<script src="firebase-config.js">`
 4. Rewrites internal `.html` href → clean URLs (`AcademicCalendar.html` → `/academic-calendar`). **NB:** `rewriteLinks()` only handles `href="..."` and `window.location.href = "..."` string literals — template literals like `` `/learning-path?comp=${id}` `` must use the absolute clean URL path directly.
 5. Writes `dist/<slug>.html` (flat — output is always at dist root regardless of source subfolder)
-6. Copies `auth-guard.js`, `schools_compact.js`, `images/`, `Sections/`
+6. Copies `auth-guard.js`, `images/`, `Sections/`
 7. Generates `dist/_redirects` for Vercel routing
 
 **Source organisation (2026-05-22):** 22 dashboard HTML files live under `dashboards/` for IDE clarity (EASE results, Cambridge dashboards, KPI/appraisal/survey panels, accreditation/network audit, Rapor Pendidikan, AcademicStandards). URLs + clean slugs + `page_access_config` doc IDs **UNCHANGED** — `cleanUrls` and `BASE_CSS_SKIP` are keyed by basename so the folder prefix is invisible to the build pipeline downstream. `htmlFiles` entries carry the `dashboards/<File>.html` prefix; `fileBase = path.basename(file)` is used for the lookups.
@@ -284,7 +284,7 @@ The `leaders` track of the 3-track Cambridge competency system (root CLAUDE.md "
 | `firebase-config.js` / `.example.js` | Local dev config (gitignored) / template |
 | `vercel.json` | Vercel config (cleanUrls, build cmd) |
 | `dist/` | Build output (not committed) |
-| `schools_compact.js` | Minified school data used by school-picker components |
+| `archive/dashboards/schools_compact.js` | Archived 2026-10-04 — every school's BAN-PDM accreditation record. It was served publicly at `/schools_compact.js`; only the archived Accreditation Dashboard used it. Never copy it back into `dist/`: the Academic Hub must not ship one school's data to another. |
 
 ---
 
