@@ -798,8 +798,6 @@ const NAV_ITEMS = [
     { key: 'quality-ecosystem-guide',             href: '/quality-ecosystem-guide',             label: 'Quality Ecosystem Guide', guide: 'quality_ecosystem' },
     { key: 'student-learning-guide',              href: '/student-learning-guide',              label: 'Student Learning Guide', guide: 'student_learning' },
     { key: 'career-growth-guide',                 href: '/career-growth-guide',                 label: 'Career Growth Guide', guide: 'career_growth' },
-    { key: 'cambridge-results',                   href: '/cambridge-results',                   label: 'Cambridge Results' },
-    { key: 'cambridge-exams',                     href: '/cambridge-exams',                     label: 'Cambridge Exams Dashboard' },
     { key: 'academic-standards',                  href: '/academic-standards',                  label: 'Academic Standards' },
     { key: 'cambridge-standards',                 href: '/cambridge-standards',                 label: 'Cambridge Standards' },
     { key: 'references',                          href: '/references',                          label: 'References' },

@@ -200,7 +200,8 @@ const htmlFiles = [
   "messageboard.html",
   "dashboards/AcademicStandards.html",
   "dashboards/AcademicStandardsDynamic.html",
-  "dashboards/CambridgeExamsDashboard.html",
+  // dashboards/CambridgeExamsDashboard.html — taken offline 2026-10-04: it was
+  // public and named every school's results. Returns as a login + own-school page.
   "dashboards/CambridgePathwaySimulator.html",
   "SchoolSelfAppraisal.html",
   "academic-calendar.html",
@@ -584,16 +585,12 @@ if (fs.existsSync("Sections")) {
   copyDirRecursive("Sections", "dist/Sections");
   console.log("Copied: Sections/");
 }
-// Cambridge Results Pack — published WITHOUT login (Alif, 2026-09-24) at
-// /cambridge-results. Copied verbatim on purpose: these self-contained pages
-// must not receive the navbar, auth-guard or base.css this build injects into
-// the pages listed above. Written by scripts/cambridge-results/build-pack.js at
-// the monorepo root; never hand-edit. noindex comes from each page's meta tag
-// and from the X-Robots-Tag header in vercel.json.
-if (fs.existsSync("cambridge-results")) {
-  copyDirRecursive("cambridge-results", "dist/cambridge-results");
-  console.log("Copied: cambridge-results/ (Cambridge Results Pack, public)");
-}
+// Cambridge Results Pack (/cambridge-results) — NOT copied since 2026-10-04.
+// It was published without login (2026-09-24) and every view carried every
+// school's results by name; Alif then ruled that the Academic Hub shows a
+// school only its own school. The folder stays as the build-pack.js output
+// until the login + own-school edition replaces it; vercel.json redirects
+// the old URLs to the home page. Do not re-add a verbatim copy.
 // Cambridge × Kurikulum Merdeka curriculum alignment dashboard — published
 // WITHOUT login (Alif, 2026-09-24) at /curriculum-alignment for school leaders.
 // Same rule as above: one self-contained page, copied verbatim, no navbar /
